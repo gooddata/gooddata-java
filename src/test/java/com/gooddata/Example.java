@@ -5,6 +5,8 @@ package com.gooddata;
 
 import com.gooddata.account.Account;
 import com.gooddata.account.AccountService;
+import com.gooddata.md.MetadataService;
+import com.gooddata.md.Metric;
 import com.gooddata.project.Project;
 import com.gooddata.project.ProjectService;
 
@@ -25,6 +27,10 @@ public class Example {
 
         final Project project = projectService.createProject(new Project("sparkling", "pgroup2"));
         System.out.println(project.getLinks().getSelf());
+
+        final MetadataService md = gd.getMetadataService();
+        final Metric metric = new Metric("pokus", "SELECT SUM([/gdc/md/nrtk3axzqixzqu3plpq5gnmff5n2k9ob/obj/15089])", "#,##0");
+        final Metric m = md.create(project, metric);
 
         gd.logout();
     }

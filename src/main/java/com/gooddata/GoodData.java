@@ -7,6 +7,7 @@ import com.gooddata.account.AccountService;
 import com.gooddata.http.client.GoodDataHttpClient;
 import com.gooddata.http.client.LoginSSTRetrievalStrategy;
 import com.gooddata.http.client.SSTRetrievalStrategy;
+import com.gooddata.md.MetadataService;
 import com.gooddata.model.ModelService;
 import com.gooddata.project.ProjectService;
 import org.apache.http.HttpHost;
@@ -20,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 
 import static java.util.Collections.singletonMap;
+
 /**
  */
 public class GoodData {
@@ -50,6 +52,10 @@ public class GoodData {
 
     public AccountService getAccountService() {
         return new AccountService(restTemplate);
+    }
+
+    public MetadataService getMetadataService() {
+        return new MetadataService(restTemplate);
     }
 
     public void logout() {
