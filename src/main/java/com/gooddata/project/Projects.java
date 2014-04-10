@@ -13,6 +13,9 @@ import java.util.Collection;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Projects {
+
+    public static final String URI = "/gdc/projects";
+
     private final Collection<Project> projects;
 
     @JsonCreator

@@ -23,6 +23,9 @@ public class Example {
         final Collection<Project> projects = projectService.getProjects();
         System.out.println(projects);
 
+        final Project project = projectService.createProject(new Project("sparkling", "pgroup2"));
+        System.out.println(project.getLinks().getSelf());
+
         gd.logout();
     }
 
