@@ -12,9 +12,14 @@ import com.gooddata.project.ProjectService;
 import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
+
+import static java.util.Collections.singletonMap;
 /**
  */
 public class GoodData {
@@ -35,6 +40,8 @@ public class GoodData {
         final UriPrefixingClientHttpRequestFactory factory = new UriPrefixingClientHttpRequestFactory(
                 new HttpComponentsClientHttpRequestFactory(client), hostname, port, protocol);
         restTemplate = new RestTemplate(factory);
+        restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(
+                new HeaderAddingRequestInterceptor(singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE))));
     }
 
     public ProjectService getProjectService() {
