@@ -12,4 +12,15 @@ public class Project {
 
     public static final String PROJECTS_URI = "/gdc/account/profile/{id}/projects";
 
+
+    private String id;
+
+
+    public Project(final String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
 }
