@@ -7,6 +7,7 @@ import com.gooddata.account.AccountService;
 import com.gooddata.http.client.GoodDataHttpClient;
 import com.gooddata.http.client.LoginSSTRetrievalStrategy;
 import com.gooddata.http.client.SSTRetrievalStrategy;
+import com.gooddata.model.ModelService;
 import com.gooddata.project.ProjectService;
 import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
@@ -46,5 +47,10 @@ public class GoodData {
 
     public void logout() {
         getAccountService().logout();
+    }
+
+    public ModelService getModelService() {
+        // TODO do not return always new
+        return new ModelService(restTemplate);
     }
 }
