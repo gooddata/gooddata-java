@@ -46,4 +46,8 @@ public class ProjectService extends AbstractService {
     public Project getProjectByUri(final String uri) {
         return restTemplate.getForObject(uri, Project.class);
     }
+
+    public Project getProjectById(String id) {
+        return restTemplate.getForObject(Project.PROJECT_URI, Project.class, id);
+    }
 }

@@ -14,7 +14,7 @@ public class ModelExample {
         final GoodData gd = new GoodData("jiri.mikulasek@gooddata.com", "jindrisska");
 
         final ModelService modelService = gd.getModelService();
-        final Project project = new Project("amxhoeyj7oskijld63tajq0o9f4nhxy7");
+        final Project project = gd.getProjectService().getProjectById("amxhoeyj7oskijld63tajq0o9f4nhxy7");
         final ModelDiff projectModelDiff = modelService.getProjectModelDiff(project, new DiffRequest(projectModelData));
 
         modelService.changeProjectModel(project, projectModelDiff);
