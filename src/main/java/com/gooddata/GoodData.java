@@ -34,28 +34,33 @@ public class GoodData {
     private static final int PORT = 443;
     private static final String HOSTNAME = "secure.gooddata.com";
 
-    private final RestTemplate restTemplate;
-    private final HttpClientBuilder httpClientBuilder;
-    private final String login;
-    private final String password;
-    private AccountService accountService;
-    private ProjectService projectService;
-    private MetadataService metadataService;
-    private ModelService modelService;
-    private GdcService gdcService;
-    private DataStoreService dataStoreService;
-    private DatasetService datasetService;
+    private final AccountService accountService;
+    private final ProjectService projectService;
+    private final MetadataService metadataService;
+    private final ModelService modelService;
+    private final GdcService gdcService;
+    private final DataStoreService dataStoreService;
+    private final DatasetService datasetService;
 
     public GoodData(String login, String password) {
         this(login, password, HOSTNAME);
     }
 
     public GoodData(String hostname, String login, String password) {
-        this.login = login;
-        this.password = password;
-        final HttpHost host = new HttpHost(hostname, PORT, PROTOCOL);
+        final HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+        final RestTemplate restTemplate = createRestTemplate(hostname, login, password, httpClientBuilder);
 
-        httpClientBuilder = HttpClientBuilder.create();
+        accountService = new AccountService(restTemplate);
+        projectService = new ProjectService(restTemplate, accountService);
+        metadataService = new MetadataService(restTemplate);
+        modelService = new ModelService(restTemplate);
+        gdcService = new GdcService(restTemplate);
+        dataStoreService = new DataStoreService(httpClientBuilder, gdcService, login, password);
+        datasetService = new DatasetService(restTemplate, dataStoreService);
+    }
+
+    private RestTemplate createRestTemplate(String hostname, String login, String password, HttpClientBuilder httpClientBuilder) {
+        final HttpHost host = new HttpHost(hostname, PORT, PROTOCOL);
         final CloseableHttpClient httpClient = httpClientBuilder.build();
         final SSTRetrievalStrategy strategy = new LoginSSTRetrievalStrategy(httpClient, host, login, password);
 
@@ -63,11 +68,10 @@ public class GoodData {
 
         final UriPrefixingClientHttpRequestFactory factory = new UriPrefixingClientHttpRequestFactory(
                 new HttpComponentsClientHttpRequestFactory(client), hostname, PORT, PROTOCOL);
-        restTemplate = new RestTemplate(factory);
+        final RestTemplate restTemplate = new RestTemplate(factory);
         restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(
                 new HeaderAddingRequestInterceptor(singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE))));
-
-        initServices();
+        return restTemplate;
     }
 
     public void logout() {
@@ -102,13 +106,4 @@ public class GoodData {
         return datasetService;
     }
 
-    private void initServices() {
-        accountService = new AccountService(restTemplate);
-        projectService = new ProjectService(restTemplate, getAccountService());
-        metadataService = new MetadataService(restTemplate);
-        modelService = new ModelService(restTemplate);
-        gdcService = new GdcService(restTemplate);
-        dataStoreService = new DataStoreService(httpClientBuilder, getGdcService(), login, password);
-        datasetService = new DatasetService(restTemplate, getDataStoreService());
-    }
 }
