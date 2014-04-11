@@ -86,6 +86,10 @@ public abstract class AbstractService {
         }
     }
 
+    protected <T> T extractData(ClientHttpResponse response, Class<T> cls) throws IOException {
+        return new HttpMessageConverterExtractor<>(cls, restTemplate.getMessageConverters()).extractData(response);
+    }
+
 
     public static interface ConditionCallback {
         boolean finished(ClientHttpResponse response) throws IOException;

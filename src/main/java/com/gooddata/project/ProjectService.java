@@ -7,7 +7,6 @@ import com.gooddata.AbstractService;
 import com.gooddata.UriResponse;
 import com.gooddata.account.AccountService;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -39,8 +38,7 @@ public class ProjectService extends AbstractService {
                 new ConditionCallback() {
                     @Override
                     public boolean finished(ClientHttpResponse response) throws IOException {
-                        final Project project = new HttpMessageConverterExtractor<>(Project.class,
-                                restTemplate.getMessageConverters()).extractData(response);
+                        final Project project = extractData(response, Project.class);
                         return "ENABLED".equalsIgnoreCase(project.getContent().getState());
                     }
                 }, Project.class

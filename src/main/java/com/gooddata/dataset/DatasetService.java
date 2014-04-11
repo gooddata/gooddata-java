@@ -44,11 +44,10 @@ public class DatasetService extends AbstractService {
             dataStoreService.upload(dirPath + MANIFEST_FILE_NAME, IOUtils.toInputStream(manifestJson));
 
             final PullTask pullTask = restTemplate.postForObject(Pull.URI, new Pull(dirPath), PullTask.class, project.getId());
-            PullTaskStatus taskStatus = poll(URI.create(pullTask.getUri()), new ConditionCallback() {
+            final PullTaskStatus taskStatus = poll(URI.create(pullTask.getUri()), new ConditionCallback() {
                 @Override
                 public boolean finished(ClientHttpResponse response) throws IOException {
-                    final PullTaskStatus status = new HttpMessageConverterExtractor<>(PullTaskStatus.class, restTemplate.getMessageConverters())
-                            .extractData(response);
+                    final PullTaskStatus status = extractData(response, PullTaskStatus.class);
                     return status.isFinished();
                 }
             }, PullTaskStatus.class);
