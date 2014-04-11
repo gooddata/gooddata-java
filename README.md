@@ -40,7 +40,15 @@ modelService.updateProjectModel(project, projectModelDiff);
 ```java
 MetadataService md = gd.getMetadataService();
 Metric metric = new Metric("my sum", "SELECT SUM([/gdc/md/PROJECT_ID/obj/ID])", "#,##0");
-Metric m = md.create(project, metric);
+Metric m = md.createObj(project, metric);
+
+ReportDefinition definition = GridReportDefinition.create(
+        "my report",
+        asList("metricGroup"),
+        asList(new AttributeItem("/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/29")),
+        asList(new Item("/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/41"))
+);
+md.createMd(project, definition);
 ```
 
 ### DataStore API

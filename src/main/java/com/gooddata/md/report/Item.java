@@ -15,13 +15,24 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 public class Item {
 
     private final String uri;
+    protected String alias = "";
 
     @JsonCreator
-    public Item(@JsonProperty("uri") String uri) {
+    public Item(@JsonProperty("uri") String uri, @JsonProperty("alias") String alias) {
         this.uri = uri;
+        this.alias = alias;
+    }
+
+    public Item(String uri) {
+        this(uri, "");
     }
 
     public String getUri() {
         return uri;
     }
+
+    public String getAlias() {
+        return alias;
+    }
+
 }

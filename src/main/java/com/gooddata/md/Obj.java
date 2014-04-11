@@ -10,6 +10,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
  */
 public abstract class Obj {
     public static final String URI = "/gdc/md/{projectId}/obj";
+    public static final String OBJ_URI = URI + "/{objId}";
 
     protected final Meta meta;
 
