@@ -10,7 +10,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,7 +33,7 @@ public class DatasetService extends AbstractService {
     }
 
     public void loadDataset(Project project, InputStream dataset, DatasetManifest manifest) {
-        final String dirPath = "/" + project.getId() + "_" + RandomStringUtils.randomAlphabetic(3) + "/";
+        final String dirPath = getDirPath(project);
         try {
             dataStoreService.upload(dirPath + manifest.getFile(), dataset);
             final String manifestJson = mapper.writeValueAsString(manifest);
@@ -57,6 +56,15 @@ public class DatasetService extends AbstractService {
             dataStoreService.delete(dirPath);
         }
 
+    }
+
+    private String getDirPath(Project project) {
+        return new StringBuilder("/")
+                .append(project.getId())
+                .append("_")
+                .append(RandomStringUtils.randomAlphabetic(3))
+                .append("/")
+                .toString();
     }
 
     public void loadDataset(Project project, String datasetId, InputStream dataset) {
