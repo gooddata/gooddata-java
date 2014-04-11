@@ -6,9 +6,11 @@ package com.gooddata.project;
 import com.gooddata.AbstractService;
 import com.gooddata.UriResponse;
 import com.gooddata.account.AccountService;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
 
@@ -34,10 +36,12 @@ public class ProjectService extends AbstractService {
         final UriResponse uri = restTemplate.postForObject(Projects.URI, inputProject, UriResponse.class);
 
         return poll(URI.create(uri.getUri()),
-                new ConditionCallback<Project>() {
+                new ConditionCallback<Project, Project>() {
                     @Override
-                    public boolean finished(ResponseEntity<Project> entity) {
-                        return "ENABLED".equalsIgnoreCase(entity.getBody().getContent().getState());
+                    public boolean finished(ClientHttpResponse response) throws IOException {
+                        final Project project = new HttpMessageConverterExtractor<>(Project.class,
+                                restTemplate.getMessageConverters()).extractData(response);
+                        return "ENABLED".equalsIgnoreCase(project.getContent().getState());
                     }
                 }, Project.class
         );
