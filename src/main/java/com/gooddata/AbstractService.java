@@ -33,12 +33,7 @@ public abstract class AbstractService {
     }
 
     public <T> T poll(URI pollingUri, Class<T> cls) {
-        return poll(pollingUri, new ConditionCallback<T, T>() {
-            @Override
-            public boolean finished(ClientHttpResponse response) throws IOException {
-                return HttpStatus.OK.equals(response.getStatusCode());
-            }
-        }, cls);
+        return poll(pollingUri, new StatusOkConditionCallback<T, T>(), cls);
     }
 
     public <T> T poll(URI pollingUri, ConditionCallback<T, T> condition, Class<T> cls) {

@@ -21,7 +21,7 @@ import org.springframework.web.util.UriTemplate;
 public class Project {
 
     public static final String PROJECTS_URI = "/gdc/account/profile/{id}/projects";
-    public static final String PROJECT_URI = Projects.URI + "{id}";
+    public static final String PROJECT_URI = Projects.URI + "/{id}";
     public static final UriTemplate PROJECT_TEMPLATE = new UriTemplate(PROJECT_URI);
 
     private Content content;

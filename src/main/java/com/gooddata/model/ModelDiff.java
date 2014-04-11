@@ -66,15 +66,15 @@ public class ModelDiff {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class UpdateScript {
 
-        private String maql;
+        private List<String> maqlChunks;
 
         @JsonCreator
-        public UpdateScript(@JsonProperty("maqlDdlChunks") String maql) {
-            this.maql = maql;
+        public UpdateScript(@JsonProperty("maqlDdlChunks") List<String> maqlChunks) {
+            this.maqlChunks = maqlChunks;
         }
 
-        public String getMaql() {
-            return maql;
+        public List<String> getMaqlChunks() {
+            return maqlChunks;
         }
     }
 }

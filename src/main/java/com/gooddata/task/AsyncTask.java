@@ -1,4 +1,4 @@
-package com.gooddata.model;
+package com.gooddata.task;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;

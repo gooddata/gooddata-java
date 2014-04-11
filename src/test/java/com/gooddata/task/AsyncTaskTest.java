@@ -1,4 +1,4 @@
-package com.gooddata.model;
+package com.gooddata.task;
 
 
 import static org.junit.Assert.assertEquals;
