@@ -66,6 +66,15 @@ datasetService.loadDataset(project, "datasetId", new FileInputStream("data.csv")
 
 ```
 
+### Report API
+
+Execute and export reports.
+
+```java
+ReportService reportService = gd.getReportService();
+String imgUri = reportService.exportReport(reportDef, "png");
+```
+
 ### DataStore API
 
 Manage files on the data store (currently backed by WebDAV) - user staging area.
@@ -76,13 +85,4 @@ dataStoreService.upload("/dir/file.txt", new FileInputStream("file.txt"));
 InputStream stream = dataStoreService.download("/dir/file.txt");
 dataStoreService.delete("/dir/file.txt");
 
-```
-
-### Report API
-
-Execute and export reports.
-
-```java
-ReportService reportService = gd.getReportService();
-String imgUri = reportService.exportReport(reportDef, "png");
 ```

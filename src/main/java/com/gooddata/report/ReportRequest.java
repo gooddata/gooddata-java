@@ -14,13 +14,13 @@ public class ReportRequest {
 
     public static final String URI = "/gdc/xtab2/executor3";
 
-    @JsonProperty("reportDefinition")
     private final String reportDefinitionUri;
 
     public ReportRequest(String reportDefinitionUri) {
         this.reportDefinitionUri = reportDefinitionUri;
     }
 
+    @JsonProperty("reportDefinition")
     public String getReportDefinitionUri() {
         return reportDefinitionUri;
     }
