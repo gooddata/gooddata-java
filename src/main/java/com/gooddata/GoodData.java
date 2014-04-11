@@ -4,6 +4,7 @@
 package com.gooddata;
 
 import com.gooddata.account.AccountService;
+import com.gooddata.dataset.DatasetService;
 import com.gooddata.gdc.DataStoreService;
 import com.gooddata.gdc.GdcService;
 import com.gooddata.http.client.GoodDataHttpClient;
@@ -86,5 +87,9 @@ public class GoodData {
 
     public DataStoreService getDataStoreService() {
         return new DataStoreService(httpClientBuilder, getGdcService(), login, password);
+    }
+
+    public DatasetService getDatasetService() {
+        return new DatasetService(restTemplate, getDataStoreService());
     }
 }

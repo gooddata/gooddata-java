@@ -18,18 +18,9 @@ public class ModelExample {
         final ModelService modelService = gd.getModelService();
         final Project project = gd.getProjectService().getProjectById("amxhoeyj7oskijld63tajq0o9f4nhxy7");
         final ModelDiff projectModelDiff = modelService.getProjectModelDiff(project, new DiffRequest(projectModelData));
-        try {
-            System.out.println(new ObjectMapper().writeValueAsString(projectModelDiff));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         modelService.updateProjectModel(project, projectModelDiff);
-       /*
-        try {
-            new ObjectMapper().writeValue(System.out, new DiffRequest(projectModelData));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }  */
+
 
         gd.logout();
     }

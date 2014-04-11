@@ -49,3 +49,12 @@ dataStoreService.upload("/dir/file.txt", new FileInputStream("file.txt"));
 InputStream stream = dataStoreService.download("/dir/file.txt");
 
 ```
+
+### Dataset API
+
+```java
+final DatasetService datasetService = gd.getDatasetService();
+final DatasetManifest manifest = datasetService.getDatasetManifest(project, "datasetId");
+
+```
+

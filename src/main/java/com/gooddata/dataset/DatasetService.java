@@ -4,14 +4,23 @@
 package com.gooddata.dataset;
 
 import com.gooddata.AbstractService;
+import com.gooddata.gdc.DataStoreService;
+import com.gooddata.project.Project;
 import org.springframework.web.client.RestTemplate;
 
 /**
  */
 public class DatasetService extends AbstractService {
 
-    public DatasetService(RestTemplate restTemplate) {
+    private final DataStoreService dataStoreService;
+
+    public DatasetService(RestTemplate restTemplate, DataStoreService dataStoreService) {
         super(restTemplate);
+        this.dataStoreService = dataStoreService;
+    }
+
+    public DatasetManifest getDatasetManifest(Project project, String datasetId) {
+        return restTemplate.getForObject(DatasetManifest.URI, DatasetManifest.class, project.getId(), datasetId);
     }
 
 }

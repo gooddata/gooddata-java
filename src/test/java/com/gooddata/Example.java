@@ -5,6 +5,8 @@ package com.gooddata;
 
 import com.gooddata.account.Account;
 import com.gooddata.account.AccountService;
+import com.gooddata.dataset.DatasetManifest;
+import com.gooddata.dataset.DatasetService;
 import com.gooddata.md.MetadataService;
 import com.gooddata.md.Metric;
 import com.gooddata.project.Project;
@@ -31,6 +33,10 @@ public class Example {
         final MetadataService md = gd.getMetadataService();
         final Metric metric = new Metric("pokus", "SELECT SUM([/gdc/md/nrtk3axzqixzqu3plpq5gnmff5n2k9ob/obj/15089])", "#,##0");
         final Metric m = md.createObj(project, metric);
+
+        final DatasetService datasetService = gd.getDatasetService();
+        final DatasetManifest manifest = datasetService.getDatasetManifest(project, "datasetId");
+        System.out.println(manifest);
 
         gd.logout();
     }
