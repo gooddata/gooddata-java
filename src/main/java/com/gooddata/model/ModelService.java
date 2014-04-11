@@ -4,10 +4,12 @@ import com.gooddata.AbstractService;
 import com.gooddata.project.Project;
 import com.gooddata.task.AsyncTask;
 import com.gooddata.task.TaskStatus;
+import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.springframework.web.client.RestTemplate;
-
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 
@@ -25,6 +27,18 @@ public class ModelService extends AbstractService {
         return poll(URI.create(asyncTask.getUri()), new StatusOkConditionCallback(), ModelDiff.class);
     }
 
+    public ModelDiff getProjectModelDiff(Project project, String targetModel) {
+        return getProjectModelDiff(project, new DiffRequest(targetModel));
+    }
+
+    public ModelDiff getProjectModelDiff(Project project, InputStream targetModel) {
+        try {
+            return getProjectModelDiff(project, new String(IOUtils.toByteArray(targetModel)));
+        } catch (IOException e) {
+            throw new ModelException("Can't read target model", e);
+        }
+    }
+
     public void updateProjectModel(Project project, ModelDiff projectModelDiff) {
         for (ModelDiff.UpdateScript updateScript : projectModelDiff.getUpdateScripts()) {
             for (String maql : updateScript.getMaqlChunks()) {
@@ -35,7 +49,10 @@ public class ModelService extends AbstractService {
 
     public void updateProjectModel(Project project, MaqlDdl maqlDdl) {
         final LinkEntries linkEntries = restTemplate.postForObject(MaqlDdl.URI, maqlDdl, LinkEntries.class, project.getId());
-        poll(URI.create(linkEntries.getStatusLink()), TaskStatus.class);
+        TaskStatus taskStatus = poll(URI.create(linkEntries.getStatusLink()), TaskStatus.class);
+        if (!taskStatus.isSuccess()) {
+             throw new ModelException("Update project model finished with status " + taskStatus.getStatus());
+        }
     }
 
 

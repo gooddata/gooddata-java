@@ -14,6 +14,8 @@ import org.codehaus.jackson.annotate.JsonTypeName;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TaskStatus {
 
+    private static final String OK = "OK";
+
     private final String status;
     private final String uri;
 
@@ -31,5 +33,9 @@ public class TaskStatus {
 
     public String getUri() {
         return uri;
+    }
+
+    public boolean isSuccess() {
+        return OK.equals(status);
     }
 }
