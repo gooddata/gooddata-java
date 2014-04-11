@@ -12,6 +12,7 @@ import com.gooddata.model.ModelService;
 import com.gooddata.project.ProjectService;
 import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -26,21 +27,26 @@ import static java.util.Collections.singletonMap;
  */
 public class GoodData {
 
+    private static final String PROTOCOL = "https";
+    private static final int PORT = 443;
+    private static final String HOSTNAME = "secure.gooddata.com";
+
     private final RestTemplate restTemplate;
 
     public GoodData(String login, String password) {
-        final String hostname = "staging.getgooddata.com";
-        final int port = 443;
-        final String protocol = "https";
-        HttpHost host = new HttpHost(hostname, port, protocol);
+        this(login, password, HOSTNAME);
+    }
 
-        SSTRetrievalStrategy strategy = new LoginSSTRetrievalStrategy(HttpClientBuilder.create().build(), host, login, password);
+    public GoodData(String hostname, String login, String password) {
+        final HttpHost host = new HttpHost(hostname, PORT, PROTOCOL);
 
-        HttpClient client = new GoodDataHttpClient(HttpClientBuilder.create().build(), strategy);
+        final CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        final SSTRetrievalStrategy strategy = new LoginSSTRetrievalStrategy(httpClient, host, login, password);
 
+        final HttpClient client = new GoodDataHttpClient(httpClient, strategy);
 
         final UriPrefixingClientHttpRequestFactory factory = new UriPrefixingClientHttpRequestFactory(
-                new HttpComponentsClientHttpRequestFactory(client), hostname, port, protocol);
+                new HttpComponentsClientHttpRequestFactory(client), hostname, PORT, PROTOCOL);
         restTemplate = new RestTemplate(factory);
         restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(
                 new HeaderAddingRequestInterceptor(singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE))));
