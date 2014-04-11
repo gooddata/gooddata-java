@@ -1,4 +1,4 @@
-package com.gooddata.task;
+package com.gooddata.model;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -12,7 +12,7 @@ import org.codehaus.jackson.annotate.JsonTypeName;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("wTaskStatus")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TaskStatus {
+public class MaqlDdlTaskStatus {
 
     private static final String OK = "OK";
 
@@ -22,7 +22,7 @@ public class TaskStatus {
     // TODO messages
 
     @JsonCreator
-    public TaskStatus(@JsonProperty("status") String status, @JsonProperty("poll") String uri) {
+    public MaqlDdlTaskStatus(@JsonProperty("status") String status, @JsonProperty("poll") String uri) {
         this.status = status;
         this.uri = uri;
     }

@@ -1,4 +1,4 @@
-package com.gooddata.task;
+package com.gooddata.model;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -10,12 +10,12 @@ import org.codehaus.jackson.annotate.JsonTypeName;
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("asyncTask")
-public class AsyncTask {
+public class DiffTask {
 
     private Link link;
 
     @JsonCreator
-    public AsyncTask(@JsonProperty("link") Link link) {
+    public DiffTask(@JsonProperty("link") Link link) {
         this.link = link;
     }
 

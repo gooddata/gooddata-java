@@ -1,9 +1,11 @@
 package com.gooddata.model;
 
+import com.gooddata.GoodDataException;
+
 /**
- * TODO
+ * Represents error in ModelService
  */
-public class ModelException extends RuntimeException {
+public class ModelException extends GoodDataException {
     public ModelException(String message) {
         super(message);
     }

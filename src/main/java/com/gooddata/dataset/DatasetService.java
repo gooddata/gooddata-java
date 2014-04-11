@@ -4,11 +4,8 @@
 package com.gooddata.dataset;
 
 import com.gooddata.AbstractService;
-import com.gooddata.GoodDataException;
 import com.gooddata.gdc.DataStoreService;
 import com.gooddata.project.Project;
-import com.gooddata.task.PullTask;
-import com.gooddata.task.PullTaskStatus;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -52,10 +49,10 @@ public class DatasetService extends AbstractService {
                 }
             }, PullTaskStatus.class);
             if (!taskStatus.isSuccess()) {
-                throw new GoodDataException("ETL pull finished with status " + taskStatus.getStatus());
+                throw new DatasetException("ETL pull finished with status " + taskStatus.getStatus());
             }
         } catch (IOException e) {
-            throw new GoodDataException("Unable to serialize manifest", e);
+            throw new DatasetException("Unable to serialize manifest", e);
         } finally {
             dataStoreService.delete(dirPath);
         }
