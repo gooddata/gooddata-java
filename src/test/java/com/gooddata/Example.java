@@ -30,7 +30,7 @@ public class Example {
 
         final MetadataService md = gd.getMetadataService();
         final Metric metric = new Metric("pokus", "SELECT SUM([/gdc/md/nrtk3axzqixzqu3plpq5gnmff5n2k9ob/obj/15089])", "#,##0");
-        final Metric m = md.create(project, metric);
+        final Metric m = md.createObj(project, metric);
 
         gd.logout();
     }

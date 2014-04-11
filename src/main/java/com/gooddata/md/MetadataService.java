@@ -16,12 +16,13 @@ public class MetadataService extends AbstractService {
         super(restTemplate);
     }
 
-    public <T extends Obj> T get(String uri, Class<T> cls) {
+    public <T extends Obj> T getObjByUri(String uri, Class<T> cls) {
         return restTemplate.getForObject(uri, cls);
     }
 
-    public <T extends Obj> T create(Project project, Metric obj) {
+    @SuppressWarnings("unchecked")
+    public <T extends Obj> T createObj(Project project, Obj obj) {
         final UriResponse response = restTemplate.postForObject(Obj.URI, obj, UriResponse.class, project.getId());
-        return get(response.getUri(), (Class<T>)obj.getClass());
+        return getObjByUri(response.getUri(), (Class<T>) obj.getClass());
     }
 }
