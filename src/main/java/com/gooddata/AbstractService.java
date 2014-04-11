@@ -33,15 +33,14 @@ public abstract class AbstractService {
     }
 
     public <T> T poll(URI pollingUri, Class<T> cls) {
-        return poll(pollingUri, new StatusOkConditionCallback<T, T>(), cls);
+        return poll(pollingUri, new StatusOkConditionCallback(), cls);
     }
 
-    public <T> T poll(URI pollingUri, ConditionCallback<T, T> condition, Class<T> cls) {
+    public <T> T poll(URI pollingUri, ConditionCallback condition, Class<T> cls) {
         return poll(pollingUri, condition, cls, cls);
     }
 
-    public <T, R> R poll(URI pollingUri, ConditionCallback<T, R> condition, Class<T> pollingClass,
-                         Class<R> returnClass) {
+    public <T, R> R poll(URI pollingUri, ConditionCallback condition, Class<T> pollingClass, Class<R> returnClass) {
         int attempt = 0;
 
         while (true) {
@@ -84,7 +83,7 @@ public abstract class AbstractService {
         }
     }
 
-    public static interface ConditionCallback<T, R> {
+    public static interface ConditionCallback {
         boolean finished(ClientHttpResponse response) throws IOException;
     }
 

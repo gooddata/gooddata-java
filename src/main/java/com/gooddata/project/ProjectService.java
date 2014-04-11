@@ -36,7 +36,7 @@ public class ProjectService extends AbstractService {
         final UriResponse uri = restTemplate.postForObject(Projects.URI, inputProject, UriResponse.class);
 
         return poll(URI.create(uri.getUri()),
-                new ConditionCallback<Project, Project>() {
+                new ConditionCallback() {
                     @Override
                     public boolean finished(ClientHttpResponse response) throws IOException {
                         final Project project = new HttpMessageConverterExtractor<>(Project.class,
