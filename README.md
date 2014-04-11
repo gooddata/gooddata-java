@@ -8,7 +8,7 @@
 <dependency>
     <groupId>com.gooddata</groupId>
     <artifactId>gooddata-java</artifactId>
-    <version>${gooddata-java.version</version>
+    <version>${gooddata-java.version}</version>
 </dependency>
 ```
 
@@ -30,7 +30,9 @@ Project project = projectService.createProject(new Project("my project", "MyAuth
 ### Project Model API
 ```java
 ModelService modelService = gd.getModelService();
-TODO
+String projectModelData = ".....";
+ModelDiff projectModelDiff = modelService.getProjectModelDiff(project, projectModelData);
+modelService.updateProjectModel(project, projectModelDiff);
 ```
 
 ### Metadata API
