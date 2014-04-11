@@ -14,6 +14,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.Collection;
 
+import static java.util.Arrays.asList;
+
 /**
  */
 @JsonTypeName("report")
@@ -28,6 +30,10 @@ public class Report extends Obj {
     public Report(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
         super(meta);
         this.content = content;
+    }
+
+    public Report(String title, ReportDefinition definition) {
+        this(new Meta(title), new Content(asList(definition.getMeta().getUri())));
     }
 
     public Content getContent() {
