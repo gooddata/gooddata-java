@@ -60,4 +60,13 @@ public class DataStoreService {
             throw new GoodDataException("Unable to upload to " + uri, e);
         }
     }
+
+    public void delete(String path) {
+        final URI uri = getUri(path);
+        try {
+            sardine.delete(uri.toString());
+        } catch (IOException e) {
+            throw new GoodDataException("Unable to delete " + uri, e);
+        }
+    }
 }

@@ -37,11 +37,11 @@ public class DatasetService extends AbstractService {
     }
 
     public void loadDataset(Project project, InputStream dataset, DatasetManifest manifest) {
-        final String dirPath = "/" + project.getId() + "_" + RandomStringUtils.randomAlphabetic(3);
+        final String dirPath = "/" + project.getId() + "_" + RandomStringUtils.randomAlphabetic(3) + "/";
         try {
-            dataStoreService.upload(dirPath + "/" + manifest.getFile(), dataset);
-            String manifestJson = mapper.writeValueAsString(manifest);
-            dataStoreService.upload(dirPath + "/" + MANIFEST_FILE_NAME, IOUtils.toInputStream(manifestJson));
+            dataStoreService.upload(dirPath + manifest.getFile(), dataset);
+            final String manifestJson = mapper.writeValueAsString(manifest);
+            dataStoreService.upload(dirPath + MANIFEST_FILE_NAME, IOUtils.toInputStream(manifestJson));
 
             final PullTask pullTask = restTemplate.postForObject(Pull.URI, new Pull(dirPath), PullTask.class, project.getId());
             PullTaskStatus taskStatus = poll(URI.create(pullTask.getUri()), new ConditionCallback() {
@@ -58,7 +58,7 @@ public class DatasetService extends AbstractService {
         } catch (IOException e) {
             throw new GoodDataException("Unable to serialize manifest", e);
         } finally {
-            // TODO delete
+            dataStoreService.delete(dirPath);
         }
 
     }

@@ -49,6 +49,7 @@ Metric m = md.create(project, metric);
 DataStoreService dataStoreService = gd.getDataStoreService();
 dataStoreService.upload("/dir/file.txt", new FileInputStream("file.txt"));
 InputStream stream = dataStoreService.download("/dir/file.txt");
+dataStoreService.delete("/dir/file.txt");
 
 ```
 
