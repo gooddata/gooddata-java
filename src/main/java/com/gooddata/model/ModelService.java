@@ -7,9 +7,7 @@ import com.gooddata.task.AsyncTask;
 import com.gooddata.task.TaskStatus;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestTemplate;
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -27,16 +25,16 @@ public class ModelService extends AbstractService {
         return poll(URI.create(asyncTask.getUri()), new StatusOkConditionCallback<AsyncTask, ModelDiff>(), AsyncTask.class, ModelDiff.class);
     }
 
-    public void manageProjectModel(Project project, ModelDiff projectModelDiff) {
+    public void updateProjectModel(Project project, ModelDiff projectModelDiff) {
         for (ModelDiff.UpdateScript updateScript : projectModelDiff.getUpdateScripts()) {
             for (String maql : updateScript.getMaqlChunks()) {
-                manageProjectModel(project, new ModelManage(maql));
+                updateProjectModel(project, new MaqlDdl(maql));
             }
         }
     }
 
-    public void manageProjectModel(Project project, ModelManage modelManage) {
-        final LinkEntries linkEntries = restTemplate.postForObject(ModelManage.URI, modelManage, LinkEntries.class, project.getId());
+    public void updateProjectModel(Project project, MaqlDdl maqlDdl) {
+        final LinkEntries linkEntries = restTemplate.postForObject(MaqlDdl.URI, maqlDdl, LinkEntries.class, project.getId());
         poll(URI.create(linkEntries.getStatusLink()), TaskStatus.class);
     }
 

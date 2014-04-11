@@ -10,14 +10,14 @@ import org.codehaus.jackson.annotate.JsonTypeName;
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("manage")
-public class ModelManage {
+public class MaqlDdl {
 
     public static final String URI = "/gdc/md/{project}/ldm/manage2";
 
     private final String maql;
 
     @JsonCreator
-    public ModelManage(@JsonProperty("maql") String maql) {
+    public MaqlDdl(@JsonProperty("maql") String maql) {
         this.maql = maql;
     }
 

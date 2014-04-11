@@ -19,7 +19,7 @@ public class AsyncTaskTest {
                 + "        }\n"
                 + "    }\n"
                 + "}", AsyncTask.class);
-        assertEquals("/gdc/projects/{project-id}/model/diff/{diff-id}", asyncTask.getLink());
+        assertEquals("/gdc/projects/{project-id}/model/diff/{diff-id}", asyncTask.getUri());
 
 
     }

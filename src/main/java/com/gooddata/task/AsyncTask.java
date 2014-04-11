@@ -19,7 +19,7 @@ public class AsyncTask {
         this.link = link;
     }
 
-    public String getLink() {
+    public String getUri() {
         return link.pollUri;
     }
 

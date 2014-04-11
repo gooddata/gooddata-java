@@ -23,7 +23,7 @@ public class ModelExample {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        modelService.manageProjectModel(project, projectModelDiff);
+        modelService.updateProjectModel(project, projectModelDiff);
        /*
         try {
             new ObjectMapper().writeValue(System.out, new DiffRequest(projectModelData));
