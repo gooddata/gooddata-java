@@ -34,8 +34,8 @@ Create and update the project model, execute MAQL DDL,...
 
 ```java
 ModelService modelService = gd.getModelService();
-ModelDiff projectModelDiff = modelService.getProjectModelDiff(project, new FileInputStream("model.json");
-modelService.updateProjectModel(project, projectModelDiff);
+ModelDiff diff = modelService.getProjectModelDiff(project, new FileInputStream("model.json");
+modelService.updateProjectModel(project, diff);
 ```
 
 ### Metadata API
@@ -61,7 +61,7 @@ md.createMd(project, definition);
 Upload data to datasets,..
 
 ```java
-final DatasetService datasetService = gd.getDatasetService();
+DatasetService datasetService = gd.getDatasetService();
 datasetService.loadDataset(project, "datasetId", new FileInputStream("data.csv"));
 
 ```
