@@ -11,7 +11,7 @@ public class DiffRequestTest {
     @Test
     public void testSer() throws Exception {
         String valueAsString = mapper.writeValueAsString(new DiffRequest("{\"projectModel\":\"xxx\"}"));
-        assertEquals("{\"diffRequest\":{\"targetModel\":{\"projectModel\":\"xxx\"}}", valueAsString);
+        assertEquals("{\"diffRequest\":{\"targetModel\":{\"projectModel\":\"xxx\"}}}", valueAsString);
 
     }
 }
