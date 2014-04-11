@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 
+import static java.lang.String.format;
+
 /**
  */
 public abstract class AbstractService {
@@ -28,33 +30,35 @@ public abstract class AbstractService {
 
     protected final RestTemplate restTemplate;
 
+    private final RequestCallback noopRequestCallback = new RequestCallback() {
+        @Override
+        public void doWithRequest(final ClientHttpRequest request) throws IOException {
+        }
+    };
+    private final ResponseExtractor<ClientHttpResponse> reusableResponseExtractor = new ResponseExtractor<ClientHttpResponse>() {
+        @Override
+        public ClientHttpResponse extractData(final ClientHttpResponse response) throws IOException {
+            return new ReusableClientHttpResponse(response);
+        }
+    };
+
+
     public AbstractService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
+
 
     public <T> T poll(URI pollingUri, Class<T> cls) {
         return poll(pollingUri, new StatusOkConditionCallback(), cls);
     }
 
-    public <T> T poll(URI pollingUri, ConditionCallback condition, Class<T> cls) {
-        return poll(pollingUri, condition, cls, cls);
-    }
-
-    public <T, R> R poll(URI pollingUri, ConditionCallback condition, Class<T> pollingClass, Class<R> returnClass) {
+    public <T> T poll(URI pollingUri, ConditionCallback condition, Class<T> returnClass) {
         int attempt = 0;
 
         while (true) {
 
-            final ClientHttpResponse response = restTemplate.execute(pollingUri, HttpMethod.GET, new RequestCallback() {
-                @Override
-                public void doWithRequest(final ClientHttpRequest request) throws IOException {
-                }
-            }, new ResponseExtractor<ClientHttpResponse>() {
-                @Override
-                public ClientHttpResponse extractData(final ClientHttpResponse response) throws IOException {
-                    return new ReusableClientHttpResponse(response);
-                }
-            });
+            final ClientHttpResponse response = restTemplate.execute(pollingUri, HttpMethod.GET, noopRequestCallback,
+                    reusableResponseExtractor);
 
             try {
                 if (condition.finished(response)) {
@@ -62,8 +66,7 @@ public abstract class AbstractService {
                             .extractData(response);
                 } else if (HttpStatus.Series.CLIENT_ERROR.equals(response.getStatusCode().series())) {
                     throw new IllegalStateException(
-                            String.format("Polling returned client error HTTP status %s",
-                                    response.getStatusCode().value())
+                            format("Polling returned client error HTTP status %s", response.getStatusCode().value())
                     );
                 }
             } catch (IOException e) {
@@ -71,7 +74,7 @@ public abstract class AbstractService {
             }
 
             if (attempt >= MAX_ATTEMPTS - 1) {
-                throw new IllegalStateException(String.format("Max number of attempts (%s) exceeded", MAX_ATTEMPTS));
+                throw new IllegalStateException(format("Max number of attempts (%s) exceeded", MAX_ATTEMPTS));
             }
 
             try {
@@ -83,11 +86,20 @@ public abstract class AbstractService {
         }
     }
 
+
     public static interface ConditionCallback {
         boolean finished(ClientHttpResponse response) throws IOException;
     }
 
-    public static class ReusableClientHttpResponse implements ClientHttpResponse {
+    public static class StatusOkConditionCallback implements ConditionCallback {
+        @Override
+        public boolean finished(ClientHttpResponse response) throws IOException {
+            return HttpStatus.OK.equals(response.getStatusCode());
+        }
+    }
+
+
+    private class ReusableClientHttpResponse implements ClientHttpResponse {
 
         private final byte[] body;
         private final HttpStatus statusCode;
@@ -95,7 +107,7 @@ public abstract class AbstractService {
         private final String statusText;
         private final HttpHeaders headers;
 
-        ReusableClientHttpResponse(ClientHttpResponse response) {
+        public ReusableClientHttpResponse(ClientHttpResponse response) {
             try {
                 body = FileCopyUtils.copyToByteArray(response.getBody());
                 statusCode = response.getStatusCode();
@@ -140,7 +152,6 @@ public abstract class AbstractService {
         public void close() {
             //already closed
         }
-
     }
 
 }

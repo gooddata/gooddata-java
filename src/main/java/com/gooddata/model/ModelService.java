@@ -1,13 +1,13 @@
 package com.gooddata.model;
 
 import com.gooddata.AbstractService;
-import com.gooddata.StatusOkConditionCallback;
 import com.gooddata.project.Project;
 import com.gooddata.task.AsyncTask;
 import com.gooddata.task.TaskStatus;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.springframework.web.client.RestTemplate;
+
 import java.net.URI;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class ModelService extends AbstractService {
 
     public ModelDiff getProjectModelDiff(Project project, DiffRequest diffRequest) {
         final AsyncTask asyncTask = restTemplate.postForObject(DiffRequest.URI, diffRequest, AsyncTask.class, project.getId());
-        return poll(URI.create(asyncTask.getUri()), new StatusOkConditionCallback<AsyncTask, ModelDiff>(), AsyncTask.class, ModelDiff.class);
+        return poll(URI.create(asyncTask.getUri()), new StatusOkConditionCallback(), ModelDiff.class);
     }
 
     public void updateProjectModel(Project project, ModelDiff projectModelDiff) {
