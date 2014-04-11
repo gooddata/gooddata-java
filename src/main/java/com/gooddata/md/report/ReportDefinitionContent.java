@@ -4,6 +4,7 @@
 package com.gooddata.md.report;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 
@@ -13,9 +14,11 @@ import java.util.Collections;
 /**
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "format")
-@JsonSubTypes(
-        @JsonSubTypes.Type(name = GridReportDefinition.FORMAT, value = GridReportDefinition.class)
-)
+@JsonSubTypes({
+        @JsonSubTypes.Type(name = GridReportDefinition.FORMAT, value = GridReportDefinition.class),
+        @JsonSubTypes.Type(name = OneNumberReportDefinition.FORMAT, value = OneNumberReportDefinition.class)
+})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class ReportDefinitionContent {
 
     private final String format;

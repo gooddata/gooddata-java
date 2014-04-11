@@ -77,3 +77,12 @@ InputStream stream = dataStoreService.download("/dir/file.txt");
 dataStoreService.delete("/dir/file.txt");
 
 ```
+
+### Report API
+
+Execute and export reports.
+
+```java
+ReportService reportService = gd.getReportService();
+String imgUri = reportService.exportReport(reportDef, "png");
+```

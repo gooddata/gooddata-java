@@ -4,7 +4,6 @@
 package com.gooddata;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
@@ -20,6 +19,7 @@ import java.io.InputStream;
 import java.net.URI;
 
 import static java.lang.String.format;
+import static org.springframework.http.HttpMethod.GET;
 
 /**
  */
@@ -57,7 +57,7 @@ public abstract class AbstractService {
 
         while (true) {
 
-            final ClientHttpResponse response = restTemplate.execute(pollingUri, HttpMethod.GET, noopRequestCallback,
+            final ClientHttpResponse response = restTemplate.execute(pollingUri, GET, noopRequestCallback,
                     reusableResponseExtractor);
 
             try {

@@ -37,6 +37,11 @@ public class Example {
         final DatasetService datasetService = gd.getDatasetService();
         final DatasetManifest manifest = datasetService.getDatasetManifest(project, "datasetId");
         System.out.println(manifest);
+        final ReportDefinition reportDef = md.getObjByUri("/gdc/md/GoodSalesDemoKokot1/obj/1962", ReportDefinition.class);
+
+        final ReportService reportService = gd.getReportService();
+        final String imgUri = reportService.exportReport(reportDef, "csv");
+        System.out.println(imgUri);
 
         gd.logout();
     }

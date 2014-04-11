@@ -13,6 +13,7 @@ import com.gooddata.http.client.SSTRetrievalStrategy;
 import com.gooddata.md.MetadataService;
 import com.gooddata.model.ModelService;
 import com.gooddata.project.ProjectService;
+import com.gooddata.report.ReportService;
 import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -41,6 +42,7 @@ public class GoodData {
     private final GdcService gdcService;
     private final DataStoreService dataStoreService;
     private final DatasetService datasetService;
+    private final ReportService reportService;
 
     public GoodData(String login, String password) {
         this(login, password, HOSTNAME);
@@ -57,6 +59,7 @@ public class GoodData {
         gdcService = new GdcService(restTemplate);
         dataStoreService = new DataStoreService(httpClientBuilder, gdcService, login, password);
         datasetService = new DatasetService(restTemplate, dataStoreService);
+        reportService = new ReportService(restTemplate);
     }
 
     private RestTemplate createRestTemplate(String hostname, String login, String password, HttpClientBuilder httpClientBuilder) {
@@ -104,6 +107,10 @@ public class GoodData {
 
     public DatasetService getDatasetService() {
         return datasetService;
+    }
+
+    public ReportService getReportService() {
+        return reportService;
     }
 
 }
