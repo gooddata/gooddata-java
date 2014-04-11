@@ -11,9 +11,8 @@ import org.junit.Test;
 public class TaskStatusTest {
 
     @Test
-    @Ignore
     public void testDeser() throws Exception {
-        final TaskStatus taskStatus = new ObjectMapper().readValue("", TaskStatus.class);
+        final TaskStatus taskStatus = new ObjectMapper().readValue("{\"wTaskStatus\":{\"status\":\"OK\",\"poll\":\"someURI\"}}", TaskStatus.class);
         assertEquals("OK", taskStatus.getStatus());
         assertEquals("someURI", taskStatus.getUri());
 
