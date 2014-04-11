@@ -14,14 +14,11 @@ import java.net.URI;
 /**
  * Sets default URI prefix for Spring REST client which by default requires absolute URI.
  * UriPrefixingAsyncClientHttpRequestFactory allows you to specify default hostname and port.
- * <p/>
- * It has to implement both AsyncClientHttpRequestFactory, ClientHttpRequestFactory, Spring
- * would not talk to it otherwise.
  */
 class UriPrefixingClientHttpRequestFactory implements ClientHttpRequestFactory {
 
     private final ClientHttpRequestFactory wrapped;
-    private final URI defaultUri;
+    private final UriPrefixer prefixer;
 
     /**
      * Creates na instance
@@ -31,7 +28,7 @@ class UriPrefixingClientHttpRequestFactory implements ClientHttpRequestFactory {
      */
     UriPrefixingClientHttpRequestFactory(ClientHttpRequestFactory wrapped, URI uriPrefix) {
         this.wrapped = wrapped;
-        this.defaultUri = uriPrefix;
+        this.prefixer = new UriPrefixer(uriPrefix);
     }
 
     UriPrefixingClientHttpRequestFactory(ClientHttpRequestFactory factory, String hostname, int port, String protocol) {
@@ -40,14 +37,7 @@ class UriPrefixingClientHttpRequestFactory implements ClientHttpRequestFactory {
 
     @Override
     public ClientHttpRequest createRequest(URI uri, HttpMethod httpMethod) throws IOException {
-        return wrapped.createRequest(mergeUris(uri), httpMethod);
+        return wrapped.createRequest(prefixer.mergeUris(uri), httpMethod);
     }
 
-    private URI mergeUris(URI uri) {
-        return UriComponentsBuilder.fromUri(defaultUri)
-                .path(uri.getRawPath())
-                .query(uri.getRawQuery())
-                .fragment(uri.getRawFragment())
-                .build().toUri();
-    }
 }

@@ -88,14 +88,20 @@ public class Project {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Links {
         private final String self;
+        private final String uploads;
 
         @JsonCreator
-        public Links(@JsonProperty("self") String self) {
+        public Links(@JsonProperty("self") String self, @JsonProperty("uploads") String uploads) {
             this.self = self;
+            this.uploads = uploads;
         }
 
         public String getSelf() {
             return self;
+        }
+
+        public String getUploads() {
+            return uploads;
         }
     }
 

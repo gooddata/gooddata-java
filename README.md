@@ -12,17 +12,34 @@
 </dependency>
 ```
 
+## General
+
 ```java
 GoodData gd = new GoodData("roman@gooddata.com", "Roman1");
+gd.logout();
+```
 
+## Project API
+
+```java
 ProjectService projectService = gd.getProjectService();
 Collection<Project> projects = projectService.getProjects();
-
 Project project = projectService.createProject(new Project("my project", "MyAuthToken"));
+```
 
+## Metadata API
+
+```java
 MetadataService md = gd.getMetadataService();
 Metric metric = new Metric("my sum", "SELECT SUM([/gdc/md/PROJECT_ID/obj/ID])", "#,##0");
 Metric m = md.create(project, metric);
+```
 
-gd.logout();
+## DataStore API
+
+```java
+DataStoreService dataStoreService = gd.getDataStoreService();
+dataStoreService.upload("/dir/file.txt", new FileInputStream("file.txt"));
+InputStream stream = dataStoreService.download("/dir/file.txt");
+
 ```

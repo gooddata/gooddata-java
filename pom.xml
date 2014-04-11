@@ -42,6 +42,11 @@
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.12</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.lookfirst</groupId>
+            <artifactId>sardine</artifactId>
+            <version>5.1</version>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>

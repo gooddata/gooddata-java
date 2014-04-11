@@ -4,6 +4,7 @@
 package com.gooddata;
 
 import com.gooddata.account.AccountService;
+import com.gooddata.gdc.DataStoreService;
 import com.gooddata.gdc.GdcService;
 import com.gooddata.http.client.GoodDataHttpClient;
 import com.gooddata.http.client.LoginSSTRetrievalStrategy;
@@ -33,15 +34,21 @@ public class GoodData {
     private static final String HOSTNAME = "secure.gooddata.com";
 
     private final RestTemplate restTemplate;
+    private final HttpClientBuilder httpClientBuilder;
+    private final String login;
+    private final String password;
 
     public GoodData(String login, String password) {
         this(login, password, HOSTNAME);
     }
 
     public GoodData(String hostname, String login, String password) {
+        this.login = login;
+        this.password = password;
         final HttpHost host = new HttpHost(hostname, PORT, PROTOCOL);
 
-        final CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        httpClientBuilder = HttpClientBuilder.create();
+        final CloseableHttpClient httpClient = httpClientBuilder.build();
         final SSTRetrievalStrategy strategy = new LoginSSTRetrievalStrategy(httpClient, host, login, password);
 
         final HttpClient client = new GoodDataHttpClient(httpClient, strategy);
@@ -75,5 +82,9 @@ public class GoodData {
 
     public GdcService getGdcService() {
         return new GdcService(restTemplate);
+    }
+
+    public DataStoreService getDataStoreService() {
+        return new DataStoreService(httpClientBuilder, getGdcService(), login, password);
     }
 }
