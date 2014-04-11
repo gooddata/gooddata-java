@@ -38,6 +38,13 @@ public class GoodData {
     private final HttpClientBuilder httpClientBuilder;
     private final String login;
     private final String password;
+    private AccountService accountService;
+    private ProjectService projectService;
+    private MetadataService metadataService;
+    private ModelService modelService;
+    private GdcService gdcService;
+    private DataStoreService dataStoreService;
+    private DatasetService datasetService;
 
     public GoodData(String login, String password) {
         this(login, password, HOSTNAME);
@@ -59,6 +66,8 @@ public class GoodData {
         restTemplate = new RestTemplate(factory);
         restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(
                 new HeaderAddingRequestInterceptor(singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE))));
+
+        initServices();
     }
 
     public void logout() {
@@ -66,30 +75,40 @@ public class GoodData {
     }
 
     public ProjectService getProjectService() {
-       return new ProjectService(restTemplate, getAccountService());
+        return projectService;
     }
 
     public AccountService getAccountService() {
-        return new AccountService(restTemplate);
+        return accountService;
     }
 
     public MetadataService getMetadataService() {
-        return new MetadataService(restTemplate);
+        return metadataService;
     }
 
     public ModelService getModelService() {
-        return new ModelService(restTemplate);
+        return modelService;
     }
 
     public GdcService getGdcService() {
-        return new GdcService(restTemplate);
+        return gdcService;
     }
 
     public DataStoreService getDataStoreService() {
-        return new DataStoreService(httpClientBuilder, getGdcService(), login, password);
+        return dataStoreService;
     }
 
     public DatasetService getDatasetService() {
-        return new DatasetService(restTemplate, getDataStoreService());
+        return datasetService;
+    }
+
+    private void initServices() {
+        accountService = new AccountService(restTemplate);
+        projectService = new ProjectService(restTemplate, getAccountService());
+        metadataService = new MetadataService(restTemplate);
+        modelService = new ModelService(restTemplate);
+        gdcService = new GdcService(restTemplate);
+        dataStoreService = new DataStoreService(httpClientBuilder, getGdcService(), login, password);
+        datasetService = new DatasetService(restTemplate, getDataStoreService());
     }
 }
