@@ -4,11 +4,13 @@
 package com.gooddata.project;
 
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.springframework.web.util.UriTemplate;
 
 /**
  */
@@ -19,11 +21,12 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 public class Project {
 
     public static final String PROJECTS_URI = "/gdc/account/profile/{id}/projects";
+    public static final String PROJECT_URI = Projects.URI + "{id}";
+    public static final UriTemplate PROJECT_TEMPLATE = new UriTemplate(PROJECT_URI);
 
     private Content content;
     private Meta meta;
     private Links links;
-    private String id;
 
     public Project(String title, String authorizationToken) {
         content = new Content(authorizationToken);
@@ -37,16 +40,13 @@ public class Project {
         this.links = links;
     }
 
-    public Project(final String id) {
-        this.id = id;
-    }
-
     public Content getContent() {
         return content;
     }
 
+    @JsonIgnore
     public String getId() {
-        return id;
+        return PROJECT_TEMPLATE.match(getLinks().getSelf()).get("id");
     }
 
     public Meta getMeta() {
