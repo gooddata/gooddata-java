@@ -55,6 +55,7 @@ InputStream stream = dataStoreService.download("/dir/file.txt");
 ```java
 final DatasetService datasetService = gd.getDatasetService();
 final DatasetManifest manifest = datasetService.getDatasetManifest(project, "datasetId");
+datasetService.loadDataset(project, new FileInputStream("/person.csv"), manifest);
 
 ```
 

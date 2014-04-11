@@ -2,6 +2,7 @@ package com.gooddata.dataset;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import java.util.List;
@@ -12,27 +13,28 @@ import java.util.Map;
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("dataSetSLIManifest")
+@JsonPropertyOrder({"parts", "dataSet", "file"})
 public class DatasetManifest {
 
-    public static final String URI = "/gdc/md/{projectId}/ldm/singleloadinterface/{id}/manifest";
+    public static final String URI = "/gdc/md/{projectId}/ldm/singleloadinterface/{dataSet}/manifest";
 
-    private final String id;
+    private final String dataSet;
     private String file;
     private List<Part> parts;
 
-    public DatasetManifest(String id) {
-        this.id = id;
+    public DatasetManifest(String dataSet) {
+        this.dataSet = dataSet;
     }
 
     @JsonCreator
-    public DatasetManifest(@JsonProperty("dataSet") String id, @JsonProperty("file") String file, @JsonProperty("parts") List<Part> parts) {
-        this.id = id;
+    public DatasetManifest(@JsonProperty("dataSet") String dataSet, @JsonProperty("file") String file, @JsonProperty("parts") List<Part> parts) {
+        this.dataSet = dataSet;
         this.file = file;
         this.parts = parts;
     }
 
-    public String getId() {
-        return id;
+    public String getDataSet() {
+        return dataSet;
     }
 
     public List<Part> getParts() {

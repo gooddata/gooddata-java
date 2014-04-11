@@ -60,7 +60,7 @@ public class DatasetManifestTest {
     @Test
     public void testDeser() throws Exception {
         final DatasetManifest manifest = new ObjectMapper().readValue(SERIALIZED, DatasetManifest.class);
-        assertEquals("dataset.person", manifest.getId());
+        assertEquals("dataset.person", manifest.getDataSet());
         assertEquals("dataset.person.csv", manifest.getFile());
         assertEquals(5, manifest.getParts().size());
 

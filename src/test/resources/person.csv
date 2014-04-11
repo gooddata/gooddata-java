@@ -1,0 +1,5 @@
+f_person.f_shoesize,f_person.nm_name,d_person_role.nm_xrole,f_person.f_age,d_person_department.nm_xdepartment
+37,Jane,manager,35,HR
+42,Jack,developer,25,DevOps
+35,Sandy,recruiter,27,HR
+40,Jonathan,developer,50,DevOps
