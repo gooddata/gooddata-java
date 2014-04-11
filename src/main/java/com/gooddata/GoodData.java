@@ -4,6 +4,7 @@
 package com.gooddata;
 
 import com.gooddata.account.AccountService;
+import com.gooddata.gdc.GdcService;
 import com.gooddata.http.client.GoodDataHttpClient;
 import com.gooddata.http.client.LoginSSTRetrievalStrategy;
 import com.gooddata.http.client.SSTRetrievalStrategy;
@@ -52,6 +53,10 @@ public class GoodData {
                 new HeaderAddingRequestInterceptor(singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE))));
     }
 
+    public void logout() {
+        getAccountService().logout();
+    }
+
     public ProjectService getProjectService() {
        return new ProjectService(restTemplate, getAccountService());
     }
@@ -64,12 +69,11 @@ public class GoodData {
         return new MetadataService(restTemplate);
     }
 
-    public void logout() {
-        getAccountService().logout();
+    public ModelService getModelService() {
+        return new ModelService(restTemplate);
     }
 
-    public ModelService getModelService() {
-        // TODO do not return always new
-        return new ModelService(restTemplate);
+    public GdcService getGdcService() {
+        return new GdcService(restTemplate);
     }
 }
