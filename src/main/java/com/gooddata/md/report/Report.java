@@ -1,8 +1,10 @@
 /*
  * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
  */
-package com.gooddata.md;
+package com.gooddata.md.report;
 
+import com.gooddata.md.Meta;
+import com.gooddata.md.Obj;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -10,24 +12,22 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.util.Collection;
+
 /**
  */
-@JsonTypeName("metric")
+@JsonTypeName("report")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class Metric extends Obj {
+public class Report extends Obj {
 
     private final Content content;
 
     @JsonCreator
-    public Metric(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
+    public Report(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
         super(meta);
         this.content = content;
-    }
-
-    public Metric(String title, String expression, String format) {
-        this(new Meta(title), new Metric.Content(expression, format));
     }
 
     public Content getContent() {
@@ -35,22 +35,17 @@ public class Metric extends Obj {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     public static class Content {
-        private final String expression;
-        private final String format;
+        private final Collection<String> definitions;
 
         @JsonCreator
-        public Content(@JsonProperty("expression") String expression, @JsonProperty("format") String format) {
-            this.expression = expression;
-            this.format = format;
+        public Content(@JsonProperty("definitions") Collection<String> definitions) {
+            this.definitions = definitions;
         }
 
-        public String getExpression() {
-            return expression;
-        }
-
-        public String getFormat() {
-            return format;
+        public Collection<String> getDefinitions() {
+            return definitions;
         }
     }
 }

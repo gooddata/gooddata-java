@@ -25,7 +25,7 @@ public class ModelExample {
         gd.logout();
     }
 
-    private static final String projectModelData = "{\"projectModel\": {\"datasets\": [\n"
+    public static final String projectModelData = "{\"projectModel\": {\"datasets\": [\n"
             + "{\n"
             + "    \"dataset\": {\n"
             + "        \"identifier\": \"dataset.person\",\n"
