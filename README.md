@@ -21,21 +21,26 @@ gd.logout();
 
 ### Project API
 
+List projects, create a project,...
 ```java
 ProjectService projectService = gd.getProjectService();
 Collection<Project> projects = projectService.getProjects();
-Project project = projectService.createProject(new Project("my project", "MyAuthToken"));
+Project project = projectService.createProject(new Project("my project", "MyToken"));
 ```
 
 ### Project Model API
+
+Create and update the project model, execute MAQL DDL,...
+
 ```java
 ModelService modelService = gd.getModelService();
-String projectModelData = ".....";
-ModelDiff projectModelDiff = modelService.getProjectModelDiff(project, projectModelData);
+ModelDiff projectModelDiff = modelService.getProjectModelDiff(project, new FileInputStream("model.json");
 modelService.updateProjectModel(project, projectModelDiff);
 ```
 
 ### Metadata API
+
+Create and update project metadata - metrics, reports,...
 
 ```java
 MetadataService md = gd.getMetadataService();
@@ -45,13 +50,25 @@ Metric m = md.createObj(project, metric);
 ReportDefinition definition = GridReportDefinition.create(
         "my report",
         asList("metricGroup"),
-        asList(new AttributeItem("/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/29")),
-        asList(new Item("/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/41"))
+        asList(new AttributeItem("/gdc/md/PROJECT_ID/obj/ID")),
+        asList(new Item("/gdc/md/PROJECT_ID/obj/ID"))
 );
 md.createMd(project, definition);
 ```
 
+### Dataset API
+
+Upload data to datasets,..
+
+```java
+final DatasetService datasetService = gd.getDatasetService();
+datasetService.loadDataset(project, "datasetId", new FileInputStream("data.csv"));
+
+```
+
 ### DataStore API
+
+Manage files on the data store (currently backed by WebDAV) - user staging area.
 
 ```java
 DataStoreService dataStoreService = gd.getDataStoreService();
@@ -60,13 +77,3 @@ InputStream stream = dataStoreService.download("/dir/file.txt");
 dataStoreService.delete("/dir/file.txt");
 
 ```
-
-### Dataset API
-
-```java
-final DatasetService datasetService = gd.getDatasetService();
-final DatasetManifest manifest = datasetService.getDatasetManifest(project, "datasetId");
-datasetService.loadDataset(project, new FileInputStream("/person.csv"), manifest);
-
-```
-

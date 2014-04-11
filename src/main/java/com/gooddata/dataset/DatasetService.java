@@ -63,7 +63,7 @@ public class DatasetService extends AbstractService {
 
     }
 
-    public void loadDataset(Project project, InputStream dataset, String datasetId) {
+    public void loadDataset(Project project, String datasetId, InputStream dataset) {
         loadDataset(project, dataset, getDatasetManifest(project, datasetId));
     }
 }
