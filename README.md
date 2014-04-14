@@ -12,6 +12,9 @@
 </dependency>
 ```
 
+The *GoodData Java SDK* uses the [GoodData HTTP client](https://github.com/gooddata/gooddata-http-client) (version 0.8.2 or later)
+and the *Apache HTTP Client* (version 4.3 or later).
+
 ### General
 
 ```java
