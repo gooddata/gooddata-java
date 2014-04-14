@@ -14,13 +14,11 @@ import java.util.Map;
 
 import static org.apache.commons.lang.Validate.notNull;
 
-/**
- */
-public class HeaderAddingRequestInterceptor implements ClientHttpRequestInterceptor {
+class HeaderSettingRequestInterceptor implements ClientHttpRequestInterceptor {
 
     private final Map<String, String> headers;
 
-    public HeaderAddingRequestInterceptor(Map<String, String> headers) {
+    public HeaderSettingRequestInterceptor(Map<String, String> headers) {
         notNull(headers);
         this.headers = headers;
     }
