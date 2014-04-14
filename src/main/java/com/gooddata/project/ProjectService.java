@@ -10,7 +10,6 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.Collection;
 
 /**
@@ -34,7 +33,7 @@ public class ProjectService extends AbstractService {
 
         final UriResponse uri = restTemplate.postForObject(Projects.URI, inputProject, UriResponse.class);
 
-        return poll(URI.create(uri.getUri()),
+        return poll(uri.getUri(),
                 new ConditionCallback() {
                     @Override
                     public boolean finished(ClientHttpResponse response) throws IOException {

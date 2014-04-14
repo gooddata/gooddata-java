@@ -19,7 +19,7 @@ public class ModelService extends AbstractService {
 
     public ModelDiff getProjectModelDiff(Project project, DiffRequest diffRequest) {
         final DiffTask diffTask = restTemplate.postForObject(DiffRequest.URI, diffRequest, DiffTask.class, project.getId());
-        return poll(URI.create(diffTask.getUri()), new StatusOkConditionCallback(), ModelDiff.class);
+        return poll(diffTask.getUri(), new StatusOkConditionCallback(), ModelDiff.class);
     }
 
     public ModelDiff getProjectModelDiff(Project project, String targetModel) {
@@ -44,7 +44,7 @@ public class ModelService extends AbstractService {
 
     public void updateProjectModel(Project project, MaqlDdl maqlDdl) {
         final MaqlDdlLinks linkEntries = restTemplate.postForObject(MaqlDdl.URI, maqlDdl, MaqlDdlLinks.class, project.getId());
-        MaqlDdlTaskStatus maqlDdlTaskStatus = poll(URI.create(linkEntries.getStatusLink()), MaqlDdlTaskStatus.class);
+        MaqlDdlTaskStatus maqlDdlTaskStatus = poll(linkEntries.getStatusLink(), MaqlDdlTaskStatus.class);
         if (!maqlDdlTaskStatus.isSuccess()) {
              throw new ModelException("Update project model finished with status " + maqlDdlTaskStatus.getStatus());
         }

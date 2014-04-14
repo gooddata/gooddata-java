@@ -47,9 +47,16 @@ public abstract class AbstractService {
         this.restTemplate = restTemplate;
     }
 
-
     public <T> T poll(URI pollingUri, Class<T> cls) {
         return poll(pollingUri, new StatusOkConditionCallback(), cls);
+    }
+
+    public <T> T poll(String pollingUri, Class<T> cls) {
+        return poll(URI.create(pollingUri), new StatusOkConditionCallback(), cls);
+    }
+
+    public <T> T poll(String pollingUri, ConditionCallback condition, Class<T> returnClass) {
+        return poll(URI.create(pollingUri), condition, returnClass);
     }
 
     public <T> T poll(URI pollingUri, ConditionCallback condition, Class<T> returnClass) {

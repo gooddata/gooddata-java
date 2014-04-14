@@ -13,7 +13,6 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 
 /**
  */
@@ -40,7 +39,7 @@ public class DatasetService extends AbstractService {
             dataStoreService.upload(dirPath + MANIFEST_FILE_NAME, IOUtils.toInputStream(manifestJson));
 
             final PullTask pullTask = restTemplate.postForObject(Pull.URI, new Pull(dirPath), PullTask.class, project.getId());
-            final PullTaskStatus taskStatus = poll(URI.create(pullTask.getUri()), new ConditionCallback() {
+            final PullTaskStatus taskStatus = poll(pullTask.getUri(), new ConditionCallback() {
                 @Override
                 public boolean finished(ClientHttpResponse response) throws IOException {
                     final PullTaskStatus status = extractData(response, PullTaskStatus.class);
