@@ -2,7 +2,7 @@ package com.gooddata.report;
 
 import com.gooddata.AbstractService;
 import com.gooddata.GoodDataException;
-import com.gooddata.UriResponse;
+import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;

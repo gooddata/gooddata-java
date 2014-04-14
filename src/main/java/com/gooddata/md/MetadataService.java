@@ -4,7 +4,7 @@
 package com.gooddata.md;
 
 import com.gooddata.AbstractService;
-import com.gooddata.UriResponse;
+import com.gooddata.gdc.UriResponse;
 import com.gooddata.project.Project;
 import org.springframework.web.client.RestTemplate;
 

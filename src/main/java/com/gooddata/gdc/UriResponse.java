@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
  */
-package com.gooddata;
+package com.gooddata.gdc;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;

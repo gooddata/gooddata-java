@@ -4,7 +4,7 @@
 package com.gooddata.project;
 
 import com.gooddata.AbstractService;
-import com.gooddata.UriResponse;
+import com.gooddata.gdc.UriResponse;
 import com.gooddata.account.AccountService;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestTemplate;
