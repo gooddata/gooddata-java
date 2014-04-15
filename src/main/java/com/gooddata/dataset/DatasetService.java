@@ -4,12 +4,15 @@
 package com.gooddata.dataset;
 
 import com.gooddata.AbstractService;
+import com.gooddata.GoodDataRestException;
+import com.gooddata.gdc.DataStoreException;
 import com.gooddata.gdc.DataStoreService;
 import com.gooddata.project.Project;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +31,17 @@ public class DatasetService extends AbstractService {
     }
 
     public DatasetManifest getDatasetManifest(Project project, String datasetId) {
-        return restTemplate.getForObject(DatasetManifest.URI, DatasetManifest.class, project.getId(), datasetId);
+        try {
+            return restTemplate.getForObject(DatasetManifest.URI, DatasetManifest.class, project.getId(), datasetId);
+        } catch (GoodDataRestException e) {
+            if (e.getStatusCode() == 404) {
+                throw new DatasetNotFoundException(datasetId, e);
+            } else {
+                throw new DatasetException("Unable to get dataset " + datasetId, e);
+            }
+        } catch (RestClientException e) {
+            throw new DatasetException("Unable to get dataset " + datasetId, e);
+        }
     }
 
     public void loadDataset(Project project, InputStream dataset, DatasetManifest manifest) {
@@ -51,8 +64,14 @@ public class DatasetService extends AbstractService {
             }
         } catch (IOException e) {
             throw new DatasetException("Unable to serialize manifest", e);
+        } catch (DataStoreException | GoodDataRestException | RestClientException e) {
+            throw new DatasetException("Unable to load dataset " + manifest.getDataSet(), e);
         } finally {
-            dataStoreService.delete(dirPath);
+            try {
+                dataStoreService.delete(dirPath);
+            } catch (DataStoreException ignored) {
+                // todo log?
+            }
         }
 
     }

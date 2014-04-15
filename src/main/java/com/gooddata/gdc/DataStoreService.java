@@ -5,7 +5,6 @@ package com.gooddata.gdc;
 
 import com.github.sardine.impl.SardineImpl;
 import com.github.sardine.impl.io.ContentLengthInputStream;
-import com.gooddata.GoodDataException;
 import com.gooddata.UriPrefixer;
 import org.apache.http.impl.client.HttpClientBuilder;
 
@@ -40,15 +39,14 @@ public class DataStoreService {
     }
 
     public void upload(String path, InputStream stream) {
-        final URI uri = getUri(path);
-        upload(uri, stream);
+        upload(getUri(path), stream);
     }
 
     private void upload(URI url, InputStream stream) {
         try {
             sardine.put(url.toString(), stream);
         } catch (IOException e) {
-            throw new GoodDataException("Unable to upload to " + url, e);
+            throw new DataStoreException("Unable to upload to " + url, e);
         }
     }
 
@@ -57,7 +55,7 @@ public class DataStoreService {
         try {
             return sardine.get(uri.toString());
         } catch (IOException e) {
-            throw new GoodDataException("Unable to upload to " + uri, e);
+            throw new DataStoreException("Unable to download from " + uri, e);
         }
     }
 
@@ -66,7 +64,7 @@ public class DataStoreService {
         try {
             sardine.delete(uri.toString());
         } catch (IOException e) {
-            throw new GoodDataException("Unable to delete " + uri, e);
+            throw new DataStoreException("Unable to delete " + uri, e);
         }
     }
 }

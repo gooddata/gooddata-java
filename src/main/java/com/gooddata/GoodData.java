@@ -31,6 +31,8 @@ import static java.util.Collections.singletonMap;
  */
 public class GoodData {
 
+    public static final String GDC_REQUEST_ID_HEADER = "X-GDC-REQUEST";
+
     private static final String PROTOCOL = "https";
     private static final int PORT = 443;
     private static final String HOSTNAME = "secure.gooddata.com";
@@ -74,6 +76,7 @@ public class GoodData {
         final RestTemplate restTemplate = new RestTemplate(factory);
         restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(
                 new HeaderSettingRequestInterceptor(singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE))));
+        restTemplate.setErrorHandler(new ResponseErrorHandler(restTemplate.getMessageConverters()));
         return restTemplate;
     }
 

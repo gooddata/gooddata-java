@@ -72,16 +72,16 @@ public abstract class AbstractService {
                     return new HttpMessageConverterExtractor<>(returnClass, restTemplate.getMessageConverters())
                             .extractData(response);
                 } else if (HttpStatus.Series.CLIENT_ERROR.equals(response.getStatusCode().series())) {
-                    throw new IllegalStateException(
+                    throw new GoodDataException(
                             format("Polling returned client error HTTP status %s", response.getStatusCode().value())
                     );
                 }
             } catch (IOException e) {
-                throw new RuntimeException("I/O error occurred during HTTP response extraction", e);
+                throw new GoodDataException("I/O error occurred during HTTP response extraction", e);
             }
 
             if (attempt >= MAX_ATTEMPTS - 1) {
-                throw new IllegalStateException(format("Max number of attempts (%s) exceeded", MAX_ATTEMPTS));
+                throw new GoodDataException(format("Max number of attempts (%s) exceeded", MAX_ATTEMPTS));
             }
 
             try {
