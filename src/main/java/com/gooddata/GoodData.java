@@ -45,7 +45,7 @@ public class GoodData {
     private final ReportService reportService;
 
     public GoodData(String login, String password) {
-        this(login, password, HOSTNAME);
+        this(HOSTNAME, login, password);
     }
 
     public GoodData(String hostname, String login, String password) {
