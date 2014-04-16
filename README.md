@@ -39,6 +39,8 @@ Create and update the project model, execute MAQL DDL,...
 ModelService modelService = gd.getModelService();
 ModelDiff diff = modelService.getProjectModelDiff(project, new FileInputStream("model.json");
 modelService.updateProjectModel(project, diff);
+
+modelService.updateProjectModel(project, "MAQL DDL EXPRESSION");
 ```
 
 ### Metadata API

@@ -40,13 +40,13 @@ public class ModelService extends AbstractService {
     public void updateProjectModel(Project project, ModelDiff projectModelDiff) {
         for (ModelDiff.UpdateScript updateScript : projectModelDiff.getUpdateScripts()) {
             for (String maql : updateScript.getMaqlChunks()) {
-                updateProjectModel(project, new MaqlDdl(maql));
+                updateProjectModel(project, maql);
             }
         }
     }
 
-    public void updateProjectModel(Project project, MaqlDdl maqlDdl) {
-        final MaqlDdlLinks linkEntries = restTemplate.postForObject(MaqlDdl.URI, maqlDdl, MaqlDdlLinks.class, project.getId());
+    public void updateProjectModel(Project project, String maqlDdl) {
+        final MaqlDdlLinks linkEntries = restTemplate.postForObject(MaqlDdl.URI, new MaqlDdl(maqlDdl), MaqlDdlLinks.class, project.getId());
         MaqlDdlTaskStatus maqlDdlTaskStatus = poll(linkEntries.getStatusLink(), MaqlDdlTaskStatus.class);
         if (!maqlDdlTaskStatus.isSuccess()) {
              throw new ModelException("Update project model finished with status " + maqlDdlTaskStatus.getStatus());
