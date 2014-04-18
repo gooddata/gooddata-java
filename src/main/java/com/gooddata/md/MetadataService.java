@@ -20,6 +20,17 @@ public class MetadataService extends AbstractService {
         super(restTemplate);
     }
 
+    @SuppressWarnings("unchecked")
+    public <T extends Obj> T createObj(Project project, T obj) {
+        final UriResponse response;
+        try {
+            response = restTemplate.postForObject(Obj.URI, obj, UriResponse.class, project.getId());
+        } catch (GoodDataRestException | RestClientException e) {
+            throw new ObjCreateException(obj, e);
+        }
+        return getObjByUri(response.getUri(), (Class<T>) obj.getClass());
+    }
+
     public <T extends Obj> T getObjByUri(String uri, Class<T> cls) {
         try {
             return restTemplate.getForObject(uri, cls);
@@ -36,11 +47,5 @@ public class MetadataService extends AbstractService {
 
     public <T extends Obj> T getObjById(Project project, String id, Class<T> cls) {
         return getObjByUri(Obj.OBJ_TEMPLATE.expand(project.getId(), id).toString(), cls);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends Obj> T createObj(Project project, T obj) {
-        final UriResponse response = restTemplate.postForObject(Obj.URI, obj, UriResponse.class, project.getId());
-        return getObjByUri(response.getUri(), (Class<T>) obj.getClass());
     }
 }
