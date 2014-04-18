@@ -7,12 +7,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
+import static com.gooddata.Validate.notEmpty;
+import static com.gooddata.Validate.notNull;
+
 public class UriPrefixer {
 
     private final URI defaultUri;
 
     public UriPrefixer(URI uriPrefix) {
-        this.defaultUri = uriPrefix;
+        this.defaultUri = notNull(uriPrefix, "uriPrefix");
     }
 
     public UriPrefixer(String uriPrefix) {
@@ -24,6 +27,7 @@ public class UriPrefixer {
     }
 
     public URI mergeUris(URI uri) {
+        notNull(uri, "uri");
         return UriComponentsBuilder.fromUri(defaultUri)
                 .path(uri.getRawPath())
                 .query(uri.getRawQuery())
@@ -32,6 +36,7 @@ public class UriPrefixer {
     }
 
     public URI mergeUris(String uri) {
+        notEmpty(uri, "uri");
         return mergeUris(URI.create(uri));
     }
 }

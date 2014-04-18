@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.gooddata.GoodData.GDC_REQUEST_ID_HEADER;
-import static org.apache.commons.lang.Validate.noNullElements;
+import static com.gooddata.Validate.noNullElements;
 
 /**
  * A response error handler able to extract GoodData error response
@@ -24,8 +24,8 @@ class ResponseErrorHandler extends DefaultResponseErrorHandler {
     private HttpMessageConverterExtractor<GdcError> gdcErrorExtractor;
 
     ResponseErrorHandler(List<HttpMessageConverter<?>> messageConverters) {
-        noNullElements(messageConverters);
-        gdcErrorExtractor = new HttpMessageConverterExtractor<>(GdcError.class, messageConverters);
+        gdcErrorExtractor = new HttpMessageConverterExtractor<>(GdcError.class,
+                noNullElements(messageConverters, "messageConverters"));
     }
 
     @Override

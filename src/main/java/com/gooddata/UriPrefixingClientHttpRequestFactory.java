@@ -11,6 +11,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.net.URI;
 
+import static com.gooddata.Validate.notNull;
+
 /**
  * Sets default URI prefix for Spring REST client which by default requires absolute URI.
  * UriPrefixingAsyncClientHttpRequestFactory allows you to specify default hostname and port.
@@ -23,11 +25,11 @@ class UriPrefixingClientHttpRequestFactory implements ClientHttpRequestFactory {
     /**
      * Creates na instance
      *
-     * @param wrapped
+     * @param factory
      * @param uriPrefix
      */
-    UriPrefixingClientHttpRequestFactory(ClientHttpRequestFactory wrapped, URI uriPrefix) {
-        this.wrapped = wrapped;
+    UriPrefixingClientHttpRequestFactory(ClientHttpRequestFactory factory, URI uriPrefix) {
+        this.wrapped = notNull(factory, "factory");
         this.prefixer = new UriPrefixer(uriPrefix);
     }
 

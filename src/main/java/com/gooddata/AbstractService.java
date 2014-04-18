@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 
+import static com.gooddata.Validate.notNull;
 import static java.lang.String.format;
 import static org.springframework.http.HttpMethod.GET;
 
@@ -47,7 +48,7 @@ public abstract class AbstractService {
 
 
     public AbstractService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+        this.restTemplate = notNull(restTemplate, "restTemplate");
     }
 
     public <T> T poll(URI pollingUri, Class<T> cls) {

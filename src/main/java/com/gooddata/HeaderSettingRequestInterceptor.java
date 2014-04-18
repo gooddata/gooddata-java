@@ -12,15 +12,14 @@ import org.springframework.http.client.support.HttpRequestWrapper;
 import java.io.IOException;
 import java.util.Map;
 
-import static org.apache.commons.lang.Validate.notNull;
+import static com.gooddata.Validate.notNull;
 
 class HeaderSettingRequestInterceptor implements ClientHttpRequestInterceptor {
 
     private final Map<String, String> headers;
 
     public HeaderSettingRequestInterceptor(Map<String, String> headers) {
-        notNull(headers);
-        this.headers = headers;
+        this.headers = notNull(headers, "headers");
     }
 
     @Override
