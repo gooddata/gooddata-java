@@ -45,11 +45,14 @@ modelService.updateProjectModel(project, "MAQL DDL EXPRESSION");
 
 ### Metadata API
 
-Create and update project metadata - metrics, reports,...
+Query, create and update project metadata - attributes, facts, metrics, reports,...
 
 ```java
 MetadataService md = gd.getMetadataService();
-Metric metric = new Metric("my sum", "SELECT SUM([/gdc/md/PROJECT_ID/obj/ID])", "#,##0");
+
+String factUri = md.getObjUri(project, Fact.class, Restriction.title("myfact"));
+
+Metric metric = new Metric("my sum", "SELECT SUM([" + factUri + "])", "#,##0");
 Metric m = md.createObj(project, metric);
 
 ReportDefinition definition = GridReportDefinition.create(

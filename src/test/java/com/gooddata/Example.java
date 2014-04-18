@@ -7,8 +7,10 @@ import com.gooddata.account.Account;
 import com.gooddata.account.AccountService;
 import com.gooddata.dataset.DatasetManifest;
 import com.gooddata.dataset.DatasetService;
+import com.gooddata.md.Fact;
 import com.gooddata.md.MetadataService;
 import com.gooddata.md.Metric;
+import com.gooddata.md.Restriction;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
 import com.gooddata.project.ProjectService;
@@ -33,8 +35,10 @@ public class Example {
         System.out.println(project.getLinks().getSelf());
 
         final MetadataService md = gd.getMetadataService();
-        final Metric metric = new Metric("pokus", "SELECT SUM([/gdc/md/nrtk3axzqixzqu3plpq5gnmff5n2k9ob/obj/15089])", "#,##0");
-        final Metric m = md.createObj(project, metric);
+
+        final String factUri = md.getObjUri(project, Fact.class, Restriction.title("myfact"));
+
+        final Metric m = md.createObj(project, new Metric("my sum", "SELECT SUM([" + factUri + "])", "#,##0"));
 
         final DatasetService datasetService = gd.getDatasetService();
         final DatasetManifest manifest = datasetService.getDatasetManifest(project, "datasetId");

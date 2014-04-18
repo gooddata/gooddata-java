@@ -10,25 +10,23 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.util.Collection;
+
 /**
- * Metric
+ * Fact
  */
-@JsonTypeName("metric")
+@JsonTypeName("fact")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class Metric extends Obj implements Queryable {
+public class Fact extends Obj implements Queryable {
 
     private final Content content;
 
     @JsonCreator
-    public Metric(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
+    public Fact(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
         super(meta);
         this.content = content;
-    }
-
-    public Metric(String title, String expression, String format) {
-        this(new Meta(title), new Metric.Content(expression, format));
     }
 
     public Content getContent() {
@@ -37,21 +35,15 @@ public class Metric extends Obj implements Queryable {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Content {
-        private final String expression;
-        private final String format;
+        private final Collection<Key> expr;
 
         @JsonCreator
-        public Content(@JsonProperty("expression") String expression, @JsonProperty("format") String format) {
-            this.expression = expression;
-            this.format = format;
+        public Content(@JsonProperty("expr") Collection<Key> expr) {
+            this.expr = expr;
         }
 
-        public String getExpression() {
-            return expression;
-        }
-
-        public String getFormat() {
-            return format;
+        public Collection<Key> getExpr() {
+            return expr;
         }
     }
 }
