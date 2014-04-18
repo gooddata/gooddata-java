@@ -54,7 +54,7 @@ public class ProjectService extends AbstractService {
 
     public Project getProjectByUri(final String uri) {
         try {
-            return restTemplate.getForObject(Project.PROJECT_URI, Project.class, uri);
+            return restTemplate.getForObject(uri, Project.class);
         } catch (GoodDataRestException e) {
             if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
                 throw new ProjectNotFoundException(uri, e);
