@@ -4,6 +4,8 @@
 package com.gooddata.gdc;
 
 import com.gooddata.AbstractService;
+import com.gooddata.GoodDataException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -15,7 +17,11 @@ public class GdcService extends AbstractService {
     }
 
     public Gdc getGdc() {
-        return restTemplate.getForObject(Gdc.URI, Gdc.class);
+        try {
+            return restTemplate.getForObject(Gdc.URI, Gdc.class);
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to get gdc about", e);
+        }
     }
 
 }

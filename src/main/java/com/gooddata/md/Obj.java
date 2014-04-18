@@ -4,6 +4,7 @@
 package com.gooddata.md;
 
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.springframework.web.util.UriTemplate;
 
 /**
  * Metadata object
@@ -11,6 +12,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public abstract class Obj {
     public static final String URI = "/gdc/md/{projectId}/obj";
     public static final String OBJ_URI = URI + "/{objId}";
+    public static final UriTemplate OBJ_TEMPLATE = new UriTemplate(OBJ_URI);
 
     protected final Meta meta;
 

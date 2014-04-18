@@ -4,6 +4,8 @@
 package com.gooddata.account;
 
 import com.gooddata.AbstractService;
+import com.gooddata.GoodDataException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -15,11 +17,19 @@ public class AccountService extends AbstractService {
     }
 
     public Account getCurrent() {
-        return restTemplate.getForObject(Account.URI, Account.class, Account.CURRENT_ID);
+        try {
+            return restTemplate.getForObject(Account.URI, Account.class, Account.CURRENT_ID);
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to get current account", e);
+        }
     }
 
     public void logout() {
-        final String id = getCurrent().getId();
-        restTemplate.delete(Account.LOGIN_URI, id);
+        try {
+            final String id = getCurrent().getId();
+            restTemplate.delete(Account.LOGIN_URI, id);
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to logout", e);
+        }
     }
 }

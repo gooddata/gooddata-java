@@ -4,8 +4,12 @@
 package com.gooddata.md;
 
 import com.gooddata.AbstractService;
+import com.gooddata.GoodDataException;
+import com.gooddata.GoodDataRestException;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.project.Project;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -17,11 +21,21 @@ public class MetadataService extends AbstractService {
     }
 
     public <T extends Obj> T getObjByUri(String uri, Class<T> cls) {
-        return restTemplate.getForObject(uri, cls);
+        try {
+            return restTemplate.getForObject(uri, cls);
+        } catch (GoodDataRestException e) {
+            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+                throw new ObjNotFoundException(uri, cls, e);
+            } else {
+                throw e;
+            }
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to get " + cls.getSimpleName().toLowerCase() + " " + uri, e);
+        }
     }
 
     public <T extends Obj> T getObjById(Project project, String id, Class<T> cls) {
-        return restTemplate.getForObject(Obj.OBJ_URI, cls, project.getId(), id);
+        return getObjByUri(Obj.OBJ_TEMPLATE.expand(project.getId(), id).toString(), cls);
     }
 
     @SuppressWarnings("unchecked")
