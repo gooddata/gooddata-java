@@ -18,6 +18,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.VersionInfo;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -36,6 +37,7 @@ public class GoodData {
     private static final String PROTOCOL = "https";
     private static final int PORT = 443;
     private static final String HOSTNAME = "secure.gooddata.com";
+    private static final String UNKNOWN_VERSION = "UNKNOWN";
 
     private final AccountService accountService;
     private final ProjectService projectService;
@@ -51,7 +53,8 @@ public class GoodData {
     }
 
     public GoodData(String hostname, String login, String password) {
-        final HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+        final HttpClientBuilder httpClientBuilder = HttpClientBuilder.create()
+                .setUserAgent(getUserAgent());
         final RestTemplate restTemplate = createRestTemplate(hostname, login, password, httpClientBuilder);
 
         accountService = new AccountService(restTemplate);
@@ -78,6 +81,19 @@ public class GoodData {
                 new HeaderSettingRequestInterceptor(singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE))));
         restTemplate.setErrorHandler(new ResponseErrorHandler(restTemplate.getMessageConverters()));
         return restTemplate;
+    }
+
+    private String getUserAgent() {
+        final Package pkg = Package.getPackage("com.gooddata");
+        final String clientVersion = pkg != null && pkg.getImplementationVersion() != null
+                ? pkg.getImplementationVersion() : UNKNOWN_VERSION;
+
+        final VersionInfo vi = VersionInfo.loadVersionInfo("org.apache.http.client", HttpClientBuilder.class.getClassLoader());
+        final String apacheVersion = vi != null ? vi.getRelease() : UNKNOWN_VERSION;
+
+        return String.format("%s/%s (%s; %s) %s/%s", "GoodData-Java-SDK", clientVersion,
+                System.getProperty("os.name"), System.getProperty("java.specification.version"),
+                "Apache-HttpClient", apacheVersion);
     }
 
     public void logout() {
