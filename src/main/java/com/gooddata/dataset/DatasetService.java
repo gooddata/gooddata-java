@@ -45,7 +45,7 @@ public class DatasetService extends AbstractService {
         }
     }
 
-    public void loadDataset(Project project, InputStream dataset, DatasetManifest manifest) {
+    public void loadDataset(Project project, DatasetManifest manifest, InputStream dataset) {
         final String dirPath = getDirPath(project);
         try {
             dataStoreService.upload(dirPath + manifest.getFile(), dataset);
@@ -88,6 +88,6 @@ public class DatasetService extends AbstractService {
     }
 
     public void loadDataset(Project project, String datasetId, InputStream dataset) {
-        loadDataset(project, dataset, getDatasetManifest(project, datasetId));
+        loadDataset(project, getDatasetManifest(project, datasetId), dataset);
     }
 }
