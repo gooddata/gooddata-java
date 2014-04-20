@@ -8,13 +8,16 @@ import com.gooddata.GoodDataRestException;
 import com.gooddata.gdc.DataStoreException;
 import com.gooddata.gdc.DataStoreService;
 import com.gooddata.project.Project;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  */
@@ -47,7 +50,8 @@ public class DatasetService extends AbstractService {
         try {
             dataStoreService.upload(dirPath + manifest.getFile(), dataset);
             final String manifestJson = mapper.writeValueAsString(manifest);
-            dataStoreService.upload(dirPath + MANIFEST_FILE_NAME, IOUtils.toInputStream(manifestJson));
+            final ByteArrayInputStream inputStream = new ByteArrayInputStream(manifestJson.getBytes(UTF_8));
+            dataStoreService.upload(dirPath + MANIFEST_FILE_NAME, inputStream);
 
             final PullTask pullTask = restTemplate.postForObject(Pull.URI, new Pull(dirPath), PullTask.class, project.getId());
             final PullTaskStatus taskStatus = poll(pullTask.getUri(), new ConditionCallback() {

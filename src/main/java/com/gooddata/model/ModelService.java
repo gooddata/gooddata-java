@@ -6,12 +6,11 @@ package com.gooddata.model;
 import com.gooddata.AbstractService;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.project.Project;
-import org.apache.commons.io.IOUtils;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
+import java.io.Reader;
 
 /**
  * TODO
@@ -35,9 +34,9 @@ public class ModelService extends AbstractService {
         return getProjectModelDiff(project, new DiffRequest(targetModel));
     }
 
-    public ModelDiff getProjectModelDiff(Project project, InputStream targetModel) {
+    public ModelDiff getProjectModelDiff(Project project, Reader targetModel) {
         try {
-            return getProjectModelDiff(project, new String(IOUtils.toByteArray(targetModel)));
+            return getProjectModelDiff(project, FileCopyUtils.copyToString(targetModel));
         } catch (IOException e) {
             throw new ModelException("Can't read target model", e);
         }
