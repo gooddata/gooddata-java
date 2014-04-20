@@ -10,7 +10,6 @@ import com.gooddata.gdc.DataStoreService;
 import com.gooddata.project.Project;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +22,6 @@ public class DatasetService extends AbstractService {
 
     private static final String MANIFEST_FILE_NAME = "upload_info.json";
     private final DataStoreService dataStoreService;
-    private final static ObjectMapper mapper = new ObjectMapper();
 
     public DatasetService(RestTemplate restTemplate, DataStoreService dataStoreService) {
         super(restTemplate);

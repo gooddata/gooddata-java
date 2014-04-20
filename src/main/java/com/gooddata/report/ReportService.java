@@ -8,7 +8,6 @@ import com.gooddata.GoodDataException;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +23,6 @@ import static org.springframework.http.HttpMethod.POST;
 public class ReportService extends AbstractService {
 
     public static final String EXPORTING_URI = "/gdc/exporter/executor";
-
-    private ObjectMapper mapper = new ObjectMapper();
 
     public ReportService(final RestTemplate restTemplate) {
         super(restTemplate);

@@ -3,6 +3,7 @@
  */
 package com.gooddata;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequest;
@@ -29,6 +30,8 @@ public abstract class AbstractService {
     public static Integer MAX_ATTEMPTS = 5;
 
     protected final RestTemplate restTemplate;
+
+    protected final ObjectMapper mapper = new ObjectMapper();
 
     private final RequestCallback noopRequestCallback = new RequestCallback() {
         @Override
