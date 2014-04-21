@@ -3,11 +3,15 @@
  */
 package com.gooddata.dataset;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
  * TODO
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Pull {
 
     public static final String URI = "/gdc/md/{projectId}/etl/pull";

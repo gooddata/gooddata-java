@@ -4,14 +4,21 @@
 package com.gooddata.model;
 
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.List;
 
 /**
 * TODO
 */
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 class MaqlDdlLinks {
+
     private static final String TASKS_STATUS = "tasks-status";
+
     private final List<LinkEntry> entries;
 
     @JsonCreator
@@ -28,6 +35,8 @@ class MaqlDdlLinks {
         return null;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     private static class LinkEntry {
         private final String link;
         private final String category;
