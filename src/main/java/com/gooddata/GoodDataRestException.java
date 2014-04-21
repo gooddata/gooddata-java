@@ -28,10 +28,8 @@ public class GoodDataRestException extends GoodDataException {
 
     public GoodDataRestException (int statusCode, String requestId, String statusText, GdcError error) {
         this(statusCode,
-                error != null && error.getRequestId() != null
-                        ? error.getRequestId() : requestId,
-                error != null && error.getMessage() != null
-                        ? String.format(error.getMessage(), error.getParameters()) : statusText,
+                error != null && error.getRequestId() != null ? error.getRequestId() : requestId,
+                error != null && error.getMessage() != null ? error.getFormattedMessage() : statusText,
                 error != null ? error.getComponent() : null,
                 error != null ? error.getErrorClass() : null);
     }
