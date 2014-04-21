@@ -9,11 +9,19 @@ import com.gooddata.GoodDataException;
  * Represents error in DatasetService
  */
 public class DatasetException extends GoodDataException {
-    public DatasetException(String message) {
-        super(message);
+
+    private final String dataset;
+
+    public DatasetException(String message, String dataset) {
+        this(message, dataset, null);
     }
 
-    public DatasetException(String message, Throwable cause) {
-        super(message, cause);
+    public DatasetException(String message, String dataset, Throwable cause) {
+        super("Load dataset " + dataset + " failed: " + message, cause);
+        this.dataset = dataset;
+    }
+
+    public String getDataset() {
+        return dataset;
     }
 }

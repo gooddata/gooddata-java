@@ -16,6 +16,8 @@ import org.springframework.web.client.RestTemplate;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -24,6 +26,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class DatasetService extends AbstractService {
 
     private static final String MANIFEST_FILE_NAME = "upload_info.json";
+    private static final String STATUS_FILE_NAME = "upload_status.json";
+
     private final DataStoreService dataStoreService;
 
     public DatasetService(RestTemplate restTemplate, DataStoreService dataStoreService) {
@@ -38,22 +42,22 @@ public class DatasetService extends AbstractService {
             if (e.getStatusCode() == 404) {
                 throw new DatasetNotFoundException(datasetId, e);
             } else {
-                throw new DatasetException("Unable to get dataset " + datasetId, e);
+                throw new DatasetException("Unable to get manifest", datasetId, e);
             }
         } catch (RestClientException e) {
-            throw new DatasetException("Unable to get dataset " + datasetId, e);
+            throw new DatasetException("Unable to get manifest", datasetId, e);
         }
     }
 
     public void loadDataset(Project project, DatasetManifest manifest, InputStream dataset) {
-        final String dirPath = getDirPath(project);
+        final Path dirPath = Paths.get("/", project.getId() + "_" + RandomStringUtils.randomAlphabetic(3), "/");
         try {
-            dataStoreService.upload(dirPath + manifest.getFile(), dataset);
+            dataStoreService.upload(dirPath.resolve(manifest.getFile()).toString(), dataset);
             final String manifestJson = mapper.writeValueAsString(manifest);
             final ByteArrayInputStream inputStream = new ByteArrayInputStream(manifestJson.getBytes(UTF_8));
-            dataStoreService.upload(dirPath + MANIFEST_FILE_NAME, inputStream);
+            dataStoreService.upload(dirPath.resolve(MANIFEST_FILE_NAME).toString(), inputStream);
 
-            final PullTask pullTask = restTemplate.postForObject(Pull.URI, new Pull(dirPath), PullTask.class, project.getId());
+            final PullTask pullTask = restTemplate.postForObject(Pull.URI, new Pull(dirPath.toString()), PullTask.class, project.getId());
             final PullTaskStatus taskStatus = poll(pullTask.getUri(), new ConditionCallback() {
                 @Override
                 public boolean finished(ClientHttpResponse response) throws IOException {
@@ -62,29 +66,30 @@ public class DatasetService extends AbstractService {
                 }
             }, PullTaskStatus.class);
             if (!taskStatus.isSuccess()) {
-                throw new DatasetException("ETL pull finished with status " + taskStatus.getStatus());
+                String message = "status: " + taskStatus.getStatus();
+                try {
+                    final InputStream input = dataStoreService.download(dirPath.resolve(STATUS_FILE_NAME).toString());
+                    final FailStatus status = mapper.readValue(input, FailStatus.class);
+                    if (status != null && status.getError() != null) {
+                        message = status.getError().getFormattedMessage();
+                    }
+                } catch (IOException | DataStoreException ignored) {
+                    // todo log?
+                }
+                throw new DatasetException(message, manifest.getDataSet());
             }
         } catch (IOException e) {
-            throw new DatasetException("Unable to serialize manifest", e);
+            throw new DatasetException("Unable to serialize manifest", manifest.getDataSet(), e);
         } catch (DataStoreException | GoodDataRestException | RestClientException e) {
-            throw new DatasetException("Unable to load dataset " + manifest.getDataSet(), e);
+            throw new DatasetException("Unable to load", manifest.getDataSet(), e);
         } finally {
             try {
-                dataStoreService.delete(dirPath);
+                dataStoreService.delete(dirPath.toString() + "/");
             } catch (DataStoreException ignored) {
                 // todo log?
             }
         }
 
-    }
-
-    private String getDirPath(Project project) {
-        return new StringBuilder("/")
-                .append(project.getId())
-                .append("_")
-                .append(RandomStringUtils.randomAlphabetic(3))
-                .append("/")
-                .toString();
     }
 
     public void loadDataset(Project project, String datasetId, InputStream dataset) {
