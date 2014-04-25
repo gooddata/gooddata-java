@@ -1,0 +1,25 @@
+{
+    "fact" : {
+        "content" : {
+            "expr" : [
+                {
+                    "data" : "/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/13",
+                    "type" : "col"
+                }
+            ]
+        },
+        "meta" : {
+            "author" : "/gdc/account/profile/33410a1a28be3ef934bdee5f6c78d17f",
+            "uri" : "/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/35",
+            "tags" : "",
+            "created" : "2014-04-11 13:45:56",
+            "identifier" : "fact.person.shoesize",
+            "deprecated" : "0",
+            "summary" : "",
+            "title" : "Person Shoe Size",
+            "category" : "fact",
+            "updated" : "2014-04-11 13:45:56",
+            "contributor" : "/gdc/account/profile/33410a1a28be3ef934bdee5f6c78d17f"
+        }
+    }
+}

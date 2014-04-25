@@ -1,0 +1,26 @@
+{
+   "attributeDisplayForm" : {
+      "content" : {
+         "formOf" : "/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/28",
+         "expression" : "[/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/17]",
+         "default" : 0,
+         "ldmexpression" : ""
+      },
+      "links" : {
+         "elements" : "/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/29/elements"
+      },
+      "meta" : {
+         "author" : "/gdc/account/profile/33410a1a28be3ef934bdee5f6c78d17f",
+         "uri" : "/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/29",
+         "tags" : "",
+         "created" : "2014-04-11 13:45:56",
+         "identifier" : "attr.person.id.name",
+         "deprecated" : "0",
+         "summary" : "",
+         "title" : "Person Name",
+         "category" : "attributeDisplayForm",
+         "updated" : "2014-04-11 13:45:56",
+         "contributor" : "/gdc/account/profile/33410a1a28be3ef934bdee5f6c78d17f"
+      }
+   }
+}

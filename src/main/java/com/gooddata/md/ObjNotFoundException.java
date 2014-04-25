@@ -7,14 +7,11 @@ import com.gooddata.GoodDataException;
  */
 public class ObjNotFoundException extends GoodDataException {
 
-    private final String uri;
-
     public <T extends Obj> ObjNotFoundException(String uri, Class<T> cls, Exception e) {
         super(cls.getSimpleName() + " not found " + uri, e);
-        this.uri = uri;
     }
 
-    public String getUri() {
-        return uri;
+    public <T extends Queryable> ObjNotFoundException(Class<T> cls) {
+        super(cls.getSimpleName() + " not found");
     }
 }

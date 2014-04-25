@@ -1,11 +1,8 @@
 /*
  * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
  */
-package com.gooddata.md.report;
+package com.gooddata.md;
 
-import com.gooddata.md.Meta;
-import com.gooddata.md.Obj;
-import com.gooddata.md.Queryable;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -15,26 +12,21 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.Collection;
 
-import static java.util.Arrays.asList;
-
 /**
+ * Attribute
  */
-@JsonTypeName("report")
+@JsonTypeName("attribute")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class Report extends Obj implements Queryable {
+public class Attribute extends Obj implements Queryable {
 
     private final Content content;
 
     @JsonCreator
-    public Report(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
+    public Attribute(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
         super(meta);
         this.content = content;
-    }
-
-    public Report(String title, ReportDefinition definition) {
-        this(new Meta(title), new Content(asList(definition.getMeta().getUri())));
     }
 
     public Content getContent() {
@@ -44,15 +36,29 @@ public class Report extends Obj implements Queryable {
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     public static class Content {
-        private final Collection<String> definitions;
+        private final Collection<Key> pk;
+        private final Collection<Key> fk;
+        private final Collection<DisplayForm> displayForms;
 
         @JsonCreator
-        public Content(@JsonProperty("definitions") Collection<String> definitions) {
-            this.definitions = definitions;
+        public Content(@JsonProperty("pk") Collection<Key> pk, @JsonProperty("fk") Collection<Key> fk,
+                       @JsonProperty("displayForms") Collection<DisplayForm> displayForms) {
+            this.pk = pk;
+            this.fk = fk;
+            this.displayForms = displayForms;
         }
 
-        public Collection<String> getDefinitions() {
-            return definitions;
+        public Collection<Key> getPk() {
+            return pk;
+        }
+
+        public Collection<Key> getFk() {
+            return fk;
+        }
+
+        public Collection<DisplayForm> getDisplayForms() {
+            return displayForms;
         }
     }
+
 }
