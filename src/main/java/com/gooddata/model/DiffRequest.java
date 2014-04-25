@@ -6,14 +6,12 @@ package com.gooddata.model;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.annotate.JsonRawValue;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import static org.apache.commons.lang.Validate.notNull;
-
+import static com.gooddata.Validate.notNull;
 
 /**
  * A request to perform diff between current project model and given targetModel.
@@ -34,8 +32,7 @@ public class DiffRequest {
      */
     @JsonCreator
     public DiffRequest(@JsonProperty("targetModel") String targetModel) {
-        notNull(targetModel, "targetModel cannot be null");
-        this.targetModel = targetModel;
+        this.targetModel = notNull(targetModel, "targetModel");
     }
 
     /**

@@ -15,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 
+import static com.gooddata.Validate.notEmpty;
+import static com.gooddata.Validate.notNull;
 import static org.springframework.http.HttpMethod.POST;
 
 /**
@@ -29,11 +31,14 @@ public class ReportService extends AbstractService {
     }
 
     public String exportReport(final ReportDefinition reportDefinition, final String format) {
+        notNull(reportDefinition, "reportDefinition");
+        notEmpty(format, "format");
         final JsonNode execResult = executeReport(reportDefinition.getMeta().getUri());
         return exportReport(execResult, format);
     }
 
     public JsonNode executeReport(final String reportDefinitionUri) {
+        notEmpty(reportDefinitionUri, "reportDefinitionUri");
         final ResponseEntity<String> entity = restTemplate
                 .exchange(ReportRequest.URI, POST, new HttpEntity<>(new ReportRequest(reportDefinitionUri)),
                         String.class);
@@ -45,6 +50,8 @@ public class ReportService extends AbstractService {
     }
 
     public String exportReport(final JsonNode execResult, final String format) {
+        notNull(execResult, "execResult");
+        notEmpty(format, "format");
         final ObjectNode root = mapper.createObjectNode();
         final ObjectNode child = mapper.createObjectNode();
 

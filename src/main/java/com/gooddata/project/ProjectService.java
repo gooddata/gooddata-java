@@ -16,6 +16,9 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.Collection;
 
+import static com.gooddata.Validate.notEmpty;
+import static com.gooddata.Validate.notNull;
+
 /**
  */
 public class ProjectService extends AbstractService {
@@ -24,7 +27,7 @@ public class ProjectService extends AbstractService {
 
     public ProjectService(RestTemplate restTemplate, AccountService accountService) {
         super(restTemplate);
-        this.accountService = accountService;
+        this.accountService = notNull(accountService, "accountService");
     }
 
     public Collection<Project> getProjects() {
@@ -37,9 +40,10 @@ public class ProjectService extends AbstractService {
         }
     }
 
-    public Project createProject(Project inputProject) {
+    public Project createProject(Project project) {
+        notNull(project, "project");
 
-        final UriResponse uri = restTemplate.postForObject(Projects.URI, inputProject, UriResponse.class);
+        final UriResponse uri = restTemplate.postForObject(Projects.URI, project, UriResponse.class);
 
         return poll(uri.getUri(),
                 new ConditionCallback() {
@@ -53,6 +57,7 @@ public class ProjectService extends AbstractService {
     }
 
     public Project getProjectByUri(final String uri) {
+        notEmpty(uri, "uri");
         try {
             return restTemplate.getForObject(uri, Project.class);
         } catch (GoodDataRestException e) {
@@ -67,6 +72,7 @@ public class ProjectService extends AbstractService {
     }
 
     public Project getProjectById(String id) {
+        notEmpty(id, "id");
         return getProjectByUri(Project.PROJECT_TEMPLATE.expand(id).toString());
     }
 }

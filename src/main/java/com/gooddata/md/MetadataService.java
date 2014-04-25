@@ -15,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.gooddata.Validate.notNull;
+
 /**
  * Query, create and update project metadata - attributes, facts, metrics, reports,...
  */
@@ -26,6 +28,8 @@ public class MetadataService extends AbstractService {
 
     @SuppressWarnings("unchecked")
     public <T extends Obj> T createObj(Project project, T obj) {
+        notNull(project, "project");
+        notNull(obj, "obj");
         final UriResponse response;
         try {
             response = restTemplate.postForObject(Obj.URI, obj, UriResponse.class, project.getId());
@@ -36,6 +40,8 @@ public class MetadataService extends AbstractService {
     }
 
     public <T extends Obj> T getObjByUri(String uri, Class<T> cls) {
+        notNull(uri, "uri");
+        notNull(cls, "cls");
         try {
             return restTemplate.getForObject(uri, cls);
         } catch (GoodDataRestException e) {
@@ -50,6 +56,9 @@ public class MetadataService extends AbstractService {
     }
 
     public <T extends Obj> T getObjById(Project project, String id, Class<T> cls) {
+        notNull(project, "project");
+        notNull(id, "id");
+        notNull(cls, "cls");
         return getObjByUri(Obj.OBJ_TEMPLATE.expand(project.getId(), id).toString(), cls);
     }
 

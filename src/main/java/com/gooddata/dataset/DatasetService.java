@@ -20,6 +20,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static com.gooddata.Validate.notEmpty;
+import static com.gooddata.Validate.notNull;
 
 /**
  */
@@ -32,10 +34,12 @@ public class DatasetService extends AbstractService {
 
     public DatasetService(RestTemplate restTemplate, DataStoreService dataStoreService) {
         super(restTemplate);
-        this.dataStoreService = dataStoreService;
+        this.dataStoreService = notNull(dataStoreService, "dataStoreService");
     }
 
     public DatasetManifest getDatasetManifest(Project project, String datasetId) {
+        notNull(project, "project");
+        notEmpty(datasetId, "datasetId");
         try {
             return restTemplate.getForObject(DatasetManifest.URI, DatasetManifest.class, project.getId(), datasetId);
         } catch (GoodDataRestException e) {
@@ -50,6 +54,9 @@ public class DatasetService extends AbstractService {
     }
 
     public void loadDataset(Project project, DatasetManifest manifest, InputStream dataset) {
+        notNull(project, "project");
+        notNull(dataset, "dataset");
+        notNull(manifest, "manifest");
         final Path dirPath = Paths.get("/", project.getId() + "_" + RandomStringUtils.randomAlphabetic(3), "/");
         try {
             dataStoreService.upload(dirPath.resolve(manifest.getFile()).toString(), dataset);
@@ -93,6 +100,9 @@ public class DatasetService extends AbstractService {
     }
 
     public void loadDataset(Project project, String datasetId, InputStream dataset) {
+        notNull(project, "project");
+        notEmpty(datasetId, "datasetId");
+        notNull(dataset, "dataset");
         loadDataset(project, getDatasetManifest(project, datasetId), dataset);
     }
 }

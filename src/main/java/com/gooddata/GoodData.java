@@ -26,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 
+import static com.gooddata.Validate.notEmpty;
 import static java.util.Collections.singletonMap;
 
 /**
@@ -53,6 +54,9 @@ public class GoodData {
     }
 
     public GoodData(String hostname, String login, String password) {
+        notEmpty(hostname, "hostname");
+        notEmpty(login, "login");
+        notEmpty(password, "password");
         final HttpClientBuilder httpClientBuilder = HttpClientBuilder.create()
                 .setUserAgent(getUserAgent());
         final RestTemplate restTemplate = createRestTemplate(hostname, login, password, httpClientBuilder);

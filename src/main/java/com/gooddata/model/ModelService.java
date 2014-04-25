@@ -12,6 +12,9 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.io.Reader;
 
+import static com.gooddata.Validate.notEmpty;
+import static com.gooddata.Validate.notNull;
+
 /**
  * TODO
  */
@@ -22,6 +25,8 @@ public class ModelService extends AbstractService {
     }
 
     public ModelDiff getProjectModelDiff(Project project, DiffRequest diffRequest) {
+        notNull(project, "project");
+        notNull(diffRequest, "diffRequest");
         try {
             final DiffTask diffTask = restTemplate.postForObject(DiffRequest.URI, diffRequest, DiffTask.class, project.getId());
             return poll(diffTask.getUri(), new StatusOkConditionCallback(), ModelDiff.class);
@@ -31,10 +36,14 @@ public class ModelService extends AbstractService {
     }
 
     public ModelDiff getProjectModelDiff(Project project, String targetModel) {
+        notNull(project, "project");
+        notNull(targetModel, "targetModel");
         return getProjectModelDiff(project, new DiffRequest(targetModel));
     }
 
     public ModelDiff getProjectModelDiff(Project project, Reader targetModel) {
+        notNull(project, "project");
+        notNull(targetModel, "targetModel");
         try {
             return getProjectModelDiff(project, FileCopyUtils.copyToString(targetModel));
         } catch (IOException e) {
@@ -43,6 +52,8 @@ public class ModelService extends AbstractService {
     }
 
     public void updateProjectModel(Project project, ModelDiff projectModelDiff) {
+        notNull(project, "project");
+        notNull(projectModelDiff, "projectModelDiff");
         for (ModelDiff.UpdateScript updateScript : projectModelDiff.getUpdateScripts()) {
             for (String maql : updateScript.getMaqlChunks()) {
                 updateProjectModel(project, maql);
@@ -51,6 +62,8 @@ public class ModelService extends AbstractService {
     }
 
     public void updateProjectModel(Project project, String maqlDdl) {
+        notNull(project, "project");
+        notEmpty(maqlDdl, "maqlDdl");
         try {
             final MaqlDdlLinks linkEntries = restTemplate.postForObject(MaqlDdl.URI, new MaqlDdl(maqlDdl), MaqlDdlLinks.class, project.getId());
             final MaqlDdlTaskStatus maqlDdlTaskStatus = poll(linkEntries.getStatusLink(), MaqlDdlTaskStatus.class);

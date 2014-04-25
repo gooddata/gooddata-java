@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 
+import static com.gooddata.Validate.notEmpty;
+import static com.gooddata.Validate.notNull;
+
 /**
  */
 public class DataStoreService {
@@ -21,7 +24,7 @@ public class DataStoreService {
     private UriPrefixer prefixer;
 
     public DataStoreService(HttpClientBuilder httClientBuilder, GdcService gdcService, String user, String pass) {
-        this.gdcService = gdcService;
+        this.gdcService = notNull(gdcService, "gdcService");
         sardine = new SardineImpl(httClientBuilder, user, pass);
     }
 
@@ -39,6 +42,7 @@ public class DataStoreService {
     }
 
     public void upload(String path, InputStream stream) {
+        notEmpty(path, "path");
         upload(getUri(path), stream);
     }
 
@@ -51,6 +55,7 @@ public class DataStoreService {
     }
 
     public ContentLengthInputStream download(String path) {
+        notEmpty(path, "path");
         final URI uri = getUri(path);
         try {
             return sardine.get(uri.toString());
@@ -60,6 +65,7 @@ public class DataStoreService {
     }
 
     public void delete(String path) {
+        notEmpty(path, "path");
         final URI uri = getUri(path);
         try {
             sardine.delete(uri.toString());
