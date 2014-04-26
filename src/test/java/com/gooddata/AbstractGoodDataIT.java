@@ -17,7 +17,7 @@ public abstract class AbstractGoodDataIT {
     protected  GoodData gd;
 
     @Before
-    public void setUp() {
+    public void commonSetUp() {
         initJadler().that().respondsWithDefaultContentType("application/json");
         gd = new GoodData("localhost", "sdk@gooddata.com", "sdk", port(), "http") {
             @Override
