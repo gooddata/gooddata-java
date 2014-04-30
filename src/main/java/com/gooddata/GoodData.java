@@ -4,6 +4,7 @@
 package com.gooddata;
 
 import com.gooddata.account.AccountService;
+import com.gooddata.connectors.ConnectorService;
 import com.gooddata.dataload.processes.ProcessService;
 import com.gooddata.warehouse.WarehouseService;
 import com.gooddata.dataset.DatasetService;
@@ -61,6 +62,7 @@ public class GoodData {
     private final DataStoreService dataStoreService;
     private final DatasetService datasetService;
     private final ReportService reportService;
+    private final ConnectorService connectorService;
     private final ProcessService processService;
     private final WarehouseService warehouseService;
 
@@ -129,6 +131,7 @@ public class GoodData {
         reportService = new ReportService(restTemplate);
         processService = new ProcessService(restTemplate, accountService);
         warehouseService = new WarehouseService(restTemplate, hostname, port);
+        connectorService = new ConnectorService(restTemplate, projectService);
     }
 
     private RestTemplate createRestTemplate(String login, String password, String hostname, HttpClientBuilder builder,
@@ -255,5 +258,8 @@ public class GoodData {
      */
     public WarehouseService getWarehouseService() {
         return warehouseService;
+    }
+    public ConnectorService getConnectorService() {
+        return connectorService;
     }
 }

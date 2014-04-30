@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 
 import static com.gooddata.Validate.notEmpty;
 import static com.gooddata.Validate.notNull;
@@ -146,6 +147,16 @@ public class ProjectService extends AbstractService {
             restTemplate.delete(project.getUri());
         } catch (GoodDataRestException | RestClientException e) {
             throw new GoodDataException("Unable to delete project " + project.getId(), e);
+        }
+    }
+
+    public Collection<ProjectTemplate> getProjectTemplates(Project project) {
+        notNull(project, "project");
+        try {
+            final ProjectTemplates templates = restTemplate.getForObject(ProjectTemplate.URI, ProjectTemplates.class, project.getId());
+            return templates != null && templates.getTemplatesInfo() != null ? templates.getTemplatesInfo() : Collections.<ProjectTemplate>emptyList();
+        } catch (GoodDataRestException | RestClientException e) {
+            throw new GoodDataException("Unable to get project templates", e);
         }
     }
 }
