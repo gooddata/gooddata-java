@@ -3,8 +3,8 @@
  */
 package com.gooddata.gdc;
 
+import com.github.sardine.Sardine;
 import com.github.sardine.impl.SardineImpl;
-import com.github.sardine.impl.io.ContentLengthInputStream;
 import com.gooddata.UriPrefixer;
 import org.apache.http.impl.client.HttpClientBuilder;
 
@@ -19,7 +19,7 @@ import static com.gooddata.Validate.notNull;
  */
 public class DataStoreService {
 
-    private final SardineImpl sardine;
+    private final Sardine sardine;
     private final GdcService gdcService;
     private UriPrefixer prefixer;
 
@@ -54,7 +54,7 @@ public class DataStoreService {
         }
     }
 
-    public ContentLengthInputStream download(String path) {
+    public InputStream download(String path) {
         notEmpty(path, "path");
         final URI uri = getUri(path);
         try {
