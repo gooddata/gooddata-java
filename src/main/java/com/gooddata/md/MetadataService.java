@@ -74,6 +74,8 @@ public class MetadataService extends AbstractService {
     }
 
     public <T extends Queryable> Collection<Entry> find(Project project, Class<T> cls, Restriction... restrictions) {
+        notNull(project, "project");
+        notNull(cls, "cls");
         final String type = cls.getSimpleName().toLowerCase() + (cls.isAssignableFrom(ReportDefinition.class) ? "" : "s");
         try {
             final Collection<Entry> entries = restTemplate.getForObject(Query.URI, Query.class, project.getId(), type).getEntries();
