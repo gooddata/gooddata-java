@@ -7,6 +7,7 @@ import com.gooddata.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.gdc.UriResponse;
+import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestClientException;
@@ -73,7 +74,7 @@ public class MetadataService extends AbstractService {
     }
 
     public <T extends Queryable> Collection<Entry> find(Project project, Class<T> cls, Restriction... restrictions) {
-        final String type = cls.getSimpleName().toLowerCase() + "s";
+        final String type = cls.getSimpleName().toLowerCase() + (cls.isAssignableFrom(ReportDefinition.class) ? "" : "s");
         try {
             final Collection<Entry> entries = restTemplate.getForObject(Query.URI, Query.class, project.getId(), type).getEntries();
             return filterEntries(entries, restrictions);
