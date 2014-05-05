@@ -4,6 +4,7 @@
 package com.gooddata.dataset;
 
 import com.gooddata.AbstractService;
+import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.gdc.DataStoreException;
 import com.gooddata.gdc.DataStoreService;
@@ -18,10 +19,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static com.gooddata.Validate.notEmpty;
 import static com.gooddata.Validate.notNull;
+import static java.util.Collections.emptyList;
 
 /**
  */
@@ -104,5 +107,18 @@ public class DatasetService extends AbstractService {
         notEmpty(datasetId, "datasetId");
         notNull(dataset, "dataset");
         loadDataset(project, getDatasetManifest(project, datasetId), dataset);
+    }
+
+    public Collection<Dataset> listDatasets(Project project) {
+        notNull(project, "project");
+        try {
+            final Datasets result = restTemplate.getForObject(Datasets.URI, Datasets.class, project.getId());
+            if (result == null || result.getLinks() == null) {
+                return emptyList();
+            }
+            return result.getLinks();
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to list datasets for project " + project.getId(), e);
+        }
     }
 }
