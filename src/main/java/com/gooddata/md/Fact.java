@@ -4,6 +4,7 @@
 package com.gooddata.md;
 
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
@@ -12,8 +13,10 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.Collection;
 
+import static java.util.Arrays.asList;
+
 /**
- * Fact
+ * Fact of GoodData project dataset
  */
 @JsonTypeName("fact")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
@@ -21,29 +24,39 @@ import java.util.Collection;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Fact extends Obj implements Queryable {
 
+    @JsonProperty("content")
     private final Content content;
 
     @JsonCreator
-    public Fact(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
+    private Fact(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
         super(meta);
         this.content = content;
     }
 
-    public Content getContent() {
-        return content;
+    /* Just for serialization test */
+    Fact(String title, String data, String type) {
+        super(new Meta(title));
+        content = new Content(asList(new Expression(data, type)));
+    }
+
+    @JsonIgnore
+    public Collection<Expression> getExpressions() {
+        return content.getExpression();
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Content {
-        private final Collection<Key> expr;
+    private static class Content {
+
+        @JsonProperty("expr")
+        private final Collection<Expression> expression;
 
         @JsonCreator
-        public Content(@JsonProperty("expr") Collection<Key> expr) {
-            this.expr = expr;
+        public Content(@JsonProperty("expr") Collection<Expression> expression) {
+            this.expression = expression;
         }
 
-        public Collection<Key> getExpr() {
-            return expr;
+        public Collection<Expression> getExpression() {
+            return expression;
         }
     }
 }

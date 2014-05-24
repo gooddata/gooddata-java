@@ -3,23 +3,23 @@
         "content" : {
             "expr" : [
                 {
-                    "data" : "/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/13",
+                    "data" : "/gdc/md/PROJECT_ID/obj/COL_ID",
                     "type" : "col"
                 }
             ]
         },
         "meta" : {
-            "author" : "/gdc/account/profile/33410a1a28be3ef934bdee5f6c78d17f",
-            "uri" : "/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/35",
+            "author" : "/gdc/account/profile/AUTHOR_ID",
+            "uri" : "/gdc/md/PROJECT_ID/obj/FACT_ID",
             "tags" : "",
-            "created" : "2014-04-11 13:45:56",
+            "created" : "2014-04-11 13:45:53",
             "identifier" : "fact.person.shoesize",
             "deprecated" : "0",
             "summary" : "",
             "title" : "Person Shoe Size",
             "category" : "fact",
-            "updated" : "2014-04-11 13:45:56",
-            "contributor" : "/gdc/account/profile/33410a1a28be3ef934bdee5f6c78d17f"
+            "updated" : "2014-04-11 13:46:52",
+            "contributor" : "/gdc/account/profile/CONTRIBUTOR_ID"
         }
     }
 }

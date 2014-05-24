@@ -12,41 +12,42 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import java.io.Serializable;
 
 /**
- * Metadata meta information
+ * Metadata meta information (meant just for internal SDK usage)
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
-@JsonSerialize(include=Inclusion.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonSerialize(include = Inclusion.NON_NULL)
 public class Meta implements Serializable {
 
     private String author;
     private String contributor;
-    private String created;
+    private String created; //TODO date time
+    private String updated; //TODO date time
     private String summary;
-    private String updated;
     private String category;
-    private String tags;
+    private String tags; //TODO collection
     private String uri;
-    private String deprecated;
+    private String deprecated; //TODO boolean
     private String title;
     private String identifier;
     private String projectTemplate;
-    private Integer locked;
+    private Integer locked; //TODO boolean
+    private Integer unlisted; //TODO boolean
 
     @JsonCreator
-    public Meta(@JsonProperty("author") String author,
-            @JsonProperty("contributor") String contributor,
-            @JsonProperty("created") String created,
-            @JsonProperty("updated") String updated,
-            @JsonProperty("summary") String summary,
-            @JsonProperty("title") String title,
-            @JsonProperty("category") String category,
-            @JsonProperty("tags")String tags,
-            @JsonProperty("uri") String uri,
-            @JsonProperty("deprecated") String deprecated,
-            @JsonProperty("identifier") String identifier,
-            @JsonProperty("link") String link,
-            @JsonProperty("projectTemplate") String projectTemplate,
-            @JsonProperty("locked") Integer locked) {
+    protected Meta(@JsonProperty("author") String author,
+                   @JsonProperty("contributor") String contributor,
+                   @JsonProperty("created") String created,
+                   @JsonProperty("updated") String updated,
+                   @JsonProperty("summary") String summary,
+                   @JsonProperty("title") String title,
+                   @JsonProperty("category") String category,
+                   @JsonProperty("tags") String tags,
+                   @JsonProperty("uri") String uri,
+                   @JsonProperty("deprecated") String deprecated,
+                   @JsonProperty("identifier") String identifier,
+                   @JsonProperty("projectTemplate") String projectTemplate,
+                   @JsonProperty("locked") Integer locked,
+                   @JsonProperty("unlisted") Integer unlisted) {
         super();
         this.author = author;
         this.uri = uri;
@@ -59,8 +60,9 @@ public class Meta implements Serializable {
         this.deprecated = deprecated;
         this.identifier = identifier;
         this.projectTemplate = projectTemplate;
-        this.locked = locked;
         this.contributor = contributor;
+        this.locked = locked;
+        this.unlisted = unlisted;
     }
 
     public Meta(String title) {
@@ -119,4 +121,7 @@ public class Meta implements Serializable {
         return locked;
     }
 
+    public Integer getUnlisted() {
+        return unlisted;
+    }
 }

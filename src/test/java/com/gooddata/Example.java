@@ -36,7 +36,7 @@ public class Example {
 
         final MetadataService md = gd.getMetadataService();
 
-        final String factUri = md.getObjUri(project, Fact.class, Restriction.title("myfact"));
+        final String factUri = md.findObjUri(project, Fact.class, Restriction.title("myfact"));
 
         final Metric m = md.createObj(project, new Metric("my sum", "SELECT SUM([" + factUri + "])", "#,##0"));
 

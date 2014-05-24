@@ -1,0 +1,15 @@
+{
+    "report" : {
+        "content" : {
+            "domains" : [
+                "/gdc/md/PROJECT_ID/obj/DOM_ID"
+            ],
+            "definitions" : [
+                "/gdc/md/PROJECT_ID/obj/DEF_ID"
+            ]
+        },
+        "meta" : {
+            "title" : "Beers Consumed This Week"
+        }
+    }
+}

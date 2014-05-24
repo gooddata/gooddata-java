@@ -7,15 +7,15 @@ import com.gooddata.md.Meta;
 import com.gooddata.md.Obj;
 import com.gooddata.md.Queryable;
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import java.util.Collection;
-
 /**
+ * Report definition
  */
 @JsonTypeName("reportDefinition")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
@@ -23,29 +23,29 @@ import java.util.Collection;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ReportDefinition extends Obj implements Queryable {
 
+    @JsonProperty("content")
     private final ReportDefinitionContent content;
 
     @JsonCreator
-    public ReportDefinition(@JsonProperty("meta") Meta meta, @JsonProperty("content") ReportDefinitionContent content) {
+    ReportDefinition(@JsonProperty("meta") Meta meta, @JsonProperty("content") ReportDefinitionContent content) {
         super(meta);
         this.content = content;
     }
 
-    public ReportDefinitionContent getContent() {
-        return content;
+    /* Just for serialization test */
+    ReportDefinition(String title, ReportDefinitionContent content) {
+        super(new Meta(title));
+        this.content = content;
     }
 
-    public static class Content {
-        private final Collection<String> definitions;
+    @JsonIgnore
+    public String getFormat() {
+        return content.getFormat();
+    }
 
-        @JsonCreator
-        public Content(@JsonProperty("definitions") Collection<String> definitions) {
-            this.definitions = definitions;
-        }
-
-        public Collection<String> getDefinitions() {
-            return definitions;
-        }
+    @JsonIgnore
+    public Grid getGrid() {
+        return content.getGrid();
     }
 
 }

@@ -4,6 +4,7 @@
 package com.gooddata.md;
 
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
@@ -19,10 +20,11 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Metric extends Obj implements Queryable {
 
+    @JsonProperty("content")
     private final Content content;
 
     @JsonCreator
-    public Metric(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
+    private Metric(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
         super(meta);
         this.content = content;
     }
@@ -31,12 +33,18 @@ public class Metric extends Obj implements Queryable {
         this(new Meta(title), new Metric.Content(expression, format));
     }
 
-    public Content getContent() {
-        return content;
+    @JsonIgnore
+    public String getExpression() {
+        return content.getExpression();
+    }
+
+    @JsonIgnore
+    public String getFormat() {
+        return content.getFormat();
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Content {
+    private static class Content {
         private final String expression;
         private final String format;
 

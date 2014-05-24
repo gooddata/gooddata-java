@@ -4,6 +4,7 @@
 package com.gooddata.md;
 
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
@@ -11,9 +12,12 @@ import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.Collection;
+import java.util.Collections;
+
+import static java.util.Arrays.asList;
 
 /**
- * Attribute
+ * Attribute of GoodData project dataset
  */
 @JsonTypeName("attribute")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
@@ -21,21 +25,39 @@ import java.util.Collection;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Attribute extends Obj implements Queryable {
 
+    @JsonProperty("content")
     private final Content content;
 
     @JsonCreator
-    public Attribute(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
+    private Attribute(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
         super(meta);
         this.content = content;
     }
 
-    public Content getContent() {
-        return content;
+    /* Just for serialization test */
+    Attribute(String title, Key primaryKey, Key foreignKey) {
+        super(new Meta(title));
+        content = new Content(asList(primaryKey), asList(foreignKey), Collections.<DisplayForm>emptyList());
+    }
+
+    @JsonIgnore
+    public Collection<DisplayForm> getDisplayForms() {
+        return content.getDisplayForms();
+    }
+
+    @JsonIgnore
+    public Collection<Key> getPrimaryKeys() {
+        return content.getPk();
+    }
+
+    @JsonIgnore
+    public Collection<Key> getForeignKeys() {
+        return content.getFk();
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-    public static class Content {
+    private static class Content {
         private final Collection<Key> pk;
         private final Collection<Key> fk;
         private final Collection<DisplayForm> displayForms;

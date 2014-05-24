@@ -1,0 +1,13 @@
+{
+   "attributeDisplayForm" : {
+      "content" : {
+         "formOf" : "/gdc/md/PROJECT_ID/obj/DF_FORM_OF_ID",
+         "expression" : "[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]",
+         "default" : 0,
+         "ldmexpression" : ""
+      },
+      "meta" : {
+         "title" : "Person Name"
+      }
+   }
+}

@@ -12,44 +12,41 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 
 /**
+ * Attribute in Grid
  */
 @JsonTypeName("attribute")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class AttributeItem extends Item {
+public class AttributeInGrid extends GridElement {
 
-    private Collection<Totals> totals = new ArrayList<>();
+    private Collection<Collection<String>> totals;
 
     @JsonCreator
-    public AttributeItem(@JsonProperty("uri") String uri, @JsonProperty("totals") Collection<Totals> totals,
-                         @JsonProperty("alias") String alias) {
+    AttributeInGrid(@JsonProperty("uri") String uri, @JsonProperty("totals") Collection<Collection<String>> totals,
+                    @JsonProperty("alias") String alias) {
         super(uri, alias);
         this.totals = totals;
     }
 
-    public AttributeItem(String uri) {
+    public AttributeInGrid(String uri) {
         super(uri, "");
+        totals = new ArrayList<>();
     }
 
-    public Collection<Totals> getTotals() {
-        return totals;
+    public AttributeInGrid(String uri, String alias) {
+        super(uri, alias);
+        totals = new ArrayList<>();
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-    public static class Totals {
-        private Collection<String> totals = new ArrayList<>();
-
-        @JsonCreator
-        public Totals(@JsonProperty Collection<String> totals) {
-            this.totals = totals;
+    public Collection<Collection<String>> getTotals() {
+        final LinkedList<Collection<String>> result = new LinkedList<>();
+        for (final Collection<String> t : totals) {
+            result.add(t);
         }
-
-        public Collection<String> getTotals() {
-            return totals;
-        }
+        return result;
     }
 }
