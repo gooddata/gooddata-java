@@ -19,7 +19,7 @@ import static com.gooddata.Validate.notNull;
 import static org.springframework.http.HttpMethod.POST;
 
 /**
- * TODO
+ * Service for report execution and export
  */
 public class ReportService extends AbstractService {
 

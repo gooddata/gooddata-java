@@ -8,9 +8,6 @@ import static org.junit.Assert.assertEquals;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
-/**
- * TODO
- */
 public class DatasetManifestTest {
 
     private static final String SERIALIZED = "{\n"

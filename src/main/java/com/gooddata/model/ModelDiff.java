@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * TODO
+ * Model diff
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("projectModelDiff")

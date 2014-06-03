@@ -16,7 +16,7 @@ import static com.gooddata.Validate.notEmpty;
 import static com.gooddata.Validate.notNull;
 
 /**
- * TODO
+ * Service for manipulating with project model
  */
 public class ModelService extends AbstractService {
 

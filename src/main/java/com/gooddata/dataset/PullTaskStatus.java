@@ -7,7 +7,7 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
- * TODO
+ * ETL Pull task status (for internal use)
  */
 public class PullTaskStatus {
 

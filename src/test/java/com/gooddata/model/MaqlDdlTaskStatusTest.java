@@ -8,9 +8,6 @@ import com.gooddata.model.MaqlDdlTaskStatus;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
-/**
- * TODO
- */
 public class MaqlDdlTaskStatusTest {
 
     @Test
