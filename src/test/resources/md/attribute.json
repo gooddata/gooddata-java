@@ -3,23 +3,23 @@
       "content" : {
          "pk" : [
             {
-               "data" : "/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/15",
+               "data" : "/gdc/md/PROJECT_ID/obj/PK_ID",
                "type" : "col"
             }
          ],
          "displayForms" : [
             {
                "content" : {
-                  "formOf" : "/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/28",
-                  "expression" : "[/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/17]",
-                  "ldmexpression" : ""
+                  "formOf" : "/gdc/md/PROJECT_ID/obj/DF_FORM_OF_ID",
+                  "expression" : "[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]",
+                  "ldmexpression" : "[/gdc/md/PROJECT_ID/obj/DF_LDM_EXPRESSION_ID]"
                },
                "links" : {
-                  "elements" : "/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/29/elements"
+                  "elements" : "/gdc/md/PROJECT_ID/obj/DF_ID/elements"
                },
                "meta" : {
-                  "author" : "/gdc/account/profile/33410a1a28be3ef934bdee5f6c78d17f",
-                  "uri" : "/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/29",
+                  "author" : "/gdc/account/profile/USER_ID",
+                  "uri" : "/gdc/md/PROJECT_ID/obj/DF_ID",
                   "tags" : "",
                   "created" : "2014-04-11 13:45:56",
                   "identifier" : "attr.person.id.name",
@@ -28,14 +28,20 @@
                   "title" : "Person Name",
                   "category" : "attributeDisplayForm",
                   "updated" : "2014-04-11 13:45:56",
-                  "contributor" : "/gdc/account/profile/33410a1a28be3ef934bdee5f6c78d17f"
+                  "contributor" : "/gdc/account/profile/USER_ID"
                }
             }
-         ]
+         ],
+          "fk" : [
+              {
+                  "data" : "/gdc/md/PROJECT_ID/obj/FK_ID",
+                  "type" : "col"
+              }
+          ]
       },
       "meta" : {
-         "author" : "/gdc/account/profile/33410a1a28be3ef934bdee5f6c78d17f",
-         "uri" : "/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/28",
+         "author" : "/gdc/account/profile/USER_ID",
+         "uri" : "/gdc/md/PROJECT_ID/obj/28",
          "tags" : "",
          "created" : "2014-04-11 13:45:56",
          "identifier" : "attr.person.id",
@@ -44,7 +50,7 @@
          "title" : "Person ID",
          "category" : "attribute",
          "updated" : "2014-04-11 13:45:56",
-         "contributor" : "/gdc/account/profile/33410a1a28be3ef934bdee5f6c78d17f"
+         "contributor" : "/gdc/account/profile/USER_ID"
       }
    }
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
  */
-package com.gooddata.md.report;
+package com.gooddata.md;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -9,30 +9,26 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
+ * Expression of fact
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class Item {
+public class Expression {
 
-    private final String uri;
-    protected String alias = "";
+    private final String data;
+    private final String type;
 
     @JsonCreator
-    public Item(@JsonProperty("uri") String uri, @JsonProperty("alias") String alias) {
-        this.uri = uri;
-        this.alias = alias;
+    public Expression(@JsonProperty("data") String data, @JsonProperty("type") String type) {
+        this.data = data;
+        this.type = type;
     }
 
-    public Item(String uri) {
-        this(uri, "");
+    public String getData() {
+        return data;
     }
 
-    public String getUri() {
-        return uri;
+    public String getType() {
+        return type;
     }
-
-    public String getAlias() {
-        return alias;
-    }
-
 }

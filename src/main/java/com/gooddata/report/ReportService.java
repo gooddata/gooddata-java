@@ -7,7 +7,6 @@ import com.gooddata.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +32,7 @@ public class ReportService extends AbstractService {
     public String exportReport(final ReportDefinition reportDefinition, final String format) {
         notNull(reportDefinition, "reportDefinition");
         notEmpty(format, "format");
-        final ExecResult execResult = executeReport(reportDefinition.getMeta().getUri());
+        final ExecResult execResult = executeReport(reportDefinition.getUri());
         return exportReport(execResult, format);
     }
 

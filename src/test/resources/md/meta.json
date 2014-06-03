@@ -1,0 +1,16 @@
+{
+    "author": "/gdc/account/profile/USER_ID",
+    "uri": "/gdc/md/PROJECT_ID/obj/OBJ_ID",
+    "tags": "TAG1 TAG2",
+    "created": "2014-04-11 13:45:56",
+    "identifier": "attr.person.id.name",
+    "deprecated": "0",
+    "summary": "Obj summary",
+    "title": "Obj title",
+    "category": "attributeDisplayForm",
+    "updated": "2014-04-11 13:45:57",
+    "contributor": "/gdc/account/profile/CONTRIBUTOR_USER_ID",
+    "projectTemplate": "/projectTemplates/TYPE/VERSION",
+    "locked": 0,
+    "unlisted": 1
+}

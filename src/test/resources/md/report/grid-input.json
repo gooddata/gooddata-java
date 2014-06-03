@@ -1,0 +1,21 @@
+{
+    "sort": {
+        "columns": [],
+        "rows": []
+    },
+    "columnWidths": [
+        {
+            "width": 343
+        }
+    ],
+    "columns": [
+        "metricGroup"
+    ],
+    "metrics": [
+        {
+            "alias": "metr",
+            "uri": "/gdc/md/PROJECT_ID/obj/METR_ID"
+        }
+    ],
+    "rows": []
+}

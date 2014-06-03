@@ -12,30 +12,28 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import java.util.List;
 
 /**
+ * Grid report definition
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class GridReportDefinition extends ReportDefinitionContent {
+public class GridReportDefinitionContent extends ReportDefinitionContent {
 
     public static final String FORMAT = "grid";
 
-    private final Grid grid;
-
     @JsonCreator
-    public GridReportDefinition(@JsonProperty("format") String format, @JsonProperty("grid") Grid grid) {
-        super(format);
-        this.grid = grid;
+    private GridReportDefinitionContent(@JsonProperty("format") String format, @JsonProperty("grid") Grid grid) {
+        super(format, grid);
     }
 
-    public GridReportDefinition(Grid grid) {
+    GridReportDefinitionContent(Grid grid) {
         this(FORMAT, grid);
     }
 
-    public Grid getGrid() {
-        return grid;
+    public String getFormat() {
+        return FORMAT;
     }
 
-    public static ReportDefinition create(String title, List<String> columns, List<AttributeItem> rows, List<Item> metrics) {
-        return new ReportDefinition(new Meta(title), new GridReportDefinition(new Grid(columns, rows, metrics)));
+    public static ReportDefinition create(String title, List<String> columns, List<GridElement> rows, List<GridElement> metrics) {
+        return new ReportDefinition(new Meta(title), new GridReportDefinitionContent(new Grid(columns, rows, metrics)));
     }
 }

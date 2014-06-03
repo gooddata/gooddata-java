@@ -6,7 +6,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
- * Metadata query result
+ * Metadata entry (can be named "LINK" in some API docs)
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -18,20 +18,28 @@ public class Entry {
     private final String category;
     private final String author;
     private final String contributor;
-    private final String deprecated;
+    private final String deprecated; //TODO boolean
     private final String identifier;
-    private final String locked;
-    private final String tags;
-    private final String created; // todo date time
-    private final String updated; // todo date time
+    private final String tags; //TODO collection
+    private final String created; //TODO date time
+    private final String updated; //TODO date time
+    private final Integer locked; //TODO boolean
+    private final Integer unlisted; //TODO boolean
 
     @JsonCreator
-    public Entry(@JsonProperty("link") String link, @JsonProperty("title") String title,
-                 @JsonProperty("summary") String summary, @JsonProperty("category") String category,
-                 @JsonProperty("author") String author, @JsonProperty("contributor") String contributor,
-                 @JsonProperty("deprecated") String deprecated, @JsonProperty("identifier") String identifier,
-                 @JsonProperty("locked") String locked, @JsonProperty("tags") String tags,
-                 @JsonProperty("created") String created, @JsonProperty("updated") String updated) {
+    public Entry(@JsonProperty("link") String link,
+                 @JsonProperty("title") String title,
+                 @JsonProperty("summary") String summary,
+                 @JsonProperty("category") String category,
+                 @JsonProperty("author") String author,
+                 @JsonProperty("contributor") String contributor,
+                 @JsonProperty("deprecated") String deprecated,
+                 @JsonProperty("identifier") String identifier,
+                 @JsonProperty("tags") String tags,
+                 @JsonProperty("created") String created,
+                 @JsonProperty("updated") String updated,
+                 @JsonProperty("locked") Integer locked,
+                 @JsonProperty("unlisted") Integer unlisted) {
         this.link = link;
         this.title = title;
         this.summary = summary;
@@ -40,10 +48,11 @@ public class Entry {
         this.contributor = contributor;
         this.deprecated = deprecated;
         this.identifier = identifier;
-        this.locked = locked;
         this.tags = tags;
         this.created = created;
         this.updated = updated;
+        this.locked = locked;
+        this.unlisted = unlisted;
     }
 
     public String getLink() {
@@ -78,10 +87,6 @@ public class Entry {
         return identifier;
     }
 
-    public String getLocked() {
-        return locked;
-    }
-
     public String getTags() {
         return tags;
     }
@@ -92,5 +97,13 @@ public class Entry {
 
     public String getUpdated() {
         return updated;
+    }
+
+    public Integer getLocked() {
+        return locked;
+    }
+
+    public Integer getUnlisted() {
+        return unlisted;
     }
 }

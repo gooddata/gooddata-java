@@ -17,7 +17,12 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 public class AttributeDisplayForm extends DisplayForm {
 
     @JsonCreator
-    public AttributeDisplayForm(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
+    private AttributeDisplayForm(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
         super(meta, content);
+    }
+
+    /* Just for serialization test */
+    AttributeDisplayForm(String title, String formOf, String expression, Integer isDefault, String ldmExpression) {
+        super(new Meta(title), new Content(formOf, expression, isDefault, ldmExpression));
     }
 }

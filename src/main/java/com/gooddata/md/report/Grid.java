@@ -15,41 +15,55 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Grid content (in report definition)
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Grid {
 
     private final Collection<String> columns;
-    private final Collection<AttributeItem> rows;
-    private final Collection<Item> metrics;
-    private final Map<String,List<String>> sort;
-    private final Collection<String> columnWidths = Collections.emptyList();
+    private final Collection<GridElement> rows;
+    private final Collection<GridElement> metrics;
+    private final Map<String, List<String>> sort;
+    private final Collection<Map<String, Object>> columnWidths;
 
     @JsonCreator
-    public Grid(@JsonProperty("columns") Collection<String> columns, @JsonProperty("rows") Collection<AttributeItem> rows,
-                @JsonProperty("metrics") Collection<Item> metrics) {
+    public Grid(@JsonProperty("columns") Collection<String> columns,
+                @JsonProperty("rows") Collection<GridElement> rows,
+                @JsonProperty("metrics") Collection<GridElement> metrics,
+                @JsonProperty("sort") Map<String, List<String>> sort,
+                @JsonProperty("columnWidths") Collection<Map<String, Object>> columnWidths) {
+        this.columns = columns;
+        this.rows = rows;
+        this.metrics = metrics;
+        this.sort = sort;
+        this.columnWidths = columnWidths;
+    }
+
+    public Grid(final Collection<String> columns, final Collection<GridElement> rows,
+                final Collection<GridElement> metrics) {
         this.columns = columns;
         this.rows = rows;
         this.metrics = metrics;
         sort = new LinkedHashMap<>();
         sort.put("columns", Collections.<String>emptyList());
         sort.put("rows", Collections.<String>emptyList());
+        columnWidths = Collections.emptyList();
     }
 
     public Collection<String> getColumns() {
         return columns;
     }
 
-    public Collection<AttributeItem> getRows() {
+    public Collection<GridElement> getRows() {
         return rows;
     }
 
-    public Collection<Item> getMetrics() {
+    public Collection<GridElement> getMetrics() {
         return metrics;
     }
 
-    public Collection<String> getColumnWidths() {
+    public Collection<Map<String, Object>> getColumnWidths() {
         return columnWidths;
     }
 

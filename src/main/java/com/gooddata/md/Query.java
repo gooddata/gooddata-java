@@ -10,7 +10,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import java.util.Collection;
 
 /**
- * Metadata query
+ * Metadata query result
  */
 @JsonTypeName("query")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
@@ -25,7 +25,7 @@ public class Query {
     private final Meta meta;
 
     @JsonCreator
-    public Query(@JsonProperty("entries") Collection<Entry> entries, @JsonProperty("meta") Meta meta) {
+    private Query(@JsonProperty("entries") Collection<Entry> entries, @JsonProperty("meta") Meta meta) {
         this.entries = entries;
         this.meta = meta;
     }
@@ -34,13 +34,21 @@ public class Query {
         return entries;
     }
 
-    public Meta getMeta() {
-        return meta;
+    public String getCategory() {
+        return meta.getCategory();
+    }
+
+    public String getSummary() {
+        return meta.getSummary();
+    }
+
+    public String getTitle() {
+        return meta.getTitle();
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-    public static class Meta {
+    private static class Meta {
         private final String category;
         private final String summary;
         private final String title;

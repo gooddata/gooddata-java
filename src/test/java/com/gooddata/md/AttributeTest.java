@@ -1,35 +1,56 @@
 package com.gooddata.md;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.io.InputStream;
 import java.util.Collection;
 
+import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 
 public class AttributeTest {
+
+    public static final String TITLE = "Person ID";
+
     @Test
     public void shouldDeserialize() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/md/attribute.json");
-        final Attribute value = new ObjectMapper().readValue(stream, Attribute.class);
-        assertThat(value, is(notNullValue()));
-        final Attribute.Content content = value.getContent();
-        assertThat(content, is(notNullValue()));
+        final Attribute attribute = new ObjectMapper().readValue(stream, Attribute.class);
+        assertThat(attribute, is(notNullValue()));
 
-        final Collection<DisplayForm> displayForms = content.getDisplayForms();
+        final Collection<DisplayForm> displayForms = attribute.getDisplayForms();
         assertThat(displayForms, is(notNullValue()));
         assertThat(displayForms, hasSize(1));
 
         final DisplayForm displayForm = displayForms.iterator().next();
-        final DisplayForm.Content displayFormContent = displayForm.getContent();
-        assertThat(displayFormContent, is(notNullValue()));
+        assertThat(displayForm, is(notNullValue()));
 
-        assertThat(displayFormContent.getFormOf(), is("/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/28"));
-        assertThat(displayFormContent.getExpression(), is("[/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/obj/17]"));
-        assertThat(displayFormContent.getLdmexpression(), is(""));
+        assertThat(displayForm.getFormOf(), is("/gdc/md/PROJECT_ID/obj/DF_FORM_OF_ID"));
+        assertThat(displayForm.getExpression(), is("[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]"));
+        assertThat(displayForm.getLdmExpression(), is("[/gdc/md/PROJECT_ID/obj/DF_LDM_EXPRESSION_ID]"));
+
+        final Collection<Key> primaryKeys = attribute.getPrimaryKeys();
+        assertThat(primaryKeys, is(Matchers.notNullValue()));
+        assertThat(primaryKeys, hasSize(1));
+        assertThat(primaryKeys.iterator().next(), is(Matchers.notNullValue()));
+
+        final Collection<Key> foreignKeys = attribute.getForeignKeys();
+        assertThat(foreignKeys, is(Matchers.notNullValue()));
+        assertThat(foreignKeys, hasSize(1));
+        assertThat(foreignKeys.iterator().next(), is(Matchers.notNullValue()));
     }
+
+    @Test
+    public void testSerialization() throws Exception {
+        final Attribute attribute = new Attribute(TITLE, new Key("/gdc/md/PROJECT_ID/obj/PK_ID", "col"),
+                new Key("/gdc/md/PROJECT_ID/obj/FK_ID", "col"));
+
+        assertThat(attribute, serializesToJson("/md/attribute-input.json"));
+    }
+
 }

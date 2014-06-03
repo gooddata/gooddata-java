@@ -27,24 +27,59 @@ public class MetadataService extends AbstractService {
         super(restTemplate);
     }
 
+    /**
+     * Create metadata object in given project
+     *
+     * @param project project
+     * @param obj     metadata object to be created
+     * @param <T>     type of the object to be created
+     * @return new metadata object
+     * @throws com.gooddata.md.ObjCreateException   if creation failed
+     * @throws com.gooddata.md.ObjNotFoundException if new metadata object not found after creation
+     * @throws com.gooddata.GoodDataRestException   if GoodData REST API returns unexpected status code when getting
+     *                                              the new object
+     * @throws com.gooddata.GoodDataException       if it encounters client-side HTTP errors when getting the new object
+     */
     @SuppressWarnings("unchecked")
     public <T extends Obj> T createObj(Project project, T obj) {
         notNull(project, "project");
         notNull(obj, "obj");
+
         final UriResponse response;
         try {
             response = restTemplate.postForObject(Obj.URI, obj, UriResponse.class, project.getId());
         } catch (GoodDataRestException | RestClientException e) {
             throw new ObjCreateException(obj, e);
         }
+
+        if (response == null) {
+            throw new ObjCreateException("empty response from API call", obj);
+        }
         return getObjByUri(response.getUri(), (Class<T>) obj.getClass());
     }
 
+    /**
+     * Get metadata object by URI (format is <code>/gdc/md/{PROJECT_ID}/obj/{OBJECT_ID}</code>)
+     *
+     * @param uri URI in format <code>/gdc/md/{PROJECT_ID}/obj/{OBJECT_ID}</code>
+     * @param cls class of the resulting object
+     * @param <T> type of the object to be returned
+     * @return the metadata object
+     * @throws com.gooddata.md.ObjNotFoundException if metadata object not found
+     * @throws com.gooddata.GoodDataRestException   if GoodData REST API returns unexpected status code
+     * @throws com.gooddata.GoodDataException       if it encounters client-side HTTP errors
+     */
     public <T extends Obj> T getObjByUri(String uri, Class<T> cls) {
         notNull(uri, "uri");
         notNull(cls, "cls");
         try {
-            return restTemplate.getForObject(uri, cls);
+            final T result = restTemplate.getForObject(uri, cls);
+
+            if (result != null) {
+                return result;
+            } else {
+                throw new GoodDataException("empty response from API call");
+            }
         } catch (GoodDataRestException e) {
             if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
                 throw new ObjNotFoundException(uri, cls, e);
@@ -56,6 +91,18 @@ public class MetadataService extends AbstractService {
         }
     }
 
+    /**
+     * Get metadata object by id.
+     *
+     * @param project project where to search for the object
+     * @param id      id of the object
+     * @param cls     class of the resulting object
+     * @param <T>     type of the object to be returned
+     * @return the metadata object
+     * @throws com.gooddata.md.ObjNotFoundException if metadata object not found
+     * @throws com.gooddata.GoodDataRestException   if GoodData REST API returns unexpected status code
+     * @throws com.gooddata.GoodDataException       if it encounters client-side HTTP errors
+     */
     public <T extends Obj> T getObjById(Project project, String id, Class<T> cls) {
         notNull(project, "project");
         notNull(id, "id");
@@ -63,7 +110,18 @@ public class MetadataService extends AbstractService {
         return getObjByUri(Obj.OBJ_TEMPLATE.expand(project.getId(), id).toString(), cls);
     }
 
-    public <T extends Queryable> String getObjUri(Project project, Class<T> cls, Restriction... restrictions) {
+    /**
+     * Get metadata object URI by restrictions like identifier, title or summary.
+     *
+     * @param project      project where to search for the object
+     * @param cls          class of the resulting object
+     * @param restrictions query restrictions
+     * @param <T>          type of the object to be returned
+     * @return the URI of metadata object
+     * @throws com.gooddata.md.ObjNotFoundException  if metadata object not found
+     * @throws com.gooddata.md.NonUniqueObjException if more than one object corresponds to search restrictions
+     */
+    public <T extends Queryable> String findObjUri(Project project, Class<T> cls, Restriction... restrictions) {
         final Collection<String> results = findUris(project, cls, restrictions);
         if (results == null || results.isEmpty()) {
             throw new ObjNotFoundException(cls);
@@ -73,13 +131,30 @@ public class MetadataService extends AbstractService {
         return results.iterator().next();
     }
 
+    /**
+     * Find metadata by restrictions like identifier, title or summary.
+     *
+     * @param project      project where to search for the metadata
+     * @param cls          class of searched metadata
+     * @param restrictions query restrictions
+     * @param <T>          type of the metadata referenced in returned entries
+     * @return the collection of metadata entries
+     * @throws com.gooddata.GoodDataException if unable to query metadata
+     */
     public <T extends Queryable> Collection<Entry> find(Project project, Class<T> cls, Restriction... restrictions) {
         notNull(project, "project");
         notNull(cls, "cls");
-        final String type = cls.getSimpleName().toLowerCase() + (cls.isAssignableFrom(ReportDefinition.class) ? "" : "s");
+
+        final String type = cls.getSimpleName().toLowerCase() +
+                (cls.isAssignableFrom(ReportDefinition.class) ? "" : "s");
         try {
-            final Collection<Entry> entries = restTemplate.getForObject(Query.URI, Query.class, project.getId(), type).getEntries();
-            return filterEntries(entries, restrictions);
+            final Query queryResult = restTemplate.getForObject(Query.URI, Query.class, project.getId(), type);
+
+            if (queryResult != null && queryResult.getEntries() != null) {
+                return filterEntries(queryResult.getEntries(), restrictions);
+            } else {
+                throw new GoodDataException("empty response from API call");
+            }
         } catch (RestClientException e) {
             throw new GoodDataException("Unable to query metadata: " + type, e);
         }
@@ -90,22 +165,40 @@ public class MetadataService extends AbstractService {
             return entries;
         }
         final Collection<Entry> result = new ArrayList<>(entries.size());
-        for (Entry entry: entries) {
-            for (Restriction restriction: restrictions) {
+        for (Entry entry : entries) {
+            for (Restriction restriction : restrictions) {
                 switch (restriction.getType()) {
-                    case IDENTIFIER: if (restriction.getValue().equals(entry.getIdentifier())) result.add(entry); break;
-                    case TITLE: if (restriction.getValue().equals(entry.getTitle())) result.add(entry); break;
-                    case SUMMARY: if (restriction.getValue().equals(entry.getSummary())) result.add(entry); break;
+                    case IDENTIFIER:
+                        if (restriction.getValue().equals(entry.getIdentifier())) result.add(entry);
+                        break;
+                    case TITLE:
+                        if (restriction.getValue().equals(entry.getTitle())) result.add(entry);
+                        break;
+                    case SUMMARY:
+                        if (restriction.getValue().equals(entry.getSummary())) result.add(entry);
+                        break;
                 }
             }
         }
         return result;
     }
 
-    public <T extends Queryable> Collection<String> findUris(Project project, Class<T> cls, Restriction... restrictions) {
+    /**
+     * Find metadata URIs by restrictions like identifier, title or summary.
+     *
+     * @param project      project where to search for the metadata
+     * @param cls          class of searched metadata
+     * @param restrictions query restrictions
+     * @param <T>          type of the metadata referenced by returned URIs
+     * @return the collection of metadata URIs
+     * @throws com.gooddata.GoodDataException if unable to query metadata
+     */
+    public <T extends Queryable> Collection<String> findUris(Project project,
+                                                             Class<T> cls,
+                                                             Restriction... restrictions) {
         final Collection<Entry> entries = find(project, cls, restrictions);
         final Collection<String> result = new ArrayList<>(entries.size());
-        for (Entry entry: entries) {
+        for (Entry entry : entries) {
             result.add(entry.getLink());
         }
         return result;
