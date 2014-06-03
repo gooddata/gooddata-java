@@ -69,6 +69,11 @@ public class Meta implements Serializable {
         this.title = title;
     }
 
+    public Meta(String title, String summary) {
+        this.title = title;
+        this.summary = summary;
+    }
+
     public String getAuthor() {
         return author;
     }

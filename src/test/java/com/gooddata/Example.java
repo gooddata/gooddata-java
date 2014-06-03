@@ -32,7 +32,7 @@ public class Example {
         System.out.println(projects);
 
         final Project project = projectService.createProject(new Project("sparkling", "pgroup2"));
-        System.out.println(project.getLinks().getSelf());
+        System.out.println(project.getSelfLink());
 
         final MetadataService md = gd.getMetadataService();
 
