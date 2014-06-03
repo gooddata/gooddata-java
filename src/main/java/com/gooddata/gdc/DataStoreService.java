@@ -30,7 +30,7 @@ public class DataStoreService {
 
     private UriPrefixer getPrefixer() {
         if (prefixer == null) {
-            final String webDAVUri = gdcService.getGdc().getLink("uploads").getLink();
+            final String webDAVUri = gdcService.getGdc().getUserStagingLink();
             prefixer = new UriPrefixer(webDAVUri);
             sardine.enablePreemptiveAuthentication(prefixer.getDefaultUri().getHost());
         }
