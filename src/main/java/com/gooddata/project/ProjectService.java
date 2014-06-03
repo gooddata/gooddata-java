@@ -70,7 +70,7 @@ public class ProjectService extends AbstractService {
                     @Override
                     public boolean finished(ClientHttpResponse response) throws IOException {
                         final Project project = extractData(response, Project.class);
-                        return "ENABLED".equalsIgnoreCase(project.getContent().getState());
+                        return "ENABLED".equalsIgnoreCase(project.getState());
                     }
                 },
                 Project.class
