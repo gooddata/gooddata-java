@@ -16,7 +16,6 @@ import com.gooddata.project.ProjectService;
 import com.gooddata.report.ReportService;
 import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.VersionInfo;
 import org.springframework.http.MediaType;
@@ -54,12 +53,17 @@ public class GoodData {
     }
 
     public GoodData(String hostname, String login, String password) {
+        this(hostname, login, password, PORT, PROTOCOL);
+    }
+
+    public GoodData(String hostname, String login, String password, int port, String protocol) {
         notEmpty(hostname, "hostname");
         notEmpty(login, "login");
         notEmpty(password, "password");
+        notEmpty(protocol, "protocol");
         final HttpClientBuilder httpClientBuilder = HttpClientBuilder.create()
                 .setUserAgent(getUserAgent());
-        final RestTemplate restTemplate = createRestTemplate(hostname, login, password, httpClientBuilder);
+        final RestTemplate restTemplate = createRestTemplate(login, password, hostname, httpClientBuilder, port, protocol);
 
         accountService = new AccountService(restTemplate);
         projectService = new ProjectService(restTemplate, accountService);
@@ -71,20 +75,25 @@ public class GoodData {
         reportService = new ReportService(restTemplate);
     }
 
-    private RestTemplate createRestTemplate(String hostname, String login, String password, HttpClientBuilder httpClientBuilder) {
-        final HttpHost host = new HttpHost(hostname, PORT, PROTOCOL);
-        final CloseableHttpClient httpClient = httpClientBuilder.build();
-        final SSTRetrievalStrategy strategy = new LoginSSTRetrievalStrategy(httpClient, host, login, password);
-
-        final HttpClient client = new GoodDataHttpClient(httpClient, strategy);
+    private RestTemplate createRestTemplate(String login, String password, String hostname, HttpClientBuilder builder,
+                                            int port, String protocol) {
+        final HttpClient client = createHttpClient(login, password, hostname, port, protocol, builder);
 
         final UriPrefixingClientHttpRequestFactory factory = new UriPrefixingClientHttpRequestFactory(
-                new HttpComponentsClientHttpRequestFactory(client), hostname, PORT, PROTOCOL);
+                new HttpComponentsClientHttpRequestFactory(client), hostname, port, protocol);
         final RestTemplate restTemplate = new RestTemplate(factory);
         restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(
                 new HeaderSettingRequestInterceptor(singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE))));
         restTemplate.setErrorHandler(new ResponseErrorHandler(restTemplate.getMessageConverters()));
         return restTemplate;
+    }
+
+    protected HttpClient createHttpClient(final String login, final String password, final String hostname,
+                                          final int port, final String protocol, final HttpClientBuilder builder) {
+        final HttpHost host = new HttpHost(hostname, port, protocol);
+        final HttpClient httpClient = builder.build();
+        final SSTRetrievalStrategy strategy = new LoginSSTRetrievalStrategy(httpClient, host, login, password);
+        return new GoodDataHttpClient(httpClient, strategy);
     }
 
     private String getUserAgent() {
