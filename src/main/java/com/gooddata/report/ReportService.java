@@ -10,12 +10,18 @@ import com.gooddata.md.report.ReportDefinition;
 import org.codehaus.jackson.node.ObjectNode;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.client.ResponseExtractor;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 import static com.gooddata.Validate.notEmpty;
 import static com.gooddata.Validate.notNull;
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
 /**
@@ -29,35 +35,58 @@ public class ReportService extends AbstractService {
         super(restTemplate);
     }
 
-    public String exportReport(final ReportDefinition reportDefinition, final String format) {
+    public String exportReport(final ReportDefinition reportDefinition, final ReportExportFormat format) {
         notNull(reportDefinition, "reportDefinition");
-        notEmpty(format, "format");
+        notNull(format, "format");
         final ExecResult execResult = executeReport(reportDefinition.getUri());
         return exportReport(execResult, format);
     }
 
-    public ExecResult executeReport(final String reportDefinitionUri) {
-        notEmpty(reportDefinitionUri, "reportDefinitionUri");
-        final ResponseEntity<String> entity = restTemplate
-                .exchange(ReportRequest.URI, POST, new HttpEntity<>(new ReportRequest(reportDefinitionUri)),
-                        String.class);
+    public void exportReport(final ReportDefinition reportDefinition, final ReportExportFormat format,
+                             final OutputStream output) {
+        notNull(output, "output");
+        final String uri = exportReport(reportDefinition, format);
         try {
+            restTemplate.execute(uri, GET, noopRequestCallback, new ResponseExtractor<Integer>() {
+                @Override
+                public Integer extractData(ClientHttpResponse response) throws IOException {
+                    return FileCopyUtils.copy(response.getBody(), output);
+                }
+            });
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to export report", e);
+        }
+    }
+
+    private ExecResult executeReport(final String reportDefinitionUri) {
+        notEmpty(reportDefinitionUri, "reportDefinitionUri");
+        try {
+            final ResponseEntity<String> entity = restTemplate
+                    .exchange(ReportRequest.URI, POST, new HttpEntity<>(new ReportRequest(reportDefinitionUri)),
+                            String.class);
             return new ExecResult(mapper.readTree(entity.getBody()));
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to execute report", e);
         } catch (IOException e) {
             throw new GoodDataException("Unable to read execution result", e);
         }
     }
 
-    public String exportReport(final ExecResult execResult, final String format) {
+    private String exportReport(final ExecResult execResult, final ReportExportFormat format) {
         notNull(execResult, "execResult");
-        notEmpty(format, "format");
+        notNull(format, "format");
         final ObjectNode root = mapper.createObjectNode();
         final ObjectNode child = mapper.createObjectNode();
 
         child.put("result", execResult.getJsonNode());
-        child.put("format", format);
+        child.put("format", format.getValue());
         root.put("result_req", child);
 
-        return restTemplate.postForObject(EXPORTING_URI, root, UriResponse.class).getUri();
+        try {
+            return restTemplate.postForObject(EXPORTING_URI, root, UriResponse.class).getUri();
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to export report", e);
+        }
     }
+
 }

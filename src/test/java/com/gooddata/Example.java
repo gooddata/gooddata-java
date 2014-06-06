@@ -14,6 +14,7 @@ import com.gooddata.md.Restriction;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
 import com.gooddata.project.ProjectService;
+import com.gooddata.report.ReportExportFormat;
 import com.gooddata.report.ReportService;
 
 import java.util.Collection;
@@ -46,7 +47,7 @@ public class Example {
 
         final ReportDefinition reportDef = md.getObjByUri("/gdc/md/GoodSalesDemoKokot1/obj/1962", ReportDefinition.class);
         final ReportService reportService = gd.getReportService();
-        final String imgUri = reportService.exportReport(reportDef, "csv");
+        final String imgUri = reportService.exportReport(reportDef, ReportExportFormat.PNG);
         System.out.println(imgUri);
 
         gd.logout();
