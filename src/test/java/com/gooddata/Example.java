@@ -12,10 +12,13 @@ import com.gooddata.md.MetadataService;
 import com.gooddata.md.Metric;
 import com.gooddata.md.Restriction;
 import com.gooddata.md.report.ReportDefinition;
+import com.gooddata.model.ModelDiff;
+import com.gooddata.model.ModelService;
 import com.gooddata.project.Project;
 import com.gooddata.project.ProjectService;
 import com.gooddata.report.ReportService;
 
+import java.io.InputStreamReader;
 import java.util.Collection;
 
 public class Example {
@@ -33,6 +36,11 @@ public class Example {
 
         final Project project = projectService.createProject(new Project("sparkling", "pgroup2"));
         System.out.println(project.getSelfLink());
+
+        final ModelService modelService = gd.getModelService();
+        final ModelDiff projectModelDiff = modelService.getProjectModelDiff(project,
+                new InputStreamReader(Example.class.getResourceAsStream("/person.json")));
+        modelService.updateProjectModel(project, projectModelDiff);
 
         final MetadataService md = gd.getMetadataService();
 
