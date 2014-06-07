@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Dataset manifest
+ * Dataset specific upload manifest
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("dataSetSLIManifest")
@@ -33,7 +33,8 @@ public class DatasetManifest {
     }
 
     @JsonCreator
-    public DatasetManifest(@JsonProperty("dataSet") String dataSet, @JsonProperty("file") String file, @JsonProperty("parts") List<Part> parts) {
+    public DatasetManifest(@JsonProperty("dataSet") String dataSet, @JsonProperty("file") String file,
+                           @JsonProperty("parts") List<Part> parts) {
         this.dataSet = dataSet;
         this.file = file;
         this.parts = parts;
@@ -59,14 +60,29 @@ public class DatasetManifest {
         this.file = file;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     public static class Part {
 
         @JsonProperty("mode")
         private String uploadMode;
         private String columnName;
         private List<String> populates;
-        private Integer referenceKey;
+        private Integer referenceKey; //TODO boolean
         private Map<String, String> constraints;
+
+        @JsonCreator
+        Part(@JsonProperty("mode") String uploadMode,
+             @JsonProperty("columnName") String columnName,
+             @JsonProperty("populates") List<String> populates,
+             @JsonProperty("referenceKey") Integer referenceKey,
+             @JsonProperty("constraints") Map<String, String> constraints) {
+            this.uploadMode = uploadMode;
+            this.columnName = columnName;
+            this.populates = populates;
+            this.referenceKey = referenceKey;
+            this.constraints = constraints;
+        }
 
         public String getUploadMode() {
             return uploadMode;
