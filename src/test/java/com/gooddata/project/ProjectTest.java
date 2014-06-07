@@ -53,7 +53,9 @@ public class ProjectTest {
 
     @Test
     public void testSerialize() throws Exception {
-        final String serializedProject = new ObjectMapper().writeValueAsString(new Project("TITLE", "SUMMARY", "TOKEN"));
+        final Project project = new Project("TITLE", "SUMMARY", "TOKEN");
+        project.setProjectTemplate("/projectTemplates/TEMPLATE");
+        final String serializedProject = new ObjectMapper().writeValueAsString(project);
 
         assertThat(serializedProject, startsWith("{\"project\""));
 
@@ -68,6 +70,7 @@ public class ProjectTest {
         assertThat(serializedProject, containsString("\"meta\""));
         assertThat(serializedProject, containsString("\"title\":\"TITLE\""));
         assertThat(serializedProject, containsString("\"summary\":\"SUMMARY\""));
+        assertThat(serializedProject, containsString("\"projectTemplate\":\"/projectTemplates/TEMPLATE\""));
         assertThat(serializedProject, not(containsString("\"author\"")));
         assertThat(serializedProject, not(containsString("\"contributor\"")));
         assertThat(serializedProject, not(containsString("\"created\"")));

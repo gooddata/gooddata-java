@@ -29,7 +29,6 @@ public class Meta implements Serializable {
     private String deprecated; //TODO boolean
     private String title;
     private String identifier;
-    private String projectTemplate;
     private Integer locked; //TODO boolean
     private Integer unlisted; //TODO boolean
 
@@ -45,7 +44,6 @@ public class Meta implements Serializable {
                    @JsonProperty("uri") String uri,
                    @JsonProperty("deprecated") String deprecated,
                    @JsonProperty("identifier") String identifier,
-                   @JsonProperty("projectTemplate") String projectTemplate,
                    @JsonProperty("locked") Integer locked,
                    @JsonProperty("unlisted") Integer unlisted) {
         super();
@@ -59,7 +57,6 @@ public class Meta implements Serializable {
         this.category = category;
         this.deprecated = deprecated;
         this.identifier = identifier;
-        this.projectTemplate = projectTemplate;
         this.contributor = contributor;
         this.locked = locked;
         this.unlisted = unlisted;
@@ -118,10 +115,6 @@ public class Meta implements Serializable {
         return identifier;
     }
 
-    public String getProjectTemplate() {
-        return projectTemplate;
-    }
-
     public Integer getLocked() {
         return locked;
     }
@@ -129,4 +122,5 @@ public class Meta implements Serializable {
     public Integer getUnlisted() {
         return unlisted;
     }
+
 }

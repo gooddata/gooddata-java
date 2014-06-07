@@ -78,11 +78,6 @@ public abstract class Obj {
     }
 
     @JsonIgnore
-    public String getProjectTemplate() {
-        return meta.getProjectTemplate();
-    }
-
-    @JsonIgnore
     public Integer getLocked() {
         return meta.getLocked();
     }
