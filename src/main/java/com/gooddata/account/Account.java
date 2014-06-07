@@ -4,6 +4,7 @@
 package com.gooddata.account;
 
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
@@ -12,6 +13,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.springframework.web.util.UriTemplate;
 
 /**
+ * Account setting
  */
 @JsonTypeName("accountSetting")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
@@ -27,32 +29,68 @@ public class Account {
 
     public static final String CURRENT_ID = "current";
 
+
+    private final String firstName;
+    private final String lastName;
+    @JsonIgnore
     private final Links links;
 
     @JsonCreator
-    public Account(@JsonProperty("links") Links links) {
+    public Account(@JsonProperty("firstName") String firstName,
+                   @JsonProperty("lastName") String lastName,
+                   @JsonProperty("links") Links links) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.links = links;
     }
 
-    public Links getLinks() {
-        return links;
+    /* Just for serialization test */
+    Account(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        links = null;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    @JsonIgnore
+    public String getSelfLink() {
+        return links.getSelf();
+    }
+
+    @JsonIgnore
+    public String getProjectsLink() {
+        return links.getProjects();
+    }
+
+    @JsonIgnore
     public String getId() {
-        return TEMPLATE.match(getLinks().getSelf()).get("id");
+        return TEMPLATE.match(getSelfLink()).get("id");
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Links {
+    private static class Links {
         private final String self;
+        private final String projects;
 
         @JsonCreator
-        public Links(@JsonProperty("self") String self) {
+        public Links(@JsonProperty("self") String self, @JsonProperty("projects") String projects) {
             this.self = self;
+            this.projects = projects;
         }
 
         public String getSelf() {
             return self;
+        }
+
+        public String getProjects() {
+            return projects;
         }
     }
 }
