@@ -3,19 +3,33 @@
  */
 package com.gooddata.model;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import com.gooddata.model.MaqlDdlTaskStatus;
+import static org.junit.Assert.assertThat;
+
+import com.gooddata.gdc.GdcError;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
 public class MaqlDdlTaskStatusTest {
 
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
     @Test
     public void testDeser() throws Exception {
-        final MaqlDdlTaskStatus maqlDdlTaskStatus = new ObjectMapper().readValue("{\"wTaskStatus\":{\"status\":\"OK\",\"poll\":\"someURI\"}}", MaqlDdlTaskStatus.class);
-        assertEquals("OK", maqlDdlTaskStatus.getStatus());
-        assertEquals("someURI", maqlDdlTaskStatus.getUri());
+        final MaqlDdlTaskStatus status = MAPPER.readValue(getClass().getResourceAsStream("/model/maql-ddl-task-status.json"), MaqlDdlTaskStatus.class);
+        assertEquals("OK", status.getStatus());
+        assertEquals("/gdc/md/PROJECT_ID/tasks/TASK_ID/status", status.getUri());
+    }
 
-
+    @Test
+    public void testDeserMessages() throws Exception {
+        final MaqlDdlTaskStatus status = MAPPER.readValue(getClass().getResourceAsStream("/model/maql-ddl-task-status-fail.json"), MaqlDdlTaskStatus.class);
+        assertEquals("ERROR", status.getStatus());
+        assertEquals("/gdc/md/PROJECT_ID/tasks/TASK_ID/status", status.getUri());
+        assertThat(status.getMessages(), hasSize(1));
+        final GdcError error = status.getMessages().iterator().next();
+        assertThat(error.getFormattedMessage(), is("The object (attr.person.id) doesn't exists."));
     }
 }

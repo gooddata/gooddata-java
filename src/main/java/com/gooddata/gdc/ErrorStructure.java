@@ -37,4 +37,9 @@ public class ErrorStructure {
     public String getFormattedMessage() {
         return message == null ? null : String.format(message, parameters);
     }
+
+    @Override
+    public String toString() {
+        return getFormattedMessage();
+    }
 }
