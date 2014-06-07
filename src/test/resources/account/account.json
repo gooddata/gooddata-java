@@ -1,0 +1,21 @@
+{
+    "accountSetting" : {
+        "country" : null,
+        "firstName" : "Blah",
+        "ssoProvider" : null,
+        "timezone" : null,
+        "position" : null,
+        "authenticationModes" : [],
+        "companyName" : "gdc",
+        "login" : "fake@gooddata.com",
+        "email" : "fake@gooddata.com",
+        "created" : "2013-12-17 19:08:20",
+        "updated" : "2013-12-17 19:16:09",
+        "lastName" : "Muhehe",
+        "phoneNumber" : "123",
+        "links" : {
+            "self" : "/gdc/account/profile/ID",
+            "projects" : "/gdc/account/profile/ID/projects"
+        }
+    }
+}

@@ -1,0 +1,33 @@
+{
+    "dataSetSLIManifest": {
+        "parts": [
+            {
+                "columnName": "f_person.f_shoesize",
+                "populates": [
+                    "fact.person.shoesize"
+                ],
+                "mode": "FULL"
+            },
+            {
+                "columnName": "date",
+                "populates": [
+                    "date"
+                ],
+                "mode": "FULL",
+                "constraints": {
+                    "date": "yyyy-MM-dd'T'HH:mm:ssZ"
+                }
+            },
+            {
+                "columnName": "d_person_department.nm_xdepartment",
+                "populates": [
+                    "attr.person.xdepartment"
+                ],
+                "mode": "FULL",
+                "referenceKey": 1
+            }
+        ],
+        "file": "dataset.person.csv",
+        "dataSet": "dataset.person"
+    }
+}

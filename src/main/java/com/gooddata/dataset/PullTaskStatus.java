@@ -4,11 +4,14 @@
 package com.gooddata.dataset;
 
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
- * ETL Pull task status (for internal use)
+ * ETL Pull task status (for internal use).
+ * Deserialization only.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PullTaskStatus {
 
     private static final String OK = "OK";
@@ -17,7 +20,7 @@ public class PullTaskStatus {
     private final String status;
 
     @JsonCreator
-    public PullTaskStatus(@JsonProperty("taskStatus") String status) {
+    private PullTaskStatus(@JsonProperty("taskStatus") String status) {
         this.status = status;
     }
 
