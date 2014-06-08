@@ -32,7 +32,7 @@ public class ReportTest {
 
     @Test
     public void testSerialization() throws Exception {
-        final Report report = new Report("Beers Consumed This Week", DEFINITION, DOMAIN);
+        final Report report = new Report("Beers Consumed This Week", DOMAIN, DEFINITION);
         assertThat(report, serializesToJson("/md/report/report-input.json"));
     }
 

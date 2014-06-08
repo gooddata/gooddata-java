@@ -65,7 +65,7 @@ public class Example {
                 asList(new GridElement(m.getUri(), "Age Sum"))
         );
         definition = md.createObj(project, definition);
-        final Report report = md.createObj(project, new Report(definition.getTitle(), definition.getUri(), null));
+        final Report report = md.createObj(project, new Report(definition.getTitle(), definition));
 
         final DatasetService datasetService = gd.getDatasetService();
         final DatasetManifest manifest = datasetService.getDatasetManifest(project, "dataset.person");
