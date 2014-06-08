@@ -121,7 +121,7 @@ public class MetadataService extends AbstractService {
      * @throws com.gooddata.md.ObjNotFoundException  if metadata object not found
      * @throws com.gooddata.md.NonUniqueObjException if more than one object corresponds to search restrictions
      */
-    public <T extends Queryable> String findObjUri(Project project, Class<T> cls, Restriction... restrictions) {
+    public <T extends Queryable> String getObjUri(Project project, Class<T> cls, Restriction... restrictions) {
         final Collection<String> results = findUris(project, cls, restrictions);
         if (results == null || results.isEmpty()) {
             throw new ObjNotFoundException(cls);

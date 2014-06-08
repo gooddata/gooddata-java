@@ -52,7 +52,7 @@ Query, create and update project metadata - attributes, facts, metrics, reports,
 ```java
 MetadataService md = gd.getMetadataService();
 
-String factUri = md.findObjUri(project, Fact.class, Restriction.title("myfact"));
+String factUri = md.getObjUri(project, Fact.class, Restriction.title("myfact"));
 
 Metric m = md.createObj(project, new Metric("My Sum", "SELECT SUM([" + factUri + "])", "#,##0"));
 
