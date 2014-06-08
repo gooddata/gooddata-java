@@ -7,6 +7,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.springframework.web.util.UriTemplate;
 
+import static com.gooddata.Validate.noNullElements;
+
 /**
  * Metadata object (common part)
  */
@@ -85,6 +87,21 @@ public abstract class Obj {
     @JsonIgnore
     public Integer getUnlisted() {
         return meta.getUnlisted();
+    }
+
+    /**
+     * Get list of URIs of the given {@link Obj}s
+     * @param objs metadata objects
+     * @return list of URIs
+     */
+    @SafeVarargs
+    protected static <T extends Obj> String[] uris(T... objs) {
+        noNullElements(objs, "objs");
+        final String[] uris = new String[objs.length];
+        for (int i=0; i<objs.length; i++) {
+            uris[i] = objs[i].getUri();
+        }
+        return uris;
     }
 
 }
