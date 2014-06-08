@@ -14,7 +14,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class DisplayForm extends Obj {
+public class DisplayForm extends AbstractObj {
 
     @JsonProperty("content")
     private final Content content;

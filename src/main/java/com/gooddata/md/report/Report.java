@@ -3,8 +3,8 @@
  */
 package com.gooddata.md.report;
 
+import com.gooddata.md.AbstractObj;
 import com.gooddata.md.Meta;
-import com.gooddata.md.Obj;
 import com.gooddata.md.Queryable;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -25,7 +25,7 @@ import static java.util.Arrays.asList;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class Report extends Obj implements Queryable {
+public class Report extends AbstractObj implements Queryable {
 
     @JsonProperty("content")
     private final Content content;

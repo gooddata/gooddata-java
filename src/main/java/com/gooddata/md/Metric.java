@@ -18,7 +18,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class Metric extends Obj implements Queryable {
+public class Metric extends AbstractObj implements Queryable {
 
     @JsonProperty("content")
     private final Content content;
