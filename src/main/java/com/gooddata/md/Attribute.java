@@ -55,6 +55,11 @@ public class Attribute extends AbstractObj implements Queryable {
         return content.getFk();
     }
 
+    @JsonIgnore
+    public DisplayForm getDefaultDisplayForm() {
+        return getDisplayForms().iterator().next();
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     private static class Content {
