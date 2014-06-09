@@ -68,7 +68,7 @@ public class ModelService extends AbstractService {
             final MaqlDdlLinks linkEntries = restTemplate.postForObject(MaqlDdl.URI, new MaqlDdl(maqlDdl), MaqlDdlLinks.class, project.getId());
             final MaqlDdlTaskStatus maqlDdlTaskStatus = poll(linkEntries.getStatusLink(), MaqlDdlTaskStatus.class);
             if (!maqlDdlTaskStatus.isSuccess()) {
-                 throw new ModelException("Update project model finished with status " + maqlDdlTaskStatus.getStatus());
+                 throw new ModelException("Unable to update project model: " + maqlDdlTaskStatus.getMessages());
             }
         } catch (GoodDataRestException | RestClientException e) {
             throw new ModelException("Unable to update project model", e);

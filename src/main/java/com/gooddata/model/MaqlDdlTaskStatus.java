@@ -3,12 +3,15 @@
  */
 package com.gooddata.model;
 
+import com.gooddata.gdc.GdcError;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import java.util.Collection;
 
 /**
  * MAQL DDL task status
@@ -22,14 +25,17 @@ public class MaqlDdlTaskStatus {
     private static final String OK = "OK";
 
     private final String status;
+
     private final String uri;
 
-    // TODO messages
+    private final Collection<GdcError> messages;
 
     @JsonCreator
-    public MaqlDdlTaskStatus(@JsonProperty("status") String status, @JsonProperty("poll") String uri) {
+    public MaqlDdlTaskStatus(@JsonProperty("status") String status, @JsonProperty("poll") String uri,
+                             @JsonProperty("messages") Collection<GdcError> messages) {
         this.status = status;
         this.uri = uri;
+        this.messages = messages;
     }
 
     public String getStatus() {
@@ -38,6 +44,10 @@ public class MaqlDdlTaskStatus {
 
     public String getUri() {
         return uri;
+    }
+
+    public Collection<GdcError> getMessages() {
+        return messages;
     }
 
     public boolean isSuccess() {
