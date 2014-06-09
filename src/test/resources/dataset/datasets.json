@@ -1,0 +1,16 @@
+{
+    "about": {
+        "summary": "single loading interfaces",
+        "category": "singleloadinterface",
+        "instance": "MD::LDM::SingleLoadInterface",
+        "links": [
+            {
+                "link": "/gdc/md/vra1wg1m6r0gzl8i8r8y3h1bk0kkzkpo/ldm/singleloadinterface/dataset.person",
+                "identifier": "dataset.person",
+                "summary": "dataset single data loading interface specifications",
+                "category": "dataset-singleloadinterface",
+                "title": "Person"
+            }
+        ]
+    }
+}
