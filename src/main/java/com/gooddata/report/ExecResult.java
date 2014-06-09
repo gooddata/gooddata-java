@@ -10,7 +10,7 @@ import static com.gooddata.Validate.notNull;
 /**
  * Executed report
  */
-public class ExecResult {
+class ExecResult {
 
     private final JsonNode jsonNode;
 

@@ -34,11 +34,12 @@ public abstract class AbstractService {
 
     protected final ObjectMapper mapper = new ObjectMapper();
 
-    private final RequestCallback noopRequestCallback = new RequestCallback() {
+    protected final RequestCallback noopRequestCallback = new RequestCallback() {
         @Override
         public void doWithRequest(final ClientHttpRequest request) throws IOException {
         }
     };
+
     private final ResponseExtractor<ClientHttpResponse> reusableResponseExtractor = new ResponseExtractor<ClientHttpResponse>() {
         @Override
         public ClientHttpResponse extractData(final ClientHttpResponse response) throws IOException {
