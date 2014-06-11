@@ -13,6 +13,11 @@ import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.springframework.web.util.UriTemplate;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import static java.util.Arrays.asList;
+
 /**
  * Project in GoodData platform
  */
@@ -25,6 +30,7 @@ public class Project {
     public static final String PROJECTS_URI = "/gdc/account/profile/{id}/projects";
     public static final String PROJECT_URI = Projects.URI + "/{id}";
     public static final UriTemplate PROJECT_TEMPLATE = new UriTemplate(PROJECT_URI);
+    private static final Set<String> PREPARING_STATES = new HashSet<>(asList("PREPARING", "PREPARED", "LOADING"));
 
     @JsonProperty("content")
     private ProjectContent content;
@@ -201,6 +207,16 @@ public class Project {
     @JsonIgnore
     public String getUploadsLink() {
         return links.getUploads();
+    }
+
+    @JsonIgnore
+    public boolean isPreparing() {
+        return PREPARING_STATES.contains(getState());
+    }
+
+    @JsonIgnore
+    public boolean isEnabled() {
+        return "ENABLED".equals(getState());
     }
 
 

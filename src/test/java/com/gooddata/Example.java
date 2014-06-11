@@ -35,12 +35,12 @@ public class Example {
         final Collection<Project> projects = projectService.getProjects();
         System.out.println(projects);
 
-        final Project project = projectService.createProject(new Project("sparkling", "pgroup2"));
+        final Project project = projectService.createProject(new Project("sparkling", "pgroup2")).get();
         System.out.println(project.getSelfLink());
 
         final ModelService modelService = gd.getModelService();
         final ModelDiff projectModelDiff = modelService.getProjectModelDiff(project,
-                new InputStreamReader(Example.class.getResourceAsStream("/person.json")));
+                new InputStreamReader(Example.class.getResourceAsStream("/person.json"))).get();
         modelService.updateProjectModel(project, projectModelDiff);
 
         final MetadataService md = gd.getMetadataService();
@@ -51,7 +51,7 @@ public class Example {
 
         final DatasetService datasetService = gd.getDatasetService();
         final DatasetManifest manifest = datasetService.getDatasetManifest(project, "dataset.person");
-        datasetService.loadDataset(project, manifest, Example.class.getResourceAsStream("/person.csv"));
+        datasetService.loadDataset(project, manifest, Example.class.getResourceAsStream("/person.csv")).get();
 
         final ReportDefinition reportDef = md.getObjByUri("/gdc/md/GoodSalesDemoKokot1/obj/1962", ReportDefinition.class);
         final ReportService reportService = gd.getReportService();

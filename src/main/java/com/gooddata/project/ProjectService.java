@@ -6,8 +6,10 @@ package com.gooddata.project;
 import com.gooddata.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.account.AccountService;
+import com.gooddata.FutureResult;
+import com.gooddata.PollHandler;
 import com.gooddata.gdc.UriResponse;
+import com.gooddata.account.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
@@ -60,21 +62,29 @@ public class ProjectService extends AbstractService {
      * @param project project to be created
      * @return created project (including very useful id)
      */
-    public Project createProject(Project project) {
+    public FutureResult<Project> createProject(Project project) {
         notNull(project, "project");
 
-        final UriResponse uri = restTemplate.postForObject(Projects.URI, project, UriResponse.class);
+        final UriResponse uri;
+        try {
+            uri = restTemplate.postForObject(Projects.URI, project, UriResponse.class);
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to create project", e);
+        }
 
-        return poll(uri.getUri(),
-                new ConditionCallback() {
-                    @Override
-                    public boolean finished(ClientHttpResponse response) throws IOException {
-                        final Project project = extractData(response, Project.class);
-                        return "ENABLED".equalsIgnoreCase(project.getState());
-                    }
-                },
-                Project.class
-        );
+        return new FutureResult<>(this, new PollHandler<Project>(uri.getUri(), Project.class) {
+            @Override
+            public boolean isFinished(ClientHttpResponse response) throws IOException {
+                final Project project = extractData(response, Project.class);
+                return !project.isPreparing();
+            }
+            @Override
+            protected void onFinish() {
+                if (!getResult().isEnabled()) {
+                    throw new GoodDataException("Created project is not enabled");
+                }
+            }
+        });
     }
 
     /**
