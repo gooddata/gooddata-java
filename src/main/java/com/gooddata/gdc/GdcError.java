@@ -11,25 +11,21 @@ import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
- * GoodData REST API error structure
+ * GoodData REST API error structure.
+ * Deserialization only.
  */
 @JsonTypeName("error")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class GdcError extends ErrorStructure {
-    private final String requestId;
 
     @JsonCreator
-    public GdcError(@JsonProperty("message") String message, @JsonProperty("parameters") String[] parameters,
-                    @JsonProperty("requestId") String requestId, @JsonProperty("component") String component,
-                    @JsonProperty("errorClass") String errorClass) {
-        super(errorClass, component, parameters, message);
-        this.requestId = requestId;
-    }
-
-    public String getRequestId() {
-        return requestId;
+    private GdcError(@JsonProperty("errorClass") String errorClass, @JsonProperty("component") String component,
+                     @JsonProperty("parameters") String[] parameters, @JsonProperty("message") String message,
+                     @JsonProperty("errorCode") String errorCode, @JsonProperty("errorId") String errorId,
+                     @JsonProperty("trace") String trace, @JsonProperty("requestId") String requestId) {
+        super(errorClass, component, parameters, message, errorCode, errorId, trace, requestId);
     }
 
 }
