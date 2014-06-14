@@ -27,7 +27,6 @@ public class ObjTest {
     public static final String URI = "/gdc/md/PROJECT_ID/obj/OBJ_ID";
     public static final String DEPRECATED = "0";
     public static final String IDENTIFIER = "attr.person.id.name";
-    public static final String PROJECT_TEMPLATE = "/projectTemplates/TYPE/VERSION";
     public static final Integer LOCKED = 0;
     public static final Integer UNLISTED = 1;
 
@@ -48,7 +47,6 @@ public class ObjTest {
         assertThat(obj.getUri(), is(URI));
         assertThat(obj.getDeprecated(), is(DEPRECATED));
         assertThat(obj.getIdentifier(), is(IDENTIFIER));
-        assertThat(obj.getProjectTemplate(), is(PROJECT_TEMPLATE));
         assertThat(obj.getLocked(), is(LOCKED));
         assertThat(obj.getUnlisted(), is(UNLISTED));
     }
@@ -57,7 +55,7 @@ public class ObjTest {
     public void testSerialization() throws Exception {
         final ConcreteObj obj = new ConcreteObj(
                 new Meta(AUTHOR, CONTRIBUTOR, CREATED, UPDATED, SUMMARY, TITLE, CATEGORY, TAGS, URI, DEPRECATED,
-                        IDENTIFIER, PROJECT_TEMPLATE, LOCKED, UNLISTED)
+                        IDENTIFIER, LOCKED, UNLISTED)
         );
 
         assertThat(obj, serializesToJson("/md/objCommon.json"));

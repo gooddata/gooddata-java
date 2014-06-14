@@ -24,7 +24,6 @@ public class MetaTest {
     public static final String URI = "/gdc/md/PROJECT_ID/obj/OBJ_ID";
     public static final String DEPRECATED = "0";
     public static final String IDENTIFIER = "attr.person.id.name";
-    public static final String PROJECT_TEMPLATE = "/projectTemplates/TYPE/VERSION";
     public static final Integer LOCKED = 0;
     public static final Integer UNLISTED = 1;
 
@@ -43,7 +42,6 @@ public class MetaTest {
         assertThat(meta.getUri(), is(URI));
         assertThat(meta.getDeprecated(), is(DEPRECATED));
         assertThat(meta.getIdentifier(), is(IDENTIFIER));
-        assertThat(meta.getProjectTemplate(), is(PROJECT_TEMPLATE));
         assertThat(meta.getLocked(), is(LOCKED));
         assertThat(meta.getUnlisted(), is(UNLISTED));
     }
@@ -51,7 +49,7 @@ public class MetaTest {
     @Test
     public void testSerialization() throws Exception {
         final Meta meta = new Meta(AUTHOR, CONTRIBUTOR, CREATED, UPDATED, SUMMARY, TITLE, CATEGORY, TAGS, URI,
-                DEPRECATED, IDENTIFIER, PROJECT_TEMPLATE, LOCKED, UNLISTED);
+                DEPRECATED, IDENTIFIER, LOCKED, UNLISTED);
 
         assertThat(meta, serializesToJson("/md/meta.json"));
     }

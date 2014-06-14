@@ -36,27 +36,31 @@ public class Project {
     private ProjectContent content;
 
     @JsonProperty("meta")
-    private Meta meta;
+    private ProjectMeta meta;
 
     @JsonIgnore
     private Links links;
 
     public Project(String title, String authorizationToken) {
         content = new ProjectContent(authorizationToken);
-        meta = new Meta(title);
+        meta = new ProjectMeta(title);
     }
 
     public Project(String title, String summary, String authorizationToken) {
         content = new ProjectContent(authorizationToken);
-        meta = new Meta(title, summary);
+        meta = new ProjectMeta(title, summary);
     }
 
     @JsonCreator
-    private Project(@JsonProperty("content") ProjectContent content, @JsonProperty("meta") Meta meta,
+    private Project(@JsonProperty("content") ProjectContent content, @JsonProperty("meta") ProjectMeta meta,
                     @JsonProperty("links") Links links) {
         this.content = content;
         this.meta = meta;
         this.links = links;
+    }
+
+    public void setProjectTemplate(String uri) {
+        meta.setProjectTemplate(uri);
     }
 
     @JsonIgnore
@@ -414,4 +418,35 @@ public class Project {
         }
     }
 
+    private static class ProjectMeta extends Meta {
+
+        private String projectTemplate;
+
+        @JsonCreator
+        private ProjectMeta(@JsonProperty("author") String author, @JsonProperty("contributor") String contributor,
+                            @JsonProperty("created") String created, @JsonProperty("updated") String updated,
+                            @JsonProperty("summary") String summary, @JsonProperty("title") String title,
+                            @JsonProperty("category") String category, @JsonProperty("tags") String tags,
+                            @JsonProperty("uri") String uri, @JsonProperty("deprecated") String deprecated,
+                            @JsonProperty("identifier") String identifier,
+                            @JsonProperty("locked") Integer locked, @JsonProperty("unlisted") Integer unlisted) {
+            super(author, contributor, created, updated, summary, title, category, tags, uri, deprecated, identifier, locked, unlisted);
+        }
+
+        private ProjectMeta(String title) {
+            super(title);
+        }
+
+        private ProjectMeta(String title, String summary) {
+            super(title, summary);
+        }
+
+        public String getProjectTemplate() {
+            return projectTemplate;
+        }
+
+        public void setProjectTemplate(String projectTemplate) {
+            this.projectTemplate = projectTemplate;
+        }
+    }
 }
