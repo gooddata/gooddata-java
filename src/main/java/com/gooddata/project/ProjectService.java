@@ -4,12 +4,12 @@
 package com.gooddata.project;
 
 import com.gooddata.AbstractService;
+import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.FutureResult;
 import com.gooddata.PollHandler;
-import com.gooddata.gdc.UriResponse;
 import com.gooddata.account.AccountService;
+import com.gooddata.gdc.UriResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
@@ -36,6 +36,12 @@ public class ProjectService extends AbstractService {
 
     private final AccountService accountService;
 
+    /**
+     * Constructs service for GoodData project management (list projects, create a project, ...).
+     *
+     * @param restTemplate RESTful HTTP Spring template
+     * @param accountService GoodData account service
+     */
     public ProjectService(RestTemplate restTemplate, AccountService accountService) {
         super(restTemplate);
         this.accountService = notNull(accountService, "accountService");
@@ -72,12 +78,18 @@ public class ProjectService extends AbstractService {
             throw new GoodDataException("Unable to create project", e);
         }
 
+        if (uri == null) {
+            throw new GoodDataException("Empty response when project POSTed to API");
+        }
+
         return new FutureResult<>(this, new PollHandler<Project>(uri.getUri(), Project.class) {
+
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
                 final Project project = extractData(response, Project.class);
                 return !project.isPreparing();
             }
+
             @Override
             protected void onFinish() {
                 if (!getResult().isEnabled()) {
