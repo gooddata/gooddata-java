@@ -3,7 +3,6 @@
  */
 package com.gooddata.model;
 
-import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
@@ -11,7 +10,8 @@ import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
- * MAQL DDL statement
+ * MAQL DDL statement.
+ * Serialization only.
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("manage")
@@ -21,10 +21,10 @@ public class MaqlDdl {
 
     public static final String URI = "/gdc/md/{project}/ldm/manage2";
 
+    @JsonProperty("maql")
     private final String maql;
 
-    @JsonCreator
-    public MaqlDdl(@JsonProperty("maql") String maql) {
+    public MaqlDdl(String maql) {
         this.maql = maql;
     }
 
