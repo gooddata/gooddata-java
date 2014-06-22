@@ -28,7 +28,7 @@ List projects, create a project,...
 ```java
 ProjectService projectService = gd.getProjectService();
 Collection<Project> projects = projectService.getProjects();
-Project project = projectService.createProject(new Project("my project", "MyToken"));
+Project project = projectService.createProject(new Project("my project", "MyToken")).get();
 ```
 
 ### Project Model API
@@ -37,7 +37,7 @@ Create and update the project model, execute MAQL DDL,...
 
 ```java
 ModelService modelService = gd.getModelService();
-ModelDiff diff = modelService.getProjectModelDiff(project, new FileInputStream("model.json");
+ModelDiff diff = modelService.getProjectModelDiff(project, new InputStreamReader(getClass().getResourceAsStream("/model.json"))).get();
 modelService.updateProjectModel(project, diff);
 
 modelService.updateProjectModel(project, "MAQL DDL EXPRESSION");
@@ -50,18 +50,18 @@ Query, create and update project metadata - attributes, facts, metrics, reports,
 ```java
 MetadataService md = gd.getMetadataService();
 
-String factUri = md.getObjUri(project, Fact.class, Restriction.title("myfact"));
+String factUri = md.findObjUri(project, Fact.class, Restriction.title("myfact"));
 
-Metric metric = new Metric("my sum", "SELECT SUM([" + factUri + "])", "#,##0");
-Metric m = md.createObj(project, metric);
+Metric m = md.createObj(project, new Metric("My Sum", "SELECT SUM([" + factUri + "])", "#,##0"));
 
-ReportDefinition definition = GridReportDefinition.create(
+ReportDefinition definition = GridReportDefinitionContent.create(
         "my report",
         asList("metricGroup"),
-        asList(new AttributeItem("/gdc/md/PROJECT_ID/obj/ID")),
-        asList(new Item("/gdc/md/PROJECT_ID/obj/ID"))
+        asList(new AttributeInGrid("/gdc/md/PROJECT_ID/obj/ATTR_ID")),
+        asList(new GridElement("/gdc/md/PROJECT_ID/obj/FACT_ID", "My Sum"))
 );
-md.createMd(project, definition);
+definition = md.createObj(project, definition);
+Report report = md.createObj(project, new Report(definition.getTitle(), definition.getUri(), null));
 ```
 
 ### Dataset API
@@ -70,8 +70,7 @@ Upload data to datasets,..
 
 ```java
 DatasetService datasetService = gd.getDatasetService();
-datasetService.loadDataset(project, "datasetId", new FileInputStream("data.csv"));
-
+datasetService.loadDataset(project, "datasetId", new FileInputStream("data.csv")).get();
 ```
 
 ### Report API
@@ -80,7 +79,7 @@ Execute and export reports.
 
 ```java
 ReportService reportService = gd.getReportService();
-String imgUri = reportService.exportReport(reportDef, "png");
+String imgUri = reportService.exportReport(reportDef, ReportExportFormat.PNG);
 ```
 
 ### DataStore API
@@ -92,5 +91,4 @@ DataStoreService dataStoreService = gd.getDataStoreService();
 dataStoreService.upload("/dir/file.txt", new FileInputStream("file.txt"));
 InputStream stream = dataStoreService.download("/dir/file.txt");
 dataStoreService.delete("/dir/file.txt");
-
 ```

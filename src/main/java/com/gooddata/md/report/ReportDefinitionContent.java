@@ -20,6 +20,7 @@ import static java.util.Collections.emptyList;
 @JsonSubTypes({
         @JsonSubTypes.Type(name = GridReportDefinitionContent.FORMAT, value = GridReportDefinitionContent.class),
         @JsonSubTypes.Type(name = OneNumberReportDefinitionContent.FORMAT, value = OneNumberReportDefinitionContent.class)
+        //TODO chart
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)

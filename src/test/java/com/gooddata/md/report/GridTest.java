@@ -51,7 +51,7 @@ public class GridTest {
         colWidths.put("width", 343);
         sort.put("columns", Collections.<String>emptyList());
         sort.put("rows", Collections.<String>emptyList());
-        final Grid grid = new Grid(asList("metricGroup"), Collections.<GridElement>emptyList(),
+        final Grid grid = new Grid(asList("metricGroup"), Collections.<AttributeInGrid>emptyList(),
                 asList(new GridElement("/gdc/md/PROJECT_ID/obj/METR_ID", "metr")), sort, asList(colWidths));
 
         assertThat(grid, serializesToJson("/md/report/grid-input.json"));
