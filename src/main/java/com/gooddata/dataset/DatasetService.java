@@ -29,6 +29,7 @@ import static com.gooddata.Validate.notNull;
 import static java.util.Collections.emptyList;
 
 /**
+ * Service to work with datasets and manifests.
  */
 public class DatasetService extends AbstractService {
 
@@ -42,6 +43,17 @@ public class DatasetService extends AbstractService {
         this.dataStoreService = notNull(dataStoreService, "dataStoreService");
     }
 
+    /**
+     * Obtains manifest from given project by given datasetId
+     *
+     * @param project project to which manifest belongs
+     * @param datasetId id of dataset
+     *
+     * @throws com.gooddata.dataset.DatasetNotFoundException when manifest can't be found (doesn't exist)
+     * @throws com.gooddata.dataset.DatasetException in case the API call failure
+     *
+     * @return manifest for dataset
+     */
     public DatasetManifest getDatasetManifest(Project project, String datasetId) {
         notNull(project, "project");
         notEmpty(datasetId, "datasetId");
@@ -58,6 +70,20 @@ public class DatasetService extends AbstractService {
         }
     }
 
+    /**
+     * Loads dataset into platform. Uploads given dataset and manifest to staging area and triggers ETL pull.
+     * The call is asynchronous returning {@link com.gooddata.FutureResult} to let caller wait for results.
+     * Uploaded files are deleted from staging area when finished.
+     *
+     * @param project project to which dataset belongs
+     * @param manifest dataset manifest
+     * @param dataset dataset to upload
+     *
+     * @throws com.gooddata.dataset.DatasetException if there is a problem to serialize manifest or upload dataset
+     *
+     * @return {@link com.gooddata.FutureResult} of the task, which can throw {@link com.gooddata.dataset.DatasetException}
+     *  in case the ETL pull task fails
+     */
     public FutureResult<Void> loadDataset(final Project project, final DatasetManifest manifest, final InputStream dataset) {
         notNull(project, "project");
         notNull(dataset, "dataset");
@@ -106,6 +132,16 @@ public class DatasetService extends AbstractService {
         }
     }
 
+    /**
+     * Gets DatasetManifest (using {@link #getDatasetManifest(com.gooddata.project.Project, String)}
+     * first and then calls {@link #loadDataset(com.gooddata.project.Project, DatasetManifest, java.io.InputStream)}
+     *
+     * @param project project to which dataset belongs
+     * @param datasetId datasetId to obtain a manifest
+     * @param dataset dataset to upload
+     *
+     * @return {@link com.gooddata.FutureResult} of the task
+     */
     public FutureResult<Void> loadDataset(Project project, String datasetId, InputStream dataset) {
         notNull(project, "project");
         notEmpty(datasetId, "datasetId");
@@ -113,6 +149,12 @@ public class DatasetService extends AbstractService {
         return loadDataset(project, getDatasetManifest(project, datasetId), dataset);
     }
 
+    /**
+     * Lists datasets in project. Returns empty list in case there are no datasets.
+     *
+     * @param project project to list datasets in
+     * @return collection of datasets in project or empty list
+     */
     public Collection<Dataset> listDatasets(Project project) {
         notNull(project, "project");
         try {
