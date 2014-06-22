@@ -7,6 +7,7 @@ import com.gooddata.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class ReportService extends AbstractService {
     public String exportReport(final ReportDefinition reportDefinition, final ReportExportFormat format) {
         notNull(reportDefinition, "reportDefinition");
         notNull(format, "format");
-        final ExecResult execResult = executeReport(reportDefinition.getUri());
+        final JsonNode execResult = executeReport(reportDefinition.getUri());
         return exportReport(execResult, format);
     }
 
@@ -58,13 +59,13 @@ public class ReportService extends AbstractService {
         }
     }
 
-    private ExecResult executeReport(final String reportDefinitionUri) {
+    private JsonNode executeReport(final String reportDefinitionUri) {
         notEmpty(reportDefinitionUri, "reportDefinitionUri");
         try {
             final ResponseEntity<String> entity = restTemplate
                     .exchange(ReportRequest.URI, POST, new HttpEntity<>(new ReportRequest(reportDefinitionUri)),
                             String.class);
-            return new ExecResult(mapper.readTree(entity.getBody()));
+            return mapper.readTree(entity.getBody());
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to execute report", e);
         } catch (IOException e) {
@@ -72,13 +73,13 @@ public class ReportService extends AbstractService {
         }
     }
 
-    private String exportReport(final ExecResult execResult, final ReportExportFormat format) {
+    private String exportReport(final JsonNode execResult, final ReportExportFormat format) {
         notNull(execResult, "execResult");
         notNull(format, "format");
         final ObjectNode root = mapper.createObjectNode();
         final ObjectNode child = mapper.createObjectNode();
 
-        child.put("result", execResult.getJsonNode());
+        child.put("result", execResult);
         child.put("format", format.getValue());
         root.put("result_req", child);
 

@@ -7,6 +7,7 @@ import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.PollHandler;
+import com.gooddata.gdc.AsyncTask;
 import com.gooddata.project.Project;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.FileCopyUtils;
@@ -31,8 +32,8 @@ public class ModelService extends AbstractService {
         notNull(project, "project");
         notNull(diffRequest, "diffRequest");
         try {
-            final DiffTask diffTask = restTemplate.postForObject(DiffRequest.URI, diffRequest, DiffTask.class, project.getId());
-            return new FutureResult<>(this, new PollHandler<>(diffTask.getUri(), ModelDiff.class));
+            final AsyncTask asyncTask = restTemplate.postForObject(DiffRequest.URI, diffRequest, AsyncTask.class, project.getId());
+            return new FutureResult<>(this, new PollHandler<>(asyncTask.getUri(), ModelDiff.class));
         } catch (GoodDataRestException | RestClientException e) {
             throw new ModelException("Unable to get project model diff", e);
         }
@@ -57,10 +58,9 @@ public class ModelService extends AbstractService {
     public void updateProjectModel(Project project, ModelDiff projectModelDiff) {
         notNull(project, "project");
         notNull(projectModelDiff, "projectModelDiff");
-        for (ModelDiff.UpdateScript updateScript : projectModelDiff.getUpdateScripts()) {
-            for (String maql : updateScript.getMaqlChunks()) {
-                updateProjectModel(project, maql);
-            }
+
+        for (String maql : projectModelDiff.getUpdateMaql()) {
+            updateProjectModel(project, maql);
         }
     }
 

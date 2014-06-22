@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
  */
-package com.gooddata.model;
+package com.gooddata.gdc;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -11,18 +11,19 @@ import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
- * TODO may be move somewhere to common
+ * Asynchronous task containing link for polling.
+ * Deserialization only.
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("asyncTask")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class DiffTask {
+public class AsyncTask {
 
     private Link link;
 
     @JsonCreator
-    public DiffTask(@JsonProperty("link") Link link) {
+    private AsyncTask(@JsonProperty("link") Link link) {
         this.link = link;
     }
 
@@ -30,11 +31,11 @@ public class DiffTask {
         return link.pollUri;
     }
 
-    public static class Link {
+    private static class Link {
         private String pollUri;
 
         @JsonCreator
-        public Link(@JsonProperty("poll") String pollUri) {
+        private Link(@JsonProperty("poll") String pollUri) {
             this.pollUri = pollUri;
         }
     }

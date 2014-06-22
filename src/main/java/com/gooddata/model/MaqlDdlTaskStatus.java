@@ -14,7 +14,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import java.util.Collection;
 
 /**
- * MAQL DDL task status
+ * MAQL DDL asynchronous task status.
+ * Deserialization only.
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("wTaskStatus")
@@ -26,15 +27,15 @@ public class MaqlDdlTaskStatus {
 
     private final String status;
 
-    private final String uri;
+    private final String pollUri;
 
     private final Collection<GdcError> messages;
 
     @JsonCreator
-    public MaqlDdlTaskStatus(@JsonProperty("status") String status, @JsonProperty("poll") String uri,
-                             @JsonProperty("messages") Collection<GdcError> messages) {
+    private MaqlDdlTaskStatus(@JsonProperty("status") String status, @JsonProperty("poll") String pollUri,
+                              @JsonProperty("messages") Collection<GdcError> messages) {
         this.status = status;
-        this.uri = uri;
+        this.pollUri = pollUri;
         this.messages = messages;
     }
 
@@ -42,8 +43,8 @@ public class MaqlDdlTaskStatus {
         return status;
     }
 
-    public String getUri() {
-        return uri;
+    public String getPollUri() {
+        return pollUri;
     }
 
     public Collection<GdcError> getMessages() {
