@@ -33,7 +33,7 @@ public class GridReportDefinitionContent extends ReportDefinitionContent {
         return FORMAT;
     }
 
-    public static ReportDefinition create(String title, List<String> columns, List<GridElement> rows,
+    public static ReportDefinition create(String title, List<String> columns, List<AttributeInGrid> rows,
                                           List<GridElement> metrics) {
         return new ReportDefinition(new Meta(title), new GridReportDefinitionContent(new Grid(columns, rows, metrics)));
     }

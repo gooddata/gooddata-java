@@ -29,7 +29,7 @@ public class OneNumberReportDefinitionContentTest {
     @Test
     public void testSerialization() throws Exception {
         final OneNumberReportDefinitionContent def = new OneNumberReportDefinitionContent(
-                new Grid(Collections.<String>emptyList(), Collections.<GridElement>emptyList(),
+                new Grid(Collections.<String>emptyList(), Collections.<AttributeInGrid>emptyList(),
                         Collections.<GridElement>emptyList()), "desc"
         );
         assertThat(def, serializesToJson("/md/report/oneNumberReportDefinitionContent-input.json"));

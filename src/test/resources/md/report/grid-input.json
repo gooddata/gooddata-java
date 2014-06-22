@@ -17,5 +17,15 @@
             "uri": "/gdc/md/PROJECT_ID/obj/METR_ID"
         }
     ],
-    "rows": []
+    "rows": [
+        {
+            "attribute": {
+                "alias": "attr",
+                "totals": [
+                    []
+                ],
+                "uri": "/gdc/md/PROJECT_ID/obj/ATTR_ID"
+            }
+        }
+    ]
 }

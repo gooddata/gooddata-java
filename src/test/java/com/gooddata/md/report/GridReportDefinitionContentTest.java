@@ -28,7 +28,7 @@ public class GridReportDefinitionContentTest {
     @Test
     public void testSerialization() throws Exception {
         final GridReportDefinitionContent def = new GridReportDefinitionContent(
-                new Grid(Collections.<String>emptyList(), Collections.<GridElement>emptyList(),
+                new Grid(Collections.<String>emptyList(), Collections.<AttributeInGrid>emptyList(),
                         Collections.<GridElement>emptyList()));
         assertThat(def, serializesToJson("/md/report/gridReportDefinitionContent-input.json"));
     }
