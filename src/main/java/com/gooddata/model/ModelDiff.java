@@ -81,7 +81,15 @@ public class ModelDiff {
         return unmodifiableList(updateScripts.get(0).getMaqlChunks());
     }
 
-    private UpdateScript getUpdateScriptByFlags(final boolean preserveData, final boolean cascadeDrops) {
+    /**
+     * Returns MAQL DDL update script by given flags determining side-effects (truncation of loaded data,
+     * drops of related objects).
+     *
+     * @param preserveData true to preserve data, false to truncate
+     * @param cascadeDrops true to drop all related objects
+     * @return update script with requested side-effect flags
+     */
+    public UpdateScript getUpdateScriptByFlags(final boolean preserveData, final boolean cascadeDrops) {
         UpdateScript result = null;
         for (final UpdateScript script : updateScripts) {
             if (script.isPreserveData() == preserveData && script.isCascadeDrops() == cascadeDrops) {
