@@ -27,8 +27,20 @@ import java.util.Arrays;
 
 import static com.gooddata.Validate.notEmpty;
 import static java.util.Collections.singletonMap;
+import static org.apache.http.util.VersionInfo.loadVersionInfo;
 
 /**
+ * Entry point for GoodData SDK usage.
+ * <p/>
+ * Configure connection to GoodData using one of constructors. One can then get initialized service he needs from
+ * the newly constructed instance. This instance can be also used later for logout from GoodData Platform.
+ * <p/>
+ * Usage example:
+ * <pre><code>
+ *     GoodData gd = new GoodData("roman@gooddata.com", "Roman1");
+ *     // do something useful like: gd.getSomeService().doSomething()
+ *     gd.logout();
+ * </code></pre>
  */
 public class GoodData {
 
@@ -48,14 +60,39 @@ public class GoodData {
     private final DatasetService datasetService;
     private final ReportService reportService;
 
+    /**
+     * Create instance configured to communicate with GoodData Platform under user with given credentials.
+     *
+     * @param login GoodData user's login
+     * @param password GoodData user's password
+     */
     public GoodData(String login, String password) {
         this(HOSTNAME, login, password);
     }
 
+    /**
+     * Create instance configured to communicate with GoodData Platform running on given host using given user's
+     * credentials.
+     *
+     * @param hostname GoodData Platform's host name (e.g. secure.gooddata.com)
+     * @param login GoodData user's login
+     * @param password GoodData user's password
+     */
     public GoodData(String hostname, String login, String password) {
         this(hostname, login, password, PORT, PROTOCOL);
     }
 
+
+    /**
+     * Create instance configured to communicate with GoodData Platform running on given host, port and protocol using
+     * given user's credentials.
+     *
+     * @param hostname GoodData Platform's host name (e.g. secure.gooddata.com)
+     * @param login GoodData user's login
+     * @param password GoodData user's password
+     * @param port GoodData Platform's API port (e.g. 443)
+     * @param protocol GoodData Platform's API protocol (e.g. https)
+     */
     public GoodData(String hostname, String login, String password, int port, String protocol) {
         notEmpty(hostname, "hostname");
         notEmpty(login, "login");
@@ -63,7 +100,8 @@ public class GoodData {
         notEmpty(protocol, "protocol");
         final HttpClientBuilder httpClientBuilder = HttpClientBuilder.create()
                 .setUserAgent(getUserAgent());
-        final RestTemplate restTemplate = createRestTemplate(login, password, hostname, httpClientBuilder, port, protocol);
+        final RestTemplate restTemplate = createRestTemplate(login, password, hostname, httpClientBuilder, port,
+                protocol);
 
         accountService = new AccountService(restTemplate);
         projectService = new ProjectService(restTemplate, accountService);
@@ -101,7 +139,7 @@ public class GoodData {
         final String clientVersion = pkg != null && pkg.getImplementationVersion() != null
                 ? pkg.getImplementationVersion() : UNKNOWN_VERSION;
 
-        final VersionInfo vi = VersionInfo.loadVersionInfo("org.apache.http.client", HttpClientBuilder.class.getClassLoader());
+        final VersionInfo vi = loadVersionInfo("org.apache.http.client", HttpClientBuilder.class.getClassLoader());
         final String apacheVersion = vi != null ? vi.getRelease() : UNKNOWN_VERSION;
 
         return String.format("%s/%s (%s; %s) %s/%s", "GoodData-Java-SDK", clientVersion,
@@ -109,38 +147,82 @@ public class GoodData {
                 "Apache-HttpClient", apacheVersion);
     }
 
+    /**
+     * Logout from GoodData Platform
+     */
     public void logout() {
         getAccountService().logout();
     }
 
+    /**
+     * Get initialized service for project management (to list projects, create a project, ...)
+     *
+     * @return initialized service for project management
+     */
     public ProjectService getProjectService() {
         return projectService;
     }
 
+    /**
+     * Get initialized service for account management (to get current account information, logout, ...)
+     *
+     * @return initialized service for account management
+     */
     public AccountService getAccountService() {
         return accountService;
     }
 
+    /**
+     * Get initialized service for metadata management (to query, create and update project metadata like attributes,
+     * facts, metrics, reports, ...)
+     *
+     * @return initialized service for metadata management
+     */
     public MetadataService getMetadataService() {
         return metadataService;
     }
 
+    /**
+     * Get initialized service for model management (to get model diff, update model, ...)
+     *
+     * @return initialized service for model management
+     */
     public ModelService getModelService() {
         return modelService;
     }
 
+    /**
+     * Get initialized service for API root management (to get API root links, ...)
+     *
+     * @return initialized service for API root management
+     */
     public GdcService getGdcService() {
         return gdcService;
     }
 
+    /**
+     * Get initialized service for data store (user staging/WebDAV) management (to upload, download, delete, ...)
+     *
+     * @return initialized service for data store management
+     */
     public DataStoreService getDataStoreService() {
         return dataStoreService;
     }
 
+    /**
+     * Get initialized service for dataset management (to list manifest, get datasets, load dataset, ...)
+     *
+     * @return initialized service for dataset management
+     */
     public DatasetService getDatasetService() {
         return datasetService;
     }
 
+    /**
+     * Get initialized service for report management (to execute and export report, ...)
+     *
+     * @return initialized service for report management
+     */
     public ReportService getReportService() {
         return reportService;
     }
