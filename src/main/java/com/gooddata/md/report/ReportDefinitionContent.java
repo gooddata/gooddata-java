@@ -19,7 +19,8 @@ import static java.util.Collections.emptyList;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "format")
 @JsonSubTypes({
         @JsonSubTypes.Type(name = GridReportDefinitionContent.FORMAT, value = GridReportDefinitionContent.class),
-        @JsonSubTypes.Type(name = OneNumberReportDefinitionContent.FORMAT, value = OneNumberReportDefinitionContent.class)
+        @JsonSubTypes.Type(name = OneNumberReportDefinitionContent.FORMAT,
+                value = OneNumberReportDefinitionContent.class)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)

@@ -40,7 +40,6 @@ public abstract class Validate {
     }
 
     /**
-     *
      * Throws IllegalArgumentException if the collection contains null elements (or is null), otherwise returns
      * the collection.
      *

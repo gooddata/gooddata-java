@@ -8,7 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.RequestCallback;
@@ -18,7 +17,6 @@ import org.springframework.web.client.RestTemplate;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.gooddata.Validate.notNull;
@@ -26,6 +24,7 @@ import static java.lang.String.format;
 import static org.springframework.http.HttpMethod.GET;
 
 /**
+ * Parent for GoodData services providing helpers for REST API calls and polling.
  */
 public abstract class AbstractService {
 
@@ -49,6 +48,12 @@ public abstract class AbstractService {
     };
 
 
+    /**
+     * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
+     * this abstract one.
+     *
+     * @param restTemplate RESTful HTTP Spring template
+     */
     public AbstractService(RestTemplate restTemplate) {
         this.restTemplate = notNull(restTemplate, "restTemplate");
     }

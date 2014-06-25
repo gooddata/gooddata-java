@@ -36,6 +36,7 @@ public class Gdc {
 
     /**
      * Get GoodData API root link
+     *
      * @return GoodData API root link
      */
     @JsonIgnore
@@ -45,6 +46,7 @@ public class Gdc {
 
     /**
      * Get temporary token generator link
+     *
      * @return temporary token generator link
      */
     @JsonIgnore
@@ -54,6 +56,7 @@ public class Gdc {
 
     /**
      * Get authentication service link
+     *
      * @return authentication service link
      */
     @JsonIgnore
@@ -63,6 +66,7 @@ public class Gdc {
 
     /**
      * Get metadata resources link
+     *
      * @return metadata resources link
      */
     @JsonIgnore
@@ -72,6 +76,7 @@ public class Gdc {
 
     /**
      * Get report execution resource link
+     *
      * @return report execution resource link
      */
     @JsonIgnore
@@ -81,6 +86,7 @@ public class Gdc {
 
     /**
      * Get link of resource used to determine valid attribute values in the context of a report
+     *
      * @return link of resource used to determine valid attribute values in the context of a report
      */
     @JsonIgnore
@@ -90,6 +96,7 @@ public class Gdc {
 
     /**
      * Get report exporting resource link
+     *
      * @return report exporting resource link
      */
     @JsonIgnore
@@ -99,6 +106,7 @@ public class Gdc {
 
     /**
      * Get account manipulation resource link
+     *
      * @return account manipulation resource link
      */
     @JsonIgnore
@@ -108,6 +116,7 @@ public class Gdc {
 
     /**
      * Get user and project management resource link
+     *
      * @return user and project management resource link
      */
     @JsonIgnore
@@ -117,6 +126,7 @@ public class Gdc {
 
     /**
      * Get miscellaneous tool resource link
+     *
      * @return miscellaneous tool resource link
      */
     @JsonIgnore
@@ -126,6 +136,7 @@ public class Gdc {
 
     /**
      * Get template resource link
+     *
      * @return template resource link
      */
     @JsonIgnore
@@ -135,6 +146,7 @@ public class Gdc {
 
     /**
      * Get release information link
+     *
      * @return release information link
      */
     @JsonIgnore
@@ -144,6 +156,7 @@ public class Gdc {
 
     /**
      * Get user data staging area link
+     *
      * @return user data staging area link
      */
     @JsonIgnore
@@ -153,6 +166,7 @@ public class Gdc {
 
     /**
      * Get link by category
+     *
      * @param category requested link category
      * @return link by given category
      */
@@ -187,6 +201,7 @@ public class Gdc {
 
         /**
          * Get link category
+         *
          * @return link category
          */
         public String getCategory() {
@@ -195,6 +210,7 @@ public class Gdc {
 
         /**
          * Get link URI
+         *
          * @return link URI
          */
         public String getUri() {
@@ -203,6 +219,7 @@ public class Gdc {
 
         /**
          * Get link summary
+         *
          * @return link summary
          */
         public String getSummary() {
@@ -211,6 +228,7 @@ public class Gdc {
 
         /**
          * Get link title
+         *
          * @return link title
          */
         public String getTitle() {

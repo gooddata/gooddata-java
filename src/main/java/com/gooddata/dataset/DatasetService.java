@@ -23,9 +23,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static com.gooddata.Validate.notEmpty;
 import static com.gooddata.Validate.notNull;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.emptyList;
 
 /**
@@ -46,13 +46,11 @@ public class DatasetService extends AbstractService {
     /**
      * Obtains manifest from given project by given datasetId
      *
-     * @param project project to which manifest belongs
+     * @param project   project to which manifest belongs
      * @param datasetId id of dataset
-     *
-     * @throws com.gooddata.dataset.DatasetNotFoundException when manifest can't be found (doesn't exist)
-     * @throws com.gooddata.dataset.DatasetException in case the API call failure
-     *
      * @return manifest for dataset
+     * @throws com.gooddata.dataset.DatasetNotFoundException when manifest can't be found (doesn't exist)
+     * @throws com.gooddata.dataset.DatasetException         in case the API call failure
      */
     public DatasetManifest getDatasetManifest(Project project, String datasetId) {
         notNull(project, "project");
@@ -75,16 +73,15 @@ public class DatasetService extends AbstractService {
      * The call is asynchronous returning {@link com.gooddata.FutureResult} to let caller wait for results.
      * Uploaded files are deleted from staging area when finished.
      *
-     * @param project project to which dataset belongs
+     * @param project  project to which dataset belongs
      * @param manifest dataset manifest
-     * @param dataset dataset to upload
-     *
-     * @throws com.gooddata.dataset.DatasetException if there is a problem to serialize manifest or upload dataset
-     *
+     * @param dataset  dataset to upload
      * @return {@link com.gooddata.FutureResult} of the task, which can throw {@link com.gooddata.dataset.DatasetException}
-     *  in case the ETL pull task fails
+     * in case the ETL pull task fails
+     * @throws com.gooddata.dataset.DatasetException if there is a problem to serialize manifest or upload dataset
      */
-    public FutureResult<Void> loadDataset(final Project project, final DatasetManifest manifest, final InputStream dataset) {
+    public FutureResult<Void> loadDataset(final Project project, final DatasetManifest manifest,
+                                          final InputStream dataset) {
         notNull(project, "project");
         notNull(dataset, "dataset");
         notNull(manifest, "manifest");
@@ -95,7 +92,8 @@ public class DatasetService extends AbstractService {
             final ByteArrayInputStream inputStream = new ByteArrayInputStream(manifestJson.getBytes(UTF_8));
             dataStoreService.upload(dirPath.resolve(MANIFEST_FILE_NAME).toString(), inputStream);
 
-            final PullTask pullTask = restTemplate.postForObject(Pull.URI, new Pull(dirPath.toString()), PullTask.class, project.getId());
+            final PullTask pullTask = restTemplate
+                    .postForObject(Pull.URI, new Pull(dirPath.toString()), PullTask.class, project.getId());
             return new FutureResult<>(this, new PollHandler<Void>(pullTask.getUri(), Void.class) {
                 @Override
                 public boolean isFinished(ClientHttpResponse response) throws IOException {
@@ -104,7 +102,8 @@ public class DatasetService extends AbstractService {
                     if (finished && !status.isSuccess()) {
                         String message = "status: " + status.getStatus();
                         try {
-                            final InputStream input = dataStoreService.download(dirPath.resolve(STATUS_FILE_NAME).toString());
+                            final InputStream input = dataStoreService
+                                    .download(dirPath.resolve(STATUS_FILE_NAME).toString());
                             final FailStatus failStatus = mapper.readValue(input, FailStatus.class);
                             if (failStatus != null && failStatus.getError() != null) {
                                 message = failStatus.getError().getFormattedMessage();
@@ -116,6 +115,7 @@ public class DatasetService extends AbstractService {
                     }
                     return finished;
                 }
+
                 @Override
                 protected void onFinish() {
                     try {
@@ -136,10 +136,9 @@ public class DatasetService extends AbstractService {
      * Gets DatasetManifest (using {@link #getDatasetManifest(com.gooddata.project.Project, String)}
      * first and then calls {@link #loadDataset(com.gooddata.project.Project, DatasetManifest, java.io.InputStream)}
      *
-     * @param project project to which dataset belongs
+     * @param project   project to which dataset belongs
      * @param datasetId datasetId to obtain a manifest
-     * @param dataset dataset to upload
-     *
+     * @param dataset   dataset to upload
      * @return {@link com.gooddata.FutureResult} of the task
      */
     public FutureResult<Void> loadDataset(Project project, String datasetId, InputStream dataset) {

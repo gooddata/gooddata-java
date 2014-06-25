@@ -14,6 +14,7 @@ import static com.gooddata.Validate.notNull;
  * For internal usage by services employing polling.<p>
  * Implementing classes should override {@link #isFinished(ClientHttpResponse)} method and
  * may override {@link #onFinish()} method.
+ *
  * @see FutureResult
  */
 public class PollHandler<T> {
@@ -28,7 +29,8 @@ public class PollHandler<T> {
 
     /**
      * Creates a new instance of polling handler
-     * @param pollingUri URI for polling
+     *
+     * @param pollingUri  URI for polling
      * @param resultClass class of the result (or {@link Void})
      */
     public PollHandler(final String pollingUri, final Class<T> resultClass) {
@@ -36,6 +38,11 @@ public class PollHandler<T> {
         this.resultClass = notNull(resultClass, "resultClass");
     }
 
+    /**
+     * Get URI used for polling
+     *
+     * @return URI string
+     */
     final String getPollingUri() {
         return pollingUri;
     }
@@ -57,6 +64,7 @@ public class PollHandler<T> {
 
     /**
      * Return result of polling
+     *
      * @return result
      */
     protected final T getResult() {
@@ -65,6 +73,7 @@ public class PollHandler<T> {
 
     /**
      * Check if polling should finish
+     *
      * @param response client side http response
      * @return true if polling should finish
      * @throws IOException
@@ -76,5 +85,6 @@ public class PollHandler<T> {
     /**
      * Method called after polling is successfully finished (default no-op)
      */
-    protected void onFinish() {}
+    protected void onFinish() {
+    }
 }

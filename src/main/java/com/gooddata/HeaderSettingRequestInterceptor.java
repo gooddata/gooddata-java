@@ -23,9 +23,10 @@ class HeaderSettingRequestInterceptor implements ClientHttpRequestInterceptor {
     }
 
     @Override
-    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+    public ClientHttpResponse intercept(HttpRequest request, byte[] body,
+                                        ClientHttpRequestExecution execution) throws IOException {
         final HttpRequestWrapper requestWrapper = new HttpRequestWrapper(request);
-        for (final Map.Entry<String,String> header: headers.entrySet()) {
+        for (final Map.Entry<String, String> header : headers.entrySet()) {
             requestWrapper.getHeaders().set(header.getKey(), header.getValue());
         }
         return execution.execute(requestWrapper, body);

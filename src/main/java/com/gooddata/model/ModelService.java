@@ -13,6 +13,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
 import java.io.IOException;
 import java.io.Reader;
 
@@ -32,7 +33,8 @@ public class ModelService extends AbstractService {
         notNull(project, "project");
         notNull(diffRequest, "diffRequest");
         try {
-            final AsyncTask asyncTask = restTemplate.postForObject(DiffRequest.URI, diffRequest, AsyncTask.class, project.getId());
+            final AsyncTask asyncTask = restTemplate
+                    .postForObject(DiffRequest.URI, diffRequest, AsyncTask.class, project.getId());
             return new FutureResult<>(this, new PollHandler<>(asyncTask.getUri(), ModelDiff.class));
         } catch (GoodDataRestException | RestClientException e) {
             throw new ModelException("Unable to get project model diff", e);
@@ -68,7 +70,8 @@ public class ModelService extends AbstractService {
         notNull(project, "project");
         notEmpty(maqlDdl, "maqlDdl");
         try {
-            final MaqlDdlLinks linkEntries = restTemplate.postForObject(MaqlDdl.URI, new MaqlDdl(maqlDdl), MaqlDdlLinks.class, project.getId());
+            final MaqlDdlLinks linkEntries = restTemplate.postForObject(MaqlDdl.URI, new MaqlDdl(maqlDdl),
+                    MaqlDdlLinks.class, project.getId());
             return new FutureResult<>(this, new PollHandler<Void>(linkEntries.getStatusLink(), Void.class) {
                 @Override
                 public boolean isFinished(final ClientHttpResponse response) throws IOException {
@@ -76,7 +79,8 @@ public class ModelService extends AbstractService {
                     if (finished) {
                         final MaqlDdlTaskStatus maqlDdlTaskStatus = extractData(response, MaqlDdlTaskStatus.class);
                         if (!maqlDdlTaskStatus.isSuccess()) {
-                            throw new ModelException("Unable to update project model: " + maqlDdlTaskStatus.getMessages());
+                            throw new ModelException(
+                                    "Unable to update project model: " + maqlDdlTaskStatus.getMessages());
                         }
                     }
                     return finished;

@@ -6,7 +6,7 @@ package com.gooddata;
 import com.gooddata.gdc.GdcError;
 
 /**
- * A REST API exception
+ * Signals client or server error during communication with GoodData REST API.
  */
 public class GoodDataRestException extends GoodDataException {
 
@@ -18,7 +18,17 @@ public class GoodDataRestException extends GoodDataException {
 
     private final String errorClass;
 
-    public GoodDataRestException(int statusCode, String requestId, String message, String component, String errorClass) {
+    /**
+     * Construct a GoodDataRestException with specified details.
+     *
+     * @param statusCode the HTTP status code of the response
+     * @param requestId the GoodData request ID (from header)
+     * @param message the detail message
+     * @param component the GoodData component where error occurred
+     * @param errorClass the class of the error
+     */
+    public GoodDataRestException(int statusCode, String requestId, String message, String component,
+                                 String errorClass) {
         super(statusCode + ": [requestId=" + requestId + "] " + message);
         this.statusCode = statusCode;
         this.requestId = requestId;
@@ -26,7 +36,15 @@ public class GoodDataRestException extends GoodDataException {
         this.errorClass = errorClass;
     }
 
-    public GoodDataRestException (int statusCode, String requestId, String statusText, GdcError error) {
+    /**
+     * Construct a GoodDataRestException with specified details.
+     *
+     * @param statusCode the HTTP status code of the response
+     * @param requestId the GoodData request ID (from header)
+     * @param statusText the HTTP status text of the response
+     * @param error the GoodData REST API error structure
+     */
+    public GoodDataRestException(int statusCode, String requestId, String statusText, GdcError error) {
         this(statusCode,
                 error != null && error.getRequestId() != null ? error.getRequestId() : requestId,
                 error != null && error.getMessage() != null ? error.getFormattedMessage() : statusText,
