@@ -39,7 +39,7 @@ public class ProjectService extends AbstractService {
     /**
      * Constructs service for GoodData project management (list projects, create a project, ...).
      *
-     * @param restTemplate RESTful HTTP Spring template
+     * @param restTemplate   RESTful HTTP Spring template
      * @param accountService GoodData account service
      */
     public ProjectService(RestTemplate restTemplate, AccountService accountService) {
@@ -51,6 +51,7 @@ public class ProjectService extends AbstractService {
      * Get all projects current user has access to.
      *
      * @return collection of all projects current user has access to
+     * @throws com.gooddata.GoodDataException when projects can't be accessed
      */
     public Collection<Project> getProjects() {
         try {
@@ -67,6 +68,7 @@ public class ProjectService extends AbstractService {
      *
      * @param project project to be created
      * @return created project (including very useful id)
+     * @throws com.gooddata.GoodDataException when projects creation fails
      */
     public FutureResult<Project> createProject(Project project) {
         notNull(project, "project");
@@ -104,6 +106,7 @@ public class ProjectService extends AbstractService {
      *
      * @param uri URI of project resource (/gdc/projects/{id})
      * @return project
+     * @throws com.gooddata.GoodDataException when project can't be accessed
      */
     public Project getProjectByUri(final String uri) {
         notEmpty(uri, "uri");
@@ -125,6 +128,7 @@ public class ProjectService extends AbstractService {
      *
      * @param id id of project
      * @return project
+     * @throws com.gooddata.GoodDataException when project can't be accessed
      */
     public Project getProjectById(String id) {
         notEmpty(id, "id");

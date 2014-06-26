@@ -430,7 +430,8 @@ public class Project {
                             @JsonProperty("uri") String uri, @JsonProperty("deprecated") String deprecated,
                             @JsonProperty("identifier") String identifier,
                             @JsonProperty("locked") Integer locked, @JsonProperty("unlisted") Integer unlisted) {
-            super(author, contributor, created, updated, summary, title, category, tags, uri, deprecated, identifier, locked, unlisted);
+            super(author, contributor, created, updated, summary, title, category, tags, uri, deprecated, identifier,
+                    locked, unlisted);
         }
 
         private ProjectMeta(String title) {

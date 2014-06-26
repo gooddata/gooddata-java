@@ -18,7 +18,7 @@ public class FailStatus {
 
     @JsonCreator
     private FailStatus(@JsonProperty("status") String status, @JsonProperty("date") String date,
-                      @JsonProperty("error") ErrorStructure error) {
+                       @JsonProperty("error") ErrorStructure error) {
         this.status = status;
         this.date = date;
         this.error = error;

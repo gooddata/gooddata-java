@@ -19,6 +19,7 @@ public final class FutureResult<T> {
     /**
      * Creates a new instance of the result to be eventually retrieved by polling on the REST API.<p>
      * For internal usage by services employing polling.
+     *
      * @param service this service
      * @param handler poll handler
      */
@@ -29,6 +30,7 @@ public final class FutureResult<T> {
 
     /**
      * Checks if the result is available
+     *
      * @return true if so
      * @throws GoodDataException when polling fails or the thread was interrupted
      */
@@ -38,6 +40,7 @@ public final class FutureResult<T> {
 
     /**
      * Wait for the result to be available and return it's value
+     *
      * @return result value
      * @throws GoodDataException when polling fails or the thread was interrupted
      */
@@ -47,8 +50,9 @@ public final class FutureResult<T> {
 
     /**
      * Wait for the result to be available up to given time and return it's value
+     *
      * @param timeout timeout value
-     * @param unit timeout unit
+     * @param unit    timeout unit
      * @return result value
      * @throws GoodDataException when polling fails, the timeout expires or the thread was interrupted
      */
@@ -59,6 +63,11 @@ public final class FutureResult<T> {
         return service.poll(handler, timeout, unit);
     }
 
+    /**
+     * Get URI used for polling
+     *
+     * @return URI string
+     */
     public String getPollingUri() {
         return handler.getPollingUri();
     }

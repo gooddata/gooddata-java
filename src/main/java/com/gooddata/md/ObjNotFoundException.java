@@ -12,7 +12,7 @@ public class ObjNotFoundException extends GoodDataException {
      *
      * @param uri the URI of metadata object you're searching for
      * @param cls class of metadata object you're searching for
-     * @param e caused by this exception
+     * @param e   caused by this exception
      * @param <T> the type of results you're searching for
      */
     public <T extends Obj> ObjNotFoundException(String uri, Class<T> cls, Exception e) {

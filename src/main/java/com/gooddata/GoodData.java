@@ -63,7 +63,7 @@ public class GoodData {
     /**
      * Create instance configured to communicate with GoodData Platform under user with given credentials.
      *
-     * @param login GoodData user's login
+     * @param login    GoodData user's login
      * @param password GoodData user's password
      */
     public GoodData(String login, String password) {
@@ -75,7 +75,7 @@ public class GoodData {
      * credentials.
      *
      * @param hostname GoodData Platform's host name (e.g. secure.gooddata.com)
-     * @param login GoodData user's login
+     * @param login    GoodData user's login
      * @param password GoodData user's password
      */
     public GoodData(String hostname, String login, String password) {
@@ -88,9 +88,9 @@ public class GoodData {
      * given user's credentials.
      *
      * @param hostname GoodData Platform's host name (e.g. secure.gooddata.com)
-     * @param login GoodData user's login
+     * @param login    GoodData user's login
      * @param password GoodData user's password
-     * @param port GoodData Platform's API port (e.g. 443)
+     * @param port     GoodData Platform's API port (e.g. 443)
      * @param protocol GoodData Platform's API protocol (e.g. https)
      */
     public GoodData(String hostname, String login, String password, int port, String protocol) {

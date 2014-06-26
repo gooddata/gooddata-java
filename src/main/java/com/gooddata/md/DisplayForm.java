@@ -58,7 +58,8 @@ public class DisplayForm extends Obj {
 
         @JsonCreator
         public Content(@JsonProperty("formOf") String formOf, @JsonProperty("expression") String expression,
-                       @JsonProperty("default") Integer isDefault, @JsonProperty("ldmexpression") String ldmExpression) {
+                       @JsonProperty("default") Integer isDefault,
+                       @JsonProperty("ldmexpression") String ldmExpression) {
             this.formOf = formOf;
             this.expression = expression;
             this.isDefault = isDefault;
