@@ -27,9 +27,9 @@ public class ErrorStructure {
                              @JsonProperty("parameters") String[] parameters, @JsonProperty("message") String message,
                              @JsonProperty("errorCode") String errorCode, @JsonProperty("errorId") String errorId,
                              @JsonProperty("trace") String trace, @JsonProperty("requestId") String requestId) {
-        this.errorClass = notNull(errorClass, "errorClass");
-        this.component = notNull(component, "component");
-        this.parameters = notNull(parameters, "parameters");
+        this.errorClass = errorClass;
+        this.component = component;
+        this.parameters = parameters;
         this.message = notNull(message, "message");
         this.errorCode = errorCode;
         this.errorId = errorId;

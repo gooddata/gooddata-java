@@ -22,14 +22,14 @@ import java.util.Map;
 public class Grid {
 
     private final Collection<String> columns;
-    private final Collection<GridElement> rows;
+    private final Collection<AttributeInGrid> rows;
     private final Collection<GridElement> metrics;
     private final Map<String, List<String>> sort;
     private final Collection<Map<String, Object>> columnWidths;
 
     @JsonCreator
     public Grid(@JsonProperty("columns") Collection<String> columns,
-                @JsonProperty("rows") Collection<GridElement> rows,
+                @JsonProperty("rows") Collection<AttributeInGrid> rows,
                 @JsonProperty("metrics") Collection<GridElement> metrics,
                 @JsonProperty("sort") Map<String, List<String>> sort,
                 @JsonProperty("columnWidths") Collection<Map<String, Object>> columnWidths) {
@@ -40,7 +40,7 @@ public class Grid {
         this.columnWidths = columnWidths;
     }
 
-    public Grid(final Collection<String> columns, final Collection<GridElement> rows,
+    public Grid(final Collection<String> columns, final Collection<AttributeInGrid> rows,
                 final Collection<GridElement> metrics) {
         this.columns = columns;
         this.rows = rows;
@@ -55,7 +55,7 @@ public class Grid {
         return columns;
     }
 
-    public Collection<GridElement> getRows() {
+    public Collection<AttributeInGrid> getRows() {
         return rows;
     }
 

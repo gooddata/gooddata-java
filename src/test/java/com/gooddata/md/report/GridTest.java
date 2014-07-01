@@ -6,6 +6,7 @@ package com.gooddata.md.report;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,8 @@ public class GridTest {
 
         assertThat(grid.getRows(), is(notNullValue()));
         assertThat(grid.getRows(), hasSize(1));
+        final AttributeInGrid attrInGrid = grid.getRows().iterator().next();
+        assertThat(attrInGrid.getAlias(), is("attr"));
 
         assertThat(grid.getMetrics(), is(notNullValue()));
         assertThat(grid.getMetrics(), hasSize(1));
@@ -51,7 +54,9 @@ public class GridTest {
         colWidths.put("width", 343);
         sort.put("columns", Collections.<String>emptyList());
         sort.put("rows", Collections.<String>emptyList());
-        final Grid grid = new Grid(asList("metricGroup"), Collections.<GridElement>emptyList(),
+        final Grid grid = new Grid(asList("metricGroup"),
+                asList(new AttributeInGrid("/gdc/md/PROJECT_ID/obj/ATTR_ID",
+                        asList((Collection<String>)Collections.<String>emptyList()), "attr")),
                 asList(new GridElement("/gdc/md/PROJECT_ID/obj/METR_ID", "metr")), sort, asList(colWidths));
 
         assertThat(grid, serializesToJson("/md/report/grid-input.json"));

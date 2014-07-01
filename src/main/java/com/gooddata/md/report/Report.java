@@ -36,8 +36,7 @@ public class Report extends Obj implements Queryable {
         this.content = content;
     }
 
-    /* Just for serialization test */
-    Report(String title, String definition, String domain) {
+    public Report(String title, String definition, String domain) {
         super(new Meta(title));
         content = new Content(asList(definition), asList(domain));
     }
