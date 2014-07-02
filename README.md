@@ -4,11 +4,13 @@
 
 ## Usage
 
+The *GoodData Java SDK* is available in Maven Central Repository, to use it from Maven add to `pom.xml`:
+
 ```xml
 <dependency>
-    <groupId>com.gooddata</groupId>
+    <groupId>cz.geek</groupId>
     <artifactId>gooddata-java</artifactId>
-    <version>${gooddata-java.version}</version>
+    <version>0.8.0</version>
 </dependency>
 ```
 
