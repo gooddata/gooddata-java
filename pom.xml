@@ -6,7 +6,7 @@
 
     <groupId>com.gooddata</groupId>
     <artifactId>gooddata-java</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.8.0-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>GoodData Java SDK</description>
 
