@@ -84,7 +84,7 @@ public class ProjectService extends AbstractService {
             throw new GoodDataException("Empty response when project POSTed to API");
         }
 
-        return new FutureResult<>(this, new PollHandler<Project>(uri.getUri(), Project.class) {
+        return new FutureResult<>(this, new PollHandler<Project,Project>(uri.getUri(), Project.class) {
 
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {

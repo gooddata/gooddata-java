@@ -13,28 +13,43 @@ import static com.gooddata.Validate.notNull;
 /**
  * For internal usage by services employing polling.<p>
  * Implementing classes should override {@link #isFinished(ClientHttpResponse)} method and
- * may override {@link #onFinish()} method.
+ * may override {@link #onFinish()} and {@link #handlePollResult(Object)} methods.
  *
- * @see FutureResult
+ * @param <P> polling type
+ * @param <R> result type
+ *
+ * @see com.gooddata.FutureResult
  */
-public class PollHandler<T> {
+public class PollHandler<P,R> {
 
     private final String pollingUri;
 
-    private final Class<T> resultClass;
+    private final Class<P> pollClass;
+    private final Class<R> resultClass;
 
     private boolean done = false;
 
-    private T result;
+    private R result;
 
     /**
      * Creates a new instance of polling handler
-     *
-     * @param pollingUri  URI for polling
-     * @param resultClass class of the result (or {@link Void})
+     *  @param pollingUri  URI for polling
+     *  @param pollAndResultClass class of the polling object and result  (or {@link Void})
      */
-    public PollHandler(final String pollingUri, final Class<T> resultClass) {
+    @SuppressWarnings("unchecked")
+    public PollHandler(final String pollingUri, final Class pollAndResultClass) {
+        this(pollingUri, pollAndResultClass, pollAndResultClass);
+    }
+
+    /**
+     * Creates a new instance of polling handler
+     *  @param pollingUri  URI for polling
+     *  @param pollClass class of the polling object (or {@link Void})
+     *  @param resultClass class of the result (or {@link Void})
+     */
+    public PollHandler(final String pollingUri, final Class<P> pollClass, Class<R> resultClass) {
         this.pollingUri = notNull(pollingUri, "pollingUri");
+        this.pollClass = notNull(pollClass, "pollClass");
         this.resultClass = notNull(resultClass, "resultClass");
     }
 
@@ -47,11 +62,15 @@ public class PollHandler<T> {
         return pollingUri;
     }
 
-    final Class<T> getResultClass() {
+    final Class<R> getResultClass() {
         return resultClass;
     }
 
-    final PollHandler<T> setResult(T result) {
+    final Class<P> getPollClass() {
+        return pollClass;
+    }
+
+    protected PollHandler<P,R> setResult(R result) {
         this.result = result;
         this.done = true;
         onFinish();
@@ -67,7 +86,7 @@ public class PollHandler<T> {
      *
      * @return result
      */
-    protected final T getResult() {
+    protected final R getResult() {
         return result;
     }
 
@@ -86,5 +105,13 @@ public class PollHandler<T> {
      * Method called after polling is successfully finished (default no-op)
      */
     protected void onFinish() {
+    }
+
+    protected void handlePollResult(P pollResult) {
+        if (resultClass.equals(pollClass)) {
+            setResult(resultClass.cast(pollResult));
+        } else {
+            throw new IllegalStateException("Please override handlePollResult method when you want different type of polling and result class");
+        }
     }
 }

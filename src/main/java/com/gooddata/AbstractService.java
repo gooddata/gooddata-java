@@ -58,7 +58,7 @@ public abstract class AbstractService {
         this.restTemplate = notNull(restTemplate, "restTemplate");
     }
 
-    final <T> T poll(final PollHandler<T> handler, long timeout, final TimeUnit unit) {
+    final <R> R poll(final PollHandler<?,R> handler, long timeout, final TimeUnit unit) {
         notNull(handler, "handler");
         final long start = System.currentTimeMillis();
         while (true) {
@@ -77,15 +77,15 @@ public abstract class AbstractService {
         }
     }
 
-    final <T> boolean pollOnce(final PollHandler<T> handler) {
+    final <P> boolean pollOnce(final PollHandler<P,?> handler) {
         notNull(handler, "handler");
         final ClientHttpResponse response = restTemplate.execute(handler.getPollingUri(), GET, noopRequestCallback,
                 reusableResponseExtractor);
 
         try {
             if (handler.isFinished(response)) {
-                final T data = extractData(response, handler.getResultClass());
-                handler.setResult(data);
+                final P data = extractData(response, handler.getPollClass());
+                handler.handlePollResult(data);
             } else if (HttpStatus.Series.CLIENT_ERROR.equals(response.getStatusCode().series())) {
                 throw new GoodDataException(
                         format("Polling returned client error HTTP status %s", response.getStatusCode().value())
