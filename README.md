@@ -117,3 +117,8 @@ Process process = processService.createProcess(project, new Process('name', 'GRA
 ProcessExecutionDetail executionDetail = processService.executeProcess(new ProcessExecution(process, "myGraph.grf")).get();
 processService.getExecutionLog(executionDetail, new FileOutputStream("file/where/the/log/willbewritten");
 ```
+
+##Contribute
+Missing functionality? Found a BUG? 
+
+Please create us an [issue](https://github.com/martiner/gooddata-java/issues) or simply [contribute your code](CONTRIBUTE.md).
