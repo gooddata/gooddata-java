@@ -94,3 +94,17 @@ dataStoreService.upload("/dir/file.txt", new FileInputStream("file.txt"));
 InputStream stream = dataStoreService.download("/dir/file.txt");
 dataStoreService.delete("/dir/file.txt");
 ```
+
+### Warehouse API
+Manage warehouses - create, update, list and delete.
+```java
+WarehouseService warehouseService = gd.getWarehouseService();
+Warehouse warehouse = warehouseService.createWarehouse(new Warehouse("title", "authToken", "description"));
+String jdbc = warehouse.getJdbcConnectionString();
+
+warehouse.setTitle("another Title");
+warehouse = warehouseService.updateWarehouse(warehouse);
+
+Collection<Warehouse> warehouseList = warehouseService.listInstances();
+warehouseService.removeWarehouse(warehouse);
+```

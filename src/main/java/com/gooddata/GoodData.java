@@ -4,6 +4,8 @@
 package com.gooddata;
 
 import com.gooddata.account.AccountService;
+import com.gooddata.dataload.processes.ProcessService;
+import com.gooddata.warehouse.WarehouseService;
 import com.gooddata.dataset.DatasetService;
 import com.gooddata.gdc.DataStoreService;
 import com.gooddata.gdc.GdcService;
@@ -59,6 +61,7 @@ public class GoodData {
     private final DataStoreService dataStoreService;
     private final DatasetService datasetService;
     private final ReportService reportService;
+    private final WarehouseService warehouseService;
 
     /**
      * Create instance configured to communicate with GoodData Platform under user with given credentials.
@@ -111,6 +114,8 @@ public class GoodData {
         dataStoreService = new DataStoreService(httpClientBuilder, gdcService, login, password);
         datasetService = new DatasetService(restTemplate, dataStoreService);
         reportService = new ReportService(restTemplate);
+        processService = new ProcessService(restTemplate);
+        warehouseService = new WarehouseService(restTemplate, hostname, port);
     }
 
     private RestTemplate createRestTemplate(String login, String password, String hostname, HttpClientBuilder builder,
@@ -227,4 +232,12 @@ public class GoodData {
         return reportService;
     }
 
+    /**
+     * Get initialized service for ADS management (create, access and delete ads instances).
+     *
+     * @return initialized service for ADS management
+     */
+    public WarehouseService getWarehouseService() {
+        return warehouseService;
+    }
 }
