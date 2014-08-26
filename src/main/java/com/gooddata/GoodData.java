@@ -61,6 +61,7 @@ public class GoodData {
     private final DataStoreService dataStoreService;
     private final DatasetService datasetService;
     private final ReportService reportService;
+    private final ProcessService processService;
     private final WarehouseService warehouseService;
 
     /**
@@ -114,7 +115,7 @@ public class GoodData {
         dataStoreService = new DataStoreService(httpClientBuilder, gdcService, login, password);
         datasetService = new DatasetService(restTemplate, dataStoreService);
         reportService = new ReportService(restTemplate);
-        processService = new ProcessService(restTemplate);
+        processService = new ProcessService(restTemplate, accountService);
         warehouseService = new WarehouseService(restTemplate, hostname, port);
     }
 
@@ -232,6 +233,9 @@ public class GoodData {
         return reportService;
     }
 
+    public ProcessService getProcessService() {
+        return processService;
+    }
     /**
      * Get initialized service for ADS management (create, access and delete ads instances).
      *

@@ -1,0 +1,6 @@
+{
+    "process" : {
+        "type" : "GROOVY",
+        "name" : "testProcess"
+    }
+}

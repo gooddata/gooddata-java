@@ -1,0 +1,13 @@
+{
+    "execution" : {
+        "executable" : "test.groovy",
+        "params" : {
+            "PARAM1" : "VALUE1",
+            "PARAM2" : "VALUE2"
+        },
+        "hiddenParams" : {
+            "HIDDEN_PARAM1" : "SENSITIVE_VALUE1",
+            "HIDDEN_PARAM2" : "SENSITIVE_VALUE2"
+        }
+    }
+}

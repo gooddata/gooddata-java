@@ -108,3 +108,12 @@ warehouse = warehouseService.updateWarehouse(warehouse);
 Collection<Warehouse> warehouseList = warehouseService.listInstances();
 warehouseService.removeWarehouse(warehouse);
 ```
+
+### Dataload processes API
+Manage dataload processes - create, update, list, delete, and process executions - execute, get logs, ...
+```java
+ProcessService processService = gd.getProcessService();
+Process process = processService.createProcess(project, new Process('name', 'GRAPH'), new File('path/to/processdatadir')).get();
+ProcessExecutionDetail executionDetail = processService.executeProcess(new ProcessExecution(process, "myGraph.grf")).get();
+processService.getExecutionLog(executionDetail, new FileOutputStream("file/where/the/log/willbewritten");
+```

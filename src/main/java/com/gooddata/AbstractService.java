@@ -12,16 +12,20 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.concurrent.TimeUnit;
 
 import static com.gooddata.Validate.notNull;
 import static java.lang.String.format;
+import static java.util.Collections.emptyList;
 import static org.springframework.http.HttpMethod.GET;
+
 
 /**
  * Parent for GoodData services providing helpers for REST API calls and polling.
@@ -158,6 +162,19 @@ public abstract class AbstractService {
         @Override
         public void close() {
             //already closed
+        }
+    }
+
+    protected static class OutputStreamResponseExtractor implements ResponseExtractor<Integer> {
+        private final OutputStream output;
+
+        public OutputStreamResponseExtractor(OutputStream output) {
+            this.output = output;
+        }
+
+        @Override
+        public Integer extractData(ClientHttpResponse response) throws IOException {
+            return FileCopyUtils.copy(response.getBody(), output);
         }
     }
 
