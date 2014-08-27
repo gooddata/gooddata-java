@@ -3,6 +3,10 @@
  */
 package com.gooddata;
 
+import static com.gooddata.Validate.notNull;
+import static java.lang.String.format;
+import static org.springframework.http.HttpMethod.GET;
+
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,7 +16,6 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayInputStream;
@@ -20,11 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.TimeUnit;
-
-import static com.gooddata.Validate.notNull;
-import static java.lang.String.format;
-import static java.util.Collections.emptyList;
-import static org.springframework.http.HttpMethod.GET;
 
 
 /**
@@ -112,7 +110,7 @@ public abstract class AbstractService {
 
     private class ReusableClientHttpResponse implements ClientHttpResponse {
 
-        private final byte[] body;
+        private byte[] body;
         private final HttpStatus statusCode;
         private final int rawStatusCode;
         private final String statusText;
@@ -120,7 +118,10 @@ public abstract class AbstractService {
 
         public ReusableClientHttpResponse(ClientHttpResponse response) {
             try {
-                body = FileCopyUtils.copyToByteArray(response.getBody());
+                final InputStream bodyStream = response.getBody();
+                if (bodyStream != null) {
+                    body = FileCopyUtils.copyToByteArray(bodyStream);
+                }
                 statusCode = response.getStatusCode();
                 rawStatusCode = response.getRawStatusCode();
                 statusText = response.getStatusText();
@@ -156,7 +157,7 @@ public abstract class AbstractService {
 
         @Override
         public InputStream getBody() throws IOException {
-            return new ByteArrayInputStream(body);
+            return body != null ? new ByteArrayInputStream(body) : null;
         }
 
         @Override
