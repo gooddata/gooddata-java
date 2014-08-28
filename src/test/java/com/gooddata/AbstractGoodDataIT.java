@@ -5,15 +5,20 @@ package com.gooddata;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
 
+import static com.gooddata.Validate.notNull;
 import static net.jadler.Jadler.closeJadler;
 import static net.jadler.Jadler.initJadler;
 import static net.jadler.Jadler.port;
 
+import java.io.InputStream;
+
 public abstract class AbstractGoodDataIT {
 
+    protected static final ObjectMapper MAPPER = new ObjectMapper();
     protected  GoodData gd;
 
     @Before
@@ -31,5 +36,9 @@ public abstract class AbstractGoodDataIT {
     @After
     public void tearDown() {
         closeJadler();
+    }
+
+    protected InputStream readResource(String path) {
+        return notNull(getClass().getResourceAsStream(path), "resource denote by path: " + path);
     }
 }

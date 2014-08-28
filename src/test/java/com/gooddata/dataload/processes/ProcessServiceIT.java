@@ -41,8 +41,8 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
 
     @Before
     public void setUp() throws Exception {
-        project = MAPPER.readValue(getClass().getResourceAsStream("/project/project.json"), Project.class);
-        process = MAPPER.readValue(getClass().getResourceAsStream("/dataload/processes/process.json"), Process.class);
+        project = MAPPER.readValue(readResource("/project/project.json"), Project.class);
+        process = MAPPER.readValue(readResource("/dataload/processes/process.json"), Process.class);
 
     }
 
@@ -52,7 +52,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(PROCESSES_PATH)
                 .respond()
-                .withBody(getClass().getResourceAsStream("/dataload/processes/process.json"))
+                .withBody(readResource("/dataload/processes/process.json"))
                 .withStatus(201);
 
         File file = temporaryFolder.newFile("test.groovy");
@@ -75,7 +75,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(PROCESSES_PATH)
                 .respond()
-                .withBody(getClass().getResourceAsStream("/dataload/processes/processes.json"))
+                .withBody(readResource("/dataload/processes/processes.json"))
                 .withStatus(200);
 
         final Collection<Process> processes = gd.getProcessService().listProcesses(project);
@@ -89,7 +89,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(PROCESS_PATH)
                 .respond()
-                .withBody(getClass().getResourceAsStream("/dataload/processes/process.json"))
+                .withBody(readResource("/dataload/processes/process.json"))
                 .withStatus(200);
 
         final Process process = gd.getProcessService().getProcessById(project, PROCESS_ID);

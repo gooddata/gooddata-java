@@ -16,7 +16,7 @@ public class GdcServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc")
             .respond()
-                .withBody(getClass().getResourceAsStream("/gdc/gdc.json"))
+                .withBody(readResource("/gdc/gdc.json"))
                 .withStatus(200);
 
         final Gdc gdc = gd.getGdcService().getGdc();

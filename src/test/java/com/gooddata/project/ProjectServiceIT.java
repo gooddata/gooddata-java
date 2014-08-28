@@ -24,9 +24,9 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
 
     @Before
     public void setUp() throws Exception {
-        loading = MAPPER.readValue(getClass().getResourceAsStream("/project/project-loading.json"), Project.class);
-        enabled = MAPPER.readValue(getClass().getResourceAsStream("/project/project.json"), Project.class);
-        deleted = MAPPER.readValue(getClass().getResourceAsStream("/project/project-deleted.json"), Project.class);
+        loading = MAPPER.readValue(readResource("/project/project-loading.json"), Project.class);
+        enabled = MAPPER.readValue(readResource("/project/project.json"), Project.class);
+        deleted = MAPPER.readValue(readResource("/project/project-deleted.json"), Project.class);
     }
 
     @Test

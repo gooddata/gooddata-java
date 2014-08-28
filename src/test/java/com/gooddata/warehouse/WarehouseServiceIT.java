@@ -9,20 +9,17 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 import com.gooddata.AbstractGoodDataIT;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
 
 
 public class WarehouseServiceIT extends AbstractGoodDataIT {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final String TITLE = "Test";
     private static final String TASK_POLL = "/warehouse/warehouseTask-poll.json";
     private static final String TASK_DONE = "/warehouse/warehouseTask-finished.json";
@@ -40,10 +37,6 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         pollingTask = MAPPER.readValue(readResource(TASK_POLL), WarehouseTask.class);
         finishedTask = MAPPER.readValue(readResource(TASK_DONE), WarehouseTask.class);
         warehouse = MAPPER.readValue(readResource(WAREHOUSE), Warehouse.class);
-    }
-
-    private InputStream readResource(String path) {
-        return getClass().getResourceAsStream(path);
     }
 
     @Test
