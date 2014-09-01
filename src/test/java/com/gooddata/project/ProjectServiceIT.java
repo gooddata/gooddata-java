@@ -1,5 +1,10 @@
 package com.gooddata.project;
 
+import static net.jadler.Jadler.onRequest;
+import static net.jadler.Jadler.verifyThatRequest;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
+
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
@@ -8,15 +13,10 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 
-import static net.jadler.Jadler.onRequest;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
 public class ProjectServiceIT extends AbstractGoodDataIT {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final String PROJECT_URI = "/gdc/projects/123";
+    private static final String PROJECT_URI = "/gdc/projects/PROJECT_ID";
 
     private Project loading;
     private Project enabled;
@@ -103,6 +103,22 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         ;
 
         gd.getProjectService().createProject(new Project("TITLE", "AUTH_TOKEN")).get();
+    }
+
+    @Test
+    public void shouldRemoveProject() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("DELETE")
+                .havingPathEqualTo(PROJECT_URI)
+                .respond()
+                .withStatus(202);
+
+        gd.getProjectService().removeProject(enabled);
+
+        verifyThatRequest()
+                .havingMethodEqualTo("DELETE")
+                .havingPathEqualTo(PROJECT_URI)
+                .receivedOnce();
     }
 
 }

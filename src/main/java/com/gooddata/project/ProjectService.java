@@ -134,4 +134,18 @@ public class ProjectService extends AbstractService {
         notEmpty(id, "id");
         return getProjectByUri(Project.PROJECT_TEMPLATE.expand(id).toString());
     }
+
+    /**
+     * Removes given project
+     * @param project project to be removed
+     * @throws com.gooddata.GoodDataException when project can't be deleted
+     */
+    public void removeProject(final Project project) {
+        notNull(project, "project");
+        try {
+            restTemplate.delete(project.getSelfLink());
+        } catch (GoodDataRestException | RestClientException e) {
+            throw new GoodDataException("Unable to delete project " + project.getId(), e);
+        }
+    }
 }
