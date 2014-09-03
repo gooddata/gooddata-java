@@ -132,7 +132,7 @@ public class ProjectService extends AbstractService {
      */
     public Project getProjectById(String id) {
         notEmpty(id, "id");
-        return getProjectByUri(Project.PROJECT_TEMPLATE.expand(id).toString());
+        return getProjectByUri(Project.TEMPLATE.expand(id).toString());
     }
 
     /**

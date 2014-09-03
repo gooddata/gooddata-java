@@ -28,8 +28,8 @@ import static java.util.Arrays.asList;
 public class Project {
 
     public static final String PROJECTS_URI = "/gdc/account/profile/{id}/projects";
-    public static final String PROJECT_URI = Projects.URI + "/{id}";
-    public static final UriTemplate PROJECT_TEMPLATE = new UriTemplate(PROJECT_URI);
+    public static final String URI = Projects.URI + "/{id}";
+    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
     private static final Set<String> PREPARING_STATES = new HashSet<>(asList("PREPARING", "PREPARED", "LOADING"));
 
     @JsonProperty("content")
@@ -65,7 +65,7 @@ public class Project {
 
     @JsonIgnore
     public String getId() {
-        return PROJECT_TEMPLATE.match(getSelfLink()).get("id");
+        return TEMPLATE.match(getSelfLink()).get("id");
     }
 
     @JsonIgnore
