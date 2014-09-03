@@ -19,21 +19,32 @@ public abstract class ZipUtils {
 
     /**
      * This method compresses the input file to zip format. If the given file is a directory, it recursively
-     * packs the directory into the output.
+     * packs the directory into the output. Not including give directory itself
      *
      * @param file file to be zipped
      * @param output stream where the output will be written
      */
     public static void zip(File file, OutputStream output) throws IOException {
+        zip(file, output, false);
+    }
+
+    /**
+     * This method compresses the input file to zip format. If the given file is a directory, it recursively
+     * packs the directory into the output.
+     *
+     * @param file file to be zipped
+     * @param output stream where the output will be written
+     * @param includeRoot if root dir should be included
+     */
+    public static void zip(File file, OutputStream output, boolean includeRoot) throws IOException {
         notNull(file, "file");
         notNull(output, "output");
 
         try (ZipOutputStream zos = new ZipOutputStream(output)) {
-            final Path rootPath = file.getParentFile().toPath();
             if (file.isDirectory()) {
-                zipDir(rootPath, file, zos);
+                zipDir(includeRoot ? file.getParentFile().toPath() : file.toPath(), file, zos);
             } else {
-                zipFile(rootPath, file, zos);
+                zipFile(file.getParentFile().toPath(), file, zos);
             }
 
         }

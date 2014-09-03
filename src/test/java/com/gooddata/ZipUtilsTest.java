@@ -38,12 +38,29 @@ public class ZipUtilsTest {
         toZipFile.getParentFile().mkdirs();
         toZipFile.createNewFile();
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            ZipUtils.zip(toZipDir, output);
+            ZipUtils.zip(toZipDir, output, true);
             output.close();
             try (ZipInputStream zipInputStream = new ZipInputStream(new ByteArrayInputStream(output.toByteArray()))) {
                 ZipEntry entry = zipInputStream.getNextEntry();
                 assertNotNull(entry);
                 assertEquals("toZip/a/b/someFile.zip", entry.getName());
+            }
+        }
+    }
+
+    @Test
+    public void shouldZipDirWithoutRoot() throws Exception {
+        File toZipDir = temporaryFolder.newFolder("toZip");
+        File toZipFile = toZipDir.toPath().resolve("a/b/someFile.zip").toFile();
+        toZipFile.getParentFile().mkdirs();
+        toZipFile.createNewFile();
+        try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+            ZipUtils.zip(toZipDir, output);
+            output.close();
+            try (ZipInputStream zipInputStream = new ZipInputStream(new ByteArrayInputStream(output.toByteArray()))) {
+                ZipEntry entry = zipInputStream.getNextEntry();
+                assertNotNull(entry);
+                assertEquals("a/b/someFile.zip", entry.getName());
             }
         }
     }
