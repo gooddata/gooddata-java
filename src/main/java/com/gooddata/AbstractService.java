@@ -3,6 +3,10 @@
  */
 package com.gooddata;
 
+import static com.gooddata.Validate.notNull;
+import static java.lang.String.format;
+import static org.springframework.http.HttpMethod.GET;
+
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,11 +21,9 @@ import org.springframework.web.client.RestTemplate;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.concurrent.TimeUnit;
 
-import static com.gooddata.Validate.notNull;
-import static java.lang.String.format;
-import static org.springframework.http.HttpMethod.GET;
 
 /**
  * Parent for GoodData services providing helpers for REST API calls and polling.
@@ -58,7 +60,7 @@ public abstract class AbstractService {
         this.restTemplate = notNull(restTemplate, "restTemplate");
     }
 
-    final <T> T poll(final PollHandler<T> handler, long timeout, final TimeUnit unit) {
+    final <R> R poll(final PollHandler<?,R> handler, long timeout, final TimeUnit unit) {
         notNull(handler, "handler");
         final long start = System.currentTimeMillis();
         while (true) {
@@ -77,15 +79,15 @@ public abstract class AbstractService {
         }
     }
 
-    final <T> boolean pollOnce(final PollHandler<T> handler) {
+    final <P> boolean pollOnce(final PollHandler<P,?> handler) {
         notNull(handler, "handler");
         final ClientHttpResponse response = restTemplate.execute(handler.getPollingUri(), GET, noopRequestCallback,
                 reusableResponseExtractor);
 
         try {
             if (handler.isFinished(response)) {
-                final T data = extractData(response, handler.getResultClass());
-                handler.setResult(data);
+                final P data = extractData(response, handler.getPollClass());
+                handler.handlePollResult(data);
             } else if (HttpStatus.Series.CLIENT_ERROR.equals(response.getStatusCode().series())) {
                 throw new GoodDataException(
                         format("Polling returned client error HTTP status %s", response.getStatusCode().value())
@@ -108,7 +110,7 @@ public abstract class AbstractService {
 
     private class ReusableClientHttpResponse implements ClientHttpResponse {
 
-        private final byte[] body;
+        private byte[] body;
         private final HttpStatus statusCode;
         private final int rawStatusCode;
         private final String statusText;
@@ -116,7 +118,10 @@ public abstract class AbstractService {
 
         public ReusableClientHttpResponse(ClientHttpResponse response) {
             try {
-                body = FileCopyUtils.copyToByteArray(response.getBody());
+                final InputStream bodyStream = response.getBody();
+                if (bodyStream != null) {
+                    body = FileCopyUtils.copyToByteArray(bodyStream);
+                }
                 statusCode = response.getStatusCode();
                 rawStatusCode = response.getRawStatusCode();
                 statusText = response.getStatusText();
@@ -152,12 +157,25 @@ public abstract class AbstractService {
 
         @Override
         public InputStream getBody() throws IOException {
-            return new ByteArrayInputStream(body);
+            return body != null ? new ByteArrayInputStream(body) : null;
         }
 
         @Override
         public void close() {
             //already closed
+        }
+    }
+
+    protected static class OutputStreamResponseExtractor implements ResponseExtractor<Integer> {
+        private final OutputStream output;
+
+        public OutputStreamResponseExtractor(OutputStream output) {
+            this.output = output;
+        }
+
+        @Override
+        public Integer extractData(ClientHttpResponse response) throws IOException {
+            return FileCopyUtils.copy(response.getBody(), output);
         }
     }
 

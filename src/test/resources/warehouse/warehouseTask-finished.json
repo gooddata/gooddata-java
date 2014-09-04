@@ -1,0 +1,9 @@
+{
+    "asyncTask": {
+        "links": {
+            "dssInstance": "/gdc/dss/instances/instanceId",
+            "user": "user URI",
+            "users": "URI of users in DSS Instance"
+        }
+    }
+}

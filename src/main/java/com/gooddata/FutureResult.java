@@ -14,7 +14,7 @@ public final class FutureResult<T> {
 
     private final AbstractService service;
 
-    private final PollHandler<T> handler;
+    private final PollHandler<?,T> handler;
 
     /**
      * Creates a new instance of the result to be eventually retrieved by polling on the REST API.<p>
@@ -23,7 +23,7 @@ public final class FutureResult<T> {
      * @param service this service
      * @param handler poll handler
      */
-    public FutureResult(final AbstractService service, final PollHandler<T> handler) {
+    public FutureResult(final AbstractService service, final PollHandler<?,T> handler) {
         this.service = notNull(service, "service");
         this.handler = notNull(handler, "handler");
     }

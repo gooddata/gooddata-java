@@ -84,7 +84,7 @@ public class ProjectService extends AbstractService {
             throw new GoodDataException("Empty response when project POSTed to API");
         }
 
-        return new FutureResult<>(this, new PollHandler<Project>(uri.getUri(), Project.class) {
+        return new FutureResult<>(this, new PollHandler<Project,Project>(uri.getUri(), Project.class) {
 
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
@@ -132,6 +132,20 @@ public class ProjectService extends AbstractService {
      */
     public Project getProjectById(String id) {
         notEmpty(id, "id");
-        return getProjectByUri(Project.PROJECT_TEMPLATE.expand(id).toString());
+        return getProjectByUri(Project.TEMPLATE.expand(id).toString());
+    }
+
+    /**
+     * Removes given project
+     * @param project project to be removed
+     * @throws com.gooddata.GoodDataException when project can't be deleted
+     */
+    public void removeProject(final Project project) {
+        notNull(project, "project");
+        try {
+            restTemplate.delete(project.getSelfLink());
+        } catch (GoodDataRestException | RestClientException e) {
+            throw new GoodDataException("Unable to delete project " + project.getId(), e);
+        }
     }
 }

@@ -94,7 +94,7 @@ public class DatasetService extends AbstractService {
 
             final PullTask pullTask = restTemplate
                     .postForObject(Pull.URI, new Pull(dirPath.toString()), PullTask.class, project.getId());
-            return new FutureResult<>(this, new PollHandler<Void>(pullTask.getUri(), Void.class) {
+            return new FutureResult<>(this, new PollHandler<Void,Void>(pullTask.getUri(), Void.class) {
                 @Override
                 public boolean isFinished(ClientHttpResponse response) throws IOException {
                     final PullTaskStatus status = extractData(response, PullTaskStatus.class);

@@ -1,0 +1,18 @@
+{
+    "dssInstance" : {
+        "title" : "Test",
+        "description" : "Storage",
+        "status" : "ENABLED",
+        "authorizationToken" : "{Token}",
+        "created" : "2014-05-05T08:27:33.000Z",
+        "updated" : "2014-05-05T08:27:34.000Z",
+        "createdBy" : "/gdc/account/profile/createdBy",
+        "updatedBy" : "/gdc/account/profile/updatedBy",
+        "links" : {
+            "self" : "/gdc/dss/instances/instanceId",
+            "parent" : "/gdc/dss/instances",
+            "users" : "/gdc/dss/instances/instanceId/users",
+            "jdbc" : "/gdc/dss/instances/instanceId/jdbc"
+        }
+    }
+}

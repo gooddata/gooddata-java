@@ -48,12 +48,7 @@ public class ReportService extends AbstractService {
         notNull(output, "output");
         final String uri = exportReport(reportDefinition, format);
         try {
-            restTemplate.execute(uri, GET, noopRequestCallback, new ResponseExtractor<Integer>() {
-                @Override
-                public Integer extractData(ClientHttpResponse response) throws IOException {
-                    return FileCopyUtils.copy(response.getBody(), output);
-                }
-            });
+            restTemplate.execute(uri, GET, noopRequestCallback, new OutputStreamResponseExtractor(output));
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to export report", e);
         }
@@ -89,5 +84,4 @@ public class ReportService extends AbstractService {
             throw new GoodDataException("Unable to export report", e);
         }
     }
-
 }
