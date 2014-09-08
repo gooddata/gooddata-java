@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/martiner/gooddata-java.png?branch=master)](https://travis-ci.org/martiner/gooddata-java)
 
+The *GoodData Java SDK* encapsulates the REST API provided by the [GoodData](http://www.gooddata.com) platform.
+The first version was implemented during the [All Data Hackathon](http://hackathon.gooddata.com) April 10 - 11 2014
+and currently the SDK is transitioned to be an official GoodData project.
+
 ## Usage
 
 The *GoodData Java SDK* is available in Maven Central Repository, to use it from Maven add to `pom.xml`:
@@ -105,18 +109,16 @@ WarehouseService warehouseService = gd.getWarehouseService();
 Warehouse warehouse = warehouseService.createWarehouse(new Warehouse("title", "authToken", "description"));
 String jdbc = warehouse.getJdbcConnectionString();
 
-warehouse.setTitle("another Title");
-warehouse = warehouseService.updateWarehouse(warehouse);
-
 Collection<Warehouse> warehouseList = warehouseService.listInstances();
 warehouseService.removeWarehouse(warehouse);
 ```
 
 ### Dataload processes API
-Manage dataload processes - create, update, list, delete, and process executions - execute, get logs, ...
+Manage dataload processes - create, update, list, delete, and process executions - execute, get logs,...
 ```java
 ProcessService processService = gd.getProcessService();
-Process process = processService.createProcess(project, new Process('name', 'GRAPH'), new File('path/to/processdatadir')).get();
+Process process = processService.createProcess(project, new Process("name", "GRAPH"), new File("path/to/processdatadir")).get();
+
 ProcessExecutionDetail executionDetail = processService.executeProcess(new ProcessExecution(process, "myGraph.grf")).get();
 processService.getExecutionLog(executionDetail, new FileOutputStream("file/where/the/log/willbewritten");
 ```
