@@ -1,13 +1,17 @@
 package com.gooddata.warehouse;
 
 import com.gooddata.AbstractGoodDataIT;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.util.Collection;
 
 import static net.jadler.Jadler.onRequest;
 import static net.jadler.Jadler.port;
+import static net.jadler.Jadler.verifyThatRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -93,8 +97,8 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
     public void shouldGetWarehouse() throws Exception {
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(warehouse.getSelfLink())
-            .respond()
+                .havingPathEqualTo(warehouse.getUri())
+                .respond()
                 .withBody(readResource(WAREHOUSE))
                 .withStatus(200);
 
@@ -113,18 +117,40 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
 
         onRequest()
                 .havingMethodEqualTo("PUT")
-                .havingPathEqualTo(warehouse.getSelfLink())
-            .respond()
+                .havingPathEqualTo(warehouse.getUri())
+                .respond()
                 .withStatus(204);
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(warehouse.getSelfLink())
-            .respond()
+                .havingPathEqualTo(warehouse.getUri())
+                .respond()
                 .withBody(MAPPER.writeValueAsString(toUpdate))
                 .withStatus(200);
 
         final Warehouse updated = gd.getWarehouseService().updateWarehouse(toUpdate);
         assertThat(updated, notNullValue());
         assertThat(updated.getTitle(), is(updatedTitle));
+
+        verifyThatRequest()
+                .havingMethodEqualTo("PUT")
+                .havingPathEqualTo(warehouse.getUri())
+                .havingBody(new BaseMatcher<String>() {
+                    @Override
+                    public boolean matches(Object o) {
+                        try {
+                            Warehouse instance = MAPPER.readValue((String) o, Warehouse.class);
+                            return updatedTitle.equals(instance.getTitle());
+                        } catch (IOException e) {
+                            return false;
+                        }
+                    }
+
+
+                    @Override
+                    public void describeTo(Description description) {
+                        description.appendText("Warehouse not changed");
+                    }
+                })
+                .receivedOnce();
     }
 }

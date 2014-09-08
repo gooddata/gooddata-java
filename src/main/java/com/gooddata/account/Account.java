@@ -60,7 +60,7 @@ public class Account {
     }
 
     @JsonIgnore
-    public String getSelfLink() {
+    public String getUri() {
         return links.getSelf();
     }
 
@@ -71,7 +71,7 @@ public class Account {
 
     @JsonIgnore
     public String getId() {
-        return TEMPLATE.match(getSelfLink()).get("id");
+        return TEMPLATE.match(getUri()).get("id");
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

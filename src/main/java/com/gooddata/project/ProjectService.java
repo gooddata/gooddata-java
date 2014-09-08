@@ -143,7 +143,7 @@ public class ProjectService extends AbstractService {
     public void removeProject(final Project project) {
         notNull(project, "project");
         try {
-            restTemplate.delete(project.getSelfLink());
+            restTemplate.delete(project.getUri());
         } catch (GoodDataRestException | RestClientException e) {
             throw new GoodDataException("Unable to delete project " + project.getId(), e);
         }

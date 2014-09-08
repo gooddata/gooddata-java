@@ -19,7 +19,7 @@ public class AccountTest {
         assertThat(account.getFirstName(), is("Blah"));
         assertThat(account.getLastName(), is("Muhehe"));
         assertThat(account.getId(), is("ID"));
-        assertThat(account.getSelfLink(), is("/gdc/account/profile/ID"));
+        assertThat(account.getUri(), is("/gdc/account/profile/ID"));
         assertThat(account.getProjectsLink(), is("/gdc/account/profile/ID/projects"));
     }
 

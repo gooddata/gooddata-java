@@ -127,13 +127,13 @@ public class Warehouse {
     }
 
     @JsonIgnore
-    public String getSelfLink() {
+    public String getUri() {
         return links != null ? links.get(SELF_LINK): null;
     }
 
     @JsonIgnore
     public String getId() {
-        return TEMPLATE.match(getSelfLink()).get(ID_PARAM);
+        return TEMPLATE.match(getUri()).get(ID_PARAM);
     }
 
     @JsonIgnore
