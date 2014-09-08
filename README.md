@@ -10,7 +10,7 @@ The *GoodData Java SDK* is available in Maven Central Repository, to use it from
 <dependency>
     <groupId>cz.geek</groupId>
     <artifactId>gooddata-java</artifactId>
-    <version>0.8.0</version>
+    <version>0.9.0</version>
 </dependency>
 ```
 
