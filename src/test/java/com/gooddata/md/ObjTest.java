@@ -33,7 +33,7 @@ public class ObjTest {
     @Test
     public void testDeserialization() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/md/objCommon.json");
-        final Obj obj = new ObjectMapper().readValue(stream, ConcreteObj.class);
+        final AbstractObj obj = new ObjectMapper().readValue(stream, ConcreteObj.class);
 
         assertThat(obj, is(notNullValue()));
         assertThat(obj.getAuthor(), is(AUTHOR));
@@ -61,7 +61,7 @@ public class ObjTest {
         assertThat(obj, serializesToJson("/md/objCommon.json"));
     }
 
-    public static class ConcreteObj extends Obj {
+    public static class ConcreteObj extends AbstractObj {
         public ConcreteObj(@JsonProperty("meta") Meta meta) {
             super(meta);
         }

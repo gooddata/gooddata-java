@@ -34,6 +34,13 @@ public class AttributeTest {
         assertThat(displayForm.getExpression(), is("[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]"));
         assertThat(displayForm.getLdmExpression(), is("[/gdc/md/PROJECT_ID/obj/DF_LDM_EXPRESSION_ID]"));
 
+        final DisplayForm defaultDisplayForm = attribute.getDefaultDisplayForm();
+        assertThat(defaultDisplayForm, is(notNullValue()));
+
+        assertThat(defaultDisplayForm.getFormOf(), is("/gdc/md/PROJECT_ID/obj/DF_FORM_OF_ID"));
+        assertThat(defaultDisplayForm.getExpression(), is("[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]"));
+        assertThat(defaultDisplayForm.getLdmExpression(), is("[/gdc/md/PROJECT_ID/obj/DF_LDM_EXPRESSION_ID]"));
+
         final Collection<Key> primaryKeys = attribute.getPrimaryKeys();
         assertThat(primaryKeys, is(Matchers.notNullValue()));
         assertThat(primaryKeys, hasSize(1));

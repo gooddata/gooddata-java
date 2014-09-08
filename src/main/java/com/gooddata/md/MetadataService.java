@@ -121,7 +121,7 @@ public class MetadataService extends AbstractService {
      * @throws com.gooddata.md.ObjNotFoundException  if metadata object not found
      * @throws com.gooddata.md.NonUniqueObjException if more than one object corresponds to search restrictions
      */
-    public <T extends Queryable> String findObjUri(Project project, Class<T> cls, Restriction... restrictions) {
+    public <T extends Queryable> String getObjUri(Project project, Class<T> cls, Restriction... restrictions) {
         final Collection<String> results = findUris(project, cls, restrictions);
         if (results == null || results.isEmpty()) {
             throw new ObjNotFoundException(cls);
@@ -129,6 +129,27 @@ public class MetadataService extends AbstractService {
             throw new NonUniqueObjException(cls, results);
         }
         return results.iterator().next();
+    }
+
+    /**
+     * Get metadata object by restrictions like identifier, title or summary.
+     *
+     * @param project      project where to search for the object
+     * @param cls          class of the resulting object
+     * @param restrictions query restrictions
+     * @param <T>          type of the object to be returned
+     * @return metadata object
+     * @throws com.gooddata.md.ObjNotFoundException  if metadata object not found
+     * @throws com.gooddata.md.NonUniqueObjException if more than one object corresponds to search restrictions
+     */
+    public <T extends Queryable> T getObj(Project project, Class<T> cls, Restriction... restrictions) {
+        final Collection<String> results = findUris(project, cls, restrictions);
+        if (results == null || results.isEmpty()) {
+            throw new ObjNotFoundException(cls);
+        } else if (results.size() != 1) {
+            throw new NonUniqueObjException(cls, results);
+        }
+        return getObjByUri(results.iterator().next(), cls);
     }
 
     /**

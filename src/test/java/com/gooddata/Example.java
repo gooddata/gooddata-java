@@ -52,8 +52,8 @@ public class Example {
 
         final MetadataService md = gd.getMetadataService();
 
-        final String factUri = md.findObjUri(project, Fact.class, Restriction.title("Person Age"));
-        final String attrUri = md.findObjUri(project, Attribute.class, Restriction.title("Department"));
+        final String factUri = md.getObjUri(project, Fact.class, Restriction.title("Person Age"));
+        final String attrUri = md.getObjUri(project, Attribute.class, Restriction.title("Department"));
         final Attribute attr = md.getObjByUri(attrUri, Attribute.class);
 
         final Metric m = md.createObj(project, new Metric("Age Sum", "SELECT SUM([" + factUri + "])", "#,##0"));
@@ -65,7 +65,7 @@ public class Example {
                 asList(new GridElement(m.getUri(), "Age Sum"))
         );
         definition = md.createObj(project, definition);
-        final Report report = md.createObj(project, new Report(definition.getTitle(), definition.getUri(), null));
+        final Report report = md.createObj(project, new Report(definition.getTitle(), definition));
 
         final DatasetService datasetService = gd.getDatasetService();
         final DatasetManifest manifest = datasetService.getDatasetManifest(project, "dataset.person");

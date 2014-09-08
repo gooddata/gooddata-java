@@ -59,4 +59,14 @@ public abstract class Validate {
         return collection;
     }
 
+    public static <T> T[] noNullElements(T[] array, String argument) {
+        notNull(array, argument);
+        for (int i = 0; i<array.length; i++) {
+            if (array[i] == null) {
+                throw new IllegalArgumentException(argument + " contains null element at index: " + i);
+            }
+        }
+        return array;
+    }
+
 }

@@ -23,7 +23,7 @@ import static java.util.Arrays.asList;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class Attribute extends Obj implements Queryable {
+public class Attribute extends AbstractObj implements Queryable {
 
     @JsonProperty("content")
     private final Content content;
@@ -53,6 +53,11 @@ public class Attribute extends Obj implements Queryable {
     @JsonIgnore
     public Collection<Key> getForeignKeys() {
         return content.getFk();
+    }
+
+    @JsonIgnore
+    public DisplayForm getDefaultDisplayForm() {
+        return getDisplayForms().iterator().next();
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
