@@ -43,7 +43,8 @@ Create and update the project model, execute MAQL DDL,...
 
 ```java
 ModelService modelService = gd.getModelService();
-ModelDiff diff = modelService.getProjectModelDiff(project, new InputStreamReader(getClass().getResourceAsStream("/model.json"))).get();
+ModelDiff diff = modelService.getProjectModelDiff(project,
+    new InputStreamReader(getClass().getResourceAsStream("/person.json"))).get();
 modelService.updateProjectModel(project, diff);
 
 modelService.updateProjectModel(project, "MAQL DDL EXPRESSION");
@@ -56,21 +57,19 @@ Query, create and update project metadata - attributes, facts, metrics, reports,
 ```java
 MetadataService md = gd.getMetadataService();
 
-String factUri = md.getObjUri(project, Fact.class, Restriction.title("myfact"));
-Metric m = new Metric("my sum", "SELECT SUM([" + factUri + "])", "#,##0");
-Metric metric = md.createObj(project, m);
-Attribute attr = md.getObj(project, Attribute.class, Restriction.title("myattr"));
+String fact = md.getObjUri(project, Fact.class, identifier("fact.person.shoesize"));
+Metric m = md.createObj(project, new Metric("Avg shoe size", "SELECT AVG([" + fact + "])", "#,##0"));
 
-Metric m = md.createObj(project, new Metric("My Sum", "SELECT SUM([" + factUri + "])", "#,##0"));
+Attribute attr = md.getObj(project, Attribute.class, identifier("attr.person.department"));
 
 ReportDefinition definition = GridReportDefinitionContent.create(
-        "my report",
+        "Department avg shoe size",
         asList("metricGroup"),
-        asList(new AttributeInGrid("/gdc/md/PROJECT_ID/obj/ATTR_DISPLAY_FORM_ID")),
-        asList(new GridElement(m.getUri(), "My Sum"))
+        asList(new AttributeInGrid(attr.getDefaultDisplayForm().getUri())),
+        asList(new GridElement(m.getUri(), "Avg shoe size"))
 );
 definition = md.createObj(project, definition);
-Report report = md.createObj(project, new Report(definition.getTitle(), definition.getUri(), null));
+Report report = md.createObj(project, new Report(definition.getTitle(), definition));
 ```
 
 ### Dataset API
