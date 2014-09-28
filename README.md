@@ -105,10 +105,10 @@ dataStoreService.delete("/dir/file.txt");
 Manage warehouses - create, update, list and delete.
 ```java
 WarehouseService warehouseService = gd.getWarehouseService();
-Warehouse warehouse = warehouseService.createWarehouse(new Warehouse("title", "authToken", "description"));
+Warehouse warehouse = warehouseService.createWarehouse(new Warehouse("title", "authToken", "description")).get();
 String jdbc = warehouse.getJdbcConnectionString();
 
-Collection<Warehouse> warehouseList = warehouseService.listInstances();
+Collection<Warehouse> warehouseList = warehouseService.listWarehouses();
 warehouseService.removeWarehouse(warehouse);
 ```
 
@@ -116,8 +116,8 @@ warehouseService.removeWarehouse(warehouse);
 Manage dataload processes - create, update, list, delete, and process executions - execute, get logs,...
 ```java
 ProcessService processService = gd.getProcessService();
-Process process = processService.createProcess(project, new Process("name", "GRAPH"), new File("path/to/processdatadir")).get();
+Process process = processService.createProcess(project, new Process("name", "GRAPH"), new File("path/to/processdatadir"));
 
 ProcessExecutionDetail executionDetail = processService.executeProcess(new ProcessExecution(process, "myGraph.grf")).get();
-processService.getExecutionLog(executionDetail, new FileOutputStream("file/where/the/log/willbewritten");
+processService.getExecutionLog(executionDetail, new FileOutputStream("file/where/the/log/willbewritten"));
 ```
