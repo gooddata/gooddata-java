@@ -10,8 +10,6 @@ import java.io.InputStream;
 import java.util.Collections;
 
 import static com.gooddata.model.ModelDiff.UpdateScript;
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -23,7 +21,7 @@ public class ModelDiffTest {
 
     @Test
     public void testGetUpdateMaqls() throws Exception {
-        final ModelDiff diff = new ModelDiff(singletonList(new UpdateScript(asList("maql1", "maql2"), true, false)));
+        final ModelDiff diff = new ModelDiff(new UpdateScript(true, false, "maql1", "maql2"));
 
         assertThat(diff.getUpdateMaql(), hasSize(2));
         assertThat(diff.getUpdateMaql(), contains("maql1", "maql2"));
@@ -31,9 +29,9 @@ public class ModelDiffTest {
 
     @Test
     public void testGetUpdateMaqlsReturnsBest() throws Exception {
-        final ModelDiff diff = new ModelDiff(asList(
-                new UpdateScript(asList("maql1"), false, false),
-                new UpdateScript(asList("maql2"), true, false))
+        final ModelDiff diff = new ModelDiff(
+                new UpdateScript(false, false, "maql1"),
+                new UpdateScript(true, false, "maql2")
         );
 
         assertThat(diff.getUpdateMaql(), hasSize(1));
@@ -42,9 +40,9 @@ public class ModelDiffTest {
 
     @Test
     public void testGetUpdateMaqlsReturnsNotWorst() throws Exception {
-        final ModelDiff diff = new ModelDiff(asList(
-                new UpdateScript(asList("maql1"), false, true),
-                new UpdateScript(asList("maql2"), false, false))
+        final ModelDiff diff = new ModelDiff(
+                new UpdateScript(false, true, "maql1"),
+                new UpdateScript(false, false, "maql2")
         );
 
         assertThat(diff.getUpdateMaql(), hasSize(1));
@@ -53,7 +51,7 @@ public class ModelDiffTest {
 
     @Test
     public void testGetUpdateMaqlsNoPreserveData() throws Exception {
-        final ModelDiff diff = new ModelDiff(singletonList(new UpdateScript(asList("maql"), false, false)));
+        final ModelDiff diff = new ModelDiff(new UpdateScript(false, false, "maql"));
 
         assertThat(diff.getUpdateMaql(), hasSize(1));
         assertThat(diff.getUpdateMaql().get(0), equalTo("maql"));
@@ -68,7 +66,7 @@ public class ModelDiffTest {
 
     @Test
     public void testGetUpdateMaqlsNoMaqlInUpdateScript() throws Exception {
-        final ModelDiff diff = new ModelDiff(asList(new UpdateScript(Collections.<String>emptyList(), true, false)));
+        final ModelDiff diff = new ModelDiff(new UpdateScript(Collections.<String>emptyList(), true, false));
 
         assertThat(diff.getUpdateMaql(), hasSize(0));
     }
