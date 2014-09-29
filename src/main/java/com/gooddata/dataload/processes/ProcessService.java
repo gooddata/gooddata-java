@@ -5,10 +5,10 @@ import static com.gooddata.Validate.notNull;
 import static java.util.Collections.emptyList;
 
 import com.gooddata.AbstractService;
+import com.gooddata.AbstractPollHandler;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.PollHandler;
 import com.gooddata.ZipUtils;
 import com.gooddata.account.AccountService;
 import com.gooddata.project.Project;
@@ -19,18 +19,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.Collection;
@@ -207,14 +203,14 @@ public class ProcessService extends AbstractService {
 
         final String detailLink = executionTask.getDetailLink();
 
-        return new FutureResult<>(this, new PollHandler<Void, ProcessExecutionDetail>(executionTask.getPollLink(), Void.class, ProcessExecutionDetail.class) {
+        return new FutureResult<>(this, new AbstractPollHandler<Void, ProcessExecutionDetail>(executionTask.getPollLink(), Void.class, ProcessExecutionDetail.class) {
             @Override
-            protected boolean isFinished(ClientHttpResponse response) throws IOException {
+            public boolean isFinished(ClientHttpResponse response) throws IOException {
                 return HttpStatus.NO_CONTENT.equals(response.getStatusCode());
             }
 
             @Override
-            protected void handlePollResult(Void pollResult) {
+            public void handlePollResult(Void pollResult) {
                 ProcessExecutionDetail executionDetail;
                 try {
                     executionDetail = restTemplate.getForObject(detailLink, ProcessExecutionDetail.class);

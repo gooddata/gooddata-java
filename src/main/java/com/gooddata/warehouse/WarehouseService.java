@@ -4,11 +4,11 @@ import static com.gooddata.Validate.notEmpty;
 import static com.gooddata.Validate.notNull;
 import static java.util.Collections.emptyList;
 
+import com.gooddata.AbstractPollHandler;
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.PollHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
@@ -59,10 +59,10 @@ public class WarehouseService extends AbstractService {
             throw new GoodDataException("Empty response when Warehouse POSTed to API");
         }
 
-        return new FutureResult<>(this, new PollHandler<WarehouseTask,Warehouse>(task.getPollLink(), WarehouseTask.class, Warehouse.class) {
+        return new FutureResult<>(this, new AbstractPollHandler<WarehouseTask,Warehouse>(task.getPollLink(), WarehouseTask.class, Warehouse.class) {
 
             @Override
-            protected boolean isFinished(ClientHttpResponse response) throws IOException {
+            public boolean isFinished(ClientHttpResponse response) throws IOException {
                 return HttpStatus.CREATED.equals(response.getStatusCode());
             }
 
@@ -74,7 +74,7 @@ public class WarehouseService extends AbstractService {
             }
 
             @Override
-            protected void handlePollResult(WarehouseTask pollResult) {
+            public void handlePollResult(WarehouseTask pollResult) {
                 try {
                     final Warehouse warehouse = restTemplate.getForObject(pollResult.getWarehouseLink(), Warehouse.class);
                     setResult(setWarehouseConnection(warehouse));

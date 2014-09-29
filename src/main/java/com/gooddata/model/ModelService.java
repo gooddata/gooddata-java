@@ -6,7 +6,7 @@ package com.gooddata.model;
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.PollHandler;
+import com.gooddata.SimplePollHandler;
 import com.gooddata.gdc.AsyncTask;
 import com.gooddata.project.Project;
 import org.springframework.http.client.ClientHttpResponse;
@@ -35,7 +35,7 @@ public class ModelService extends AbstractService {
         try {
             final AsyncTask asyncTask = restTemplate
                     .postForObject(DiffRequest.URI, diffRequest, AsyncTask.class, project.getId());
-            return new FutureResult<>(this, new PollHandler<ModelDiff,ModelDiff>(asyncTask.getUri(), ModelDiff.class));
+            return new FutureResult<>(this, new SimplePollHandler<ModelDiff>(asyncTask.getUri(), ModelDiff.class));
         } catch (GoodDataRestException | RestClientException e) {
             throw new ModelException("Unable to get project model diff", e);
         }
@@ -72,7 +72,7 @@ public class ModelService extends AbstractService {
         try {
             final MaqlDdlLinks linkEntries = restTemplate.postForObject(MaqlDdl.URI, new MaqlDdl(maqlDdl),
                     MaqlDdlLinks.class, project.getId());
-            return new FutureResult<>(this, new PollHandler<Void,Void>(linkEntries.getStatusLink(), Void.class) {
+            return new FutureResult<>(this, new SimplePollHandler<Void>(linkEntries.getStatusLink(), Void.class) {
                 @Override
                 public boolean isFinished(final ClientHttpResponse response) throws IOException {
                     final boolean finished = super.isFinished(response);
