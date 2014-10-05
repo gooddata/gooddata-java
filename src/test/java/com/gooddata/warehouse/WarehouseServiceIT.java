@@ -1,8 +1,8 @@
 package com.gooddata.warehouse;
 
 import com.gooddata.AbstractGoodDataIT;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import java.util.Collection;
 
@@ -28,7 +28,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
     private WarehouseTask finishedTask;
     private Warehouse warehouse;
 
-    @Before
+    @BeforeClass
     public void setUp() throws Exception {
         pollingTask = MAPPER.readValue(readResource(TASK_POLL), WarehouseTask.class);
         finishedTask = MAPPER.readValue(readResource(TASK_DONE), WarehouseTask.class);

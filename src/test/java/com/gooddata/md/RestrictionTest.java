@@ -3,7 +3,7 @@
  */
 package com.gooddata.md;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;

@@ -1,7 +1,7 @@
 package com.gooddata.gdc;
 
 import com.gooddata.AbstractGoodDataIT;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.Matchers.is;

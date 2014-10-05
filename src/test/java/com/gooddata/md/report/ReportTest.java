@@ -4,7 +4,7 @@
 package com.gooddata.md.report;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.CoreMatchers.is;

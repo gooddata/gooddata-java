@@ -6,7 +6,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.io.InputStream;
 

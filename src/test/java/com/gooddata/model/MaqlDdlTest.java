@@ -4,7 +4,7 @@
 package com.gooddata.model;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

@@ -1,12 +1,15 @@
 package com.gooddata;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.apache.commons.io.FileUtils;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -16,12 +19,22 @@ import static org.hamcrest.Matchers.notNullValue;
 
 public class ZipUtilsTest {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+    private Path temporaryFolder;
+
+    @BeforeClass
+    public void setUp() throws Exception {
+        temporaryFolder = Files.createTempDirectory("zip");
+    }
+
+    @AfterClass
+    public void tearDown() throws Exception {
+        FileUtils.deleteQuietly(temporaryFolder.toFile());
+    }
 
     @Test
     public void shouldZipSingleFile() throws Exception {
-        final File file = temporaryFolder.newFile("someFile.zip");
+        final File file = temporaryFolder.resolve("someFile.zip").toFile();
+        file.createNewFile();
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             ZipUtils.zip(file, output);
             output.close();
@@ -35,12 +48,13 @@ public class ZipUtilsTest {
 
     @Test
     public void shouldZipDir() throws Exception {
-        File toZipDir = temporaryFolder.newFolder("toZip");
-        File toZipFile = toZipDir.toPath().resolve("a/b/someFile.zip").toFile();
+        Path toZipDir = temporaryFolder.resolve("toZip");
+        toZipDir.toFile().mkdirs();
+        File toZipFile = toZipDir.resolve("a/b/someFile.zip").toFile();
         toZipFile.getParentFile().mkdirs();
         toZipFile.createNewFile();
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            ZipUtils.zip(toZipDir, output, true);
+            ZipUtils.zip(toZipDir.toFile(), output, true);
             output.close();
             try (ZipInputStream zipInputStream = new ZipInputStream(new ByteArrayInputStream(output.toByteArray()))) {
                 ZipEntry entry = zipInputStream.getNextEntry();
@@ -52,12 +66,13 @@ public class ZipUtilsTest {
 
     @Test
     public void shouldZipDirWithoutRoot() throws Exception {
-        File toZipDir = temporaryFolder.newFolder("toZip");
-        File toZipFile = toZipDir.toPath().resolve("a/b/someFile.zip").toFile();
+        Path toZipDir = temporaryFolder.resolve("toZip");
+        toZipDir.toFile().mkdirs();
+        File toZipFile = toZipDir.resolve("a/b/someFile.zip").toFile();
         toZipFile.getParentFile().mkdirs();
         toZipFile.createNewFile();
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            ZipUtils.zip(toZipDir, output);
+            ZipUtils.zip(toZipDir.toFile(), output);
             output.close();
             try (ZipInputStream zipInputStream = new ZipInputStream(new ByteArrayInputStream(output.toByteArray()))) {
                 ZipEntry entry = zipInputStream.getNextEntry();

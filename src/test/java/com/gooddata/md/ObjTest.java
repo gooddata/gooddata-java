@@ -5,7 +5,7 @@ package com.gooddata.md;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.io.InputStream;
 

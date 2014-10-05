@@ -6,8 +6,8 @@ package com.gooddata.md;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.project.Project;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
@@ -34,20 +34,20 @@ public class MetadataServiceTest {
 
     private MetadataService service;
 
-    @Before
+    @BeforeMethod
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         service = new MetadataService(restTemplate);
         when(project.getId()).thenReturn(PROJECT_ID);
     }
 
-    @Test(expected = ObjCreateException.class)
+    @Test(expectedExceptions = ObjCreateException.class)
     public void testCreateObjNullResponse() throws Exception {
         final Obj obj = mock(Obj.class);
         service.createObj(project, obj);
     }
 
-    @Test(expected = ObjCreateException.class)
+    @Test(expectedExceptions = ObjCreateException.class)
     @SuppressWarnings("unchecked")
     public void testCreateObjGDRestException() throws Exception {
         final Obj obj = mock(Obj.class);
@@ -56,7 +56,7 @@ public class MetadataServiceTest {
         service.createObj(project, obj);
     }
 
-    @Test(expected = ObjCreateException.class)
+    @Test(expectedExceptions = ObjCreateException.class)
     public void testCreateObjRestClientException() throws Exception {
         final Obj obj = mock(Obj.class);
         when(restTemplate.postForObject(Obj.URI, obj, UriResponse.class, PROJECT_ID))
@@ -78,17 +78,17 @@ public class MetadataServiceTest {
         assertThat(result, is(notNullValue()));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testGetObjByUriNullUri() throws Exception {
         service.getObjByUri(null, Obj.class);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testGetObjByUriNullCls() throws Exception {
         service.getObjByUri(URI, null);
     }
 
-    @Test(expected = ObjNotFoundException.class)
+    @Test(expectedExceptions = ObjNotFoundException.class)
     public void testGetObjByUriNotFound() throws Exception {
         final GoodDataRestException restException = mock(GoodDataRestException.class);
         when(restException.getStatusCode()).thenReturn(HttpStatus.NOT_FOUND.value());
@@ -106,17 +106,17 @@ public class MetadataServiceTest {
         assertThat(result, is(resultObj));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testGetObjByIdNullProject() throws Exception {
         service.getObjById(null, ID, Obj.class);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testGetObjByIdNullId() throws Exception {
         service.getObjById(project, null, Obj.class);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testGetObjByIdNullCls() throws Exception {
         service.getObjById(project, ID, null);
     }

@@ -5,7 +5,7 @@ package com.gooddata.model;
 
 import com.gooddata.gdc.GdcError;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;

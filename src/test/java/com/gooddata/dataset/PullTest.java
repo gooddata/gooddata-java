@@ -1,6 +1,6 @@
 package com.gooddata.dataset;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.MatcherAssert.assertThat;

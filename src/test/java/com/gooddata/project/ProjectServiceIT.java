@@ -5,8 +5,8 @@ import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.gdc.UriResponse;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,7 +22,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     private Project enabled;
     private Project deleted;
 
-    @Before
+    @BeforeClass
     public void setUp() throws Exception {
         loading = MAPPER.readValue(readResource("/project/project-loading.json"), Project.class);
         enabled = MAPPER.readValue(readResource("/project/project.json"), Project.class);
@@ -54,7 +54,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         assertThat(project.getTitle(), is("TITLE"));
     }
 
-    @Test(expected = GoodDataException.class)
+    @Test(expectedExceptions = GoodDataException.class)
     public void shouldFailWhenPostFails() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -65,7 +65,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         gd.getProjectService().createProject(new Project("TITLE", "AUTH_TOKEN")).get();
     }
 
-    @Test(expected = GoodDataRestException.class) // todo previous method returns GoodDataException
+    @Test(expectedExceptions = GoodDataRestException.class) // todo previous method returns GoodDataException
     public void shouldFailWhenPollFails() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -85,7 +85,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     }
 
 
-    @Test(expected = GoodDataException.class)
+    @Test(expectedExceptions = GoodDataException.class)
     public void shouldFailWhenCantCreateProject() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")

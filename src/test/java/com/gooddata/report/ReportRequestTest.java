@@ -4,7 +4,7 @@
 package com.gooddata.report;
 
 import com.gooddata.JsonMatchers;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 

@@ -6,22 +6,20 @@ package com.gooddata;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.After;
-import org.junit.Before;
-
-import static com.gooddata.Validate.notNull;
-import static net.jadler.Jadler.closeJadler;
-import static net.jadler.Jadler.initJadler;
-import static net.jadler.Jadler.port;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 
 import java.io.InputStream;
+
+import static com.gooddata.Validate.notNull;
+import static net.jadler.Jadler.*;
 
 public abstract class AbstractGoodDataIT {
 
     protected static final ObjectMapper MAPPER = new ObjectMapper();
     protected  GoodData gd;
 
-    @Before
+    @BeforeMethod
     public void commonSetUp() {
         initJadler().that().respondsWithDefaultContentType("application/json");
         gd = new GoodData("localhost", "sdk@gooddata.com", "sdk", port(), "http") {
@@ -33,7 +31,7 @@ public abstract class AbstractGoodDataIT {
         };
     }
 
-    @After
+    @AfterMethod
     public void tearDown() {
         closeJadler();
     }

@@ -3,7 +3,7 @@ package com.gooddata.report;
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;

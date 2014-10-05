@@ -4,10 +4,8 @@ import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.FutureResult;
 import com.gooddata.project.Project;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -34,15 +32,15 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
 
     private Project project;
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
     private Process process;
 
-    @Before
+    private File file;
+
+    @BeforeClass
     public void setUp() throws Exception {
         project = MAPPER.readValue(readResource("/project/project.json"), Project.class);
         process = MAPPER.readValue(readResource("/dataload/processes/process.json"), Process.class);
-
+        file = File.createTempFile("test", ".groovy");
     }
 
     @Test
@@ -54,7 +52,6 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .withBody(readResource("/dataload/processes/process.json"))
                 .withStatus(201);
 
-        File file = temporaryFolder.newFile("test.groovy");
         final Process process = gd.getProcessService().createProcess(project, new Process("testProcess", "GROOVY"), file);
         assertThat(process, notNullValue());
         assertThat(process.getExecutables(), contains("test.groovy"));
@@ -156,7 +153,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         assertJsonEquals(MAPPER.readValue(readResource("/dataload/processes/executionDetail-success.json"), ProcessExecutionDetail.class), executionDetail);
     }
 
-    @Test(expected = ProcessExecutionException.class)
+    @Test(expectedExceptions = ProcessExecutionException.class)
     public void shouldThrowOnExecuteProcessError() throws Exception {
         mockExecutionRequests();
         onRequest()

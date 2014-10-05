@@ -2,7 +2,7 @@ package com.gooddata.md;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.hamcrest.Matchers;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.io.InputStream;
 import java.util.Collection;
