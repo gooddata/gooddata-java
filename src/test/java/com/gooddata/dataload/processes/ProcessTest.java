@@ -4,7 +4,7 @@ import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;

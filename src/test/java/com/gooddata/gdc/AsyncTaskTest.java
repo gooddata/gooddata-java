@@ -8,7 +8,8 @@ import org.junit.Test;
 
 import java.io.InputStream;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class AsyncTaskTest {
 
@@ -17,6 +18,6 @@ public class AsyncTaskTest {
         final InputStream is = getClass().getResourceAsStream("/gdc/asyncTask.json");
         final AsyncTask asyncTask = new ObjectMapper().readValue(is, AsyncTask.class);
 
-        assertEquals("POLL-URI", asyncTask.getUri());
+        assertThat(asyncTask.getUri(), is("POLL-URI"));
     }
 }

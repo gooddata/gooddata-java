@@ -6,7 +6,7 @@ package com.gooddata.report;
 import com.gooddata.JsonMatchers;
 import org.junit.Test;
 
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ReportRequestTest {
 

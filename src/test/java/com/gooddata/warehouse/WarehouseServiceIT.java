@@ -3,10 +3,10 @@ package com.gooddata.warehouse;
 import static net.jadler.Jadler.onRequest;
 import static net.jadler.Jadler.port;
 import static net.jadler.Jadler.verifyThatRequest;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.gooddata.AbstractGoodDataIT;
 import org.hamcrest.BaseMatcher;
@@ -63,7 +63,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withStatus(200);
 
         final Warehouse created = gd.getWarehouseService().createWarehouse(new Warehouse(TITLE, "{Token}", "Storage")).get();
-        assertNotNull(created);
+        assertThat(created, notNullValue());
         assertThat(created.getTitle(), is(TITLE));
         assertThat(created.getJdbcConnectionString(), is("jdbc:dss://localhost:" + port() + WAREHOUSE_URI));
     }
@@ -78,7 +78,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withStatus(200);
 
         final Collection<Warehouse> list = gd.getWarehouseService().listWarehouses();
-        assertNotNull(list);
+        assertThat(list, notNullValue());
         assertThat(list, hasSize(2));
     }
 
@@ -108,7 +108,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withStatus(200);
 
         final Warehouse warehouse = gd.getWarehouseService().getWarehouseById(WAREHOUSE_ID);
-        assertNotNull(warehouse);
+        assertThat(warehouse, notNullValue());
         assertThat(warehouse.getTitle(), is(TITLE));
     }
 
@@ -133,7 +133,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withStatus(200);
 
         final Warehouse updated = gd.getWarehouseService().updateWarehouse(toUpdate);
-        assertNotNull(updated);
+        assertThat(updated, notNullValue());
         assertThat(updated.getTitle(), is(updatedTitle));
 
         verifyThatRequest()

@@ -4,7 +4,6 @@
 package com.gooddata.md;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Assert;
 import org.junit.Test;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
@@ -26,7 +25,7 @@ public class FactTest {
     @Test
     public void testSerialization() throws Exception {
         final Fact fact = new Fact("Person Shoe Size", "/gdc/md/PROJECT_ID/obj/COL_ID", "col");
-        Assert.assertThat(fact, serializesToJson("/md/fact-input.json"));
+        assertThat(fact, serializesToJson("/md/fact-input.json"));
     }
 
 }

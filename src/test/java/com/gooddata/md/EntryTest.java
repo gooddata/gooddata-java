@@ -4,7 +4,6 @@
 package com.gooddata.md;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Assert;
 import org.junit.Test;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
@@ -52,7 +51,7 @@ public class EntryTest {
         final Entry entry = new Entry(LINK, TITLE, SUMMARY, CATEGORY, AUTHOR, CONTRIBUTOR, DEPRECATED, IDENTIFIER, TAGS,
                 CREATED, UPDATED, LOCKED, UNLISTED);
 
-        Assert.assertThat(entry, serializesToJson("/md/entry.json"));
+        assertThat(entry, serializesToJson("/md/entry.json"));
     }
 
 }

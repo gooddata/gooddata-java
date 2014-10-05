@@ -1,7 +1,7 @@
 package com.gooddata.dataload.processes;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.*;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;

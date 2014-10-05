@@ -1,7 +1,5 @@
 package com.gooddata;
 
-import static org.junit.Assert.*;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -11,6 +9,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class ZipUtilsTest {
 
@@ -25,8 +27,8 @@ public class ZipUtilsTest {
             output.close();
             try (ZipInputStream zipInputStream = new ZipInputStream(new ByteArrayInputStream(output.toByteArray()))) {
                 ZipEntry entry = zipInputStream.getNextEntry();
-                assertNotNull(entry);
-                assertEquals("someFile.zip", entry.getName());
+                assertThat(entry, notNullValue());
+                assertThat(entry.getName(), is("someFile.zip"));
             }
         }
     }
@@ -42,8 +44,8 @@ public class ZipUtilsTest {
             output.close();
             try (ZipInputStream zipInputStream = new ZipInputStream(new ByteArrayInputStream(output.toByteArray()))) {
                 ZipEntry entry = zipInputStream.getNextEntry();
-                assertNotNull(entry);
-                assertEquals("toZip/a/b/someFile.zip", entry.getName());
+                assertThat(entry, notNullValue());
+                assertThat(entry.getName(), is("toZip/a/b/someFile.zip"));
             }
         }
     }
@@ -59,8 +61,8 @@ public class ZipUtilsTest {
             output.close();
             try (ZipInputStream zipInputStream = new ZipInputStream(new ByteArrayInputStream(output.toByteArray()))) {
                 ZipEntry entry = zipInputStream.getNextEntry();
-                assertNotNull(entry);
-                assertEquals("a/b/someFile.zip", entry.getName());
+                assertThat(entry, notNullValue());
+                assertThat(entry.getName(), is("a/b/someFile.zip"));
             }
         }
     }

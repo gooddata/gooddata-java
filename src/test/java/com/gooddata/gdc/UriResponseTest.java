@@ -4,7 +4,6 @@
 package com.gooddata.gdc;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -27,6 +26,6 @@ public class UriResponseTest {
 
     @Test
     public void testSerialization() throws Exception {
-        Assert.assertThat(new UriResponse("URI"), serializesToJson("/gdc/uriResponse.json"));
+        assertThat(new UriResponse("URI"), serializesToJson("/gdc/uriResponse.json"));
     }
 }

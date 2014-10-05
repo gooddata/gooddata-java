@@ -3,10 +3,10 @@ package com.gooddata.dataload.processes;
 import static net.jadler.Jadler.onRequest;
 import static net.jadler.Jadler.verifyThatRequest;
 import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.FutureResult;
@@ -57,7 +57,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
 
         File file = temporaryFolder.newFile("test.groovy");
         final Process process = gd.getProcessService().createProcess(project, new Process("testProcess", "GROOVY"), file);
-        assertNotNull(process);
+        assertThat(process, notNullValue());
         assertThat(process.getExecutables(), hasSize(1));
         assertThat(process.getExecutables().iterator().next(), is("test.groovy"));
 
@@ -79,7 +79,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .withStatus(200);
 
         final Collection<Process> processes = gd.getProcessService().listProcesses(project);
-        assertNotNull(processes);
+        assertThat(processes, notNullValue());
         assertThat(processes, hasSize(1));
     }
 
@@ -93,7 +93,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .withStatus(200);
 
         final Process process = gd.getProcessService().getProcessById(project, PROCESS_ID);
-        assertNotNull(process);
+        assertThat(process, notNullValue());
         assertThat(process.getName(), is("testProcess"));
     }
 

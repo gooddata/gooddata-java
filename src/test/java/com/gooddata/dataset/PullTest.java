@@ -3,7 +3,7 @@ package com.gooddata.dataset;
 import org.junit.Test;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PullTest {
 

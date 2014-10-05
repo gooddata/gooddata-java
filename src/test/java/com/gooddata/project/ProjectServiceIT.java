@@ -3,7 +3,7 @@ package com.gooddata.project;
 import static net.jadler.Jadler.onRequest;
 import static net.jadler.Jadler.verifyThatRequest;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;

@@ -6,14 +6,15 @@ package com.gooddata.model;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class MaqlDdlTest {
 
     @Test
     public void testSerialization() throws Exception {
-        assertEquals("{\"manage\":{\"maql\":\"maqlddl\"}}",
-                new ObjectMapper().writeValueAsString(new MaqlDdl("maqlddl")));
+        assertThat(new ObjectMapper().writeValueAsString(new MaqlDdl("maqlddl")),
+                is("{\"manage\":{\"maql\":\"maqlddl\"}}"));
 
     }
 }

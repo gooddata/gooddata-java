@@ -1,7 +1,7 @@
 package com.gooddata.dataload.processes;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;

@@ -6,7 +6,7 @@ import org.junit.Test;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GdcServiceIT extends AbstractGoodDataIT {
 

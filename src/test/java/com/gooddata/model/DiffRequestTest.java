@@ -6,7 +6,8 @@ package com.gooddata.model;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class DiffRequestTest {
 
@@ -15,6 +16,6 @@ public class DiffRequestTest {
     @Test
     public void testSerialization() throws Exception {
         String valueAsString = mapper.writeValueAsString(new DiffRequest("{\"projectModel\":\"xxx\"}"));
-        assertEquals("{\"diffRequest\":{\"targetModel\":{\"projectModel\":\"xxx\"}}}", valueAsString);
+        assertThat(valueAsString, is("{\"diffRequest\":{\"targetModel\":{\"projectModel\":\"xxx\"}}}"));
     }
 }
