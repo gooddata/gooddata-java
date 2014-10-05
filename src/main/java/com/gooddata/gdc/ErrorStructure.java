@@ -6,6 +6,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import static com.gooddata.Validate.notNull;
+import static java.util.Arrays.copyOf;
 
 /**
  * Error structure (for embedding).
@@ -42,7 +43,7 @@ public class ErrorStructure {
     }
 
     public String[] getParameters() {
-        return parameters;
+        return parameters == null ? null : copyOf(parameters, parameters.length);
     }
 
     public String getComponent() {

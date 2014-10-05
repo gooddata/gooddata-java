@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class AbstractService {
 
-    public static Integer WAIT_BEFORE_RETRY_IN_MILLIS = 5 * 1000;
+    public static final Integer WAIT_BEFORE_RETRY_IN_MILLIS = 5 * 1000;
 
     protected final RestTemplate restTemplate;
 
@@ -108,7 +108,7 @@ public abstract class AbstractService {
         return new HttpMessageConverterExtractor<>(cls, restTemplate.getMessageConverters()).extractData(response);
     }
 
-    private class ReusableClientHttpResponse implements ClientHttpResponse {
+    private static class ReusableClientHttpResponse implements ClientHttpResponse {
 
         private byte[] body;
         private final HttpStatus statusCode;
