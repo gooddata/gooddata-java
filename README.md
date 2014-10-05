@@ -87,7 +87,7 @@ Execute and export reports.
 
 ```java
 ReportService reportService = gd.getReportService();
-String imgUri = reportService.exportReport(reportDef, ReportExportFormat.PNG);
+reportService.exportReport(definition, PNG, new FileOutputStream("report.png"));
 ```
 
 ### DataStore API

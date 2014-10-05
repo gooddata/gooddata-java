@@ -4,7 +4,9 @@
 package com.gooddata.report;
 
 import com.gooddata.AbstractService;
+import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
+import com.gooddata.PollHandler;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
 import org.codehaus.jackson.JsonNode;
@@ -12,8 +14,6 @@ import org.codehaus.jackson.node.ObjectNode;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -36,22 +36,32 @@ public class ReportService extends AbstractService {
         super(restTemplate);
     }
 
-    public String exportReport(final ReportDefinition reportDefinition, final ReportExportFormat format) {
+    public FutureResult<Void> exportReport(final ReportDefinition reportDefinition, final ReportExportFormat format,
+                                           final OutputStream output) {
+        notNull(output, "output");
         notNull(reportDefinition, "reportDefinition");
         notNull(format, "format");
         final JsonNode execResult = executeReport(reportDefinition.getUri());
-        return exportReport(execResult, format);
-    }
-
-    public void exportReport(final ReportDefinition reportDefinition, final ReportExportFormat format,
-                             final OutputStream output) {
-        notNull(output, "output");
-        final String uri = exportReport(reportDefinition, format);
-        try {
-            restTemplate.execute(uri, GET, noopRequestCallback, new OutputStreamResponseExtractor(output));
-        } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to export report", e);
-        }
+        final String uri = exportReport(execResult, format);
+        return new FutureResult<>(this, new PollHandler<Void, Void>(uri, Void.class) {
+            @Override
+            protected boolean isFinished(ClientHttpResponse response) throws IOException {
+                switch (response.getStatusCode()) {
+                    case OK: return true;
+                    case ACCEPTED: return false;
+                    case NO_CONTENT: throw new ReportException("Report contains no data");
+                    default: throw new ReportException("Unable to export report, unknown HTTP response code: " + response.getStatusCode());
+                }
+            }
+            @Override
+            protected void onFinish() {
+                try {
+                    restTemplate.execute(uri, GET, noopRequestCallback, new OutputStreamResponseExtractor(output));
+                } catch (GoodDataException | RestClientException e) {
+                    throw new GoodDataException("Unable to export report", e);
+                }
+            }
+        });
     }
 
     private JsonNode executeReport(final String reportDefinitionUri) {

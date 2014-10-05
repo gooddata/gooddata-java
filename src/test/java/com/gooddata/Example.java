@@ -26,6 +26,7 @@ import com.gooddata.report.ReportService;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collection;
@@ -85,8 +86,7 @@ public class Example {
 
         final ReportService reportService = gd.getReportService();
 
-        final String exportUri = reportService.exportReport(definition, ReportExportFormat.CSV);
-        System.out.println(exportUri);
+        reportService.exportReport(definition, ReportExportFormat.CSV, new FileOutputStream("report.csv"));
 
 
         DataStoreService dataStoreService = gd.getDataStoreService();
