@@ -1,21 +1,17 @@
 package com.gooddata.warehouse;
 
-import static net.jadler.Jadler.onRequest;
-import static net.jadler.Jadler.port;
-import static net.jadler.Jadler.verifyThatRequest;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import com.gooddata.AbstractGoodDataIT;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.Collection;
+
+import static net.jadler.Jadler.onRequest;
+import static net.jadler.Jadler.port;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.Is.is;
 
 
 public class WarehouseServiceIT extends AbstractGoodDataIT {
@@ -44,13 +40,13 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(Warehouses.URI)
-                .respond()
+            .respond()
                 .withBody(readResource(TASK_POLL))
                 .withStatus(202);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(pollingTask.getPollLink())
-                .respond()
+            .respond()
                 .withStatus(202)
                 .thenRespond()
                 .withBody(readResource(TASK_DONE))
@@ -58,7 +54,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(finishedTask.getWarehouseLink())
-                .respond()
+            .respond()
                 .withBody(readResource(WAREHOUSE))
                 .withStatus(200);
 
@@ -73,7 +69,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(Warehouses.URI)
-                .respond()
+            .respond()
                 .withBody(readResource("/warehouse/warehouses.json"))
                 .withStatus(200);
 
@@ -87,15 +83,10 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo(WAREHOUSE_URI)
-                .respond()
+            .respond()
                 .withStatus(204);
 
         gd.getWarehouseService().removeWarehouse(warehouse);
-
-        verifyThatRequest()
-                .havingMethodEqualTo("DELETE")
-                .havingPathEqualTo(WAREHOUSE_URI)
-                .receivedOnce();
     }
 
     @Test
@@ -103,7 +94,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(warehouse.getSelfLink())
-                .respond()
+            .respond()
                 .withBody(readResource(WAREHOUSE))
                 .withStatus(200);
 
@@ -123,39 +114,17 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("PUT")
                 .havingPathEqualTo(warehouse.getSelfLink())
-                .respond()
+            .respond()
                 .withStatus(204);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(warehouse.getSelfLink())
-                .respond()
+            .respond()
                 .withBody(MAPPER.writeValueAsString(toUpdate))
                 .withStatus(200);
 
         final Warehouse updated = gd.getWarehouseService().updateWarehouse(toUpdate);
         assertThat(updated, notNullValue());
         assertThat(updated.getTitle(), is(updatedTitle));
-
-        verifyThatRequest()
-                .havingMethodEqualTo("PUT")
-                .havingPathEqualTo(warehouse.getSelfLink())
-                .havingBody(new BaseMatcher<String>() {
-                    @Override
-                    public boolean matches(Object o) {
-                        try {
-                            Warehouse instance = MAPPER.readValue((String) o, Warehouse.class);
-                            return updatedTitle.equals(instance.getTitle());
-                        } catch (IOException e) {
-                            return false;
-                        }
-                    }
-
-
-                    @Override
-                    public void describeTo(Description description) {
-                        description.appendText("Warehouse not changed");
-                    }
-                })
-                .receivedOnce();
     }
 }

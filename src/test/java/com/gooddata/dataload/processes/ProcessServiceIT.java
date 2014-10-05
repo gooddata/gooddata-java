@@ -1,13 +1,5 @@
 package com.gooddata.dataload.processes;
 
-import static net.jadler.Jadler.onRequest;
-import static net.jadler.Jadler.verifyThatRequest;
-import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.FutureResult;
 import com.gooddata.project.Project;
@@ -21,6 +13,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Collection;
 
+import static net.jadler.Jadler.onRequest;
+import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.Is.is;
 
 public class ProcessServiceIT extends AbstractGoodDataIT {
 
@@ -51,22 +50,14 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(PROCESSES_PATH)
-                .respond()
+            .respond()
                 .withBody(readResource("/dataload/processes/process.json"))
                 .withStatus(201);
 
         File file = temporaryFolder.newFile("test.groovy");
         final Process process = gd.getProcessService().createProcess(project, new Process("testProcess", "GROOVY"), file);
         assertThat(process, notNullValue());
-        assertThat(process.getExecutables(), hasSize(1));
-        assertThat(process.getExecutables().iterator().next(), is("test.groovy"));
-
-        // TODO jadler misses possibility to verify multipart
-//        verifyThatRequest()
-//                .havingMethodEqualTo("POST")
-//                .havingPathEqualTo(Processes.URI)
-//                .receivedOnce();
-
+        assertThat(process.getExecutables(), contains("test.groovy"));
     }
 
     @Test
@@ -74,7 +65,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(PROCESSES_PATH)
-                .respond()
+            .respond()
                 .withBody(readResource("/dataload/processes/processes.json"))
                 .withStatus(200);
 
@@ -88,7 +79,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(PROCESS_PATH)
-                .respond()
+            .respond()
                 .withBody(readResource("/dataload/processes/process.json"))
                 .withStatus(200);
 
@@ -102,15 +93,10 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo(PROCESS_PATH)
-                .respond()
+            .respond()
                 .withStatus(204);
 
         gd.getProcessService().removeProcess(process);
-
-        verifyThatRequest()
-                .havingMethodEqualTo("DELETE")
-                .havingPathEqualTo(PROCESS_PATH)
-                .receivedOnce();
     }
 
     @Test
@@ -121,13 +107,13 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(PROCESS_SOURCE_PATH)
-                .respond()
+            .respond()
                 .withHeader("Location", processDownloadLink)
                 .withStatus(303);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(processDownloadLink)
-                .respond()
+            .respond()
                 .withBody(processSource)
                 .withStatus(200);
 
@@ -144,7 +130,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(logDownloadLink)
-                .respond()
+            .respond()
                 .withBody(log)
                 .withStatus(200);
 
@@ -160,7 +146,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(EXECUTION_DETAIL_PATH)
-                .respond()
+            .respond()
                 .withBody(readResource("/dataload/processes/executionDetail-success.json"))
                 .withStatus(200);
 
@@ -176,7 +162,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(EXECUTION_DETAIL_PATH)
-                .respond()
+            .respond()
                 .withBody(readResource("/dataload/processes/executionDetail.json"))
                 .withStatus(200);
 
@@ -187,16 +173,16 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(EXECUTIONS_PATH)
-                .respond()
+            .respond()
                 .withBody(readResource("/dataload/processes/executionTask.json"))
                 .withHeader("Location", EXECUTION_PATH)
                 .withStatus(201);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(EXECUTION_PATH)
-                .respond()
+            .respond()
                 .withStatus(202)
-                .thenRespond()
+            .thenRespond()
                 .withStatus(204);
     }
 }
