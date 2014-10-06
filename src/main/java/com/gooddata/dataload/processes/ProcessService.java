@@ -154,7 +154,8 @@ public class ProcessService extends AbstractService {
     }
 
     /**
-     * Get process source data
+     * Get process source data. Source data are fetched as zip and written to given stream.
+     *
      * @param process process to fetch data of
      * @param outputStream stream where to write fetched data
      */
