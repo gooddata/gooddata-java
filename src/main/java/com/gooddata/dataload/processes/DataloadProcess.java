@@ -1,6 +1,7 @@
 package com.gooddata.dataload.processes;
 
 import static com.gooddata.Validate.notEmpty;
+import static com.gooddata.Validate.notNull;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -38,6 +39,10 @@ public class DataloadProcess {
     public DataloadProcess(String name, String type) {
         this.name = notEmpty(name, "name");
         this.type = notEmpty(type, "type");
+    }
+
+    public DataloadProcess(String name, ProcessType type) {
+        this(name, notNull(type, "type").toString());
     }
 
     @JsonCreator
