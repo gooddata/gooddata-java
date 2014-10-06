@@ -9,8 +9,6 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,15 +26,15 @@ public class ProcessExecution {
     private final Map<String,String> params;
     private final Map<String,String> hiddenParams;
 
-    public ProcessExecution(Process process, String executable) {
+    public ProcessExecution(DataloadProcess process, String executable) {
         this(process, executable, new HashMap<String, String>(), new HashMap<String, String>());
     }
 
-    public ProcessExecution(Process process, String executable, Map<String, String> params) {
+    public ProcessExecution(DataloadProcess process, String executable, Map<String, String> params) {
         this(process, executable, params, new HashMap<String, String>());
     }
 
-    public ProcessExecution(Process process, String executable, Map<String, String> params, Map<String, String> hiddenParams) {
+    public ProcessExecution(DataloadProcess process, String executable, Map<String, String> params, Map<String, String> hiddenParams) {
         notNull(process, "process");
         this.executionsUri = notEmpty(process.getExecutionsLink(), "process executions link");
         this.executable = executable;

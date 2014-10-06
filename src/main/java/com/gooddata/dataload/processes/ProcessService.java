@@ -60,7 +60,7 @@ public class ProcessService extends AbstractService {
      * @param processData process data to upload
      * @return created process
      */
-    public Process createProcess(Project project, Process process, File processData) {
+    public DataloadProcess createProcess(Project project, DataloadProcess process, File processData) {
         notNull(process, "process");
         notNull(processData, "processData");
         notNull(project, "project");
@@ -76,7 +76,7 @@ public class ProcessService extends AbstractService {
      * @param processData process data to upload
      * @return updated process
      */
-    public Process updateProcess(Project project, Process process, File processData) {
+    public DataloadProcess updateProcess(Project project, DataloadProcess process, File processData) {
         notNull(process, "process");
         notNull(processData, "processData");
         notNull(project, "project");
@@ -90,10 +90,10 @@ public class ProcessService extends AbstractService {
      * @return found process
      * @throws com.gooddata.dataload.processes.ProcessNotFoundException when the process doesn't exist
      */
-    public Process getProcessByUri(String uri) {
+    public DataloadProcess getProcessByUri(String uri) {
         notEmpty(uri, "uri");
         try {
-            return restTemplate.getForObject(uri, Process.class);
+            return restTemplate.getForObject(uri, DataloadProcess.class);
         } catch (GoodDataRestException e) {
             if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
                 throw new ProcessNotFoundException(uri, e);
@@ -112,7 +112,7 @@ public class ProcessService extends AbstractService {
      * @return found process
      * @throws com.gooddata.dataload.processes.ProcessNotFoundException when the process doesn't exist
      */
-    public Process getProcessById(Project project, String id) {
+    public DataloadProcess getProcessById(Project project, String id) {
         notEmpty(id, "id");
         notNull(project, "project");
         return getProcessByUri(getProcessUri(project, id).toString());
@@ -123,7 +123,7 @@ public class ProcessService extends AbstractService {
      * @param project project of processes
      * @return list of found processes or empty list
      */
-    public Collection<Process> listProcesses(Project project) {
+    public Collection<DataloadProcess> listProcesses(Project project) {
         notNull(project, "project");
         return listProcesses(getProcessesUri(project));
     }
@@ -132,7 +132,7 @@ public class ProcessService extends AbstractService {
      * Get list of current user processes by given user account.
      * @return list of found processes or empty list
      */
-    public Collection<Process> listUserProcesses() {
+    public Collection<DataloadProcess> listUserProcesses() {
         return listProcesses(Processes.USER_PROCESSES_TEMPLATE.expand(accountService.getCurrent().getId()));
     }
 
@@ -140,7 +140,7 @@ public class ProcessService extends AbstractService {
      * Delete given process
      * @param process to delete
      */
-    public void removeProcess(Process process) {
+    public void removeProcess(DataloadProcess process) {
         notNull(process, "process");
         try {
             restTemplate.delete(process.getUri());
@@ -155,7 +155,7 @@ public class ProcessService extends AbstractService {
      * @param process process to fetch data of
      * @param outputStream stream where to write fetched data
      */
-    public void getProcessSource(Process process, OutputStream outputStream) {
+    public void getProcessSource(DataloadProcess process, OutputStream outputStream) {
         notNull(process, "process");
         notNull(outputStream, "outputStream");
         try {
@@ -228,7 +228,7 @@ public class ProcessService extends AbstractService {
         });
     }
 
-    private Collection<Process> listProcesses(URI uri) {
+    private Collection<DataloadProcess> listProcesses(URI uri) {
         try {
             final Processes processes = restTemplate.getForObject(uri, Processes.class);
             if (processes == null || processes.getItems() == null) {
@@ -241,14 +241,14 @@ public class ProcessService extends AbstractService {
     }
 
     private static URI getProcessUri(Project project, String id) {
-        return Process.TEMPLATE.expand(project.getId(), id);
+        return DataloadProcess.TEMPLATE.expand(project.getId(), id);
     }
 
     private static URI getProcessesUri(Project project) {
         return Processes.TEMPLATE.expand(project.getId());
     }
 
-    private Process postProcess(Process process, File processData, URI postUri) {
+    private DataloadProcess postProcess(DataloadProcess process, File processData, URI postUri) {
         File tempFile = createTempFile("process", ".zip");
 
         final MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>(2);
@@ -264,7 +264,7 @@ public class ProcessService extends AbstractService {
         }
 
         try {
-            return restTemplate.postForObject(postUri, parts, Process.class);
+            return restTemplate.postForObject(postUri, parts, DataloadProcess.class);
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to post dataload process.", e);
         } finally {
