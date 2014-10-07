@@ -23,6 +23,8 @@ import java.util.Map;
 public class ProcessExecutionDetail {
 
     private static final String LOG_LINK = "log";
+    private static final String SELF_LINK = "self";
+    private static final String EXECUTION_LINK = "poll";
     private static final String STATUS_OK = "OK";
     private final String status;
 
@@ -75,6 +77,16 @@ public class ProcessExecutionDetail {
     @JsonIgnore
     public String getLogLink() {
         return links != null ? links.get(LOG_LINK) : null;
+    }
+
+    @JsonIgnore
+    public String getUri() {
+        return links != null ? links.get(SELF_LINK) : null;
+    }
+
+    @JsonIgnore
+    public String getExecutionLink() {
+        return links != null ? links.get(EXECUTION_LINK) : null;
     }
 
     @JsonIgnore
