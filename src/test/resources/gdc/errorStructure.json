@@ -1,10 +1,10 @@
 {
     "errorClass": "CLASS",
     "trace": "TRACE",
-    "message": "MSG",
+    "message": "MSG %s %s %d",
     "component": "COMPONENT",
     "errorId": "ID",
     "errorCode": "CODE",
     "requestId": "REQ",
-    "parameters": [ "PARAM1", "PARAM2" ]
+    "parameters": [ "PARAM1", "PARAM2", 3 ]
 }

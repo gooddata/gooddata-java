@@ -30,7 +30,7 @@ public class GdcErrorTest {
 
         assertThat(err.getParameters(), is(notNullValue()));
         assertThat(err.getParameters().length, is(2));
-        assertThat(err.getParameters()[0], is("PARAM1"));
-        assertThat(err.getParameters()[1], is("PARAM2"));
+        assertThat(err.getParameters()[0].toString(), is("PARAM1"));
+        assertThat(err.getParameters()[1].toString(), is("PARAM2"));
     }
 }
