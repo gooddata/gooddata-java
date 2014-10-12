@@ -19,18 +19,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.Collection;
@@ -147,9 +143,9 @@ public class ProcessService extends AbstractService {
     public void removeProcess(Process process) {
         notNull(process, "process");
         try {
-            restTemplate.delete(process.getSelfLink());
+            restTemplate.delete(process.getUri());
         } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to remove process " + process.getSelfLink(), e);
+            throw new GoodDataException("Unable to remove process " + process.getUri(), e);
         }
     }
 

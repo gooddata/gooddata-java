@@ -65,7 +65,7 @@ public class Project {
 
     @JsonIgnore
     public String getId() {
-        return TEMPLATE.match(getSelfLink()).get("id");
+        return TEMPLATE.match(getUri()).get("id");
     }
 
     @JsonIgnore
@@ -129,7 +129,7 @@ public class Project {
     }
 
     @JsonIgnore
-    public String getSelfLink() {
+    public String getUri() {
         return links.getSelf();
     }
 

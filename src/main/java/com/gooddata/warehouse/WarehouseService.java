@@ -69,7 +69,7 @@ public class WarehouseService extends AbstractService {
             @Override
             protected void onFinish() {
                 if (!getResult().isEnabled()) {
-                    throw new GoodDataException("Created warehouse, uri: " + getResult().getSelfLink() + " is not enabled!");
+                    throw new GoodDataException("Created warehouse, uri: " + getResult().getUri() + " is not enabled!");
                 }
             }
 
@@ -93,9 +93,9 @@ public class WarehouseService extends AbstractService {
     public void removeWarehouse(Warehouse warehouse) {
         notNull(warehouse, "warehouse");
         try {
-            restTemplate.delete(warehouse.getSelfLink());
+            restTemplate.delete(warehouse.getUri());
         } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to delete Warehouse, uri: " + warehouse.getSelfLink(), e);
+            throw new GoodDataException("Unable to delete Warehouse, uri: " + warehouse.getUri(), e);
         }
     }
 
@@ -162,12 +162,12 @@ public class WarehouseService extends AbstractService {
     public Warehouse updateWarehouse(Warehouse toUpdate) {
         notNull(toUpdate, "warehouse to update");
         try {
-            restTemplate.put(toUpdate.getSelfLink(), toUpdate);
+            restTemplate.put(toUpdate.getUri(), toUpdate);
         } catch (GoodDataRestException | RestClientException e) {
-            throw new GoodDataException("Unable to update Warehouse, uri: " + toUpdate.getSelfLink());
+            throw new GoodDataException("Unable to update Warehouse, uri: " + toUpdate.getUri());
         }
 
-        return getWarehouseByUri(toUpdate.getSelfLink());
+        return getWarehouseByUri(toUpdate.getUri());
     }
 
     private Warehouse setWarehouseConnection(Warehouse warehouse) {

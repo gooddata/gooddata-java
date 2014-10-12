@@ -71,13 +71,13 @@ public class Process {
     }
 
     @JsonIgnore
-    public String getSelfLink() {
+    public String getUri() {
         return links != null ? links.get(SELF_LINK) : null;
     }
 
     @JsonIgnore
     public String getId() {
-        return TEMPLATE.match(getSelfLink()).get("processId");
+        return TEMPLATE.match(getUri()).get("processId");
     }
 
     @JsonIgnore
@@ -87,6 +87,6 @@ public class Process {
 
     @JsonIgnore
     public String getSourceLink() {
-        return getSelfLink() != null ? getSelfLink() + "/source" : null;
+        return getUri() != null ? getUri() + "/source" : null;
     }
 }

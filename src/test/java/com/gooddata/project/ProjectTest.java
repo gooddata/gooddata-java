@@ -33,7 +33,7 @@ public class ProjectTest {
         assertThat(project.getUpdated(), is("2014-04-11 11:43:47"));
 
         assertThat(project.getLdmThumbnailLink(), is("/gdc/projects/PROJECT_ID/ldm?thumbnail=1"));
-        assertThat(project.getSelfLink(), is("/gdc/projects/PROJECT_ID"));
+        assertThat(project.getUri(), is("/gdc/projects/PROJECT_ID"));
         assertThat(project.getClearCachesLink(), is("/gdc/projects/PROJECT_ID/clearCaches"));
         assertThat(project.getInvitationsLink(), is("/gdc/projects/PROJECT_ID/invitations"));
         assertThat(project.getUsersLink(), is("/gdc/projects/PROJECT_ID/users?link=1"));

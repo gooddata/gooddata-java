@@ -51,7 +51,7 @@ public class Example {
         System.out.println(projects);
 
         final Project project = projectService.createProject(new Project("sparkling3", "pgroup2")).get();
-        System.out.println(project.getSelfLink());
+        System.out.println(project.getUri());
 
 
         final ModelService modelService = gd.getModelService();
