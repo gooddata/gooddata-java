@@ -29,6 +29,6 @@ public class GdcTest {
         assertThat(gdc.getToolLink(), is("/gdc/tool"));
         assertThat(gdc.getTemplatesLink(), is("/gdc/templates"));
         assertThat(gdc.getReleaseInfoLink(), is("/gdc/releaseInfo"));
-        assertThat(gdc.getUserStagingLink(), is("https://STAGING"));
+        assertThat(gdc.getUserStagingLink(), is("{STAGING_LINK}"));
     }
 }

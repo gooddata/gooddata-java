@@ -76,7 +76,7 @@
                 "category" : "releaseInfo"
             },
             {
-                "link" : "https://STAGING",
+                "link" : "{STAGING_LINK}",
                 "summary" : "User data staging area.",
                 "title" : "user-uploads",
                 "category" : "uploads"
