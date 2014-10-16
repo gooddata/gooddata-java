@@ -20,6 +20,6 @@ public class MaqlDdlLinksTest {
         final MaqlDdlLinks maqlDdlLinks = new ObjectMapper().readValue(stream, MaqlDdlLinks.class);
 
         assertThat(maqlDdlLinks, is(notNullValue()));
-        assertThat(maqlDdlLinks.getStatusLink(), is("URI"));
+        assertThat(maqlDdlLinks.getStatusLink(), is("/gdc/md/PROJECT_ID/tasks/123/status"));
     }
 }

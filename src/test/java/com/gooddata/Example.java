@@ -58,7 +58,7 @@ public class Example {
 
         final ModelDiff projectModelDiff = modelService.getProjectModelDiff(project,
                 new InputStreamReader(Example.class.getResourceAsStream("/person.json"))).get();
-        modelService.updateProjectModel(project, projectModelDiff);
+        modelService.updateProjectModel(project, projectModelDiff).get();
 
 
         final MetadataService md = gd.getMetadataService();

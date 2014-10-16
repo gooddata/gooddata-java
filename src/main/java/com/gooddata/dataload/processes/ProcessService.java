@@ -5,10 +5,10 @@ import static com.gooddata.Validate.notNull;
 import static java.util.Collections.emptyList;
 
 import com.gooddata.AbstractService;
+import com.gooddata.AbstractPollHandler;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.PollHandler;
 import com.gooddata.ZipUtils;
 import com.gooddata.account.AccountService;
 import com.gooddata.project.Project;
@@ -203,14 +203,14 @@ public class ProcessService extends AbstractService {
 
         final String detailLink = executionTask.getDetailLink();
 
-        return new FutureResult<>(this, new PollHandler<Void, ProcessExecutionDetail>(executionTask.getPollLink(), Void.class, ProcessExecutionDetail.class) {
+        return new FutureResult<>(this, new AbstractPollHandler<Void, ProcessExecutionDetail>(executionTask.getPollLink(), Void.class, ProcessExecutionDetail.class) {
             @Override
-            protected boolean isFinished(ClientHttpResponse response) throws IOException {
+            public boolean isFinished(ClientHttpResponse response) throws IOException {
                 return HttpStatus.NO_CONTENT.equals(response.getStatusCode());
             }
 
             @Override
-            protected void handlePollResult(Void pollResult) {
+            public void handlePollResult(Void pollResult) {
                 ProcessExecutionDetail executionDetail;
                 try {
                     executionDetail = restTemplate.getForObject(detailLink, ProcessExecutionDetail.class);

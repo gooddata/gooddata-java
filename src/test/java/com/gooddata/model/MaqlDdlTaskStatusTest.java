@@ -31,4 +31,13 @@ public class MaqlDdlTaskStatusTest {
         final GdcError error = status.getMessages().iterator().next();
         assertThat(error.getFormattedMessage(), is("The object (attr.person.id) doesn't exists."));
     }
+
+    @Test
+    public void testSerialize() throws Exception {
+        final String json = MAPPER.writeValueAsString(new MaqlDdlTaskStatus("OK", "foo"));
+        final MaqlDdlTaskStatus status = MAPPER.readValue(json, MaqlDdlTaskStatus.class);
+        assertThat(status.getStatus(), is("OK"));
+        assertThat(status.getPollUri(), is("foo"));
+
+    }
 }

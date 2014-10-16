@@ -12,6 +12,7 @@ import org.codehaus.jackson.annotate.JsonTypeName;
 import java.util.Collections;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
@@ -33,6 +34,10 @@ public class ModelDiff {
     @JsonCreator
     ModelDiff(@JsonProperty("updateScripts") List<UpdateScript> updateScripts) {
         this.updateScripts = updateScripts == null ? Collections.<UpdateScript>emptyList() : updateScripts;
+    }
+
+    ModelDiff(UpdateScript... updateScripts) {
+        this(asList(updateScripts));
     }
 
     /**
@@ -107,6 +112,10 @@ public class ModelDiff {
             this.maqlChunks = maqlChunks == null ? Collections.<String>emptyList() : maqlChunks;
             this.preserveData = preserveData;
             this.cascadeDrops = cascadeDrops;
+        }
+
+        UpdateScript(boolean preserveData, boolean cascadeDrops, String... maqlChunks) {
+            this(asList(maqlChunks), preserveData, cascadeDrops);
         }
 
         public List<String> getMaqlChunks() {

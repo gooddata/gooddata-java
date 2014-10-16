@@ -12,6 +12,7 @@ import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * MAQL DDL asynchronous task status.
@@ -37,6 +38,10 @@ public class MaqlDdlTaskStatus {
         this.status = status;
         this.pollUri = pollUri;
         this.messages = messages;
+    }
+
+    MaqlDdlTaskStatus(String status, String pollUri) {
+        this(status, pollUri, Collections.<GdcError>emptyList());
     }
 
     public String getStatus() {

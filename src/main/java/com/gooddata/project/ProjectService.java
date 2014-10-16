@@ -7,7 +7,7 @@ import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.PollHandler;
+import com.gooddata.SimplePollHandler;
 import com.gooddata.account.AccountService;
 import com.gooddata.gdc.UriResponse;
 import org.springframework.http.HttpStatus;
@@ -84,7 +84,7 @@ public class ProjectService extends AbstractService {
             throw new GoodDataException("Empty response when project POSTed to API");
         }
 
-        return new FutureResult<>(this, new PollHandler<Project,Project>(uri.getUri(), Project.class) {
+        return new FutureResult<>(this, new SimplePollHandler<Project>(uri.getUri(), Project.class) {
 
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {

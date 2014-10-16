@@ -7,6 +7,7 @@ import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.PollHandler;
+import com.gooddata.SimplePollHandler;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
 import org.codehaus.jackson.JsonNode;
@@ -43,9 +44,9 @@ public class ReportService extends AbstractService {
         notNull(format, "format");
         final JsonNode execResult = executeReport(reportDefinition.getUri());
         final String uri = exportReport(execResult, format);
-        return new FutureResult<>(this, new PollHandler<Void, Void>(uri, Void.class) {
+        return new FutureResult<>(this, new SimplePollHandler<Void>(uri, Void.class) {
             @Override
-            protected boolean isFinished(ClientHttpResponse response) throws IOException {
+            public boolean isFinished(ClientHttpResponse response) throws IOException {
                 switch (response.getStatusCode()) {
                     case OK: return true;
                     case ACCEPTED: return false;
