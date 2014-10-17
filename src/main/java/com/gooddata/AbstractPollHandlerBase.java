@@ -11,7 +11,7 @@ import java.io.IOException;
 import static com.gooddata.Validate.notNull;
 
 /**
- * For internal usage by services employing polling.<p>
+ * For internal use by services employing polling.<p>
  *
  * @param <P> polling type
  * @param <R> result type

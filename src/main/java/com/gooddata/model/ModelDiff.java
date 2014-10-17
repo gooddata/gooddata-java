@@ -36,6 +36,10 @@ public class ModelDiff {
         this.updateScripts = updateScripts == null ? Collections.<UpdateScript>emptyList() : updateScripts;
     }
 
+    /**
+     * @param updateScripts several variants of MAQL DDL evolution scripts that should be executed to update
+     *                      the source model to the target state
+     */
     ModelDiff(UpdateScript... updateScripts) {
         this(asList(updateScripts));
     }
@@ -96,6 +100,9 @@ public class ModelDiff {
         return result;
     }
 
+    /**
+     * Set of MAQL DDL scripts with one variant of side-effects (truncation of loaded data, drops of related objects...).
+     */
     @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
     @JsonTypeName("updateScript")
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -121,18 +128,40 @@ public class ModelDiff {
             this.maqlChunks = maqlChunks == null ? Collections.<String>emptyList() : maqlChunks;
         }
 
+        /**
+         * Create set of MAQL DDL scripts with one variant of side-effects (truncation of loaded data, drops of related objects...).
+         *
+         * @param preserveData true if data should be preserved, false if they should be truncated
+         * @param cascadeDrops true if related objects should be also dropped, false if not
+         * @param maqlChunks MAQL strings
+         */
         UpdateScript(boolean preserveData, boolean cascadeDrops, String... maqlChunks) {
             this(preserveData, cascadeDrops, asList(maqlChunks));
         }
 
+        /**
+         * Returns MAQL strings.
+         *
+         * @return MAQL strings
+         */
         public List<String> getMaqlChunks() {
             return maqlChunks;
         }
 
+        /**
+         * Returns true if data should be preserved, false if they should be truncated.
+         *
+         * @return true if data should be preserved, false if they should be truncated
+         */
         public Boolean isPreserveData() {
             return preserveData;
         }
 
+        /**
+         * Returns true if related objects should be also dropped, false if not
+         *
+         * @return true if related objects should be also dropped, false if not
+         */
         public Boolean isCascadeDrops() {
             return cascadeDrops;
         }

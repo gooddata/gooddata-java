@@ -89,6 +89,7 @@ public class ModelService extends AbstractService {
 
     /**
      * Update project model with the given update script(s) (MAQL).
+     *
      * @param project project to be updated
      * @param maqlDdl update script to be executed in the project
      * @return poll result
@@ -99,6 +100,7 @@ public class ModelService extends AbstractService {
 
     /**
      * Update project model with the given update script(s) (MAQL).
+     *
      * @param project project to be updated
      * @param maqlDdl update script to be executed in the project
      * @return poll result
@@ -119,11 +121,9 @@ public class ModelService extends AbstractService {
                 executeNextMaqlChunk();
             }
 
-            @Override
-            public String getPollingUri() {
-                return pollUri;
-            }
-
+            /**
+             * @return true if polling should finish, false otherwise
+             */
             private boolean executeNextMaqlChunk() {
                 if (maqlChunks.isEmpty()) {
                     return true;
@@ -136,6 +136,11 @@ public class ModelService extends AbstractService {
                     throw new ModelException("Unable to update project model", e);
                 }
                 return false;
+            }
+
+            @Override
+            public String getPollingUri() {
+                return pollUri;
             }
 
             @Override

@@ -1,7 +1,7 @@
 package com.gooddata;
 
 /**
- * For internal usage by services employing polling.<p>
+ * For internal use by services employing polling.<p>
  * A simple poll handler using same type for polling and result.
  *
  * @param <T> polling and result type

@@ -18,7 +18,7 @@ public final class FutureResult<T> {
 
     /**
      * Creates a new instance of the result to be eventually retrieved by polling on the REST API.<p>
-     * For internal usage by services employing polling.
+     * For internal use by services employing polling.
      *
      * @param service this service
      * @param handler poll handler
