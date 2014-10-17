@@ -9,6 +9,7 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class ProcessExecution {
 
         if (!CollectionUtils.isEmpty(process.getExecutables()) &&
                 !process.getExecutables().contains(executable)) {
-            throw new IllegalArgumentException("Executable " + executable + " not found in process executables.");
+            throw new IllegalArgumentException("Executable " + executable + " not found in process executables " + process.getExecutables());
         }
     }
 

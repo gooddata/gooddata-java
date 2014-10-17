@@ -150,7 +150,8 @@ public class ProcessService extends AbstractService {
     }
 
     /**
-     * Get process source data
+     * Get process source data. Source data are fetched as zip and written to given stream.
+     *
      * @param process process to fetch data of
      * @param outputStream stream where to write fetched data
      */
@@ -265,7 +266,7 @@ public class ProcessService extends AbstractService {
         try {
             return restTemplate.postForObject(postUri, parts, Process.class);
         } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to create dataload process.", e);
+            throw new GoodDataException("Unable to post dataload process.", e);
         } finally {
             deleteTempFile(tempFile);
         }
