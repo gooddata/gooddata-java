@@ -105,17 +105,24 @@ public class ModelDiff {
         private Boolean preserveData;
         private Boolean cascadeDrops;
 
+        /**
+         * Create set of MAQL DDL scripts with one variant of side-effects (truncation of loaded data, drops of related objects...).
+         *
+         * @param preserveData true if data should be preserved, false if they should be truncated
+         * @param cascadeDrops true if related objects should be also dropped, false if not
+         * @param maqlChunks MAQL strings
+         */
         @JsonCreator
-        UpdateScript(@JsonProperty("maqlDdlChunks") List<String> maqlChunks,
-                     @JsonProperty("preserveData") Boolean preserveData,
-                     @JsonProperty("cascadeDrops") Boolean cascadeDrops) {
-            this.maqlChunks = maqlChunks == null ? Collections.<String>emptyList() : maqlChunks;
+        UpdateScript(@JsonProperty("preserveData") Boolean preserveData,
+                     @JsonProperty("cascadeDrops") Boolean cascadeDrops,
+                     @JsonProperty("maqlDdlChunks") List<String> maqlChunks) {
             this.preserveData = preserveData;
             this.cascadeDrops = cascadeDrops;
+            this.maqlChunks = maqlChunks == null ? Collections.<String>emptyList() : maqlChunks;
         }
 
         UpdateScript(boolean preserveData, boolean cascadeDrops, String... maqlChunks) {
-            this(asList(maqlChunks), preserveData, cascadeDrops);
+            this(preserveData, cascadeDrops, asList(maqlChunks));
         }
 
         public List<String> getMaqlChunks() {
