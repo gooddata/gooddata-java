@@ -10,31 +10,61 @@ import java.net.URI;
 import static com.gooddata.Validate.notEmpty;
 import static com.gooddata.Validate.notNull;
 
+/**
+ * Used internally by GoodData SDK to hold and set URI prefix (hostname and port) of all requests.
+ */
 public class UriPrefixer {
 
-    private final URI defaultUri;
+    private final URI uriPrefix;
 
+    /**
+     * Construct URI prefixer using given URI prefix (just hostname and port is used)
+     *
+     * @param uriPrefix the URI prefix
+     */
     public UriPrefixer(URI uriPrefix) {
-        this.defaultUri = notNull(uriPrefix, "uriPrefix");
+        this.uriPrefix = notNull(uriPrefix, "uriPrefix");
     }
 
+    /**
+     * Construct URI prefixer using given URI prefix (just hostname and port is used)
+     *
+     * @param uriPrefix the URI prefix string
+     */
     public UriPrefixer(String uriPrefix) {
         this(URI.create(uriPrefix));
     }
 
-    public URI getDefaultUri() {
-        return defaultUri;
+    /**
+     * Get the URI prefix
+     *
+     * @return the URI prefix
+     */
+    public URI getUriPrefix() {
+        return uriPrefix;
     }
 
+    /**
+     * Return merged URI prefix (hostname and port) with the given URI (path, query, and fragment URI parts)
+     *
+     * @param uri the URI its parts (path, query, and fragment) will be merged with URI prefix
+     * @return the merged URI
+     */
     public URI mergeUris(URI uri) {
         notNull(uri, "uri");
-        return UriComponentsBuilder.fromUri(defaultUri)
+        return UriComponentsBuilder.fromUri(uriPrefix)
                 .path(uri.getRawPath())
                 .query(uri.getRawQuery())
                 .fragment(uri.getRawFragment())
                 .build().toUri();
     }
 
+    /**
+     * Return merged URI prefix (hostname and port) with the given URI string (path, query, and fragment URI parts)
+     *
+     * @param uri the URI string its parts (path, query, and fragment) will be merged with URI prefix
+     * @return the merged URI
+     */
     public URI mergeUris(String uri) {
         notEmpty(uri, "uri");
         return mergeUris(URI.create(uri));
