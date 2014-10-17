@@ -8,6 +8,9 @@ import org.testng.annotations.Test;
 
 import static com.gooddata.model.ModelDiff.UpdateScript;
 import static net.jadler.Jadler.onRequest;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ModelServiceIT extends AbstractGoodDataIT {
 
@@ -42,7 +45,10 @@ public class ModelServiceIT extends AbstractGoodDataIT {
                 .withBody(readResource("/model/modelDiff.json"))
         ;
 
-        gd.getModelService().getProjectModelDiff(project, "xxx").get();
+        final ModelDiff diff = gd.getModelService().getProjectModelDiff(project, "xxx").get();
+
+        assertThat(diff, is(notNullValue()));
+        assertThat(diff.getUpdateMaql().get(0), is("CREATE FOLDER {ffld.employee} VISUAL(TITLE \"Employee\") TYPE FACT;\nCREATE FACT {fact.employee.age} VISUAL(TITLE \"Employee Age\", FOLDER {ffld.employee}) AS {f_employee.f_age};\nALTER DATASET {dataset.employee} ADD {fact.employee.age};\nSYNCHRONIZE {dataset.employee} PRESERVE DATA;"));
     }
 
     @Test
@@ -65,8 +71,8 @@ public class ModelServiceIT extends AbstractGoodDataIT {
         ;
 
         final ModelDiff diff = new ModelDiff(new UpdateScript(true, false,
-                "synchronize {dataset.person} preserve data",
-                "synchronize {dataset.person} preserve data"
+                "synchronize {dataset.chunk1} preserve data",
+                "synchronize {dataset.chunk2} preserve data"
         ));
         gd.getModelService().updateProjectModel(project, diff).get();
     }
