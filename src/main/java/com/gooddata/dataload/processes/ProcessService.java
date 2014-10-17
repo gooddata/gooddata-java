@@ -133,7 +133,7 @@ public class ProcessService extends AbstractService {
      * @return list of found processes or empty list
      */
     public Collection<DataloadProcess> listUserProcesses() {
-        return listProcesses(Processes.USER_PROCESSES_TEMPLATE.expand(accountService.getCurrent().getId()));
+        return listProcesses(DataloadProcesses.USER_PROCESSES_TEMPLATE.expand(accountService.getCurrent().getId()));
     }
 
     /**
@@ -230,7 +230,7 @@ public class ProcessService extends AbstractService {
 
     private Collection<DataloadProcess> listProcesses(URI uri) {
         try {
-            final Processes processes = restTemplate.getForObject(uri, Processes.class);
+            final DataloadProcesses processes = restTemplate.getForObject(uri, DataloadProcesses.class);
             if (processes == null || processes.getItems() == null) {
                 return emptyList();
             }
@@ -245,7 +245,7 @@ public class ProcessService extends AbstractService {
     }
 
     private static URI getProcessesUri(Project project) {
-        return Processes.TEMPLATE.expand(project.getId());
+        return DataloadProcesses.TEMPLATE.expand(project.getId());
     }
 
     private DataloadProcess postProcess(DataloadProcess process, File processData, URI postUri) {

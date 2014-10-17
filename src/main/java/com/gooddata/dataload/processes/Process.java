@@ -1,7 +1,7 @@
 package com.gooddata.dataload.processes;
 
 /**
- * This class has been replaced by {@link com.gooddata.dataload.processes.DataloadProcess}
+ * @deprecated This class has been replaced by {@link com.gooddata.dataload.processes.DataloadProcess}
  */
 @Deprecated
 public class Process extends DataloadProcess {
