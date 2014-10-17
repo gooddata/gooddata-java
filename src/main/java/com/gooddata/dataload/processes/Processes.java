@@ -24,14 +24,14 @@ class Processes {
     public static final String USER_PROCESSES_URI = Account.URI + "/dataload/processes";
     public static final UriTemplate USER_PROCESSES_TEMPLATE = new UriTemplate(USER_PROCESSES_URI);
 
-    private final List<Process> items;
+    private final List<DataloadProcess> items;
 
     @JsonCreator
-    private Processes(@JsonProperty("items") List<Process> items) {
+    private Processes(@JsonProperty("items") List<DataloadProcess> items) {
         this.items = items;
     }
 
-    Collection<Process> getItems() {
+    Collection<DataloadProcess> getItems() {
         return items;
     }
 }

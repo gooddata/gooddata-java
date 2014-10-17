@@ -24,7 +24,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final String PROCESSES_PATH = Processes.TEMPLATE.expand("PROJECT_ID").toString();
     private static final String PROCESS_ID = "processId";
-    private static final String PROCESS_PATH = Process.TEMPLATE.expand("PROJECT_ID", PROCESS_ID).toString();
+    private static final String PROCESS_PATH = DataloadProcess.TEMPLATE.expand("PROJECT_ID", PROCESS_ID).toString();
     private static final String PROCESS_SOURCE_PATH = PROCESS_PATH + "/source";
     private static final String EXECUTIONS_PATH = PROCESS_PATH + "/executions";
     private static final String EXECUTION_PATH = EXECUTIONS_PATH + "/executionId";
@@ -32,14 +32,14 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
 
     private Project project;
 
-    private Process process;
+    private DataloadProcess process;
 
     private File file;
 
     @BeforeClass
     public void setUp() throws Exception {
         project = MAPPER.readValue(readResource("/project/project.json"), Project.class);
-        process = MAPPER.readValue(readResource("/dataload/processes/process.json"), Process.class);
+        process = MAPPER.readValue(readResource("/dataload/processes/process.json"), DataloadProcess.class);
         file = File.createTempFile("test", ".groovy");
     }
 
@@ -52,7 +52,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .withBody(readResource("/dataload/processes/process.json"))
                 .withStatus(201);
 
-        final Process process = gd.getProcessService().createProcess(project, new Process("testProcess", "GROOVY"), file);
+        final DataloadProcess process = gd.getProcessService().createProcess(project, new DataloadProcess("testProcess", "GROOVY"), file);
         assertThat(process, notNullValue());
         assertThat(process.getExecutables(), contains("test.groovy"));
     }
@@ -66,7 +66,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .withBody(readResource("/dataload/processes/processes.json"))
                 .withStatus(200);
 
-        final Collection<Process> processes = gd.getProcessService().listProcesses(project);
+        final Collection<DataloadProcess> processes = gd.getProcessService().listProcesses(project);
         assertThat(processes, notNullValue());
         assertThat(processes, hasSize(1));
     }
@@ -80,7 +80,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .withBody(readResource("/dataload/processes/process.json"))
                 .withStatus(200);
 
-        final Process process = gd.getProcessService().getProcessById(project, PROCESS_ID);
+        final DataloadProcess process = gd.getProcessService().getProcessById(project, PROCESS_ID);
         assertThat(process, notNullValue());
         assertThat(process.getName(), is("testProcess"));
     }

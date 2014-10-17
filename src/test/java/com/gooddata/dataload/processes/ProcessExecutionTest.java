@@ -20,7 +20,7 @@ public class ProcessExecutionTest {
         hidden.put("HIDDEN_PARAM1", "SENSITIVE_VALUE1");
         hidden.put("HIDDEN_PARAM2", "SENSITIVE_VALUE2");
 
-        final Process process = new ObjectMapper().readValue(getClass().getResourceAsStream("/dataload/processes/process.json"), Process.class);
+        final DataloadProcess process = new ObjectMapper().readValue(getClass().getResourceAsStream("/dataload/processes/process.json"), DataloadProcess.class);
 
         final ProcessExecution execution = new ProcessExecution(process, "test.groovy", params, hidden);
         assertThat(execution, serializesToJson("/dataload/processes/execution.json"));
