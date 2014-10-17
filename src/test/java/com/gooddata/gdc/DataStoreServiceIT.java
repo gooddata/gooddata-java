@@ -1,15 +1,15 @@
 package com.gooddata.gdc;
 
-import static net.jadler.Jadler.onRequest;
-import static net.jadler.Jadler.port;
-import static net.jadler.Jadler.verifyThatRequest;
-
 import com.gooddata.AbstractGoodDataIT;
 import org.apache.commons.io.IOUtils;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+
+import static net.jadler.Jadler.onRequest;
+import static net.jadler.Jadler.port;
+import static net.jadler.Jadler.verifyThatRequest;
 
 public class DataStoreServiceIT extends AbstractGoodDataIT {
 
