@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * Validation utils
+ * Argument validation helper methods used internally by GoodData SDK.
  */
 public abstract class Validate {
 

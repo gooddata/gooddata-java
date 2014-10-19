@@ -22,9 +22,9 @@ public class GoodDataRestException extends GoodDataException {
      * Construct a GoodDataRestException with specified details.
      *
      * @param statusCode the HTTP status code of the response
-     * @param requestId the GoodData request ID (from header)
-     * @param message the detail message
-     * @param component the GoodData component where error occurred
+     * @param requestId  the GoodData request ID (from header)
+     * @param message    the detail message
+     * @param component  the GoodData component where error occurred
      * @param errorClass the class of the error
      */
     public GoodDataRestException(int statusCode, String requestId, String message, String component,
@@ -40,9 +40,9 @@ public class GoodDataRestException extends GoodDataException {
      * Construct a GoodDataRestException with specified details.
      *
      * @param statusCode the HTTP status code of the response
-     * @param requestId the GoodData request ID (from header)
+     * @param requestId  the GoodData request ID (from header)
      * @param statusText the HTTP status text of the response
-     * @param error the GoodData REST API error structure
+     * @param error      the GoodData REST API error structure
      */
     public GoodDataRestException(int statusCode, String requestId, String statusText, GdcError error) {
         this(statusCode,
@@ -52,18 +52,38 @@ public class GoodDataRestException extends GoodDataException {
                 error != null ? error.getErrorClass() : null);
     }
 
+    /**
+     * Get the HTTP status code of the problematic REST API call response
+     *
+     * @return the HTTP status code of the response
+     */
     public int getStatusCode() {
         return statusCode;
     }
 
+    /**
+     * Get the GoodData request ID (from header) of the problematic REST API call response
+     *
+     * @return the GoodData request ID (from header)
+     */
     public String getRequestId() {
         return requestId;
     }
 
+    /**
+     * Get the GoodData component where error occurred
+     *
+     * @return the GoodData component where error occurred
+     */
     public String getComponent() {
         return component;
     }
 
+    /**
+     * Get the class of the error
+     *
+     * @return the class of the error
+     */
     public String getErrorClass() {
         return errorClass;
     }

@@ -45,7 +45,7 @@ public class DataStoreService {
             final String uriString = gdcService.getGdc().getUserStagingLink();
             final URI uri = URI.create(uriString);
             prefixer = new UriPrefixer(uri.isAbsolute() ? uri : gdcUri.resolve(uriString));
-            sardine.enablePreemptiveAuthentication(prefixer.getDefaultUri().getHost());
+            sardine.enablePreemptiveAuthentication(prefixer.getUriPrefix().getHost());
         }
         return prefixer;
     }
