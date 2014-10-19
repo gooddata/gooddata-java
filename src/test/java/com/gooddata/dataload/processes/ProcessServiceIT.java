@@ -22,7 +22,7 @@ import static org.hamcrest.core.Is.is;
 public class ProcessServiceIT extends AbstractGoodDataIT {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final String PROCESSES_PATH = Processes.TEMPLATE.expand("PROJECT_ID").toString();
+    private static final String PROCESSES_PATH = DataloadProcesses.TEMPLATE.expand("PROJECT_ID").toString();
     private static final String PROCESS_ID = "processId";
     private static final String PROCESS_PATH = DataloadProcess.TEMPLATE.expand("PROJECT_ID", PROCESS_ID).toString();
     private static final String PROCESS_SOURCE_PATH = PROCESS_PATH + "/source";

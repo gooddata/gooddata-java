@@ -1,37 +1,17 @@
+/*
+ * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
+ */
 package com.gooddata.dataload.processes;
 
-import com.gooddata.account.Account;
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.annotate.JsonTypeInfo;
-import org.codehaus.jackson.annotate.JsonTypeName;
-import org.springframework.web.util.UriTemplate;
-
-import java.util.Collection;
 import java.util.List;
 
 /**
- * List of processes. Deserialization only.
+ * @deprecated This class has been replaced by {@link com.gooddata.dataload.processes.DataloadProcesses}
  */
-@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonTypeName("processes")
-@JsonIgnoreProperties(ignoreUnknown = true)
-class Processes {
-    public static final String URI = "/gdc/projects/{projectId}/dataload/processes";
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
+@Deprecated
+public class Processes extends DataloadProcesses {
 
-    public static final String USER_PROCESSES_URI = Account.URI + "/dataload/processes";
-    public static final UriTemplate USER_PROCESSES_TEMPLATE = new UriTemplate(USER_PROCESSES_URI);
-
-    private final List<DataloadProcess> items;
-
-    @JsonCreator
-    private Processes(@JsonProperty("items") List<DataloadProcess> items) {
-        this.items = items;
-    }
-
-    Collection<DataloadProcess> getItems() {
-        return items;
+    private Processes(List<DataloadProcess> items) {
+        super(items);
     }
 }
