@@ -121,4 +121,4 @@ processService.getExecutionLog(executionDetail, new FileOutputStream("file/where
 ##Contribute
 Missing functionality? Found a BUG? 
 
-Please create us an [issue](https://github.com/martiner/gooddata-java/issues) or simply [contribute your code](CONTRIBUTE.md).
+Please create an [issue](https://github.com/martiner/gooddata-java/issues) or simply [contribute your code](CONTRIBUTE.md).
