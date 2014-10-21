@@ -5,14 +5,15 @@ package com.gooddata.md;
 
 import com.gooddata.GoodDataRestException;
 import com.gooddata.gdc.UriResponse;
+import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.is;
@@ -129,6 +130,11 @@ public class MetadataServiceTest {
 
         final Obj result = service.getObjById(project, ID, resultObj.getClass());
         assertThat(result, is(resultObj));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testUsedByNullProject() {
+        service.usedBy(null, URI, false, ReportDefinition.class);
     }
 
 //TODO the other methods

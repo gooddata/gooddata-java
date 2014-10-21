@@ -225,4 +225,37 @@ public class MetadataService extends AbstractService {
         return result;
     }
 
+    /**
+     * Find all objects which use the given object.
+     * @param obj     object to find using objects for
+     * @param nearest find nearest objects only
+     * @param types   what types (categories) to search for (for example 'reportDefinition', 'report', 'tableDataLoad',
+     *                'table'...)
+     * @return objects using given objects.
+     */
+    public Collection<Entry> usedBy(Project project, Obj obj, boolean nearest, Class<? extends Obj>... types) {
+        notNull(obj, "obj");
+        return usedBy(project, obj.getUri(), nearest, types);
+    }
+
+    /**
+     * Find all objects which use the given object.
+     * @param uri     URI of object to find using objects for
+     * @param nearest find nearest objects only
+     * @param types   what types (categories) to search for (for example 'reportDefinition', 'report', 'tableDataLoad',
+     *                'table'...)
+     * @return objects using given objects.
+     */
+    public Collection<Entry> usedBy(Project project, String uri, boolean nearest, Class<? extends Obj>... types) {
+        notNull(uri, "uri");
+        notNull(project, "project");
+
+        final InUseEntries response;
+        try {
+            response = restTemplate.postForObject(InUse.USEDBY_URI, new InUse(uri, nearest, types), InUseEntries.class, project.getId());
+        } catch (GoodDataRestException | RestClientException e) {
+            throw new GoodDataException("Unable to find objects.", e);
+        }
+        return response.getEntries();
+    }
 }
