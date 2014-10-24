@@ -8,7 +8,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import static com.gooddata.Validate.notNull;
 
 /**
- * For internal usage by services employing polling.<p>
+ * For internal use by services employing polling.<p>
  * Implementing classes should override {@link #isFinished(ClientHttpResponse)} method and
  * may override {@link #onFinish()} and {@link #handlePollResult(Object)} methods.
  *
