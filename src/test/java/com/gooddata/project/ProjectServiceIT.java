@@ -10,8 +10,11 @@ import org.testng.annotations.Test;
 
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+
+import java.util.Collection;
 
 public class ProjectServiceIT extends AbstractGoodDataIT {
 
@@ -116,4 +119,15 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         gd.getProjectService().removeProject(enabled);
     }
 
+    @Test
+    public void shouldReturnProjectTemplates() throws Exception {
+        onRequest()
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/templates")
+            .respond()
+                .withBody(readResource("/project/project-templates.json"));
+
+        final Collection<ProjectTemplate> templates = gd.getProjectService().getProjectTemplates(enabled);
+        assertThat(templates, is(notNullValue()));
+        assertThat(templates, hasSize(1));
+    }
 }
