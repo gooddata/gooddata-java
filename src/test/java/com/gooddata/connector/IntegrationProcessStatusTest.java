@@ -15,12 +15,12 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ConnectorProcessTest {
+public class IntegrationProcessStatusTest {
 
     @Test
     public void testShouldDeserialize() throws Exception {
-        final ConnectorProcess process = new ObjectMapper()
-                .readValue(getClass().getResource("/connector/connector-process.json"), ConnectorProcess.class);
+        final IntegrationProcessStatus process = new ObjectMapper()
+                .readValue(getClass().getResource("/connector/process-status-embedded.json"), IntegrationProcessStatus.class);
 
         assertThat(process, is(notNullValue()));
         assertThat(process.getStarted(), is("2014-05-30T07:50:15.000Z"));
@@ -33,61 +33,61 @@ public class ConnectorProcessTest {
 
     @Test
     public void testIsFinishedOnError() throws Exception {
-        final ConnectorProcess process = new ConnectorProcess(new Status(ERROR.name(), "", ""), "", "");
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(ERROR.name(), "", ""), "", "");
         assertThat(process.isFinished(), is(true));
     }
 
     @Test
     public void testIsFinishedOnSynchronized() throws Exception {
-        final ConnectorProcess process = new ConnectorProcess(new Status(SYNCHRONIZED.name(), "", ""), "", "");
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(SYNCHRONIZED.name(), "", ""), "", "");
         assertThat(process.isFinished(), is(true));
     }
 
     @Test
     public void testIsFinishedOnUploading() throws Exception {
-        final ConnectorProcess process = new ConnectorProcess(new Status(UPLOADING.name(), "", ""), "", "");
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(UPLOADING.name(), "", ""), "", "");
         assertThat(process.isFinished(), is(false));
     }
 
     @Test
     public void testIsFinishedOnNullCode() throws Exception {
-        final ConnectorProcess process = new ConnectorProcess(new Status(null, "", ""), "", "");
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(null, "", ""), "", "");
         assertThat(process.isFinished(), is(false));
     }
 
     @Test
     public void testIsFinishedOnUnknownCode() throws Exception {
-        final ConnectorProcess process = new ConnectorProcess(new Status("unknown code", "", ""), "", "");
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status("unknown code", "", ""), "", "");
         assertThat(process.isFinished(), is(false));
     }
 
     @Test
     public void testIsFailedOnError() throws Exception {
-        final ConnectorProcess process = new ConnectorProcess(new Status(ERROR.name(), "", ""), "", "");
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(ERROR.name(), "", ""), "", "");
         assertThat(process.isFailed(), is(true));
     }
 
     @Test
     public void testIsFailedOnUserError() throws Exception {
-        final ConnectorProcess process = new ConnectorProcess(new Status(USER_ERROR.name(), "", ""), "", "");
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(USER_ERROR.name(), "", ""), "", "");
         assertThat(process.isFailed(), is(true));
     }
 
     @Test
     public void testIsFailedOnSynchronized() throws Exception {
-        final ConnectorProcess process = new ConnectorProcess(new Status(SYNCHRONIZED.name(), "", ""), "", "");
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(SYNCHRONIZED.name(), "", ""), "", "");
         assertThat(process.isFailed(), is(false));
     }
 
     @Test
     public void testIsFailedOnNullCode() throws Exception {
-        final ConnectorProcess process = new ConnectorProcess(new Status(null, "", ""), "", "");
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(null, "", ""), "", "");
         assertThat(process.isFailed(), is(false));
     }
 
     @Test
     public void testIsFailedOnUnknownCode() throws Exception {
-        final ConnectorProcess process = new ConnectorProcess(new Status("unknown code", "", ""), "", "");
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status("unknown code", "", ""), "", "");
         assertThat(process.isFailed(), is(false));
     }
 

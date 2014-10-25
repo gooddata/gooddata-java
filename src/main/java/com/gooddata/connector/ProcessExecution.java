@@ -10,7 +10,7 @@ import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
- * Connector process execution. Serialization only.
+ * Connector process execution (i.e. definition for single ETL run). Serialization only.
  */
 @JsonTypeName("process")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)

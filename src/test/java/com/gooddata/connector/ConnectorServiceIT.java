@@ -58,12 +58,12 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")
             .respond()
-                .withBody(readResource("/connector/process-scheduled.json"))
+                .withBody(readResource("/connector/process-status-scheduled.json"))
             .thenRespond()
-                .withBody(readResource("/connector/process-finished.json"))
+                .withBody(readResource("/connector/process-status-finished.json"))
         ;
 
-        final Process process = connectors.executeProcess(project, new Zendesk4Process()).get();
+        final ProcessStatus process = connectors.executeProcess(project, new Zendesk4ProcessExecution()).get();
         assertThat(process.getStatus().getCode(), is(SYNCHRONIZED.name()));
     }
 
@@ -77,9 +77,9 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")
             .respond()
-                .withBody(readResource("/connector/process-error.json"));
+                .withBody(readResource("/connector/process-status-error.json"));
 
-        final Process process = connectors.executeProcess(project, new Zendesk4Process()).get();
+        final ProcessStatus process = connectors.executeProcess(project, new Zendesk4ProcessExecution()).get();
         assertThat(process.getStatus().getCode(), is(ERROR.name()));
     }
 }

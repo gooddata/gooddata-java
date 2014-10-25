@@ -10,18 +10,19 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 
 /**
- * Connector process (= single ETL run). Deserialization only.
+ * Connector process (i.e. single ETL run) status (standalone, not embedded in integration as its parent) .
+ * Deserialization only.
  */
 @JsonTypeName("process")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Process extends ConnectorProcess {
+public class ProcessStatus extends IntegrationProcessStatus {
 
     public static final String URL = "/gdc/projects/{project}/connectors/{connector}/integration/processes";
 
     @JsonCreator
-    Process(@JsonProperty("status") Status status, @JsonProperty("started") String started,
-            @JsonProperty("finished") String finished) {
+    ProcessStatus(@JsonProperty("status") Status status, @JsonProperty("started") String started,
+                  @JsonProperty("finished") String finished) {
         super(status, started, finished);
     }
 

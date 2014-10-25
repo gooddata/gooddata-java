@@ -20,6 +20,6 @@ public class ProcessExecutionTest {
             }
         };
 
-        assertThat(execution, serializesToJson("/connector/process-in.json"));
+        assertThat(execution, serializesToJson("/connector/process-execution-empty.json"));
     }
 }

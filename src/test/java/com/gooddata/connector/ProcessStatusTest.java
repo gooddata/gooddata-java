@@ -8,12 +8,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class ProcessTest {
+public class ProcessStatusTest {
 
     @Test
     public void shouldDeserialize() throws Exception {
-        final Process process = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/connector/process-error.json"), Process.class);
+        final ProcessStatus process = new ObjectMapper()
+                .readValue(getClass().getResourceAsStream("/connector/process-status-error.json"), ProcessStatus.class);
 
         assertThat(process, is(notNullValue()));
         assertThat(process.getFinished(), is(notNullValue()));

@@ -10,19 +10,19 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
- * Connector process (= single ETL run). Deserialization only.
+ * Connector process (i.e. single ETL run) status used in integration object. Deserialization only.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class ConnectorProcess {
+public class IntegrationProcessStatus {
 
     private final Status status;
     private final String started; // todo date
     private final String finished; // todo date
 
     @JsonCreator
-    protected ConnectorProcess(@JsonProperty("status") Status status, @JsonProperty("started") String started,
-                               @JsonProperty("finished") String finished) {
+    protected IntegrationProcessStatus(@JsonProperty("status") Status status, @JsonProperty("started") String started,
+                                       @JsonProperty("finished") String finished) {
         this.status = status;
         this.started = started;
         this.finished = finished;

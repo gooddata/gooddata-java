@@ -105,23 +105,23 @@ public class ConnectorService extends AbstractService {
      * @return executed process
      * @throws ConnectorException if process execution fails
      */
-    public FutureResult<Process> executeProcess(final Project project, final ProcessExecution execution) {
+    public FutureResult<ProcessStatus> executeProcess(final Project project, final ProcessExecution execution) {
         notNull(project, "project");
         notNull(execution, "execution");
 
         final String connectorType = execution.getConnectorType().getName();
         try {
             final UriResponse response = restTemplate
-                    .postForObject(Process.URL, execution, UriResponse.class, project.getId(), connectorType);
-            return new FutureResult<>(this, new SimplePollHandler<Process>(response.getUri(), Process.class) {
+                    .postForObject(ProcessStatus.URL, execution, UriResponse.class, project.getId(), connectorType);
+            return new FutureResult<>(this, new SimplePollHandler<ProcessStatus>(response.getUri(), ProcessStatus.class) {
                 @Override
                 public boolean isFinished(final ClientHttpResponse response) throws IOException {
-                    final Process process = extractData(response, Process.class);
+                    final ProcessStatus process = extractData(response, ProcessStatus.class);
                     return process.isFinished();
                 }
 
                 @Override
-                public void handlePollResult(final Process pollResult) {
+                public void handlePollResult(final ProcessStatus pollResult) {
                     super.handlePollResult(pollResult);
                     if (pollResult.isFailed()) {
                         throw new ConnectorException(connectorType + " process failed: " +
