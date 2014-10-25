@@ -1,24 +1,17 @@
 /*
  * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
  */
-package com.gooddata.connectors;
+package com.gooddata.connector;
 
 import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.annotate.JsonTypeInfo;
-import org.codehaus.jackson.annotate.JsonTypeName;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import static com.gooddata.Validate.notEmpty;
+import static com.gooddata.connector.ConnectorType.ZENDESK4;
 
 /**
- * Zendesk 4 connector settings
+ * Zendesk 4 (Insights) connector settings.
  */
-@JsonTypeName("settings")
-@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Zendesk4Settings implements Settings {
 
     private String apiUrl;
@@ -32,7 +25,8 @@ public class Zendesk4Settings implements Settings {
 
     @JsonCreator
     public Zendesk4Settings(@JsonProperty("apiUrl") String apiUrl, @JsonProperty("type") String type,
-                            @JsonProperty("syncTime") String syncTime, @JsonProperty("syncTimeZone") String syncTimeZone) {
+                            @JsonProperty("syncTime") String syncTime,
+                            @JsonProperty("syncTimeZone") String syncTimeZone) {
         this.apiUrl = notEmpty(apiUrl, "apiUrl");
         this.type = type;
         this.syncTime = syncTime;
@@ -60,7 +54,12 @@ public class Zendesk4Settings implements Settings {
     }
 
     @Override
-    public Connector getConnector() {
-        return Connector.ZENDESK4;
+    public ConnectorType getConnectorType() {
+        return ZENDESK4;
     }
+
+    /**
+     * Type of Zendesk account.
+     */
+    public enum Zendesk4Type {plus, enterprise}
 }

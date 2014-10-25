@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
  */
-package com.gooddata.connectors;
+package com.gooddata.connector;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -13,7 +13,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import static com.gooddata.Validate.notEmpty;
 
 /**
- * Connectors integration
+ * Connector integration (= one instance of configured ETL for loading of one GDC project).
  */
 @JsonTypeName("integration")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
@@ -35,9 +35,9 @@ public class Integration {
 
     @JsonCreator
     Integration(@JsonProperty("projectTemplate") String projectTemplate, @JsonProperty("active") boolean active,
-                       @JsonProperty("lastFinishedProcess") ConnectorProcess lastFinishedProcess,
-                       @JsonProperty("lastSuccessfulProcess") ConnectorProcess lastSuccessfulProcess,
-                       @JsonProperty("runningProcess") ConnectorProcess runningProcess) {
+                @JsonProperty("lastFinishedProcess") ConnectorProcess lastFinishedProcess,
+                @JsonProperty("lastSuccessfulProcess") ConnectorProcess lastSuccessfulProcess,
+                @JsonProperty("runningProcess") ConnectorProcess runningProcess) {
         this.projectTemplate = notEmpty(projectTemplate, "projectTemplate");
         this.active = active;
         this.lastFinishedProcess = lastFinishedProcess;

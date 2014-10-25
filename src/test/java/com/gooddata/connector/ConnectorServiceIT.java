@@ -1,4 +1,4 @@
-package com.gooddata.connectors;
+package com.gooddata.connector;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
@@ -7,6 +7,8 @@ import com.gooddata.project.Project;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import static com.gooddata.connector.Status.Code.ERROR;
+import static com.gooddata.connector.Status.Code.SYNCHRONIZED;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -33,7 +35,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
             .respond()
-                .withBody(readResource("/connectors/integration.json"));
+                .withBody(readResource("/connector/integration.json"));
 
         onRequest()
                 .havingMethodEqualTo("PUT")
@@ -56,13 +58,13 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")
             .respond()
-                .withBody(readResource("/connectors/process-scheduled.json"))
+                .withBody(readResource("/connector/process-scheduled.json"))
             .thenRespond()
-                .withBody(readResource("/connectors/process-finished.json"))
+                .withBody(readResource("/connector/process-finished.json"))
         ;
 
         final Process process = connectors.executeProcess(project, new Zendesk4Process()).get();
-        assertThat(process.getStatus().getCode(), is("SYNCHRONIZED"));
+        assertThat(process.getStatus().getCode(), is(SYNCHRONIZED.name()));
     }
 
     @Test(expectedExceptions = GoodDataException.class)
@@ -75,8 +77,9 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")
             .respond()
-                .withBody(readResource("/connectors/process-error.json"));
+                .withBody(readResource("/connector/process-error.json"));
 
-        connectors.executeProcess(project, new Zendesk4Process()).get();
+        final Process process = connectors.executeProcess(project, new Zendesk4Process()).get();
+        assertThat(process.getStatus().getCode(), is(ERROR.name()));
     }
 }
