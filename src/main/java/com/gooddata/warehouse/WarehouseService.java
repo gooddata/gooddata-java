@@ -1,7 +1,7 @@
 package com.gooddata.warehouse;
 
-import static com.gooddata.Validate.notEmpty;
-import static com.gooddata.Validate.notNull;
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 import static java.util.Collections.emptyList;
 
 import com.gooddata.AbstractPollHandler;

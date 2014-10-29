@@ -1,7 +1,7 @@
 package com.gooddata.dataload.processes;
 
-import static com.gooddata.Validate.notEmpty;
-import static com.gooddata.Validate.notNull;
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 
 import com.gooddata.gdc.ErrorStructure;
 import org.codehaus.jackson.annotate.JsonCreator;

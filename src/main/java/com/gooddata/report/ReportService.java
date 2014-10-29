@@ -6,7 +6,6 @@ package com.gooddata.report;
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
-import com.gooddata.PollHandler;
 import com.gooddata.SimplePollHandler;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
@@ -21,8 +20,8 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static com.gooddata.Validate.notEmpty;
-import static com.gooddata.Validate.notNull;
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 

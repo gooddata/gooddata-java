@@ -20,8 +20,8 @@ import java.io.Reader;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import static com.gooddata.Validate.noNullElements;
-import static com.gooddata.Validate.notNull;
+import static com.gooddata.util.Validate.noNullElements;
+import static com.gooddata.util.Validate.notNull;
 import static com.gooddata.model.ModelDiff.UpdateScript;
 import static java.util.Arrays.asList;
 

@@ -6,7 +6,7 @@ package com.gooddata.md;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import static com.gooddata.Validate.noNullElements;
+import static com.gooddata.util.Validate.noNullElements;
 
 /**
  * Metadata object (common part)

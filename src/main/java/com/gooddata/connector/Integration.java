@@ -10,7 +10,7 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import static com.gooddata.Validate.notEmpty;
+import static com.gooddata.util.Validate.notEmpty;
 
 /**
  * Connector integration (i.e. one instance of configured ETL for loading of one GDC project).

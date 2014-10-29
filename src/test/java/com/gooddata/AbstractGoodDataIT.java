@@ -11,7 +11,7 @@ import org.testng.annotations.BeforeMethod;
 
 import java.io.InputStream;
 
-import static com.gooddata.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 import static net.jadler.Jadler.*;
 
 public abstract class AbstractGoodDataIT {

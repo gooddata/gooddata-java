@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.gooddata.GoodData.GDC_REQUEST_ID_HEADER;
-import static com.gooddata.Validate.noNullElements;
+import static com.gooddata.util.Validate.noNullElements;
 
 /**
  * A response error handler able to extract GoodData error response

@@ -1,4 +1,4 @@
-package com.gooddata;
+package com.gooddata.util;
 
 import org.apache.commons.io.FileUtils;
 import org.testng.annotations.AfterClass;

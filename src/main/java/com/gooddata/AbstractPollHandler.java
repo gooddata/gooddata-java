@@ -5,7 +5,7 @@ package com.gooddata;
 
 import org.springframework.http.client.ClientHttpResponse;
 
-import static com.gooddata.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * For internal use by services employing polling.<p>
