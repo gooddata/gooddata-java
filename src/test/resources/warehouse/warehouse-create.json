@@ -1,5 +1,5 @@
 {
-    "dssInstance": {
+    "instance": {
         "title": "New ADS",
         "authorizationToken": "Your-ADS-Token",
         "description": "ADS Description"

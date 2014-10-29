@@ -1,9 +1,9 @@
 {
     "asyncTask": {
         "links": {
-            "dssInstance": "/gdc/dss/instances/instanceId",
+            "instance": "/gdc/datawarehouse/instances/instanceId",
             "user": "user URI",
-            "users": "URI of users in DSS Instance"
+            "users": "URI of users in Instance"
         }
     }
 }

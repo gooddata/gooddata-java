@@ -65,7 +65,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         final Warehouse created = gd.getWarehouseService().createWarehouse(new Warehouse(TITLE, "{Token}", "Storage")).get();
         assertThat(created, notNullValue());
         assertThat(created.getTitle(), is(TITLE));
-        assertThat(created.getJdbcConnectionString(), is("jdbc:dss://localhost:" + port() + WAREHOUSE_URI));
+        assertThat(created.getJdbcConnectionString(), is("jdbc:gdc:datawarehouse://localhost:" + port() + WAREHOUSE_URI));
     }
 
     @Test
