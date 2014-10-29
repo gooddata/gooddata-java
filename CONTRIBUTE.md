@@ -27,8 +27,8 @@ public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 * Create custom [`GoodDataException`](src/main/java/com/gooddata/GoodDataException.java)` when you feel the case is specific enough.
 * Prefer DTOs to `String` or primitive arguments.
 * **Method naming**:
-  * `get*()` when searching form single object (throwing exception when no or multiple objects are found, never null)
-  * `find*()` when searching for multiple objects (collection of objects, never null)
+  * `get*()` when searching form single object (throw exception when no or multiple objects are found, never return `null`)
+  * `find*()` when searching for multiple objects (collection of objects, never return `null`)
   * `remove*()` (i.e. `remove(Project project)`) instead od `delete*()` 
 * **Test class naming**:
   * `*Test` unit tests
