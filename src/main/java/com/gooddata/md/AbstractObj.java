@@ -88,6 +88,7 @@ public abstract class AbstractObj implements Obj {
     /**
      * Get list of URIs of the given {@link Obj}s
      * @param objs metadata objects
+     * @param <T> Obj type
      * @return list of URIs
      */
     @SafeVarargs

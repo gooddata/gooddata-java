@@ -47,7 +47,7 @@ public class ModelDiff {
     /**
      * Returns several variants of MAQL DDL evolution scripts that should be executed to update the source model to the
      * target state. Individual variants differ in their side-effects (truncation of loaded data, drops of related objects...)
-     * <p/>
+     * <p>
      * Will be empty for empty diff.
      */
     List<UpdateScript> getUpdateScripts() {
@@ -57,7 +57,7 @@ public class ModelDiff {
     /**
      * Returns MAQL DDL update script that should be executed to update the source model to the
      * target state.
-     * <p/>
+     * <p>
      * It picks the best possible variant by it's side-effects (truncation
      * of loaded data, drops of related objects). It returns first present variant by order:
      * <ol>
@@ -66,7 +66,6 @@ public class ModelDiff {
      * <li>preserve data + cascade drops</li>
      * <li>no preserve data + cascade drops</li>
      * </ol>
-     * <p/>
      * Returned list will be empty if there are no differences.
      *
      * @return MAQL DDL update scripts. Empty list if there are no differences.

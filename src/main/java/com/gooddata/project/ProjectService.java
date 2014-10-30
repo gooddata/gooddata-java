@@ -24,12 +24,11 @@ import static com.gooddata.Validate.notNull;
 
 /**
  * List projects, create a project, ...
- * <p/>
- * <p/>
+ * <p>
  * Usage example:
  * <pre><code>
  *     ProjectService projectService = gd.getProjectService();
- *     Collection<Project> projects = projectService.getProjects();
+ *     Collection&lt;Project&gt; projects = projectService.getProjects();
  *     Project project = projectService.createProject(new Project("my project", "MyToken"));
  * </code></pre>
  */
