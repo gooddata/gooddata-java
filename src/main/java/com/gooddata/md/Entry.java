@@ -1,9 +1,13 @@
 package com.gooddata.md;
 
+import com.gooddata.util.GDDateTimeDeserializer;
+import com.gooddata.util.GDDateTimeSerializer;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.joda.time.DateTime;
 
 /**
  * Metadata entry (can be named "LINK" in some API docs)
@@ -21,8 +25,8 @@ public class Entry {
     private final String deprecated; //TODO boolean
     private final String identifier;
     private final String tags; //TODO collection
-    private final String created; //TODO date time
-    private final String updated; //TODO date time
+    private final DateTime created;
+    private final DateTime updated;
     private final Integer locked; //TODO boolean
     private final Integer unlisted; //TODO boolean
 
@@ -36,8 +40,8 @@ public class Entry {
                  @JsonProperty("deprecated") String deprecated,
                  @JsonProperty("identifier") String identifier,
                  @JsonProperty("tags") String tags,
-                 @JsonProperty("created") String created,
-                 @JsonProperty("updated") String updated,
+                 @JsonProperty("created") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime created,
+                 @JsonProperty("updated") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime updated,
                  @JsonProperty("locked") Integer locked,
                  @JsonProperty("unlisted") Integer unlisted) {
         this.link = link;
@@ -91,11 +95,13 @@ public class Entry {
         return tags;
     }
 
-    public String getCreated() {
+    @JsonSerialize(using = GDDateTimeSerializer.class)
+    public DateTime getCreated() {
         return created;
     }
 
-    public String getUpdated() {
+    @JsonSerialize(using = GDDateTimeSerializer.class)
+    public DateTime getUpdated() {
         return updated;
     }
 

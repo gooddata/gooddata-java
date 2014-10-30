@@ -3,11 +3,15 @@
  */
 package com.gooddata.md;
 
+import com.gooddata.util.GDDateTimeDeserializer;
+import com.gooddata.util.GDDateTimeSerializer;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import org.joda.time.DateTime;
 
 import java.io.Serializable;
 
@@ -20,8 +24,8 @@ public class Meta implements Serializable {
 
     private String author;
     private String contributor;
-    private String created; //TODO date time
-    private String updated; //TODO date time
+    private DateTime created;
+    private DateTime updated;
     private String summary;
     private String category;
     private String tags; //TODO collection
@@ -35,8 +39,8 @@ public class Meta implements Serializable {
     @JsonCreator
     protected Meta(@JsonProperty("author") String author,
                    @JsonProperty("contributor") String contributor,
-                   @JsonProperty("created") String created,
-                   @JsonProperty("updated") String updated,
+                   @JsonProperty("created") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime created,
+                   @JsonProperty("updated") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime updated,
                    @JsonProperty("summary") String summary,
                    @JsonProperty("title") String title,
                    @JsonProperty("category") String category,
@@ -79,7 +83,8 @@ public class Meta implements Serializable {
         return contributor;
     }
 
-    public String getCreated() {
+    @JsonSerialize(using = GDDateTimeSerializer.class, include = Inclusion.NON_NULL)
+    public DateTime getCreated() {
         return created;
     }
 
@@ -91,7 +96,8 @@ public class Meta implements Serializable {
         return title;
     }
 
-    public String getUpdated() {
+    @JsonSerialize(using = GDDateTimeSerializer.class, include = Inclusion.NON_NULL)
+    public DateTime getUpdated() {
         return updated;
     }
 

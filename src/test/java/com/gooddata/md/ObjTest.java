@@ -5,6 +5,8 @@ package com.gooddata.md;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
 import java.io.InputStream;
@@ -18,10 +20,10 @@ public class ObjTest {
 
     public static final String AUTHOR = "/gdc/account/profile/USER_ID";
     public static final String CONTRIBUTOR = "/gdc/account/profile/CONTRIBUTOR_USER_ID";
-    public static final String CREATED = "2014-04-11 13:45:56";
+    public static final DateTime CREATED = new DateTime(2014, 4, 11, 13, 45, 56, DateTimeZone.UTC);
     public static final String SUMMARY = "Obj summary";
     public static final String TITLE = "Obj title";
-    public static final String UPDATED = "2014-04-11 13:45:57";
+    public static final DateTime UPDATED = new DateTime(2014, 4, 11, 13, 45, 57, DateTimeZone.UTC);
     public static final String CATEGORY = "attributeDisplayForm";
     public static final String TAGS = "TAG1 TAG2";
     public static final String URI = "/gdc/md/PROJECT_ID/obj/OBJ_ID";

@@ -4,13 +4,16 @@
 package com.gooddata.project;
 
 import com.gooddata.md.Meta;
+import com.gooddata.util.GDDateTimeDeserializer;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.joda.time.DateTime;
 import org.springframework.web.util.UriTemplate;
 
 import java.util.HashSet;
@@ -119,12 +122,12 @@ public class Project {
     }
 
     @JsonIgnore
-    public String getCreated() {
+    public DateTime getCreated() {
         return meta.getCreated();
     }
 
     @JsonIgnore
-    public String getUpdated() {
+    public DateTime getUpdated() {
         return meta.getUpdated();
     }
 
@@ -424,7 +427,8 @@ public class Project {
 
         @JsonCreator
         private ProjectMeta(@JsonProperty("author") String author, @JsonProperty("contributor") String contributor,
-                            @JsonProperty("created") String created, @JsonProperty("updated") String updated,
+                            @JsonProperty("created") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime created,
+                            @JsonProperty("updated") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime updated,
                             @JsonProperty("summary") String summary, @JsonProperty("title") String title,
                             @JsonProperty("category") String category, @JsonProperty("tags") String tags,
                             @JsonProperty("uri") String uri, @JsonProperty("deprecated") String deprecated,

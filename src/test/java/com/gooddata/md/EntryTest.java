@@ -4,6 +4,8 @@
 package com.gooddata.md;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
@@ -16,10 +18,10 @@ public class EntryTest {
     public static final String LINK = "/gdc/md/PROJECT_ID/obj/ENTRY_ID";
     public static final String AUTHOR = "/gdc/account/profile/AUTHOR_USER_ID";
     public static final String CONTRIBUTOR = "/gdc/account/profile/CONTRIBUTOR_USER_ID";
-    public static final String CREATED = "2014-04-11 13:45:54";
+    public static final DateTime CREATED = new DateTime(2014, 4, 11, 13, 45, 54, DateTimeZone.UTC);
     public static final String SUMMARY = "Entry summary";
     public static final String TITLE = "Entry title";
-    public static final String UPDATED = "2014-04-11 13:45:55";
+    public static final DateTime UPDATED = new DateTime(2014, 4, 11, 13, 45, 55, DateTimeZone.UTC);
     public static final String CATEGORY = "ENTRY_CATEGORY";
     public static final String TAGS = "TAG";
     public static final String DEPRECATED = "1";

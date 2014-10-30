@@ -6,6 +6,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
 import java.io.InputStream;
@@ -28,8 +30,8 @@ public class WarehouseTest {
         assertThat(warehouse.getAuthorizationToken(), is("{Token}"));
         assertThat(warehouse.getCreatedBy(), is("/gdc/account/profile/createdBy"));
         assertThat(warehouse.getUpdatedBy(), is("/gdc/account/profile/updatedBy"));
-        assertThat(warehouse.getCreated(), is("2014-05-05T08:27:33.000Z"));
-        assertThat(warehouse.getUpdated(), is("2014-05-05T08:27:34.000Z"));
+        assertThat(warehouse.getCreated(), is(new DateTime(2014, 5, 5, 8, 27, 33, DateTimeZone.UTC)));
+        assertThat(warehouse.getUpdated(), is(new DateTime(2014, 5, 5, 8, 27, 34, DateTimeZone.UTC)));
         assertThat(warehouse.getAuthorizationToken(), is("{Token}"));
     }
 }
