@@ -3,8 +3,7 @@
  */
 package com.gooddata.md;
 
-import com.gooddata.util.GDDateTimeDeserializer;
-import com.gooddata.util.GDDateTimeSerializer;
+import com.gooddata.util.*;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -30,11 +29,11 @@ public class Meta implements Serializable {
     private String category;
     private String tags; //TODO collection
     private String uri;
-    private String deprecated; //TODO boolean
+    private boolean deprecated;
     private String title;
     private String identifier;
-    private Integer locked; //TODO boolean
-    private Integer unlisted; //TODO boolean
+    private boolean locked;
+    private boolean unlisted;
 
     @JsonCreator
     protected Meta(@JsonProperty("author") String author,
@@ -46,10 +45,10 @@ public class Meta implements Serializable {
                    @JsonProperty("category") String category,
                    @JsonProperty("tags") String tags,
                    @JsonProperty("uri") String uri,
-                   @JsonProperty("deprecated") String deprecated,
+                   @JsonProperty("deprecated") @JsonDeserialize(using = BooleanStringDeserializer.class) boolean deprecated,
                    @JsonProperty("identifier") String identifier,
-                   @JsonProperty("locked") Integer locked,
-                   @JsonProperty("unlisted") Integer unlisted) {
+                   @JsonProperty("locked") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean locked,
+                   @JsonProperty("unlisted") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean unlisted) {
         super();
         this.author = author;
         this.uri = uri;
@@ -113,7 +112,8 @@ public class Meta implements Serializable {
         return uri;
     }
 
-    public String getDeprecated() {
+    @JsonSerialize(using = BooleanStringSerializer.class)
+    public boolean isDeprecated() {
         return deprecated;
     }
 
@@ -121,11 +121,13 @@ public class Meta implements Serializable {
         return identifier;
     }
 
-    public Integer getLocked() {
+	@JsonSerialize(using = BooleanIntegerSerializer.class)
+    public boolean isLocked() {
         return locked;
     }
 
-    public Integer getUnlisted() {
+	@JsonSerialize(using = BooleanIntegerSerializer.class)
+    public boolean isUnlisted() {
         return unlisted;
     }
 

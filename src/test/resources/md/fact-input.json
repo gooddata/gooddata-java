@@ -9,7 +9,10 @@
             ]
         },
         "meta" : {
-            "title" : "Person Shoe Size"
+            "title" : "Person Shoe Size",
+	        "deprecated" : "0",
+	        "locked": 0,
+	        "unlisted": 0
         }
     }
 }

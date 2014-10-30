@@ -27,10 +27,10 @@ public class ObjTest {
     public static final String CATEGORY = "attributeDisplayForm";
     public static final String TAGS = "TAG1 TAG2";
     public static final String URI = "/gdc/md/PROJECT_ID/obj/OBJ_ID";
-    public static final String DEPRECATED = "0";
+    public static final boolean DEPRECATED = false;
     public static final String IDENTIFIER = "attr.person.id.name";
-    public static final Integer LOCKED = 0;
-    public static final Integer UNLISTED = 1;
+    public static final boolean LOCKED = false;
+    public static final boolean UNLISTED = true;
 
     @Test
     public void testDeserialization() throws Exception {
@@ -47,10 +47,10 @@ public class ObjTest {
         assertThat(obj.getCategory(), is(CATEGORY));
         assertThat(obj.getTags(), is(TAGS));
         assertThat(obj.getUri(), is(URI));
-        assertThat(obj.getDeprecated(), is(DEPRECATED));
+        assertThat(obj.isDeprecated(), is(DEPRECATED));
         assertThat(obj.getIdentifier(), is(IDENTIFIER));
-        assertThat(obj.getLocked(), is(LOCKED));
-        assertThat(obj.getUnlisted(), is(UNLISTED));
+        assertThat(obj.isLocked(), is(LOCKED));
+        assertThat(obj.isUnlisted(), is(UNLISTED));
     }
 
     @Test

@@ -24,10 +24,10 @@ public class EntryTest {
     public static final DateTime UPDATED = new DateTime(2014, 4, 11, 13, 45, 55, DateTimeZone.UTC);
     public static final String CATEGORY = "ENTRY_CATEGORY";
     public static final String TAGS = "TAG";
-    public static final String DEPRECATED = "1";
+    public static final boolean DEPRECATED = true;
     public static final String IDENTIFIER = "ID";
-    public static final Integer LOCKED = 1;
-    public static final Integer UNLISTED = 0;
+    public static final boolean LOCKED = true;
+    public static final boolean UNLISTED = false;
 
     @Test
     public void testDeserialize() throws Exception {
@@ -39,13 +39,13 @@ public class EntryTest {
         assertThat(entry.getCategory(), is(CATEGORY));
         assertThat(entry.getAuthor(), is(AUTHOR));
         assertThat(entry.getContributor(), is(CONTRIBUTOR));
-        assertThat(entry.getDeprecated(), is(DEPRECATED));
+        assertThat(entry.isDeprecated(), is(DEPRECATED));
         assertThat(entry.getIdentifier(), is(IDENTIFIER));
         assertThat(entry.getTags(), is(TAGS));
         assertThat(entry.getCreated(), is(CREATED));
         assertThat(entry.getUpdated(), is(UPDATED));
-        assertThat(entry.getLocked(), is(LOCKED));
-        assertThat(entry.getUnlisted(), is(UNLISTED));
+        assertThat(entry.isLocked(), is(LOCKED));
+        assertThat(entry.isUnlisted(), is(UNLISTED));
     }
 
     @Test

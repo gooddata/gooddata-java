@@ -22,7 +22,7 @@ public class AttributeDisplayForm extends DisplayForm {
     }
 
     /* Just for serialization test */
-    AttributeDisplayForm(String title, String formOf, String expression, Integer isDefault, String ldmExpression) {
+    AttributeDisplayForm(String title, String formOf, String expression, boolean isDefault, String ldmExpression) {
         super(new Meta(title), new Content(formOf, expression, isDefault, ldmExpression));
     }
 }

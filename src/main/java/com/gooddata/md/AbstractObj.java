@@ -67,8 +67,8 @@ public abstract class AbstractObj implements Obj {
     }
 
     @JsonIgnore
-    public String getDeprecated() {
-        return meta.getDeprecated();
+    public boolean isDeprecated() {
+        return meta.isDeprecated();
     }
 
     @JsonIgnore
@@ -77,13 +77,13 @@ public abstract class AbstractObj implements Obj {
     }
 
     @JsonIgnore
-    public Integer getLocked() {
-        return meta.getLocked();
+    public boolean isLocked() {
+        return meta.isLocked();
     }
 
     @JsonIgnore
-    public Integer getUnlisted() {
-        return meta.getUnlisted();
+    public boolean isUnlisted() {
+        return meta.isUnlisted();
     }
 
     /**

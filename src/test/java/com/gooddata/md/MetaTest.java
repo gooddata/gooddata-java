@@ -24,10 +24,10 @@ public class MetaTest {
     public static final String CATEGORY = "attributeDisplayForm";
     public static final String TAGS = "TAG1 TAG2";
     public static final String URI = "/gdc/md/PROJECT_ID/obj/OBJ_ID";
-    public static final String DEPRECATED = "0";
+    public static final boolean DEPRECATED = false;
     public static final String IDENTIFIER = "attr.person.id.name";
-    public static final Integer LOCKED = 0;
-    public static final Integer UNLISTED = 1;
+    public static final boolean LOCKED = false;
+    public static final boolean UNLISTED = true;
 
     @Test
     public void testDeserialization() throws Exception {
@@ -42,10 +42,10 @@ public class MetaTest {
         assertThat(meta.getCategory(), is(CATEGORY));
         assertThat(meta.getTags(), is(TAGS));
         assertThat(meta.getUri(), is(URI));
-        assertThat(meta.getDeprecated(), is(DEPRECATED));
+        assertThat(meta.isDeprecated(), is(DEPRECATED));
         assertThat(meta.getIdentifier(), is(IDENTIFIER));
-        assertThat(meta.getLocked(), is(LOCKED));
-        assertThat(meta.getUnlisted(), is(UNLISTED));
+        assertThat(meta.isLocked(), is(LOCKED));
+        assertThat(meta.isUnlisted(), is(UNLISTED));
     }
 
     @Test
