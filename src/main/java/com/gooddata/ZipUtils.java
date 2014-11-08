@@ -23,6 +23,7 @@ public abstract class ZipUtils {
      *
      * @param file file to be zipped
      * @param output stream where the output will be written
+     * @throws IOException if zip creation fails
      */
     public static void zip(File file, OutputStream output) throws IOException {
         zip(file, output, false);
@@ -35,6 +36,7 @@ public abstract class ZipUtils {
      * @param file file to be zipped
      * @param output stream where the output will be written
      * @param includeRoot if root dir should be included
+     * @throws IOException if zip creation fails
      */
     public static void zip(File file, OutputStream output, boolean includeRoot) throws IOException {
         notNull(file, "file");

@@ -34,10 +34,10 @@ import static org.apache.http.util.VersionInfo.loadVersionInfo;
 
 /**
  * Entry point for GoodData SDK usage.
- * <p/>
+ * <p>
  * Configure connection to GoodData using one of constructors. One can then get initialized service he needs from
  * the newly constructed instance. This instance can be also used later for logout from GoodData Platform.
- * <p/>
+ * <p>
  * Usage example:
  * <pre><code>
  *     GoodData gd = new GoodData("roman@gooddata.com", "Roman1");
@@ -95,6 +95,7 @@ public class GoodData {
      * @param hostname GoodData Platform's host name (e.g. secure.gooddata.com)
      * @param login    GoodData user's login
      * @param password GoodData user's password
+     * @param port     GoodData Platform's API port (e.g. 443)
      */
     public GoodData(String hostname, String login, String password, int port) {
         this(hostname, login, password, port, PROTOCOL);

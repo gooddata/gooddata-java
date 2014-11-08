@@ -37,6 +37,7 @@ public class DiffRequest {
 
     /**
      * Returns desired target state of project model
+     * @return desired target state of project model
      */
     public String getTargetModel() {
         return targetModel;
