@@ -18,8 +18,15 @@ The *GoodData Java SDK* is available in Maven Central Repository, to use it from
 </dependency>
 ```
 
-The *GoodData Java SDK* uses the [GoodData HTTP client](https://github.com/gooddata/gooddata-http-client) (version 0.8.2 or later)
-and the *Apache HTTP Client* (version 4.3 or later).
+See [releases page](https://github.com/martiner/gooddata-java/releases) for information about versions and notable changes.
+
+### Dependencies
+
+The *GoodData Java SDK* uses:
+* the [GoodData HTTP client](https://github.com/gooddata/gooddata-http-client) (version 0.8.2 or later)
+* the *Apache HTTP Client* (version 4.3 or later).
+* the *Spring Framework* (version 3.x)
+* the *Jackson JSON Processor* (version 1.9)
 
 ### General
 
