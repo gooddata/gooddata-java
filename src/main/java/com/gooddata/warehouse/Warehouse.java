@@ -45,11 +45,14 @@ public class Warehouse {
     private String warehouseHost;
     private int warehousePort = 443;
 
+    public Warehouse(String title, String authToken) {
+        this(title, authToken, null);
+    }
 
     public Warehouse(String title, String authToken, String description) {
         this.title = notNull(title, "title");
         this.authorizationToken = notNull(authToken, "authToken");
-        this.description = notNull(description, "description");
+        this.description = description;
     }
 
     @JsonCreator
