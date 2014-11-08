@@ -35,7 +35,7 @@ public static final UriTemplate TEMPLATE = new UriTemplate(URI);
   * `*IT` integration tests (see [`AbstractGoodDataIT`](src/test/java/com/gooddata/AbstractGoodDataIT.java))
 
 ## Best practices
-* Test all DTOs using _[JsonUnit`](https://github.com/lukas-krecan/JsonUnit)_.
+* Test all DTOs using _[JsonUnit`](https://github.com/lukas-krecan/JsonUnit)_. TODO -- this is questionable, because almost nothing is tested by JsonUnit now.
 * Write **integration tests** for services using _[Jadler](https://github.com/jadler-mocking/jadler/wiki)_.
 * Everything public should be **documented** using _javadoc_.
 * When you need some **utility code**, look for handy utilities in used libraries first (e.g. _Spring_ has its `StreamUtils`, `FileCopyUtils`, ...). When you decide to create new utility class, use _abstract utility class pattern_.
