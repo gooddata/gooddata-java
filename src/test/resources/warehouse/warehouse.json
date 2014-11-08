@@ -1,5 +1,5 @@
 {
-    "dssInstance" : {
+    "instance" : {
         "title" : "Test",
         "description" : "Storage",
         "status" : "ENABLED",
@@ -9,10 +9,10 @@
         "createdBy" : "/gdc/account/profile/createdBy",
         "updatedBy" : "/gdc/account/profile/updatedBy",
         "links" : {
-            "self" : "/gdc/dss/instances/instanceId",
-            "parent" : "/gdc/dss/instances",
-            "users" : "/gdc/dss/instances/instanceId/users",
-            "jdbc" : "/gdc/dss/instances/instanceId/jdbc"
+            "self" : "/gdc/datawarehouse/instances/instanceId",
+            "parent" : "/gdc/datawarehouse/instances",
+            "users" : "/gdc/datawarehouse/instances/instanceId/users",
+            "jdbc" : "/gdc/datawarehouse/instances/instanceId/jdbc"
         }
     }
 }

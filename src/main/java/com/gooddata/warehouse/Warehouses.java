@@ -12,11 +12,11 @@ import java.util.List;
  * List of warehouses. Deserialization only.
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonTypeName("dssInstances")
+@JsonTypeName("instances")
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Warehouses {
 
-    static final String URI = "/gdc/dss/instances";
+    static final String URI = "/gdc/datawarehouse/instances";
 
     private final List<Warehouse> items;
 

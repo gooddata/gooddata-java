@@ -17,7 +17,7 @@ import java.util.Map;
 class WarehouseTask {
 
     private static final String POLL_LINK = "poll";
-    private static final String WAREHOUSE_LINK = "dssInstance";
+    private static final String WAREHOUSE_LINK = "instance";
 
     private final Map<String,String> links;
 
