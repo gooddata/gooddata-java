@@ -13,6 +13,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import java.util.List;
 import java.util.Map;
 
+import static com.gooddata.Validate.notNull;
+
 /**
  * Dataset specific upload manifest
  */
@@ -58,6 +60,38 @@ public class DatasetManifest {
 
     public void setFile(String file) {
         this.file = file;
+    }
+
+    /**
+     * Set upload mode for all parts of this dataset manifest
+     * @param uploadMode upload mode
+     */
+    public void setUploadMode(final UploadMode uploadMode) {
+        notNull(uploadMode, "uploadMode");
+        for (Part part : parts) {
+            part.setUploadMode(uploadMode.name());
+        }
+    }
+
+    /**
+     * Map the given CSV column name to the dataset field
+     * @param columnName column name
+     * @param populates dataset field
+     */
+    public void setMapping(final String columnName, final String populates) {
+        notNull(columnName, "columnName");
+        notNull(populates, "populates");
+        for (Part part : parts) {
+            if (part.getPopulates() == null || part.getPopulates().size() != 1) {
+                throw new IllegalStateException("Only parts with exactly one populates are supported " + part.getPopulates());
+            }
+            final String field = part.getPopulates().iterator().next();
+            if (populates.equals(field)) {
+                part.setColumnName(columnName);
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Dataset manifest parts doesn't contain populate value " + populates);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
