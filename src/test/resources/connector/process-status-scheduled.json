@@ -8,7 +8,7 @@
     "started" : "2014-04-30T07:50:15.000Z",
     "finished" : null,
     "links" : {
-      "self" : "/gdc/projects/ri4qhi4c4s587erv2h2nlv0twdds62vl/connectors/zendesk4/integration/processes/saRuMDRmnNS6zzTWDEYS"
+      "self" : "/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID"
     }
   }
 }

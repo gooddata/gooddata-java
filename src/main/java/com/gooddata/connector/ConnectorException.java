@@ -1,9 +1,9 @@
-package com.gooddata.connectors;
+package com.gooddata.connector;
 
 import com.gooddata.GoodDataException;
 
 /**
- * Connector exception
+ * Represents error in ConnectorService.
  */
 public class ConnectorException extends GoodDataException {
 

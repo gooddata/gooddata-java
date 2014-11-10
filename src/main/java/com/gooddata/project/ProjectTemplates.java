@@ -11,7 +11,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import java.util.Collection;
 
 /**
- * Project templates
+ * Collection of project templates.
+ * Deserialization only.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)

@@ -1,0 +1,37 @@
+{
+  "integration" : {
+    "projectTemplate" : "/projectTemplates/template",
+    "active" : true,
+    "lastFinishedProcess" : {
+      "status" : {
+        "code" : "ERROR",
+        "detail" : "GDC-INTERNAL-ERROR",
+        "description" : "Data load unsuccessful. Please check your settings and try again or contact us at support@gooddata.com"
+      },
+      "started" : "2014-05-30T07:50:15.000Z",
+      "finished" : "2014-05-30T07:50:50.000Z",
+      "links" : {
+        "self" : "/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/FINISHED_PROCESS_ID"
+      }
+    },
+    "lastSuccessfulProcess" : {
+      "status" : {
+        "code" : "SYNCHRONIZED",
+        "detail" : null,
+        "description" : null
+      },
+      "started" : "2014-04-30T07:50:15.000Z",
+      "finished" : "2014-04-30T07:50:50.000Z",
+      "links" : {
+        "self" : "/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/SUCCESSFUL_PROCESS_ID"
+      }
+    },
+    "runningProcess" : null,
+    "links" : {
+      "self" : "/gdc/projects/PROJECT_ID/connectors/zendesk4/integration",
+      "processes" : "/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes",
+      "configuration" : "/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/settings"
+    },
+    "ui" : { }
+  }
+}

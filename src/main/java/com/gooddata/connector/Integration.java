@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
  */
-package com.gooddata.connectors;
+package com.gooddata.connector;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -13,7 +13,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import static com.gooddata.Validate.notEmpty;
 
 /**
- * Connectors integration
+ * Connector integration (i.e. one instance of configured ETL for loading of one GDC project).
  */
 @JsonTypeName("integration")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
@@ -25,9 +25,9 @@ public class Integration {
 
     private String projectTemplate;
     private boolean active;
-    private final ConnectorProcess lastFinishedProcess;
-    private final ConnectorProcess lastSuccessfulProcess;
-    private final ConnectorProcess runningProcess;
+    private final IntegrationProcessStatus lastFinishedProcess;
+    private final IntegrationProcessStatus lastSuccessfulProcess;
+    private final IntegrationProcessStatus runningProcess;
 
     public Integration(final String projectTemplate) {
         this(projectTemplate, true, null, null, null);
@@ -35,9 +35,9 @@ public class Integration {
 
     @JsonCreator
     Integration(@JsonProperty("projectTemplate") String projectTemplate, @JsonProperty("active") boolean active,
-                       @JsonProperty("lastFinishedProcess") ConnectorProcess lastFinishedProcess,
-                       @JsonProperty("lastSuccessfulProcess") ConnectorProcess lastSuccessfulProcess,
-                       @JsonProperty("runningProcess") ConnectorProcess runningProcess) {
+                @JsonProperty("lastFinishedProcess") IntegrationProcessStatus lastFinishedProcess,
+                @JsonProperty("lastSuccessfulProcess") IntegrationProcessStatus lastSuccessfulProcess,
+                @JsonProperty("runningProcess") IntegrationProcessStatus runningProcess) {
         this.projectTemplate = notEmpty(projectTemplate, "projectTemplate");
         this.active = active;
         this.lastFinishedProcess = lastFinishedProcess;
@@ -61,15 +61,15 @@ public class Integration {
         this.active = active;
     }
 
-    public ConnectorProcess getLastFinishedProcess() {
+    public IntegrationProcessStatus getLastFinishedProcess() {
         return lastFinishedProcess;
     }
 
-    public ConnectorProcess getLastSuccessfulProcess() {
+    public IntegrationProcessStatus getLastSuccessfulProcess() {
         return lastSuccessfulProcess;
     }
 
-    public ConnectorProcess getRunningProcess() {
+    public IntegrationProcessStatus getRunningProcess() {
         return runningProcess;
     }
 }

@@ -4,7 +4,7 @@
 package com.gooddata;
 
 import com.gooddata.account.AccountService;
-import com.gooddata.connectors.ConnectorService;
+import com.gooddata.connector.ConnectorService;
 import com.gooddata.dataload.processes.ProcessService;
 import com.gooddata.warehouse.WarehouseService;
 import com.gooddata.dataset.DatasetService;

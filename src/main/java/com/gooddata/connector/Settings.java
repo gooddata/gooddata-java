@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
  */
-package com.gooddata.connectors;
+package com.gooddata.connector;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -10,15 +10,17 @@ import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
- * Connector process execution
+ * Connector integration settings.
  */
-@JsonTypeName("process")
+@JsonTypeName("settings")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public interface ProcessExecution {
+public interface Settings {
+
+    final String URL = "/gdc/projects/{project}/connectors/{connector}/integration/settings";
 
     @JsonIgnore
-    Connector getConnector();
+    ConnectorType getConnectorType();
 
 }
