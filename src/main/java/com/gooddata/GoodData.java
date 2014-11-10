@@ -24,9 +24,13 @@ import org.apache.http.util.VersionInfo;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import static com.gooddata.Validate.notEmpty;
 import static java.util.Collections.singletonMap;
@@ -145,6 +149,21 @@ public class GoodData {
         restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(
                 new HeaderSettingRequestInterceptor(singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE))));
         restTemplate.setErrorHandler(new ResponseErrorHandler(restTemplate.getMessageConverters()));
+
+        // make sure jackson1 converter is present and remove all converters conflicting with it (eg. jackson2)
+        final MappingJacksonHttpMessageConverter jacksonConverter = new MappingJacksonHttpMessageConverter();
+        final Iterator<HttpMessageConverter<?>> it = restTemplate.getMessageConverters().iterator();
+        while (it.hasNext()) {
+            final HttpMessageConverter<?> converter = it.next();
+            for (MediaType type: converter.getSupportedMediaTypes()) {
+                if (jacksonConverter.getSupportedMediaTypes().contains(type)) {
+                    it.remove();
+                    break;
+                }
+            }
+        }
+        restTemplate.getMessageConverters().add(jacksonConverter);
+
         return restTemplate;
     }
 
