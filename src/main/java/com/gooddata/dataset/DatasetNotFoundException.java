@@ -11,6 +11,6 @@ import com.gooddata.GoodDataException;
 public class DatasetNotFoundException extends GoodDataException {
 
     public DatasetNotFoundException(String dataset, Throwable cause) {
-        super("Dataset " + dataset + "was not found", cause);
+        super("Dataset " + dataset + " was not found", cause);
     }
 }

@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import java.io.InputStream;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 import static org.hamcrest.CoreMatchers.is;
@@ -45,5 +46,38 @@ public class DatasetManifestTest {
         final DatasetManifest manifest = new DatasetManifest("DATASET", "FILE", singletonList(part));
 
         assertThat(manifest, serializesToJson("/dataset/datasetManifest-input.json"));
+    }
+
+    @Test
+    public void shouldSetUploadModeForAllParts() throws Exception {
+        final DatasetManifest manifest = new DatasetManifest("dataset", "file.csv", asList(
+                new DatasetManifest.Part("FULL", "col1", asList("attr1"), 1, null),
+                new DatasetManifest.Part("FULL", "col2", asList("attr2"), 1, null)
+        ));
+        manifest.setUploadMode(UploadMode.INCREMENTAL);
+
+        assertThat(manifest.getParts().get(0).getUploadMode(), is("INCREMENTAL"));
+        assertThat(manifest.getParts().get(1).getUploadMode(), is("INCREMENTAL"));
+    }
+
+    @Test
+    public void shouldSetMapping() throws Exception {
+        final DatasetManifest manifest = new DatasetManifest("dataset", "file.csv", asList(
+                new DatasetManifest.Part("FULL", "col1", asList("attr1"), 1, null),
+                new DatasetManifest.Part("FULL", "col2", asList("attr2"), 1, null)
+        ));
+        manifest.setMapping("c1", "attr1");
+        manifest.setMapping("c2", "attr2");
+
+        assertThat(manifest.getParts().get(0).getColumnName(), is("c1"));
+        assertThat(manifest.getParts().get(1).getColumnName(), is("c2"));
+    }
+
+    @Test(expectedExceptions = IllegalStateException.class)
+    public void shouldFailOnMultiPopulates() throws Exception {
+        final DatasetManifest manifest = new DatasetManifest("dataset", "file.csv", asList(
+                new DatasetManifest.Part("FULL", "col1", asList("attr1", "attr2"), 1, null)
+        ));
+        manifest.setMapping("col", "attr2");
     }
 }
