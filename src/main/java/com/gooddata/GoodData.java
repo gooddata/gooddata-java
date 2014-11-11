@@ -30,7 +30,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 import static com.gooddata.Validate.notEmpty;
 import static java.util.Collections.singletonMap;
@@ -58,6 +57,7 @@ public class GoodData {
     private static final String HOSTNAME = "secure.gooddata.com";
     private static final String UNKNOWN_VERSION = "UNKNOWN";
 
+    private final RestTemplate restTemplate;
     private final AccountService accountService;
     private final ProjectService projectService;
     private final MetadataService metadataService;
@@ -123,20 +123,19 @@ public class GoodData {
         notEmpty(protocol, "protocol");
         final HttpClientBuilder httpClientBuilder = HttpClientBuilder.create()
                 .setUserAgent(getUserAgent());
-        final RestTemplate restTemplate = createRestTemplate(login, password, hostname, httpClientBuilder, port,
-                protocol);
+        restTemplate = createRestTemplate(login, password, hostname, httpClientBuilder, port, protocol);
 
-        accountService = new AccountService(restTemplate);
-        projectService = new ProjectService(restTemplate, accountService);
-        metadataService = new MetadataService(restTemplate);
-        modelService = new ModelService(restTemplate);
-        gdcService = new GdcService(restTemplate);
+        accountService = new AccountService(getRestTemplate());
+        projectService = new ProjectService(getRestTemplate(), accountService);
+        metadataService = new MetadataService(getRestTemplate());
+        modelService = new ModelService(getRestTemplate());
+        gdcService = new GdcService(getRestTemplate());
         dataStoreService = new DataStoreService(httpClientBuilder, gdcService, new HttpHost(hostname, port, protocol).toURI(), login, password);
-        datasetService = new DatasetService(restTemplate, dataStoreService);
-        reportService = new ReportService(restTemplate);
-        processService = new ProcessService(restTemplate, accountService);
-        warehouseService = new WarehouseService(restTemplate, hostname, port);
-        connectorService = new ConnectorService(restTemplate, projectService);
+        datasetService = new DatasetService(getRestTemplate(), dataStoreService);
+        reportService = new ReportService(getRestTemplate());
+        processService = new ProcessService(getRestTemplate(), accountService);
+        warehouseService = new WarehouseService(getRestTemplate(), hostname, port);
+        connectorService = new ConnectorService(getRestTemplate(), projectService);
     }
 
     private RestTemplate createRestTemplate(String login, String password, String hostname, HttpClientBuilder builder,
@@ -167,7 +166,7 @@ public class GoodData {
         return restTemplate;
     }
 
-    protected HttpClient createHttpClient(final String login, final String password, final String hostname,
+    HttpClient createHttpClient(final String login, final String password, final String hostname,
                                           final int port, final String protocol, final HttpClientBuilder builder) {
         final HttpHost host = new HttpHost(hostname, port, protocol);
         final HttpClient httpClient = builder.build();
@@ -186,6 +185,15 @@ public class GoodData {
         return String.format("%s/%s (%s; %s) %s/%s", "GoodData-Java-SDK", clientVersion,
                 System.getProperty("os.name"), System.getProperty("java.specification.version"),
                 "Apache-HttpClient", apacheVersion);
+    }
+
+    /**
+     * Get the configured {@link RestTemplate} used by the library.
+     * This is the extension point for inheriting classes providing additional services.
+     * @return REST template
+     */
+    protected final RestTemplate getRestTemplate() {
+        return restTemplate;
     }
 
     /**
