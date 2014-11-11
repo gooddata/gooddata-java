@@ -21,7 +21,9 @@ Below are few **rules, recommendations and best practices** we try to follow whe
 public static final String URI = "/gdc/someresource/{resource-id}";
 public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 ```
+* Put _Jackson_ annotations on getters rather then on fields.
 * Consider the **visibility** - use `package protected` when DTO is not intended for SDK user, but is needed in related service.
+* Test all DTOs using _[JsonUnit`](https://github.com/lukas-krecan/JsonUnit)_. TODO -- this is questionable, because almost nothing is tested by JsonUnit now.
 
 ### Enums
 * Use enums sparingly, because they don't work with REST API changes (eg. new value added on the backend) **never use them when deserializing**.
@@ -35,12 +37,11 @@ public static final UriTemplate TEMPLATE = new UriTemplate(URI);
   * `get*()` when searching form single object (throw exception when no or multiple objects are found, never return `null`)
   * `find*()` when searching for multiple objects (collection of objects, never return `null`)
   * `remove*()` (i.e. `remove(Project project)`) instead od `delete*()` 
+* Write **integration tests** for services using _[Jadler](https://github.com/jadler-mocking/jadler/wiki)_.
+
+## Best practices
 * **Test class naming**:
   * `*Test` unit tests
   * `*IT` integration tests (see [`AbstractGoodDataIT`](src/test/java/com/gooddata/AbstractGoodDataIT.java))
-
-## Best practices
-* Test all DTOs using _[JsonUnit`](https://github.com/lukas-krecan/JsonUnit)_. TODO -- this is questionable, because almost nothing is tested by JsonUnit now.
-* Write **integration tests** for services using _[Jadler](https://github.com/jadler-mocking/jadler/wiki)_.
 * Everything public should be **documented** using _javadoc_.
 * When you need some **utility code**, look for handy utilities in used libraries first (e.g. _Spring_ has its `StreamUtils`, `FileCopyUtils`, ...). When you decide to create new utility class, use _abstract utility class pattern_.
