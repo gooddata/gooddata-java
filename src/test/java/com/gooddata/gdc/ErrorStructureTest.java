@@ -19,15 +19,18 @@ public class ErrorStructureTest {
         assertThat(errStructure, is(notNullValue()));
         assertThat(errStructure.getErrorClass(), is("CLASS"));
         assertThat(errStructure.getTrace(), is("TRACE"));
-        assertThat(errStructure.getMessage(), is("MSG"));
+        assertThat(errStructure.getMessage(), is("MSG %s %s %d"));
         assertThat(errStructure.getComponent(), is("COMPONENT"));
         assertThat(errStructure.getErrorId(), is("ID"));
         assertThat(errStructure.getErrorCode(), is("CODE"));
         assertThat(errStructure.getRequestId(), is("REQ"));
 
         assertThat(errStructure.getParameters(), is(notNullValue()));
-        assertThat(errStructure.getParameters().length, is(2));
-        assertThat(errStructure.getParameters()[0], is("PARAM1"));
-        assertThat(errStructure.getParameters()[1], is("PARAM2"));
+        assertThat(errStructure.getParameters().length, is(3));
+        assertThat(errStructure.getParameters()[0].toString(), is("PARAM1"));
+        assertThat(errStructure.getParameters()[1].toString(), is("PARAM2"));
+        assertThat(errStructure.getParameters()[2].toString(), is("3"));
+
+        assertThat(errStructure.getFormattedMessage(), is("MSG PARAM1 PARAM2 3"));
     }
 }

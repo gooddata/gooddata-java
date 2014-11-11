@@ -15,7 +15,7 @@ import static java.util.Arrays.copyOf;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ErrorStructure {
     protected final String message;
-    protected final String[] parameters;
+    protected final Object[] parameters;
     protected final String component;
     protected final String errorClass;
     protected final String errorCode;
@@ -25,7 +25,7 @@ public class ErrorStructure {
 
     @JsonCreator
     protected ErrorStructure(@JsonProperty("errorClass") String errorClass, @JsonProperty("component") String component,
-                             @JsonProperty("parameters") String[] parameters, @JsonProperty("message") String message,
+                             @JsonProperty("parameters") Object[] parameters, @JsonProperty("message") String message,
                              @JsonProperty("errorCode") String errorCode, @JsonProperty("errorId") String errorId,
                              @JsonProperty("trace") String trace, @JsonProperty("requestId") String requestId) {
         this.errorClass = errorClass;
@@ -42,7 +42,7 @@ public class ErrorStructure {
         return message;
     }
 
-    public String[] getParameters() {
+    public Object[] getParameters() {
         return parameters == null ? null : copyOf(parameters, parameters.length);
     }
 
