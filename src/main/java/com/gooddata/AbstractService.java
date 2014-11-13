@@ -3,7 +3,7 @@
  */
 package com.gooddata;
 
-import static com.gooddata.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 import static java.lang.String.format;
 import static org.springframework.http.HttpMethod.GET;
 

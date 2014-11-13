@@ -1,9 +1,14 @@
 package com.gooddata.dataset;
 
 import com.gooddata.gdc.ErrorStructure;
+import com.gooddata.util.GDDateTimeDeserializer;
+import com.gooddata.util.GDDateTimeSerializer;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.joda.time.DateTime;
 
 /**
  * Fail status of dataset load.
@@ -13,11 +18,12 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public class FailStatus {
 
     private final String status;
-    private final String date; //TODO date
+    private final DateTime date;
     private final ErrorStructure error;
 
     @JsonCreator
-    private FailStatus(@JsonProperty("status") String status, @JsonProperty("date") String date,
+    private FailStatus(@JsonProperty("status") String status,
+                       @JsonProperty("date") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime date,
                        @JsonProperty("error") ErrorStructure error) {
         this.status = status;
         this.date = date;
@@ -28,7 +34,8 @@ public class FailStatus {
         return status;
     }
 
-    public String getDate() {
+    @JsonSerialize(using = GDDateTimeSerializer.class)
+    public DateTime getDate() {
         return date;
     }
 

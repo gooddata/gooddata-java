@@ -31,7 +31,7 @@ public class DatasetManifestTest {
         final DatasetManifest.Part lastPart = manifest.getParts().get(2);
         assertThat(lastPart.getColumnName(), is("d_person_department.nm_xdepartment"));
         assertThat(lastPart.getUploadMode(), is("FULL"));
-        assertThat(lastPart.getReferenceKey(), is(1));
+        assertThat(lastPart.isReferenceKey(), is(true));
         assertThat(lastPart.getPopulates(), hasSize(1));
         assertThat(lastPart.getPopulates().get(0), is("attr.person.xdepartment"));
 
@@ -41,7 +41,7 @@ public class DatasetManifestTest {
 
     @Test
     public void testSerialization() throws Exception {
-        final DatasetManifest.Part part = new DatasetManifest.Part("MODE", "COLUMN", singletonList("POPULATES"), 1,
+        final DatasetManifest.Part part = new DatasetManifest.Part("MODE", "COLUMN", singletonList("POPULATES"), true,
                 singletonMap("date", "CONSTRAINT"));
         final DatasetManifest manifest = new DatasetManifest("DATASET", "FILE", singletonList(part));
 

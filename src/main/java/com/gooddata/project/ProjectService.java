@@ -19,8 +19,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 
-import static com.gooddata.Validate.notEmpty;
-import static com.gooddata.Validate.notNull;
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * List projects, create a project, ...

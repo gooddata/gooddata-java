@@ -19,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.Collection;
 
-import static com.gooddata.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Service for connector integration creation, update of its settings or execution of its process.

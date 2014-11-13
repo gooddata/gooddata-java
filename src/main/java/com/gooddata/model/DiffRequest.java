@@ -10,7 +10,7 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import static com.gooddata.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * A request to perform diff between current project model and given targetModel.

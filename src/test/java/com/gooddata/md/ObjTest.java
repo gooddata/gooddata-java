@@ -5,6 +5,8 @@ package com.gooddata.md;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
 import java.io.InputStream;
@@ -18,17 +20,17 @@ public class ObjTest {
 
     public static final String AUTHOR = "/gdc/account/profile/USER_ID";
     public static final String CONTRIBUTOR = "/gdc/account/profile/CONTRIBUTOR_USER_ID";
-    public static final String CREATED = "2014-04-11 13:45:56";
+    public static final DateTime CREATED = new DateTime(2014, 4, 11, 13, 45, 56, DateTimeZone.UTC);
     public static final String SUMMARY = "Obj summary";
     public static final String TITLE = "Obj title";
-    public static final String UPDATED = "2014-04-11 13:45:57";
+    public static final DateTime UPDATED = new DateTime(2014, 4, 11, 13, 45, 57, DateTimeZone.UTC);
     public static final String CATEGORY = "attributeDisplayForm";
     public static final String TAGS = "TAG1 TAG2";
     public static final String URI = "/gdc/md/PROJECT_ID/obj/OBJ_ID";
-    public static final String DEPRECATED = "0";
+    public static final boolean DEPRECATED = false;
     public static final String IDENTIFIER = "attr.person.id.name";
-    public static final Integer LOCKED = 0;
-    public static final Integer UNLISTED = 1;
+    public static final boolean LOCKED = false;
+    public static final boolean UNLISTED = true;
 
     @Test
     public void testDeserialization() throws Exception {
@@ -45,10 +47,10 @@ public class ObjTest {
         assertThat(obj.getCategory(), is(CATEGORY));
         assertThat(obj.getTags(), is(TAGS));
         assertThat(obj.getUri(), is(URI));
-        assertThat(obj.getDeprecated(), is(DEPRECATED));
+        assertThat(obj.isDeprecated(), is(DEPRECATED));
         assertThat(obj.getIdentifier(), is(IDENTIFIER));
-        assertThat(obj.getLocked(), is(LOCKED));
-        assertThat(obj.getUnlisted(), is(UNLISTED));
+        assertThat(obj.isLocked(), is(LOCKED));
+        assertThat(obj.isUnlisted(), is(UNLISTED));
     }
 
     @Test

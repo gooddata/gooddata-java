@@ -32,7 +32,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.gooddata.Validate.notEmpty;
+import static com.gooddata.util.Validate.notEmpty;
 import static java.util.Collections.singletonMap;
 import static org.apache.http.util.VersionInfo.loadVersionInfo;
 

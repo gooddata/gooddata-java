@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.gooddata.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Query, create and update project metadata - attributes, facts, metrics, reports,...

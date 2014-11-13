@@ -3,10 +3,13 @@
  */
 package com.gooddata.md;
 
+import com.gooddata.util.BooleanIntegerDeserializer;
+import com.gooddata.util.BooleanIntegerSerializer;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
@@ -36,9 +39,9 @@ public class DisplayForm extends AbstractObj {
     }
 
     @JsonIgnore
-    public Integer getDefault() {
-        return content.getDefault();
-    } //TODO boolean
+    public boolean isDefault() {
+        return content.isDefault();
+    }
 
     @JsonIgnore
     public String getLdmExpression() {
@@ -51,14 +54,12 @@ public class DisplayForm extends AbstractObj {
 
         private final String formOf;
         private final String expression;
-        @JsonProperty("default")
-        private final Integer isDefault;
-        @JsonProperty("ldmexpression")
+        private final boolean isDefault;
         private final String ldmExpression;
 
         @JsonCreator
         public Content(@JsonProperty("formOf") String formOf, @JsonProperty("expression") String expression,
-                       @JsonProperty("default") Integer isDefault,
+                       @JsonProperty("default") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean isDefault,
                        @JsonProperty("ldmexpression") String ldmExpression) {
             this.formOf = formOf;
             this.expression = expression;
@@ -74,10 +75,13 @@ public class DisplayForm extends AbstractObj {
             return expression;
         }
 
-        public Integer getDefault() {
+	    @JsonProperty("default")
+	    @JsonSerialize(using = BooleanIntegerSerializer.class)
+        public boolean isDefault() {
             return isDefault;
         }
 
+	    @JsonProperty("ldmexpression")
         public String getLdmExpression() {
             return ldmExpression;
         }

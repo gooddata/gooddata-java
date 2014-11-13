@@ -20,7 +20,10 @@
             "filters" : []
         },
         "meta" : {
-            "title" : "Untitled"
+            "title" : "Untitled",
+	        "deprecated" : "0",
+	        "locked": 0,
+	        "unlisted": 0
         }
     }
 }

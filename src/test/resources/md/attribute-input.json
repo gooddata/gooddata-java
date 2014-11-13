@@ -16,7 +16,10 @@
           ]
       },
       "meta" : {
-         "title" : "Person ID"
+         "title" : "Person ID",
+	      "deprecated" : "0",
+	      "locked": 0,
+	      "unlisted": 0
       }
    }
 }

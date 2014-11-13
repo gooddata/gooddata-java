@@ -14,7 +14,7 @@ public class AttributeDisplayFormTest {
 
     public static final String FORM_OF = "/gdc/md/PROJECT_ID/obj/DF_FORM_OF_ID";
     public static final String EXPRESSION = "[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]";
-    public static final Integer DEFAULT = 0;
+    public static final boolean DEFAULT = false;
     public static final String LDM_EXPRESSION = "";
 
     @Test
@@ -25,7 +25,7 @@ public class AttributeDisplayFormTest {
 
         assertThat(attrDF.getFormOf(), is(FORM_OF));
         assertThat(attrDF.getExpression(), is(EXPRESSION));
-        assertThat(attrDF.getDefault(), is(DEFAULT));
+        assertThat(attrDF.isDefault(), is(DEFAULT));
         assertThat(attrDF.getLdmExpression(), is(LDM_EXPRESSION));
     }
 

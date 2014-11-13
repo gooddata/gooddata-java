@@ -1,6 +1,8 @@
 package com.gooddata.project;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -29,8 +31,8 @@ public class ProjectTest {
         assertThat(project.getSummary(), is("DESC"));
         assertThat(project.getAuthor(), is("/gdc/account/profile/USER_ID"));
         assertThat(project.getContributor(), is("/gdc/account/profile/CONTRIB_USER_ID"));
-        assertThat(project.getCreated(), is("2014-04-11 11:43:45"));
-        assertThat(project.getUpdated(), is("2014-04-11 11:43:47"));
+        assertThat(project.getCreated(), is(new DateTime(2014, 4, 11, 11, 43, 45, DateTimeZone.UTC)));
+        assertThat(project.getUpdated(), is(new DateTime(2014, 4, 11, 11, 43, 47, DateTimeZone.UTC)));
 
         assertThat(project.getLdmThumbnailLink(), is("/gdc/projects/PROJECT_ID/ldm?thumbnail=1"));
         assertThat(project.getUri(), is("/gdc/projects/PROJECT_ID"));

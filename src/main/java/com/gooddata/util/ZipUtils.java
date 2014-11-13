@@ -1,6 +1,6 @@
-package com.gooddata;
+package com.gooddata.util;
 
-import static com.gooddata.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 
 import org.springframework.util.StreamUtils;
 

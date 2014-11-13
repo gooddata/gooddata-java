@@ -5,8 +5,9 @@ package com.gooddata.md;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.joda.time.DateTime;
 
-import static com.gooddata.Validate.noNullElements;
+import static com.gooddata.util.Validate.noNullElements;
 
 /**
  * Metadata object (common part)
@@ -31,7 +32,7 @@ public abstract class AbstractObj implements Obj {
     }
 
     @JsonIgnore
-    public String getCreated() {
+    public DateTime getCreated() {
         return meta.getCreated();
     }
 
@@ -46,7 +47,7 @@ public abstract class AbstractObj implements Obj {
     }
 
     @JsonIgnore
-    public String getUpdated() {
+    public DateTime getUpdated() {
         return meta.getUpdated();
     }
 
@@ -66,8 +67,8 @@ public abstract class AbstractObj implements Obj {
     }
 
     @JsonIgnore
-    public String getDeprecated() {
-        return meta.getDeprecated();
+    public boolean isDeprecated() {
+        return meta.isDeprecated();
     }
 
     @JsonIgnore
@@ -76,13 +77,13 @@ public abstract class AbstractObj implements Obj {
     }
 
     @JsonIgnore
-    public Integer getLocked() {
-        return meta.getLocked();
+    public boolean isLocked() {
+        return meta.isLocked();
     }
 
     @JsonIgnore
-    public Integer getUnlisted() {
-        return meta.getUnlisted();
+    public boolean isUnlisted() {
+        return meta.isUnlisted();
     }
 
     /**

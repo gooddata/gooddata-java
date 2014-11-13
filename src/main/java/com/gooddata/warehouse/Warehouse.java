@@ -1,14 +1,19 @@
 package com.gooddata.warehouse;
 
-import static com.gooddata.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
+import static org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion.NON_NULL;
 
+import com.gooddata.util.ISODateTimeDeserializer;
+import com.gooddata.util.ISODateTimeSerializer;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.joda.time.DateTime;
 import org.springframework.web.util.UriTemplate;
 
 import java.util.Map;
@@ -19,7 +24,7 @@ import java.util.Map;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("instance")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonSerialize(include = NON_NULL)
 public class Warehouse {
 
     private static final String ID_PARAM = "id";
@@ -35,8 +40,8 @@ public class Warehouse {
     private String description;
 
     private String authorizationToken;
-    private String created; // TODO should be date
-    private String updated; // TODO should be date
+    private DateTime created;
+    private DateTime updated;
     private String createdBy;
     private String updatedBy;
     private String status;
@@ -57,8 +62,11 @@ public class Warehouse {
 
     @JsonCreator
     Warehouse(@JsonProperty("title") String title, @JsonProperty("authorizationToken") String authToken,
-            @JsonProperty("description") String description, @JsonProperty("created") String created, @JsonProperty("updated") String updated,
-            @JsonProperty("createdBy") String createdBy, @JsonProperty("updatedBy") String updatedBy, @JsonProperty("status") String status, @JsonProperty("links") Map<String, String> links) {
+              @JsonProperty("description") String description,
+              @JsonProperty("created")  @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime created,
+              @JsonProperty("updated")  @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime updated,
+              @JsonProperty("createdBy") String createdBy, @JsonProperty("updatedBy") String updatedBy,
+              @JsonProperty("status") String status, @JsonProperty("links") Map<String, String> links) {
         this(title, authToken, description);
         this.created = created;
         this.updated = updated;
@@ -88,11 +96,13 @@ public class Warehouse {
         this.description = description;
     }
 
-    public String getCreated() {
+    @JsonSerialize(using = ISODateTimeSerializer.class, include = NON_NULL)
+    public DateTime getCreated() {
         return created;
     }
 
-    public String getUpdated() {
+    @JsonSerialize(using = ISODateTimeSerializer.class, include = NON_NULL)
+    public DateTime getUpdated() {
         return updated;
     }
 

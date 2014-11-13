@@ -4,6 +4,8 @@
 package com.gooddata.md;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
@@ -15,17 +17,17 @@ public class MetaTest {
 
     public static final String AUTHOR = "/gdc/account/profile/USER_ID";
     public static final String CONTRIBUTOR = "/gdc/account/profile/CONTRIBUTOR_USER_ID";
-    public static final String CREATED = "2014-04-11 13:45:56";
+    public static final DateTime CREATED = new DateTime(2014, 4, 11, 13, 45, 56, DateTimeZone.UTC);
     public static final String SUMMARY = "Obj summary";
     public static final String TITLE = "Obj title";
-    public static final String UPDATED = "2014-04-11 13:45:57";
+    public static final DateTime UPDATED = new DateTime(2014, 4, 11, 13, 45, 57, DateTimeZone.UTC);
     public static final String CATEGORY = "attributeDisplayForm";
     public static final String TAGS = "TAG1 TAG2";
     public static final String URI = "/gdc/md/PROJECT_ID/obj/OBJ_ID";
-    public static final String DEPRECATED = "0";
+    public static final boolean DEPRECATED = false;
     public static final String IDENTIFIER = "attr.person.id.name";
-    public static final Integer LOCKED = 0;
-    public static final Integer UNLISTED = 1;
+    public static final boolean LOCKED = false;
+    public static final boolean UNLISTED = true;
 
     @Test
     public void testDeserialization() throws Exception {
@@ -40,10 +42,10 @@ public class MetaTest {
         assertThat(meta.getCategory(), is(CATEGORY));
         assertThat(meta.getTags(), is(TAGS));
         assertThat(meta.getUri(), is(URI));
-        assertThat(meta.getDeprecated(), is(DEPRECATED));
+        assertThat(meta.isDeprecated(), is(DEPRECATED));
         assertThat(meta.getIdentifier(), is(IDENTIFIER));
-        assertThat(meta.getLocked(), is(LOCKED));
-        assertThat(meta.getUnlisted(), is(UNLISTED));
+        assertThat(meta.isLocked(), is(LOCKED));
+        assertThat(meta.isUnlisted(), is(UNLISTED));
     }
 
     @Test

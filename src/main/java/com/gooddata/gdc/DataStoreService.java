@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 
-import static com.gooddata.Validate.notEmpty;
-import static com.gooddata.Validate.notNull;
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Uploads, downloads, deletes, ... at datastore

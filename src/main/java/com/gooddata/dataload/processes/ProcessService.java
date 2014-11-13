@@ -1,7 +1,7 @@
 package com.gooddata.dataload.processes;
 
-import static com.gooddata.Validate.notEmpty;
-import static com.gooddata.Validate.notNull;
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 import static java.util.Collections.emptyList;
 
 import com.gooddata.AbstractService;
@@ -9,7 +9,7 @@ import com.gooddata.AbstractPollHandler;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.ZipUtils;
+import com.gooddata.util.ZipUtils;
 import com.gooddata.account.AccountService;
 import com.gooddata.project.Project;
 import org.springframework.core.io.FileSystemResource;

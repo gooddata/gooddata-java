@@ -1,4 +1,4 @@
-package com.gooddata;
+package com.gooddata.util;
 
 import java.util.Collection;
 import java.util.Iterator;

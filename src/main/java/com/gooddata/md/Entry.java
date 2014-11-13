@@ -1,9 +1,12 @@
 package com.gooddata.md;
 
+import com.gooddata.util.*;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.joda.time.DateTime;
 
 /**
  * Metadata entry (can be named "LINK" in some API docs)
@@ -18,13 +21,13 @@ public class Entry {
     private final String category;
     private final String author;
     private final String contributor;
-    private final String deprecated; //TODO boolean
+    private final boolean deprecated;
     private final String identifier;
     private final String tags; //TODO collection
-    private final String created; //TODO date time
-    private final String updated; //TODO date time
-    private final Integer locked; //TODO boolean
-    private final Integer unlisted; //TODO boolean
+    private final DateTime created;
+    private final DateTime updated;
+    private final boolean locked;
+    private final boolean unlisted;
 
     @JsonCreator
     public Entry(@JsonProperty("link") String link,
@@ -33,13 +36,13 @@ public class Entry {
                  @JsonProperty("category") String category,
                  @JsonProperty("author") String author,
                  @JsonProperty("contributor") String contributor,
-                 @JsonProperty("deprecated") String deprecated,
+                 @JsonProperty("deprecated") @JsonDeserialize(using = BooleanStringDeserializer.class) boolean deprecated,
                  @JsonProperty("identifier") String identifier,
                  @JsonProperty("tags") String tags,
-                 @JsonProperty("created") String created,
-                 @JsonProperty("updated") String updated,
-                 @JsonProperty("locked") Integer locked,
-                 @JsonProperty("unlisted") Integer unlisted) {
+                 @JsonProperty("created") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime created,
+                 @JsonProperty("updated") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime updated,
+                 @JsonProperty("locked") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean locked,
+                 @JsonProperty("unlisted") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean unlisted) {
         this.link = link;
         this.title = title;
         this.summary = summary;
@@ -79,7 +82,8 @@ public class Entry {
         return contributor;
     }
 
-    public String getDeprecated() {
+    @JsonSerialize(using = BooleanStringSerializer.class)
+    public boolean isDeprecated() {
         return deprecated;
     }
 
@@ -91,19 +95,23 @@ public class Entry {
         return tags;
     }
 
-    public String getCreated() {
+    @JsonSerialize(using = GDDateTimeSerializer.class)
+    public DateTime getCreated() {
         return created;
     }
 
-    public String getUpdated() {
+    @JsonSerialize(using = GDDateTimeSerializer.class)
+    public DateTime getUpdated() {
         return updated;
     }
 
-    public Integer getLocked() {
+	@JsonSerialize(using = BooleanIntegerSerializer.class)
+    public boolean isLocked() {
         return locked;
     }
 
-    public Integer getUnlisted() {
+	@JsonSerialize(using = BooleanIntegerSerializer.class)
+    public boolean isUnlisted() {
         return unlisted;
     }
 }

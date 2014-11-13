@@ -2,6 +2,8 @@ package com.gooddata.dataset;
 
 import com.gooddata.gdc.ErrorStructure;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
 import java.io.InputStream;
@@ -20,7 +22,7 @@ public class FailStatusTest {
 
         assertThat(value, is(notNullValue()));
         assertThat(value.getStatus(), is("ERROR"));
-        assertThat(value.getDate(), is("2014-04-21 00:11:34"));
+        assertThat(value.getDate(), is(new DateTime(2014, 4, 21, 0, 11, 34, DateTimeZone.UTC)));
 
         final ErrorStructure error = value.getError();
         assertThat(error, is(notNullValue()));

@@ -3,11 +3,14 @@
  */
 package com.gooddata.dataset;
 
+import com.gooddata.util.BooleanIntegerDeserializer;
+import com.gooddata.util.BooleanIntegerSerializer;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.List;
@@ -102,14 +105,14 @@ public class DatasetManifest {
         private String uploadMode;
         private String columnName;
         private List<String> populates;
-        private Integer referenceKey; //TODO boolean
+        private boolean referenceKey;
         private Map<String, String> constraints;
 
         @JsonCreator
         Part(@JsonProperty("mode") String uploadMode,
              @JsonProperty("columnName") String columnName,
              @JsonProperty("populates") List<String> populates,
-             @JsonProperty("referenceKey") Integer referenceKey,
+             @JsonProperty("referenceKey") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean referenceKey,
              @JsonProperty("constraints") Map<String, String> constraints) {
             this.uploadMode = uploadMode;
             this.columnName = columnName;
@@ -142,11 +145,12 @@ public class DatasetManifest {
             this.populates = populates;
         }
 
-        public Integer getReferenceKey() {
+	    @JsonSerialize(using = BooleanIntegerSerializer.class)
+        public boolean isReferenceKey() {
             return referenceKey;
         }
 
-        public void setReferenceKey(Integer referenceKey) {
+        public void setReferenceKey(boolean referenceKey) {
             this.referenceKey = referenceKey;
         }
 

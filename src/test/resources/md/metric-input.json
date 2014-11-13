@@ -5,7 +5,10 @@
             "format" : "FORMAT"
         },
         "meta" : {
-            "title" : "Person Name"
+            "title" : "Person Name",
+	        "deprecated" : "0",
+	        "locked": 0,
+	        "unlisted": 0
         }
     }
 }
