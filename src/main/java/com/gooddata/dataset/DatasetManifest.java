@@ -16,7 +16,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import java.util.List;
 import java.util.Map;
 
-import static com.gooddata.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
+
 
 /**
  * Dataset specific upload manifest
