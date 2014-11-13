@@ -51,8 +51,8 @@ public class DatasetManifestTest {
     @Test
     public void shouldSetUploadModeForAllParts() throws Exception {
         final DatasetManifest manifest = new DatasetManifest("dataset", "file.csv", asList(
-                new DatasetManifest.Part("FULL", "col1", asList("attr1"), 1, null),
-                new DatasetManifest.Part("FULL", "col2", asList("attr2"), 1, null)
+                new DatasetManifest.Part("FULL", "col1", asList("attr1"), true, null),
+                new DatasetManifest.Part("FULL", "col2", asList("attr2"), true, null)
         ));
         manifest.setUploadMode(UploadMode.INCREMENTAL);
 
@@ -63,8 +63,8 @@ public class DatasetManifestTest {
     @Test
     public void shouldSetMapping() throws Exception {
         final DatasetManifest manifest = new DatasetManifest("dataset", "file.csv", asList(
-                new DatasetManifest.Part("FULL", "col1", asList("attr1"), 1, null),
-                new DatasetManifest.Part("FULL", "col2", asList("attr2"), 1, null)
+                new DatasetManifest.Part("FULL", "col1", asList("attr1"), true, null),
+                new DatasetManifest.Part("FULL", "col2", asList("attr2"), true, null)
         ));
         manifest.setMapping("c1", "attr1");
         manifest.setMapping("c2", "attr2");
@@ -76,7 +76,7 @@ public class DatasetManifestTest {
     @Test(expectedExceptions = IllegalStateException.class)
     public void shouldFailOnMultiPopulates() throws Exception {
         final DatasetManifest manifest = new DatasetManifest("dataset", "file.csv", asList(
-                new DatasetManifest.Part("FULL", "col1", asList("attr1", "attr2"), 1, null)
+                new DatasetManifest.Part("FULL", "col1", asList("attr1", "attr2"), true, null)
         ));
         manifest.setMapping("col", "attr2");
     }
