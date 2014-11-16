@@ -21,6 +21,6 @@ public class GdcServiceIT extends AbstractGoodDataIT {
 
         final Gdc gdc = gd.getGdcService().getGdc();
         assertThat(gdc, is(notNullValue()));
-        assertThat(gdc.getUserStagingLink(), is("{STAGING_LINK}"));
+        assertThat(gdc.getUserStagingLink(), is("/uploads"));
     }
 }
