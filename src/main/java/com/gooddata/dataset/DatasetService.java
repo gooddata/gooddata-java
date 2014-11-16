@@ -21,11 +21,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
 /**
@@ -100,17 +103,7 @@ public class DatasetService extends AbstractService {
                     final PullTaskStatus status = extractData(response, PullTaskStatus.class);
                     final boolean finished = status.isFinished();
                     if (finished && !status.isSuccess()) {
-                        String message = "status: " + status.getStatus();
-                        try {
-                            final InputStream input = dataStoreService
-                                    .download(dirPath.resolve(STATUS_FILE_NAME).toString());
-                            final FailStatus failStatus = mapper.readValue(input, FailStatus.class);
-                            if (failStatus != null && failStatus.getError() != null) {
-                                message = failStatus.getError().getFormattedMessage();
-                            }
-                        } catch (IOException | DataStoreException ignored) {
-                            // todo log?
-                        }
+                        final String message = getErrorMessage(status, dirPath);
                         throw new DatasetException(message, manifest.getDataSet());
                     }
                     return finished;
@@ -129,6 +122,43 @@ public class DatasetService extends AbstractService {
             throw new DatasetException("Unable to serialize manifest", manifest.getDataSet(), e);
         } catch (DataStoreException | GoodDataRestException | RestClientException e) {
             throw new DatasetException("Unable to load", manifest.getDataSet(), e);
+        }
+    }
+
+    private String getErrorMessage(final PullTaskStatus status, final Path dirPath) {
+        String message = "status: " + status.getStatus();
+        try {
+            final FailStatus failStatus = download(dirPath.resolve(STATUS_FILE_NAME), FailStatus.class);
+            if (failStatus != null) {
+                final List<FailPart> errorParts = failStatus.getErrorParts();
+                if (!errorParts.isEmpty()) {
+                    final List<String> errors = new ArrayList<>();
+                    for (FailPart part: errorParts) {
+                        if (part.getLogName() != null) {
+                            try {
+                                final String[] msg = download(dirPath.resolve(part.getLogName()), String[].class);
+                                errors.addAll(asList(msg));
+                            } catch (IOException | DataStoreException e) {
+                                if (part.getError() != null) {
+                                    errors.add(part.getError().getFormattedMessage());
+                                }
+                            }
+                        }
+                    }
+                    message = errors.toString();
+                } else if (failStatus.getError() != null) {
+                    message = failStatus.getError().getFormattedMessage();
+                }
+            }
+        } catch (IOException | DataStoreException ignored) {
+            // todo log?
+        }
+        return message;
+    }
+
+    private <T> T download(final Path path, final Class<T> type) throws IOException {
+        try (final InputStream input = dataStoreService.download(path.toString())) {
+            return mapper.readValue(input, type);
         }
     }
 
