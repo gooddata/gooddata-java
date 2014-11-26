@@ -15,4 +15,12 @@ public class Zendesk4ProcessExecutionTest {
         assertThat(new Zendesk4ProcessExecution(), JsonMatchers.serializesToJson(
                 "/connector/process-execution-empty.json"));
     }
+
+    @Test
+    public void testShouldSerializeIncremental() throws Exception {
+        final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
+        execution.setIncremental(true);
+        assertThat(execution, JsonMatchers.serializesToJson(
+                "/connector/process-execution-incremental.json"));
+    }
 }
