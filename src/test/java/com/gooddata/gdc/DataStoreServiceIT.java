@@ -36,7 +36,7 @@ public class DataStoreServiceIT extends AbstractGoodDataIT {
         gd.getDataStoreService().upload("/test", content);
     }
 
-    @Test(enabled = false) // todo #91
+    @Test
     public void shouldUploadRelative() throws Exception {
         gd.getDataStoreService().upload("test", content);
     }
