@@ -2,52 +2,57 @@ package com.gooddata.gdc;
 
 import com.gooddata.AbstractGoodDataIT;
 import org.apache.commons.io.IOUtils;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.InputStream;
 
 import static net.jadler.Jadler.onRequest;
 import static net.jadler.Jadler.port;
-import static net.jadler.Jadler.verifyThatRequest;
 
 public class DataStoreServiceIT extends AbstractGoodDataIT {
 
+    private InputStream content;
 
-    @Test
-    public void testUpload() throws Exception {
-        onRequest().havingMethodEqualTo("PUT").havingPathEqualTo("/test").respond().withStatus(201);
-        mockGdc("http://localhost:" + port());
-        gd.getDataStoreService().upload("/test", new ByteArrayInputStream("test".getBytes()));
-        verifyThatRequest().havingMethodEqualTo("PUT").havingPathEqualTo("/test").receivedOnce();
-    }
-
-    @Test
-    public void testUploadRelativePath() throws Exception {
-        testUploadRelative("/uploads");
-    }
-
-    @Test
-    public void testUploadRelativePathNoSlash() throws Exception {
-        testUploadRelative("uploads");
-    }
-
-    private void testUploadRelative(String path) throws IOException {
-        onRequest().havingMethodEqualTo("PUT").havingPathEqualTo("/uploads/test").respond().withStatus(201);
-        mockGdc(path);
-        gd.getDataStoreService().upload("/test", new ByteArrayInputStream("test".getBytes()));
-        verifyThatRequest().havingMethodEqualTo("PUT").havingPathEqualTo("/uploads/test").receivedOnce();
-    }
-
-    private void mockGdc(String path) throws IOException {
-        final String gdcBody = IOUtils.toString(getClass().getResourceAsStream("/gdc/gdc.json")).replaceAll("\\{STAGING_LINK\\}", path);
+    @BeforeMethod
+    public void setUp() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("PUT")
+                .havingPathEqualTo("/uploads/test")
+            .respond()
+                .withStatus(201);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc")
-                .respond()
-                .withBody(gdcBody)
+            .respond()
+                .withBody(readResource("/gdc/gdc.json"))
                 .withStatus(200);
+        content = new ByteArrayInputStream("test".getBytes());
     }
 
+    @Test
+    public void shouldUploadAbsolute() throws Exception {
+        gd.getDataStoreService().upload("/test", content);
+    }
+
+    @Test(enabled = false) // todo #91
+    public void shouldUploadRelative() throws Exception {
+        gd.getDataStoreService().upload("test", content);
+    }
+
+    @Test
+    public void shouldUploadWithFullStagingLink() throws Exception {
+        final String gdcBody = IOUtils.toString(readResource("/gdc/gdc.json"))
+                .replaceAll("/uploads", "http://localhost:" + port() + "/uploads");
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc")
+            .respond()
+                .withBody(gdcBody)
+                .withStatus(200);
+
+        gd.getDataStoreService().upload("/test", content);
+    }
 
 }
