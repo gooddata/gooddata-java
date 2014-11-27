@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -19,7 +20,8 @@ public abstract class ZipUtils {
 
     /**
      * This method compresses the input file to zip format. If the given file is a directory, it recursively
-     * packs the directory into the output. Not including give directory itself
+     * packs the directory into the output. Not including given directory itself.
+     * If the given file is already zipped, simply copies it into the output.
      *
      * @param file file to be zipped
      * @param output stream where the output will be written
@@ -31,7 +33,7 @@ public abstract class ZipUtils {
 
     /**
      * This method compresses the input file to zip format. If the given file is a directory, it recursively
-     * packs the directory into the output.
+     * packs the directory into the output. If the given file is already zipped, simply copies it into the output.
      *
      * @param file file to be zipped
      * @param output stream where the output will be written
@@ -42,13 +44,18 @@ public abstract class ZipUtils {
         notNull(file, "file");
         notNull(output, "output");
 
-        try (ZipOutputStream zos = new ZipOutputStream(output)) {
-            if (file.isDirectory()) {
-                zipDir(includeRoot ? file.getParentFile().toPath() : file.toPath(), file, zos);
-            } else {
-                zipFile(file.getParentFile().toPath(), file, zos);
+        if (isZipped(file)) {
+            try (FileInputStream fis = new FileInputStream(file)) {
+                StreamUtils.copy(fis, output);
             }
-
+        } else {
+            try (ZipOutputStream zos = new ZipOutputStream(output)) {
+                if (file.isDirectory()) {
+                    zipDir(includeRoot ? file.getParentFile().toPath() : file.toPath(), file, zos);
+                } else {
+                    zipFile(file.getParentFile().toPath(), file, zos);
+                }
+            }
         }
     }
 
@@ -69,5 +76,13 @@ public abstract class ZipUtils {
             StreamUtils.copy(fis, zos);
         }
         zos.closeEntry();
+    }
+
+    private static boolean isZipped(File file) {
+        try {
+            return new ZipInputStream(new FileInputStream(file)).getNextEntry() != null;
+        } catch (IOException e) {
+            return false;
+        }
     }
 }
