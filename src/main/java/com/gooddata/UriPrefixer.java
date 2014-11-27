@@ -5,6 +5,7 @@ package com.gooddata;
 
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.File;
 import java.net.URI;
 
 import static com.gooddata.util.Validate.notEmpty;
@@ -52,8 +53,9 @@ public class UriPrefixer {
      */
     public URI mergeUris(URI uri) {
         notNull(uri, "uri");
+        final String path = new File(uriPrefix.getRawPath(), uri.getRawPath()).getAbsolutePath();
         return UriComponentsBuilder.fromUri(uriPrefix)
-                .path(uri.getRawPath())
+                .replacePath(path)
                 .query(uri.getRawQuery())
                 .fragment(uri.getRawFragment())
                 .build().toUri();
