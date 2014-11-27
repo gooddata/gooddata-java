@@ -1,5 +1,5 @@
 language: java
 install: true
-script: mvn verify
+script: mvn verify coveralls:report -Pcoverage
 jdk:
   - openjdk7
