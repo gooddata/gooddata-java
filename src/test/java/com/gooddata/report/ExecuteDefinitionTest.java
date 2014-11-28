@@ -8,11 +8,11 @@ import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ReportRequestTest {
+public class ExecuteDefinitionTest {
 
     @Test
     public void testSerialization() throws Exception {
-        final ReportRequest request = new ReportRequest("DEF-URI");
-        assertThat(request, JsonMatchers.serializesToJson("/report/reportRequest.json"));
+        final ReportRequest request = new ExecuteDefinition("DEF-URI");
+        assertThat(request, JsonMatchers.serializesToJson("/report/executeDefinition.json"));
     }
 }

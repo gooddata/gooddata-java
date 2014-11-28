@@ -8,6 +8,7 @@ import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.SimplePollHandler;
 import com.gooddata.gdc.UriResponse;
+import com.gooddata.md.report.Report;
 import com.gooddata.md.report.ReportDefinition;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
@@ -26,7 +27,7 @@ import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
 /**
- * Service for report execution and export
+ * Service for report export
  */
 public class ReportService extends AbstractService {
 
@@ -36,12 +37,38 @@ public class ReportService extends AbstractService {
         super(restTemplate);
     }
 
+    /**
+     * Export the given report definition in the given format to the given output strream
+     * @param reportDefinition report definition
+     * @param format export format
+     * @param output target
+     * @return polling result
+     */
     public FutureResult<Void> exportReport(final ReportDefinition reportDefinition, final ReportExportFormat format,
                                            final OutputStream output) {
-        notNull(output, "output");
         notNull(reportDefinition, "reportDefinition");
+        final ReportRequest request = new ExecuteDefinition(reportDefinition.getUri());
+        return exportReport(request, format, output);
+    }
+
+    /**
+     * Export the given report in the given format to the given output strream
+     * @param report report
+     * @param format export format
+     * @param output target
+     * @return polling result
+     */
+    public FutureResult<Void> exportReport(final Report report, final ReportExportFormat format,
+                                           final OutputStream output) {
+        notNull(report, "report");
+        final ReportRequest request = new ExecuteReport(report.getUri());
+        return exportReport(request, format, output);
+    }
+
+    private FutureResult<Void> exportReport(final ReportRequest request, final ReportExportFormat format, final OutputStream output) {
+        notNull(output, "output");
         notNull(format, "format");
-        final JsonNode execResult = executeReport(reportDefinition.getUri());
+        final JsonNode execResult = executeReport(request);
         final String uri = exportReport(execResult, format);
         return new FutureResult<>(this, new SimplePollHandler<Void>(uri, Void.class) {
             @Override
@@ -64,12 +91,10 @@ public class ReportService extends AbstractService {
         });
     }
 
-    private JsonNode executeReport(final String reportDefinitionUri) {
-        notEmpty(reportDefinitionUri, "reportDefinitionUri");
+    private JsonNode executeReport(final ReportRequest request) {
         try {
             final ResponseEntity<String> entity = restTemplate
-                    .exchange(ReportRequest.URI, POST, new HttpEntity<>(new ReportRequest(reportDefinitionUri)),
-                            String.class);
+                    .exchange(ReportRequest.URI, POST, new HttpEntity<>(request), String.class);
             return mapper.readTree(entity.getBody());
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to execute report", e);
