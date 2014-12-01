@@ -1,26 +1,23 @@
 package com.gooddata.dataload.processes;
 
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
-import static java.util.Collections.emptyList;
-
-import com.gooddata.AbstractService;
 import com.gooddata.AbstractPollHandler;
+import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.account.AccountService;
 import com.gooddata.collections.Page;
 import com.gooddata.collections.PageableList;
 import com.gooddata.gdc.DataStoreService;
-import com.gooddata.util.ZipUtils;
-import com.gooddata.account.AccountService;
 import com.gooddata.project.Project;
+import com.gooddata.util.ZipUtils;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -36,6 +33,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.Collection;
+
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
+import static java.util.Collections.emptyList;
 
 /**
  * Service to manage dataload processes and process executions.
@@ -235,7 +236,9 @@ public class ProcessService extends AbstractService {
                 }
             }
         });
-    }/**
+    }
+
+    /**
      * Create new schedule with given data by given project.
      *
      * @param project  project to which the process belongs
@@ -263,7 +266,12 @@ public class ProcessService extends AbstractService {
 
         final String uri = getScheduleUri(project, schedule.getId()).toString();
         try {
-            return restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(schedule), Schedule.class).getBody();
+            final ResponseEntity<Schedule> response = restTemplate
+                    .exchange(uri, HttpMethod.PUT, new HttpEntity<>(schedule), Schedule.class);
+            if (response == null) {
+                throw new GoodDataException("Unable to update schedule. No response returned from API.");
+            }
+            return response.getBody();
         } catch (GoodDataRestException e) {
             if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
                 throw new ScheduleNotFoundException(uri, e);
@@ -380,7 +388,9 @@ public class ProcessService extends AbstractService {
     private Collection<DataloadProcess> listProcesses(URI uri) {
         try {
             final DataloadProcesses processes = restTemplate.getForObject(uri, DataloadProcesses.class);
-            if (processes == null || processes.getItems() == null) {
+            if (processes == null) {
+                throw new GoodDataException("empty response from API call");
+            } else if (processes.getItems() == null) {
                 return emptyList();
             }
             return processes.getItems();
@@ -430,7 +440,12 @@ public class ProcessService extends AbstractService {
         }
 
         try {
-            return restTemplate.exchange(postUri, method, new HttpEntity<>(processToSend), DataloadProcess.class).getBody();
+            final ResponseEntity<DataloadProcess> response = restTemplate
+                    .exchange(postUri, method, new HttpEntity<>(processToSend), DataloadProcess.class);
+            if (response == null) {
+                throw new GoodDataException("Unable to post dataload process. No response returned from API.");
+            }
+            return response.getBody();
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to post dataload process.", e);
         } finally {
