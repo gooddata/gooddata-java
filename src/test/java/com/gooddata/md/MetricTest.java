@@ -23,7 +23,7 @@ public class MetricTest {
 
     @Test
     public void testSerialization() throws Exception {
-        final Metric metric = new Metric("Person Name", "[/gdc/md/PROJECT_ID/obj/EXPR_ID]", "FORMAT");
+        final Metric metric = new Metric("Person Name", "SELECT SUM([/gdc/md/PROJECT_ID/obj/EXPR_ID])", "FORMAT");
 
         assertThat(metric, serializesToJson("/md/metric-input.json"));
     }
