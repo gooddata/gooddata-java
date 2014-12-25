@@ -35,10 +35,16 @@ public class DataloadProcess {
     private String type;
     private Set<String> executables;
     private Map<String,String> links;
+    private String path;
 
     public DataloadProcess(String name, String type) {
         this.name = notEmpty(name, "name");
         this.type = notEmpty(type, "type");
+    }
+
+    DataloadProcess(String name, String type, String path) {
+        this(name, type);
+        this.path = path;
     }
 
     public DataloadProcess(String name, ProcessType type) {
@@ -68,6 +74,14 @@ public class DataloadProcess {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    void setPath(String path) {
+        this.path = path;
     }
 
     @JsonIgnore
