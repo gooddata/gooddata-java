@@ -3,10 +3,13 @@
  */
 package com.gooddata.md.report;
 
+import com.gooddata.md.Meta;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import java.util.List;
 
 /**
  * One number report definition
@@ -70,5 +73,11 @@ public class OneNumberReportDefinitionContent extends ReportDefinitionContent {
         public String getDescription() {
             return description;
         }
+    }
+
+    public static ReportDefinition create(String title, List<String> columns, List<AttributeInGrid> rows,
+                                          List<GridElement> metrics) {
+        return new ReportDefinition(new Meta(title), new OneNumberReportDefinitionContent(
+                new Grid(columns, rows, metrics), title));
     }
 }
