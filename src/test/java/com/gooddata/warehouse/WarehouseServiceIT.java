@@ -1,6 +1,7 @@
 package com.gooddata.warehouse;
 
 import com.gooddata.AbstractGoodDataIT;
+import com.gooddata.GoodDataException;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.testng.annotations.BeforeClass;
@@ -66,6 +67,23 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         assertThat(created, notNullValue());
         assertThat(created.getTitle(), is(TITLE));
         assertThat(created.getJdbcConnectionString(), is("jdbc:gdc:datawarehouse://localhost:" + port() + WAREHOUSE_URI));
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void shouldFailToCreateWarehouse() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(Warehouses.URI)
+            .respond()
+                .withBody(readResource(TASK_POLL))
+                .withStatus(202);
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(pollingTask.getPollLink())
+            .respond()
+                .withStatus(400)
+        ;
+        gd.getWarehouseService().createWarehouse(new Warehouse(TITLE, "{Token}", "Storage")).get();
     }
 
     @Test

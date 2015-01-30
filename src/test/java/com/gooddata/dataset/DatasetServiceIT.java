@@ -89,6 +89,17 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
 
     }
 
+    @Test(expectedExceptions = DatasetException.class, expectedExceptionsMessageRegExp = ".*dataset.person.*Unable to load.*")
+    public void shouldFailPolling() throws Exception {
+        onRequest()
+                .havingPathEqualTo("/gdc/md/PROJECT/etl/task/ID")
+                .respond()
+                .withStatus(400);
+
+        final DatasetManifest manifest = MAPPER.readValue(readResource("/dataset/datasetManifest.json"), DatasetManifest.class);
+        gd.getDatasetService().loadDataset(project, manifest, new ByteArrayInputStream(new byte[]{})).get();
+    }
+
     @Test
     public void shouldFailLoading() throws Exception {
         onRequest()

@@ -25,4 +25,9 @@ public class UriResponse {
     public String getUri() {
         return uri;
     }
+
+    @Override
+    public String toString() {
+        return uri;
+    }
 }

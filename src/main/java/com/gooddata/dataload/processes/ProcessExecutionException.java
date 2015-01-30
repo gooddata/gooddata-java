@@ -7,7 +7,6 @@ import com.gooddata.GoodDataException;
  */
 public class ProcessExecutionException extends GoodDataException {
 
-
     private ProcessExecutionDetail executionDetail;
     private String executionDetailUri;
 
@@ -20,13 +19,20 @@ public class ProcessExecutionException extends GoodDataException {
     }
 
     public ProcessExecutionException(String message, ProcessExecutionDetail executionDetail) {
-        super(message);
-        this.executionDetail = executionDetail;
+        this(message, executionDetail, null);
     }
 
     public ProcessExecutionException(String message, Throwable cause, String executionDetailUri) {
         super(message, cause);
         this.executionDetailUri = executionDetailUri;
+    }
+
+    public ProcessExecutionException(final String message, final ProcessExecutionDetail executionDetail, final Throwable cause) {
+        super(message, cause);
+        this.executionDetail = executionDetail;
+        if (executionDetail != null) {
+            this.executionDetailUri = executionDetail.getUri();
+        }
     }
 
     public ProcessExecutionDetail getExecutionDetail() {

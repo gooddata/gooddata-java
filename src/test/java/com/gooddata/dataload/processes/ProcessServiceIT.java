@@ -149,7 +149,20 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void shouldExecuteProcess() throws Exception {
-        mockExecutionRequests();
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(EXECUTIONS_PATH)
+            .respond()
+                .withBody(readResource("/dataload/processes/executionTask.json"))
+                .withHeader("Location", EXECUTION_PATH)
+                .withStatus(201);
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(EXECUTION_PATH)
+            .respond()
+                .withStatus(202)
+            .thenRespond()
+                .withStatus(204);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(EXECUTION_DETAIL_PATH)
@@ -165,18 +178,6 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
 
     @Test(expectedExceptions = ProcessExecutionException.class)
     public void shouldThrowOnExecuteProcessError() throws Exception {
-        mockExecutionRequests();
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo(EXECUTION_DETAIL_PATH)
-            .respond()
-                .withBody(readResource("/dataload/processes/executionDetail.json"))
-                .withStatus(200);
-
-        gd.getProcessService().executeProcess(new ProcessExecution(process, "test.groovy")).get();
-    }
-
-    private void mockExecutionRequests() {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(EXECUTIONS_PATH)
@@ -188,9 +189,16 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(EXECUTION_PATH)
             .respond()
-                .withStatus(202)
-            .thenRespond()
-                .withStatus(204);
+                .withStatus(410)
+        ;
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(EXECUTION_DETAIL_PATH)
+            .respond()
+                .withBody(readResource("/dataload/processes/executionDetail.json"))
+                .withStatus(200);
+
+        gd.getProcessService().executeProcess(new ProcessExecution(process, "test.groovy")).get();
     }
 
     @Test

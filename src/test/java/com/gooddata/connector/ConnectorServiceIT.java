@@ -114,6 +114,21 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         assertThat(process.getStatus().getCode(), is(SYNCHRONIZED.name()));
     }
 
+    @Test(expectedExceptions = ConnectorException.class, expectedExceptionsMessageRegExp = ".*process failed.*")
+    public void shouldFailExecuteProcessPolling() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes")
+            .respond()
+                .withBody(MAPPER.writeValueAsString(new UriResponse("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")));
+        onRequest()
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")
+            .respond()
+                .withStatus(400)
+        ;
+        connectors.executeProcess(project, new Zendesk4ProcessExecution()).get();
+    }
+
     @Test(expectedExceptions = GoodDataException.class)
     public void shouldFailExecuteProcess() throws Exception {
         onRequest()

@@ -8,7 +8,7 @@ package com.gooddata;
  *
  * @see com.gooddata.FutureResult
  */
-public class SimplePollHandler<T> extends AbstractPollHandler<T, T> {
+public abstract class SimplePollHandler<T> extends AbstractPollHandler<T, T> {
     /**
      * Creates a new instance of polling handler
      *

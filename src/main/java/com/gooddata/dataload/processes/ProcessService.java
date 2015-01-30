@@ -222,19 +222,31 @@ public class ProcessService extends AbstractService {
 
             @Override
             public void handlePollResult(Void pollResult) {
-                ProcessExecutionDetail executionDetail;
-                try {
-                    executionDetail = restTemplate.getForObject(detailLink, ProcessExecutionDetail.class);
-                } catch (GoodDataException | RestClientException e) {
-                    throw new ProcessExecutionException("Execution finished, but cannot get its result.", e, detailLink);
-                }
-
+                final ProcessExecutionDetail executionDetail = getProcessExecutionDetailByUri(detailLink);
                 if (!executionDetail.isSuccess()) {
                     throw new ProcessExecutionException("Execution was not successful", executionDetail);
                 } else {
                     setResult(executionDetail);
                 }
             }
+
+            @Override
+            public void handlePollException(final GoodDataRestException e) {
+                ProcessExecutionDetail detail = null;
+                try {
+                    detail = getProcessExecutionDetailByUri(detailLink);
+                } catch (GoodDataException ignored) { }
+                throw new ProcessExecutionException("Can't execute " + e.getText(), detail, e);
+            }
+
+            private ProcessExecutionDetail getProcessExecutionDetailByUri(final String uri) {
+                try {
+                    return restTemplate.getForObject(uri, ProcessExecutionDetail.class);
+                } catch (GoodDataException | RestClientException e) {
+                    throw new ProcessExecutionException("Execution finished, but cannot get its result.", e, uri);
+                }
+            }
+
         });
     }
 
