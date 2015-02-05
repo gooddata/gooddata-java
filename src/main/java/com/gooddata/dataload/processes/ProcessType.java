@@ -7,5 +7,6 @@ public enum ProcessType {
     GRAPH,
     RUBY,
     JAVASCRIPT,
-    GROOVY
+    GROOVY,
+    DATALOAD
 }
