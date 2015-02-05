@@ -8,6 +8,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import static com.gooddata.project.FeatureFlag.FEATURE_FLAGS_TEMPLATE;
+import static com.gooddata.project.FeatureFlag.FEATURE_FLAG_TEMPLATE;
+import static com.gooddata.util.ResourceUtils.readStringFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -19,7 +22,9 @@ import java.util.Collection;
 public class ProjectServiceIT extends AbstractGoodDataIT {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final String PROJECT_URI = "/gdc/projects/PROJECT_ID";
+
+    private static final String PROJECT_ID = "PROJECT_ID";
+    private static final String PROJECT_URI = "/gdc/projects/" + PROJECT_ID;
 
     private Project loading;
     private Project enabled;
@@ -122,7 +127,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     @Test
     public void shouldReturnProjectTemplates() throws Exception {
         onRequest()
-                .havingPathEqualTo("/gdc/md/PROJECT_ID/templates")
+                .havingPathEqualTo("/gdc/md/" + PROJECT_ID + "/templates")
             .respond()
                 .withBody(readResource("/project/project-templates.json"));
 
@@ -130,4 +135,86 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         assertThat(templates, is(notNullValue()));
         assertThat(templates, hasSize(1));
     }
+
+    @Test
+    public void shouldGetProjectFeatureFlag() {
+        final String featureFlagName = "myCoolFeature";
+
+        mockGetFeatureFlagRequest(getFeatureFlagUri(featureFlagName), true);
+
+        final FeatureFlag featureFlag = gd.getProjectService().getProjectFeatureFlag(PROJECT_ID,featureFlagName);
+
+        checkFeatureFlag(featureFlag, featureFlagName, true);
+    }
+
+    @Test
+    public void shouldSetProjectFeatureFlag() {
+        final String featureFlagName = "myCoolFeature";
+
+        final String featureFlagUri = getFeatureFlagUri(featureFlagName);
+
+        mockCreateFeatureFlagRequest(featureFlagUri);
+
+        mockGetFeatureFlagRequest(featureFlagUri, true);
+
+        final FeatureFlag featureFlag = gd.getProjectService().createProjectFeatureFlag(PROJECT_ID, featureFlagName);
+
+        checkFeatureFlag(featureFlag, featureFlagName, true);
+    }
+
+    @Test
+    public void shouldDisableExistingFeatureFlag() {
+
+        final String featureFlagName = "myCoolFeature";
+
+        final String featureFlagUri = getFeatureFlagUri(featureFlagName);
+        mockUpdateFeatureFlagRequest(featureFlagUri);
+        mockGetFeatureFlagRequest(featureFlagUri, false);
+
+        final FeatureFlag updatedFeatureFlag = gd.getProjectService().updateProjectFeatureFlag(
+                PROJECT_ID, featureFlagName, false);
+
+        checkFeatureFlag(updatedFeatureFlag, featureFlagName, false);
+    }
+
+
+    private String getFeatureFlagUri(String featureFlagName) {
+        return FEATURE_FLAG_TEMPLATE.expand(PROJECT_ID, featureFlagName).toString();
+    }
+
+    private void mockCreateFeatureFlagRequest(String featureFlagUri) {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(FEATURE_FLAGS_TEMPLATE.expand(PROJECT_ID).toString())
+                .respond()
+                .withHeader("Location", featureFlagUri)
+                .withStatus(201);
+    }
+
+    private void mockGetFeatureFlagRequest(String featureFlagUri, boolean featureFlagValue) {
+        final String jsonWithValue = readStringFromResource("/project/feature-flag.json")
+                .replaceAll("\"value\"\\s*:\\s*(true|false)",
+                        "\"value\" : " + featureFlagValue);
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(featureFlagUri)
+                .respond()
+                .withBody(jsonWithValue)
+                .withStatus(200);
+    }
+
+    private void mockUpdateFeatureFlagRequest(String featureFlagUri) {
+        onRequest()
+                .havingMethodEqualTo("PUT")
+                .havingPathEqualTo(featureFlagUri)
+                .respond()
+                .withStatus(200);
+    }
+
+    private void checkFeatureFlag(FeatureFlag featureFlag, String expectedName, boolean expectedValue) {
+        assertThat(featureFlag, is(notNullValue()));
+        assertThat(featureFlag.getKey(), is(expectedName));
+        assertThat(featureFlag.getValue(), is(expectedValue));
+    }
+
 }

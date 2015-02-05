@@ -16,9 +16,12 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 
+import static com.gooddata.project.FeatureFlag.FEATURE_FLAGS_TEMPLATE;
+import static com.gooddata.project.FeatureFlag.FEATURE_FLAG_TEMPLATE;
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 
@@ -157,5 +160,71 @@ public class ProjectService extends AbstractService {
         } catch (GoodDataRestException | RestClientException e) {
             throw new GoodDataException("Unable to get project templates", e);
         }
+    }
+
+
+    /**
+     * Creates new feature flag for given project - the feature flag is by default enabled.
+     * It doesn't make sense to create feature flag that is disabled because this is the same as having no feature
+     * flag at all.
+     *
+     * @param projectId project identifier
+     * @param featureFlagName name of feature flag to be enabled
+     */
+    public FeatureFlag createProjectFeatureFlag(final String projectId, final String featureFlagName) {
+        notEmpty(projectId, "projectId cannot be empty.");
+        notEmpty(featureFlagName, "featureFlagName cannot be empty!");
+
+        final String featureFlagsUri = FEATURE_FLAGS_TEMPLATE.expand(projectId).toString();
+
+        try {
+            final URI featureFlagUri = restTemplate.postForLocation(featureFlagsUri, new FeatureFlag(featureFlagName));
+            notNull(featureFlagsUri, "URI of new featureFlag should not be null!");
+            return getFeatureFlag(featureFlagUri.toString());
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to create feature flag: " + featureFlagName, e);
+        }
+    }
+
+    /**
+     * Get feature flag by unique name (aka "key").
+     *
+     * @param projectId project identifier
+     * @param featureFlagName name of feature flag
+     * @return feature flag
+     */
+    public FeatureFlag getProjectFeatureFlag(String projectId, String featureFlagName) {
+        return restTemplate.getForObject(getFeatureFlagUri(projectId, featureFlagName), FeatureFlag.class);
+    }
+
+    /**
+     * Updates existing feature flag using given {@code newValue}.
+     *
+     * @param projectId project identifier
+     * @param featureFlagName name of feature flag to be updated
+     * @param newValue new valued for feature flag - true (enabled), false (disabled)
+     * @return updated feature flag
+     */
+    public FeatureFlag updateProjectFeatureFlag(String projectId, String featureFlagName, boolean newValue) {
+                notEmpty(projectId, "projectId cannot be empty.");
+        notEmpty(featureFlagName, "featureFlagName cannot be empty!");
+
+        final String featureFlagUri = getFeatureFlagUri(projectId, featureFlagName);
+
+        try {
+            restTemplate.put(featureFlagUri, new FeatureFlag(featureFlagName, newValue));
+            return getFeatureFlag(featureFlagUri);
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to create feature flag: " + featureFlagName, e);
+        }
+
+    }
+
+    private FeatureFlag getFeatureFlag(String featureFlagUri) {
+        return restTemplate.getForObject(featureFlagUri, FeatureFlag.class);
+    }
+
+    private String getFeatureFlagUri(String projectId, String featureFlagName) {
+        return FEATURE_FLAG_TEMPLATE.expand(projectId, featureFlagName).toString();
     }
 }
