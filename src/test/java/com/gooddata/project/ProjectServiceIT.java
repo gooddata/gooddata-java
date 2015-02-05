@@ -11,9 +11,13 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static com.gooddata.JsonMatchers.isJsonString;
+import static com.gooddata.project.ProjectFeatureFlags.FEATURE_FLAGS_TEMPLATE;
+import static com.gooddata.project.ProjectFeatureFlag.FEATURE_FLAG_TEMPLATE;
+import static com.gooddata.util.ResourceUtils.readStringFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -25,7 +29,9 @@ import java.util.Set;
 public class ProjectServiceIT extends AbstractGoodDataIT {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final String PROJECT_URI = "/gdc/projects/PROJECT_ID";
+
+    private static final String PROJECT_ID = "PROJECT_ID";
+    private static final String PROJECT_URI = "/gdc/projects/" + PROJECT_ID;
 
     private Project loading;
     private Project enabled;
@@ -128,7 +134,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     @Test
     public void shouldReturnProjectTemplates() throws Exception {
         onRequest()
-                .havingPathEqualTo("/gdc/md/PROJECT_ID/templates")
+                .havingPathEqualTo("/gdc/md/" + PROJECT_ID + "/templates")
             .respond()
                 .withBody(readResource("/project/project-templates.json"));
 
@@ -137,12 +143,12 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         assertThat(templates, hasSize(1));
     }
 
-    @Test
+        @Test
     public void shouldReturnAvailableValidations() throws Exception {
         onRequest()
-                .havingPathEqualTo("/gdc/md/PROJECT_ID/validate")
-            .respond()
-                .withBody(readResource("/project/project-validationAvail.json"));
+                .havingPathEqualTo("/gdc/md/" + PROJECT_ID + "/validate")
+                    .respond()
+                    .withBody(readResource("/project/project-validationAvail.json"));
 
         final Set<ProjectValidationType> validations = gd.getProjectService().getAvailableProjectValidationTypes(enabled);
         assertThat(validations, notNullValue());
@@ -152,7 +158,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void shouldValidateProject() throws Exception {
-        final String validateUri = "/gdc/md/PROJECT_ID/validate";
+        final String validateUri = "/gdc/md/"  + PROJECT_ID + "/validate";
         final String task1Uri = validateUri + "/task/TASK_ID";
         final String task2Uri = validateUri + "/task/TASK_ID2";
         final String resultUri = validateUri + "/result/RESULT_ID";
@@ -200,7 +206,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void shouldValidateProject2() throws Exception {
-        final String validateUri = "/gdc/md/PROJECT_ID/validate";
+        final String validateUri = "/gdc/md/" + PROJECT_ID + "/validate";
         final String task1Uri = validateUri + "/task/TASK_ID";
         final String task2Uri = validateUri + "/task/TASK_ID2";
         final String resultUri = validateUri + "/result/RESULT_ID";
@@ -310,6 +316,126 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         final List<User> secondPage = gd.getProjectService().listUsers(enabled, new PageRequest(firstPage.size(), 1));
         assertThat(secondPage, notNullValue());
         assertThat(secondPage, empty());
+    }
+
+    @Test
+    public void shouldListProjectFeatureFlags() throws Exception {
+
+        mockListFeatureFlagsRequest();
+
+        final List<ProjectFeatureFlag> projectFeatureFlags = gd.getProjectService().listFeatureFlags(enabled);
+
+        assertThat(projectFeatureFlags, contains(
+                new ProjectFeatureFlag("myCoolFeature", true),
+                new ProjectFeatureFlag("mySuperCoolFeature", true),
+                new ProjectFeatureFlag("mySuperSecretFeature", false)));
+    }
+
+    @Test
+    public void shouldGetProjectFeatureFlag() {
+        final String featureFlagName = "myCoolFeature";
+
+        mockGetFeatureFlagRequest(getFeatureFlagUri(featureFlagName), true);
+
+        final ProjectFeatureFlag featureFlag = gd.getProjectService().getFeatureFlag(enabled, featureFlagName);
+
+        checkFeatureFlag(featureFlag, featureFlagName, true);
+    }
+
+    @Test
+    public void shouldSetProjectFeatureFlag() {
+        final String featureFlagName = "myCoolFeature";
+
+        final String featureFlagUri = getFeatureFlagUri(featureFlagName);
+
+        mockCreateFeatureFlagRequest(featureFlagUri);
+
+        mockGetFeatureFlagRequest(featureFlagUri, true);
+
+        final ProjectFeatureFlag featureFlag = gd.getProjectService().createFeatureFlag(enabled,
+                new ProjectFeatureFlag(featureFlagName));
+
+        checkFeatureFlag(featureFlag, featureFlagName, true);
+    }
+
+    @Test
+    public void shouldDisableExistingFeatureFlag() {
+
+        final String featureFlagName = "myCoolFeature";
+
+        final String featureFlagUri = getFeatureFlagUri(featureFlagName);
+        mockUpdateFeatureFlagRequest(featureFlagUri);
+        mockGetFeatureFlagRequest(featureFlagUri, false);
+
+        final ProjectFeatureFlag updatedFeatureFlag = gd.getProjectService().updateFeatureFlag(
+                new ProjectFeatureFlag(featureFlagName, false, new ProjectFeatureFlag.Links(featureFlagUri)));
+
+        checkFeatureFlag(updatedFeatureFlag, featureFlagName, false);
+    }
+
+    @Test
+    public void shouldDeleteExistingFeatureFlag() {
+
+        final String featureFlagName = "myCoolFeature";
+
+        final String featureFlagUri = getFeatureFlagUri(featureFlagName);
+        onRequest()
+                .havingMethodEqualTo("DELETE")
+                .havingPathEqualTo(featureFlagUri)
+                .respond()
+                .withStatus(204);
+
+        gd.getProjectService().deleteFeatureFlag(new ProjectFeatureFlag(featureFlagName, true,
+                new ProjectFeatureFlag.Links(featureFlagUri)));
+    }
+
+
+    private String getFeatureFlagUri(String featureFlagName) {
+        return FEATURE_FLAG_TEMPLATE.expand(PROJECT_ID, featureFlagName).toString();
+    }
+
+    private void mockListFeatureFlagsRequest() {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(FEATURE_FLAGS_TEMPLATE.expand(PROJECT_ID).toString())
+                .respond()
+                .withBody(readStringFromResource("/project/feature-flags.json"))
+                .withStatus(200);
+    }
+
+    private void mockCreateFeatureFlagRequest(String featureFlagUri) {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(FEATURE_FLAGS_TEMPLATE.expand(PROJECT_ID).toString())
+                .respond()
+                .withHeader("Location", featureFlagUri)
+                .withStatus(201);
+    }
+
+    private void mockGetFeatureFlagRequest(String featureFlagUri, boolean featureFlagValue) {
+        final String jsonWithValue = readStringFromResource("/project/feature-flag.json")
+                .replaceAll("\"value\"\\s*:\\s*(true|false)",
+                        "\"value\" : " + featureFlagValue);
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(featureFlagUri)
+                .respond()
+                .withBody(jsonWithValue)
+                .withStatus(200);
+    }
+
+    private void mockUpdateFeatureFlagRequest(String featureFlagUri) {
+        onRequest()
+                .havingMethodEqualTo("PUT")
+                .havingPathEqualTo(featureFlagUri)
+                .respond()
+                .withStatus(200);
+    }
+
+    private void checkFeatureFlag(ProjectFeatureFlag featureFlag, String expectedName, boolean expectedValue) {
+        assertThat(featureFlag, is(notNullValue()));
+        assertThat(featureFlag.getName(), is(expectedName));
+        assertThat(featureFlag.getEnabled(), is(expectedValue));
     }
 
 }
