@@ -22,6 +22,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static java.util.Arrays.asList;
+import static org.apache.commons.lang.Validate.notEmpty;
+import static org.apache.commons.lang.Validate.notNull;
 
 /**
  * Project in GoodData platform
@@ -228,6 +230,16 @@ public class Project {
         return "ENABLED".equals(getState());
     }
 
+    public void setDriver(String driver) {
+        notEmpty(driver, "driver cannot be empty!");
+        content.setDriver(driver);
+    }
+
+    public void setDriver(ProjectDriver driver) {
+        notNull(driver, "driver cannot be null!");
+        setDriver(driver.getValue());
+    }
+
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -251,6 +263,12 @@ public class Project {
         @JsonIgnore
         private String state;
 
+        public ProjectContent(final String authorizationToken) {
+            this.authorizationToken = authorizationToken;
+            guidedNavigation = "1";
+            driver = ProjectDriver.POSTGRES.getValue();
+        }
+
         @JsonCreator
         public ProjectContent(@JsonProperty("authorizationToken") String authorizationToken,
                               @JsonProperty("driver") String driver,
@@ -264,12 +282,6 @@ public class Project {
             this.cluster = cluster;
             this.isPublic = isPublic;
             this.state = state;
-        }
-
-        public ProjectContent(final String authorizationToken) {
-            this.authorizationToken = authorizationToken;
-            guidedNavigation = "1";
-            driver = "Pg";
         }
 
         public String getState() {
@@ -294,6 +306,10 @@ public class Project {
 
         public String getIsPublic() {
             return isPublic;
+        }
+
+        public void setDriver(String driver) {
+            this.driver = driver;
         }
     }
 

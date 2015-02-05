@@ -80,4 +80,27 @@ public class ProjectTest {
 
         assertThat(serializedProject, not(containsString("\"links\"")));
     }
+
+
+    @Test
+    public void testDeserializeVerticaProject() throws Exception {
+        final Project project = new ObjectMapper()
+                .readValue(getClass().getResourceAsStream("/project/project-vertica.json"), Project.class);
+        assertThat(project, is(notNullValue()));
+
+        assertThat(project.getDriver(), is("vertica"));
+        assertThat(project.getState(), is("ENABLED"));
+        assertThat(project.getTitle(), is("TITLE"));
+    }
+
+    @Test
+    public void testSerializeVerticaProject() throws Exception {
+        final Project project = new Project("TITLE", "SUMMARY", "TOKEN");
+        project.setDriver(ProjectDriver.VERTICA);
+        project.setProjectTemplate("/projectTemplates/TEMPLATE");
+        final String serializedProject = new ObjectMapper().writeValueAsString(project);
+
+        assertThat(serializedProject, startsWith("{\"project\""));
+        assertThat(serializedProject, containsString("\"driver\":\"vertica\""));
+    }
 }
