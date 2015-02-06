@@ -133,7 +133,7 @@ public class GoodData {
         dataStoreService = new DataStoreService(httpClientBuilder, gdcService, new HttpHost(hostname, port, protocol).toURI(), login, password);
         datasetService = new DatasetService(getRestTemplate(), dataStoreService);
         reportService = new ReportService(getRestTemplate());
-        processService = new ProcessService(getRestTemplate(), accountService);
+        processService = new ProcessService(getRestTemplate(), accountService, dataStoreService);
         warehouseService = new WarehouseService(getRestTemplate(), hostname, port);
         connectorService = new ConnectorService(getRestTemplate(), projectService);
     }

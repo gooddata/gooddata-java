@@ -50,8 +50,13 @@ public class DataStoreService {
         return prefixer;
     }
 
-    private URI getUri(String uri) {
-        return getPrefixer().mergeUris(uri);
+    /**
+     * Returns uri for given path (which is used by this service for upload, download or delete)
+     * @param path path the uri is constructed for
+     * @return uri for given path
+     */
+    public URI getUri(String path) {
+        return getPrefixer().mergeUris(path);
     }
 
     /**

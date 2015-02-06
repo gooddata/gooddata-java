@@ -9,6 +9,7 @@ import com.gooddata.AbstractPollHandler;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.gdc.DataStoreService;
 import com.gooddata.util.ZipUtils;
 import com.gooddata.account.AccountService;
 import com.gooddata.project.Project;
@@ -25,6 +26,8 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -37,18 +40,21 @@ import java.util.Collection;
 public class ProcessService extends AbstractService {
 
     private static final MediaType MEDIA_TYPE_ZIP = MediaType.parseMediaType("application/zip");
+    private static final long MAX_MULTIPART_SIZE = 1024 * 1024;
 
     private final AccountService accountService;
+    private final DataStoreService dataStoreService;
 
     /**
      * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
      * this abstract one.
-     *
      * @param restTemplate RESTful HTTP Spring template
      * @param accountService service to access accounts
+     * @param dataStoreService service for upload process data
      */
-    public ProcessService(RestTemplate restTemplate, AccountService accountService) {
+    public ProcessService(RestTemplate restTemplate, AccountService accountService, DataStoreService dataStoreService) {
         super(restTemplate);
+        this.dataStoreService = dataStoreService;
         this.accountService = notNull(accountService, "accountService");
     }
 
@@ -251,20 +257,37 @@ public class ProcessService extends AbstractService {
     private DataloadProcess postProcess(DataloadProcess process, File processData, URI postUri) {
         File tempFile = createTempFile("process", ".zip");
 
-        final MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>(2);
-        parts.add("process", process);
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MEDIA_TYPE_ZIP);
-        parts.add("data", new HttpEntity<>(new FileSystemResource(tempFile), headers));
-
         try (FileOutputStream output = new FileOutputStream(tempFile)) {
             ZipUtils.zip(processData, output);
         } catch (IOException e) {
             throw new GoodDataException("Unable to zip process data", e);
         }
 
+        Object processToSend;
+        HttpMethod method = HttpMethod.POST;
+        if (tempFile.length() > MAX_MULTIPART_SIZE) {
+            try {
+                process.setPath(dataStoreService.getUri(tempFile.getName()).getPath());
+                dataStoreService.upload(tempFile.getName(), new FileInputStream(tempFile));
+                processToSend = process;
+                if (DataloadProcess.TEMPLATE.matches(postUri.toString())) {
+                    method = HttpMethod.PUT;
+                }
+            } catch (FileNotFoundException e) {
+                throw new GoodDataException("Unable to access zipped process data at "
+                        + tempFile.getAbsolutePath(), e);
+            }
+        } else {
+            final MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>(2);
+            parts.add("process", process);
+            final HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MEDIA_TYPE_ZIP);
+            parts.add("data", new HttpEntity<>(new FileSystemResource(tempFile), headers));
+            processToSend = parts;
+        }
+
         try {
-            return restTemplate.postForObject(postUri, parts, DataloadProcess.class);
+            return restTemplate.exchange(postUri, method, new HttpEntity<>(processToSend), DataloadProcess.class).getBody();
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to post dataload process.", e);
         } finally {

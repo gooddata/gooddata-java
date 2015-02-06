@@ -30,5 +30,8 @@ public class DataloadProcessTest {
     public void testSerialization() {
         final DataloadProcess process = new DataloadProcess("testProcess", "GROOVY");
         assertThat(process, serializesToJson("/dataload/processes/process-input.json"));
+
+        final DataloadProcess processWithPath = new DataloadProcess("testProcess", "GROOVY", "/uploads/process.zip");
+        assertThat(processWithPath, serializesToJson("/dataload/processes/process-input-withPath.json"));
     }
 }
