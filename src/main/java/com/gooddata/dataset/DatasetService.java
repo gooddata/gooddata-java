@@ -3,6 +3,7 @@
  */
 package com.gooddata.dataset;
 
+import com.gooddata.AbstractPollHandler;
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
@@ -10,6 +11,7 @@ import com.gooddata.GoodDataRestException;
 import com.gooddata.SimplePollHandler;
 import com.gooddata.gdc.DataStoreException;
 import com.gooddata.gdc.DataStoreService;
+import com.gooddata.gdc.UriResponse;
 import com.gooddata.project.Project;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.http.client.ClientHttpResponse;
@@ -195,5 +197,45 @@ public class DatasetService extends AbstractService {
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to list datasets for project " + project.getId(), e);
         }
+    }
+
+    /**
+     * Optimize SLI hash. This feature is useful only if data warehouse was reduced somehow. Remove unused values from
+     * the existing SLI hash.
+     *
+     * @param project project to optimize SLI hash in
+     * @return {@link com.gooddata.FutureResult} of the task
+     */
+    public FutureResult<Void> optimizeSliHash(final Project project) {
+        notNull(project, "project");
+
+        final UriResponse uriResponse = restTemplate.postForObject(
+                EtlMode.URL, new EtlMode(EtlModeType.SLI, LookupMode.RECREATE), UriResponse.class, project.getId());
+
+        return new FutureResult<>(this,
+                new AbstractPollHandler<DatasetTaskStatus, Void>(uriResponse.getUri(), DatasetTaskStatus.class, Void.class) {
+            @Override
+            public void handlePollResult(final DatasetTaskStatus pollResult) {
+                if (!pollResult.isSuccess()) {
+                    throw new GoodDataException("Unable to optimize SLI hash for project " + project.getId());
+                }
+                setResult(null);
+            }
+
+            @Override
+            public boolean isFinished(final ClientHttpResponse response) throws IOException {
+                if (!super.isFinished(response)) {
+                    return false;
+                }
+                final DatasetTaskStatus maqlDdlTaskStatus = extractData(response, DatasetTaskStatus.class);
+                if (maqlDdlTaskStatus.isSuccess()) {
+                    return true;
+                }
+                throw new GoodDataException("Unable to optimize SLI hash: " + maqlDdlTaskStatus.getMessages());
+            }
+
+        });
+
+
     }
 }
