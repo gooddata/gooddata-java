@@ -12,6 +12,7 @@ import com.gooddata.gdc.UriResponse;
 import com.gooddata.project.Project;
 import com.gooddata.project.ProjectService;
 import com.gooddata.project.ProjectTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -31,6 +32,31 @@ public class ConnectorService extends AbstractService {
     public ConnectorService(final RestTemplate restTemplate, final ProjectService projectService) {
         super(restTemplate);
         this.projectService = notNull(projectService, "projectService");
+    }
+
+    /**
+     * Retrieve connector integration
+     *
+     * @param project       project
+     * @param connectorType connector type
+     * @return              integration
+     * @throws ConnectorException if integration can't be retrieved
+     */
+    public Integration getIntegration(final Project project, final ConnectorType connectorType) {
+        notNull(project, "project");
+        notNull(connectorType, "connector");
+
+        try {
+            return restTemplate.getForObject(Integration.URL, Integration.class, project.getId(), connectorType.getName());
+        } catch (GoodDataRestException e) {
+            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+                throw new IntegrationNotFoundException(project, connectorType, e);
+            } else {
+                throw e;
+            }
+        } catch (RestClientException e) {
+            throw new ConnectorException("Unable to get " + connectorType + " integration", e);
+        }
     }
 
     /**
@@ -76,6 +102,33 @@ public class ConnectorService extends AbstractService {
                     connectorType.getName());
         } catch (GoodDataRestException | RestClientException e) {
             throw new ConnectorException("Unable to create " + connectorType + " integration", e);
+        }
+    }
+
+    /**
+     * Update connector integration
+     *
+     * @param project       project
+     * @param connectorType connector type
+     * @param integration   integration
+     * @throws ConnectorException if integration can't be updated
+     */
+    public void updateIntegration(final Project project, final ConnectorType connectorType,
+                                         final Integration integration) {
+        notNull(project, "project");
+        notNull(connectorType, "connector");
+        notNull(integration, "integration");
+
+        try {
+            restTemplate.put(Integration.URL, integration, project.getId(), connectorType.getName());
+        } catch (GoodDataRestException e) {
+            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+                throw new IntegrationNotFoundException(project, connectorType, e);
+            } else {
+                throw e;
+            }
+        } catch (RestClientException e) {
+            throw new ConnectorException("Unable to update " + connectorType + " integration", e);
         }
     }
 
@@ -133,4 +186,6 @@ public class ConnectorService extends AbstractService {
             throw new ConnectorException("Unable to execute " + connectorType + " process", e);
         }
     }
+
+
 }

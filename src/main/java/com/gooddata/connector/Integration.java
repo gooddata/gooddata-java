@@ -4,6 +4,7 @@
 package com.gooddata.connector;
 
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
@@ -61,14 +62,17 @@ public class Integration {
         this.active = active;
     }
 
+    @JsonIgnore
     public IntegrationProcessStatus getLastFinishedProcess() {
         return lastFinishedProcess;
     }
 
+    @JsonIgnore
     public IntegrationProcessStatus getLastSuccessfulProcess() {
         return lastSuccessfulProcess;
     }
 
+    @JsonIgnore
     public IntegrationProcessStatus getRunningProcess() {
         return runningProcess;
     }

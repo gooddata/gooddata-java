@@ -37,4 +37,5 @@ public class IntegrationTest {
         assertThat(integration.getProjectTemplate(), is("template"));
         assertThat(integration.isActive(), is(true));
     }
+
 }

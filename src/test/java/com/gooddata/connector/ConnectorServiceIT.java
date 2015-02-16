@@ -49,6 +49,53 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
+    public void shouldGetIntegration() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
+            .respond()
+                .withBody(readResource("/connector/integration.json"));
+
+        final Integration integration = connectors.getIntegration(project, ConnectorType.ZENDESK4);
+        assertThat(integration, notNullValue());
+    }
+
+    @Test(expectedExceptions = IntegrationNotFoundException.class)
+    public void shouldFailGetIntegrationNotFount() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
+            .respond()
+                .withStatus(404);
+
+        connectors.getIntegration(project, ConnectorType.ZENDESK4);
+    }
+
+    @Test
+    public void shouldUpdateIntegration() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("PUT")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
+            .respond()
+                .withBody(readResource("/connector/integration.json"));
+
+        final Integration integration = new Integration("/projectTemplates/template");
+        connectors.updateIntegration(project, ConnectorType.ZENDESK4, integration);
+    }
+
+    @Test(expectedExceptions = IntegrationNotFoundException.class)
+    public void shouldFailUpdateIntegrationNotFound() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("PUT")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
+            .respond()
+                .withStatus(404);
+
+        final Integration integration = new Integration("/projectTemplates/template");
+        connectors.updateIntegration(project, ConnectorType.ZENDESK4, integration);
+    }
+
+    @Test
     public void shouldExecuteProcess() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
