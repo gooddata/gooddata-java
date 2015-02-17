@@ -200,7 +200,7 @@
         <dependency>
             <groupId>com.gooddata</groupId>
             <artifactId>gooddata-http-client</artifactId>
-            <version>0.8.2</version>
+            <version>0.8.3</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
