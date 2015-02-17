@@ -1,6 +1,7 @@
 package com.gooddata.dataset;
 
 import com.gooddata.AbstractGoodDataIT;
+import com.gooddata.GoodDataException;
 import com.gooddata.project.Project;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -19,6 +20,8 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.testng.Assert.fail;
 
 public class DatasetServiceIT extends AbstractGoodDataIT {
+
+    private static final String STATUS_URI = "/gdc/md/PROJECT_ID/tasks/TASK_ID/status";
 
     private Project project;
 
@@ -131,5 +134,47 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
 
         final Collection<Dataset> datasets = gd.getDatasetService().listDatasets(project);
         assertThat(datasets, hasSize(1));
+    }
+
+    @Test
+    public void shouldOptimizeSliHash() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/etl/mode")
+                .respond()
+                .withStatus(202)
+                .withBody("{\"uri\" : \"" + STATUS_URI + "\"}");
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(STATUS_URI)
+                .respond()
+                .withStatus(202)
+                .withBody(MAPPER.writeValueAsString(new DatasetTaskStatus("RUNNING", STATUS_URI)))
+                .thenRespond()
+                .withStatus(200)
+                .withBody(MAPPER.writeValueAsString(new DatasetTaskStatus("OK", STATUS_URI)));
+
+        gd.getDatasetService().optimizeSliHash(project).get();
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void shouldFailOptimizeSliHash() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/etl/mode")
+                .respond()
+                .withStatus(202)
+                .withBody("{\"uri\" : \"" + STATUS_URI + "\"}");
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(STATUS_URI)
+                .respond()
+                .withStatus(202)
+                .withBody(MAPPER.writeValueAsString(new DatasetTaskStatus("RUNNING", STATUS_URI)))
+                .thenRespond()
+                .withStatus(200)
+                .withBody(MAPPER.writeValueAsString(new DatasetTaskStatus("ERROR", STATUS_URI)));
+
+        gd.getDatasetService().optimizeSliHash(project).get();
     }
 }
