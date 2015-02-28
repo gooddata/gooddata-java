@@ -15,7 +15,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import static com.gooddata.util.Validate.noNullElements;
 import static com.gooddata.util.Validate.notNull;
 
 /**
@@ -257,5 +259,40 @@ public class MetadataService extends AbstractService {
             throw new GoodDataException("Unable to find objects.", e);
         }
         return response.getEntries();
+    }
+
+    /**
+     * Find metadata URIs by restrictions. Identifier is the only supported restriction.
+     *
+     * @param project      project where to search for the metadata
+     * @param restrictions query restrictions
+     * @return the collection of metadata URIs
+     * @throws com.gooddata.GoodDataException if unable to query metadata
+     */
+    public Collection<String> findUris(Project project, Restriction... restrictions) {
+        notNull(project, "project" );
+        noNullElements(restrictions, "restrictions");
+
+        final List<String> ids = new ArrayList<>(restrictions.length);
+        for (Restriction restriction: restrictions) {
+            if (!Restriction.Type.IDENTIFIER.equals(restriction.getType())) {
+                throw new IllegalArgumentException("All restrictions have to be of type " + Restriction.Type.IDENTIFIER);
+            }
+            ids.add(restriction.getValue());
+        }
+
+        final IdentifiersAndUris response;
+        try {
+            response = restTemplate.postForObject(IdentifiersAndUris.URI, new IdentifierToUri(ids), IdentifiersAndUris.class, project.getId());
+        } catch (GoodDataRestException | RestClientException e) {
+            throw new GoodDataException("Unable to get URIs from identifiers.", e);
+        }
+
+        final List<String> uris = new ArrayList<>();
+        for (IdentifierAndUri idAndUri : response.getIdentifiers()) {
+            uris.add(idAndUri.getUri());
+        }
+
+        return uris;
     }
 }

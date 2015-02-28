@@ -6,6 +6,7 @@ import com.gooddata.project.Project;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,7 +19,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class MetadataServiceIT extends AbstractGoodDataIT {
 
     private static final String USEDBY_URI = "/gdc/md/PROJECT_ID/usedby2";
+    private static final String IDENTIFIERS_URI = "/gdc/md/PROJECT_ID/identifiers";
     private static final String OBJ_URI = "OBJ_URI";
+    private static final String ID = "ID";
     private static final String TITLE = "TITLE";
 
     private Project project;
@@ -49,4 +52,23 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         assertThat(result.iterator().next().getTitle(), is(TITLE));
     }
 
+    @Test
+    public void testFindIdentifierUris() throws IOException {
+        final IdentifierAndUri identifierAndUri = new IdentifierAndUri(ID, OBJ_URI);
+
+        final List<IdentifierAndUri> identifiersAndUris = new ArrayList<>();
+        identifiersAndUris.add(identifierAndUri);
+        IdentifiersAndUris response = new IdentifiersAndUris(identifiersAndUris);
+
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(IDENTIFIERS_URI)
+                .respond()
+                .withStatus(200)
+                .withBody(MAPPER.writeValueAsString(response));
+
+        final Collection<String> uris = gd.getMetadataService().findUris(project, Restriction.identifier(ID));
+        assertThat(uris.size(), is(1));
+        assertThat(uris.iterator().next(), is(OBJ_URI));
+    }
 }
