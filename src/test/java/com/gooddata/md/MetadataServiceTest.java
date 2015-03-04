@@ -137,6 +137,16 @@ public class MetadataServiceTest {
         service.usedBy(null, URI, false, ReportDefinition.class);
     }
 
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testFindIdentifierUrisNullProject() {
+        service.findUris(null, Restriction.identifier(ID));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testFindIdentifierUrisNullRestriction() {
+        service.findUris(project, null);
+    }
+
 //TODO the other methods
 
 }
