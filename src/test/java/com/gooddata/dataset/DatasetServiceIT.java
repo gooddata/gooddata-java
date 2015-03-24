@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Collection;
 
 import static net.jadler.Jadler.onRequest;
@@ -22,6 +23,8 @@ import static org.testng.Assert.fail;
 public class DatasetServiceIT extends AbstractGoodDataIT {
 
     private static final String STATUS_URI = "/gdc/md/PROJECT_ID/tasks/TASK_ID/status";
+
+    private static final String DML_MAQL = "DELETE FROM {attr.logs.phase_id} WHERE {created.date.yyyymmdd} < \"2015-01-18\"";
 
     private Project project;
 
@@ -176,5 +179,49 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
                 .withBody(MAPPER.writeValueAsString(new DatasetTaskStatus("ERROR", STATUS_URI)));
 
         gd.getDatasetService().optimizeSliHash(project).get();
+    }
+
+    @Test
+    public void shouldUpdateProjectData() throws IOException {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/dml/manage")
+                .respond()
+                .withStatus(202)
+                .withBody("{\"uri\" : \"" + STATUS_URI + "\"}");
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(STATUS_URI)
+                .respond()
+                .withStatus(202)
+                .withBody(MAPPER.writeValueAsString(new TaskState("RUNNING", STATUS_URI)))
+                .thenRespond()
+                .withStatus(200)
+                .withBody(MAPPER.writeValueAsString(new TaskState("OK", STATUS_URI)))
+        ;
+
+        gd.getDatasetService().updateProjectData(project, DML_MAQL).get();
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void shouldFailUpdateProjectData() throws IOException {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/dml/manage")
+                .respond()
+                .withStatus(202)
+                .withBody("{\"uri\" : \"" + STATUS_URI + "\"}");
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(STATUS_URI)
+                .respond()
+                .withStatus(202)
+                .withBody(MAPPER.writeValueAsString(new TaskState("RUNNING", STATUS_URI)))
+                .thenRespond()
+                .withStatus(200)
+                .withBody(MAPPER.writeValueAsString(new TaskState("ERROR", STATUS_URI)))
+        ;
+
+        gd.getDatasetService().updateProjectData(project, DML_MAQL).get();
     }
 }

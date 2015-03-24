@@ -88,6 +88,12 @@ DatasetService datasetService = gd.getDatasetService();
 datasetService.loadDataset(project, "datasetId", new FileInputStream("data.csv")).get();
 ```
 
+Update data in dataset
+```java
+DatasetService datasetService = gd.getDatasetService();
+datasetService.updateProjectData(project, "DELETE FROM {attr.person.name} WHERE {label.person.name} = \"not exists\";");
+```
+
 ### Report API
 
 Execute and export reports.

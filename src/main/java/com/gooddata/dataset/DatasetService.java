@@ -29,6 +29,7 @@ import java.util.List;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
+import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -236,6 +237,48 @@ public class DatasetService extends AbstractService {
 
         });
 
-
     }
+
+    /**
+     * Update project data with the given update script (MAQL). This method can be used for data manipulation only,
+     * for model changes use {@link com.gooddata.model.ModelService#updateProjectModel}.
+     *
+     * @param project project to be updated
+     * @param maqlDml update script to be executed in the project
+     * @return poll result
+     *
+     * @see com.gooddata.model.ModelService#updateProjectModel
+     */
+    public FutureResult<Void> updateProjectData(final Project project, final String maqlDml) {
+        notNull(project, "project");
+
+        final UriResponse uriResponse = restTemplate.postForObject(
+                MaqlDml.URI, new MaqlDml(maqlDml), UriResponse.class, project.getId());
+
+        final String errorMessage = format("Unable to update data for project '%s'", project.getId());
+
+        return new FutureResult<>(this,
+                new AbstractPollHandler<TaskState, Void>(uriResponse.getUri(), TaskState.class, Void.class) {
+            @Override
+            public void handlePollResult(final TaskState pollResult) {
+                if (!pollResult.isSuccess()) {
+                    throw new GoodDataException(errorMessage);
+                }
+                setResult(null);
+            }
+
+            @Override
+            public boolean isFinished(final ClientHttpResponse response) throws IOException {
+                if (!super.isFinished(response)) {
+                    return false;
+                }
+                final TaskState taskState = extractData(response, TaskState.class);
+                if (taskState.isSuccess()) {
+                    return true;
+                }
+                throw new GoodDataException(errorMessage + ": " + taskState.getMessage());
+            }
+        });
+    }
+
 }

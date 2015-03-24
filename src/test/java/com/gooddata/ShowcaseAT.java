@@ -203,6 +203,12 @@ public class ShowcaseAT {
         datasetService.loadDataset(project, manifest, getClass().getResourceAsStream("/person.csv")).get();
     }
 
+    @Test(groups = "dataset", dependsOnMethods = "loadDataset")
+    public void updateData() {
+        final DatasetService datasetService = gd.getDatasetService();
+        datasetService.updateProjectData(project, "DELETE FROM {attr.person.name} WHERE {label.person.name} = \"not exists\";");
+    }
+
     @Test(groups = "report", dependsOnGroups = "dataset")
     public void exportReportDefinition() throws Exception {
         final ReportService reportService = gd.getReportService();

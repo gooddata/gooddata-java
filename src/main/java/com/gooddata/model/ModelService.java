@@ -88,11 +88,14 @@ public class ModelService extends AbstractService {
     }
 
     /**
-     * Update project model with the given update script(s) (MAQL).
+     * Update project model with the given update script(s) (MAQL). For data manipulation use
+     * {@link com.gooddata.model.ModelService#updateProjectModel}.
      *
      * @param project project to be updated
      * @param maqlDdl update script to be executed in the project
      * @return poll result
+     *
+     * @see com.gooddata.dataset.DatasetService#updateProjectData
      */
     public FutureResult<Void> updateProjectModel(final Project project, final String... maqlDdl) {
         return updateProjectModel(project, asList(maqlDdl));
@@ -104,6 +107,8 @@ public class ModelService extends AbstractService {
      * @param project project to be updated
      * @param maqlDdl update script to be executed in the project
      * @return poll result
+     *
+     * @see com.gooddata.dataset.DatasetService#updateProjectData
      */
     public FutureResult<Void> updateProjectModel(final Project project, final Collection<String> maqlDdl) {
         notNull(project, "project");
