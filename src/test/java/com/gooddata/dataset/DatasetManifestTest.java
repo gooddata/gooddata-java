@@ -80,4 +80,16 @@ public class DatasetManifestTest {
         ));
         manifest.setMapping("col", "attr2");
     }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void shouldFailOnSetSourceNull() {
+        final DatasetManifest manifest = new DatasetManifest("dataset.name");
+        manifest.setSource(null);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void shouldFailOnSetFileNull() {
+        final DatasetManifest manifest = new DatasetManifest("dataset.name");
+        manifest.setFile(null);
+    }
 }

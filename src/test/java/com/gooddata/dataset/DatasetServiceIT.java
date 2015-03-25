@@ -9,6 +9,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.util.Collection;
 
@@ -70,6 +71,25 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
+    public void shouldLoadDatasets() throws Exception {
+        onRequest()
+                .havingPathEqualTo("/gdc/md/PROJECT/etl/task/ID")
+            .respond()
+                .withStatus(202)
+                .withBody(readResource("/dataset/pullTask.json"))
+            .thenRespond()
+                .withStatus(200)
+                .withBody(readResource("/dataset/pullTaskStatusOk.json"));
+
+        final DatasetManifest manifest = MAPPER.readValue(readResource("/dataset/datasetManifest.json"), DatasetManifest.class);
+        final InputStream source = new ByteArrayInputStream(new byte[]{});
+        manifest.setSource(source);
+
+        gd.getDatasetService().loadDatasets(project, manifest).get();
+
+    }
+
+    @Test
     public void shouldFailLoading() throws Exception {
         onRequest()
                 .havingPathEqualTo("/gdc/md/PROJECT/etl/task/ID")
@@ -81,7 +101,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
             gd.getDatasetService().loadDataset(project, manifest, new ByteArrayInputStream(new byte[]{})).get();
             fail("Exception should be thrown");
         } catch (DatasetException e) {
-            assertThat(e.getMessage(), is("Load dataset dataset.person failed: status: ERROR"));
+            assertThat(e.getMessage(), is("Load datasets [dataset.person] failed: status: ERROR"));
         }
     }
 
@@ -110,7 +130,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
             gd.getDatasetService().loadDataset(project, manifest, new ByteArrayInputStream(new byte[]{})).get();
             fail("Exception should be thrown");
         } catch (DatasetException e) {
-            assertThat(e.getMessage(), is("Load dataset dataset.person failed: [Very error indeed, 1 errors occured during csv import]"));
+            assertThat(e.getMessage(), is("Load datasets [dataset.person] failed: [Very error indeed, 1 errors occured during csv import]"));
         }
     }
 

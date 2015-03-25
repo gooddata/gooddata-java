@@ -6,6 +6,7 @@ package com.gooddata.dataset;
 import com.gooddata.util.BooleanIntegerDeserializer;
 import com.gooddata.util.BooleanIntegerSerializer;
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
@@ -13,9 +14,11 @@ import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 
 
@@ -33,9 +36,20 @@ public class DatasetManifest {
     private final String dataSet;
     private String file;
     private List<Part> parts;
+    private InputStream source;
 
     public DatasetManifest(String dataSet) {
         this.dataSet = dataSet;
+    }
+
+    /**
+     * Create dataset upload manifest.
+     * @param dataSet dataset name
+     * @param source  source CSV
+     */
+    public DatasetManifest(final String dataSet, final InputStream source) {
+        this.source = notNull(source, "source");
+        this.dataSet = notEmpty(dataSet, "dataSet");
     }
 
     @JsonCreator
@@ -63,7 +77,7 @@ public class DatasetManifest {
     }
 
     public void setFile(String file) {
-        this.file = file;
+        this.file = notEmpty(file, "file");
     }
 
     /**
@@ -96,6 +110,16 @@ public class DatasetManifest {
             }
         }
         throw new IllegalArgumentException("Dataset manifest parts doesn't contain populate value " + populates);
+    }
+
+    @JsonIgnore
+    public InputStream getSource() {
+        return source;
+    }
+
+    @JsonIgnore
+    public void setSource(final InputStream source) {
+        this.source = notNull(source, "source");
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

@@ -40,6 +40,22 @@ public abstract class Validate {
     }
 
     /**
+     * Throws IllegalArgumentException if the map is empty, otherwise returns the map.
+     *
+     * @param value        input collection
+     * @param argumentName the name of the input argument
+     * @param <T>          the type of map
+     * @return map
+     */
+    public static <T extends Collection> T notEmpty(T value, String argumentName) {
+        notNull(value, argumentName);
+        if (value.size() == 0) {
+            throw new IllegalArgumentException(argumentName + " can't be empty");
+        }
+        return value;
+    }
+
+    /**
      * Throws IllegalArgumentException if the collection contains null elements (or is null), otherwise returns
      * the collection.
      *
