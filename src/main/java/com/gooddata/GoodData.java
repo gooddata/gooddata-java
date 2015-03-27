@@ -52,9 +52,9 @@ public class GoodData {
 
     public static final String GDC_REQUEST_ID_HEADER = "X-GDC-REQUEST";
 
-    private static final String PROTOCOL = "https";
-    private static final int PORT = 443;
-    private static final String HOSTNAME = "secure.gooddata.com";
+    protected static final String PROTOCOL = "https";
+    protected static final int PORT = 443;
+    protected static final String HOSTNAME = "secure.gooddata.com";
     private static final String UNKNOWN_VERSION = "UNKNOWN";
 
     private final RestTemplate restTemplate;
@@ -116,7 +116,7 @@ public class GoodData {
      * @param port     GoodData Platform's API port (e.g. 443)
      * @param protocol GoodData Platform's API protocol (e.g. https)
      */
-    GoodData(String hostname, String login, String password, int port, String protocol) {
+    protected GoodData(String hostname, String login, String password, int port, String protocol) {
         notEmpty(hostname, "hostname");
         notEmpty(login, "login");
         notEmpty(password, "password");
@@ -166,7 +166,7 @@ public class GoodData {
         return restTemplate;
     }
 
-    HttpClient createHttpClient(final String login, final String password, final String hostname,
+    protected HttpClient createHttpClient(final String login, final String password, final String hostname,
                                           final int port, final String protocol, final HttpClientBuilder builder) {
         final HttpHost host = new HttpHost(hostname, port, protocol);
         final HttpClient httpClient = builder.build();
