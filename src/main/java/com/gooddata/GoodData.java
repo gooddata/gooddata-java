@@ -24,12 +24,17 @@ import org.apache.http.util.VersionInfo;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
+import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.ResourceHttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
+import java.util.List;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static java.util.Collections.singletonMap;
@@ -149,19 +154,24 @@ public class GoodData {
                 new HeaderSettingRequestInterceptor(singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE))));
         restTemplate.setErrorHandler(new ResponseErrorHandler(restTemplate.getMessageConverters()));
 
-        // make sure jackson1 converter is present and remove all converters conflicting with it (eg. jackson2)
-        final MappingJacksonHttpMessageConverter jacksonConverter = new MappingJacksonHttpMessageConverter();
-        final Iterator<HttpMessageConverter<?>> it = restTemplate.getMessageConverters().iterator();
-        while (it.hasNext()) {
-            final HttpMessageConverter<?> converter = it.next();
-            for (MediaType type: converter.getSupportedMediaTypes()) {
-                if (jacksonConverter.getSupportedMediaTypes().contains(type)) {
-                    it.remove();
-                    break;
-                }
-            }
-        }
-        restTemplate.getMessageConverters().add(jacksonConverter);
+        // avoid jackson2 auto-detection and ensure jackson1 converter is present
+        final List<HttpMessageConverter<?>> partConverters = new ArrayList<>();
+        partConverters.add(new ByteArrayHttpMessageConverter());
+        final StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter();
+        stringHttpMessageConverter.setWriteAcceptCharset(false);
+        partConverters.add(stringHttpMessageConverter);
+        partConverters.add(new ResourceHttpMessageConverter());
+        partConverters.add(new MappingJacksonHttpMessageConverter());
+        final FormHttpMessageConverter formHttpMessageConverter = new FormHttpMessageConverter();
+        formHttpMessageConverter.setPartConverters(partConverters);
+
+        final List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+        messageConverters.add(new ByteArrayHttpMessageConverter());
+        messageConverters.add(new StringHttpMessageConverter());
+        messageConverters.add(new ResourceHttpMessageConverter());
+        messageConverters.add(formHttpMessageConverter);
+        messageConverters.add(new MappingJacksonHttpMessageConverter());
+        restTemplate.setMessageConverters(messageConverters);
 
         return restTemplate;
     }
