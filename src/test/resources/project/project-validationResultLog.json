@@ -1,0 +1,52 @@
+{
+  "ecat": "TRANSITIVITY",
+  "level": "WARN",
+  "msg": "There are inconsistent values between %s->%s->%s and %s->%s for %s value '%s'.",
+  "pars": [
+    {
+      "object": {
+        "id": "86",
+        "name": "Warehouse ZIP",
+        "uri": "/gdc/md/FoodMartDemo/obj/86"
+      }
+    },
+    {
+      "object": {
+        "id": "56",
+        "name": "Warehouse City",
+        "uri": "/gdc/md/FoodMartDemo/obj/56"
+      }
+    },
+    {
+      "object": {
+        "id": "35",
+        "name": "Warehouse County",
+        "uri": "/gdc/md/FoodMartDemo/obj/35"
+      }
+    },
+    {
+      "object": {
+        "id": "86",
+        "name": "Warehouse ZIP",
+        "uri": "/gdc/md/FoodMartDemo/obj/86"
+      }
+    },
+    {
+      "object": {
+        "id": "35",
+        "name": "Warehouse County",
+        "uri": "/gdc/md/FoodMartDemo/obj/35"
+      }
+    },
+    {
+      "object": {
+        "id": "86",
+        "name": "Warehouse ZIP",
+        "uri": "/gdc/md/FoodMartDemo/obj/86"
+      }
+    },
+    {
+      "common": "00968"
+    }
+  ]
+}

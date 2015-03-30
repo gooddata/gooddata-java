@@ -44,6 +44,12 @@ Collection<Project> projects = projectService.getProjects();
 Project project = projectService.createProject(new Project("my project", "MyToken")).get();
 ```
 
+Validate project
+```java
+Set<ProjectValidationType> types = projectService.getAvailableProjectValidationTypes(project);
+ProjectValidationResults results = projectService.validateProject(project, types).get();
+```
+
 ### Project Model API
 
 Create and update the project model, execute MAQL DDL,...

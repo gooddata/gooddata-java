@@ -41,6 +41,16 @@ public class JsonMatchers {
         return new JsonFileMatcher<>(expectedResourceName);
     }
 
+    /**
+     * Creates a matcher that matches String against JSON in given resource file.
+     * @param expectedResourceName name of resource (relative patch in resource folder)
+     * @return  matcher that matches String against JSON in given resource file
+     */
+    @Factory
+    public static Matcher<String> isJsonString(final String expectedResourceName) {
+        return new JsonFileMatcher<>(expectedResourceName);
+    }
+
     private static class JsonFileMatcher<T> extends BaseMatcher<T> {
 
         private String expectedResourceName;
@@ -58,7 +68,7 @@ public class JsonMatchers {
         public boolean matches(final Object actual) {
             String expectedJsonString;
             try {
-                actualJsonString = new ObjectMapper().writeValueAsString(actual);
+                actualJsonString = actual instanceof String ? (String) actual : new ObjectMapper().writeValueAsString(actual);
 
                 final URL resourceUrl = getClass().getResource(expectedResourceName);
                 if (resourceUrl == null) {
