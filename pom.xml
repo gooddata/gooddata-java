@@ -249,7 +249,7 @@
         <dependency>
             <groupId>net.javacrumbs.json-unit</groupId>
             <artifactId>json-unit</artifactId>
-            <version>0.1.6</version>
+            <version>1.5.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
