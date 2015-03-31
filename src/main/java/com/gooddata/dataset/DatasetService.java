@@ -11,6 +11,7 @@ import com.gooddata.GoodDataRestException;
 import com.gooddata.SimplePollHandler;
 import com.gooddata.gdc.DataStoreException;
 import com.gooddata.gdc.DataStoreService;
+import com.gooddata.gdc.TaskStatus;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.project.Project;
 import org.apache.commons.lang.RandomStringUtils;
@@ -213,9 +214,9 @@ public class DatasetService extends AbstractService {
                 EtlMode.URL, new EtlMode(EtlModeType.SLI, LookupMode.RECREATE), UriResponse.class, project.getId());
 
         return new FutureResult<>(this,
-                new AbstractPollHandler<DatasetTaskStatus, Void>(uriResponse.getUri(), DatasetTaskStatus.class, Void.class) {
+                new AbstractPollHandler<TaskStatus, Void>(uriResponse.getUri(), TaskStatus.class, Void.class) {
             @Override
-            public void handlePollResult(final DatasetTaskStatus pollResult) {
+            public void handlePollResult(final TaskStatus pollResult) {
                 if (!pollResult.isSuccess()) {
                     throw new GoodDataException("Unable to optimize SLI hash for project " + project.getId());
                 }
@@ -227,7 +228,7 @@ public class DatasetService extends AbstractService {
                 if (!super.isFinished(response)) {
                     return false;
                 }
-                final DatasetTaskStatus maqlDdlTaskStatus = extractData(response, DatasetTaskStatus.class);
+                final TaskStatus maqlDdlTaskStatus = extractData(response, TaskStatus.class);
                 if (maqlDdlTaskStatus.isSuccess()) {
                     return true;
                 }

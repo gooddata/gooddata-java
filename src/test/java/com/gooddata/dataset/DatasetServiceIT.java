@@ -2,6 +2,7 @@ package com.gooddata.dataset;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
+import com.gooddata.gdc.TaskStatus;
 import com.gooddata.project.Project;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -149,10 +150,10 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(STATUS_URI)
                 .respond()
                 .withStatus(202)
-                .withBody(MAPPER.writeValueAsString(new DatasetTaskStatus("RUNNING", STATUS_URI)))
+                .withBody(MAPPER.writeValueAsString(new TaskStatus("RUNNING", STATUS_URI)))
                 .thenRespond()
                 .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(new DatasetTaskStatus("OK", STATUS_URI)));
+                .withBody(MAPPER.writeValueAsString(new TaskStatus("OK", STATUS_URI)));
 
         gd.getDatasetService().optimizeSliHash(project).get();
     }
@@ -170,10 +171,10 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(STATUS_URI)
                 .respond()
                 .withStatus(202)
-                .withBody(MAPPER.writeValueAsString(new DatasetTaskStatus("RUNNING", STATUS_URI)))
+                .withBody(MAPPER.writeValueAsString(new TaskStatus("RUNNING", STATUS_URI)))
                 .thenRespond()
                 .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(new DatasetTaskStatus("ERROR", STATUS_URI)));
+                .withBody(MAPPER.writeValueAsString(new TaskStatus("ERROR", STATUS_URI)));
 
         gd.getDatasetService().optimizeSliHash(project).get();
     }

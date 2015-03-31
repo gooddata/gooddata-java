@@ -2,6 +2,7 @@ package com.gooddata.model;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.gdc.AsyncTask;
+import com.gooddata.gdc.TaskStatus;
 import com.gooddata.project.Project;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -64,10 +65,10 @@ public class ModelServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(STATUS_URI)
             .respond()
                 .withStatus(202)
-                .withBody(MAPPER.writeValueAsString(new MaqlDdlTaskStatus("RUNNING", STATUS_URI)))
+                .withBody(MAPPER.writeValueAsString(new TaskStatus("RUNNING", STATUS_URI)))
             .thenRespond()
                 .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(new MaqlDdlTaskStatus("OK", STATUS_URI)))
+                .withBody(MAPPER.writeValueAsString(new TaskStatus("OK", STATUS_URI)))
         ;
 
         final ModelDiff diff = new ModelDiff(new UpdateScript(true, false,
