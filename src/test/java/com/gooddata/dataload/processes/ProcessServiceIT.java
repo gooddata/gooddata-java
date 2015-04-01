@@ -16,6 +16,7 @@ import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 
@@ -55,6 +56,25 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         final DataloadProcess process = gd.getProcessService().createProcess(project, new DataloadProcess("testProcess", "GROOVY"), file);
         assertThat(process, notNullValue());
         assertThat(process.getExecutables(), contains("test.groovy"));
+    }
+
+    @Test
+    public void shouldCreateProcessWithoutData() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(PROCESSES_PATH)
+            .respond()
+                .withBody(readResource("/dataload/processes/processWithoutData.json"))
+                .withStatus(201);
+
+        final String processName = "dataloadProcess";
+        final String processType = "DATALOAD";
+        final DataloadProcess process = gd.getProcessService().createProcess(project,
+                new DataloadProcess(processName, processType));
+        assertThat(process, notNullValue());
+        assertThat(process.getName(), is(processName));
+        assertThat(process.getType(), is(processType));
+        assertThat(process.getExecutables(), nullValue());
     }
 
     @Test

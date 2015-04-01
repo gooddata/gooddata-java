@@ -36,6 +36,7 @@ public class Project {
     public static final String URI = Projects.URI + "/{id}";
     public static final UriTemplate TEMPLATE = new UriTemplate(URI);
     private static final Set<String> PREPARING_STATES = new HashSet<>(asList("PREPARING", "PREPARED", "LOADING"));
+    private static final String POSTGRES_DRIVER = "Pg";
 
     @JsonProperty("content")
     private ProjectContent content;
@@ -53,6 +54,19 @@ public class Project {
 
     public Project(String title, String summary, String authorizationToken) {
         content = new ProjectContent(authorizationToken);
+        meta = new ProjectMeta(title, summary);
+    }
+
+    /**
+     * Creates new project with given attributes using authorization token and based on {@code driver}.
+     * @param title project title
+     * @param summary short project summary
+     * @param authorizationToken authorization token for creating the new project
+     * @param driver driver on which the project is based, default is "Pg" (PostgreSQL),
+     *               other option can be "vertica" for Vertica columnar DB based projects.
+     */
+    public Project(String title, String summary, String authorizationToken, String driver) {
+        content = new ProjectContent(authorizationToken, driver);
         meta = new ProjectMeta(title, summary);
     }
 
@@ -251,6 +265,16 @@ public class Project {
         @JsonIgnore
         private String state;
 
+        public ProjectContent(final String authorizationToken) {
+            this(authorizationToken, POSTGRES_DRIVER);
+        }
+
+        public ProjectContent(final String authorizationToken, String driver) {
+            this.authorizationToken = authorizationToken;
+            this.driver = driver;
+            guidedNavigation = "1";
+        }
+
         @JsonCreator
         public ProjectContent(@JsonProperty("authorizationToken") String authorizationToken,
                               @JsonProperty("driver") String driver,
@@ -264,12 +288,6 @@ public class Project {
             this.cluster = cluster;
             this.isPublic = isPublic;
             this.state = state;
-        }
-
-        public ProjectContent(final String authorizationToken) {
-            this.authorizationToken = authorizationToken;
-            guidedNavigation = "1";
-            driver = "Pg";
         }
 
         public String getState() {
