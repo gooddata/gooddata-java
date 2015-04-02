@@ -23,6 +23,7 @@ import com.gooddata.model.ModelDiff;
 import com.gooddata.model.ModelService;
 import com.gooddata.project.Project;
 import com.gooddata.project.ProjectService;
+import com.gooddata.project.ProjectValidationResults;
 import com.gooddata.report.ReportExportFormat;
 import com.gooddata.report.ReportService;
 import com.gooddata.warehouse.Warehouse;
@@ -130,6 +131,13 @@ public class ShowcaseAT {
     public void getProjectByUri() throws Exception {
         final Project project = gd.getProjectService().getProjectByUri(this.project.getUri());
         assertThat(project, hasSameIdAs(this.project));
+    }
+
+    @Test(groups = "project", dependsOnMethods = "createProject")
+    public void validateProject() throws Exception {
+        final ProjectValidationResults results = gd.getProjectService().validateProject(project).get();
+        assertThat(results, is(notNullValue()));
+        assertThat(results.getResults(), is(notNullValue()));
     }
 
     @Test(groups = "model", dependsOnGroups = "project")

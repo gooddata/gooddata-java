@@ -1,0 +1,24 @@
+[
+  {
+    "common": "report"
+  },
+  {
+    "object": {
+      "name": "Historical backlog",
+      "id": "41886",
+      "uri": "/gdc/md/d45dlwq6fixqsgbukrlnir1qsw8y44q6/obj/41886"
+    }
+  },
+  {
+    "sli_el": {
+      "ids": ["4761"],
+      "vals": ["Deleted"]
+    }
+  },
+  {
+    "gdctime_el": {
+      "ids": ["4762"],
+      "vals": ["Deleted"]
+    }
+  }
+]

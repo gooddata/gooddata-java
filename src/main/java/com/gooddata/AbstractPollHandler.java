@@ -19,7 +19,7 @@ import static com.gooddata.util.Validate.notNull;
  */
 public abstract class AbstractPollHandler<P,R> extends AbstractPollHandlerBase<P,R> {
 
-    private final String pollingUri;
+    private String pollingUri;
 
     /**
      * Creates a new instance of polling handler
@@ -37,4 +37,7 @@ public abstract class AbstractPollHandler<P,R> extends AbstractPollHandlerBase<P
         return pollingUri;
     }
 
+    protected void setPollingUri(final String pollingUri) {
+        this.pollingUri = pollingUri;
+    }
 }

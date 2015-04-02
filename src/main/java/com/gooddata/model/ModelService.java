@@ -9,6 +9,7 @@ import com.gooddata.GoodDataRestException;
 import com.gooddata.AbstractPollHandlerBase;
 import com.gooddata.SimplePollHandler;
 import com.gooddata.gdc.AsyncTask;
+import com.gooddata.gdc.TaskStatus;
 import com.gooddata.project.Project;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.FileCopyUtils;
@@ -148,7 +149,7 @@ public class ModelService extends AbstractService {
                 if (!super.isFinished(response)) {
                     return false;
                 }
-                final MaqlDdlTaskStatus maqlDdlTaskStatus = extractData(response, MaqlDdlTaskStatus.class);
+                final TaskStatus maqlDdlTaskStatus = extractData(response, TaskStatus.class);
                 if (!maqlDdlTaskStatus.isSuccess()) {
                     throw new ModelException("Unable to update project model: " + maqlDdlTaskStatus.getMessages());
                 }

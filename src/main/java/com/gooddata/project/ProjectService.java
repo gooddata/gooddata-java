@@ -3,12 +3,14 @@
  */
 package com.gooddata.project;
 
+import com.gooddata.AbstractPollHandler;
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.SimplePollHandler;
 import com.gooddata.account.AccountService;
+import com.gooddata.gdc.AsyncTask;
 import com.gooddata.gdc.UriResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
@@ -16,11 +18,15 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
+import static java.util.Arrays.asList;
 
 /**
  * List projects, create a project, ...
@@ -157,5 +163,85 @@ public class ProjectService extends AbstractService {
         } catch (GoodDataRestException | RestClientException e) {
             throw new GoodDataException("Unable to get project templates", e);
         }
+    }
+
+    /**
+     * Get available validation types for project. Which can be passed to {@link #validateProject(Project, ProjectValidationType...)}.
+     *
+     * @param project project to fetch validation types for
+     * @return available validations
+     */
+    public Set<ProjectValidationType> getAvailableProjectValidationTypes(Project project) {
+        notNull(project, "project");
+        try {
+            return restTemplate.getForObject(ProjectValidations.URI, ProjectValidations.class, project.getId()).getValidations();
+        } catch (GoodDataRestException | RestClientException e) {
+            throw new GoodDataException("Unable to get project available validation types", e);
+        }
+    }
+
+    /**
+     * Validate project using all available validations.
+     *
+     * @param project project to validate
+     * @return results of validation
+     */
+    public FutureResult<ProjectValidationResults> validateProject(final Project project) {
+        return validateProject(project, getAvailableProjectValidationTypes(project));
+    }
+
+    /**
+     * Validate project with given validations
+     *
+     * @param project project to validate
+     * @param validations validations to use
+     * @return results of validation
+     */
+    public FutureResult<ProjectValidationResults> validateProject(final Project project, ProjectValidationType... validations) {
+        return validateProject(project, new HashSet<>(asList(validations)));
+    }
+
+    /**
+     * Validate project with given validations
+     *
+     * @param project project to validate
+     * @param validations validations to use
+     * @return results of validation
+     */
+    public FutureResult<ProjectValidationResults> validateProject(final Project project, Set<ProjectValidationType> validations) {
+        notNull(project, "project");
+        final AsyncTask task;
+        try {
+            task = restTemplate.postForObject(ProjectValidations.URI, new ProjectValidations(validations), AsyncTask.class, project.getId());
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to to start project validation", e);
+        }
+        return new FutureResult<>(this,
+                // PollHandler able to poll on different URIs (by the Location header)
+                // poll class is Void because the object returned varies between invocations (even on the same URI)
+                new AbstractPollHandler<Void, ProjectValidationResults>(task.getUri(), Void.class, ProjectValidationResults.class) {
+
+                    @Override
+                    public boolean isFinished(ClientHttpResponse response) throws IOException {
+                        final URI location = response.getHeaders().getLocation();
+                        if (location != null) {
+                            setPollingUri(location.toString());
+                        }
+                        final boolean finished = super.isFinished(response);
+                        if (finished) {
+                            try {
+                                final ProjectValidationResults result = restTemplate.getForObject(getPollingUri(), getResultClass());
+                                setResult(result);
+                            } catch (GoodDataException | RestClientException e) {
+                                throw new GoodDataException("Unable to obtain validation results from " + getPollingUri());
+                            }
+                        }
+                        return finished;
+                    }
+
+                    @Override
+                    public void handlePollResult(final Void pollResult) {
+                    }
+                });
     }
 }

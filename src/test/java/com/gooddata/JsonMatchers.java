@@ -1,6 +1,8 @@
 package com.gooddata;
 
 import net.javacrumbs.jsonunit.JsonAssert;
+import net.javacrumbs.jsonunit.core.Configuration;
+import net.javacrumbs.jsonunit.core.Option;
 import net.javacrumbs.jsonunit.core.internal.Diff;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.hamcrest.BaseMatcher;
@@ -13,6 +15,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static java.lang.String.format;
+import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
+import static net.javacrumbs.jsonunit.core.Option.TREATING_NULL_AS_ABSENT;
 import static net.javacrumbs.jsonunit.core.internal.Diff.create;
 
 /**
@@ -37,6 +41,16 @@ public class JsonMatchers {
         return new JsonFileMatcher<>(expectedResourceName);
     }
 
+    /**
+     * Creates a matcher that matches String against JSON in given resource file.
+     * @param expectedResourceName name of resource (relative patch in resource folder)
+     * @return  matcher that matches String against JSON in given resource file
+     */
+    @Factory
+    public static Matcher<String> isJsonString(final String expectedResourceName) {
+        return new JsonFileMatcher<>(expectedResourceName);
+    }
+
     private static class JsonFileMatcher<T> extends BaseMatcher<T> {
 
         private String expectedResourceName;
@@ -54,7 +68,7 @@ public class JsonMatchers {
         public boolean matches(final Object actual) {
             String expectedJsonString;
             try {
-                actualJsonString = new ObjectMapper().writeValueAsString(actual);
+                actualJsonString = actual instanceof String ? (String) actual : new ObjectMapper().writeValueAsString(actual);
 
                 final URL resourceUrl = getClass().getResource(expectedResourceName);
                 if (resourceUrl == null) {
@@ -69,8 +83,7 @@ public class JsonMatchers {
             }
 
             this.expectedJsonString = expectedJsonString;
-            final Diff diff = create(expectedJsonString, actual, "fullJson", "", JsonAssert.getIgnorePlaceholder(),
-                    JsonAssert.getTolerance(), JsonAssert.getTreatNullAsAbsent());
+            final Diff diff = create(expectedJsonString, actual, "fullJson", "", Configuration.empty().withOptions(TREATING_NULL_AS_ABSENT, IGNORING_ARRAY_ORDER));
             if (!diff.similar()) {
                 differences = diff.differences();
             }
