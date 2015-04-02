@@ -6,6 +6,7 @@ Below are few **rules, recommendations and best practices** we try to follow whe
 * Every pull request with non-trivial change must be **associated with an issue**.
 * Every closed non-rejected pull request and issue must be marked with exactly **one milestone version**.
 * Issue must be **properly labeled** (bug/enhancement/backward incompatible/...). 
+* Add usage examples of new high level functionality to [README.md](README.md)
 
 ## Design
 
