@@ -5,7 +5,6 @@ import com.gooddata.FutureResult;
 import com.gooddata.collections.PageableList;
 import com.gooddata.project.Project;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -241,13 +240,13 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
 
         final PageableList<Schedule> firstPage = gd.getProcessService().listSchedules(project);
         assertThat(firstPage, notNullValue());
-        assertThat(firstPage.getItems(), Matchers.hasSize(1));
+        assertThat(firstPage, hasSize(1));
         assertThat(firstPage.getNextPage(), notNullValue());
         assertThat(firstPage.getNextPage().getPageUri(null).toString(), is("/gdc/projects/PROJECT_ID/schedules?offset=1&limit=1"));
 
         final PageableList<Schedule> secondPage = gd.getProcessService().listSchedules(project, firstPage.getNextPage());
         assertThat(secondPage, notNullValue());
-        assertThat(secondPage.getItems(), Matchers.hasSize(1));
+        assertThat(secondPage, hasSize(1));
         assertThat(secondPage.getNextPage(), nullValue());
     }
 

@@ -18,10 +18,10 @@ public class SchedulesTest {
         final InputStream stream = getClass().getResourceAsStream("/dataload/processes/schedules.json");
         final Schedules schedules = new ObjectMapper().readValue(stream, Schedules.class);
 
-        assertThat(schedules.getItems(), notNullValue());
-        assertThat(schedules.getItems(), hasSize(1));
-        assertThat(schedules.getItems().get(0).getId(), is("schedule_id"));
-        assertThat(schedules.getItems().get(0).getType(), is("MSETL"));
+        assertThat(schedules, notNullValue());
+        assertThat(schedules, hasSize(1));
+        assertThat(schedules.get(0).getId(), is("schedule_id"));
+        assertThat(schedules.get(0).getType(), is("MSETL"));
         assertThat(schedules.getNextPage(), nullValue());
     }
 
@@ -30,10 +30,10 @@ public class SchedulesTest {
         final InputStream stream = getClass().getResourceAsStream("/dataload/processes/schedules_page1.json");
         final Schedules schedules = new ObjectMapper().readValue(stream, Schedules.class);
 
-        assertThat(schedules.getItems(), notNullValue());
-        assertThat(schedules.getItems(), hasSize(1));
-        assertThat(schedules.getItems().get(0).getId(), is("schedule_id_1"));
-        assertThat(schedules.getItems().get(0).getType(), is("MSETL"));
+        assertThat(schedules, notNullValue());
+        assertThat(schedules, hasSize(1));
+        assertThat(schedules.get(0).getId(), is("schedule_id_1"));
+        assertThat(schedules.get(0).getType(), is("MSETL"));
         assertThat(schedules.getNextPage(), notNullValue());
         assertThat(schedules.getNextPage().getPageUri(null).toString(), is("/gdc/projects/PROJECT_ID/schedules?offset=1&limit=1"));
     }

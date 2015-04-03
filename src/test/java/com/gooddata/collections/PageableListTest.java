@@ -16,24 +16,24 @@ public class PageableListTest {
     @Test
     public void testCollectionEmpty() {
         final PageableList<Integer> collection = new PageableList<>();
-        assertThat(collection.getItems(), notNullValue());
-        assertThat(collection.getItems(), empty());
+        assertThat(collection, notNullValue());
+        assertThat(collection, empty());
         assertThat(collection.getNextPage(), nullValue());
     }
 
     @Test
     public void testCollection() {
         final PageableList<Integer> collection = new PageableList<>(Arrays.asList(1, 2, 3), null);
-        assertThat(collection.getItems(), notNullValue());
-        assertThat(collection.getItems(), hasSize(3));
+        assertThat(collection, notNullValue());
+        assertThat(collection, hasSize(3));
         assertThat(collection.getNextPage(), nullValue());
     }
 
     @Test
     public void testCollectionWithPaging() {
         final PageableList<Integer> collection = new PageableList<>(Arrays.asList(1, 2, 3), new Paging(1, 2, "next"));
-        assertThat(collection.getItems(), notNullValue());
-        assertThat(collection.getItems(), hasSize(3));
+        assertThat(collection, notNullValue());
+        assertThat(collection, hasSize(3));
         assertThat(collection.getNextPage(), notNullValue());
         assertThat(collection.getNextPage().getPageUri(null).toString(), is("next"));
     }
