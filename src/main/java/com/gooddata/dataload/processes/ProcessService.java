@@ -9,6 +9,8 @@ import com.gooddata.AbstractPollHandler;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.collections.Page;
+import com.gooddata.collections.PageableList;
 import com.gooddata.gdc.DataStoreService;
 import com.gooddata.util.ZipUtils;
 import com.gooddata.account.AccountService;
@@ -24,6 +26,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -232,6 +235,146 @@ public class ProcessService extends AbstractService {
                 }
             }
         });
+    }/**
+     * Create new schedule with given data by given project.
+     *
+     * @param project  project to which the process belongs
+     * @param schedule to create
+     * @return created schedule
+     */
+    public Schedule createSchedule(Project project, Schedule schedule) {
+        notNull(schedule, "schedule");
+        notNull(project, "project");
+
+        return postSchedule(schedule, getSchedulesUri(project));
+    }
+
+    /**
+     * Update connector integration
+     *
+     * @param project  project
+     * @param schedule to update
+     * @return updated Schedule
+     * @throws ScheduleNotFoundException when the schedule doesn't exist
+     */
+    public Schedule updateSchedule(final Project project, Schedule schedule) {
+        notNull(schedule, "schedule");
+        notNull(project, "project");
+
+        final String uri = getScheduleUri(project, schedule.getId()).toString();
+        try {
+            return restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(schedule), Schedule.class).getBody();
+        } catch (GoodDataRestException e) {
+            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+                throw new ScheduleNotFoundException(uri, e);
+            } else {
+                throw e;
+            }
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to get schedule " + uri, e);
+        }
+    }
+
+    /**
+     * Get schedule by given URI.
+     *
+     * @param uri schedule uri
+     * @return found schedule
+     * @throws ScheduleNotFoundException when the schedule doesn't exist
+     */
+    public Schedule getScheduleByUri(String uri) {
+        notEmpty(uri, "uri");
+        try {
+            return restTemplate.getForObject(uri, Schedule.class);
+        } catch (GoodDataRestException e) {
+            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+                throw new ScheduleNotFoundException(uri, e);
+            } else {
+                throw e;
+            }
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to get schedule " + uri, e);
+        }
+    }
+
+    /**
+     * Get schedule by given id and project.
+     *
+     * @param project project to which the schedule belongs
+     * @param id      schedule id
+     * @return found schedule
+     * @throws ScheduleNotFoundException when the process doesn't exist
+     */
+    public Schedule getScheduleById(Project project, String id) {
+        notEmpty(id, "id");
+        notNull(project, "project");
+        return getScheduleByUri(getScheduleUri(project, id).toString());
+    }
+
+    /**
+     * Get first page of paged list of schedules by given project.
+     *
+     * @param project project of schedules
+     * @return list of found schedules or empty list
+     */
+    public PageableList<Schedule> listSchedules(Project project) {
+        notNull(project, "project");
+        return listSchedules(getSchedulesUri(project));
+    }
+
+    /**
+     * Get defined page of paged list of schedules by given project.
+     *
+     * @param project project of schedules
+     * @param page    page to be retrieved
+     * @return list of found schedules or empty list
+     */
+    public PageableList<Schedule> listSchedules(Project project, Page page) {
+        notNull(project, "project");
+        notNull(page, "page");
+        return listSchedules(page.getPageUri(UriComponentsBuilder.fromUri(getSchedulesUri(project))));
+    }
+
+    /**
+     * Delete given schedule
+     *
+     * @param schedule to delete
+     */
+    public void removeSchedule(Schedule schedule) {
+        notNull(schedule, "schedule");
+        try {
+            restTemplate.delete(schedule.getUri());
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to remove schedule " + schedule.getUri(), e);
+        }
+    }
+
+    private PageableList<Schedule> listSchedules(URI uri) {
+        try {
+            final Schedules schedules = restTemplate.getForObject(uri, Schedules.class);
+            if (schedules == null) {
+                return new PageableList<>();
+            }
+            return schedules;
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to list schedules", e);
+        }
+    }
+
+    private static URI getScheduleUri(Project project, String id) {
+        return Schedule.TEMPLATE.expand(project.getId(), id);
+    }
+
+    private static URI getSchedulesUri(Project project) {
+        return Schedules.TEMPLATE.expand(project.getId());
+    }
+
+    private Schedule postSchedule(Schedule schedule, URI postUri) {
+        try {
+            return restTemplate.postForObject(postUri, schedule, Schedule.class);
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to post schedule.", e);
+        }
     }
 
     private Collection<DataloadProcess> listProcesses(URI uri) {

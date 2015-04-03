@@ -2,6 +2,7 @@ package com.gooddata;
 
 import com.gooddata.account.Account;
 import com.gooddata.account.AccountService;
+import com.gooddata.collections.PageableList;
 import com.gooddata.dataload.processes.DataloadProcess;
 import com.gooddata.dataload.processes.ProcessExecution;
 import com.gooddata.dataload.processes.ProcessExecutionDetail;
@@ -25,6 +26,8 @@ import com.gooddata.project.Project;
 import com.gooddata.project.ProjectService;
 import com.gooddata.report.ReportExportFormat;
 import com.gooddata.report.ReportService;
+import com.gooddata.dataload.processes.Schedule;
+import com.gooddata.dataload.processes.ScheduleState;
 import com.gooddata.warehouse.Warehouse;
 import com.gooddata.warehouse.WarehouseService;
 import org.apache.commons.io.FileUtils;
@@ -53,9 +56,11 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
 public class ShowcaseAT {
@@ -243,6 +248,19 @@ public class ShowcaseAT {
             copy("sdktest.grf", dir);
             copy("workspace.prm", dir);
             process = gd.getProcessService().createProcess(project, new DataloadProcess(title, ProcessType.GRAPH), dir);
+            final Schedule schedule = gd.getProcessService().createSchedule(project, new Schedule(process, "sdktest.grf", "0 0 * * *"));
+
+            assertThat(schedule, notNullValue());
+            assertThat(schedule.getExecutable(), is("sdktest.grf"));
+
+            final PageableList<Schedule> collection = gd.getProcessService().listSchedules(project);
+            assertThat(collection.getItems(), hasSize(1));
+            assertThat(collection.getNextPage(), nullValue());
+
+            schedule.setState(ScheduleState.DISABLED);
+            assertThat(gd.getProcessService().updateSchedule(project, schedule).isEnabled(), is(false));
+
+            gd.getProcessService().removeSchedule(schedule);
         } finally {
             FileUtils.deleteDirectory(dir);
         }

@@ -2,8 +2,10 @@ package com.gooddata.dataload.processes;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.FutureResult;
+import com.gooddata.collections.PageableList;
 import com.gooddata.project.Project;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -16,6 +18,7 @@ import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 
@@ -29,10 +32,17 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
     private static final String EXECUTIONS_PATH = PROCESS_PATH + "/executions";
     private static final String EXECUTION_PATH = EXECUTIONS_PATH + "/executionId";
     private static final String EXECUTION_DETAIL_PATH = EXECUTION_PATH + "/detail";
+    private static final String PROJECT_ID = "PROJECT_ID";
+    private static final String SCHEDULES_PATH = Schedules.TEMPLATE.expand(PROJECT_ID).toString();
+    private static final String SCHEDULE_ID = "SCHEDULE_ID";
+    private static final String SCHEDULE_PATH = Schedule.TEMPLATE.expand(PROJECT_ID, SCHEDULE_ID).toString();
+    private static final String EXECUTABLE = "test.groovy";
 
     private Project project;
 
     private DataloadProcess process;
+
+    private Schedule schedule;
 
     private File file;
 
@@ -40,6 +50,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
     public void setUp() throws Exception {
         project = MAPPER.readValue(readResource("/project/project.json"), Project.class);
         process = MAPPER.readValue(readResource("/dataload/processes/process.json"), DataloadProcess.class);
+        schedule = MAPPER.readValue(readResource("/dataload/processes/schedule.json"), Schedule.class);
         file = File.createTempFile("test", ".groovy");
     }
 
@@ -181,5 +192,87 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .withStatus(202)
             .thenRespond()
                 .withStatus(204);
+    }
+
+    @Test
+    public void shouldCreateSchedule() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(SCHEDULES_PATH)
+                .respond()
+                .withBody(readResource("/dataload/processes/schedule.json"))
+                .withStatus(201);
+
+        final Schedule schedule = gd.getProcessService().createSchedule(project, new Schedule(process, EXECUTABLE, "0 0 * * *"));
+        assertThat(schedule, notNullValue());
+        assertThat(schedule.getId(), is(SCHEDULE_ID));
+    }
+
+    @Test
+    public void shouldUpdateSchedule() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("PUT")
+                .havingPathEqualTo(SCHEDULE_PATH)
+                .respond()
+                .withBody(readResource("/dataload/processes/schedule-disabled.json"))
+                .withStatus(200);
+
+        schedule.setState(ScheduleState.DISABLED);
+        final Schedule updated = gd.getProcessService().updateSchedule(project, schedule);
+        assertThat(updated, notNullValue());
+        assertThat(updated.isEnabled(), is(false));
+    }
+
+    @Test
+    public void shouldListPagedSchedules() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(SCHEDULES_PATH)
+                .respond()
+                .withBody(readResource("/dataload/processes/schedules_page1.json"))
+                .withStatus(200);
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(SCHEDULES_PATH)
+                .havingQueryStringEqualTo("offset=1&limit=1")
+                .respond()
+                .withBody(readResource("/dataload/processes/schedules_page2.json"))
+                .withStatus(200);
+
+        final PageableList<Schedule> firstPage = gd.getProcessService().listSchedules(project);
+        assertThat(firstPage, notNullValue());
+        assertThat(firstPage.getItems(), Matchers.hasSize(1));
+        assertThat(firstPage.getNextPage(), notNullValue());
+        assertThat(firstPage.getNextPage().getPageUri(null).toString(), is("/gdc/projects/PROJECT_ID/schedules?offset=1&limit=1"));
+
+        final PageableList<Schedule> secondPage = gd.getProcessService().listSchedules(project, firstPage.getNextPage());
+        assertThat(secondPage, notNullValue());
+        assertThat(secondPage.getItems(), Matchers.hasSize(1));
+        assertThat(secondPage.getNextPage(), nullValue());
+    }
+
+    @Test
+    public void shouldGetSchedule() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(SCHEDULE_PATH)
+                .respond()
+                .withBody(readResource("/dataload/processes/schedule.json"))
+                .withStatus(200);
+
+        final Schedule schedule = gd.getProcessService().getScheduleById(project, SCHEDULE_ID);
+        assertThat(schedule, notNullValue());
+        assertThat(schedule.isEnabled(), is(true));
+    }
+
+    @Test
+    public void shouldRemoveSchedule() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("DELETE")
+                .havingPathEqualTo(SCHEDULE_PATH)
+                .respond()
+                .withStatus(204);
+
+        gd.getProcessService().removeSchedule(schedule);
     }
 }

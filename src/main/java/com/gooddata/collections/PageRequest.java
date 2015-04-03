@@ -4,6 +4,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
+import static com.gooddata.util.Validate.notNull;
+
 /**
  * User defined page with desired offset and limit.
  */
@@ -25,7 +27,7 @@ public class PageRequest implements Page {
 
     @Override
     public URI getPageUri(final UriComponentsBuilder uriBuilder) {
-        return uriBuilder
+        return notNull(uriBuilder, "uriBuilder")
                 .queryParam("offset", offset)
                 .queryParam("limit", limit)
                 .build().toUri();

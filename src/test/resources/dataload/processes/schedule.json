@@ -1,0 +1,42 @@
+{
+  "schedule": {
+    "type": "MSETL",
+    "state": "ENABLED",
+    "params": {
+      "PROCESS_ID": "process_id",
+      "EXECUTABLE": "Twitter/graph/twitter.grf"
+    },
+    "cron": "0 0 * * *",
+    "timezone": "UTC",
+    "nextExecutionTime": "2013-11-16T00:00:00.000Z",
+    "lastSuccessful": {
+      "execution": {
+        "startTime": "2013-11-15T00:00:40.355Z",
+        "endTime": "2013-11-15T00:00:49.030Z",
+        "log": "/gdc/projects/PROJECT_ID/dataload/processes/process_id/executions/execution_id/log",
+        "status": "OK",
+        "trigger": "CRON",
+        "links": {
+          "self": "/gdc/projects/PROJECT_ID/schedules/SCHEDULE_ID/executions/execution_id"
+        }
+      }
+    },
+    "lastExecution": {
+      "execution": {
+        "startTime": "2013-11-15T00:00:40.355Z",
+        "endTime": "2013-11-15T00:00:49.030Z",
+        "log": "/gdc/projects/PROJECT_ID/dataload/processes/process_id/executions/execution_id/log",
+        "status": "OK",
+        "trigger": "CRON",
+        "links": {
+          "self": "/gdc/projects/PROJECT_ID/schedules/SCHEDULE_ID/executions/execution_id"
+        }
+      }
+    },
+    "consecutiveFailedExecutionCount": 0,
+    "links": {
+      "self": "/gdc/projects/PROJECT_ID/schedules/SCHEDULE_ID",
+      "executions": "/gdc/projects/PROJECT_ID/schedules/SCHEDULE_ID/executions"
+    }
+  }
+}
