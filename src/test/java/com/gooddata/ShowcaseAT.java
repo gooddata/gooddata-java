@@ -268,7 +268,8 @@ public class ShowcaseAT {
             assertThat(schedule.getExecutable(), is("sdktest.grf"));
 
             final PageableList<Schedule> collection = gd.getProcessService().listSchedules(project);
-            assertThat(collection.getItems(), hasSize(1));
+            assertThat(collection, notNullValue());
+            assertThat(collection, hasSize(1));
             assertThat(collection.getNextPage(), nullValue());
 
             schedule.setState(ScheduleState.DISABLED);
