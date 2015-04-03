@@ -142,3 +142,8 @@ processService.getExecutionLog(executionDetail, new FileOutputStream("file/where
 
 processService.createSchedule(project, new Schedule(process, "myGraph.grf", "0 0 * * *"));
 ```
+
+##Contribute
+Missing functionality? Found a BUG? 
+
+Please create an [issue](https://github.com/martiner/gooddata-java/issues) or simply [contribute your code](CONTRIBUTING.md).
