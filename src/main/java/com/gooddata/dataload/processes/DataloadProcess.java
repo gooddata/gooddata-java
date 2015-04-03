@@ -10,6 +10,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.util.UriTemplate;
 
 import java.util.Collections;
@@ -107,5 +108,12 @@ public class DataloadProcess {
     @JsonIgnore
     public String getSourceLink() {
         return getUri() != null ? getUri() + "/source" : null;
+    }
+
+    public void validateExecutable(final String executable) {
+        if (!CollectionUtils.isEmpty(getExecutables()) &&
+                !getExecutables().contains(executable)) {
+            throw new IllegalArgumentException("Executable " + executable + " not found in process executables " + getExecutables());
+        }
     }
 }

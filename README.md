@@ -132,11 +132,13 @@ warehouseService.removeWarehouse(warehouse);
 ```
 
 ### Dataload processes API
-Manage dataload processes - create, update, list, delete, and process executions - execute, get logs,...
+Manage dataload processes - create, update, list, delete, and process executions - execute, get logs, schedules, ...
 ```java
 ProcessService processService = gd.getProcessService();
 DataloadProcess process = processService.createProcess(project, new DataloadProcess("name", "GRAPH"), new File("path/to/processdatadir"));
 
 ProcessExecutionDetail executionDetail = processService.executeProcess(new ProcessExecution(process, "myGraph.grf")).get();
 processService.getExecutionLog(executionDetail, new FileOutputStream("file/where/the/log/willbewritten"));
+
+processService.createSchedule(project, new Schedule(process, "myGraph.grf", "0 0 * * *"));
 ```
