@@ -18,6 +18,8 @@ public class GoodDataRestException extends GoodDataException {
 
     private final String errorClass;
 
+    private final String text;
+
     /**
      * Construct a GoodDataRestException with specified details.
      *
@@ -29,11 +31,12 @@ public class GoodDataRestException extends GoodDataException {
      */
     public GoodDataRestException(int statusCode, String requestId, String message, String component,
                                  String errorClass) {
-        super(statusCode + (requestId != null ? ": [requestId=" + requestId + "] " : "") + message);
+        super(statusCode + (requestId != null ? ": [requestId=" + requestId + "] " : ": ") + message);
         this.statusCode = statusCode;
         this.requestId = requestId;
         this.component = component;
         this.errorClass = errorClass;
+        this.text = message;
     }
 
     /**
@@ -88,4 +91,11 @@ public class GoodDataRestException extends GoodDataException {
         return errorClass;
     }
 
+    /**
+     * Text message describing the error
+     * @return text message
+     */
+    public String getText() {
+        return text;
+    }
 }
