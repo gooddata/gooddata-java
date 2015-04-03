@@ -12,12 +12,14 @@ import org.testng.annotations.BeforeMethod;
 import java.io.InputStream;
 
 import static com.gooddata.util.Validate.notNull;
-import static net.jadler.Jadler.*;
+import static net.jadler.Jadler.closeJadler;
+import static net.jadler.Jadler.initJadler;
+import static net.jadler.Jadler.port;
 
 public abstract class AbstractGoodDataIT {
 
     protected static final ObjectMapper MAPPER = new ObjectMapper();
-    protected  GoodData gd;
+    protected GoodData gd;
 
     @BeforeMethod
     public void commonSetUp() {
@@ -25,7 +27,8 @@ public abstract class AbstractGoodDataIT {
         gd = new GoodData("localhost", "sdk@gooddata.com", "sdk", port(), "http") {
             @Override
             protected HttpClient createHttpClient(final String login, final String password, final String hostname,
-                                                  final int port, final String protocol, final HttpClientBuilder builder) {
+                                                  final int port, final String protocol,
+                                                  final HttpClientBuilder builder) {
                 return builder.build();
             }
         };

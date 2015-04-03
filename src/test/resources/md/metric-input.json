@@ -1,7 +1,7 @@
 {
     "metric" : {
         "content" : {
-            "expression" : "[/gdc/md/PROJECT_ID/obj/EXPR_ID]",
+            "expression" : "SELECT SUM([/gdc/md/PROJECT_ID/obj/EXPR_ID])",
             "format" : "FORMAT"
         },
         "meta" : {

@@ -40,7 +40,7 @@ public class MetadataService extends AbstractService {
      * @throws com.gooddata.md.ObjNotFoundException if new metadata object not found after creation
      * @throws com.gooddata.GoodDataRestException   if GoodData REST API returns unexpected status code when getting
      *                                              the new object
-     * @throws com.gooddata.GoodDataException       if it encounters client-side HTTP errors when getting the new object
+     * @throws com.gooddata.GoodDataException       if no response from API or client-side HTTP error when getting the new object
      */
     @SuppressWarnings("unchecked")
     public <T extends Obj> T createObj(Project project, T obj) {
@@ -69,7 +69,7 @@ public class MetadataService extends AbstractService {
      * @return the metadata object
      * @throws com.gooddata.md.ObjNotFoundException if metadata object not found
      * @throws com.gooddata.GoodDataRestException   if GoodData REST API returns unexpected status code
-     * @throws com.gooddata.GoodDataException       if it encounters client-side HTTP errors
+     * @throws com.gooddata.GoodDataException       if no response from API or client-side HTTP error
      */
     public <T extends Obj> T getObjByUri(String uri, Class<T> cls) {
         notNull(uri, "uri");
@@ -103,7 +103,7 @@ public class MetadataService extends AbstractService {
      * @return the metadata object
      * @throws com.gooddata.md.ObjNotFoundException if metadata object not found
      * @throws com.gooddata.GoodDataRestException   if GoodData REST API returns unexpected status code
-     * @throws com.gooddata.GoodDataException       if it encounters client-side HTTP errors
+     * @throws com.gooddata.GoodDataException       if no response from API or client-side HTTP error
      */
     public <T extends Obj> T getObjById(Project project, String id, Class<T> cls) {
         notNull(project, "project");
