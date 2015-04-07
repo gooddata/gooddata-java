@@ -34,6 +34,7 @@ import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static org.apache.commons.lang.StringUtils.isEmpty;
 
 /**
  * Service to work with datasets and manifests.
@@ -99,34 +100,113 @@ public class DatasetService extends AbstractService {
             final ByteArrayInputStream inputStream = new ByteArrayInputStream(manifestJson.getBytes(UTF_8));
             dataStoreService.upload(dirPath.resolve(MANIFEST_FILE_NAME).toString(), inputStream);
 
-            final PullTask pullTask = restTemplate
-                    .postForObject(Pull.URI, new Pull(dirPath.toString()), PullTask.class, project.getId());
-            return new FutureResult<>(this, new SimplePollHandler<Void>(pullTask.getUri(), Void.class) {
-                @Override
-                public boolean isFinished(ClientHttpResponse response) throws IOException {
-                    final PullTaskStatus status = extractData(response, PullTaskStatus.class);
-                    final boolean finished = status.isFinished();
-                    if (finished && !status.isSuccess()) {
-                        final String message = getErrorMessage(status, dirPath);
-                        throw new DatasetException(message, manifest.getDataSet());
-                    }
-                    return finished;
-                }
-
-                @Override
-                protected void onFinish() {
-                    try {
-                        dataStoreService.delete(dirPath.toString() + "/");
-                    } catch (DataStoreException ignored) {
-                        // todo log?
-                    }
-                }
-            });
+            return pullLoad(project, dirPath, manifest.getDataSet());
         } catch (IOException e) {
             throw new DatasetException("Unable to serialize manifest", manifest.getDataSet(), e);
         } catch (DataStoreException | GoodDataRestException | RestClientException e) {
             throw new DatasetException("Unable to load", manifest.getDataSet(), e);
         }
+    }
+
+    /**
+     * Gets DatasetManifest (using {@link #getDatasetManifest(com.gooddata.project.Project, String)}
+     * first and then calls {@link #loadDataset(com.gooddata.project.Project, DatasetManifest, java.io.InputStream)}
+     *
+     * @param project   project to which dataset belongs
+     * @param datasetId datasetId to obtain a manifest
+     * @param dataset   dataset to upload
+     * @return {@link com.gooddata.FutureResult} of the task
+     */
+    public FutureResult<Void> loadDataset(Project project, String datasetId, InputStream dataset) {
+        notNull(project, "project");
+        notEmpty(datasetId, "datasetId");
+        notNull(dataset, "dataset");
+        return loadDataset(project, getDatasetManifest(project, datasetId), dataset);
+    }
+
+    public FutureResult<Void> loadDatasets(final Project project, DatasetManifest... datasets) {
+        return loadDatasets(project, asList(datasets));
+    }
+
+    /**
+     * Loads datasets into platform. Uploads given datasets and their manifests to staging area and triggers ETL pull.
+     * The call is asynchronous returning {@link com.gooddata.FutureResult} to let caller wait for results.
+     * Uploaded files are deleted from staging area when finished.
+     *
+     * @param project  project to which dataset belongs
+     * @param datasets map dataset manifests
+     * @return {@link com.gooddata.FutureResult} of the task, which can throw {@link com.gooddata.dataset.DatasetException}
+     * in case the ETL pull task fails
+     * @throws com.gooddata.dataset.DatasetException if there is a problem to serialize manifest or upload dataset
+     * @see <a href="https://developer.gooddata.com/article/multiload-of-csv-data">batch upload reference</a>
+     */
+    public FutureResult<Void> loadDatasets(final Project project, final Collection<DatasetManifest> datasets) {
+        notNull(project, "project");
+        validateUploadManifests(datasets);
+        final List<String> datasetsNames = new ArrayList<>(datasets.size());
+        try {
+            final Path dirPath = Paths.get("/", project.getId() + "_" + RandomStringUtils.randomAlphabetic(3), "/");
+            for (DatasetManifest datasetManifest : datasets) {
+                datasetsNames.add(datasetManifest.getDataSet());
+                dataStoreService.upload(dirPath.resolve(datasetManifest.getFile()).toString(), datasetManifest.getSource());
+            }
+
+            final String manifestJson = mapper.writeValueAsString(new DatasetManifests(datasets));
+            final ByteArrayInputStream inputStream = new ByteArrayInputStream(manifestJson.getBytes(UTF_8));
+            dataStoreService.upload(dirPath.resolve(MANIFEST_FILE_NAME).toString(), inputStream);
+
+            return pullLoad(project, dirPath, datasetsNames);
+        } catch (IOException e) {
+            throw new DatasetException("Unable to serialize manifest", datasetsNames, e);
+        } catch (DataStoreException | GoodDataRestException | RestClientException e) {
+            throw new DatasetException("Unable to load", datasetsNames, e);
+        }
+    }
+
+    private void validateUploadManifests(final Collection<DatasetManifest> datasets) {
+        notEmpty(datasets, "datasets");
+        for (DatasetManifest datasetManifest : datasets) {
+            if (datasetManifest.getSource() == null) {
+                throw new IllegalArgumentException(format("Source for dataset '%s' is null", datasetManifest.getDataSet()));
+            }
+            if (datasetManifest.getFile() == null) {
+                throw new IllegalArgumentException(format("File for dataset '%s' is null", datasetManifest.getDataSet()));
+            }
+            if (isEmpty(datasetManifest.getDataSet())) {
+                throw new IllegalArgumentException("Dataset name is empty.");
+            }
+        }
+    }
+
+    private FutureResult<Void> pullLoad(Project project, final Path dirPath, final String dataset) {
+        return pullLoad(project, dirPath, asList(dataset));
+    }
+
+    private FutureResult<Void> pullLoad(Project project, final Path dirPath, final Collection<String> datasets) {
+        final PullTask pullTask = restTemplate
+                .postForObject(Pull.URI, new Pull(dirPath.toString()), PullTask.class, project.getId());
+        return new FutureResult<>(this, new SimplePollHandler<Void>(pullTask.getUri(), Void.class) {
+            @Override
+            public boolean isFinished(ClientHttpResponse response) throws IOException {
+                final PullTaskStatus status = extractData(response, PullTaskStatus.class);
+                final boolean finished = status.isFinished();
+                if (finished && !status.isSuccess()) {
+                    final String message = getErrorMessage(status, dirPath);
+                    throw new DatasetException(message, datasets);
+                }
+                return finished;
+            }
+
+            @Override
+            protected void onFinish() {
+                try {
+                    dataStoreService.delete(dirPath.toString() + "/");
+                } catch (DataStoreException ignored) {
+                    // todo log?
+                }
+            }
+        });
+
     }
 
     private String getErrorMessage(final PullTaskStatus status, final Path dirPath) {
@@ -164,22 +244,6 @@ public class DatasetService extends AbstractService {
         try (final InputStream input = dataStoreService.download(path.toString())) {
             return mapper.readValue(input, type);
         }
-    }
-
-    /**
-     * Gets DatasetManifest (using {@link #getDatasetManifest(com.gooddata.project.Project, String)}
-     * first and then calls {@link #loadDataset(com.gooddata.project.Project, DatasetManifest, java.io.InputStream)}
-     *
-     * @param project   project to which dataset belongs
-     * @param datasetId datasetId to obtain a manifest
-     * @param dataset   dataset to upload
-     * @return {@link com.gooddata.FutureResult} of the task
-     */
-    public FutureResult<Void> loadDataset(Project project, String datasetId, InputStream dataset) {
-        notNull(project, "project");
-        notEmpty(datasetId, "datasetId");
-        notNull(dataset, "dataset");
-        return loadDataset(project, getDatasetManifest(project, datasetId), dataset);
     }
 
     /**

@@ -65,6 +65,27 @@
                         }
                     ]
                 }
+            },
+            {
+                "dataset": {
+                    "identifier": "dataset.city",
+                    "title": "Person",
+                    "description": "Dataset with City-related data",
+                    "anchor": {
+                        "attribute": {
+                            "identifier": "attr.city.name",
+                            "title": "City Name",
+                            "labels": [
+                                {
+                                    "label": {
+                                        "identifier": "label.city.name",
+                                        "title": "City Name"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
             }
         ]
     }

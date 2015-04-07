@@ -93,6 +93,18 @@ Upload data to datasets,..
 DatasetService datasetService = gd.getDatasetService();
 datasetService.loadDataset(project, "datasetId", new FileInputStream("data.csv")).get();
 ```
+Upload data to datasets using batch upload ,..
+
+```java
+DatasetService datasetService = gd.getDatasetService();
+final DatasetManifest personManifest = datasetService.getDatasetManifest(project, "dataset.person");
+personManifest.setSource(getClass().getResourceAsStream("/person.csv"));
+
+final DatasetManifest cityManifest = datasetService.getDatasetManifest(project, "dataset.city");
+cityManifest.setSource(getClass().getResourceAsStream("/city.csv"));
+
+datasetService.loadDatasets(project, personManifest, cityManifest).get();
+```
 
 Update data in dataset
 ```java
