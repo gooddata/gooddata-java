@@ -152,7 +152,6 @@ public class GoodData {
         final RestTemplate restTemplate = new RestTemplate(factory);
         restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(
                 new HeaderSettingRequestInterceptor(singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE))));
-        restTemplate.setErrorHandler(new ResponseErrorHandler(restTemplate.getMessageConverters()));
 
         // avoid jackson2 auto-detection and ensure jackson1 converter is present
         final List<HttpMessageConverter<?>> partConverters = new ArrayList<>();
@@ -172,6 +171,8 @@ public class GoodData {
         messageConverters.add(formHttpMessageConverter);
         messageConverters.add(new MappingJacksonHttpMessageConverter());
         restTemplate.setMessageConverters(messageConverters);
+
+        restTemplate.setErrorHandler(new ResponseErrorHandler(messageConverters));
 
         return restTemplate;
     }
