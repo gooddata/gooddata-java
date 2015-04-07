@@ -81,8 +81,13 @@ public abstract class AbstractService {
 
     final <P> boolean pollOnce(final PollHandler<P,?> handler) {
         notNull(handler, "handler");
-        final ClientHttpResponse response = restTemplate.execute(handler.getPollingUri(), GET, noopRequestCallback,
-                reusableResponseExtractor);
+        final ClientHttpResponse response;
+        try {
+            response = restTemplate.execute(handler.getPollingUri(), GET, noopRequestCallback, reusableResponseExtractor);
+        } catch (GoodDataRestException e) {
+            handler.handlePollException(e);
+            throw new GoodDataException("Handler " + handler.getClass().getName() + " didn't handle exception", e);
+        }
 
         try {
             if (handler.isFinished(response)) {

@@ -181,6 +181,11 @@ public class ConnectorService extends AbstractService {
                                 pollResult.getStatus().getDescription());
                     }
                 }
+
+                @Override
+                public void handlePollException(final GoodDataRestException e) {
+                    throw new ConnectorException(connectorType + " process failed: " + e.getText(), e);
+                }
             });
         } catch (GoodDataRestException | RestClientException e) {
             throw new ConnectorException("Unable to execute " + connectorType + " process", e);

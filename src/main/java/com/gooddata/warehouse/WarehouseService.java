@@ -83,6 +83,11 @@ public class WarehouseService extends AbstractService {
                             + pollResult.getWarehouseLink(), e);
                 }
             }
+
+            @Override
+            public void handlePollException(final GoodDataRestException e) {
+                throw new GoodDataException("Unable to create warehouse", e);
+            }
         });
     }
 

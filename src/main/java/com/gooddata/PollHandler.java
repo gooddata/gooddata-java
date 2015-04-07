@@ -66,4 +66,12 @@ public interface PollHandler<P,R> {
      * @param pollResult result of polling request
      */
     void handlePollResult(P pollResult);
+
+    /**
+     * Handle exception while polling.
+     * The implementing class should throw instance of {@link com.gooddata.GoodDataException}
+     * (or ancestor) with the given argument as cause.
+     * @param e the exception
+     */
+    void handlePollException(GoodDataRestException e);
 }

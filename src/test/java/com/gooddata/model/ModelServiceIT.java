@@ -52,6 +52,24 @@ public class ModelServiceIT extends AbstractGoodDataIT {
         assertThat(diff.getUpdateMaql().get(0), is("CREATE FOLDER {ffld.employee} VISUAL(TITLE \"Employee\") TYPE FACT;\nCREATE FACT {fact.employee.age} VISUAL(TITLE \"Employee Age\", FOLDER {ffld.employee}) AS {f_employee.f_age};\nALTER DATASET {dataset.employee} ADD {fact.employee.age};\nSYNCHRONIZE {dataset.employee} PRESERVE DATA;"));
     }
 
+    @Test(expectedExceptions = ModelException.class, expectedExceptionsMessageRegExp = "Unable to get project model diff")
+    public void shouldFailCreateDiff() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(DIFF_URI)
+            .respond()
+                .withStatus(202)
+                .withBody(MAPPER.writeValueAsString(new AsyncTask(DIFF_POLL_URI)));
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(DIFF_POLL_URI)
+            .respond()
+                .withStatus(400)
+        ;
+
+        gd.getModelService().getProjectModelDiff(project, "xxx").get();
+    }
+
     @Test
     public void shouldUpdateModel() throws Exception {
         onRequest()
@@ -69,6 +87,28 @@ public class ModelServiceIT extends AbstractGoodDataIT {
             .thenRespond()
                 .withStatus(200)
                 .withBody(MAPPER.writeValueAsString(new TaskStatus("OK", STATUS_URI)))
+        ;
+
+        final ModelDiff diff = new ModelDiff(new UpdateScript(true, false,
+                "synchronize {dataset.chunk1} preserve data",
+                "synchronize {dataset.chunk2} preserve data"
+        ));
+        gd.getModelService().updateProjectModel(project, diff).get();
+    }
+
+    @Test(expectedExceptions = ModelException.class, expectedExceptionsMessageRegExp = "Unable to update project model")
+    public void shouldFailUpdateModel() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(LDM_MANAGE2)
+            .respond()
+                .withStatus(202)
+                .withBody(readResource("/model/maqlDdlLinks.json"));
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(STATUS_URI)
+            .respond()
+                .withStatus(400)
         ;
 
         final ModelDiff diff = new ModelDiff(new UpdateScript(true, false,

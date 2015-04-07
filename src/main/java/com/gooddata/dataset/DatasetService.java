@@ -198,6 +198,11 @@ public class DatasetService extends AbstractService {
             }
 
             @Override
+            public void handlePollException(final GoodDataRestException e) {
+                throw new DatasetException("Unable to load", datasets, e);
+            }
+
+            @Override
             protected void onFinish() {
                 try {
                     dataStoreService.delete(dirPath.toString() + "/");
@@ -302,6 +307,11 @@ public class DatasetService extends AbstractService {
                 throw new GoodDataException("Unable to optimize SLI hash: " + maqlDdlTaskStatus.getMessages());
             }
 
+            @Override
+            public void handlePollException(final GoodDataRestException e) {
+                throw new GoodDataException("Unable to optimize SLI hash: " + getPollingUri(), e);
+            }
+
         });
 
     }
@@ -344,6 +354,11 @@ public class DatasetService extends AbstractService {
                     return true;
                 }
                 throw new GoodDataException(errorMessage + ": " + taskState.getMessage());
+            }
+
+            @Override
+            public void handlePollException(final GoodDataRestException e) {
+                throw new GoodDataException(errorMessage + ": " + getPollingUri(), e);
             }
         });
     }

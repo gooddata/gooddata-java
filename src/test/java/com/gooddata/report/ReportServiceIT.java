@@ -60,4 +60,17 @@ public class ReportServiceIT extends AbstractGoodDataIT {
         gd.getReportService().exportReport(rd, ReportExportFormat.CSV, output).get();
         assertThat(output.toString(StandardCharsets.US_ASCII.name()), is(RESPONSE));
     }
+
+    @Test(expectedExceptions = ReportException.class, expectedExceptionsMessageRegExp = "Unable to export report")
+    public void shouldFail() throws Exception {
+        onRequest()
+                .havingPathEqualTo(URI)
+                .havingMethodEqualTo("GET")
+                .respond()
+                .withStatus(400);
+
+        final Report rd = MAPPER.readValue(readResource("/md/report/report.json"), Report.class);
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        gd.getReportService().exportReport(rd, ReportExportFormat.CSV, output).get();
+    }
 }

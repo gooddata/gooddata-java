@@ -2,7 +2,6 @@ package com.gooddata.project;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
-import com.gooddata.GoodDataRestException;
 import com.gooddata.gdc.AsyncTask;
 import com.gooddata.gdc.TaskStatus;
 import com.gooddata.gdc.UriResponse;
@@ -72,7 +71,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         gd.getProjectService().createProject(new Project("TITLE", "AUTH_TOKEN")).get();
     }
 
-    @Test(expectedExceptions = GoodDataRestException.class) // todo previous method returns GoodDataException
+    @Test(expectedExceptions = GoodDataException.class)
     public void shouldFailWhenPollFails() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
