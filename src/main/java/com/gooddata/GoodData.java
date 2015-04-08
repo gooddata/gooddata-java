@@ -57,6 +57,8 @@ public class GoodData {
     protected static final String HOSTNAME = "secure.gooddata.com";
     private static final String UNKNOWN_VERSION = "UNKNOWN";
 
+    private static final int RESTAPI_VERSION = 1;
+
     private final RestTemplate restTemplate;
     private final AccountService accountService;
     private final ProjectService projectService;
@@ -146,7 +148,7 @@ public class GoodData {
                 new HttpComponentsClientHttpRequestFactory(client), hostname, port, protocol);
         final RestTemplate restTemplate = new RestTemplate(factory);
         restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(
-                new HeaderSettingRequestInterceptor(singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE))));
+                new HeaderSettingRequestInterceptor(singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE + ";version=" + RESTAPI_VERSION))));
         restTemplate.setErrorHandler(new ResponseErrorHandler(restTemplate.getMessageConverters()));
 
         // make sure jackson1 converter is present and remove all converters conflicting with it (eg. jackson2)
