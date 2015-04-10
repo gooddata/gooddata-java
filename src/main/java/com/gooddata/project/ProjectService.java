@@ -263,14 +263,14 @@ public class ProjectService extends AbstractService {
      * It doesn't make sense to create feature flag that is disabled because this is the same as having no feature
      * flag at all.
      *
-     * @param projectId project identifier
-     * @param featureFlagName name of feature flag to be enabled
+     * @param project project for which the feature flag should be created, cannot be null
+     * @param featureFlagName name of feature flag to be enabled, cannot be empty
      */
-    public FeatureFlag createProjectFeatureFlag(final String projectId, final String featureFlagName) {
-        notEmpty(projectId, "projectId cannot be empty.");
+    public FeatureFlag createProjectFeatureFlag(final Project project, final String featureFlagName) {
+        notNull(project, "project cannot be null!");
         notEmpty(featureFlagName, "featureFlagName cannot be empty!");
 
-        final String featureFlagsUri = FEATURE_FLAGS_TEMPLATE.expand(projectId).toString();
+        final String featureFlagsUri = FEATURE_FLAGS_TEMPLATE.expand(project.getId()).toString();
 
         try {
             final URI featureFlagUri = restTemplate.postForLocation(featureFlagsUri, new FeatureFlag(featureFlagName));
@@ -284,27 +284,30 @@ public class ProjectService extends AbstractService {
     /**
      * Get feature flag by unique name (aka "key").
      *
-     * @param projectId project identifier
-     * @param featureFlagName name of feature flag
+     * @param project project, cannot be null
+     * @param featureFlagName name of feature flag, cannot be empty
      * @return feature flag
      */
-    public FeatureFlag getProjectFeatureFlag(String projectId, String featureFlagName) {
-        return restTemplate.getForObject(getFeatureFlagUri(projectId, featureFlagName), FeatureFlag.class);
+    public FeatureFlag getProjectFeatureFlag(final Project project, final String featureFlagName) {
+        notNull(project, "project cannot be null!");
+        notEmpty(featureFlagName, "featureFlagName cannot be empty!");
+
+        return restTemplate.getForObject(getFeatureFlagUri(project, featureFlagName), FeatureFlag.class);
     }
 
     /**
      * Updates existing feature flag using given {@code newValue}.
      *
-     * @param projectId project identifier
-     * @param featureFlagName name of feature flag to be updated
+     * @param project project, cannot be null
+     * @param featureFlagName name of feature flag to be updated, canont be empty
      * @param newValue new valued for feature flag - true (enabled), false (disabled)
      * @return updated feature flag
      */
-    public FeatureFlag updateProjectFeatureFlag(String projectId, String featureFlagName, boolean newValue) {
-        notEmpty(projectId, "projectId cannot be empty.");
+    public FeatureFlag updateProjectFeatureFlag(final Project project, final String featureFlagName, boolean newValue) {
+        notNull(project, "project cannot be null!");
         notEmpty(featureFlagName, "featureFlagName cannot be empty!");
 
-        final String featureFlagUri = getFeatureFlagUri(projectId, featureFlagName);
+        final String featureFlagUri = getFeatureFlagUri(project, featureFlagName);
 
         try {
             restTemplate.put(featureFlagUri, new FeatureFlag(featureFlagName, newValue));
@@ -319,7 +322,7 @@ public class ProjectService extends AbstractService {
         return restTemplate.getForObject(featureFlagUri, FeatureFlag.class);
     }
 
-    private String getFeatureFlagUri(String projectId, String featureFlagName) {
-        return FEATURE_FLAG_TEMPLATE.expand(projectId, featureFlagName).toString();
+    private String getFeatureFlagUri(final Project project, final String featureFlagName) {
+        return FEATURE_FLAG_TEMPLATE.expand(project.getId(), featureFlagName).toString();
     }
 }

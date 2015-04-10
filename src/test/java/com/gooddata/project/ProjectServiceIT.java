@@ -21,6 +21,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Set;
 
@@ -256,7 +257,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
 
         mockGetFeatureFlagRequest(getFeatureFlagUri(featureFlagName), true);
 
-        final FeatureFlag featureFlag = gd.getProjectService().getProjectFeatureFlag(PROJECT_ID,featureFlagName);
+        final FeatureFlag featureFlag = gd.getProjectService().getProjectFeatureFlag(enabled, featureFlagName);
 
         checkFeatureFlag(featureFlag, featureFlagName, true);
     }
@@ -271,7 +272,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
 
         mockGetFeatureFlagRequest(featureFlagUri, true);
 
-        final FeatureFlag featureFlag = gd.getProjectService().createProjectFeatureFlag(PROJECT_ID, featureFlagName);
+        final FeatureFlag featureFlag = gd.getProjectService().createProjectFeatureFlag(enabled, featureFlagName);
 
         checkFeatureFlag(featureFlag, featureFlagName, true);
     }
@@ -286,7 +287,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         mockGetFeatureFlagRequest(featureFlagUri, false);
 
         final FeatureFlag updatedFeatureFlag = gd.getProjectService().updateProjectFeatureFlag(
-                PROJECT_ID, featureFlagName, false);
+                enabled, featureFlagName, false);
 
         checkFeatureFlag(updatedFeatureFlag, featureFlagName, false);
     }
