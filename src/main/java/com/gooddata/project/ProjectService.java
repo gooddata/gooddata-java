@@ -301,7 +301,7 @@ public class ProjectService extends AbstractService {
      * @return updated feature flag
      */
     public FeatureFlag updateProjectFeatureFlag(String projectId, String featureFlagName, boolean newValue) {
-                notEmpty(projectId, "projectId cannot be empty.");
+        notEmpty(projectId, "projectId cannot be empty.");
         notEmpty(featureFlagName, "featureFlagName cannot be empty!");
 
         final String featureFlagUri = getFeatureFlagUri(projectId, featureFlagName);
