@@ -1,8 +1,10 @@
 package com.gooddata.gdc;
 
 import com.gooddata.AbstractGoodDataIT;
+import com.gooddata.util.ResourceUtils;
 import org.testng.annotations.Test;
 
+import static com.gooddata.util.ResourceUtils.readFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -16,7 +18,7 @@ public class GdcServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc")
             .respond()
-                .withBody(readResource("/gdc/gdc.json"))
+                .withBody(readFromResource("/gdc/gdc.json"))
                 .withStatus(200);
 
         final Gdc gdc = gd.getGdcService().getGdc();

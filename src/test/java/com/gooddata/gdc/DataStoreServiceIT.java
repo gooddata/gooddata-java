@@ -1,6 +1,7 @@
 package com.gooddata.gdc;
 
 import com.gooddata.AbstractGoodDataIT;
+import com.gooddata.util.ResourceUtils;
 import org.apache.commons.io.IOUtils;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -8,6 +9,7 @@ import org.testng.annotations.Test;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import static com.gooddata.util.ResourceUtils.readFromResource;
 import static net.jadler.Jadler.onRequest;
 import static net.jadler.Jadler.port;
 
@@ -26,7 +28,7 @@ public class DataStoreServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc")
             .respond()
-                .withBody(readResource("/gdc/gdc.json"))
+                .withBody(readFromResource("/gdc/gdc.json"))
                 .withStatus(200);
         content = new ByteArrayInputStream("test".getBytes());
     }
@@ -43,7 +45,7 @@ public class DataStoreServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void shouldUploadWithFullStagingLink() throws Exception {
-        final String gdcBody = IOUtils.toString(readResource("/gdc/gdc.json"))
+        final String gdcBody = IOUtils.toString(readFromResource("/gdc/gdc.json"))
                 .replaceAll("/uploads", "http://localhost:" + port() + "/uploads");
         onRequest()
                 .havingMethodEqualTo("GET")

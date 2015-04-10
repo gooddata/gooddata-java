@@ -4,6 +4,7 @@ import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.FutureResult;
 import com.gooddata.collections.PageableList;
 import com.gooddata.project.Project;
+import com.gooddata.util.ResourceUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -12,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Collection;
 
+import static com.gooddata.util.ResourceUtils.readFromResource;
 import static net.jadler.Jadler.onRequest;
 import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -47,9 +49,9 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
 
     @BeforeClass
     public void setUp() throws Exception {
-        project = MAPPER.readValue(readResource("/project/project.json"), Project.class);
-        process = MAPPER.readValue(readResource("/dataload/processes/process.json"), DataloadProcess.class);
-        schedule = MAPPER.readValue(readResource("/dataload/processes/schedule.json"), Schedule.class);
+        project = MAPPER.readValue(readFromResource("/project/project.json"), Project.class);
+        process = MAPPER.readValue(readFromResource("/dataload/processes/process.json"), DataloadProcess.class);
+        schedule = MAPPER.readValue(readFromResource("/dataload/processes/schedule.json"), Schedule.class);
         file = File.createTempFile("test", ".groovy");
     }
 
@@ -59,7 +61,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(PROCESSES_PATH)
             .respond()
-                .withBody(readResource("/dataload/processes/process.json"))
+                .withBody(readFromResource("/dataload/processes/process.json"))
                 .withStatus(201);
 
         final DataloadProcess process = gd.getProcessService().createProcess(project, new DataloadProcess("testProcess", "GROOVY"), file);
@@ -68,12 +70,31 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
+    public void shouldCreateProcessWithoutData() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(PROCESSES_PATH)
+            .respond()
+                .withBody(readFromResource("/dataload/processes/processWithoutData.json"))
+                .withStatus(201);
+
+        final String processName = "dataloadProcess";
+        final String processType = "DATALOAD";
+        final DataloadProcess process = gd.getProcessService().createProcess(project,
+                new DataloadProcess(processName, processType));
+        assertThat(process, notNullValue());
+        assertThat(process.getName(), is(processName));
+        assertThat(process.getType(), is(processType));
+        assertThat(process.getExecutables(), nullValue());
+    }
+
+    @Test
     public void shouldListProcesses() throws Exception {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(PROCESSES_PATH)
             .respond()
-                .withBody(readResource("/dataload/processes/processes.json"))
+                .withBody(readFromResource("/dataload/processes/processes.json"))
                 .withStatus(200);
 
         final Collection<DataloadProcess> processes = gd.getProcessService().listProcesses(project);
@@ -87,7 +108,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(PROCESS_PATH)
             .respond()
-                .withBody(readResource("/dataload/processes/process.json"))
+                .withBody(readFromResource("/dataload/processes/process.json"))
                 .withStatus(200);
 
         final DataloadProcess process = gd.getProcessService().getProcessById(project, PROCESS_ID);
@@ -142,7 +163,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .withStatus(200);
 
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        final ProcessExecutionDetail executionDetail = MAPPER.readValue(readResource("/dataload/processes/executionDetail.json"), ProcessExecutionDetail.class);
+        final ProcessExecutionDetail executionDetail = MAPPER.readValue(readFromResource("/dataload/processes/executionDetail.json"), ProcessExecutionDetail.class);
         gd.getProcessService().getExecutionLog(executionDetail, outputStream);
         assertThat(outputStream.toString(), is(log));
     }
@@ -153,7 +174,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(EXECUTIONS_PATH)
             .respond()
-                .withBody(readResource("/dataload/processes/executionTask.json"))
+                .withBody(readFromResource("/dataload/processes/executionTask.json"))
                 .withHeader("Location", EXECUTION_PATH)
                 .withStatus(201);
         onRequest()
@@ -167,13 +188,13 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(EXECUTION_DETAIL_PATH)
             .respond()
-                .withBody(readResource("/dataload/processes/executionDetail-success.json"))
+                .withBody(readFromResource("/dataload/processes/executionDetail-success.json"))
                 .withStatus(200);
 
         final FutureResult<ProcessExecutionDetail> result = gd.getProcessService().executeProcess(new ProcessExecution(process, "test.groovy"));
         final ProcessExecutionDetail executionDetail = result.get();
 
-        assertJsonEquals(MAPPER.readValue(readResource("/dataload/processes/executionDetail-success.json"), ProcessExecutionDetail.class), executionDetail);
+        assertJsonEquals(MAPPER.readValue(readFromResource("/dataload/processes/executionDetail-success.json"), ProcessExecutionDetail.class), executionDetail);
     }
 
     @Test(expectedExceptions = ProcessExecutionException.class)
@@ -182,7 +203,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(EXECUTIONS_PATH)
             .respond()
-                .withBody(readResource("/dataload/processes/executionTask.json"))
+                .withBody(readFromResource("/dataload/processes/executionTask.json"))
                 .withHeader("Location", EXECUTION_PATH)
                 .withStatus(201);
         onRequest()
@@ -195,7 +216,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(EXECUTION_DETAIL_PATH)
             .respond()
-                .withBody(readResource("/dataload/processes/executionDetail.json"))
+                .withBody(readFromResource("/dataload/processes/executionDetail.json"))
                 .withStatus(200);
 
         gd.getProcessService().executeProcess(new ProcessExecution(process, "test.groovy")).get();
@@ -207,7 +228,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(SCHEDULES_PATH)
                 .respond()
-                .withBody(readResource("/dataload/processes/schedule.json"))
+                .withBody(readFromResource("/dataload/processes/schedule.json"))
                 .withStatus(201);
 
         final Schedule schedule = gd.getProcessService().createSchedule(project, new Schedule(process, EXECUTABLE, "0 0 * * *"));
@@ -221,7 +242,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("PUT")
                 .havingPathEqualTo(SCHEDULE_PATH)
                 .respond()
-                .withBody(readResource("/dataload/processes/schedule-disabled.json"))
+                .withBody(readFromResource("/dataload/processes/schedule-disabled.json"))
                 .withStatus(200);
 
         schedule.setState(ScheduleState.DISABLED);
@@ -236,14 +257,14 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(SCHEDULES_PATH)
                 .respond()
-                .withBody(readResource("/dataload/processes/schedules_page1.json"))
+                .withBody(readFromResource("/dataload/processes/schedules_page1.json"))
                 .withStatus(200);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(SCHEDULES_PATH)
                 .havingQueryStringEqualTo("offset=1&limit=1")
                 .respond()
-                .withBody(readResource("/dataload/processes/schedules_page2.json"))
+                .withBody(readFromResource("/dataload/processes/schedules_page2.json"))
                 .withStatus(200);
 
         final PageableList<Schedule> firstPage = gd.getProcessService().listSchedules(project);
@@ -264,7 +285,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(SCHEDULE_PATH)
                 .respond()
-                .withBody(readResource("/dataload/processes/schedule.json"))
+                .withBody(readFromResource("/dataload/processes/schedule.json"))
                 .withStatus(200);
 
         final Schedule schedule = gd.getProcessService().getScheduleById(project, SCHEDULE_ID);

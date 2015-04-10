@@ -23,6 +23,7 @@ import com.gooddata.md.report.Report;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.model.ModelDiff;
 import com.gooddata.model.ModelService;
+import com.gooddata.project.FeatureFlag;
 import com.gooddata.project.Project;
 import com.gooddata.project.ProjectService;
 import com.gooddata.project.ProjectValidationResults;
@@ -32,6 +33,7 @@ import com.gooddata.dataload.processes.Schedule;
 import com.gooddata.dataload.processes.ScheduleState;
 import com.gooddata.warehouse.Warehouse;
 import com.gooddata.warehouse.WarehouseService;
+import junit.framework.Assert;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.LocalDate;
@@ -55,6 +57,7 @@ import static com.gooddata.WarehouseIdMatcher.hasSameIdAs;
 import static com.gooddata.md.Restriction.identifier;
 import static java.nio.file.Files.createTempDirectory;
 import static java.util.Arrays.asList;
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -66,6 +69,8 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
 public class ShowcaseAT {
+
+    private static final String PROJECT_FEATURE_FLAG = "testFeatureFlag";
 
     private String title;
     private GoodData gd;
@@ -144,6 +149,27 @@ public class ShowcaseAT {
         final ProjectValidationResults results = gd.getProjectService().validateProject(project).get();
         assertThat(results, is(notNullValue()));
         assertThat(results.getResults(), is(notNullValue()));
+    }
+
+    @Test(groups = "project", dependsOnMethods = "createProject")
+    public void createProjectFeatureFlag() throws Exception {
+        final FeatureFlag featureFlag =
+                gd.getProjectService().createProjectFeatureFlag(project, PROJECT_FEATURE_FLAG);
+        checkFeatureFlag(featureFlag, true);
+    }
+
+    @Test(groups = "project", dependsOnMethods = "createProjectFeatureFlag")
+    public void getProjectFeatureFlag() throws Exception {
+        final FeatureFlag featureFlag =
+                gd.getProjectService().getProjectFeatureFlag(project, PROJECT_FEATURE_FLAG);
+        checkFeatureFlag(featureFlag, true);
+    }
+
+    @Test(groups = "project", dependsOnMethods = "getProjectFeatureFlag")
+    public void updateProjectFeatureFlag() throws Exception {
+        final FeatureFlag featureFlag =
+                gd.getProjectService().updateProjectFeatureFlag(project, PROJECT_FEATURE_FLAG, false);
+        checkFeatureFlag(featureFlag, false);
     }
 
     @Test(groups = "model", dependsOnGroups = "project")
@@ -331,4 +357,13 @@ public class ShowcaseAT {
         final Collection<DataloadProcess> processes = gd.getProcessService().listProcesses(project);
         assertThat(processes, not(hasItem(hasSameIdAs(process))));
     }
+
+
+
+    private void checkFeatureFlag(FeatureFlag featureFlag, boolean expectedValue) {
+        assertThat(featureFlag, is(notNullValue()));
+        assertThat(featureFlag.getKey(), is(PROJECT_FEATURE_FLAG));
+        assertThat(featureFlag.getValue(), is(expectedValue));
+    }
+
 }

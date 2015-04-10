@@ -3,6 +3,7 @@
  */
 package com.gooddata;
 
+import com.gooddata.util.ResourceUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -37,9 +38,5 @@ public abstract class AbstractGoodDataIT {
     @AfterMethod
     public void tearDown() {
         closeJadler();
-    }
-
-    protected InputStream readResource(String path) {
-        return notNull(getClass().getResourceAsStream(path), "resource denote by path: " + path);
     }
 }

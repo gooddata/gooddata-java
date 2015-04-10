@@ -5,24 +5,32 @@ import com.gooddata.GoodDataException;
 import com.gooddata.gdc.AsyncTask;
 import com.gooddata.gdc.TaskStatus;
 import com.gooddata.gdc.UriResponse;
+import com.gooddata.util.ResourceUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static com.gooddata.JsonMatchers.isJsonString;
+import static com.gooddata.project.FeatureFlag.FEATURE_FLAGS_TEMPLATE;
+import static com.gooddata.project.FeatureFlag.FEATURE_FLAG_TEMPLATE;
+import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.util.ResourceUtils.readStringFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Set;
 
 public class ProjectServiceIT extends AbstractGoodDataIT {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final String PROJECT_URI = "/gdc/projects/PROJECT_ID";
+
+    private static final String PROJECT_ID = "PROJECT_ID";
+    private static final String PROJECT_URI = "/gdc/projects/" + PROJECT_ID;
 
     private Project loading;
     private Project enabled;
@@ -30,9 +38,9 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
 
     @BeforeClass
     public void setUp() throws Exception {
-        loading = MAPPER.readValue(readResource("/project/project-loading.json"), Project.class);
-        enabled = MAPPER.readValue(readResource("/project/project.json"), Project.class);
-        deleted = MAPPER.readValue(readResource("/project/project-deleted.json"), Project.class);
+        loading = MAPPER.readValue(readFromResource("/project/project-loading.json"), Project.class);
+        enabled = MAPPER.readValue(readFromResource("/project/project.json"), Project.class);
+        deleted = MAPPER.readValue(readFromResource("/project/project-deleted.json"), Project.class);
     }
 
     @Test
@@ -125,21 +133,21 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     @Test
     public void shouldReturnProjectTemplates() throws Exception {
         onRequest()
-                .havingPathEqualTo("/gdc/md/PROJECT_ID/templates")
+                .havingPathEqualTo("/gdc/md/" + PROJECT_ID + "/templates")
             .respond()
-                .withBody(readResource("/project/project-templates.json"));
+                .withBody(readFromResource("/project/project-templates.json"));
 
         final Collection<ProjectTemplate> templates = gd.getProjectService().getProjectTemplates(enabled);
         assertThat(templates, is(notNullValue()));
         assertThat(templates, hasSize(1));
     }
 
-    @Test
+        @Test
     public void shouldReturnAvailableValidations() throws Exception {
         onRequest()
-                .havingPathEqualTo("/gdc/md/PROJECT_ID/validate")
-            .respond()
-                .withBody(readResource("/project/project-validationAvail.json"));
+                .havingPathEqualTo("/gdc/md/" + PROJECT_ID + "/validate")
+                    .respond()
+                    .withBody(readFromResource("/project/project-validationAvail.json"));
 
         final Set<ProjectValidationType> validations = gd.getProjectService().getAvailableProjectValidationTypes(enabled);
         assertThat(validations, notNullValue());
@@ -149,7 +157,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void shouldValidateProject() throws Exception {
-        final String validateUri = "/gdc/md/PROJECT_ID/validate";
+        final String validateUri = "/gdc/md/"  + PROJECT_ID + "/validate";
         final String task1Uri = validateUri + "/task/TASK_ID";
         final String task2Uri = validateUri + "/task/TASK_ID2";
         final String resultUri = validateUri + "/result/RESULT_ID";
@@ -157,7 +165,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo(validateUri)
             .respond()
-                .withBody(readResource("/project/project-validationAvail.json"));
+                .withBody(readFromResource("/project/project-validationAvail.json"));
 
         onRequest()
                 .havingPathEqualTo(validateUri)
@@ -187,7 +195,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo(resultUri)
             .respond()
-                .withBody(readResource("/project/project-validationResults.json"))
+                .withBody(readFromResource("/project/project-validationResults.json"))
                 .withStatus(200);
 
         final ProjectValidationResults validateResult = gd.getProjectService().validateProject(enabled).get();
@@ -197,7 +205,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void shouldValidateProject2() throws Exception {
-        final String validateUri = "/gdc/md/PROJECT_ID/validate";
+        final String validateUri = "/gdc/md/" + PROJECT_ID + "/validate";
         final String task1Uri = validateUri + "/task/TASK_ID";
         final String task2Uri = validateUri + "/task/TASK_ID2";
         final String resultUri = validateUri + "/result/RESULT_ID";
@@ -205,7 +213,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo(validateUri)
             .respond()
-                .withBody(readResource("/project/project-validationAvail.json"));
+                .withBody(readFromResource("/project/project-validationAvail.json"));
 
         onRequest()
                 .havingPathEqualTo(validateUri)
@@ -233,7 +241,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo(resultUri)
             .respond()
-                .withBody(readResource("/project/project-validationResults.json"))
+                .withBody(readFromResource("/project/project-validationResults.json"))
                 .withStatus(200);
 
         final ProjectValidationResults validateResult = gd.getProjectService().validateProject(enabled).get();
@@ -241,5 +249,87 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         assertThat(validateResult, notNullValue());
     }
 
+
+    @Test
+
+    public void shouldGetProjectFeatureFlag() {
+        final String featureFlagName = "myCoolFeature";
+
+        mockGetFeatureFlagRequest(getFeatureFlagUri(featureFlagName), true);
+
+        final FeatureFlag featureFlag = gd.getProjectService().getProjectFeatureFlag(enabled, featureFlagName);
+
+        checkFeatureFlag(featureFlag, featureFlagName, true);
+    }
+
+    @Test
+    public void shouldSetProjectFeatureFlag() {
+        final String featureFlagName = "myCoolFeature";
+
+        final String featureFlagUri = getFeatureFlagUri(featureFlagName);
+
+        mockCreateFeatureFlagRequest(featureFlagUri);
+
+        mockGetFeatureFlagRequest(featureFlagUri, true);
+
+        final FeatureFlag featureFlag = gd.getProjectService().createProjectFeatureFlag(enabled, featureFlagName);
+
+        checkFeatureFlag(featureFlag, featureFlagName, true);
+    }
+
+    @Test
+    public void shouldDisableExistingFeatureFlag() {
+
+        final String featureFlagName = "myCoolFeature";
+
+        final String featureFlagUri = getFeatureFlagUri(featureFlagName);
+        mockUpdateFeatureFlagRequest(featureFlagUri);
+        mockGetFeatureFlagRequest(featureFlagUri, false);
+
+        final FeatureFlag updatedFeatureFlag = gd.getProjectService().updateProjectFeatureFlag(
+                enabled, featureFlagName, false);
+
+        checkFeatureFlag(updatedFeatureFlag, featureFlagName, false);
+    }
+
+
+    private String getFeatureFlagUri(String featureFlagName) {
+        return FEATURE_FLAG_TEMPLATE.expand(PROJECT_ID, featureFlagName).toString();
+    }
+
+    private void mockCreateFeatureFlagRequest(String featureFlagUri) {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(FEATURE_FLAGS_TEMPLATE.expand(PROJECT_ID).toString())
+                .respond()
+                .withHeader("Location", featureFlagUri)
+                .withStatus(201);
+    }
+
+    private void mockGetFeatureFlagRequest(String featureFlagUri, boolean featureFlagValue) {
+        final String jsonWithValue = readStringFromResource("/project/feature-flag.json")
+                .replaceAll("\"value\"\\s*:\\s*(true|false)",
+                        "\"value\" : " + featureFlagValue);
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(featureFlagUri)
+                .respond()
+                .withBody(jsonWithValue)
+                .withStatus(200);
+    }
+
+    private void mockUpdateFeatureFlagRequest(String featureFlagUri) {
+        onRequest()
+                .havingMethodEqualTo("PUT")
+                .havingPathEqualTo(featureFlagUri)
+                .respond()
+                .withStatus(200);
+    }
+
+    private void checkFeatureFlag(FeatureFlag featureFlag, String expectedName, boolean expectedValue) {
+        assertThat(featureFlag, is(notNullValue()));
+        assertThat(featureFlag.getKey(), is(expectedName));
+        assertThat(featureFlag.getValue(), is(expectedValue));
+    }
 
 }
