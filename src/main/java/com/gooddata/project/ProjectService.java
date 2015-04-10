@@ -11,6 +11,8 @@ import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.SimplePollHandler;
 import com.gooddata.account.AccountService;
+import com.gooddata.collections.Page;
+import com.gooddata.collections.PageableList;
 import com.gooddata.gdc.AsyncTask;
 import com.gooddata.gdc.UriResponse;
 import org.springframework.http.HttpStatus;
@@ -23,11 +25,13 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 import static java.util.Arrays.asList;
+import static org.springframework.web.util.UriComponentsBuilder.fromUri;
 
 /**
  * List projects, create a project, ...
@@ -254,5 +258,87 @@ public class ProjectService extends AbstractService {
                         throw new GoodDataException("Project validation failed: " + getPollingUri(), e);
                     }
                 });
+    }
+
+    /**
+     * Get first page of paged list of users by given project.
+     *
+     * @param project project of users
+     * @return list of found users or empty list
+     */
+    public List<User> listUsers(Project project) {
+        notNull(project, "project");
+        return listUsers(getUsersUri(project));
+    }
+
+    /**
+     * Get defined page of paged list of users by given project.
+     *
+     * @param project project of users
+     * @param page    page to be retrieved
+     * @return list of found users or empty list
+     */
+    public List<User> listUsers(Project project, Page page) {
+        notNull(project, "project");
+        notNull(page, "page");
+        return listUsers(page.getPageUri(fromUri(getUsersUri(project))));
+    }
+
+    private PageableList<User> listUsers(URI uri) {
+        try {
+            final Users users = restTemplate.getForObject(uri, Users.class);
+            if (users == null) {
+                return new PageableList<>();
+            }
+            return users;
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to list users", e);
+        }
+    }
+
+    private static URI getUsersUri(Project project) {
+        return Users.TEMPLATE.expand(project.getId());
+    }
+
+    /**
+     * Get set of user role by given project.
+     *
+     * Note: This makes n+1 API calls to retrieve all role details.
+     *
+     * @param project project of roles
+     * @return set of found roles or empty set
+     */
+    public Set<Role> getRoles(final Project project) {
+        notNull(project, "project");
+        final Roles roles = restTemplate.getForObject(Roles.URI, Roles.class, project.getId());
+        final Set<Role> result = new HashSet<>();
+        for (String roleUri : roles.getRoles()) {
+            final Role role = restTemplate.getForObject(roleUri, Role.class);
+            role.setUri(roleUri);
+            result.add(role);
+        }
+        return result;
+    }
+
+    /**
+     * Get role by given URI.
+     *
+     * @param uri role uri
+     * @return found role
+     * @throws RoleNotFoundException when the role doesn't exist
+     */
+    public Role getRoleByUri(String uri) {
+        notEmpty(uri, "uri");
+        try {
+            return restTemplate.getForObject(uri, Role.class);
+        } catch (GoodDataRestException e) {
+            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+                throw new RoleNotFoundException(uri, e);
+            } else {
+                throw e;
+            }
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to get role " + uri, e);
+        }
     }
 }

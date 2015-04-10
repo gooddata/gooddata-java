@@ -50,6 +50,22 @@ Set<ProjectValidationType> types = projectService.getAvailableProjectValidationT
 ProjectValidationResults results = projectService.validateProject(project, types).get();
 ```
 
+List project users
+```java
+ProjectService projectService = gd.getProjectService();
+List<User> users = new ArrayList<>();
+List<User> page;
+while (!(page = projectService.listUsers(project, new PageRequest(users.size(), 100))).isEmpty()) {
+    users.addAll(page);
+}
+```
+
+List project user roles
+```java
+ProjectService projectService = gd.getProjectService();
+Set<Role> roles = projectService.getRoles(project);
+```
+
 ### Project Model API
 
 Create and update the project model, execute MAQL DDL,...

@@ -12,12 +12,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.gooddata.util.Validate.notNull;
+
 public abstract class PageableListDeserializer<T, E> extends JsonDeserializer<T> {
 
     private final Class<E> elementType;
+    private final String collectionName;
 
     protected PageableListDeserializer(final Class<E> elementType) {
-        this.elementType = elementType;
+        this(elementType, "items");
+    }
+
+    protected PageableListDeserializer(final Class<E> elementType, final String collectionName) {
+        this.elementType = notNull(elementType, "elementType");
+        this.collectionName = notNull(collectionName, "collectionName");
     }
 
     protected abstract T createList(final List<E> items, final Paging paging);
@@ -36,7 +44,7 @@ public abstract class PageableListDeserializer<T, E> extends JsonDeserializer<T>
         final JsonNode pagingNode = root.get("paging");
         final Paging paging = pagingNode == null ? null : objectMapper.readValue(pagingNode, Paging.class);
 
-        final JsonNode itemsNode = root.get("items");
+        final JsonNode itemsNode = root.get(collectionName);
         final List<E> items;
         if (itemsNode == null) {
             items = Collections.emptyList();

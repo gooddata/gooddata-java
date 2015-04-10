@@ -1,0 +1,11 @@
+{
+  "projectRoles": {
+    "roles": [
+      "/gdc/projects/PROJECT_ID/roles/ROLE1",
+      "/gdc/projects/PROJECT_ID/roles/ROLE2"
+    ],
+    "links": {
+      "project": "/gdc/projects/PROJECT_ID/"
+    }
+  }
+}
