@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import static com.gooddata.JsonMatchers.isJsonString;
 import static com.gooddata.project.ProjectFeatureFlags.FEATURE_FLAGS_TEMPLATE;
 import static com.gooddata.project.ProjectFeatureFlag.FEATURE_FLAG_TEMPLATE;
+import static com.gooddata.util.ResourceUtils.readFromResource;
 import static com.gooddata.util.ResourceUtils.readStringFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -39,9 +40,9 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
 
     @BeforeClass
     public void setUp() throws Exception {
-        loading = MAPPER.readValue(readResource("/project/project-loading.json"), Project.class);
-        enabled = MAPPER.readValue(readResource("/project/project.json"), Project.class);
-        deleted = MAPPER.readValue(readResource("/project/project-deleted.json"), Project.class);
+        loading = MAPPER.readValue(readFromResource("/project/project-loading.json"), Project.class);
+        enabled = MAPPER.readValue(readFromResource("/project/project.json"), Project.class);
+        deleted = MAPPER.readValue(readFromResource("/project/project-deleted.json"), Project.class);
     }
 
     @Test
@@ -136,7 +137,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo("/gdc/md/" + PROJECT_ID + "/templates")
             .respond()
-                .withBody(readResource("/project/project-templates.json"));
+                .withBody(readFromResource("/project/project-templates.json"));
 
         final Collection<ProjectTemplate> templates = gd.getProjectService().getProjectTemplates(enabled);
         assertThat(templates, is(notNullValue()));
@@ -148,7 +149,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo("/gdc/md/" + PROJECT_ID + "/validate")
                     .respond()
-                    .withBody(readResource("/project/project-validationAvail.json"));
+                    .withBody(readFromResource("/project/project-validationAvail.json"));
 
         final Set<ProjectValidationType> validations = gd.getProjectService().getAvailableProjectValidationTypes(enabled);
         assertThat(validations, notNullValue());
@@ -166,7 +167,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo(validateUri)
             .respond()
-                .withBody(readResource("/project/project-validationAvail.json"));
+                .withBody(readFromResource("/project/project-validationAvail.json"));
 
         onRequest()
                 .havingPathEqualTo(validateUri)
@@ -196,7 +197,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo(resultUri)
             .respond()
-                .withBody(readResource("/project/project-validationResults.json"))
+                .withBody(readFromResource("/project/project-validationResults.json"))
                 .withStatus(200);
 
         final ProjectValidationResults validateResult = gd.getProjectService().validateProject(enabled).get();
@@ -214,7 +215,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo(validateUri)
             .respond()
-                .withBody(readResource("/project/project-validationAvail.json"));
+                .withBody(readFromResource("/project/project-validationAvail.json"));
 
         onRequest()
                 .havingPathEqualTo(validateUri)
@@ -242,7 +243,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo(resultUri)
             .respond()
-                .withBody(readResource("/project/project-validationResults.json"))
+                .withBody(readFromResource("/project/project-validationResults.json"))
                 .withStatus(200);
 
         final ProjectValidationResults validateResult = gd.getProjectService().validateProject(enabled).get();
@@ -256,21 +257,21 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/roles")
         .respond()
-                .withBody(readResource("/project/project-roles.json"))
+                .withBody(readFromResource("/project/project-roles.json"))
                 .withStatus(200);
 
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/roles/ROLE1")
         .respond()
-                .withBody(readResource("/project/project-role.json"))
+                .withBody(readFromResource("/project/project-role.json"))
                 .withStatus(200);
 
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/roles/ROLE2")
         .respond()
-                .withBody(readResource("/project/project-role2.json"))
+                .withBody(readFromResource("/project/project-role2.json"))
                 .withStatus(200);
 
         final Set<Role> roles = gd.getProjectService().getRoles(enabled);
@@ -285,7 +286,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(roleUri)
         .respond()
-                .withBody(readResource("/project/project-role.json"))
+                .withBody(readFromResource("/project/project-role.json"))
                 .withStatus(200);
 
         final Role role = gd.getProjectService().getRoleByUri(roleUri);
@@ -299,14 +300,14 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(Users.TEMPLATE.expand("PROJECT_ID").toString())
         .respond()
-                .withBody(readResource("/project/project-users.json"))
+                .withBody(readFromResource("/project/project-users.json"))
                 .withStatus(200);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(Users.TEMPLATE.expand("PROJECT_ID").toString())
                 .havingQueryStringEqualTo("offset=1&limit=1")
         .respond()
-                .withBody(readResource("/project/project-users-empty.json"))
+                .withBody(readFromResource("/project/project-users-empty.json"))
                 .withStatus(200);
 
         final List<User> firstPage = gd.getProjectService().listUsers(enabled);

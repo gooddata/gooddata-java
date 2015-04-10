@@ -7,6 +7,7 @@ import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
+import com.gooddata.util.ResourceUtils;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static com.gooddata.util.ResourceUtils.readFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -37,8 +39,8 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
 
     @BeforeClass
     public void setUp() throws Exception {
-        project = MAPPER.readValue(readResource("/project/project.json"), Project.class);
-        metricInput = MAPPER.readValue(readResource("/md/metric-input.json"), Metric.class);
+        project = MAPPER.readValue(readFromResource("/project/project.json"), Project.class);
+        metricInput = MAPPER.readValue(readFromResource("/md/metric-input.json"), Metric.class);
     }
 
     @Test
@@ -95,7 +97,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(SPECIFIC_OBJ_URI)
             .respond()
                 .withStatus(200)
-                .withBody(readResource("/md/metric.json"));
+                .withBody(readFromResource("/md/metric.json"));
 
         final Obj result = gd.getMetadataService().createObj(project, metricInput);
 
@@ -112,7 +114,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(SPECIFIC_OBJ_URI)
             .respond()
                 .withStatus(200)
-                .withBody(readResource("/md/metric.json"));
+                .withBody(readFromResource("/md/metric.json"));
 
         final Obj result = gd.getMetadataService().getObjByUri(SPECIFIC_OBJ_URI, Metric.class);
 
@@ -129,7 +131,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(SPECIFIC_OBJ_URI)
             .respond()
                 .withStatus(200)
-                .withBody(readResource("/md/metric.json"));
+                .withBody(readFromResource("/md/metric.json"));
 
         final Obj result = gd.getMetadataService().getObjById(project, ID, Metric.class);
 
@@ -147,7 +149,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/query/attributes")
             .respond()
                 .withStatus(200)
-                .withBody(readResource("/md/query.json"));
+                .withBody(readFromResource("/md/query.json"));
 
         final String result = gd.getMetadataService().getObjUri(project, Attribute.class, Restriction.title("Resource"));
 
@@ -162,13 +164,13 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/query/attributes")
             .respond()
                 .withStatus(200)
-                .withBody(readResource("/md/query.json"));
+                .withBody(readFromResource("/md/query.json"));
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJ_ID/obj/118")
             .respond()
                 .withStatus(200)
-                .withBody(readResource("/md/attribute.json"));
+                .withBody(readFromResource("/md/attribute.json"));
 
         final Obj result = gd.getMetadataService().getObj(project, Attribute.class, Restriction.title("Name"));
 
@@ -185,7 +187,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/query/attributes")
             .respond()
                 .withStatus(200)
-                .withBody(readResource("/md/query.json"));
+                .withBody(readFromResource("/md/query.json"));
 
         final Collection<Entry> result = gd.getMetadataService()
                 .find(project, Attribute.class, Restriction.summary(""));
@@ -201,7 +203,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/query/attributes")
             .respond()
                 .withStatus(200)
-                .withBody(readResource("/md/query.json"));
+                .withBody(readFromResource("/md/query.json"));
 
         final Collection<String> result = gd.getMetadataService()
                 .findUris(project, Attribute.class, Restriction.summary(""));
