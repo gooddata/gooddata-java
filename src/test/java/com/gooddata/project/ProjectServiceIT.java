@@ -5,6 +5,7 @@ import com.gooddata.GoodDataException;
 import com.gooddata.gdc.AsyncTask;
 import com.gooddata.gdc.TaskStatus;
 import com.gooddata.gdc.UriResponse;
+import com.gooddata.util.ResourceUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -12,6 +13,7 @@ import org.testng.annotations.Test;
 import static com.gooddata.JsonMatchers.isJsonString;
 import static com.gooddata.project.FeatureFlag.FEATURE_FLAGS_TEMPLATE;
 import static com.gooddata.project.FeatureFlag.FEATURE_FLAG_TEMPLATE;
+import static com.gooddata.util.ResourceUtils.readFromResource;
 import static com.gooddata.util.ResourceUtils.readStringFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -35,9 +37,9 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
 
     @BeforeClass
     public void setUp() throws Exception {
-        loading = MAPPER.readValue(readResource("/project/project-loading.json"), Project.class);
-        enabled = MAPPER.readValue(readResource("/project/project.json"), Project.class);
-        deleted = MAPPER.readValue(readResource("/project/project-deleted.json"), Project.class);
+        loading = MAPPER.readValue(readFromResource("/project/project-loading.json"), Project.class);
+        enabled = MAPPER.readValue(readFromResource("/project/project.json"), Project.class);
+        deleted = MAPPER.readValue(readFromResource("/project/project-deleted.json"), Project.class);
     }
 
     @Test
@@ -132,7 +134,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo("/gdc/md/" + PROJECT_ID + "/templates")
             .respond()
-                .withBody(readResource("/project/project-templates.json"));
+                .withBody(readFromResource("/project/project-templates.json"));
 
         final Collection<ProjectTemplate> templates = gd.getProjectService().getProjectTemplates(enabled);
         assertThat(templates, is(notNullValue()));
@@ -144,7 +146,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo("/gdc/md/" + PROJECT_ID + "/validate")
                     .respond()
-                    .withBody(readResource("/project/project-validationAvail.json"));
+                    .withBody(readFromResource("/project/project-validationAvail.json"));
 
         final Set<ProjectValidationType> validations = gd.getProjectService().getAvailableProjectValidationTypes(enabled);
         assertThat(validations, notNullValue());
@@ -162,7 +164,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo(validateUri)
             .respond()
-                .withBody(readResource("/project/project-validationAvail.json"));
+                .withBody(readFromResource("/project/project-validationAvail.json"));
 
         onRequest()
                 .havingPathEqualTo(validateUri)
@@ -192,7 +194,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo(resultUri)
             .respond()
-                .withBody(readResource("/project/project-validationResults.json"))
+                .withBody(readFromResource("/project/project-validationResults.json"))
                 .withStatus(200);
 
         final ProjectValidationResults validateResult = gd.getProjectService().validateProject(enabled).get();
@@ -210,7 +212,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo(validateUri)
             .respond()
-                .withBody(readResource("/project/project-validationAvail.json"));
+                .withBody(readFromResource("/project/project-validationAvail.json"));
 
         onRequest()
                 .havingPathEqualTo(validateUri)
@@ -238,7 +240,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo(resultUri)
             .respond()
-                .withBody(readResource("/project/project-validationResults.json"))
+                .withBody(readFromResource("/project/project-validationResults.json"))
                 .withStatus(200);
 
         final ProjectValidationResults validateResult = gd.getProjectService().validateProject(enabled).get();

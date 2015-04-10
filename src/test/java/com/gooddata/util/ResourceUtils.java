@@ -12,6 +12,7 @@ import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 public class ResourceUtils {
@@ -19,25 +20,35 @@ public class ResourceUtils {
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public static <T> T readObjectFromResource(Class testClass, String resourcePath, Class<T> objectClass) {
-        notNull(testClass, "testClass");
-        notEmpty(resourcePath, "resourcePath");
         notNull(objectClass, "objectClass");
 
         try {
-            return OBJECT_MAPPER.readValue(testClass.getResourceAsStream(resourcePath), objectClass);
+            return OBJECT_MAPPER.readValue(readFromResource(resourcePath, testClass), objectClass);
         } catch (IOException e) {
             throw new IllegalStateException(format("Cannot read class %s from resource %s", objectClass, resourcePath), e);
         }
     }
 
     public static String readStringFromResource(String resourcePath) {
-        notEmpty(resourcePath, "resourcePath");
-
         try {
-            return IOUtils.toString(ResourceUtils.class.getResourceAsStream(resourcePath),
+            return IOUtils.toString(readFromResource(resourcePath),
                     StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new IllegalStateException(format("Cannot read from resource %s", resourcePath), e);
         }
+    }
+
+    public static InputStream readFromResource(String resourcePath) {
+        final Class<?> clazz = ResourceUtils.class;
+        return readFromResource(resourcePath, clazz);
+    }
+
+
+
+    private static InputStream readFromResource(String resourcePath, Class<?> testClass) {
+        notEmpty(resourcePath, "resourcePath");
+        notNull(testClass, "testClass cannot be null!");
+
+        return testClass.getResourceAsStream(resourcePath);
     }
 }
