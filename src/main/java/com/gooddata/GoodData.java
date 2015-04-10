@@ -62,6 +62,8 @@ public class GoodData {
     protected static final String HOSTNAME = "secure.gooddata.com";
     private static final String UNKNOWN_VERSION = "UNKNOWN";
 
+    private static final int RESTAPI_VERSION = 1;
+
     private final RestTemplate restTemplate;
     private final AccountService accountService;
     private final ProjectService projectService;
@@ -151,7 +153,7 @@ public class GoodData {
                 new HttpComponentsClientHttpRequestFactory(client), hostname, port, protocol);
         final RestTemplate restTemplate = new RestTemplate(factory);
         restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(
-                new HeaderSettingRequestInterceptor(singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE))));
+                new HeaderSettingRequestInterceptor(singletonMap("Accept", getAcceptHeaderValue()))));
 
         // avoid jackson2 auto-detection and ensure jackson1 converter is present
         final List<HttpMessageConverter<?>> partConverters = new ArrayList<>();
@@ -175,6 +177,14 @@ public class GoodData {
         restTemplate.setErrorHandler(new ResponseErrorHandler(messageConverters));
 
         return restTemplate;
+    }
+
+    /*
+     * Set accept header (application/json by default) and append rest api versioning information which is mandatory
+     * for some resources.
+     */
+    private String getAcceptHeaderValue(){
+        return MediaType.APPLICATION_JSON_VALUE + ";version=" + RESTAPI_VERSION;
     }
 
     protected HttpClient createHttpClient(final String login, final String password, final String hostname,
