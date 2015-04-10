@@ -5,6 +5,7 @@ package com.gooddata.connector;
 
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
+import com.gooddata.PollResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.SimplePollHandler;
@@ -166,7 +167,7 @@ public class ConnectorService extends AbstractService {
         try {
             final UriResponse response = restTemplate
                     .postForObject(ProcessStatus.URL, execution, UriResponse.class, project.getId(), connectorType);
-            return new FutureResult<>(this, new SimplePollHandler<ProcessStatus>(response.getUri(), ProcessStatus.class) {
+            return new PollResult<>(this, new SimplePollHandler<ProcessStatus>(response.getUri(), ProcessStatus.class) {
                 @Override
                 public boolean isFinished(final ClientHttpResponse response) throws IOException {
                     final ProcessStatus process = extractData(response, ProcessStatus.class);

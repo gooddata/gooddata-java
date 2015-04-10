@@ -5,28 +5,10 @@ package com.gooddata;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.gooddata.util.Validate.notNull;
-
 /**
  * Represents the result retrieved by polling on the REST API.
  */
-public final class FutureResult<T> {
-
-    private final AbstractService service;
-
-    private final PollHandler<?,T> handler;
-
-    /**
-     * Creates a new instance of the result to be eventually retrieved by polling on the REST API.<p>
-     * For internal use by services employing polling.
-     *
-     * @param service this service
-     * @param handler poll handler
-     */
-    public FutureResult(final AbstractService service, final PollHandler<?,T> handler) {
-        this.service = notNull(service, "service");
-        this.handler = notNull(handler, "handler");
-    }
+public interface FutureResult<T> {
 
     /**
      * Checks if the result is available
@@ -34,9 +16,7 @@ public final class FutureResult<T> {
      * @return true if so
      * @throws GoodDataException when polling fails or the thread was interrupted
      */
-    public boolean isDone() {
-        return handler.isDone() || service.pollOnce(handler);
-    }
+    public boolean isDone();
 
     /**
      * Wait for the result to be available and return it's value
@@ -44,9 +24,7 @@ public final class FutureResult<T> {
      * @return result value
      * @throws GoodDataException when polling fails or the thread was interrupted
      */
-    public T get() {
-        return get(0, null);
-    }
+    public T get();
 
     /**
      * Wait for the result to be available up to given time and return it's value
@@ -56,19 +34,6 @@ public final class FutureResult<T> {
      * @return result value
      * @throws GoodDataException when polling fails, the timeout expires or the thread was interrupted
      */
-    public T get(final long timeout, final TimeUnit unit) {
-        if (handler.isDone()) {
-            return handler.getResult();
-        }
-        return service.poll(handler, timeout, unit);
-    }
+    public T get(final long timeout, final TimeUnit unit);
 
-    /**
-     * Get URI used for polling
-     *
-     * @return URI string
-     */
-    public String getPollingUri() {
-        return handler.getPollingUri();
-    }
 }

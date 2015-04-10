@@ -3,6 +3,7 @@ package com.gooddata.dataload.processes;
 import com.gooddata.AbstractPollHandler;
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
+import com.gooddata.PollResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.account.AccountService;
@@ -214,7 +215,7 @@ public class ProcessService extends AbstractService {
 
         final String detailLink = executionTask.getDetailLink();
 
-        return new FutureResult<>(this, new AbstractPollHandler<Void, ProcessExecutionDetail>(executionTask.getPollLink(), Void.class, ProcessExecutionDetail.class) {
+        return new PollResult<>(this, new AbstractPollHandler<Void, ProcessExecutionDetail>(executionTask.getPollLink(), Void.class, ProcessExecutionDetail.class) {
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
                 return HttpStatus.NO_CONTENT.equals(response.getStatusCode());
