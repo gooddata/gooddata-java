@@ -1,0 +1,39 @@
+{
+    "project" : {
+        "content" : {
+            "cluster" : "CLUSTER",
+            "authorizationToken" : "AUTH_TOKEN",
+            "guidedNavigation" : "1",
+            "isPublic" : "0",
+            "driver" : "vertica",
+            "state" : "ENABLED"
+        },
+        "links" : {
+            "ldm_thumbnail" : "/gdc/projects/PROJECT_ID/ldm?thumbnail=1",
+            "self" : "/gdc/projects/PROJECT_ID",
+            "clearCaches" : "/gdc/projects/PROJECT_ID/clearCaches",
+            "invitations" : "/gdc/projects/PROJECT_ID/invitations",
+            "users" : "/gdc/projects/PROJECT_ID/users?link=1",
+            "groups" : "/gdc/projects/PROJECT_ID/groups",
+            "uploads" : "https://ea-di.staging.getgooddata.com/project-uploads/PROJECT_ID/",
+            "ldm" : "/gdc/projects/PROJECT_ID/ldm",
+            "metadata" : "/gdc/md/PROJECT_ID",
+            "publicartifacts" : "/gdc/projects/PROJECT_ID/publicartifacts",
+            "roles" : "/gdc/projects/PROJECT_ID/roles",
+            "dataload" : "/gdc/projects/PROJECT_ID/dataload",
+            "connectors" : "/gdc/projects/PROJECT_ID/connectors",
+            "execute" : "/gdc/projects/PROJECT_ID/execute",
+            "schedules" : "/gdc/projects/PROJECT_ID/schedules",
+            "templates" : "/gdc/md/PROJECT_ID/templates",
+            "eventstores" : "/gdc/projects/PROJECT_ID/dataload/eventstore/stores"
+        },
+        "meta" : {
+            "created" : "2014-04-11 11:43:45",
+            "summary" : "DESC",
+            "updated" : "2014-04-11 11:43:47",
+            "author" : "/gdc/account/profile/USER_ID",
+            "title" : "TITLE",
+            "contributor" : "/gdc/account/profile/CONTRIB_USER_ID"
+        }
+    }
+}
