@@ -5,6 +5,7 @@ package com.gooddata.report;
 
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
+import com.gooddata.PollResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.SimplePollHandler;
@@ -22,7 +23,6 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -71,7 +71,7 @@ public class ReportService extends AbstractService {
         notNull(format, "format");
         final JsonNode execResult = executeReport(request);
         final String uri = exportReport(execResult, format);
-        return new FutureResult<>(this, new SimplePollHandler<Void>(uri, Void.class) {
+        return new PollResult<>(this, new SimplePollHandler<Void>(uri, Void.class) {
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
                 switch (response.getStatusCode()) {

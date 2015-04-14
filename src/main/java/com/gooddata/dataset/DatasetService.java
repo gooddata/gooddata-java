@@ -6,6 +6,7 @@ package com.gooddata.dataset;
 import com.gooddata.AbstractPollHandler;
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
+import com.gooddata.PollResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.SimplePollHandler;
@@ -185,7 +186,7 @@ public class DatasetService extends AbstractService {
     private FutureResult<Void> pullLoad(Project project, final Path dirPath, final Collection<String> datasets) {
         final PullTask pullTask = restTemplate
                 .postForObject(Pull.URI, new Pull(dirPath.toString()), PullTask.class, project.getId());
-        return new FutureResult<>(this, new SimplePollHandler<Void>(pullTask.getUri(), Void.class) {
+        return new PollResult<>(this, new SimplePollHandler<Void>(pullTask.getUri(), Void.class) {
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
                 final PullTaskStatus status = extractData(response, PullTaskStatus.class);
@@ -285,7 +286,7 @@ public class DatasetService extends AbstractService {
         final UriResponse uriResponse = restTemplate.postForObject(
                 EtlMode.URL, new EtlMode(EtlModeType.SLI, LookupMode.RECREATE), UriResponse.class, project.getId());
 
-        return new FutureResult<>(this,
+        return new PollResult<>(this,
                 new AbstractPollHandler<TaskStatus, Void>(uriResponse.getUri(), TaskStatus.class, Void.class) {
             @Override
             public void handlePollResult(final TaskStatus pollResult) {
@@ -334,7 +335,7 @@ public class DatasetService extends AbstractService {
 
         final String errorMessage = format("Unable to update data for project '%s'", project.getId());
 
-        return new FutureResult<>(this,
+        return new PollResult<>(this,
                 new AbstractPollHandler<TaskState, Void>(uriResponse.getUri(), TaskState.class, Void.class) {
             @Override
             public void handlePollResult(final TaskState pollResult) {

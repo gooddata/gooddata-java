@@ -1,12 +1,9 @@
 package com.gooddata.warehouse;
 
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
-import static java.util.Collections.emptyList;
-
 import com.gooddata.AbstractPollHandler;
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
+import com.gooddata.PollResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import org.springframework.http.HttpStatus;
@@ -16,6 +13,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.Collection;
+
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
+import static java.util.Collections.emptyList;
 
 /**
  * Provide access to warehouse API - create, update, list and delete warehouses.
@@ -59,7 +60,7 @@ public class WarehouseService extends AbstractService {
             throw new GoodDataException("Empty response when Warehouse POSTed to API");
         }
 
-        return new FutureResult<>(this, new AbstractPollHandler<WarehouseTask,Warehouse>(task.getPollLink(), WarehouseTask.class, Warehouse.class) {
+        return new PollResult<>(this, new AbstractPollHandler<WarehouseTask,Warehouse>(task.getPollLink(), WarehouseTask.class, Warehouse.class) {
 
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {

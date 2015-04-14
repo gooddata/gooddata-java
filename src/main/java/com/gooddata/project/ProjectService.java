@@ -6,6 +6,7 @@ package com.gooddata.project;
 import com.gooddata.AbstractPollHandler;
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
+import com.gooddata.PollResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.SimplePollHandler;
@@ -90,7 +91,7 @@ public class ProjectService extends AbstractService {
             throw new GoodDataException("Empty response when project POSTed to API");
         }
 
-        return new FutureResult<>(this, new SimplePollHandler<Project>(uri.getUri(), Project.class) {
+        return new PollResult<>(this, new SimplePollHandler<Project>(uri.getUri(), Project.class) {
 
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
@@ -221,7 +222,7 @@ public class ProjectService extends AbstractService {
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to to start project validation", e);
         }
-        return new FutureResult<>(this,
+        return new PollResult<>(this,
                 // PollHandler able to poll on different URIs (by the Location header)
                 // poll class is Void because the object returned varies between invocations (even on the same URI)
                 new AbstractPollHandler<Void, ProjectValidationResults>(task.getUri(), Void.class, ProjectValidationResults.class) {
