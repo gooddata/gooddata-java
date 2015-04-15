@@ -2,6 +2,7 @@ package com.gooddata;
 
 import com.gooddata.account.Account;
 import com.gooddata.account.AccountService;
+import com.gooddata.collections.PageRequest;
 import com.gooddata.collections.PageableList;
 import com.gooddata.dataload.processes.DataloadProcess;
 import com.gooddata.dataload.processes.ProcessExecution;
@@ -26,6 +27,8 @@ import com.gooddata.model.ModelService;
 import com.gooddata.project.Project;
 import com.gooddata.project.ProjectService;
 import com.gooddata.project.ProjectValidationResults;
+import com.gooddata.project.Role;
+import com.gooddata.project.User;
 import com.gooddata.report.ReportExportFormat;
 import com.gooddata.report.ReportService;
 import com.gooddata.dataload.processes.Schedule;
@@ -46,7 +49,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static com.gooddata.ProcessIdMatcher.hasSameIdAs;
@@ -58,6 +64,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -125,6 +132,26 @@ public class ShowcaseAT {
 
         final Collection<Project> projects = projectService.getProjects();
         assertThat(projects, hasItem(hasSameIdAs(project)));
+    }
+
+    @Test(groups = "project", dependsOnMethods = "createProject")
+    public void listProjectUsers() throws Exception {
+        final ProjectService projectService = gd.getProjectService();
+
+        final List<User> users = new ArrayList<>();
+        List<User> page;
+        while (!(page = projectService.listUsers(project, new PageRequest(users.size(), 100))).isEmpty()) {
+            users.addAll(page);
+        }
+        assertThat(users, not(empty()));
+    }
+
+    @Test(groups = "project", dependsOnMethods = "createProject")
+    public void listProjectRoles() throws Exception {
+        final ProjectService projectService = gd.getProjectService();
+
+        final Set<Role> roles = projectService.getRoles(project);
+        assertThat(roles, not(empty()));
     }
 
     @Test(groups = "project", dependsOnMethods = "createProject")

@@ -2,6 +2,7 @@ package com.gooddata.project;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
+import com.gooddata.collections.PageRequest;
 import com.gooddata.gdc.AsyncTask;
 import com.gooddata.gdc.TaskStatus;
 import com.gooddata.gdc.UriResponse;
@@ -12,11 +13,13 @@ import org.testng.annotations.Test;
 import static com.gooddata.JsonMatchers.isJsonString;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 public class ProjectServiceIT extends AbstractGoodDataIT {
@@ -241,5 +244,72 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         assertThat(validateResult, notNullValue());
     }
 
+    @Test
+    public void shouldReturnProjectRoles() {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/roles")
+        .respond()
+                .withBody(readResource("/project/project-roles.json"))
+                .withStatus(200);
+
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/roles/ROLE1")
+        .respond()
+                .withBody(readResource("/project/project-role.json"))
+                .withStatus(200);
+
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/roles/ROLE2")
+        .respond()
+                .withBody(readResource("/project/project-role2.json"))
+                .withStatus(200);
+
+        final Set<Role> roles = gd.getProjectService().getRoles(enabled);
+        assertThat(roles, notNullValue());
+        assertThat(roles, hasSize(2));
+    }
+
+    @Test
+    public void shouldReturnProjectRoleForUri() {
+        final String roleUri = "/gdc/projects/PROJECT_ID/roles/ROLE1";
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(roleUri)
+        .respond()
+                .withBody(readResource("/project/project-role.json"))
+                .withStatus(200);
+
+        final Role role = gd.getProjectService().getRoleByUri(roleUri);
+        assertThat(role, notNullValue());
+        assertThat(role.getTitle(), is("Embedded Dashboard Only"));
+    }
+
+    @Test
+    public void shouldListPagedUsers() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(Users.TEMPLATE.expand("PROJECT_ID").toString())
+        .respond()
+                .withBody(readResource("/project/project-users.json"))
+                .withStatus(200);
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(Users.TEMPLATE.expand("PROJECT_ID").toString())
+                .havingQueryStringEqualTo("offset=1&limit=1")
+        .respond()
+                .withBody(readResource("/project/project-users-empty.json"))
+                .withStatus(200);
+
+        final List<User> firstPage = gd.getProjectService().listUsers(enabled);
+        assertThat(firstPage, notNullValue());
+        assertThat(firstPage, hasSize(1));
+
+        final List<User> secondPage = gd.getProjectService().listUsers(enabled, new PageRequest(firstPage.size(), 1));
+        assertThat(secondPage, notNullValue());
+        assertThat(secondPage, empty());
+    }
 
 }
