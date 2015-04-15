@@ -68,6 +68,24 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
+    public void shouldCreateProcessWithoutData() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(PROCESSES_PATH)
+            .respond()
+                .withBody(readResource("/dataload/processes/processWithoutData.json"))
+                .withStatus(201);
+
+        final String processName = "dataloadProcess";
+        final DataloadProcess process = gd.getProcessService().createProcess(project,
+                new DataloadProcess(processName, ProcessType.DATALOAD));
+        assertThat(process, notNullValue());
+        assertThat(process.getName(), is(processName));
+        assertThat(process.getType(), is(ProcessType.DATALOAD.toString()));
+        assertThat(process.getExecutables(), nullValue());
+    }
+
+    @Test
     public void shouldListProcesses() throws Exception {
         onRequest()
                 .havingMethodEqualTo("GET")

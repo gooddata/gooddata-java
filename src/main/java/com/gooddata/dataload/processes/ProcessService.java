@@ -80,6 +80,21 @@ public class ProcessService extends AbstractService {
     }
 
     /**
+     * Create new process without data.
+     * Only some specific types of processes can be created without data.
+     *
+     * @param project project to which the process belongs
+     * @param process to create
+     * @return created process
+     */
+    public DataloadProcess createProcess(Project project, DataloadProcess process) {
+        notNull(project, "project");
+        notNull(process, "process");
+
+        return postProcess(process, getProcessesUri(project));
+    }
+
+    /**
      * Update process with given data by given project.
      *
      * @param project project to which the process belongs
@@ -463,6 +478,14 @@ public class ProcessService extends AbstractService {
             throw new GoodDataException("Unable to post dataload process.", e);
         } finally {
             deleteTempFile(tempFile);
+        }
+    }
+
+    private DataloadProcess postProcess(DataloadProcess process, URI postUri) {
+        try {
+            return restTemplate.postForObject(postUri, process, DataloadProcess.class);
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to create dataload process.", e);
         }
     }
 
