@@ -23,4 +23,18 @@ public class GdcServiceIT extends AbstractGoodDataIT {
         assertThat(gdc, is(notNullValue()));
         assertThat(gdc.getUserStagingLink(), is("/uploads"));
     }
+
+    @Test
+    public void shouldUseProperVersionHeader() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc")
+                .havingHeaderEqualTo("Accept", "application/json;version=1")
+                .respond()
+                .withBody(readResource("/gdc/gdc.json"))
+                .withStatus(200);
+
+        final Gdc gdc = gd.getGdcService().getGdc();
+        assertThat(gdc, is(notNullValue()));
+    }
 }
