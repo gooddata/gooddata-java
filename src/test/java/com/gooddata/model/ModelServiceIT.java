@@ -4,10 +4,12 @@ import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.gdc.AsyncTask;
 import com.gooddata.gdc.TaskStatus;
 import com.gooddata.project.Project;
+import com.gooddata.util.ResourceUtils;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static com.gooddata.model.ModelDiff.UpdateScript;
+import static com.gooddata.util.ResourceUtils.readFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -24,7 +26,7 @@ public class ModelServiceIT extends AbstractGoodDataIT {
 
     @BeforeClass
     public void setUp() throws Exception {
-        project = MAPPER.readValue(readResource("/project/project.json"), Project.class);
+        project = MAPPER.readValue(readFromResource("/project/project.json"), Project.class);
     }
 
     @Test
@@ -43,7 +45,7 @@ public class ModelServiceIT extends AbstractGoodDataIT {
                 .withBody(MAPPER.writeValueAsString(new AsyncTask(DIFF_POLL_URI)))
             .thenRespond()
                 .withStatus(200)
-                .withBody(readResource("/model/modelDiff.json"))
+                .withBody(readFromResource("/model/modelDiff.json"))
         ;
 
         final ModelDiff diff = gd.getModelService().getProjectModelDiff(project, "xxx").get();
@@ -77,7 +79,7 @@ public class ModelServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(LDM_MANAGE2)
             .respond()
                 .withStatus(202)
-                .withBody(readResource("/model/maqlDdlLinks.json"));
+                .withBody(readFromResource("/model/maqlDdlLinks.json"));
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(STATUS_URI)
@@ -103,7 +105,7 @@ public class ModelServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(LDM_MANAGE2)
             .respond()
                 .withStatus(202)
-                .withBody(readResource("/model/maqlDdlLinks.json"));
+                .withBody(readFromResource("/model/maqlDdlLinks.json"));
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(STATUS_URI)

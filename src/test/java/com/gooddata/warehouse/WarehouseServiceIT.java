@@ -2,6 +2,7 @@ package com.gooddata.warehouse;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
+import com.gooddata.util.ResourceUtils;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.testng.annotations.BeforeClass;
@@ -10,6 +11,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.Collection;
 
+import static com.gooddata.util.ResourceUtils.readFromResource;
 import static net.jadler.Jadler.onRequest;
 import static net.jadler.Jadler.port;
 import static net.jadler.Jadler.verifyThatRequest;
@@ -35,9 +37,9 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
 
     @BeforeClass
     public void setUp() throws Exception {
-        pollingTask = MAPPER.readValue(readResource(TASK_POLL), WarehouseTask.class);
-        finishedTask = MAPPER.readValue(readResource(TASK_DONE), WarehouseTask.class);
-        warehouse = MAPPER.readValue(readResource(WAREHOUSE), Warehouse.class);
+        pollingTask = MAPPER.readValue(readFromResource(TASK_POLL), WarehouseTask.class);
+        finishedTask = MAPPER.readValue(readFromResource(TASK_DONE), WarehouseTask.class);
+        warehouse = MAPPER.readValue(readFromResource(WAREHOUSE), Warehouse.class);
     }
 
     @Test
@@ -46,7 +48,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(Warehouses.URI)
             .respond()
-                .withBody(readResource(TASK_POLL))
+                .withBody(readFromResource(TASK_POLL))
                 .withStatus(202);
         onRequest()
                 .havingMethodEqualTo("GET")
@@ -54,13 +56,13 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
             .respond()
                 .withStatus(202)
                 .thenRespond()
-                .withBody(readResource(TASK_DONE))
+                .withBody(readFromResource(TASK_DONE))
                 .withStatus(201);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(finishedTask.getWarehouseLink())
             .respond()
-                .withBody(readResource(WAREHOUSE))
+                .withBody(readFromResource(WAREHOUSE))
                 .withStatus(200);
 
         final Warehouse created = gd.getWarehouseService().createWarehouse(new Warehouse(TITLE, "{Token}", "Storage")).get();
@@ -75,7 +77,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(Warehouses.URI)
             .respond()
-                .withBody(readResource(TASK_POLL))
+                .withBody(readFromResource(TASK_POLL))
                 .withStatus(202);
         onRequest()
                 .havingMethodEqualTo("GET")
@@ -92,7 +94,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(Warehouses.URI)
             .respond()
-                .withBody(readResource("/warehouse/warehouses.json"))
+                .withBody(readFromResource("/warehouse/warehouses.json"))
                 .withStatus(200);
 
         final Collection<Warehouse> list = gd.getWarehouseService().listWarehouses();
@@ -117,7 +119,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(warehouse.getUri())
                 .respond()
-                .withBody(readResource(WAREHOUSE))
+                .withBody(readFromResource(WAREHOUSE))
                 .withStatus(200);
 
         final Warehouse warehouse = gd.getWarehouseService().getWarehouseById(WAREHOUSE_ID);
@@ -130,7 +132,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
 
         final String updatedTitle = "UPDATED_TITLE";
 
-        final Warehouse toUpdate = MAPPER.readValue(readResource(WAREHOUSE), Warehouse.class);
+        final Warehouse toUpdate = MAPPER.readValue(readFromResource(WAREHOUSE), Warehouse.class);
         toUpdate.setTitle(updatedTitle);
 
         onRequest()

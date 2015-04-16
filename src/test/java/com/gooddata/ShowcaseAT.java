@@ -24,6 +24,7 @@ import com.gooddata.md.report.Report;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.model.ModelDiff;
 import com.gooddata.model.ModelService;
+import com.gooddata.project.ProjectFeatureFlag;
 import com.gooddata.project.Project;
 import com.gooddata.project.ProjectService;
 import com.gooddata.project.ProjectValidationResults;
@@ -39,6 +40,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.LocalDate;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -63,6 +65,7 @@ import static java.nio.file.Files.createTempDirectory;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
@@ -71,8 +74,11 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
+import static org.testng.AssertJUnit.fail;
 
 public class ShowcaseAT {
+
+    private static final String PROJECT_FEATURE_FLAG = "testFeatureFlag";
 
     private String title;
     private GoodData gd;
@@ -171,6 +177,62 @@ public class ShowcaseAT {
         final ProjectValidationResults results = gd.getProjectService().validateProject(project).get();
         assertThat(results, is(notNullValue()));
         assertThat(results.getResults(), is(notNullValue()));
+    }
+
+    @Test(groups = "project", dependsOnMethods = "createProject")
+    public void createProjectFeatureFlag() throws Exception {
+        final ProjectFeatureFlag featureFlag =
+                gd.getProjectService().createFeatureFlag(project, new ProjectFeatureFlag(PROJECT_FEATURE_FLAG));
+        checkFeatureFlag(featureFlag, true);
+    }
+
+    @Test(groups = "project", dependsOnMethods = "createProjectFeatureFlag")
+    public void listProjectFeatureFlags() throws Exception {
+        gd.getProjectService().createFeatureFlag(project, new ProjectFeatureFlag("mostRecentFeatureFlag"));
+
+        final List<ProjectFeatureFlag> projectFeatureFlags = gd.getProjectService().listFeatureFlags(project);
+
+        assertThat(projectFeatureFlags, containsInAnyOrder(
+                new ProjectFeatureFlag("mostRecentFeatureFlag", true),
+                new ProjectFeatureFlag(PROJECT_FEATURE_FLAG, true)));
+    }
+
+    @Test(groups = "project", dependsOnMethods = "createProjectFeatureFlag")
+    public void getProjectFeatureFlag() throws Exception {
+        final ProjectFeatureFlag featureFlag =
+                gd.getProjectService().getFeatureFlag(project, PROJECT_FEATURE_FLAG);
+        checkFeatureFlag(featureFlag, true);
+    }
+
+    @Test(groups = "project", dependsOnMethods = "getProjectFeatureFlag")
+    public void updateProjectFeatureFlag() throws Exception {
+        final ProjectFeatureFlag featureFlag =
+                gd.getProjectService().getFeatureFlag(project, PROJECT_FEATURE_FLAG);
+
+        // disable (update) feature flag
+        featureFlag.setEnabled(false);
+        final ProjectFeatureFlag disabledFlag = gd.getProjectService().updateFeatureFlag(featureFlag);
+        checkFeatureFlag(disabledFlag, false);
+
+        // enable again
+        featureFlag.setEnabled(true);
+        final ProjectFeatureFlag enabledFlag = gd.getProjectService().updateFeatureFlag(featureFlag);
+        checkFeatureFlag(enabledFlag, true);
+    }
+
+    @Test(groups = "project", dependsOnMethods = "createProjectFeatureFlag")
+    public void deleteProjectFeatureFlag() throws Exception {
+        final ProjectFeatureFlag featureFlag =
+                gd.getProjectService().createFeatureFlag(project, new ProjectFeatureFlag("temporaryFeatureFlag"));
+
+        gd.getProjectService().deleteFeatureFlag(featureFlag);
+
+        try {
+            gd.getProjectService().getFeatureFlag(project, featureFlag.getName());
+            fail("Feature flag has not been deleted properly. HTTP status NOT FOUND expected.");
+        } catch (GoodDataRestException e) {
+            assertThat(e.getStatusCode(), is(HttpStatus.NOT_FOUND.value()));
+        }
     }
 
     @Test(groups = "model", dependsOnGroups = "project")
@@ -358,4 +420,13 @@ public class ShowcaseAT {
         final Collection<DataloadProcess> processes = gd.getProcessService().listProcesses(project);
         assertThat(processes, not(hasItem(hasSameIdAs(process))));
     }
+
+
+
+    private void checkFeatureFlag(ProjectFeatureFlag featureFlag, boolean expectedValue) {
+        assertThat(featureFlag, is(notNullValue()));
+        assertThat(featureFlag.getName(), is(PROJECT_FEATURE_FLAG));
+        assertThat(featureFlag.getEnabled(), is(expectedValue));
+    }
+
 }
