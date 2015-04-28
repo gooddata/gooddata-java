@@ -1,0 +1,58 @@
+{
+  "scheduledMail": {
+    "meta": {
+      "title": "Scheduled report example",
+      "summary": "Daily at 12:00pm PT",
+      "tags": "",
+      "deprecated": "0",
+      "locked": 0,
+      "unlisted": 0
+    },
+    "content": {
+      "when": {
+        "recurrency": "0:0:0:1*12:0:0",
+        "startDate": "2012-06-05",
+        "timeZone": "America/Los_Angeles"
+      },
+      "to": [
+        "email@example.com"
+      ],
+      "bcc": [
+        "secret-email@example.com"
+      ],
+      "subject": "Scheduled report",
+      "body": "Hey, I'm sending you new Reports and Dashboards!",
+      "attachments": [
+        {
+          "reportAttachment": {
+            "uri": "/gdc/md/PROJ_ID/obj/OBJECT_ID1",
+            "formats": [
+              "pdf",
+              "xls"
+            ],
+            "exportOptions": {
+              "pageOrientation": "landscape"
+            }
+          }
+        },
+        {
+          "dashboardAttachment": {
+            "uri": "/gdc/md/PROJ_ID/obj/DASHBOARD_ID2",
+            "allTabs": 1,
+            "tabs": []
+          }
+        },
+        {
+          "dashboardAttachment": {
+            "uri": "/gdc/md/PROJ_ID/obj/DASHBOARD_ID3",
+            "allTabs": 0,
+            "tabs": [
+              "testTab"
+            ],
+            "executionContext": "/gdc/md/PROJ_ID/obj/EXECUTION_CONTEXT_ID"
+          }
+        }
+      ]
+    }
+  }
+}

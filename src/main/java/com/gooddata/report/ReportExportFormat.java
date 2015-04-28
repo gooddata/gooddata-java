@@ -5,10 +5,17 @@ package com.gooddata.report;
  */
 public enum ReportExportFormat {
 
-    PDF, XLS, PNG, CSV;
+    PDF, XLS, PNG, CSV, HTML, XLSX;
 
     public String getValue() {
         return name().toLowerCase();
     }
 
+    public static String[] arrayToStringArray(ReportExportFormat... formats) {
+        String[] fs = new String[formats.length];
+        for (int i = 0; i < formats.length; i++) {
+            fs[i] = formats[i].getValue();
+        }
+        return fs;
+    }
 }

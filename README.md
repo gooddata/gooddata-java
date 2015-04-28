@@ -101,6 +101,34 @@ definition = md.createObj(project, definition);
 Report report = md.createObj(project, new Report(definition.getTitle(), definition));
 ```
 
+Create and retrieve scheduled mails on reports and dashboards:
+
+```java
+Project project = ...
+ReportDefinition reportDefinition = ...
+
+MetadataService md = gd.getMetadataService();
+ScheduledMail scheduledMail = md.createObj(
+    project,
+    (new ScheduledMail("Scheduled Mail Title", "Scheduled Mail Summary"))
+        .setRecurrency("0:0:0:1*12:0:0")
+        .setStartDate(new LocalDate(2012, 6, 5))
+        .setTimeZone("America/Los_Angeles")
+        .addToAddress("user_in_project@example.com")
+        .addBccAddress("another_user_in_project@example.com")
+        .setSubject("Mail subject")
+        .setBody("Mail body")
+        .addReportAttachment(reportDefinition,
+                             Collections.singletonMap("pageOrientation", "landscape"),
+                             pdf, xls)
+);
+
+Collection<Entry> result = md.find(project, ScheduledMail.class);
+for (Entry e : result) {
+    ScheduledMail schedule = md.getObjByUri(e.getLink(), ScheduledMail.class);
+}
+```
+
 ### Dataset API
 
 Upload data to datasets,..

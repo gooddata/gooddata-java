@@ -10,13 +10,13 @@ import com.gooddata.dataload.processes.ProcessExecutionDetail;
 import com.gooddata.dataload.processes.ProcessExecutionException;
 import com.gooddata.dataload.processes.ProcessService;
 import com.gooddata.dataload.processes.ProcessType;
+import com.gooddata.dataload.processes.Schedule;
+import com.gooddata.dataload.processes.ScheduleState;
 import com.gooddata.dataset.DatasetManifest;
 import com.gooddata.dataset.DatasetService;
 import com.gooddata.gdc.DataStoreService;
-import com.gooddata.md.Attribute;
-import com.gooddata.md.Fact;
-import com.gooddata.md.MetadataService;
-import com.gooddata.md.Metric;
+import com.gooddata.md.*;
+import com.gooddata.md.ScheduledMail;
 import com.gooddata.md.report.AttributeInGrid;
 import com.gooddata.md.report.GridElement;
 import com.gooddata.md.report.GridReportDefinitionContent;
@@ -24,16 +24,14 @@ import com.gooddata.md.report.Report;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.model.ModelDiff;
 import com.gooddata.model.ModelService;
-import com.gooddata.project.ProjectFeatureFlag;
 import com.gooddata.project.Project;
+import com.gooddata.project.ProjectFeatureFlag;
 import com.gooddata.project.ProjectService;
 import com.gooddata.project.ProjectValidationResults;
 import com.gooddata.project.Role;
 import com.gooddata.project.User;
 import com.gooddata.report.ReportExportFormat;
 import com.gooddata.report.ReportService;
-import com.gooddata.dataload.processes.Schedule;
-import com.gooddata.dataload.processes.ScheduleState;
 import com.gooddata.warehouse.Warehouse;
 import com.gooddata.warehouse.WarehouseService;
 import org.apache.commons.io.FileUtils;
@@ -51,11 +49,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static com.gooddata.ProcessIdMatcher.hasSameIdAs;
 import static com.gooddata.ProjectIdMatcher.hasSameIdAs;
@@ -75,6 +69,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.testng.AssertJUnit.fail;
+import static com.gooddata.report.ReportExportFormat.*;
 
 public class ShowcaseAT {
 
@@ -92,6 +87,7 @@ public class ShowcaseAT {
     private String warehouseToken;
     private Warehouse warehouse;
     private DataloadProcess process;
+    private ScheduledMail scheduledMail;
 
     @BeforeClass
     public void setUp() throws Exception {
@@ -269,6 +265,34 @@ public class ShowcaseAT {
                 asList(new GridElement(metric.getUri(), "Avg shoe size"))
         ));
         md.createObj(project, new Report(reportDefinition.getTitle(), reportDefinition));
+    }
+
+    @Test(groups = "md", dependsOnMethods = "createReport")
+    public void createScheduledMail() throws Exception {
+        final MetadataService md = gd.getMetadataService();
+
+        scheduledMail = md.createObj(project,
+                (new ScheduledMail("Scheduled Mail Title", "Scheduled Mail Summary"))
+                                            .setRecurrency("0:0:0:1*12:0:0")
+                                            .setStartDate(new LocalDate(2012, 6, 5))
+                                            .setTimeZone("America/Los_Angeles")
+                                            .addToAddress(getProperty("login"))
+                                            .addBccAddress(getProperty("login"))
+                                            .setSubject("Mail subject")
+                                            .setBody("Mail body")
+                                            .addReportAttachment(reportDefinition,
+                                                                 Collections.singletonMap("pageOrientation", "landscape"),
+                                                                 PDF, XLS));
+    }
+
+    @Test(groups = "md", dependsOnMethods = "createScheduledMail")
+    public void retrieveScheduledMail() throws Exception {
+        final MetadataService md = gd.getMetadataService();
+        Collection<Entry> result = md.find(project, ScheduledMail.class);
+        assertThat(result, hasSize(1));
+        for (Entry e : result) {
+            ScheduledMail schedule = md.getObjByUri(e.getLink(), ScheduledMail.class);
+        }
     }
 
     @Test(groups = "datastore", dependsOnMethods = "login")
