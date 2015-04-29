@@ -126,6 +126,18 @@ public class Schedule {
         return Collections.unmodifiableMap(params);
     }
 
+    public void addParam(String key, String value) {
+        notEmpty(key, "param cannot be empty!");
+        notNull(value, "value cannot be null!");
+        params.put(key, value);
+    }
+
+    public void removeParam(String paramKey) {
+        notEmpty(paramKey, "paramKey cannot be empty!");
+        params.remove(paramKey);
+    }
+
+
     public String getCron() {
         return cron;
     }
