@@ -166,4 +166,48 @@ public class Schedule {
         return TEMPLATE.match(getUri()).get("scheduleId");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof Schedule))
+            return false;
+
+        Schedule schedule = (Schedule) o;
+
+        if (cron != null ? !cron.equals(schedule.cron) : schedule.cron != null)
+            return false;
+        if (getUri() != null ? !getUri().equals(schedule.getUri()) : schedule.getUri() != null)
+            return false;
+        if (params != null ? !params.equals(schedule.params) : schedule.params != null)
+            return false;
+        if (state != null ? !state.equals(schedule.state) : schedule.state != null)
+            return false;
+        if (type != null ? !type.equals(schedule.type) : schedule.type != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type != null ? type.hashCode() : 0;
+        result = 31 * result + (state != null ? state.hashCode() : 0);
+        result = 31 * result + (cron != null ? cron.hashCode() : 0);
+        result = 31 * result + (params != null ? params.hashCode() : 0);
+        result = 31 * result + (getUri() != null ? getUri().hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Schedule{");
+        sb.append("type='").append(type).append('\'');
+        sb.append(", state='").append(state).append('\'');
+        sb.append(", cron='").append(cron).append('\'');
+        sb.append(", params=").append(params);
+        sb.append(", uri=").append(getUri());
+        sb.append('}');
+        return sb.toString();
+    }
 }

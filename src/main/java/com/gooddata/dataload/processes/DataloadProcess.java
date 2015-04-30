@@ -116,4 +116,45 @@ public class DataloadProcess {
             throw new IllegalArgumentException("Executable " + executable + " not found in process executables " + getExecutables());
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof DataloadProcess))
+            return false;
+
+        DataloadProcess that = (DataloadProcess) o;
+
+        if (getUri() != null ? !getUri().equals(that.getUri()) : that.getUri() != null)
+            return false;
+        if (executables != null ? !executables.equals(that.executables) : that.executables != null)
+            return false;
+        if (!name.equals(that.name))
+            return false;
+        if (!type.equals(that.type))
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + type.hashCode();
+        result = 31 * result + (executables != null ? executables.hashCode() : 0);
+        result = 31 * result + (getUri() != null ? getUri().hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("DataloadProcess{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", type='").append(type).append('\'');
+        sb.append(", executables=").append(executables);
+        sb.append(", uri=").append(getUri());
+        sb.append('}');
+        return sb.toString();
+    }
 }
