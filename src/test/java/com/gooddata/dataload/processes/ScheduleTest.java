@@ -1,6 +1,7 @@
 package com.gooddata.dataload.processes;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.hamcrest.collection.IsMapContaining;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.mockito.Matchers;
@@ -13,11 +14,13 @@ import org.testng.annotations.Test;
 import java.util.Collections;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.fail;
@@ -123,6 +126,22 @@ public class ScheduleTest {
         schedule.setExecutable(process, EXECUTABLE);
         assertThat(schedule.getExecutable(), is(EXECUTABLE));
         schedule.setExecutable(process, "garbage");
+    }
+
+    @Test
+    public void testCustomParams() {
+        final Schedule schedule = new Schedule(process, EXECUTABLE, "0 0 * * *");
+        assertThat(schedule.getProcessId(), is("process_id"));
+
+        final int originalParamsSize = schedule.getParams().size();
+        schedule.addParam("myParam", "value");
+
+        assertThat(schedule.getParams(), hasEntry("myParam", "value"));
+        assertThat(schedule.getParams().size(), is(originalParamsSize + 1));
+
+        schedule.removeParam("myParam");
+        assertThat(schedule.getParams(), not(hasEntry("myParam", "value")));
+        assertThat(schedule.getParams().size(), is(originalParamsSize));
     }
 
 }
