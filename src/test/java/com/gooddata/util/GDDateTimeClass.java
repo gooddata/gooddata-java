@@ -5,19 +5,18 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
-public class GDDateClass {
-    private LocalDate date;
+class GDDateTimeClass {
+
+    private DateTime date;
 
     @JsonCreator
-    public GDDateClass(@JsonProperty("date") @JsonDeserialize(using = GDDateDeserializer.class) final LocalDate date) {
+    public GDDateTimeClass(@JsonProperty("date") @JsonDeserialize(using = GDDateTimeDeserializer.class) final DateTime date) {
         this.date = date;
     }
 
-    @JsonSerialize(using = GDDateSerializer.class)
-    public LocalDate getDate() {
+    @JsonSerialize(using = GDDateTimeSerializer.class)
+    public DateTime getDate() {
         return date;
     }
-
 }

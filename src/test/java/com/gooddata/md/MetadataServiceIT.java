@@ -7,7 +7,6 @@ import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
-import com.gooddata.util.ResourceUtils;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -36,11 +35,13 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
 
     private Project project;
     private Metric metricInput;
+    private ScheduledMail scheduledMailInput;
 
     @BeforeClass
     public void setUp() throws Exception {
         project = MAPPER.readValue(readFromResource("/project/project.json"), Project.class);
         metricInput = MAPPER.readValue(readFromResource("/md/metric-input.json"), Metric.class);
+        scheduledMailInput = MAPPER.readValue(readFromResource("/md/scheduledMail.json"), ScheduledMail.class);
     }
 
     @Test
@@ -105,6 +106,29 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         assertThat(result, is(instanceOf(Metric.class)));
         assertThat(((Metric) result).getTitle(), is("Person Name"));
         assertThat(((Metric) result).getFormat(), is("FORMAT"));
+    }
+
+    @Test
+    public void shouldCreateMailScheduleObj() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(OBJ_URI)
+                .respond()
+                .withStatus(200)
+                .withBody(MAPPER.writeValueAsString(new UriResponse(SPECIFIC_OBJ_URI)));
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(SPECIFIC_OBJ_URI)
+                .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/md/scheduledMail.json"));
+
+        final Obj result = gd.getMetadataService().createObj(project, scheduledMailInput);
+
+        assertThat(result, is(notNullValue()));
+        assertThat(result, is(instanceOf(ScheduledMail.class)));
+        assertThat(((ScheduledMail) result).getTitle(), is("Scheduled report example"));
+        assertThat(((ScheduledMail) result).getToAddresses(), contains("email@example.com"));
     }
 
     @Test
