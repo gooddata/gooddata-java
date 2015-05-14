@@ -109,6 +109,28 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
+    public void shouldRemoveObjByUri() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("DELETE")
+                .havingPathEqualTo(SPECIFIC_OBJ_URI)
+                .respond()
+                .withStatus(204);
+
+        gd.getMetadataService().removeObjByUri(SPECIFIC_OBJ_URI);
+    }
+
+    @Test
+    public void shouldRemoveObj() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("DELETE")
+                .havingPathEqualTo(SPECIFIC_OBJ_URI)
+                .respond()
+                .withStatus(204);
+
+        gd.getMetadataService().removeObj(metricInput);
+    }
+
+    @Test
     public void shouldCreateMailScheduleObj() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")

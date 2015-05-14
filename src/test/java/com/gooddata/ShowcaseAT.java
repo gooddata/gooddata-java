@@ -82,6 +82,7 @@ public class ShowcaseAT {
     private Attribute attr;
     private Metric metric;
     private ReportDefinition reportDefinition;
+    private Report report;
     private String file;
     private String projectToken;
     private String warehouseToken;
@@ -264,7 +265,7 @@ public class ShowcaseAT {
                 asList(new AttributeInGrid(attr.getDefaultDisplayForm().getUri())),
                 asList(new GridElement(metric.getUri(), "Avg shoe size"))
         ));
-        md.createObj(project, new Report(reportDefinition.getTitle(), reportDefinition));
+        report = md.createObj(project, new Report(reportDefinition.getTitle(), reportDefinition));
     }
 
     @Test(groups = "md", dependsOnMethods = "createReport")
@@ -352,6 +353,18 @@ public class ShowcaseAT {
     public void exportReportDefinition() throws Exception {
         final ReportService reportService = gd.getReportService();
         reportService.exportReport(reportDefinition, ReportExportFormat.CSV, System.out);
+    }
+
+    @Test(dependsOnGroups = "report")
+    public void removeReport() throws Exception {
+        final MetadataService metadataService = gd.getMetadataService();
+        metadataService.removeObj(report);
+    }
+
+    @Test(dependsOnMethods = "removeReport")
+    public void removeDefinition() throws Exception {
+        final MetadataService metadataService = gd.getMetadataService();
+        metadataService.removeObj(reportDefinition);
     }
 
     @Test(groups = "warehouse", dependsOnMethods = "login")

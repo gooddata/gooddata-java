@@ -8,7 +8,8 @@
             "title" : "Person Name",
 	        "deprecated" : "0",
 	        "locked": 0,
-	        "unlisted": 0
+	        "unlisted": 0,
+            "uri": "/gdc/md/PROJECT_ID/obj/ID"
         }
     }
 }
