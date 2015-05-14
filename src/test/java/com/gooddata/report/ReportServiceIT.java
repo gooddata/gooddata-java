@@ -74,4 +74,17 @@ public class ReportServiceIT extends AbstractGoodDataIT {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         gd.getReportService().exportReport(rd, ReportExportFormat.CSV, output).get();
     }
+
+    @Test(expectedExceptions = NoDataReportException.class, expectedExceptionsMessageRegExp = "Report contains no data")
+    public void shouldFailNoData() throws Exception {
+        onRequest()
+                .havingPathEqualTo(URI)
+                .havingMethodEqualTo("GET")
+                .respond()
+                .withStatus(204);
+
+        final Report rd = MAPPER.readValue(readFromResource("/md/report/report.json"), Report.class);
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        gd.getReportService().exportReport(rd, ReportExportFormat.CSV, output).get();
+    }
 }
