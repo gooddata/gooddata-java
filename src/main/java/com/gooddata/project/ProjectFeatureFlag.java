@@ -1,7 +1,5 @@
 package com.gooddata.project;
 
-import static org.apache.commons.lang.Validate.notNull;
-
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -10,6 +8,8 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.springframework.web.util.UriTemplate;
+
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Project feature flag is a boolean flag used for enabling / disabling some specific feature of GoodData platform
