@@ -26,6 +26,7 @@ public class ProjectTest {
         assertThat(project.getCluster(), is("CLUSTER"));
         assertThat(project.isPublic(), is(false));
         assertThat(project.getState(), is("ENABLED"));
+        assertThat(project.getEnvironment(), is("TESTING"));
 
         assertThat(project.getTitle(), is("TITLE"));
         assertThat(project.getSummary(), is("DESC"));
@@ -57,6 +58,7 @@ public class ProjectTest {
     public void testSerialize() throws Exception {
         final Project project = new Project("TITLE", "SUMMARY", "TOKEN");
         project.setProjectTemplate("/projectTemplates/TEMPLATE");
+        project.setEnvironment(ProjectEnvironment.TESTING);
         final String serializedProject = new ObjectMapper().writeValueAsString(project);
 
         assertThat(serializedProject, startsWith("{\"project\""));
@@ -73,6 +75,7 @@ public class ProjectTest {
         assertThat(serializedProject, containsString("\"title\":\"TITLE\""));
         assertThat(serializedProject, containsString("\"summary\":\"SUMMARY\""));
         assertThat(serializedProject, containsString("\"projectTemplate\":\"/projectTemplates/TEMPLATE\""));
+        assertThat(serializedProject, containsString("\"environment\":\"TESTING\""));
         assertThat(serializedProject, not(containsString("\"author\"")));
         assertThat(serializedProject, not(containsString("\"contributor\"")));
         assertThat(serializedProject, not(containsString("\"created\"")));

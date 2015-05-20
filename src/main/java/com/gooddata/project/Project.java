@@ -240,6 +240,20 @@ public class Project {
         setDriver(driver.getValue());
     }
 
+    @JsonIgnore
+    public String getEnvironment() {
+        return content.getEnvironment();
+    }
+
+    @JsonIgnore
+    public void setEnvironment(final String environment) {
+        content.setEnvironment(environment);
+    }
+
+    public void setEnvironment(final ProjectEnvironment environment) {
+        notNull(environment, "environment");
+        setEnvironment(environment.name());
+    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -263,6 +277,9 @@ public class Project {
         @JsonIgnore
         private String state;
 
+        @JsonProperty
+        private String environment;
+
         public ProjectContent(final String authorizationToken) {
             this.authorizationToken = authorizationToken;
             guidedNavigation = "1";
@@ -275,6 +292,7 @@ public class Project {
                               @JsonProperty("cluster") String cluster,
                               @JsonProperty("guidedNavigation") String guidedNavigation,
                               @JsonProperty("isPublic") String isPublic,
+                              @JsonProperty("environment") String environment,
                               @JsonProperty("state") String state) {
             this.authorizationToken = authorizationToken;
             this.guidedNavigation = guidedNavigation;
@@ -282,6 +300,7 @@ public class Project {
             this.cluster = cluster;
             this.isPublic = isPublic;
             this.state = state;
+            this.environment = environment;
         }
 
         public String getState() {
@@ -310,6 +329,14 @@ public class Project {
 
         public void setDriver(String driver) {
             this.driver = driver;
+        }
+
+        public String getEnvironment() {
+            return environment;
+        }
+
+        public void setEnvironment(final String environment) {
+            this.environment = environment;
         }
     }
 

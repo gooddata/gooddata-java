@@ -6,6 +6,7 @@
             "guidedNavigation" : "1",
             "isPublic" : "0",
             "driver" : "Pg",
+            "environment" : "TESTING",
             "state" : "ENABLED"
         },
         "links" : {
