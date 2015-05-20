@@ -18,6 +18,7 @@ import com.gooddata.gdc.DataStoreService;
 import com.gooddata.md.*;
 import com.gooddata.md.ScheduledMail;
 import com.gooddata.md.report.AttributeInGrid;
+import com.gooddata.md.report.Filter;
 import com.gooddata.md.report.GridElement;
 import com.gooddata.md.report.GridReportDefinitionContent;
 import com.gooddata.md.report.Report;
@@ -262,7 +263,8 @@ public class ShowcaseAT {
                 "Department avg shoe size",
                 asList("metricGroup"),
                 asList(new AttributeInGrid(attr.getDefaultDisplayForm().getUri())),
-                asList(new GridElement(metric.getUri(), "Avg shoe size"))
+                asList(new GridElement(metric.getUri(), "Avg shoe size")),
+                asList(new Filter("(SELECT [" + metric.getUri() + "]) >= 0"))
         ));
         md.createObj(project, new Report(reportDefinition.getTitle(), reportDefinition));
     }

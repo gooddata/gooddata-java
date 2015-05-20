@@ -11,8 +11,6 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.Collection;
 
-import static java.util.Collections.emptyList;
-
 /**
  * Report definition content
  */
@@ -29,12 +27,12 @@ public abstract class ReportDefinitionContent {
 
     private final String format;
     private final Grid grid;
-    private final Collection<Object> filters; //TODO proper type
+    private final Collection<Filter> filters;
 
-    public ReportDefinitionContent(String format, Grid grid) {
+    public ReportDefinitionContent(String format, Grid grid, Collection<Filter> filters) {
         this.format = format;
         this.grid = grid;
-        this.filters = emptyList();
+        this.filters = filters;
     }
 
     @JsonIgnore // handled by type info
@@ -46,7 +44,7 @@ public abstract class ReportDefinitionContent {
         return grid;
     }
 
-    public Collection<Object> getFilters() {
+    public Collection<Filter> getFilters() {
         return filters;
     }
 }

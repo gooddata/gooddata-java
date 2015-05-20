@@ -9,6 +9,8 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,12 +23,19 @@ public class GridReportDefinitionContent extends ReportDefinitionContent {
     public static final String FORMAT = "grid";
 
     @JsonCreator
-    private GridReportDefinitionContent(@JsonProperty("format") String format, @JsonProperty("grid") Grid grid) {
-        super(format, grid);
+    private GridReportDefinitionContent(
+            @JsonProperty("format") String format,
+            @JsonProperty("grid") Grid grid,
+            @JsonProperty("filters") Collection<Filter> filters) {
+        super(format, grid, filters);
+    }
+
+    GridReportDefinitionContent(Grid grid, Collection<Filter> filters) {
+        this(FORMAT, grid, filters);
     }
 
     GridReportDefinitionContent(Grid grid) {
-        this(FORMAT, grid);
+        this(grid, Collections.<Filter>emptyList());
     }
 
     public String getFormat() {
@@ -35,6 +44,11 @@ public class GridReportDefinitionContent extends ReportDefinitionContent {
 
     public static ReportDefinition create(String title, List<String> columns, List<AttributeInGrid> rows,
                                           List<GridElement> metrics) {
-        return new ReportDefinition(new Meta(title), new GridReportDefinitionContent(new Grid(columns, rows, metrics)));
+        return create(title, columns, rows, metrics, Collections.<Filter>emptyList());
+    }
+
+    public static ReportDefinition create(String title, List<String> columns, List<AttributeInGrid> rows,
+                                          List<GridElement> metrics, Collection<Filter> filters) {
+        return new ReportDefinition(new Meta(title), new GridReportDefinitionContent(new Grid(columns, rows, metrics), filters));
     }
 }

@@ -9,6 +9,8 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,14 +26,15 @@ public class OneNumberReportDefinitionContent extends ReportDefinitionContent {
 
     @JsonCreator
     private OneNumberReportDefinitionContent(@JsonProperty("format") String format, @JsonProperty("grid") Grid grid,
-                                             @JsonProperty("oneNumber") OneNumberVisualization oneNumber) {
-        super(format, grid);
+                                             @JsonProperty("oneNumber") OneNumberVisualization oneNumber,
+                                             @JsonProperty("filters") Collection<Filter> filters) {
+        super(format, grid, filters);
         this.oneNumber = oneNumber;
     }
 
     /* Just for serialization test */
-    OneNumberReportDefinitionContent(Grid grid, String description) {
-        super(FORMAT, grid);
+    OneNumberReportDefinitionContent(Grid grid, String description, Collection<Filter> filters) {
+        super(FORMAT, grid, filters);
         oneNumber = new OneNumberVisualization(new OneNumberLabels(description));
     }
 
@@ -77,7 +80,12 @@ public class OneNumberReportDefinitionContent extends ReportDefinitionContent {
 
     public static ReportDefinition create(String title, List<String> columns, List<AttributeInGrid> rows,
                                           List<GridElement> metrics) {
+        return create(title, columns, rows, metrics, Collections.<Filter>emptyList());
+    }
+
+    public static ReportDefinition create(String title, List<String> columns, List<AttributeInGrid> rows,
+                                          List<GridElement> metrics, Collection<Filter> filters) {
         return new ReportDefinition(new Meta(title), new OneNumberReportDefinitionContent(
-                new Grid(columns, rows, metrics), title));
+                new Grid(columns, rows, metrics), title, filters));
     }
 }

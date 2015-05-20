@@ -17,7 +17,7 @@
                 }
             },
             "format" : "oneNumber",
-            "filters" : []
+            "filters" : [ { "expression" : "(SELECT [/gdc/md/projectId/obj/123]) >= 2" } ]
         },
         "meta" : {
             "title" : "Untitled",
