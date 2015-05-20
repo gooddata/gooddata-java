@@ -35,7 +35,7 @@ import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static org.apache.commons.lang.StringUtils.isEmpty;
+import static org.springframework.util.StringUtils.isEmpty;
 
 /**
  * Service to work with datasets and manifests.
