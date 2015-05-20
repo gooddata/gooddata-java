@@ -81,7 +81,7 @@ modelService.updateProjectModel(project, "MAQL DDL EXPRESSION").get();
 
 ### Metadata API
 
-Query, create and update project metadata - attributes, facts, metrics, reports,...
+Query, create, update and remove project metadata - attributes, facts, metrics, reports,...
 
 ```java
 MetadataService md = gd.getMetadataService();
@@ -99,6 +99,8 @@ ReportDefinition definition = GridReportDefinitionContent.create(
 );
 definition = md.createObj(project, definition);
 Report report = md.createObj(project, new Report(definition.getTitle(), definition));
+
+md.removeObj(report)
 ```
 
 Create and retrieve scheduled mails on reports and dashboards:

@@ -94,6 +94,54 @@ public class MetadataService extends AbstractService {
     }
 
     /**
+     * Remove metadata object URI
+     *
+     * @param obj metadata object to remove
+     * @param <T> type of the object to be returned
+     * @throws com.gooddata.md.ObjNotFoundException if metadata object not found
+     * @throws com.gooddata.GoodDataRestException   if GoodData REST API returns unexpected status code
+     * @throws com.gooddata.GoodDataException       if no response from API or client-side HTTP error
+     */
+    public void removeObj(Obj obj) {
+        notNull(obj, "obj");
+        try {
+            restTemplate.delete(obj.getUri());
+        } catch (GoodDataRestException e) {
+            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+                throw new ObjNotFoundException(obj);
+            } else {
+                throw e;
+            }
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to remove " + obj.getClass().getSimpleName().toLowerCase() + " " + obj.getUri(), e);
+        }
+    }
+
+    /**
+     * Remove metadata object by URI (format is <code>/gdc/md/{PROJECT_ID}/obj/{OBJECT_ID}</code>)
+     *
+     * @param uri URI in format <code>/gdc/md/{PROJECT_ID}/obj/{OBJECT_ID}</code>
+     * @param <T> type of the object to be returned
+     * @throws com.gooddata.md.ObjNotFoundException if metadata object not found
+     * @throws com.gooddata.GoodDataRestException   if GoodData REST API returns unexpected status code
+     * @throws com.gooddata.GoodDataException       if no response from API or client-side HTTP error
+     */
+    public void removeObjByUri(String uri) {
+        notNull(uri, "uri");
+        try {
+            restTemplate.delete(uri);
+        } catch (GoodDataRestException e) {
+            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+                throw new ObjNotFoundException(uri);
+            } else {
+                throw e;
+            }
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to remove " + uri, e);
+        }
+    }
+
+    /**
      * Get metadata object by id.
      *
      * @param project project where to search for the object
