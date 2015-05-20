@@ -10,8 +10,18 @@ import static com.gooddata.connector.ConnectorType.ZENDESK4;
  */
 public class Zendesk4ProcessExecution implements ProcessExecution {
 
+    private Boolean incremental;
+
     @Override
     public ConnectorType getConnectorType() {
         return ZENDESK4;
+    }
+
+    public Boolean getIncremental() {
+        return incremental;
+    }
+
+    public void setIncremental(final Boolean incremental) {
+        this.incremental = incremental;
     }
 }
