@@ -44,6 +44,8 @@ public class ReportService extends AbstractService {
      * @param format export format
      * @param output target
      * @return polling result
+     * @throws NoDataReportException in case report contains no data
+     * @throws ReportException on error
      */
     public FutureResult<Void> exportReport(final ReportDefinition reportDefinition, final ReportExportFormat format,
                                            final OutputStream output) {
@@ -58,6 +60,8 @@ public class ReportService extends AbstractService {
      * @param format export format
      * @param output target
      * @return polling result
+     * @throws NoDataReportException in case report contains no data
+     * @throws ReportException on error
      */
     public FutureResult<Void> exportReport(final Report report, final ReportExportFormat format,
                                            final OutputStream output) {
@@ -77,7 +81,7 @@ public class ReportService extends AbstractService {
                 switch (response.getStatusCode()) {
                     case OK: return true;
                     case ACCEPTED: return false;
-                    case NO_CONTENT: throw new ReportException("Report contains no data");
+                    case NO_CONTENT: throw new NoDataReportException();
                     default: throw new ReportException("Unable to export report, unknown HTTP response code: " + response.getStatusCode());
                 }
             }
