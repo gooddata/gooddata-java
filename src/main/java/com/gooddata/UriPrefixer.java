@@ -3,15 +3,14 @@
  */
 package com.gooddata;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.File;
 import java.net.URI;
-import java.nio.file.Paths;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
+import static org.springframework.util.StringUtils.trimLeadingCharacter;
+import static org.springframework.util.StringUtils.trimTrailingCharacter;
 
 /**
  * Used internally by GoodData SDK to hold and set URI prefix (hostname and port) of all requests.
@@ -55,8 +54,9 @@ public class UriPrefixer {
      */
     public URI mergeUris(URI uri) {
         notNull(uri, "uri");
+        final String path = trimTrailingCharacter(trimLeadingCharacter(uri.getRawPath(), '/'), '/');
         return UriComponentsBuilder.fromUri(uriPrefix)
-                .pathSegment(StringUtils.strip(uri.getRawPath(), "/"))
+                .pathSegment(path)
                 .query(uri.getRawQuery())
                 .fragment(uri.getRawFragment())
                 .build().toUri();
