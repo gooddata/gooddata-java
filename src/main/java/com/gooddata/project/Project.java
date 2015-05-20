@@ -21,9 +21,9 @@ import org.springframework.web.util.UriTemplate;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang.Validate.notEmpty;
-import static org.apache.commons.lang.Validate.notNull;
 
 /**
  * Project in GoodData platform

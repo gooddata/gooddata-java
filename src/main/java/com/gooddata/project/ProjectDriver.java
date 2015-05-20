@@ -4,7 +4,7 @@
 
 package com.gooddata.project;
 
-import static org.apache.commons.lang.Validate.notEmpty;
+import static com.gooddata.util.Validate.notEmpty;
 
 public enum ProjectDriver {
     POSTGRES("Pg"),
