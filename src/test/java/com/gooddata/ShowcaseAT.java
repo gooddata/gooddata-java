@@ -56,6 +56,7 @@ import static com.gooddata.ProcessIdMatcher.hasSameIdAs;
 import static com.gooddata.ProjectIdMatcher.hasSameIdAs;
 import static com.gooddata.WarehouseIdMatcher.hasSameIdAs;
 import static com.gooddata.md.Restriction.identifier;
+import static com.gooddata.project.ProjectEnvironment.TESTING;
 import static java.nio.file.Files.createTempDirectory;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -127,7 +128,9 @@ public class ShowcaseAT {
 
     @Test(groups = "project", dependsOnMethods = "login")
     public void createProject() throws Exception {
-        project = gd.getProjectService().createProject(new Project(title, projectToken)).get();
+        final Project p = new Project(title, projectToken);
+        p.setEnvironment(TESTING);
+        project = gd.getProjectService().createProject(p).get();
     }
 
     @Test(groups = "project", dependsOnMethods = "createProject")
