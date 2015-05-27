@@ -19,7 +19,9 @@ import com.gooddata.project.ProjectService;
 import com.gooddata.report.ReportService;
 import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.VersionInfo;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -84,7 +86,18 @@ public class GoodData {
      * @param password GoodData user's password
      */
     public GoodData(String login, String password) {
-        this(HOSTNAME, login, password);
+        this(HOSTNAME, login, password, new GoodDataSettings());
+    }
+
+    /**
+     * Create instance configured to communicate with GoodData Platform under user with given credentials.
+     *
+     * @param login    GoodData user's login
+     * @param password GoodData user's password
+     * @param settings additional settings
+     */
+    public GoodData(String login, String password, GoodDataSettings settings) {
+        this(HOSTNAME, login, password, settings);
     }
 
     /**
@@ -96,7 +109,22 @@ public class GoodData {
      * @param password GoodData user's password
      */
     public GoodData(String hostname, String login, String password) {
-        this(hostname, login, password, PORT, PROTOCOL);
+        this(hostname, login, password, PORT, PROTOCOL, new GoodDataSettings());
+    }
+
+
+
+    /**
+     * Create instance configured to communicate with GoodData Platform running on given host using given user's
+     * credentials.
+     *
+     * @param hostname GoodData Platform's host name (e.g. secure.gooddata.com)
+     * @param login    GoodData user's login
+     * @param password GoodData user's password
+     * @param settings additional settings
+     */
+    public GoodData(String hostname, String login, String password, GoodDataSettings settings) {
+        this(hostname, login, password, PORT, PROTOCOL, settings);
     }
 
     /**
@@ -109,7 +137,21 @@ public class GoodData {
      * @param port     GoodData Platform's API port (e.g. 443)
      */
     public GoodData(String hostname, String login, String password, int port) {
-        this(hostname, login, password, port, PROTOCOL);
+        this(hostname, login, password, port, PROTOCOL, new GoodDataSettings());
+    }
+
+    /**
+     * Create instance configured to communicate with GoodData Platform running on given host and port using given user's
+     * credentials.
+     *
+     * @param hostname GoodData Platform's host name (e.g. secure.gooddata.com)
+     * @param login    GoodData user's login
+     * @param password GoodData user's password
+     * @param port     GoodData Platform's API port (e.g. 443)
+     * @param settings additional settings
+     */
+    public GoodData(String hostname, String login, String password, int port, GoodDataSettings settings) {
+        this(hostname, login, password, port, PROTOCOL, settings);
     }
 
 
@@ -123,13 +165,13 @@ public class GoodData {
      * @param port     GoodData Platform's API port (e.g. 443)
      * @param protocol GoodData Platform's API protocol (e.g. https)
      */
-    protected GoodData(String hostname, String login, String password, int port, String protocol) {
+    protected GoodData(String hostname, String login, String password, int port, String protocol, GoodDataSettings settings) {
         notEmpty(hostname, "hostname");
         notEmpty(login, "login");
         notEmpty(password, "password");
         notEmpty(protocol, "protocol");
-        final HttpClientBuilder httpClientBuilder = HttpClientBuilder.create()
-                .setUserAgent(getUserAgent());
+        final HttpClientBuilder httpClientBuilder = createHttpClientBuilder(settings);
+
         restTemplate = createRestTemplate(login, password, hostname, httpClientBuilder, port, protocol);
 
         accountService = new AccountService(getRestTemplate());
@@ -177,6 +219,21 @@ public class GoodData {
         restTemplate.setErrorHandler(new ResponseErrorHandler(messageConverters));
 
         return restTemplate;
+    }
+
+    private HttpClientBuilder createHttpClientBuilder(final GoodDataSettings settings) {
+        final PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
+        connectionManager.setDefaultMaxPerRoute(settings.getMaxConnections());
+        connectionManager.setMaxTotal(settings.getMaxConnections());
+
+        final RequestConfig.Builder requestConfig = RequestConfig.copy(RequestConfig.DEFAULT);
+        requestConfig.setConnectTimeout(settings.getConnectionTimeout());
+        requestConfig.setSocketTimeout(settings.getSocketTimeout());
+
+        return HttpClientBuilder.create()
+                .setUserAgent(getUserAgent())
+                .setConnectionManager(connectionManager)
+                .setDefaultRequestConfig(requestConfig.build());
     }
 
     /*
