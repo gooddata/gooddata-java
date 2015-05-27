@@ -301,6 +301,12 @@ public class ShowcaseAT {
         }
     }
 
+    @Test(groups = "md", dependsOnMethods = "retrieveScheduledMail")
+    public void removeScheduledMail() throws Exception {
+        final MetadataService metadataService = gd.getMetadataService();
+        metadataService.removeObj(scheduledMail);
+    }
+
     @Test(groups = "datastore", dependsOnMethods = "login")
     public void datastoreUpload() throws Exception {
         DataStoreService dataStoreService = gd.getDataStoreService();
@@ -366,7 +372,7 @@ public class ShowcaseAT {
         metadataService.removeObj(report);
     }
 
-    @Test(dependsOnMethods = "removeReport")
+    @Test(dependsOnMethods = {"removeReport", "removeScheduledMail"})
     public void removeDefinition() throws Exception {
         final MetadataService metadataService = gd.getMetadataService();
         metadataService.removeObj(reportDefinition);
