@@ -22,6 +22,7 @@ import java.util.Map;
 
 import static com.gooddata.util.Validate.noNullElements;
 import static com.gooddata.util.Validate.notNull;
+import static java.util.Arrays.asList;
 
 /**
  * Query, create and update project metadata - attributes, facts, metrics, reports,...
@@ -315,18 +316,42 @@ public class MetadataService extends AbstractService {
      * @param types   what types (categories) to search for (for example 'reportDefinition', 'report', 'tableDataLoad',
      *                'table'...)
      * @return objects using given objects.
+     * @see #usedBy(Project, Collection, boolean, Class[])
      */
     public Collection<Entry> usedBy(Project project, String uri, boolean nearest, Class<? extends Obj>... types) {
         notNull(uri, "uri");
         notNull(project, "project");
 
-        final InUseEntries response;
+        final Collection<Usage> usages = usedBy(project, asList(uri), nearest, types);
+        return usages.size() > 0 ? usages.iterator().next().getUsedBy() : Collections.<Entry>emptyList();
+    }
+
+    /**
+     * Find all objects which use the given objects. Batch alternative to {@link #usedBy(Project, String, boolean, Class[])}
+     * @param project project
+     * @param uris    URIs of object to find using objects for
+     * @param nearest find nearest objects only
+     * @param types   what types (categories) to search for (for example 'reportDefinition', 'report', 'tableDataLoad',
+     *                'table'...), returns all objects if no type is provided
+     * @return objects usages
+     * @see #usedBy(Project, String, boolean, Class[])
+     */
+    public Collection<Usage> usedBy(Project project, Collection<String> uris, boolean nearest, Class<? extends Obj>... types) {
+        notNull(uris, "uris");
+        notNull(project, "project");
+
+        final UseMany response;
         try {
-            response = restTemplate.postForObject(InUse.USEDBY_URI, new InUse(uri, nearest, types), InUseEntries.class, project.getId());
+            response = restTemplate.postForObject(InUseMany.USEDBY_URI, new InUseMany(uris, nearest, types), UseMany.class, project.getId());
         } catch (GoodDataRestException | RestClientException e) {
             throw new GoodDataException("Unable to find objects.", e);
         }
-        return response.getEntries();
+        final List<Usage> usages = new ArrayList<>(uris.size());
+        final Collection<UseManyEntries> useManyEntries = response.getUseMany();
+        for (UseManyEntries useMany : useManyEntries) {
+            usages.add(new Usage(useMany.getUri(), useMany.getEntries()));
+        }
+        return usages;
     }
 
     /**

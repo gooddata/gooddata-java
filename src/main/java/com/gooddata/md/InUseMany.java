@@ -10,6 +10,7 @@ import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,35 +20,35 @@ import static com.gooddata.util.Validate.notNull;
 import static java.beans.Introspector.decapitalize;
 
 /**
- * UsedBy/Using result
+ * UsedBy/Using batch request
  */
-@JsonTypeName("inUse")
+@JsonTypeName("inUseMany")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-class InUse {
+class InUseMany {
 
     public static final String USEDBY_URI = "/gdc/md/{projectId}/usedby2";
 
-    private final String uri;
+    private final Collection<String> uris;
 
     private final Set<String> types;
 
     private final boolean nearest;
 
     @JsonCreator
-    InUse(@JsonProperty("uri") String uri,
+    InUseMany(@JsonProperty("uris") Collection<String> uris,
           @JsonProperty("nearest") @JsonDeserialize(using = BooleanStringDeserializer.class) boolean nearest,
           @JsonProperty("types") Set<String> types) {
 
-            this.uri = notEmpty(uri, "uri");
-            this.types = types;
-            this.nearest = nearest;
+        this.uris = notEmpty(uris, "uris");
+        this.types = types;
+        this.nearest = nearest;
     }
 
     @SafeVarargs
-    public InUse(String uri, boolean nearest, Class<? extends Obj>... type) {
-        this.uri = notNull(uri, "uri");
+    public InUseMany(Collection<String> uris, boolean nearest, Class<? extends Obj>... type) {
+        this.uris = notNull(uris, "uris");
         noNullElements(type, "type");
         this.types = new HashSet<>();
         for (Class<? extends Obj> t: type) {
@@ -61,25 +62,25 @@ class InUse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        InUse inUse = (InUse) o;
+        InUseMany inUseMany = (InUseMany) o;
 
-        if (nearest != inUse.nearest) return false;
-        if (!types.equals(inUse.types)) return false;
-        if (!uri.equals(inUse.uri)) return false;
+        if (nearest != inUseMany.nearest) return false;
+        if (!types.equals(inUseMany.types)) return false;
+        if (!uris.equals(inUseMany.uris)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = uri.hashCode();
+        int result = uris.hashCode();
         result = 31 * result + types.hashCode();
         result = 31 * result + (nearest ? 1 : 0);
         return result;
     }
 
-    public String getUri() {
-        return uri;
+    public Collection<String> getUris() {
+        return uris;
     }
 
     public Set<String> getTypes() {

@@ -13,6 +13,8 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +33,11 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
     private static final String USEDBY_URI = "/gdc/md/PROJECT_ID/usedby2";
     private static final String IDENTIFIERS_URI = "/gdc/md/PROJECT_ID/identifiers";
     private static final String OBJ_URI = "/gdc/md/PROJECT_ID/obj";
+    private static final String OBJ_URI2 = "/gdc/md/PROJECT_ID/obj2";
     private static final String SPECIFIC_OBJ_URI = "/gdc/md/PROJECT_ID/obj/ID";
     private static final String ID = "ID";
     private static final String TITLE = "TITLE";
+    private static final String TITLE2 = "TITLE2";
 
     private Project project;
     private Metric metricInput;
@@ -48,23 +52,54 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void testUsedBy() throws Exception {
-        final List<Entry> entryList = new ArrayList<>();
-        final Entry entry = new Entry(null, TITLE, null, null, null, null, false, null, null, null, null, false, false);
-        entryList.add(entry);
-        final InUseEntries entries = new InUseEntries(entryList);
+        final List<UseManyEntries> entryList = new ArrayList<>();
+        final Entry entry1 = new Entry(null, TITLE, null, null, null, null, false, null, null, null, null, false, false);
+        entryList.add(new UseManyEntries(OBJ_URI, asList(entry1)));
+        final UseMany useMany = new UseMany(entryList);
 
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(USEDBY_URI)
                 .respond()
                 .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(entries));
+                .withBody(MAPPER.writeValueAsString(useMany));
 
         final Collection<Entry> result = gd.getMetadataService().usedBy(project, OBJ_URI, false, ReportDefinition.class);
 
-        assertThat(result, is(notNullValue()));
-        assertThat(result.size(), is(1));
+        assertThat(result, hasSize(1));
         assertThat(result.iterator().next().getTitle(), is(TITLE));
+    }
+
+    @Test
+    public void testUsedByBatch() throws Exception {
+        final List<UseManyEntries> entryList = new ArrayList<>();
+        final Entry entry1 = new Entry(null, TITLE, null, null, null, null, false, null, null, null, null, false, false);
+        final Entry entry2 = new Entry(null, TITLE2, null, null, null, null, false, null, null, null, null, false, false);
+        entryList.add(new UseManyEntries(OBJ_URI, asList(entry1)));
+        entryList.add(new UseManyEntries(OBJ_URI2, asList(entry1, entry2)));
+        final UseMany useMany = new UseMany(entryList);
+
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(USEDBY_URI)
+                .respond()
+                .withStatus(200)
+                .withBody(MAPPER.writeValueAsString(useMany));
+
+        final Collection<Usage> result = gd.getMetadataService().usedBy(project, new HashSet<>(asList(OBJ_URI, OBJ_URI2)), false, ReportDefinition.class);
+
+        assertThat(result, hasSize(2));
+        final Iterator<Usage> usages = result.iterator();
+
+        final Usage usage1 = usages.next();
+        assertThat(usage1.getUri(), is(OBJ_URI));
+        assertThat(usage1.getUsedBy().iterator().next().getTitle(), is(TITLE));
+
+        final Usage usage2 = usages.next();
+        assertThat(usage2.getUri(), is(OBJ_URI2));
+        final Iterator<Entry> obj2Entries = usage2.getUsedBy().iterator();
+        assertThat(obj2Entries.next().getTitle(), is(TITLE));
+        assertThat(obj2Entries.next().getTitle(), is(TITLE2));
     }
 
     @Test
@@ -83,7 +118,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .withBody(MAPPER.writeValueAsString(response));
 
         final Collection<String> uris = gd.getMetadataService().findUris(project, Restriction.identifier(ID));
-        assertThat(uris.size(), is(1));
+        assertThat(uris, hasSize(1));
         assertThat(uris.iterator().next(), is(OBJ_URI));
     }
 
@@ -103,7 +138,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .withBody(MAPPER.writeValueAsString(response));
 
         final Map<String, String> uris = gd.getMetadataService().identifiersToUris(project, asList(ID));
-        assertThat(uris.size(), is(1));
+        assertThat(uris.keySet(), hasSize(1));
         assertThat(uris.get(ID), is(OBJ_URI));
     }
 
