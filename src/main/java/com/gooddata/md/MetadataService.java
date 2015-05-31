@@ -94,6 +94,25 @@ public class MetadataService extends AbstractService {
     }
 
     /**
+     * Update given metadata object.
+     *
+     * @param obj object to update
+     * @param <T> type of the updated object
+     * @return updated metadata object
+     * @throws com.gooddata.md.ObjUpdateException in case of error
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends Updatable> T updateObj(T obj) {
+        notNull(obj, "obj");
+        try {
+            restTemplate.put(obj.getUri(), obj);
+            return getObjByUri(obj.getUri(), (Class<T>) obj.getClass());
+        } catch (GoodDataException | RestClientException e) {
+            throw new ObjUpdateException(obj, e);
+        }
+    }
+
+    /**
      * Remove metadata object URI
      *
      * @param obj metadata object to remove

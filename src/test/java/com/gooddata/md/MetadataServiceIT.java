@@ -109,6 +109,31 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
+    public void shouldUpdateObj() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("PUT")
+                .havingBodyEqualTo(MAPPER.writeValueAsString(metricInput))
+                .havingPathEqualTo(SPECIFIC_OBJ_URI)
+            .respond()
+                .withStatus(200)
+                .withBody(MAPPER.writeValueAsString(new UriResponse(SPECIFIC_OBJ_URI)));
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(SPECIFIC_OBJ_URI)
+                .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/md/metric.json"));
+
+        final Metric result = gd.getMetadataService().updateObj(metricInput);
+
+        assertThat(result, is(notNullValue()));
+        assertThat(result, is(instanceOf(Metric.class)));
+        assertThat(result.getTitle(), is("Person Name"));
+        assertThat(result.getFormat(), is("FORMAT"));
+
+    }
+
+    @Test
     public void shouldRemoveObjByUri() throws Exception {
         onRequest()
                 .havingMethodEqualTo("DELETE")

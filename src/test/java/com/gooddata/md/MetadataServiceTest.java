@@ -25,7 +25,9 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class MetadataServiceTest {
@@ -83,6 +85,43 @@ public class MetadataServiceTest {
 
         final Obj result = service.createObj(project, obj);
         assertThat(result, is(notNullValue()));
+    }
+
+    @Test
+    public void testUpdateObj() throws Exception {
+        final Updatable obj = mock(Updatable.class);
+        final Updatable resultObj = mock(Updatable.class);
+
+        when(obj.getUri()).thenReturn(URI);
+        when(restTemplate.getForObject(URI, obj.getClass())).thenReturn(resultObj);
+
+        final Obj result = service.updateObj(obj);
+
+        verify(restTemplate).put(obj.getUri(), obj);
+        assertThat(result, is(notNullValue()));
+    }
+
+    @Test(expectedExceptions = ObjUpdateException.class)
+    public void testUpdateObjNotFound() throws Exception {
+        final Updatable obj = mock(Updatable.class);
+
+        final GoodDataRestException restException = mock(GoodDataRestException.class);
+        when(restException.getStatusCode()).thenReturn(HttpStatus.NOT_FOUND.value());
+
+        when(obj.getUri()).thenReturn(URI);
+        when(restTemplate.getForObject(URI, obj.getClass())).thenThrow(restException);
+
+        service.updateObj(obj);
+    }
+
+    @Test(expectedExceptions = ObjUpdateException.class)
+    public void testUpdateObjRestException() throws Exception {
+        final Updatable obj = mock(Updatable.class);
+
+        when(obj.getUri()).thenReturn(URI);
+        doThrow(RestClientException.class).when(restTemplate).put(URI, obj);
+
+        service.updateObj(obj);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
