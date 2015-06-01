@@ -41,9 +41,17 @@ public abstract class AbstractObj implements Obj {
         return meta.getSummary();
     }
 
+    public void setSummary(String summary) {
+        meta.setSummary(summary);
+    }
+
     @JsonIgnore
     public String getTitle() {
         return meta.getTitle();
+    }
+
+    public void setTitle(String title) {
+        meta.setTitle(title);
     }
 
     @JsonIgnore
@@ -56,9 +64,17 @@ public abstract class AbstractObj implements Obj {
         return meta.getCategory();
     }
 
+    public void setCategory(String category) {
+        meta.setCategory(category);
+    }
+
     @JsonIgnore
     public String getTags() {
         return meta.getTags();
+    }
+
+    public void setTags(String tags) {
+        meta.setTags(tags);
     }
 
     @JsonIgnore
@@ -71,9 +87,17 @@ public abstract class AbstractObj implements Obj {
         return meta.isDeprecated();
     }
 
+    public void setDeprecated(boolean deprecated) {
+        meta.setDeprecated(deprecated);
+    }
+
     @JsonIgnore
     public String getIdentifier() {
         return meta.getIdentifier();
+    }
+
+    public void setIdentifier(String identifier) {
+        meta.setIdentifier(identifier);
     }
 
     @JsonIgnore
@@ -81,9 +105,17 @@ public abstract class AbstractObj implements Obj {
         return meta.isLocked();
     }
 
+    public void setLocked(boolean locked) {
+        meta.setLocked(locked);
+    }
+
     @JsonIgnore
     public boolean isUnlisted() {
         return meta.isUnlisted();
+    }
+
+    public void setUnlisted(boolean unlisted) {
+        meta.setUnlisted(unlisted);
     }
 
     /**
