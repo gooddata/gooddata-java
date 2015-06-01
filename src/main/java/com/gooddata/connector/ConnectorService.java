@@ -134,6 +134,36 @@ public class ConnectorService extends AbstractService {
     }
 
     /**
+     * Get settings for zendesk4 connector.
+     * @param project project
+     * @return settings for zendesk4 connector
+     */
+    public Zendesk4Settings getZendesk4Settings(Project project) {
+        return getSettings(project, ConnectorType.ZENDESK4, Zendesk4Settings.class);
+    }
+
+    /**
+     * Get settings for given connector of given class.
+     *
+     * @param project project
+     * @param connectorType type of connector to fetch settings ofr
+     * @param settingsClass class of settings fetched
+     * @param <T> type of fetched settings
+     * @return settings of connector
+     */
+    public <T extends Settings> T getSettings(Project project, ConnectorType connectorType, Class<T> settingsClass) {
+        notNull(project, "project");
+        notNull(connectorType, "connectorType");
+        notNull(settingsClass, "settingsClass");
+
+        try {
+            return restTemplate.getForObject(Settings.URL, settingsClass, project.getId(), connectorType.getName());
+        } catch (GoodDataRestException | RestClientException e) {
+            throw new ConnectorException("Unable to get " + connectorType + " integration settings", e);
+        }
+    }
+
+    /**
      * Update integration settings
      *
      * @param project  project
