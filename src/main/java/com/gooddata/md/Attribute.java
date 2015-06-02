@@ -1,20 +1,18 @@
 /*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2007-2015, GoodData(R) Corporation. All rights reserved.
  */
 package com.gooddata.md;
 
+import static java.util.Arrays.asList;
+
 import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import java.util.Collection;
 import java.util.Collections;
-
-import static java.util.Arrays.asList;
 
 /**
  * Attribute of GoodData project dataset
@@ -23,85 +21,15 @@ import static java.util.Arrays.asList;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class Attribute extends AbstractObj implements Queryable, Updatable {
-
-    @JsonProperty("content")
-    private final Content content;
+public class Attribute extends NestedAttribute implements Queryable, Updatable {
 
     @JsonCreator
-    private Attribute(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
-        super(meta);
-        this.content = content;
+    private Attribute(@JsonProperty("meta") Meta meta, @JsonProperty("content") NestedAttribute.Content content) {
+        super(meta, content);
     }
 
     /* Just for serialization test */
     Attribute(String title, Key primaryKey, Key foreignKey) {
-        super(new Meta(title));
-        content = new Content(asList(primaryKey), asList(foreignKey), Collections.<DisplayForm>emptyList(), null);
+        this(new Meta(title),  new Content(asList(primaryKey), asList(foreignKey), Collections.<DisplayForm>emptyList(), null));
     }
-
-    @JsonIgnore
-    public Collection<DisplayForm> getDisplayForms() {
-        return content.getDisplayForms();
-    }
-
-    @JsonIgnore
-    public Collection<Key> getPrimaryKeys() {
-        return content.getPk();
-    }
-
-    @JsonIgnore
-    public Collection<Key> getForeignKeys() {
-        return content.getFk();
-    }
-
-    @JsonIgnore
-    public DisplayForm getDefaultDisplayForm() {
-        return getDisplayForms().iterator().next();
-    }
-
-    @JsonIgnore
-    public String getDimensionLink() {
-        return content.getDimensionLink();
-    }
-
-    public boolean hasDimension() {
-        return getDimensionLink() != null;
-    }
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-    private static class Content {
-        private final Collection<Key> pk;
-        private final Collection<Key> fk;
-        private final Collection<DisplayForm> displayForms;
-        private final String dimension;
-
-        @JsonCreator
-        public Content(@JsonProperty("pk") Collection<Key> pk, @JsonProperty("fk") Collection<Key> fk,
-                       @JsonProperty("displayForms") Collection<DisplayForm> displayForms, @JsonProperty("dimension") String dimension) {
-            this.pk = pk;
-            this.fk = fk;
-            this.displayForms = displayForms;
-            this.dimension = dimension;
-        }
-
-        public Collection<Key> getPk() {
-            return pk;
-        }
-
-        public Collection<Key> getFk() {
-            return fk;
-        }
-
-        public Collection<DisplayForm> getDisplayForms() {
-            return displayForms;
-        }
-
-        @JsonProperty("dimension")
-        public String getDimensionLink() {
-            return dimension;
-        }
-    }
-
 }
