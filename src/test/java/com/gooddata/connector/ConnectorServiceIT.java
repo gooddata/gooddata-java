@@ -2,12 +2,14 @@ package com.gooddata.connector;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
+import com.gooddata.JsonMatchers;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.project.Project;
 import com.gooddata.util.ResourceUtils;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import static com.gooddata.JsonMatchers.serializesToJson;
 import static com.gooddata.connector.Status.Code.ERROR;
 import static com.gooddata.connector.Status.Code.SYNCHRONIZED;
 import static com.gooddata.util.ResourceUtils.*;
@@ -145,5 +147,26 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
 
         final ProcessStatus process = connectors.executeProcess(project, new Zendesk4ProcessExecution()).get();
         assertThat(process.getStatus().getCode(), is(ERROR.name()));
+    }
+
+    @Test
+    public void shouldGetSettings() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+            .respond()
+                .withBody(readFromResource("/connector/settings-zendesk4.json"));
+
+        final Zendesk4Settings zendesk4Settings = connectors.getZendesk4Settings(project);
+        assertThat(zendesk4Settings, serializesToJson("/connector/settings-zendesk4.json"));
+    }
+
+    @Test(expectedExceptions = ConnectorException.class)
+    public void shouldGetSettingsNotFound() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+            .respond()
+                .withStatus(404);
+
+        connectors.getZendesk4Settings(project);
     }
 }
