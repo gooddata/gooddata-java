@@ -37,7 +37,7 @@ public class Attribute extends AbstractObj implements Queryable, Updatable {
     /* Just for serialization test */
     Attribute(String title, Key primaryKey, Key foreignKey) {
         super(new Meta(title));
-        content = new Content(asList(primaryKey), asList(foreignKey), Collections.<DisplayForm>emptyList());
+        content = new Content(asList(primaryKey), asList(foreignKey), Collections.<DisplayForm>emptyList(), null);
     }
 
     @JsonIgnore
@@ -60,19 +60,30 @@ public class Attribute extends AbstractObj implements Queryable, Updatable {
         return getDisplayForms().iterator().next();
     }
 
+    @JsonIgnore
+    public String getDimensionLink() {
+        return content.getDimensionLink();
+    }
+
+    public boolean hasDimension() {
+        return getDimensionLink() != null;
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     private static class Content {
         private final Collection<Key> pk;
         private final Collection<Key> fk;
         private final Collection<DisplayForm> displayForms;
+        private final String dimension;
 
         @JsonCreator
         public Content(@JsonProperty("pk") Collection<Key> pk, @JsonProperty("fk") Collection<Key> fk,
-                       @JsonProperty("displayForms") Collection<DisplayForm> displayForms) {
+                       @JsonProperty("displayForms") Collection<DisplayForm> displayForms, @JsonProperty("dimension") String dimension) {
             this.pk = pk;
             this.fk = fk;
             this.displayForms = displayForms;
+            this.dimension = dimension;
         }
 
         public Collection<Key> getPk() {
@@ -85,6 +96,11 @@ public class Attribute extends AbstractObj implements Queryable, Updatable {
 
         public Collection<DisplayForm> getDisplayForms() {
             return displayForms;
+        }
+
+        @JsonProperty("dimension")
+        public String getDimensionLink() {
+            return dimension;
         }
     }
 

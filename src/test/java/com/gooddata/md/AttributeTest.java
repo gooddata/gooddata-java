@@ -50,6 +50,9 @@ public class AttributeTest {
         assertThat(foreignKeys, is(Matchers.notNullValue()));
         assertThat(foreignKeys, hasSize(1));
         assertThat(foreignKeys.iterator().next(), is(Matchers.notNullValue()));
+
+        assertThat(attribute.hasDimension(), is(true));
+        assertThat(attribute.getDimensionLink(), is("/gdc/md/PROJECT_ID/obj/DIM_ID"));
     }
 
     @Test
