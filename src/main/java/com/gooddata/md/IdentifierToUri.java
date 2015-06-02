@@ -3,7 +3,7 @@ package com.gooddata.md;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import java.util.List;
+import java.util.Collection;
 
 import static com.gooddata.util.Validate.notNull;
 
@@ -12,15 +12,15 @@ import static com.gooddata.util.Validate.notNull;
  */
 class IdentifierToUri {
 
-    private final List<String> identifierToUri;
+    private final Collection<String> identifierToUri;
 
     @JsonCreator
-    IdentifierToUri(@JsonProperty("identifierToUri") final List<String> identifierToUri) {
+    IdentifierToUri(@JsonProperty("identifierToUri") final Collection<String> identifierToUri) {
         notNull(identifierToUri, "identifierToUri");
         this.identifierToUri = identifierToUri;
     }
 
-    public List<String> getIdentifierToUri() {
+    public Collection<String> getIdentifierToUri() {
         return identifierToUri;
     }
 
