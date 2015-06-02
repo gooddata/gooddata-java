@@ -354,6 +354,11 @@ public class ShowcaseAT {
         datasetService.loadDatasets(project, personManifest, cityManifest).get();
     }
 
+    @Test(groups = "dataset", dependsOnMethods = "createModel")
+    public void identifiersToUri() {
+        assertThat(gd.getMetadataService().identifiersToUris(project, asList("attr.person.department")).size(), is(1));
+    }
+
     @Test(groups = "dataset", dependsOnMethods = "loadDatasetBatch")
     public void updateData() {
         final DatasetService datasetService = gd.getDatasetService();

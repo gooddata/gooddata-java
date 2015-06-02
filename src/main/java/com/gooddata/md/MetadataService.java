@@ -15,7 +15,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.gooddata.util.Validate.noNullElements;
 import static com.gooddata.util.Validate.notNull;
@@ -340,5 +343,33 @@ public class MetadataService extends AbstractService {
         }
 
         return uris;
+    }
+
+    /**
+     * Find metadata URIs by restrictions. Identifier is the only supported restriction.
+     *
+     * @param project      project where to search for the metadata
+     * @param identifiers query restrictions
+     * @return the map of identifiers as keys and metadata URIs as values
+     * @throws com.gooddata.GoodDataException if unable to query metadata
+     * @see #findUris(Project, Restriction...)
+     */
+    public Map<String, String> identifiersToUris(Project project, Collection<String> identifiers) {
+        notNull(project, "project" );
+        noNullElements(identifiers, "identifiers");
+
+        final IdentifiersAndUris response;
+        try {
+            response = restTemplate.postForObject(IdentifiersAndUris.URI, new IdentifierToUri(identifiers), IdentifiersAndUris.class, project.getId());
+        } catch (GoodDataRestException | RestClientException e) {
+            throw new GoodDataException("Unable to get URIs from identifiers.", e);
+        }
+
+        final Map<String, String> uris = new HashMap<>();
+        for (IdentifierAndUri idAndUri : response.getIdentifiers()) {
+            uris.put(idAndUri.getIdentifier(), idAndUri.getUri());
+        }
+
+        return Collections.unmodifiableMap(uris);
     }
 }
