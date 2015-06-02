@@ -15,7 +15,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.gooddata.util.Validate.noNullElements;
 import static com.gooddata.util.Validate.notNull;
@@ -327,12 +330,7 @@ public class MetadataService extends AbstractService {
             ids.add(restriction.getValue());
         }
 
-        final IdentifiersAndUris response;
-        try {
-            response = restTemplate.postForObject(IdentifiersAndUris.URI, new IdentifierToUri(ids), IdentifiersAndUris.class, project.getId());
-        } catch (GoodDataRestException | RestClientException e) {
-            throw new GoodDataException("Unable to get URIs from identifiers.", e);
-        }
+        final IdentifiersAndUris response = getUrisForIdentifiers(project, ids);
 
         final List<String> uris = new ArrayList<>();
         for (IdentifierAndUri idAndUri : response.getIdentifiers()) {
@@ -340,5 +338,38 @@ public class MetadataService extends AbstractService {
         }
 
         return uris;
+    }
+
+    /**
+     * Find metadata URIs for given identifiers.
+     *
+     * @param project      project where to search for the metadata
+     * @param identifiers query restrictions
+     * @return the map of identifiers as keys and metadata URIs as values
+     * @throws com.gooddata.GoodDataException if unable to query metadata
+     * @see #findUris(Project, Restriction...)
+     */
+    public Map<String, String> identifiersToUris(Project project, Collection<String> identifiers) {
+        notNull(project, "project" );
+        noNullElements(identifiers, "identifiers");
+
+        final IdentifiersAndUris response = getUrisForIdentifiers(project, identifiers);
+
+        final Map<String, String> identifiersToUris = new HashMap<>();
+        for (IdentifierAndUri idAndUri : response.getIdentifiers()) {
+            identifiersToUris.put(idAndUri.getIdentifier(), idAndUri.getUri());
+        }
+
+        return Collections.unmodifiableMap(identifiersToUris);
+    }
+
+    private IdentifiersAndUris getUrisForIdentifiers(final Project project, final Collection<String> identifiers) {
+        final IdentifiersAndUris response;
+        try {
+            response = restTemplate.postForObject(IdentifiersAndUris.URI, new IdentifierToUri(identifiers), IdentifiersAndUris.class, project.getId());
+        } catch (GoodDataRestException | RestClientException e) {
+            throw new GoodDataException("Unable to get URIs from identifiers.", e);
+        }
+        return response;
     }
 }

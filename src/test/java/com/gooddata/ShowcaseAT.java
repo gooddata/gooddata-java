@@ -15,7 +15,11 @@ import com.gooddata.dataload.processes.ScheduleState;
 import com.gooddata.dataset.DatasetManifest;
 import com.gooddata.dataset.DatasetService;
 import com.gooddata.gdc.DataStoreService;
-import com.gooddata.md.*;
+import com.gooddata.md.Attribute;
+import com.gooddata.md.Entry;
+import com.gooddata.md.Fact;
+import com.gooddata.md.MetadataService;
+import com.gooddata.md.Metric;
 import com.gooddata.md.ScheduledMail;
 import com.gooddata.md.report.AttributeInGrid;
 import com.gooddata.md.report.Filter;
@@ -50,13 +54,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 import static com.gooddata.ProcessIdMatcher.hasSameIdAs;
 import static com.gooddata.ProjectIdMatcher.hasSameIdAs;
 import static com.gooddata.WarehouseIdMatcher.hasSameIdAs;
 import static com.gooddata.md.Restriction.identifier;
 import static com.gooddata.project.ProjectEnvironment.TESTING;
+import static com.gooddata.report.ReportExportFormat.PDF;
+import static com.gooddata.report.ReportExportFormat.XLS;
 import static java.nio.file.Files.createTempDirectory;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -71,7 +83,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.testng.AssertJUnit.fail;
-import static com.gooddata.report.ReportExportFormat.*;
 
 public class ShowcaseAT {
 
@@ -305,6 +316,16 @@ public class ShowcaseAT {
     public void removeScheduledMail() throws Exception {
         final MetadataService metadataService = gd.getMetadataService();
         metadataService.removeObj(scheduledMail);
+    }
+
+    @Test(groups = "md", dependsOnMethods = "createModel")
+    public void identifiersToUri() {
+        final MetadataService metadataService = gd.getMetadataService();
+        final Map<String, String> idsToUris =
+                metadataService.identifiersToUris(project, asList("attr.person.department"));
+        assertThat(idsToUris.entrySet(), hasSize(1));
+        final Attribute attribute = metadataService.getObjByUri(idsToUris.get("attr.person.department"), Attribute.class);
+        assertThat(attribute.getIdentifier(), is("attr.person.department"));
     }
 
     @Test(groups = "datastore", dependsOnMethods = "login")
