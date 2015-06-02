@@ -97,7 +97,6 @@ public class MetadataService extends AbstractService {
      * Remove metadata object URI
      *
      * @param obj metadata object to remove
-     * @param <T> type of the object to be returned
      * @throws com.gooddata.md.ObjNotFoundException if metadata object not found
      * @throws com.gooddata.GoodDataRestException   if GoodData REST API returns unexpected status code
      * @throws com.gooddata.GoodDataException       if no response from API or client-side HTTP error
@@ -121,7 +120,6 @@ public class MetadataService extends AbstractService {
      * Remove metadata object by URI (format is <code>/gdc/md/{PROJECT_ID}/obj/{OBJECT_ID}</code>)
      *
      * @param uri URI in format <code>/gdc/md/{PROJECT_ID}/obj/{OBJECT_ID}</code>
-     * @param <T> type of the object to be returned
      * @throws com.gooddata.md.ObjNotFoundException if metadata object not found
      * @throws com.gooddata.GoodDataRestException   if GoodData REST API returns unexpected status code
      * @throws com.gooddata.GoodDataException       if no response from API or client-side HTTP error
