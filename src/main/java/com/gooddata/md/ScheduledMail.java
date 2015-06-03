@@ -27,7 +27,7 @@ import static com.gooddata.util.Validate.notNull;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class ScheduledMail extends AbstractObj implements Queryable {
+public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
 
     @JsonProperty("content")
     private Content content;

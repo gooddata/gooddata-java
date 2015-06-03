@@ -254,6 +254,16 @@ public class ShowcaseAT {
     }
 
     @Test(groups = "md", dependsOnMethods = "getObjs")
+    public void updateObj() throws Exception {
+        final MetadataService md = gd.getMetadataService();
+
+        attr.setSummary("Changed person department");
+        attr = md.updateObj(attr);
+        assertThat(attr, is(notNullValue()));
+        assertThat(attr.getSummary(), is("Changed person department"));
+    }
+
+    @Test(groups = "md", dependsOnMethods = "getObjs")
     public void createMetric() throws Exception {
         final MetadataService md = gd.getMetadataService();
         metric = md.createObj(project, new Metric("Avg shoe size", "SELECT AVG([" + fact + "])", "#,##0"));

@@ -22,7 +22,7 @@ import static java.util.Arrays.asList;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class Fact extends AbstractObj implements Queryable {
+public class Fact extends AbstractObj implements Queryable, Updatable {
 
     @JsonProperty("content")
     private final Content content;

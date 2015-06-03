@@ -14,7 +14,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class AttributeDisplayForm extends DisplayForm {
+public class AttributeDisplayForm extends DisplayForm implements Updatable {
 
     @JsonCreator
     private AttributeDisplayForm(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {

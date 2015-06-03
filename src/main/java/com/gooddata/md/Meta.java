@@ -91,8 +91,16 @@ public class Meta implements Serializable {
         return summary;
     }
 
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @JsonSerialize(using = GDDateTimeSerializer.class, include = Inclusion.NON_NULL)
@@ -104,8 +112,16 @@ public class Meta implements Serializable {
         return category;
     }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public String getTags() {
         return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 
     public String getUri() {
@@ -117,18 +133,33 @@ public class Meta implements Serializable {
         return deprecated;
     }
 
+    public void setDeprecated(boolean deprecated) {
+        this.deprecated = deprecated;
+    }
+
     public String getIdentifier() {
         return identifier;
     }
 
-	@JsonSerialize(using = BooleanIntegerSerializer.class)
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    @JsonSerialize(using = BooleanIntegerSerializer.class)
     public boolean isLocked() {
         return locked;
     }
 
-	@JsonSerialize(using = BooleanIntegerSerializer.class)
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
+    @JsonSerialize(using = BooleanIntegerSerializer.class)
     public boolean isUnlisted() {
         return unlisted;
     }
 
+    public void setUnlisted(boolean unlisted) {
+        this.unlisted = unlisted;
+    }
 }
