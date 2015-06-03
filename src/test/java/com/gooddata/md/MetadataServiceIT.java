@@ -14,8 +14,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static com.gooddata.util.ResourceUtils.readFromResource;
+import static java.util.Arrays.asList;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -83,6 +85,26 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         final Collection<String> uris = gd.getMetadataService().findUris(project, Restriction.identifier(ID));
         assertThat(uris.size(), is(1));
         assertThat(uris.iterator().next(), is(OBJ_URI));
+    }
+
+    @Test
+    public void testIdentifiersToUris() throws IOException {
+        final IdentifierAndUri identifierAndUri = new IdentifierAndUri(ID, OBJ_URI);
+
+        final List<IdentifierAndUri> identifiersAndUris = new ArrayList<>();
+        identifiersAndUris.add(identifierAndUri);
+        IdentifiersAndUris response = new IdentifiersAndUris(identifiersAndUris);
+
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(IDENTIFIERS_URI)
+                .respond()
+                .withStatus(200)
+                .withBody(MAPPER.writeValueAsString(response));
+
+        final Map<String, String> uris = gd.getMetadataService().identifiersToUris(project, asList(ID));
+        assertThat(uris.size(), is(1));
+        assertThat(uris.get(ID), is(OBJ_URI));
     }
 
     @Test
