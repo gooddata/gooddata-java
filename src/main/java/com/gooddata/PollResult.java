@@ -51,6 +51,7 @@ public final class PollResult<T> implements FutureResult<T> {
      *
      * @return URI string
      */
+    @Override
     public String getPollingUri() {
         return handler.getPollingUri();
     }

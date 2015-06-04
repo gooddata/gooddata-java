@@ -16,7 +16,7 @@ public interface FutureResult<T> {
      * @return true if so
      * @throws GoodDataException when polling fails or the thread was interrupted
      */
-    public boolean isDone();
+    boolean isDone();
 
     /**
      * Wait for the result to be available and return it's value
@@ -24,7 +24,7 @@ public interface FutureResult<T> {
      * @return result value
      * @throws GoodDataException when polling fails or the thread was interrupted
      */
-    public T get();
+    T get();
 
     /**
      * Wait for the result to be available up to given time and return it's value
@@ -34,6 +34,12 @@ public interface FutureResult<T> {
      * @return result value
      * @throws GoodDataException when polling fails, the timeout expires or the thread was interrupted
      */
-    public T get(final long timeout, final TimeUnit unit);
+    T get(final long timeout, final TimeUnit unit);
 
+    /**
+     * Get URI used for polling
+     *
+     * @return URI string
+     */
+    String getPollingUri();
 }
