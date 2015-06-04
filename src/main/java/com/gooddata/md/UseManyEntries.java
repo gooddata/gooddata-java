@@ -7,22 +7,26 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.Collection;
 
-/**
- * UsedBy/Using result
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-class InUseEntries {
+class UseManyEntries {
+
+    private final String uri;
 
     private final Collection<Entry> entries;
 
     @JsonCreator
-    InUseEntries(@JsonProperty("entries") Collection<Entry> entries) {
+    UseManyEntries(@JsonProperty("uri") final String uri,
+                   @JsonProperty("entries") final Collection<Entry> entries) {
+        this.uri = uri;
         this.entries = entries;
+    }
+
+    public String getUri() {
+        return uri;
     }
 
     public Collection<Entry> getEntries() {
         return entries;
     }
-
 }

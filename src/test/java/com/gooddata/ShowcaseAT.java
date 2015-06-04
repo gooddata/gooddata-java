@@ -21,6 +21,7 @@ import com.gooddata.md.Fact;
 import com.gooddata.md.MetadataService;
 import com.gooddata.md.Metric;
 import com.gooddata.md.ScheduledMail;
+import com.gooddata.md.Usage;
 import com.gooddata.md.report.AttributeInGrid;
 import com.gooddata.md.report.Filter;
 import com.gooddata.md.report.GridElement;
@@ -57,6 +58,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -82,6 +84,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
+import static org.testng.AssertJUnit.assertTrue;
 import static org.testng.AssertJUnit.fail;
 
 public class ShowcaseAT {
@@ -256,6 +259,42 @@ public class ShowcaseAT {
         modelService.updateProjectModel(project, projectModelDiff).get();
     }
 
+    @Test(groups = "md", dependsOnMethods = "createReport")
+    public void usedBy() {
+        final MetadataService metadataService = gd.getMetadataService();
+        final String uri = metadataService.findUris(project, identifier("attr.person.department")).iterator().next();
+
+        final Collection<Entry> usage = metadataService.usedBy(project, uri, false);
+        assertThat(usage, hasSize(5));
+    }
+
+    @Test(groups = "md", dependsOnMethods = "createReport")
+    public void usedByNotExists() {
+        final MetadataService metadataService = gd.getMetadataService();
+
+        assertThat(metadataService.usedBy(project, "/gdc/md/" + project.getId() + "/obj/1234567", false), empty());
+    }
+
+    @Test(groups = "md", dependsOnMethods = "createReport")
+    public void usedByBatch() {
+        final MetadataService metadataService = gd.getMetadataService();
+        final Map<String, String> uris =
+                metadataService.identifiersToUris(project, asList("attr.person.department", "attr.person.role"));
+
+        final Collection<Usage> usages = metadataService.usedBy(project, uris.values(), false);
+        assertThat(usages, hasSize(2));
+
+        final Iterator<Usage> usageIterator = usages.iterator();
+
+        final Usage usage1 = usageIterator.next();
+        assertTrue(uris.containsValue(usage1.getUri()));
+        assertThat(usage1.getUsedBy(), hasSize(2));
+
+        final Usage usage2 = usageIterator.next();
+        assertTrue(uris.containsValue(usage2.getUri()));
+        assertThat(usage2.getUsedBy(), hasSize(5));
+    }
+
     @Test(groups = "md", dependsOnGroups = "model")
     public void getObjs() throws Exception {
         final MetadataService md = gd.getMetadataService();
@@ -397,7 +436,7 @@ public class ShowcaseAT {
         reportService.exportReport(reportDefinition, ReportExportFormat.CSV, System.out);
     }
 
-    @Test(dependsOnGroups = "report")
+    @Test(dependsOnGroups = "report", dependsOnMethods = {"usedBy", "usedByBatch"})
     public void removeReport() throws Exception {
         final MetadataService metadataService = gd.getMetadataService();
         metadataService.removeObj(report);
