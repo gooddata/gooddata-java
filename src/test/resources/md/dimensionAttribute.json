@@ -1,0 +1,59 @@
+{
+  "content" : {
+    "direction" : "asc",
+    "sort" : "pk",
+    "pk" : [
+      {
+        "data" : "/gdc/md/PROJECT_ID/obj/4",
+        "type" : "col"
+      }
+    ],
+    "dimension" : "/gdc/md/PROJECT_ID/obj/DIM_ID",
+    "type" : "GDC.time.date",
+    "displayForms" : [
+      {
+        "content" : {
+          "formOf" : "/gdc/md/PROJECT_ID/obj/DF_FORM_OF_ID",
+          "expression" : "[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]",
+          "type" : "GDC.time.day_us",
+          "ldmexpression" : ""
+        },
+        "links" : {
+          "elements" : "/gdc/md/PROJECT_ID/obj/31/elements"
+        },
+        "meta" : {
+          "author" : "/gdc/account/profile/USER_ID",
+          "uri" : "/gdc/md/PROJECT_ID/obj/31",
+          "tags" : "",
+          "created" : "2015-05-19 11:54:05",
+          "identifier" : "created.date.mmddyyyy",
+          "deprecated" : "0",
+          "summary" : "DisplayForm mm/dd/yyyy.",
+          "title" : "mm/dd/yyyy (Ticket Created)",
+          "category" : "attributeDisplayForm",
+          "updated" : "2015-05-19 11:54:05",
+          "contributor" : "/gdc/account/profile/USER_ID"
+        }
+      }
+    ],
+    "fk" : [
+      {
+        "data" : "/gdc/md/PROJECT_ID/obj/1177",
+        "type" : "col"
+      }
+    ]
+  },
+  "meta" : {
+    "author" : "/gdc/account/profile/USER_ID",
+    "uri" : "/gdc/md/PROJECT_ID/obj/28",
+    "tags" : "date",
+    "created" : "2015-05-19 11:54:05",
+    "identifier" : "created.date",
+    "deprecated" : "0",
+    "summary" : "Date ticket created",
+    "title" : "Date (Ticket Created)",
+    "category" : "attribute",
+    "updated" : "2015-05-19 11:54:05",
+    "contributor" : "/gdc/account/profile/USER_ID"
+  }
+}

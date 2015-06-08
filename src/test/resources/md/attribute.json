@@ -37,7 +37,8 @@
                   "data" : "/gdc/md/PROJECT_ID/obj/FK_ID",
                   "type" : "col"
               }
-          ]
+          ],
+         "dimension": "/gdc/md/PROJECT_ID/obj/DIM_ID"
       },
       "meta" : {
          "author" : "/gdc/account/profile/USER_ID",
