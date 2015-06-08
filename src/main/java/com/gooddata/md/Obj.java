@@ -3,7 +3,7 @@ package com.gooddata.md;
 import org.springframework.web.util.UriTemplate;
 
 /**
- * Metadata object
+ * First class metadata object - only dto objects, which have URI pointing to themselves should implement this.
  */
 public interface Obj {
 

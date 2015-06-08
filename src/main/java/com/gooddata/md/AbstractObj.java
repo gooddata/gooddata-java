@@ -12,7 +12,7 @@ import static com.gooddata.util.Validate.noNullElements;
 /**
  * Metadata object (common part)
  */
-public abstract class AbstractObj implements Obj {
+public abstract class AbstractObj {
 
     @JsonProperty("meta")
     protected final Meta meta;
