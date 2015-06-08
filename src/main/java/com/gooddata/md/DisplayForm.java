@@ -20,7 +20,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 public class DisplayForm extends AbstractObj {
 
     @JsonProperty("content")
-    private final Content content;
+    protected final Content content;
 
     @JsonCreator
     protected DisplayForm(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
@@ -39,13 +39,13 @@ public class DisplayForm extends AbstractObj {
     }
 
     @JsonIgnore
-    public boolean isDefault() {
-        return content.isDefault();
+    public String getLdmExpression() {
+        return content.getLdmExpression();
     }
 
     @JsonIgnore
-    public String getLdmExpression() {
-        return content.getLdmExpression();
+    public String getType() {
+        return content.getType();
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -54,17 +54,16 @@ public class DisplayForm extends AbstractObj {
 
         private final String formOf;
         private final String expression;
-        private final boolean isDefault;
         private final String ldmExpression;
+        private final String type;
 
         @JsonCreator
         public Content(@JsonProperty("formOf") String formOf, @JsonProperty("expression") String expression,
-                       @JsonProperty("default") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean isDefault,
-                       @JsonProperty("ldmexpression") String ldmExpression) {
+                       @JsonProperty("ldmexpression") String ldmExpression, @JsonProperty("type") String type) {
             this.formOf = formOf;
             this.expression = expression;
-            this.isDefault = isDefault;
             this.ldmExpression = ldmExpression;
+            this.type = type;
         }
 
         public String getFormOf() {
@@ -75,15 +74,13 @@ public class DisplayForm extends AbstractObj {
             return expression;
         }
 
-	    @JsonProperty("default")
-	    @JsonSerialize(using = BooleanIntegerSerializer.class)
-        public boolean isDefault() {
-            return isDefault;
-        }
-
-	    @JsonProperty("ldmexpression")
+        @JsonProperty("ldmexpression")
         public String getLdmExpression() {
             return ldmExpression;
+        }
+
+        public String getType() {
+            return type;
         }
     }
 

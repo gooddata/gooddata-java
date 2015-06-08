@@ -11,13 +11,13 @@ import java.io.InputStream;
 import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class DisplayFormTest {
 
     public static final String FORM_OF = "/gdc/md/PROJECT_ID/obj/DF_FORM_OF_ID";
     public static final String EXPRESSION = "[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]";
-    public static final boolean DEFAULT = false;
     public static final String LDM_EXPRESSION = "";
 
     @Test
@@ -28,14 +28,14 @@ public class DisplayFormTest {
 
         assertThat(displayForm.getFormOf(), is(FORM_OF));
         assertThat(displayForm.getExpression(), is(EXPRESSION));
-        assertThat(displayForm.isDefault(), is(DEFAULT));
         assertThat(displayForm.getLdmExpression(), is(LDM_EXPRESSION));
+        assertThat(displayForm.getType(), is(nullValue()));
     }
 
     @Test
     public void testSerialization() throws Exception {
         final DisplayForm displayForm = new DisplayForm(new Meta("Person Name"),
-                new DisplayForm.Content(FORM_OF, EXPRESSION, DEFAULT, LDM_EXPRESSION));
+                new DisplayForm.Content(FORM_OF, EXPRESSION,  LDM_EXPRESSION, null));
 
         assertThat(displayForm, serializesToJson("/md/displayForm-input.json"));
     }

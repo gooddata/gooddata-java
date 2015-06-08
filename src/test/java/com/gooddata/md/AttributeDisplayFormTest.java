@@ -15,7 +15,9 @@ public class AttributeDisplayFormTest {
     public static final String FORM_OF = "/gdc/md/PROJECT_ID/obj/DF_FORM_OF_ID";
     public static final String EXPRESSION = "[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]";
     public static final boolean DEFAULT = false;
+    public static final boolean DEFAULT_TRUE = true;
     public static final String LDM_EXPRESSION = "";
+    private static final String TYPE = "TYPE";
 
     @Test
     public void shouldDeserialize() throws Exception {
@@ -25,14 +27,15 @@ public class AttributeDisplayFormTest {
 
         assertThat(attrDF.getFormOf(), is(FORM_OF));
         assertThat(attrDF.getExpression(), is(EXPRESSION));
-        assertThat(attrDF.isDefault(), is(DEFAULT));
+        assertThat(attrDF.isDefault(), is(DEFAULT_TRUE));
         assertThat(attrDF.getLdmExpression(), is(LDM_EXPRESSION));
+        assertThat(attrDF.getType(), is(TYPE));
     }
 
     @Test
     public void testSerialization() throws Exception {
         final DisplayForm attrDF = new AttributeDisplayForm("Person Name", FORM_OF, EXPRESSION, DEFAULT,
-                LDM_EXPRESSION);
+                LDM_EXPRESSION, TYPE);
 
         assertThat(attrDF, serializesToJson("/md/attributeDisplayForm-input.json"));
     }

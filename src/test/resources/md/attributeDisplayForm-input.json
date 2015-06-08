@@ -3,7 +3,8 @@
       "content" : {
          "formOf" : "/gdc/md/PROJECT_ID/obj/DF_FORM_OF_ID",
          "expression" : "[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]",
-         "default" : 0,
+         "default" : "0",
+         "type" : "TYPE",
          "ldmexpression" : ""
       },
       "meta" : {
