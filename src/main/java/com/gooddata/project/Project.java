@@ -255,6 +255,11 @@ public class Project {
         setEnvironment(environment.name());
     }
 
+    public void setEnvironment(final Environment environment) {
+        notNull(environment, "environment");
+        setEnvironment(environment.name());
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     private static class ProjectContent {
