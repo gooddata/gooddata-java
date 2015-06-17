@@ -4,6 +4,8 @@ import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
 import com.gooddata.collections.PageRequest;
 import com.gooddata.gdc.AsyncTask;
+import com.gooddata.gdc.FeatureFlag;
+import com.gooddata.gdc.FeatureFlags;
 import com.gooddata.gdc.TaskStatus;
 import com.gooddata.gdc.UriResponse;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -317,6 +319,23 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         final List<User> secondPage = gd.getProjectService().listUsers(enabled, new PageRequest(firstPage.size(), 1));
         assertThat(secondPage, notNullValue());
         assertThat(secondPage, empty());
+    }
+
+    @Test
+    public void shouldListAggregatedFeatureFlags() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(FeatureFlags.AGGREGATED_FEATURE_FLAGS_TEMPLATE.expand(PROJECT_ID).toString())
+                .respond()
+                .withBody(readStringFromResource("/gdc/featureFlags.json"))
+                .withStatus(200);
+
+        final List<FeatureFlag> featureFlags = gd.getProjectService().listAggregatedFeatureFlags(enabled);
+
+        assertThat(featureFlags, hasSize(2));
+        assertThat(featureFlags, contains(
+                new FeatureFlag("testFeature", true),
+                new FeatureFlag("testFeature2", false)));
     }
 
     @Test
