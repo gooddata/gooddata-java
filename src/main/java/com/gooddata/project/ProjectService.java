@@ -6,14 +6,16 @@ package com.gooddata.project;
 import com.gooddata.AbstractPollHandler;
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
-import com.gooddata.PollResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.PollResult;
 import com.gooddata.SimplePollHandler;
 import com.gooddata.account.AccountService;
 import com.gooddata.collections.Page;
 import com.gooddata.collections.PageableList;
 import com.gooddata.gdc.AsyncTask;
+import com.gooddata.gdc.FeatureFlag;
+import com.gooddata.gdc.FeatureFlags;
 import com.gooddata.gdc.UriResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
@@ -28,8 +30,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.gooddata.project.ProjectFeatureFlags.FEATURE_FLAGS_TEMPLATE;
+import static com.gooddata.gdc.FeatureFlags.AGGREGATED_FEATURE_FLAGS_TEMPLATE;
 import static com.gooddata.project.ProjectFeatureFlag.FEATURE_FLAG_TEMPLATE;
+import static com.gooddata.project.ProjectFeatureFlags.FEATURE_FLAGS_TEMPLATE;
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 import static java.util.Arrays.asList;
@@ -345,14 +348,39 @@ public class ProjectService extends AbstractService {
     }
 
     /**
-     * Lists all feature flags for given project.
-     * It doesn't matter wheter feature flag is enabled or not, it'll be included in all cases.
+     * Lists aggregated feature flags for given project and current user (aggregates global, project group, project and user feature flags).
+     * It doesn't matter whether feature flag is enabled or not, it'll be included in all cases.
+     *
+     * @param project project, cannot be null
+     * @return list of aggregated feature flags for given project and current user
+     */
+    public List<FeatureFlag> listAggregatedFeatureFlags(final Project project) {
+        notNull(project, "project");
+        try {
+            final FeatureFlags featureFlags =
+                    restTemplate.getForObject(AGGREGATED_FEATURE_FLAGS_TEMPLATE.expand(project.getId()),
+                            FeatureFlags.class);
+
+            if (featureFlags == null) {
+                throw new GoodDataException("empty response from API call");
+            }
+
+            return featureFlags.getFeatureFlags();
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to list aggregated feature flags for project ID=" + project.getId(), e);
+        }
+    }
+
+    /**
+     * Lists all project feature flags (only project scoped flags, use {@link #listAggregatedFeatureFlags(Project)} for
+     * aggregated flags from all scopes).
+     * It doesn't matter whether feature flag is enabled or not, it'll be included in all cases.
      *
      * @param project project, cannot be null
      * @return list of all feature flags for given project
      */
     public List<ProjectFeatureFlag> listFeatureFlags(Project project) {
-        notNull(project, "project cannot be null!");
+        notNull(project, "project");
         try {
             final ProjectFeatureFlags projectFeatureFlags =
                     restTemplate.getForObject(FEATURE_FLAGS_TEMPLATE.expand(project.getId()), ProjectFeatureFlags.class);
@@ -377,14 +405,14 @@ public class ProjectService extends AbstractService {
      * @param featureFlag feature flag to be created, cannot be null
      */
     public ProjectFeatureFlag createFeatureFlag(final Project project, final ProjectFeatureFlag featureFlag) {
-        notNull(project, "project cannot be null!");
-        notNull(featureFlag, "featureFlag cannot be null!");
+        notNull(project, "project");
+        notNull(featureFlag, "featureFlag");
 
         final String featureFlagsUri = FEATURE_FLAGS_TEMPLATE.expand(project.getId()).toString();
 
         try {
             final URI featureFlagUri = restTemplate.postForLocation(featureFlagsUri, featureFlag);
-            notNull(featureFlagsUri, "URI of new featureFlag should not be null!");
+            notNull(featureFlagsUri, "URI of new featureFlag");
             return getFeatureFlag(featureFlagUri.toString());
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to create feature flag: " + featureFlag, e);
@@ -399,8 +427,8 @@ public class ProjectService extends AbstractService {
      * @return feature flag
      */
     public ProjectFeatureFlag getFeatureFlag(final Project project, final String featureFlagName) {
-        notNull(project, "project cannot be null!");
-        notEmpty(featureFlagName, "featureFlagName cannot be empty!");
+        notNull(project, "project");
+        notEmpty(featureFlagName, "featureFlagName");
 
         return restTemplate.getForObject(getFeatureFlagUri(project, featureFlagName), ProjectFeatureFlag.class);
     }
@@ -413,8 +441,8 @@ public class ProjectService extends AbstractService {
      * @return updated feature flag
      */
     public ProjectFeatureFlag updateFeatureFlag(final ProjectFeatureFlag featureFlag) {
-        notNull(featureFlag, "featureFlag cannot be null!");
-        notEmpty(featureFlag.getUri(), "featureFlag uri cannot be empty!");
+        notNull(featureFlag, "featureFlag");
+        notEmpty(featureFlag.getUri(), "featureFlag");
 
         try {
             restTemplate.put(featureFlag.getUri(), featureFlag);
@@ -430,8 +458,8 @@ public class ProjectService extends AbstractService {
      * @param featureFlag existing project feature flag with links set properly, cannot be null
      */
     public void deleteFeatureFlag(ProjectFeatureFlag featureFlag) {
-        notNull(featureFlag, "featureFlag cannot be null!");
-        notEmpty(featureFlag.getUri(), "featureFlag uri cannot be empty!");
+        notNull(featureFlag, "featureFlag");
+        notEmpty(featureFlag.getUri(), "featureFlag URI");
 
         try {
             restTemplate.delete(featureFlag.getUri());
