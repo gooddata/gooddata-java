@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2007-2015, GoodData(R) Corporation. All rights reserved.
  */
-package com.gooddata.gdc;
+package com.gooddata.featureflag;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -9,25 +9,22 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.springframework.web.util.UriTemplate;
 
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
+import static com.gooddata.util.Validate.notEmpty;
 import static org.springframework.util.Assert.notNull;
 
-/**
- * @deprecated use {@link com.gooddata.featureflag.FeatureFlagService} and {@link com.gooddata.featureflag.FeatureFlags} instead
- */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("featureFlags")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Deprecated
-@SuppressWarnings("deprecation")
-public class FeatureFlags {
+public class FeatureFlags implements Iterable<FeatureFlag> {
 
     public static final String AGGREGATED_FEATURE_FLAGS_URI = "/gdc/internal/projects/{projectId}/featureFlags";
     public static final UriTemplate AGGREGATED_FEATURE_FLAGS_TEMPLATE = new UriTemplate(AGGREGATED_FEATURE_FLAGS_URI);
 
-    private final List<FeatureFlag> featureFlags = new ArrayList<>();
+    private final List<FeatureFlag> featureFlags = new LinkedList<>();
 
     /* protected helper method for JSON deserialization */
     @JsonAnySetter
@@ -37,11 +34,35 @@ public class FeatureFlags {
     }
 
     /**
-     * @deprecated use {@link com.gooddata.featureflag.FeatureFlags#isEnabled(String)} method or its {@link Iterable} feature
+     * @deprecated use {@link #isEnabled(String)} method or {@link Iterable} feature of this class
      */
     @Deprecated
     public List<FeatureFlag> getFeatureFlags() {
         return featureFlags;
+    }
+
+    /**
+     * {@inheritDoc Iterable#iterator}
+     */
+    @Override
+    public Iterator<FeatureFlag> iterator() {
+        return featureFlags.iterator();
+    }
+
+    /**
+     * Returns true if the feature flag with given name exists and is enabled, false otherwise.
+     *
+     * @param flagName the name of feature flag
+     * @return true if the feature flag with given name exists and is enabled, false otherwise
+     */
+    public boolean isEnabled(final String flagName) {
+        notEmpty(flagName, "flagName");
+        for (final FeatureFlag flag : featureFlags) {
+            if (flagName.equalsIgnoreCase(flag.getName())) {
+                return flag.isEnabled();
+            }
+        }
+        return false;
     }
 
     @Override
@@ -52,6 +73,7 @@ public class FeatureFlags {
         final FeatureFlags that = (FeatureFlags) o;
 
         return !(featureFlags != null ? !featureFlags.equals(that.featureFlags) : that.featureFlags != null);
+
     }
 
     @Override

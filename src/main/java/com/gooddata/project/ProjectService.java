@@ -13,6 +13,7 @@ import com.gooddata.SimplePollHandler;
 import com.gooddata.account.AccountService;
 import com.gooddata.collections.Page;
 import com.gooddata.collections.PageableList;
+import com.gooddata.featureflag.FeatureFlagService;
 import com.gooddata.gdc.AsyncTask;
 import com.gooddata.gdc.FeatureFlag;
 import com.gooddata.gdc.FeatureFlags;
@@ -353,7 +354,10 @@ public class ProjectService extends AbstractService {
      *
      * @param project project, cannot be null
      * @return list of aggregated feature flags for given project and current user
+     * @deprecated use {@link FeatureFlagService#listFeatureFlags(Project)} instead
      */
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public List<FeatureFlag> listAggregatedFeatureFlags(final Project project) {
         notNull(project, "project");
         try {
@@ -372,8 +376,8 @@ public class ProjectService extends AbstractService {
     }
 
     /**
-     * Lists all project feature flags (only project scoped flags, use {@link #listAggregatedFeatureFlags(Project)} for
-     * aggregated flags from all scopes).
+     * Lists all project feature flags (only project scoped flags, use {@link FeatureFlagService#listFeatureFlags(Project)}
+     * for aggregated flags from all scopes).
      * It doesn't matter whether feature flag is enabled or not, it'll be included in all cases.
      *
      * @param project project, cannot be null

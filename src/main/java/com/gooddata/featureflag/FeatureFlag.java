@@ -1,18 +1,14 @@
 /*
  * Copyright (C) 2007-2015, GoodData(R) Corporation. All rights reserved.
  */
-package com.gooddata.gdc;
+package com.gooddata.featureflag;
 
 import static com.gooddata.util.Validate.notNull;
 
 /**
  * Feature flag is a boolean flag used for enabling / disabling some specific feature of GoodData platform.
  * It can be used in various scopes (per project, per project group, per user, global etc.).
- *
- * @deprecated use {@link com.gooddata.featureflag.FeatureFlagService} and {@link com.gooddata.featureflag.FeatureFlag} instead
  */
-@Deprecated
-@SuppressWarnings("deprecation")
 public class FeatureFlag {
 
     private final String name;
@@ -27,7 +23,7 @@ public class FeatureFlag {
         return name;
     }
 
-    public boolean getEnabled() {
+    public boolean isEnabled() {
         return enabled;
     }
 

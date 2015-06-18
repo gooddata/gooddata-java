@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings("deprecation")
 public class ProjectServiceIT extends AbstractGoodDataIT {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -146,7 +147,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         assertThat(templates, hasSize(1));
     }
 
-        @Test
+    @Test
     public void shouldReturnAvailableValidations() throws Exception {
         onRequest()
                 .havingPathEqualTo("/gdc/md/" + PROJECT_ID + "/validate")

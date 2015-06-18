@@ -107,15 +107,6 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
                 new ProjectFeatureFlag(PROJECT_FEATURE_FLAG, true)));
     }
 
-    @Test(groups = "project", dependsOnMethods = "listProjectFeatureFlags")
-    public void listAggregatedFeatureFlags() throws Exception {
-        final List<FeatureFlag> flags = gd.getProjectService().listAggregatedFeatureFlags(project);
-
-        assertThat(flags, hasItems(
-                new FeatureFlag("mostRecentFeatureFlag", true),
-                new FeatureFlag(PROJECT_FEATURE_FLAG, true)));
-    }
-
     @Test(groups = "project", dependsOnMethods = "createProjectFeatureFlag")
     public void getProjectFeatureFlag() throws Exception {
         final ProjectFeatureFlag featureFlag =

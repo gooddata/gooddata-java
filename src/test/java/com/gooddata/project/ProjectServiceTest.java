@@ -28,6 +28,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("deprecation")
 public class ProjectServiceTest {
 
     private static final String ACCOUNT_ID = "17";
