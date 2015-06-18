@@ -354,9 +354,15 @@ public class GoodData {
         return reportService;
     }
 
+    /**
+     * Get initialized service for dataload processes management and process executions.
+     *
+     * @return initialized service for dataload processes management and process executions
+     */
     public ProcessService getProcessService() {
         return processService;
     }
+
     /**
      * Get initialized service for ADS management (create, access and delete ads instances).
      *
@@ -365,6 +371,12 @@ public class GoodData {
     public WarehouseService getWarehouseService() {
         return warehouseService;
     }
+
+    /**
+     * Get initialized service for connector integration management (create, update, start process, ...).
+     *
+     * @return initialized service for connector integration management
+     */
     public ConnectorService getConnectorService() {
         return connectorService;
     }
