@@ -382,7 +382,10 @@ public class ProjectService extends AbstractService {
      *
      * @param project project, cannot be null
      * @return list of all feature flags for given project
+     * @deprecated use {@link FeatureFlagService#listProjectFeatureFlags(Project)} instead
      */
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public List<ProjectFeatureFlag> listFeatureFlags(Project project) {
         notNull(project, "project");
         try {
@@ -409,6 +412,7 @@ public class ProjectService extends AbstractService {
      * @param featureFlag feature flag to be created, cannot be null
      * @return created feature flag
      */
+    @SuppressWarnings("deprecation")
     public ProjectFeatureFlag createFeatureFlag(final Project project, final ProjectFeatureFlag featureFlag) {
         notNull(project, "project");
         notNull(featureFlag, "featureFlag");
@@ -431,6 +435,7 @@ public class ProjectService extends AbstractService {
      * @param featureFlagName name of feature flag, cannot be empty
      * @return feature flag
      */
+    @SuppressWarnings("deprecation")
     public ProjectFeatureFlag getFeatureFlag(final Project project, final String featureFlagName) {
         notNull(project, "project");
         notEmpty(featureFlagName, "featureFlagName");
@@ -445,6 +450,7 @@ public class ProjectService extends AbstractService {
      * @param featureFlag updated feature flag
      * @return updated feature flag
      */
+    @SuppressWarnings("deprecation")
     public ProjectFeatureFlag updateFeatureFlag(final ProjectFeatureFlag featureFlag) {
         notNull(featureFlag, "featureFlag");
         notEmpty(featureFlag.getUri(), "featureFlag");
@@ -462,6 +468,7 @@ public class ProjectService extends AbstractService {
      *
      * @param featureFlag existing project feature flag with links set properly, cannot be null
      */
+    @SuppressWarnings("deprecation")
     public void deleteFeatureFlag(ProjectFeatureFlag featureFlag) {
         notNull(featureFlag, "featureFlag");
         notEmpty(featureFlag.getUri(), "featureFlag URI");
@@ -474,6 +481,7 @@ public class ProjectService extends AbstractService {
     }
 
 
+    @SuppressWarnings("deprecation")
     private ProjectFeatureFlag getFeatureFlag(String featureFlagUri) {
         return restTemplate.getForObject(featureFlagUri, ProjectFeatureFlag.class);
     }

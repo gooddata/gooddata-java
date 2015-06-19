@@ -31,7 +31,7 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/internal/projects/PROJECT_ID/featureFlags")
                 .respond()
-                .withBody(readStringFromResource("/gdc/featureFlags.json"))
+                .withBody(readStringFromResource("/featureflag/featureFlags.json"))
                 .withStatus(200);
 
         final FeatureFlags flags = service.listFeatureFlags(project);
@@ -40,4 +40,23 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
                 new FeatureFlag("testFeature", true),
                 new FeatureFlag("testFeature2", false)));
     }
+
+
+    @Test
+    public void listProjectFeatureFlagsShouldReturnProjectFeatureFlags() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/projectFeatureFlags")
+                .respond()
+                .withBody(readStringFromResource("/featureflag/projectFeatureFlags.json"))
+                .withStatus(200);
+
+        final ProjectFeatureFlags flags = service.listProjectFeatureFlags(project);
+
+        assertThat(flags, containsInAnyOrder(
+                new ProjectFeatureFlag("myCoolFeature", true),
+                new ProjectFeatureFlag("mySuperCoolFeature", true),
+                new ProjectFeatureFlag("mySuperSecretFeature", false)));
+    }
+
 }

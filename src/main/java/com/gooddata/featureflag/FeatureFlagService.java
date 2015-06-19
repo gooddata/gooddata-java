@@ -10,6 +10,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import static com.gooddata.featureflag.FeatureFlags.AGGREGATED_FEATURE_FLAGS_TEMPLATE;
+import static com.gooddata.featureflag.ProjectFeatureFlags.PROJECT_FEATURE_FLAGS_TEMPLATE;
 import static com.gooddata.util.Validate.notNull;
 
 /**
@@ -47,6 +48,30 @@ public class FeatureFlagService extends AbstractService {
             return featureFlags;
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to list aggregated feature flags for project ID=" + project.getId(), e);
+        }
+    }
+
+    /**
+     * Returns project feature flags (only project scoped flags, use {@link #listFeatureFlags(Project)} for aggregated
+     * flags from all scopes) for given project.
+     * It doesn't matter whether feature flag is enabled or not, it'll be included in both cases.
+     *
+     * @param project project, cannot be null
+     * @return list of all feature flags for given project
+     */
+    public ProjectFeatureFlags listProjectFeatureFlags(final Project project) {
+        notNull(project, "project");
+        try {
+            final ProjectFeatureFlags projectFeatureFlags = restTemplate
+                    .getForObject(PROJECT_FEATURE_FLAGS_TEMPLATE.expand(project.getId()), ProjectFeatureFlags.class);
+
+            if (projectFeatureFlags == null) {
+                throw new GoodDataException("empty response from API call");
+            }
+
+            return projectFeatureFlags;
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to list project feature flags for project ID=" + project.getId(), e);
         }
     }
 

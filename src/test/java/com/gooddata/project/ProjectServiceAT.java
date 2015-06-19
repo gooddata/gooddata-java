@@ -3,9 +3,7 @@ package com.gooddata.project;
 import com.gooddata.AbstractGoodDataAT;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.collections.PageRequest;
-import com.gooddata.gdc.FeatureFlag;
 import org.springframework.http.HttpStatus;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -17,7 +15,6 @@ import static com.gooddata.project.ProjectEnvironment.TESTING;
 import static com.gooddata.project.ProjectIdMatcher.hasSameIdAs;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -94,17 +91,6 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
         final ProjectFeatureFlag featureFlag =
                 gd.getProjectService().createFeatureFlag(project, new ProjectFeatureFlag(PROJECT_FEATURE_FLAG));
         checkFeatureFlag(featureFlag, true);
-    }
-
-    @Test(groups = "project", dependsOnMethods = "createProjectFeatureFlag")
-    public void listProjectFeatureFlags() throws Exception {
-        gd.getProjectService().createFeatureFlag(project, new ProjectFeatureFlag("mostRecentFeatureFlag"));
-
-        final List<ProjectFeatureFlag> projectFeatureFlags = gd.getProjectService().listFeatureFlags(project);
-
-        assertThat(projectFeatureFlags, hasItems(
-                new ProjectFeatureFlag("mostRecentFeatureFlag", true),
-                new ProjectFeatureFlag(PROJECT_FEATURE_FLAG, true)));
     }
 
     @Test(groups = "project", dependsOnMethods = "createProjectFeatureFlag")

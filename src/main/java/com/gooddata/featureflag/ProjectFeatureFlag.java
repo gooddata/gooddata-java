@@ -1,31 +1,26 @@
-package com.gooddata.project;
+/*
+ * Copyright (C) 2007-2015, GoodData(R) Corporation. All rights reserved.
+ */
+package com.gooddata.featureflag;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import org.springframework.web.util.UriTemplate;
 
+import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 
 /**
  * Project feature flag is a boolean flag used for enabling / disabling some specific feature of GoodData platform
  * on per project basis.
- *
- * @deprecated use {@link com.gooddata.featureflag.FeatureFlagService} and {@link com.gooddata.featureflag.ProjectFeatureFlags} instead
  */
 @JsonTypeName("featureFlag")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Deprecated
 public class ProjectFeatureFlag {
 
-    public static final String FEATURE_FLAG_URI = ProjectFeatureFlags.FEATURE_FLAGS_URI + "/{featureFlag}";
-    public static final UriTemplate FEATURE_FLAG_TEMPLATE = new UriTemplate(FEATURE_FLAG_URI);
+    public static final String PROJECT_FEATURE_FLAG_URI = ProjectFeatureFlags.PROJECT_FEATURE_FLAGS_URI + "/{featureFlag}";
+    public static final UriTemplate PROJECT_FEATURE_FLAG_TEMPLATE = new UriTemplate(PROJECT_FEATURE_FLAG_URI);
 
     private final String name;
     private boolean enabled;
@@ -39,7 +34,7 @@ public class ProjectFeatureFlag {
      * @param name unique name of feature flag
      */
     public ProjectFeatureFlag(String name) {
-        this(name, true, null);
+        this(notEmpty(name, "name"), true, null);
     }
 
     /**
@@ -49,13 +44,13 @@ public class ProjectFeatureFlag {
      * @param enabled true (flag enabled) or false (flag disabled)
      */
     public ProjectFeatureFlag(String name, boolean enabled) {
-        this(name, enabled, null);
+        this(notEmpty(name, "name"), enabled, null);
     }
 
     @JsonCreator
     ProjectFeatureFlag(@JsonProperty("key") String name,
-                               @JsonProperty("value") boolean enabled,
-                               @JsonProperty("links") Links links) {
+                       @JsonProperty("value") boolean enabled,
+                       @JsonProperty("links") Links links) {
         this.name = name;
         this.enabled = enabled;
         this.links = links;
@@ -67,7 +62,7 @@ public class ProjectFeatureFlag {
     }
 
     @JsonProperty("value")
-    public boolean getEnabled() {
+    public boolean isEnabled() {
         return enabled;
     }
 
@@ -108,7 +103,7 @@ public class ProjectFeatureFlag {
 
     @Override
     public String toString() {
-        return "FeatureFlag{" +
+        return "ProjectFeatureFlag{" +
                 "name='" + name + '\'' +
                 ", enabled=" + enabled +
                 ", links=" + links +
@@ -118,6 +113,7 @@ public class ProjectFeatureFlag {
     @JsonIgnoreProperties(ignoreUnknown = true)
     static class Links {
         private final String self;
+
         @JsonCreator
         public Links(@JsonProperty("self") String self) {
             this.self = self;

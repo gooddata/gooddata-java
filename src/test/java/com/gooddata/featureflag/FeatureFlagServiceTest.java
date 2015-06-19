@@ -23,9 +23,12 @@ public class FeatureFlagServiceTest {
 
     private static final String PROJECT_ID = "11";
     private static final String FEATURE_FLAGS_URI = "/gdc/internal/projects/11/featureFlags";
+    private static final String PROJECT_FEATURE_FLAGS_URI = "/gdc/projects/11/projectFeatureFlags";
 
     @Mock
     private Project project;
+    @Mock
+    private ProjectFeatureFlags projectFeatureFlags;
     @Mock
     private FeatureFlags featureFlags;
     @Mock
@@ -65,6 +68,36 @@ public class FeatureFlagServiceTest {
         when(featureFlags.iterator()).thenReturn(singleton(flag1).iterator());
 
         final FeatureFlags flags = service.listFeatureFlags(project);
+
+        assertThat(flags, contains(flag1));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void whenNullArgThenGetProjectFeatureFlagsShouldThrow() throws Exception {
+        service.listProjectFeatureFlags(null);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void whenEmptyResponseThenGetProjectFeatureFlagsShouldThrow() throws Exception {
+        when(restTemplate.getForObject(new URI(PROJECT_FEATURE_FLAGS_URI), ProjectFeatureFlags.class)).thenReturn(null);
+        service.listProjectFeatureFlags(project);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void whenClientErrorResponseThenGetProjectFeatureFlagsShouldThrow() throws Exception {
+        when(restTemplate.getForObject(new URI(PROJECT_FEATURE_FLAGS_URI), ProjectFeatureFlags.class))
+                .thenThrow(new RestClientException(""));
+        service.listProjectFeatureFlags(project);
+    }
+
+    @Test
+    public void testGetProjectFeatureFlags() throws Exception {
+        final ProjectFeatureFlag flag1 = new ProjectFeatureFlag("flag1", true);
+        when(restTemplate.getForObject(new URI(PROJECT_FEATURE_FLAGS_URI), ProjectFeatureFlags.class))
+                .thenReturn(projectFeatureFlags);
+        when(projectFeatureFlags.iterator()).thenReturn(singleton(flag1).iterator());
+
+        final ProjectFeatureFlags flags = service.listProjectFeatureFlags(project);
 
         assertThat(flags, contains(flag1));
     }

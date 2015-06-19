@@ -12,9 +12,13 @@ import org.springframework.web.util.UriTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @deprecated use {@link com.gooddata.featureflag.FeatureFlagService} and {@link com.gooddata.featureflag.ProjectFeatureFlags} instead
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("featureFlags")
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Deprecated
 public class ProjectFeatureFlags {
 
     public static final String FEATURE_FLAGS_URI = Project.URI + "/projectFeatureFlags";

@@ -18,6 +18,18 @@ public class FeatureFlagServiceAT extends AbstractGoodDataAT {
     private static final String PROJECT_FEATURE_FLAG = "testFeatureFlag";
 
     @Test(groups = "featureFlag", dependsOnGroups = "project")
+    public void listProjectFeatureFlags() throws Exception {
+        gd.getProjectService().createFeatureFlag(project,
+                new com.gooddata.project.ProjectFeatureFlag("mostRecentFeatureFlag"));
+
+        final ProjectFeatureFlags flags = gd.getFeatureFlagService().listProjectFeatureFlags(project);
+
+        assertThat(flags, hasItems(
+                new ProjectFeatureFlag("mostRecentFeatureFlag", true),
+                new ProjectFeatureFlag(PROJECT_FEATURE_FLAG, true)));
+    }
+
+    @Test(groups = "featureFlag", dependsOnMethods = "listProjectFeatureFlags")
     public void listFeatureFlags() throws Exception {
         final FeatureFlags flags = gd.getFeatureFlagService().listFeatureFlags(project);
 
