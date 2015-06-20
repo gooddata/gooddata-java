@@ -92,15 +92,10 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.9.1</version>
                 <executions>
                     <execution>
-                        <id>parse-version</id>
-                        <goals>
-                            <goal>parse-version</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>regex-property</id>
+                        <id>set-animalSnifferJdkVersion-property</id>
                         <goals>
                             <goal>regex-property</goal>
                         </goals>
@@ -127,6 +122,7 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>check-compatibility-with-java-api</id>
                         <phase>package</phase>
                         <goals>
                             <goal>check</goal>
