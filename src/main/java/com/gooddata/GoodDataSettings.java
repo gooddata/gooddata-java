@@ -5,20 +5,24 @@ import java.util.concurrent.TimeUnit;
 import static org.springframework.util.Assert.isTrue;
 
 /**
- * Gather various additional settings of {@link GoodData}. Can be passed to the {@link GoodData} constructor to tune up it's behaviour.
- * Settings are applied only once at the beginning. Changing this bean after it's passed to {@link GoodData} has no effect.
+ * Gather various additional settings of {@link GoodData}. Can be passed to the {@link GoodData} constructor to tune up
+ * it's behaviour.
+ * <p/>
+ * Settings are applied only once at the beginning. Changing this bean after it's passed to {@link GoodData} has
+ * no effect.
  */
 public class GoodDataSettings {
 
     private int maxConnections = 20;
     private int connectionTimeout = secondsToMillis(10);
+    private int connectionRequestTimeout = secondsToMillis(10);
     private int socketTimeout = secondsToMillis(60);
 
 
     /**
      * Set maximum number of connections used. This applies same for connections per host as for total connections.
      * (As we assume GoodData connects to single host).
-     *
+     * <p/>
      * The default value is 20.
      *
      * @param maxConnections maximum number of connections used.
@@ -30,6 +34,7 @@ public class GoodDataSettings {
 
     /**
      * Maximum number of connection used
+     *
      * @return maximum number of connection used
      */
     public int getMaxConnections() {
@@ -38,7 +43,9 @@ public class GoodDataSettings {
 
     /**
      * Set timeout milliseconds until connection established.
+     * <p/>
      * The default value is 10 seconds (10000 ms).
+     * <p/>
      * Set to 0 for infinite.
      *
      * @param connectionTimeout connection timeout milliseconds
@@ -50,7 +57,9 @@ public class GoodDataSettings {
 
     /**
      * Set timeout seconds until connection established.
+     * <p/>
      * The default value is 10 seconds.
+     * <p/>
      * Set to 0 for infinite.
      *
      * @param connectionTimeout connection timeout seconds
@@ -61,6 +70,7 @@ public class GoodDataSettings {
 
     /**
      * Milliseconds until connection established.
+     *
      * @return milliseconds until connection established
      */
     public int getConnectionTimeout() {
@@ -68,8 +78,47 @@ public class GoodDataSettings {
     }
 
     /**
+     * Set timeout in milliseconds used when requesting a connection from the connection manager.
+     * <p/>
+     * The default value is 10 seconds (10000 ms).
+     * <p/>
+     * Set to 0 for infinite.
+     *
+     * @param connectionRequestTimeout connection request timeout milliseconds
+     */
+    public void setConnectionRequestTimeout(final int connectionRequestTimeout) {
+        isTrue(connectionRequestTimeout >= 0, "connectionRequestTimeout must not be negative");
+        this.connectionRequestTimeout = connectionRequestTimeout;
+    }
+
+    /**
+     * Set timeout in seconds used when requesting a connection from the connection manager.
+     * <p/>
+     * The default value is 10 seconds.
+     * <p/>
+     * Set to 0 for infinite.
+     * <p/>
+     *
+     * @param connectionRequestTimeout connection request timeout seconds
+     */
+    public void setConnectionRequestTimeoutSeconds(final int connectionRequestTimeout) {
+        setConnectionRequestTimeout(secondsToMillis(connectionRequestTimeout));
+    }
+
+    /**
+     * Returns the timeout in milliseconds used when requesting a connection from the connection manager.
+     *
+     * @return milliseconds used as timeout when requesting a connection from the connection manager
+     */
+    public int getConnectionRequestTimeout() {
+        return connectionRequestTimeout;
+    }
+
+    /**
      * Set socket timeout (maximum period inactivity between two consecutive data packets) milliseconds.
+     * <p/>
      * The default value is 60 seconds (60000 ms).
+     * <p/>
      * Set to 0 for infinite.
      *
      * @param socketTimeout socket timeout milliseconds
@@ -81,7 +130,9 @@ public class GoodDataSettings {
 
     /**
      * Set socket timeout (maximum period inactivity between two consecutive data packets) seconds.
+     * <p/>
      * The default value is 60 seconds.
+     * <p/>
      * Set to 0 for infinite.
      *
      * @param socketTimeout socket timeout seconds
@@ -91,26 +142,24 @@ public class GoodDataSettings {
     }
 
     /**
-     * Milliseconds  for inactivity between two consecutive data packets.
-     * @return milliseconds  for inactivity between two consecutive data packets
+     * Milliseconds for inactivity between two consecutive data packets.
+     *
+     * @return milliseconds for inactivity between two consecutive data packets
      */
     public int getSocketTimeout() {
         return socketTimeout;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (!(o instanceof GoodDataSettings))
-            return false;
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        GoodDataSettings that = (GoodDataSettings) o;
+        final GoodDataSettings that = (GoodDataSettings) o;
 
-        if (maxConnections != that.maxConnections)
-            return false;
-        if (connectionTimeout != that.connectionTimeout)
-            return false;
+        if (maxConnections != that.maxConnections) return false;
+        if (connectionTimeout != that.connectionTimeout) return false;
+        if (connectionRequestTimeout != that.connectionRequestTimeout) return false;
         return socketTimeout == that.socketTimeout;
 
     }
@@ -119,6 +168,7 @@ public class GoodDataSettings {
     public int hashCode() {
         int result = maxConnections;
         result = 31 * result + connectionTimeout;
+        result = 31 * result + connectionRequestTimeout;
         result = 31 * result + socketTimeout;
         return result;
     }
@@ -126,7 +176,8 @@ public class GoodDataSettings {
     @Override
     public String toString() {
         return "GoodDataSettings{" +
-                "maxConnections=" + maxConnections +
+                "connectionRequestTimeout=" + connectionRequestTimeout +
+                ", maxConnections=" + maxConnections +
                 ", connectionTimeout=" + connectionTimeout +
                 ", socketTimeout=" + socketTimeout +
                 '}';
