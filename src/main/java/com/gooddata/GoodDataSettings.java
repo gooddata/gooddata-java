@@ -1,13 +1,8 @@
 package com.gooddata;
 
-import static org.springframework.util.Assert.isTrue;
-
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.springframework.util.Assert;
-
 import java.util.concurrent.TimeUnit;
+
+import static org.springframework.util.Assert.isTrue;
 
 /**
  * Gather various additional settings of {@link GoodData}. Can be passed to the {@link GoodData} constructor to tune up it's behaviour.
@@ -29,7 +24,7 @@ public class GoodDataSettings {
      * @param maxConnections maximum number of connections used.
      */
     public void setMaxConnections(int maxConnections) {
-        isTrue(connectionTimeout > 0, "connectionTimeout must be greater than zero");
+        isTrue(maxConnections > 0, "maxConnections must be greater than zero");
         this.maxConnections = maxConnections;
     }
 
