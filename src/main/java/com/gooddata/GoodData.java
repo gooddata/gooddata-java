@@ -228,6 +228,7 @@ public class GoodData {
 
         final RequestConfig.Builder requestConfig = RequestConfig.copy(RequestConfig.DEFAULT);
         requestConfig.setConnectTimeout(settings.getConnectionTimeout());
+        requestConfig.setConnectionRequestTimeout(settings.getConnectionRequestTimeout());
         requestConfig.setSocketTimeout(settings.getSocketTimeout());
 
         return HttpClientBuilder.create()
