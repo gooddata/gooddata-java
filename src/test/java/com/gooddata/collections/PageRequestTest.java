@@ -19,4 +19,13 @@ public class PageRequestTest {
         assertThat(pageUri, notNullValue());
         assertThat(pageUri.toString(), is("test_uri?offset=12&limit=10"));
     }
+
+    @Test
+    public void testGetPageUriWithStringOffset() throws Exception {
+        final PageRequest pageRequest = new PageRequest("17", 10);
+        final UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("test_uri");
+        final URI pageUri = pageRequest.getPageUri(uriBuilder);
+        assertThat(pageUri, notNullValue());
+        assertThat(pageUri.toString(), is("test_uri?offset=17&limit=10"));
+    }
 }
