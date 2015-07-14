@@ -11,16 +11,27 @@ import static com.gooddata.util.Validate.notNull;
  */
 public class PageRequest implements Page {
 
-    private final int offset;
+    private final String offset;
     private final int limit;
 
     /**
-     * Creates new page with provided values.
+     * Creates new page definition with provided values.
      *
-     * @param offset page offset
-     * @param limit  item count on a page
+     * @param offset page offset (position in the collection)
+     * @param limit  maximal number of returned elements (on a page)
      */
     public PageRequest(final int offset, final int limit) {
+        this.offset = String.valueOf(offset);
+        this.limit = limit;
+    }
+
+    /**
+     * Creates new page definition with provided values.
+     *
+     * @param offset page offset (position in the collection)
+     * @param limit  maximal number of returned elements (on a page)
+     */
+    public PageRequest(final String offset, final int limit) {
         this.offset = offset;
         this.limit = limit;
     }
