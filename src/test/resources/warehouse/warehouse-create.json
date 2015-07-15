@@ -2,6 +2,7 @@
     "instance": {
         "title": "New ADS",
         "authorizationToken": "Your-ADS-Token",
-        "description": "ADS Description"
+        "description": "ADS Description",
+        "environment": "TESTING"
     }
 }

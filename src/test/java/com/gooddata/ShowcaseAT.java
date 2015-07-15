@@ -31,6 +31,7 @@ import com.gooddata.md.report.Report;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.model.ModelDiff;
 import com.gooddata.model.ModelService;
+import com.gooddata.project.Environment;
 import com.gooddata.project.Project;
 import com.gooddata.project.ProjectFeatureFlag;
 import com.gooddata.project.ProjectService;
@@ -461,7 +462,9 @@ public class ShowcaseAT {
     @Test(groups = "warehouse", dependsOnMethods = "login")
     public void createWarehouse() throws Exception {
         final WarehouseService warehouseService = gd.getWarehouseService();
-        warehouse = warehouseService.createWarehouse(new Warehouse(title, warehouseToken)).get();
+        final Warehouse wh = new Warehouse(title, warehouseToken);
+        wh.setEnvironment(Environment.TESTING);
+        warehouse = warehouseService.createWarehouse(wh).get();
         String jdbc = warehouse.getJdbcConnectionString();
     }
 

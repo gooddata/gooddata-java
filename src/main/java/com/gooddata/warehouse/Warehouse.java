@@ -3,6 +3,7 @@ package com.gooddata.warehouse;
 import static com.gooddata.util.Validate.notNull;
 import static org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion.NON_NULL;
 
+import com.gooddata.project.Environment;
 import com.gooddata.util.ISODateTimeDeserializer;
 import com.gooddata.util.ISODateTimeSerializer;
 import org.codehaus.jackson.annotate.JsonCreator;
@@ -45,6 +46,7 @@ public class Warehouse {
     private String createdBy;
     private String updatedBy;
     private String status;
+    private String environment;
     private Map<String, String> links;
 
     private String warehouseHost;
@@ -66,13 +68,15 @@ public class Warehouse {
               @JsonProperty("created")  @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime created,
               @JsonProperty("updated")  @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime updated,
               @JsonProperty("createdBy") String createdBy, @JsonProperty("updatedBy") String updatedBy,
-              @JsonProperty("status") String status, @JsonProperty("links") Map<String, String> links) {
+              @JsonProperty("status") String status, @JsonProperty("environment") String environment,
+              @JsonProperty("links") Map<String, String> links) {
         this(title, authToken, description);
         this.created = created;
         this.updated = updated;
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.status = status;
+        this.environment = environment;
         this.links = links;
     }
 
@@ -124,6 +128,19 @@ public class Warehouse {
 
     void setWarehousePort(int warehousePort) {
         this.warehousePort = warehousePort;
+    }
+
+    public String getEnvironment() {
+        return environment;
+    }
+
+    public void setEnvironment(final String environment) {
+        this.environment = environment;
+    }
+
+    public void setEnvironment(final Environment environment) {
+        notNull(environment, "environment");
+        setEnvironment(environment.name());
     }
 
     /**

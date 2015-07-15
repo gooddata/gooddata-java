@@ -1,10 +1,10 @@
 package com.gooddata.warehouse;
 
-
 import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import com.gooddata.project.Environment;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -17,6 +17,7 @@ public class WarehouseTest {
     @Test
     public void testSerialization() throws Exception {
         final Warehouse warehouse = new Warehouse("New ADS", "Your-ADS-Token", "ADS Description");
+        warehouse.setEnvironment(Environment.TESTING);
         assertThat(warehouse, serializesToJson("/warehouse/warehouse-create.json"));
     }
 
@@ -28,6 +29,7 @@ public class WarehouseTest {
         assertThat(warehouse.getTitle(), is("Test"));
         assertThat(warehouse.getDescription(), is("Storage"));
         assertThat(warehouse.getAuthorizationToken(), is("{Token}"));
+        assertThat(warehouse.getEnvironment(), is("TESTING"));
         assertThat(warehouse.getCreatedBy(), is("/gdc/account/profile/createdBy"));
         assertThat(warehouse.getUpdatedBy(), is("/gdc/account/profile/updatedBy"));
         assertThat(warehouse.getCreated(), is(new DateTime(2014, 5, 5, 8, 27, 33, DateTimeZone.UTC)));
