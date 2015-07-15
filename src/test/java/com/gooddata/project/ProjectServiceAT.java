@@ -16,8 +16,8 @@ import java.util.Set;
 import static com.gooddata.project.ProjectEnvironment.TESTING;
 import static com.gooddata.project.ProjectIdMatcher.hasSameIdAs;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -111,7 +111,7 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
 
         final List<ProjectFeatureFlag> projectFeatureFlags = gd.getProjectService().listFeatureFlags(project);
 
-        assertThat(projectFeatureFlags, containsInAnyOrder(
+        assertThat(projectFeatureFlags, hasItems(
                 new ProjectFeatureFlag("mostRecentFeatureFlag", true),
                 new ProjectFeatureFlag(PROJECT_FEATURE_FLAG, true)));
     }
@@ -120,7 +120,7 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
     public void listAggregatedFeatureFlags() throws Exception {
         final List<FeatureFlag> flags = gd.getProjectService().listAggregatedFeatureFlags(project);
 
-        assertThat(flags, containsInAnyOrder(
+        assertThat(flags, hasItems(
                 new FeatureFlag("mostRecentFeatureFlag", true),
                 new FeatureFlag(PROJECT_FEATURE_FLAG, true)));
     }
