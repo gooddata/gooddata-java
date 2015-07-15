@@ -1,7 +1,5 @@
-package com.gooddata;
+package com.gooddata.project;
 
-import com.gooddata.project.Project;
-import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 

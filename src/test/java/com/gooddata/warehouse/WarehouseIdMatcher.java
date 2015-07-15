@@ -1,6 +1,5 @@
-package com.gooddata;
+package com.gooddata.warehouse;
 
-import com.gooddata.warehouse.Warehouse;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 

@@ -1,6 +1,5 @@
-package com.gooddata;
+package com.gooddata.dataload.processes;
 
-import com.gooddata.dataload.processes.DataloadProcess;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
