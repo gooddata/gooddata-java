@@ -8,6 +8,8 @@ import com.gooddata.AbstractGoodDataAT;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.hasItems;
 
 /**
@@ -18,9 +20,15 @@ public class FeatureFlagServiceAT extends AbstractGoodDataAT {
     private static final String PROJECT_FEATURE_FLAG = "testFeatureFlag";
 
     @Test(groups = "featureFlag", dependsOnGroups = "project")
+    public void createProjectFeatureFlag() throws Exception {
+        final ProjectFeatureFlag featureFlag = gd.getFeatureFlagService()
+                .createProjectFeatureFlag(project, new ProjectFeatureFlag(PROJECT_FEATURE_FLAG));
+        checkProjectFeatureFlag(featureFlag, true);
+    }
+
+    @Test(groups = "featureFlag", dependsOnMethods = "createProjectFeatureFlag")
     public void listProjectFeatureFlags() throws Exception {
-        gd.getProjectService().createFeatureFlag(project,
-                new com.gooddata.project.ProjectFeatureFlag("mostRecentFeatureFlag"));
+        gd.getFeatureFlagService().createProjectFeatureFlag(project, new ProjectFeatureFlag("mostRecentFeatureFlag"));
 
         final ProjectFeatureFlags flags = gd.getFeatureFlagService().listProjectFeatureFlags(project);
 
@@ -36,6 +44,12 @@ public class FeatureFlagServiceAT extends AbstractGoodDataAT {
         assertThat(flags, hasItems(
                 new com.gooddata.featureflag.FeatureFlag("mostRecentFeatureFlag", true),
                 new com.gooddata.featureflag.FeatureFlag(PROJECT_FEATURE_FLAG, true)));
+    }
+
+    private void checkProjectFeatureFlag(ProjectFeatureFlag featureFlag, boolean expectedValue) {
+        assertThat(featureFlag, is(notNullValue()));
+        assertThat(featureFlag.getName(), is(PROJECT_FEATURE_FLAG));
+        assertThat(featureFlag.isEnabled(), is(expectedValue));
     }
 
 }

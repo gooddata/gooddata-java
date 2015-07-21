@@ -17,16 +17,21 @@ import java.net.URI;
 import static java.util.Collections.singleton;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 public class FeatureFlagServiceTest {
 
     private static final String PROJECT_ID = "11";
+    private static final String FLAG_NAME = "flag1";
     private static final String FEATURE_FLAGS_URI = "/gdc/internal/projects/11/featureFlags";
     private static final String PROJECT_FEATURE_FLAGS_URI = "/gdc/projects/11/projectFeatureFlags";
+    private static final String PROJECT_FEATURE_FLAG_URI = "/gdc/projects/11/projectFeatureFlags/" + FLAG_NAME;
 
     @Mock
     private Project project;
+    @Mock
+    private ProjectFeatureFlag projectFeatureFlag;
     @Mock
     private ProjectFeatureFlags projectFeatureFlags;
     @Mock
@@ -63,7 +68,7 @@ public class FeatureFlagServiceTest {
 
     @Test
     public void testGetFeatureFlags() throws Exception {
-        final FeatureFlag flag1 = new FeatureFlag("flag1", true);
+        final FeatureFlag flag1 = new FeatureFlag(FLAG_NAME, true);
         when(restTemplate.getForObject(new URI(FEATURE_FLAGS_URI), FeatureFlags.class)).thenReturn(featureFlags);
         when(featureFlags.iterator()).thenReturn(singleton(flag1).iterator());
 
@@ -92,7 +97,7 @@ public class FeatureFlagServiceTest {
 
     @Test
     public void testGetProjectFeatureFlags() throws Exception {
-        final ProjectFeatureFlag flag1 = new ProjectFeatureFlag("flag1", true);
+        final ProjectFeatureFlag flag1 = new ProjectFeatureFlag(FLAG_NAME, true);
         when(restTemplate.getForObject(new URI(PROJECT_FEATURE_FLAGS_URI), ProjectFeatureFlags.class))
                 .thenReturn(projectFeatureFlags);
         when(projectFeatureFlags.iterator()).thenReturn(singleton(flag1).iterator());
@@ -100,6 +105,41 @@ public class FeatureFlagServiceTest {
         final ProjectFeatureFlags flags = service.listProjectFeatureFlags(project);
 
         assertThat(flags, contains(flag1));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void whenNullKeyThenCreateProjectFeatureFlagShouldThrow() throws Exception {
+        service.createProjectFeatureFlag(project, null);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void whenNullProjectThenCreateProjectFeatureFlagShouldThrow() throws Exception {
+        service.createProjectFeatureFlag(null, projectFeatureFlag);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void whenEmptyResponseThenCreateProjectFeatureFlagShouldThrow() throws Exception {
+        when(restTemplate.postForLocation(PROJECT_FEATURE_FLAG_URI, projectFeatureFlag)).thenReturn(null);
+        service.createProjectFeatureFlag(project, projectFeatureFlag);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void whenClientErrorResponseThenCreateProjectFeatureFlagShouldThrow() throws Exception {
+        when(restTemplate.postForLocation(PROJECT_FEATURE_FLAG_URI, projectFeatureFlag))
+                .thenThrow(new RestClientException(""));
+        service.createProjectFeatureFlag(project, projectFeatureFlag);
+    }
+
+    @Test
+    public void testCreateProjectFeatureFlag() throws Exception {
+        final ProjectFeatureFlag flag = new ProjectFeatureFlag(FLAG_NAME, true);
+        when(restTemplate.postForLocation(PROJECT_FEATURE_FLAGS_URI, flag))
+                .thenReturn(new URI(PROJECT_FEATURE_FLAG_URI));
+        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class)).thenReturn(flag);
+
+        final ProjectFeatureFlag result = service.createProjectFeatureFlag(project, flag);
+
+        assertThat(result, is(flag));
     }
 
 }

@@ -411,7 +411,9 @@ public class ProjectService extends AbstractService {
      * @param project project for which the feature flag should be created, cannot be null
      * @param featureFlag feature flag to be created, cannot be null
      * @return created feature flag
+     * @deprecated use {@link FeatureFlagService#createProjectFeatureFlag(Project, com.gooddata.featureflag.ProjectFeatureFlag)}
      */
+    @Deprecated
     @SuppressWarnings("deprecation")
     public ProjectFeatureFlag createFeatureFlag(final Project project, final ProjectFeatureFlag featureFlag) {
         notNull(project, "project");

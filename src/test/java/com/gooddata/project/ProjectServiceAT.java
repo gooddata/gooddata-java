@@ -86,13 +86,6 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
         assertThat(results.getResults(), is(notNullValue()));
     }
 
-    @Test(groups = "project", dependsOnMethods = "createProject")
-    public void createProjectFeatureFlag() throws Exception {
-        final ProjectFeatureFlag featureFlag =
-                gd.getProjectService().createFeatureFlag(project, new ProjectFeatureFlag(PROJECT_FEATURE_FLAG));
-        checkFeatureFlag(featureFlag, true);
-    }
-
     @Test(groups = "project", dependsOnMethods = "createProjectFeatureFlag")
     public void getProjectFeatureFlag() throws Exception {
         final ProjectFeatureFlag featureFlag =
