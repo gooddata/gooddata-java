@@ -6,6 +6,7 @@ package com.gooddata;
 import com.gooddata.account.AccountService;
 import com.gooddata.connector.ConnectorService;
 import com.gooddata.dataload.processes.ProcessService;
+import com.gooddata.util.ResponseErrorHandler;
 import com.gooddata.warehouse.WarehouseService;
 import com.gooddata.dataset.DatasetService;
 import com.gooddata.gdc.DataStoreService;
