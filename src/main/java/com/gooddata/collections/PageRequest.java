@@ -21,8 +21,7 @@ public class PageRequest implements Page {
      * @param limit  maximal number of returned elements (on a page)
      */
     public PageRequest(final int offset, final int limit) {
-        this.offset = String.valueOf(offset);
-        this.limit = limit;
+        this(String.valueOf(offset), limit);
     }
 
     /**
@@ -36,11 +35,40 @@ public class PageRequest implements Page {
         this.limit = limit;
     }
 
+    /**
+     * Creates new page definition with limit and no offset (usually for the first page)
+     * @param limit maximal number of returned elements (on a page)
+     */
+    public PageRequest(final int limit) {
+        this(null, limit);
+    }
+
     @Override
     public URI getPageUri(final UriComponentsBuilder uriBuilder) {
-        return notNull(uriBuilder, "uriBuilder")
-                .queryParam("offset", offset)
-                .queryParam("limit", limit)
-                .build().toUri();
+        notNull(uriBuilder, "uriBuilder");
+        if (offset != null) {
+            uriBuilder.queryParam("offset", offset);
+        }
+        uriBuilder.queryParam("limit", limit);
+        return uriBuilder.build().toUri();
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final PageRequest that = (PageRequest) o;
+
+        if (limit != that.limit) return false;
+        return !(offset != null ? !offset.equals(that.offset) : that.offset != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = offset != null ? offset.hashCode() : 0;
+        result = 31 * result + limit;
+        return result;
     }
 }

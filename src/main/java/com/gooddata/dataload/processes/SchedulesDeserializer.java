@@ -4,6 +4,7 @@ import com.gooddata.collections.PageableListDeserializer;
 import com.gooddata.collections.Paging;
 
 import java.util.List;
+import java.util.Map;
 
 class SchedulesDeserializer extends PageableListDeserializer<Schedules, Schedule> {
 
@@ -12,7 +13,7 @@ class SchedulesDeserializer extends PageableListDeserializer<Schedules, Schedule
     }
 
     @Override
-    protected Schedules createList(final List<Schedule> items, final Paging paging) {
+    protected Schedules createList(final List<Schedule> items, final Paging paging, final Map<String, String> links) {
         return new Schedules(items, paging);
     }
 }
