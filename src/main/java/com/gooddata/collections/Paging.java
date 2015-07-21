@@ -11,7 +11,7 @@ import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
- * Description of the current collection page. Deserialization only.
+ * Description of the current collection page.
  */
 @JsonTypeInfo(include = As.WRAPPER_OBJECT, use = Id.NONE)
 @JsonTypeName("paging")
@@ -19,28 +19,36 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Paging {
 
-    private final int offset;
-    private final int count;
+    private final String offset;
     private final UriPage next;
 
     @JsonCreator
-    public Paging(@JsonProperty("offset") final int offset,
-                  @JsonProperty("count") final int count,
-                  @JsonProperty("next") final String next) {
+    public Paging(@JsonProperty("offset") final String offset, @JsonProperty("next") final String next) {
         this.offset = offset;
-        this.count = count;
         this.next = next == null ? null : new UriPage(next);
     }
 
-    public int getOffset() {
+    @Deprecated
+    public Paging(final int offset, final int count, final String next) {
+        this(Integer.toString(offset), next);
+    }
+
+    public Paging(final String next) {
+        this(null, next);
+    }
+
+    @JsonIgnore
+    public String getOffset() {
         return offset;
     }
 
-    public int getCount() {
-        return count;
-    }
-
+    @JsonIgnore
     public UriPage getNext() {
         return next;
+    }
+
+    @JsonProperty("next")
+    public String getNextUri() {
+        return next == null ? null : next.getPageUri(null).toString();
     }
 }

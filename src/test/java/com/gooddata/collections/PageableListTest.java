@@ -31,7 +31,7 @@ public class PageableListTest {
 
     @Test
     public void testCollectionWithPaging() {
-        final PageableList<Integer> collection = new PageableList<>(Arrays.asList(1, 2, 3), new Paging(1, 2, "next"));
+        final PageableList<Integer> collection = new PageableList<>(Arrays.asList(1, 2, 3), new Paging("1", "next"));
         assertThat(collection, notNullValue());
         assertThat(collection, hasSize(3));
         assertThat(collection.getNextPage(), notNullValue());

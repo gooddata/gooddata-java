@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import static com.gooddata.util.Validate.notNull;
 
@@ -15,8 +16,13 @@ import static com.gooddata.util.Validate.notNull;
  */
 public class PageableList<E> implements List<E> {
 
+    static final String ITEMS_NODE = "items";
+    static final String LINKS_NODE = "links";
+    static final String PAGING_NODE = "paging";
+
     private final List<E> items;
     private final Paging paging;
+    private final Map<String, String> links;
 
     /**
      * Creates empty list with no next page.
@@ -29,11 +35,23 @@ public class PageableList<E> implements List<E> {
      * Creates list wrapping provided items and next page.
      *
      * @param items  to be wrapped
-     * @param paging page description
+     * @param paging page description, might be <code>null</code>
      */
     public PageableList(final List<E> items, final Paging paging) {
+        this(items, paging, null);
+    }
+
+    /**
+     * Creates list wrapping provided items, next page and links.
+     *
+     * @param items  to be wrapped
+     * @param paging page description, might be <code>null</code>
+     * @param links links, might be <code>null</code>
+     */
+    public PageableList(final List<E> items, final Paging paging, final Map<String, String> links) {
         this.items = notNull(items, "items");
         this.paging = paging;
+        this.links = links;
     }
 
     /**
@@ -43,6 +61,32 @@ public class PageableList<E> implements List<E> {
      */
     public Page getNextPage() {
         return paging == null ? null : paging.getNext();
+    }
+
+    /**
+     * Signals whether there are more subsequent pages or the last page has been reached
+     * @return true if there are more results to come
+     */
+    public boolean hasNextPage() {
+        return getNextPage() != null;
+    }
+
+    /**
+     * Returns map of links.
+     *
+     * @return map of links, might be <code>null</code>
+     */
+    public Map<String, String> getLinks() {
+        return links;
+    }
+
+    /**
+     * Returns description of the current collection page.
+     *
+     * @return current collection page, might be <code>null</code>
+     */
+    public Paging getPaging() {
+        return paging;
     }
 
     @Override

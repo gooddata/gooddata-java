@@ -5,6 +5,7 @@ import com.gooddata.collections.Paging;
 import com.gooddata.dataload.processes.Schedule;
 
 import java.util.List;
+import java.util.Map;
 
 class UsersDeserializer extends PageableListDeserializer<Users, User> {
 
@@ -13,7 +14,7 @@ class UsersDeserializer extends PageableListDeserializer<Users, User> {
     }
 
     @Override
-    protected Users createList(final List<User> items, final Paging paging) {
+    protected Users createList(final List<User> items, final Paging paging, final Map<String, String> links) {
         return new Users(items, paging);
     }
 }
