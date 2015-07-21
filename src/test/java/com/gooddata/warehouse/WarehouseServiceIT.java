@@ -2,14 +2,13 @@ package com.gooddata.warehouse;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
-import com.gooddata.util.ResourceUtils;
+import com.gooddata.collections.PageableList;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import static com.gooddata.util.ResourceUtils.readFromResource;
 import static net.jadler.Jadler.onRequest;
@@ -97,7 +96,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withBody(readFromResource("/warehouse/warehouses.json"))
                 .withStatus(200);
 
-        final Collection<Warehouse> list = gd.getWarehouseService().listWarehouses();
+        final PageableList<Warehouse> list = gd.getWarehouseService().listWarehouses();
         assertThat(list, notNullValue());
         assertThat(list, hasSize(2));
     }
