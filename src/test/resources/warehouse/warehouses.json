@@ -35,6 +35,7 @@
                 }
             }
         } ],
+        "paging" : {},
         "links" : {
             "parent" : "/gdc/datawarehouse",
             "self" : "/gdc/datawarehouse/instances"

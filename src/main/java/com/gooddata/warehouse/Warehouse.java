@@ -63,7 +63,7 @@ public class Warehouse {
     }
 
     @JsonCreator
-    Warehouse(@JsonProperty("title") String title, @JsonProperty("authorizationToken") String authToken,
+    public Warehouse(@JsonProperty("title") String title, @JsonProperty("authorizationToken") String authToken,
               @JsonProperty("description") String description,
               @JsonProperty("created")  @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime created,
               @JsonProperty("updated")  @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime updated,
@@ -141,6 +141,10 @@ public class Warehouse {
     public void setEnvironment(final Environment environment) {
         notNull(environment, "environment");
         setEnvironment(environment.name());
+    }
+
+    public Map<String, String> getLinks() {
+        return links;
     }
 
     /**

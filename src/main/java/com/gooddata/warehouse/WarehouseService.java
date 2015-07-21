@@ -3,20 +3,22 @@ package com.gooddata.warehouse;
 import com.gooddata.AbstractPollHandler;
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
-import com.gooddata.PollResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.PollResult;
+import com.gooddata.collections.Page;
+import com.gooddata.collections.PageableList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.net.URI;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
-import static java.util.Collections.emptyList;
 
 /**
  * Provide access to warehouse API - create, update, list and delete warehouses.
@@ -143,16 +145,32 @@ public class WarehouseService extends AbstractService {
 
     /**
      * Lists Warehouses. Returns empty list in case there are no warehouses.
+     * Returns only first page if there's more instances than page limit. Use {@link #listWarehouses(Page)} to get other pages.
      *
-     * @return collection of instances or empty list
+     * @return first page of list of warehouse instances or empty list
      */
-    public Collection<Warehouse> listWarehouses() {
+    public PageableList<Warehouse> listWarehouses() {
+        return listWarehouses(URI.create(Warehouses.URI));
+    }
+
+    /**
+     * Lists Warehouses. Returns empty list in case there are no warehouses.
+     * Returns requested page (by page limit and offset). Use {@link #listWarehouses()} to get first page with default setting.
+     *
+     * @return requested page of list of instances or empty list
+     */
+    public PageableList<Warehouse> listWarehouses(Page page) {
+        notNull(page, "page");
+        return listWarehouses(page.getPageUri(UriComponentsBuilder.fromUriString(Warehouses.URI)));
+    }
+
+    private PageableList<Warehouse> listWarehouses(final URI uri) {
         try {
-            final Warehouses result = restTemplate.getForObject(Warehouses.URI, Warehouses.class);
-            if (result == null || result.getItems() == null) {
-                return emptyList();
+            final Warehouses result = restTemplate.getForObject(uri, Warehouses.class);
+            if (result == null) {
+                return new PageableList<>();
             }
-            return setWarehouseConnection(result.getItems());
+            return setWarehouseConnection(result);
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to list Warehouses", e);
         }
@@ -183,7 +201,7 @@ public class WarehouseService extends AbstractService {
         return warehouse;
     }
 
-    private Collection<Warehouse> setWarehouseConnection(Collection<Warehouse> warehouses) {
+    private PageableList<Warehouse> setWarehouseConnection(PageableList<Warehouse> warehouses) {
         notNull(warehouses, "warehouses");
         for (Warehouse warehouse : warehouses) {
             setWarehouseConnection(warehouse);

@@ -19,6 +19,10 @@ public class ResourceUtils {
 
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
+    public static <T> T readObjectFromResource(String resourcePath, Class<T> objectClass) {
+        return readObjectFromResource(ResourceUtils.class, resourcePath, objectClass);
+    }
+
     public static <T> T readObjectFromResource(Class testClass, String resourcePath, Class<T> objectClass) {
         notNull(objectClass, "objectClass");
 
