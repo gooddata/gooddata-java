@@ -1,0 +1,31 @@
+{
+    "users": {
+        "items": [
+            {
+                "user": {
+                    "role": "admin",
+                    "profile": "/gdc/account/profile/{profile-id}",
+                    "links": {
+                        "self": "/gdc/datawarehouse/instances/{instance-id}/users/{profile-id}",
+                        "parent": "/gdc/datawarehouse/instances/{instance-id}/users"
+                    }
+                }
+            },
+            {
+                "user": {
+                    "role": "dataAdmin",
+                    "profile": "/gdc/account/profile/{profile-id-2}",
+                    "links": {
+                        "self": "/gdc/datawarehouse/instances/{instance-id}/users/{profile-id-2}",
+                        "parent": "/gdc/datawarehouse/instances/{instance-id}/users"
+                    }
+                }
+            }
+        ],
+        "paging": {},
+        "links": {
+            "parent": "/gdc/datawarehouse/{instance-id}",
+            "self": "/gdc/datawarehouse/instances/{instance-id}/users"
+        }
+    }
+}
