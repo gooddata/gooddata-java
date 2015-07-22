@@ -14,6 +14,8 @@ import static com.gooddata.warehouse.WarehouseIdMatcher.hasSameIdAs;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
 /**
@@ -73,6 +75,14 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         while ((nextPage = page.getNextPage()) != null) {
             page = service.listWarehouses(nextPage);
         }
+    }
+
+    @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
+    public void shouldListUsers() throws Exception {
+        final PageableList<WarehouseUser> users = service.listWarehouseUsers(warehouse, new PageRequest(1));
+        assertThat(users, hasSize(1));
+        assertThat(users.get(0), is(notNullValue()));
+        assertThat(users.getNextPage(), is(nullValue()));
     }
 
     @Test(dependsOnGroups = "warehouse")

@@ -176,6 +176,18 @@ public class WarehouseService extends AbstractService {
         }
     }
 
+    public PageableList<WarehouseUser> listWarehouseUsers(final Warehouse warehouse, final Page page) {
+        notNull(warehouse, "warehouse");
+        notNull(warehouse.getId(), "warehouse.id");
+        notNull(page, "page");
+        try {
+            final WarehouseUsers result = restTemplate.getForObject(WarehouseUsers.URI, WarehouseUsers.class, warehouse.getId());
+            return result != null ? result : new PageableList<WarehouseUser>();
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to list users of warehouse " + warehouse.getId(), e);
+        }
+    }
+
     /**
      * Updates given Warehouse.
      *
