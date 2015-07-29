@@ -1,8 +1,9 @@
 /*
  * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
  */
-package com.gooddata;
+package com.gooddata.util;
 
+import com.gooddata.GoodDataRestException;
 import com.gooddata.gdc.GdcError;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -19,11 +20,11 @@ import static com.gooddata.util.Validate.noNullElements;
 /**
  * A response error handler able to extract GoodData error response
  */
-class ResponseErrorHandler extends DefaultResponseErrorHandler {
+public class ResponseErrorHandler extends DefaultResponseErrorHandler {
 
     private HttpMessageConverterExtractor<GdcError> gdcErrorExtractor;
 
-    ResponseErrorHandler(List<HttpMessageConverter<?>> messageConverters) {
+    public ResponseErrorHandler(List<HttpMessageConverter<?>> messageConverters) {
         gdcErrorExtractor = new HttpMessageConverterExtractor<>(GdcError.class,
                 noNullElements(messageConverters, "messageConverters"));
     }
