@@ -4,14 +4,13 @@ import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
 import com.gooddata.gdc.TaskStatus;
 import com.gooddata.project.Project;
-import com.gooddata.util.ResourceUtils;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 
 import static com.gooddata.util.ResourceUtils.readFromResource;
@@ -227,11 +226,29 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(STATUS_URI)
                 .respond()
-                .withStatus(202)
+                .withStatus(200) // REST API returns HTTP 200 when task is in RUNNING state :(
                 .withBody(MAPPER.writeValueAsString(new TaskState("RUNNING", STATUS_URI)))
                 .thenRespond()
                 .withStatus(200)
                 .withBody(MAPPER.writeValueAsString(new TaskState("OK", STATUS_URI)))
+        ;
+
+        gd.getDatasetService().updateProjectData(project, DML_MAQL).get();
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void shouldFailUpdateProjectDataServerError() throws IOException {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/dml/manage")
+                .respond()
+                .withStatus(202)
+                .withBody("{\"uri\" : \"" + STATUS_URI + "\"}");
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(STATUS_URI)
+                .respond()
+                .withStatus(500)
         ;
 
         gd.getDatasetService().updateProjectData(project, DML_MAQL).get();
