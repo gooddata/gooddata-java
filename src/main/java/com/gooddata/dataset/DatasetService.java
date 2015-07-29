@@ -347,12 +347,11 @@ public class DatasetService extends AbstractService {
 
             @Override
             public boolean isFinished(final ClientHttpResponse response) throws IOException {
-                if (!super.isFinished(response)) {
-                    return false;
-                }
                 final TaskState taskState = extractData(response, TaskState.class);
                 if (taskState.isSuccess()) {
                     return true;
+                } else if (!taskState.isFinished()) {
+                    return false;
                 }
                 throw new GoodDataException(errorMessage + ": " + taskState.getMessage());
             }
