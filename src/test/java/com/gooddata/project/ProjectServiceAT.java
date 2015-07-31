@@ -37,13 +37,6 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
         projectToken = getProperty("projectToken");
     }
 
-    @AfterClass
-    public void tearDown() throws Exception {
-        if (gd != null && project != null) {
-            gd.getProjectService().removeProject(project);
-        }
-    }
-
     @Test(groups = "project", dependsOnGroups = "account")
     public void createProject() throws Exception {
         final Project p = new Project(title, projectToken);
