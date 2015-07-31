@@ -14,23 +14,20 @@ import org.testng.annotations.AfterSuite;
  */
 public abstract class AbstractGoodDataAT {
 
-    protected final String title;
-    protected final GoodData gd;
+    protected static final String title =
+            "sdktest " + new LocalDate() + " " + System.getenv("BUILD_NUMBER");
 
-    protected Project project;
+    protected static final GoodData gd =
+            new GoodData(getProperty("host"), getProperty("login"), getProperty("pass"));
 
-    protected String fact;
-    protected Attribute attr;
-    protected Metric metric;
-    protected Report report;
-    protected ReportDefinition reportDefinition;
-    protected ScheduledMail scheduledMail;
+    protected static Project project;
 
-
-    public AbstractGoodDataAT() {
-        title = "sdktest " + new LocalDate() + " " + System.getenv("BUILD_NUMBER");
-        gd = new GoodData(getProperty("host"), getProperty("login"), getProperty("pass"));
-    }
+    protected static String fact;
+    protected static Attribute attr;
+    protected static Metric metric;
+    protected static Report report;
+    protected static ReportDefinition reportDefinition;
+    protected static ScheduledMail scheduledMail;
 
     public static String getProperty(String name) {
         final String value = System.getenv(name);
@@ -42,10 +39,12 @@ public abstract class AbstractGoodDataAT {
     }
 
     @AfterSuite
-    public void logout() throws Exception {
+    public static void removeProjectAndLogout() {
         if (gd != null) {
+            if (project != null) {
+                gd.getProjectService().removeProject(project);
+            }
             gd.logout();
         }
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
     }
 }
