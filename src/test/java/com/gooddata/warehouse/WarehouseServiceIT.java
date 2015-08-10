@@ -2,9 +2,11 @@ package com.gooddata.warehouse;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
+import com.gooddata.collections.PageRequest;
 import com.gooddata.collections.PageableList;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -171,5 +173,18 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                     }
                 })
                 .receivedOnce();
+    }
+
+    @Test
+    public void shouldPageUsersList() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/datawarehouse/instances/instanceId/users")
+                .havingParameterEqualTo("limit", "2")
+            .respond()
+                .withBody(readFromResource("/warehouse/users.json"));
+
+        final PageableList<WarehouseUser> users = gd.getWarehouseService().listWarehouseUsers(warehouse, new PageRequest(2));
+        assertThat(users, Matchers.hasSize(2));
     }
 }
