@@ -19,6 +19,7 @@ public class DisplayFormTest {
     public static final String FORM_OF = "/gdc/md/PROJECT_ID/obj/DF_FORM_OF_ID";
     public static final String EXPRESSION = "[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]";
     public static final String LDM_EXPRESSION = "";
+    private static final String ELEMENTS_LINK = "/gdc/md/PROJECT_ID/obj/DF_ID/elements";
 
     @Test
     public void shouldDeserialize() throws Exception {
@@ -30,12 +31,13 @@ public class DisplayFormTest {
         assertThat(displayForm.getExpression(), is(EXPRESSION));
         assertThat(displayForm.getLdmExpression(), is(LDM_EXPRESSION));
         assertThat(displayForm.getType(), is(nullValue()));
+        assertThat(displayForm.getElementsLink(), is(ELEMENTS_LINK));
     }
 
     @Test
     public void testSerialization() throws Exception {
         final DisplayForm displayForm = new DisplayForm(new Meta("Person Name"),
-                new DisplayForm.Content(FORM_OF, EXPRESSION,  LDM_EXPRESSION, null));
+                new DisplayForm.Content(FORM_OF, EXPRESSION,  LDM_EXPRESSION, null), new DisplayForm.Links(ELEMENTS_LINK));
 
         assertThat(displayForm, serializesToJson("/md/displayForm-input.json"));
     }

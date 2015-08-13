@@ -7,6 +7,7 @@ import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
+import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -339,5 +341,23 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         assertThat(result, is(notNullValue()));
         assertThat(result, hasSize(2));
         assertThat(result, contains("/gdc/md/PROJ_ID/obj/127", "/gdc/md/PROJ_ID/obj/118"));
+    }
+
+    @Test
+    public void shouldGetAttributeElements() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/obj/DF_ID/elements")
+            .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/md/attributeElements.json"));
+
+        final List<AttributeElement> attributeElements =
+                gd.getMetadataService().getAttributeElements(
+                        readObjectFromResource("/md/attribute.json", Attribute.class));
+
+        assertThat(attributeElements, is(Matchers.notNullValue()));
+        assertThat(attributeElements, hasSize(3));
+        assertThat(attributeElements.get(0).getTitle(), is("1167"));
     }
 }

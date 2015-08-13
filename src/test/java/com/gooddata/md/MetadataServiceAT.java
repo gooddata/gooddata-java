@@ -1,5 +1,13 @@
 package com.gooddata.md;
 
+import static com.gooddata.md.Restriction.identifier;
+import static com.gooddata.report.ReportExportFormat.PDF;
+import static com.gooddata.report.ReportExportFormat.XLS;
+import static java.util.Arrays.asList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.testng.AssertJUnit.assertTrue;
+
 import com.gooddata.AbstractGoodDataAT;
 import com.gooddata.md.report.AttributeInGrid;
 import com.gooddata.md.report.Filter;
@@ -11,19 +19,11 @@ import org.testng.annotations.Test;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-
-import static com.gooddata.md.Restriction.identifier;
-import static com.gooddata.report.ReportExportFormat.PDF;
-import static com.gooddata.report.ReportExportFormat.XLS;
-import static java.util.Arrays.asList;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.testng.AssertJUnit.assertTrue;
+import java.util.Set;
 
 /**
  * Metadata acceptance tests.
@@ -160,4 +160,14 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         metadataService.removeObj(reportDefinition);
     }
 
+    @Test(groups = "mdAfterLoad", dependsOnGroups = {"model", "dataset"}, dependsOnMethods = "getObjs")
+    public void getAttributeElements() throws Exception {
+        final List<AttributeElement> elements = gd.getMetadataService().getAttributeElements(attr);
+        assertThat("there should be 2 elements", elements, hasSize(2));
+        final Set<String> titles = new HashSet<>(elements.size());
+        for (AttributeElement element : elements) {
+            titles.add(element.getTitle());
+        }
+        assertThat(titles, hasItems("DevOps", "HR"));
+    }
 }
