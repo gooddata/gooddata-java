@@ -164,16 +164,17 @@ public class GoodData {
         notEmpty(login, "login");
         notEmpty(password, "password");
         notEmpty(protocol, "protocol");
-        final HttpClientBuilder httpClientBuilder = createHttpClientBuilder(settings);
+        final HttpClient httpClient = createHttpClient(login, password, hostname, port, protocol,
+                createHttpClientBuilder(settings));
 
-        restTemplate = createRestTemplate(login, password, hostname, httpClientBuilder, port, protocol);
+        restTemplate = createRestTemplate(hostname, httpClient, port, protocol);
 
         accountService = new AccountService(getRestTemplate());
         projectService = new ProjectService(getRestTemplate(), accountService);
         metadataService = new MetadataService(getRestTemplate());
         modelService = new ModelService(getRestTemplate());
         gdcService = new GdcService(getRestTemplate());
-        dataStoreService = new DataStoreService(httpClientBuilder, gdcService, new HttpHost(hostname, port, protocol).toURI(), login, password);
+        dataStoreService = new DataStoreService(httpClient, gdcService, new HttpHost(hostname, port, protocol).toURI());
         datasetService = new DatasetService(getRestTemplate(), dataStoreService);
         reportService = new ReportService(getRestTemplate());
         processService = new ProcessService(getRestTemplate(), accountService, dataStoreService);
@@ -181,12 +182,10 @@ public class GoodData {
         connectorService = new ConnectorService(getRestTemplate(), projectService);
     }
 
-    private RestTemplate createRestTemplate(String login, String password, String hostname, HttpClientBuilder builder,
-                                            int port, String protocol) {
-        final HttpClient client = createHttpClient(login, password, hostname, port, protocol, builder);
+    private RestTemplate createRestTemplate(String hostname, HttpClient httpClient, int port, String protocol) {
 
         final UriPrefixingClientHttpRequestFactory factory = new UriPrefixingClientHttpRequestFactory(
-                new HttpComponentsClientHttpRequestFactory(client), hostname, port, protocol);
+                new HttpComponentsClientHttpRequestFactory(httpClient), hostname, port, protocol);
         final RestTemplate restTemplate = new RestTemplate(factory);
         restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(
                 new HeaderSettingRequestInterceptor(singletonMap("Accept", getAcceptHeaderValue()))));
