@@ -17,6 +17,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
@@ -25,6 +27,7 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -335,6 +338,35 @@ public class MetadataServiceTest {
 
         final Collection<String> results = service.findUris(project, Queryable.class, Restriction.summary(summary));
         assertThat(results, allOf(hasItem(uri1), hasItem(uri2)));
+    }
+
+    @Test
+    public void testGetAttributeElementsEmpty() throws Exception {
+        final DisplayForm attrDisplayForm = mock(AttributeDisplayForm.class);
+        when(attrDisplayForm.getElementsLink()).thenReturn("elementsLink");
+        final Attribute attr = mock(Attribute.class);
+        when(attr.getDefaultDisplayForm()).thenReturn(attrDisplayForm);
+
+        when(restTemplate.getForObject("elementsLink", AttributeElements.class))
+                .thenReturn(new AttributeElements(Collections.<AttributeElement>emptyList()));
+        final List<AttributeElement> elements = service.getAttributeElements(attr);
+        assertThat(elements, hasSize(0));
+    }
+
+    @Test
+    public void testGetAttributeElements() throws Exception {
+        final DisplayForm attrDisplayForm = mock(AttributeDisplayForm.class);
+        when(attrDisplayForm.getElementsLink()).thenReturn("elementsLink");
+        final Attribute attr = mock(Attribute.class);
+        when(attr.getDefaultDisplayForm()).thenReturn(attrDisplayForm);
+
+        final AttributeElement result1 = mock(AttributeElement.class);
+        final AttributeElement result2 = mock(AttributeElement.class);
+
+        when(restTemplate.getForObject("elementsLink", AttributeElements.class))
+                .thenReturn(new AttributeElements(asList(result1, result2)));
+        final List<AttributeElement> elements = service.getAttributeElements(attr);
+        assertThat(elements, allOf(hasItem(result1), hasItem(result2)));
     }
 
 }

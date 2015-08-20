@@ -24,14 +24,15 @@ public class AttributeDisplayForm extends DisplayForm implements Updatable {
     protected final Content content;
 
     @JsonCreator
-    private AttributeDisplayForm(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
-        super(meta, content);
+    private AttributeDisplayForm(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content,
+            @JsonProperty("links") Links links) {
+        super(meta, content, links);
         this.content = content;
     }
 
     /* Just for serialization test */
-    AttributeDisplayForm(String title, String formOf, String expression, boolean isDefault, String ldmExpression, String type) {
-        this(new Meta(title), new Content(formOf, expression, isDefault, ldmExpression, type));
+    AttributeDisplayForm(String title, String formOf, String expression, boolean isDefault, String ldmExpression, String type, String elements) {
+        this(new Meta(title), new Content(formOf, expression, isDefault, ldmExpression, type), new Links(elements));
     }
 
     @JsonIgnore

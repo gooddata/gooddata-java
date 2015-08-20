@@ -10,6 +10,7 @@ import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.gooddata.util.Validate.noNullElements;
 import static com.gooddata.util.Validate.notNull;
@@ -405,6 +407,40 @@ public class MetadataService extends AbstractService {
         }
 
         return Collections.unmodifiableMap(identifiersToUris);
+    }
+
+    /**
+     * Fetches attribute elements for given attribute using default display form.
+     *
+     * @param attribute attribute to fetch elements for
+     * @return attribute elements or empty set if there is no link for elements in default display form
+     */
+    public List<AttributeElement> getAttributeElements(Attribute attribute) {
+        notNull(attribute, "attribute");
+
+        return getAttributeElements(attribute.getDefaultDisplayForm());
+    }
+
+    /**
+     * Fetches attribute elements by given display form.
+     *
+     * @param displayForm display form to fetch attributes for
+     * @return attribute elements or empty set if there is no link for elements
+     */
+    public List<AttributeElement> getAttributeElements(DisplayForm displayForm) {
+        notNull(displayForm, "displayForm");
+
+        final String elementsLink = displayForm.getElementsLink();
+        if (StringUtils.isEmpty(elementsLink)) {
+            return Collections.emptyList();
+        }
+
+        try {
+            final AttributeElements attributeElements = restTemplate.getForObject(elementsLink, AttributeElements.class);
+            return attributeElements.getElements();
+        } catch (GoodDataRestException | RestClientException e) {
+            throw new GoodDataException("Unable to get attribute elements from " + elementsLink + ".", e);
+        }
     }
 
     private IdentifiersAndUris getUrisForIdentifiers(final Project project, final Collection<String> identifiers) {

@@ -4,10 +4,13 @@
      "expression" : "[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]",
      "ldmexpression" : ""
   },
+  "links" : {
+    "elements" : "/gdc/md/PROJECT_ID/obj/DF_ID/elements"
+  },
   "meta" : {
-     "title" : "Person Name",
-	  "deprecated" : "0",
-	  "locked": 0,
-	  "unlisted": 0
+    "title" : "Person Name",
+    "deprecated" : "0",
+    "locked": 0,
+    "unlisted": 0
   }
 }
