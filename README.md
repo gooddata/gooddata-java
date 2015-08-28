@@ -1,4 +1,4 @@
-# GoodData Java SDK [![Build Status](https://travis-ci.org/martiner/gooddata-java.png?branch=master)](https://travis-ci.org/martiner/gooddata-java)
+# GoodData Java SDK [![Build Status](https://travis-ci.org/martiner/gooddata-java.png?branch=master)](https://travis-ci.org/martiner/gooddata-java) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/cz.geek/gooddata-java/badge.svg)](https://maven-badges.herokuapp.com/maven-central/cz.geek/gooddata-java)
 
 The *GoodData Java SDK* encapsulates the REST API provided by the [GoodData](http://www.gooddata.com) platform.
 The first version was implemented during the [All Data Hackathon](http://hackathon.gooddata.com) April 10 - 11 2014
