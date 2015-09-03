@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class ZipUtilsTest {
+public class ZipHelperTest {
 
     private static final String SOME_FILE = "someFile.txt";
     private static final String SOME_FILE_PATH = Paths.get("a", "b", SOME_FILE).toString();
@@ -40,7 +40,7 @@ public class ZipUtilsTest {
         final File file = temporaryFolder.resolve(SOME_FILE).toFile();
         file.createNewFile();
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            ZipUtils.zip(file, output);
+            ZipHelper.zip(file, output);
             output.close();
             verifyZipContent(output, SOME_FILE);
         }
@@ -54,7 +54,7 @@ public class ZipUtilsTest {
         toZipFile.getParentFile().mkdirs();
         toZipFile.createNewFile();
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            ZipUtils.zip(toZipDir.toFile(), output, true);
+            ZipHelper.zip(toZipDir.toFile(), output, true);
             output.close();
             verifyZipContent(output, Paths.get("toZip", "a", "b", SOME_FILE).toString());
         }
@@ -68,7 +68,7 @@ public class ZipUtilsTest {
         toZipFile.getParentFile().mkdirs();
         toZipFile.createNewFile();
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            ZipUtils.zip(toZipDir.toFile(), output);
+            ZipHelper.zip(toZipDir.toFile(), output);
             output.close();
             verifyZipContent(output, Paths.get("a", "b", SOME_FILE).toString());
         }
@@ -81,13 +81,13 @@ public class ZipUtilsTest {
         file.createNewFile();
         final File zipped = temporaryFolder.resolve("zipped.zip").toFile();
         try (FileOutputStream zipStream = new FileOutputStream(zipped)) {
-            ZipUtils.zip(file, zipStream);
+            ZipHelper.zip(file, zipStream);
             zipStream.close();
         }
 
         // actual test
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            ZipUtils.zip(zipped, output);
+            ZipHelper.zip(zipped, output);
             output.close();
             verifyZipContent(output, SOME_FILE);
         }
