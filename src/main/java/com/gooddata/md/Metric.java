@@ -16,7 +16,6 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  */
 @JsonTypeName("metric")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Metric extends AbstractObj implements Queryable, Updatable {
 
@@ -43,7 +42,6 @@ public class Metric extends AbstractObj implements Queryable, Updatable {
         return content.getFormat();
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     private static class Content {
         private final String expression;
         private final String format;

@@ -5,7 +5,6 @@ package com.gooddata.md;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
@@ -20,7 +19,6 @@ import static java.util.Arrays.asList;
  */
 @JsonTypeName("fact")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Fact extends AbstractObj implements Queryable, Updatable {
 
@@ -44,7 +42,6 @@ public class Fact extends AbstractObj implements Queryable, Updatable {
         return content.getExpression();
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     private static class Content {
 
         @JsonProperty("expr")

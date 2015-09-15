@@ -5,7 +5,6 @@ package com.gooddata.md;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
@@ -19,7 +18,6 @@ import java.util.Collections;
  */
 @JsonTypeName("dimension")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Dimension extends AbstractObj implements Queryable, Updatable {
 
@@ -42,7 +40,6 @@ public class Dimension extends AbstractObj implements Queryable, Updatable {
         return content.getAttributes();
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     private static class Content {
 
         @JsonProperty("attributes")
