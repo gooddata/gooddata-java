@@ -1,6 +1,7 @@
 package com.gooddata.util;
 
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.testng.annotations.Test;
 
@@ -31,5 +32,10 @@ public class BooleanIntegerDeserializerTest {
 
         final BooleanIntegerClass moo = MAPPER.readValue(json, BooleanIntegerClass.class);
         assertThat(moo.isFoo(), is(false));
+    }
+
+    @Test(expectedExceptions = JsonMappingException.class)
+    public void shouldThrowOnDeserializingString() throws Exception {
+        MAPPER.readValue("{\"foo\":\"1\"}", BooleanIntegerClass.class);
     }
 }

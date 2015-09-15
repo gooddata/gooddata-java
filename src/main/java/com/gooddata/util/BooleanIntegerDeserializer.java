@@ -1,9 +1,12 @@
 package com.gooddata.util;
 
+import static com.gooddata.util.Validate.notNull;
+
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.DeserializationContext;
 import org.codehaus.jackson.map.JsonDeserializer;
+import org.codehaus.jackson.map.JsonMappingException;
 
 import java.io.IOException;
 
@@ -17,7 +20,12 @@ public class BooleanIntegerDeserializer extends JsonDeserializer<Boolean> {
     @Override
     public Boolean deserialize(JsonParser jp, DeserializationContext ctx) throws IOException {
         final JsonNode root = jp.readValueAsTree();
-        return root != null && ONE.equals(root.getNumberValue());
+        notNull(root, "jsonNode");
+        if (root.isInt()) {
+            return ONE.equals(root.getNumberValue());
+        } else {
+            throw new JsonMappingException("Expected int value: " + root.asText(), jp.getCurrentLocation());
+        }
     }
 
 }
