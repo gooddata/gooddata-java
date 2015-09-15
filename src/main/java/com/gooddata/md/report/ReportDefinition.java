@@ -14,6 +14,8 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.util.Map;
+
 /**
  * Report definition
  */
@@ -22,19 +24,29 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ReportDefinition extends AbstractObj implements Queryable, Updatable {
 
+    private static final String EXPLAIN_LINK = "explain2";
     @JsonProperty("content")
     private final ReportDefinitionContent content;
 
+    @JsonProperty("links")
+    private final Map<String, String> links;
+
     @JsonCreator
-    ReportDefinition(@JsonProperty("meta") Meta meta, @JsonProperty("content") ReportDefinitionContent content) {
+    ReportDefinition(@JsonProperty("meta") Meta meta, @JsonProperty("content") ReportDefinitionContent content, @JsonProperty("links") Map<String, String> links) {
         super(meta);
         this.content = content;
+        this.links = links;
+    }
+
+    ReportDefinition(Meta meta, ReportDefinitionContent content) {
+        this(meta, content, null);
     }
 
     /* Just for serialization test */
     ReportDefinition(String title, ReportDefinitionContent content) {
         super(new Meta(title));
         this.content = content;
+        this.links = null;
     }
 
     @JsonIgnore
@@ -45,6 +57,11 @@ public class ReportDefinition extends AbstractObj implements Queryable, Updatabl
     @JsonIgnore
     public Grid getGrid() {
         return content.getGrid();
+    }
+
+    @JsonIgnore
+    public String getExplainLink() {
+        return links != null ? links.get(EXPLAIN_LINK) : null;
     }
 
 }

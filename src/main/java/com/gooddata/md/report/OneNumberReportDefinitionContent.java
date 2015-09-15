@@ -50,7 +50,7 @@ public class OneNumberReportDefinitionContent extends ReportDefinitionContent {
         private final OneNumberLabels labels;
 
         @JsonCreator
-        private OneNumberVisualization(final OneNumberLabels labels) {
+        private OneNumberVisualization(@JsonProperty("labels") final OneNumberLabels labels) {
             this.labels = labels;
         }
 
