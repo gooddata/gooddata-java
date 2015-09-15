@@ -1,0 +1,17 @@
+{
+  "dataSet" : {
+    "content" : {
+      "ties": [],
+      "facts": [],
+      "dataLoadingColumns": [],
+      "attributes": [],
+      "hasUploadConfiguration": "0"
+    },
+    "meta" : {
+      "title" : "Dataset",
+      "deprecated" : "0",
+      "locked": 0,
+      "unlisted": 0
+    }
+  }
+}
