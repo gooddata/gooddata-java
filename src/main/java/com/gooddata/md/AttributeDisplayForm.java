@@ -1,10 +1,9 @@
 package com.gooddata.md;
 
-import com.gooddata.util.BooleanStringDeserializer;
-import com.gooddata.util.BooleanStringSerializer;
+import com.gooddata.util.BooleanIntegerDeserializer;
+import com.gooddata.util.BooleanIntegerSerializer;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
@@ -16,7 +15,6 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  */
 @JsonTypeName("attributeDisplayForm")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class AttributeDisplayForm extends DisplayForm implements Updatable {
 
@@ -40,14 +38,13 @@ public class AttributeDisplayForm extends DisplayForm implements Updatable {
         return content.isDefault();
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     private static class Content extends DisplayForm.Content {
 
         private final boolean isDefault;
 
         private Content(@JsonProperty("formOf") String formOf, @JsonProperty("expression") String expression,
-                @JsonProperty("default") @JsonDeserialize(using = BooleanStringDeserializer.class) boolean isDefault,
+                @JsonProperty("default") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean isDefault,
                 @JsonProperty("ldmexpression") String ldmExpression,
                 @JsonProperty("type") String type) {
             super(formOf, expression, ldmExpression, type);
@@ -55,7 +52,7 @@ public class AttributeDisplayForm extends DisplayForm implements Updatable {
         }
 
         @JsonProperty("default")
-        @JsonSerialize(using = BooleanStringSerializer.class)
+        @JsonSerialize(using = BooleanIntegerSerializer.class)
         public boolean isDefault() {
             return isDefault;
         }
