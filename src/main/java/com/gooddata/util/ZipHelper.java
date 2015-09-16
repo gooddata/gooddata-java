@@ -16,7 +16,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * Utility class for manipulating zip archives.
  */
-public abstract class ZipUtils {
+public abstract class ZipHelper {
 
     /**
      * This method compresses the input file to zip format. If the given file is a directory, it recursively

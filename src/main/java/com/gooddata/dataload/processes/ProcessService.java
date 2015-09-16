@@ -11,7 +11,7 @@ import com.gooddata.collections.Page;
 import com.gooddata.collections.PageableList;
 import com.gooddata.gdc.DataStoreService;
 import com.gooddata.project.Project;
-import com.gooddata.util.ZipUtils;
+import com.gooddata.util.ZipHelper;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -439,7 +439,7 @@ public class ProcessService extends AbstractService {
         File tempFile = createTempFile("process", ".zip");
 
         try (FileOutputStream output = new FileOutputStream(tempFile)) {
-            ZipUtils.zip(processData, output);
+            ZipHelper.zip(processData, output);
         } catch (IOException e) {
             throw new GoodDataException("Unable to zip process data", e);
         }
