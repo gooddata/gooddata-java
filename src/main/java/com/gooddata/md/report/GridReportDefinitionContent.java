@@ -5,7 +5,6 @@ package com.gooddata.md.report;
 
 import com.gooddata.md.Meta;
 import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -16,7 +15,6 @@ import java.util.List;
 /**
  * Grid report definition
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class GridReportDefinitionContent extends ReportDefinitionContent {
 

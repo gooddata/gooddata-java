@@ -42,4 +42,11 @@ public class AttributeDisplayFormTest {
         assertThat(attrDF, serializesToJson("/md/attributeDisplayForm-input.json"));
     }
 
+    @Test
+    public void shouldSerializeSameAsDeserializationInput() throws Exception {
+        final InputStream stream = getClass().getResourceAsStream("/md/attributeDisplayForm.json");
+        final AttributeDisplayForm attrDF = new ObjectMapper().readValue(stream, AttributeDisplayForm.class);
+        assertThat(attrDF, serializesToJson("/md/attributeDisplayForm-inputOrig.json"));
+    }
+
 }

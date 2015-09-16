@@ -4,7 +4,6 @@
 package com.gooddata.md.report;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -21,7 +20,6 @@ import java.util.Collection;
                 value = OneNumberReportDefinitionContent.class)
         //TODO chart
 })
-@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public abstract class ReportDefinitionContent {
 

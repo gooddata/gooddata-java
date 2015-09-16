@@ -24,7 +24,6 @@ import static java.util.Arrays.asList;
  */
 @JsonTypeName("report")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Report extends AbstractObj implements Queryable, Updatable {
 
@@ -57,7 +56,6 @@ public class Report extends AbstractObj implements Queryable, Updatable {
         return content.getDomains();
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     private static class Content {
         private final Collection<String> definitions;

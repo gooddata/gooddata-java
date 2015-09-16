@@ -7,6 +7,16 @@
                "type" : "col"
             }
          ],
+         "direction" : "asc",
+         "sort" : "pk",
+         "type" : "GDC.time.date",
+         "rel" : [],
+         "compositeAttribute" : [],
+         "compositeAttributePk" : [],
+         "drillDownStepAttributeDF" : "/gdc/md/PROJECT_ID/obj/DF_DRILL_DOWN",
+         "linkAttributeDF" : "/gdc/md/PROJECT_ID/obj/DF_LINK",
+         "folders" : [],
+         "grain" : [],
          "displayForms" : [
             {
                "content" : {

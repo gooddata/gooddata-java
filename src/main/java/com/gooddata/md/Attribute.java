@@ -6,7 +6,6 @@ package com.gooddata.md;
 import static java.util.Arrays.asList;
 
 import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
@@ -19,7 +18,6 @@ import java.util.Collections;
  */
 @JsonTypeName("attribute")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Attribute extends NestedAttribute implements Queryable, Updatable {
 
@@ -30,6 +28,7 @@ public class Attribute extends NestedAttribute implements Queryable, Updatable {
 
     /* Just for serialization test */
     Attribute(String title, Key primaryKey, Key foreignKey) {
-        this(new Meta(title),  new Content(asList(primaryKey), asList(foreignKey), Collections.<DisplayForm>emptyList(), null));
+        this(new Meta(title),  new Content(asList(primaryKey), asList(foreignKey), Collections.<DisplayForm>emptyList(), null, null, null, null, null,
+                null, null, null, null, null, null));
     }
 }

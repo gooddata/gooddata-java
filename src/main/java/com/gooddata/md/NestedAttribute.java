@@ -63,21 +63,95 @@ public class NestedAttribute extends AbstractObj {
         return getDimensionLink() != null;
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonIgnore
+    public Collection<String> getRelations() {
+        return content.getRelations();
+    }
+
+    @JsonIgnore
+    public String getDirection() {
+        return content.getDirection();
+    }
+
+    @JsonIgnore
+    public String getSort() {
+        return content.getSort();
+    }
+
+    @JsonIgnore
+    public String getType() {
+        return content.getType();
+    }
+
+    @JsonIgnore
+    public Collection<String> getCompositeAttribute() {
+        return content.getCompositeAttribute();
+    }
+
+    @JsonIgnore
+    public Collection<String> getCompositeAttributePk() {
+        return content.getCompositeAttributePk();
+    }
+
+    @JsonIgnore
+    public String getDrillDownStepDisplayFormLink() {
+        return content.getDrillDownStepDisplayFormLink();
+    }
+
+    @JsonIgnore
+    public String getLinkedDisplayFormLink() {
+        return content.getLinkedDisplayFormLink();
+    }
+
+    @JsonIgnore
+    public Collection<String> getFolders() {
+        return content.getFolders();
+    }
+
+    @JsonIgnore
+    public Collection<String> getGrain() {
+        return content.getGrain();
+    }
+
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     protected static class Content {
         private final Collection<Key> pk;
         private final Collection<Key> fk;
         private final Collection<DisplayForm> displayForms;
         private final String dimension;
+        private final String direction;
+        private final String sort;
+        private final String type;
+        private final Collection<String> rel;
+        private final Collection<String> compositeAttribute;
+        private final Collection<String> compositeAttributePk;
+        private final String drillDownStepAttributeDF;
+        private final String linkAttributeDF;
+        private final Collection<String> folders;
+        private final Collection<String> grain;
 
         @JsonCreator
-        public Content(@JsonProperty("pk") Collection<Key> pk, @JsonProperty("fk") Collection<Key> fk,
-                       @JsonProperty("displayForms") Collection<DisplayForm> displayForms, @JsonProperty("dimension") String dimension) {
+        protected Content(@JsonProperty("pk") Collection<Key> pk, @JsonProperty("fk") Collection<Key> fk,
+                @JsonProperty("displayForms") Collection<DisplayForm> displayForms, @JsonProperty("dimension") String dimension,
+                @JsonProperty("direction") String direction, @JsonProperty("sort") String sort, @JsonProperty("type") String type,
+                @JsonProperty("rel") Collection<String> rel, @JsonProperty("compositeAttribute") Collection<String> compositeAttribute,
+                @JsonProperty("compositeAttributePk") Collection<String> compositeAttributePk,
+                @JsonProperty("drillDownStepAttributeDF") String drillDownStepAttributeDF, @JsonProperty("linkAttributeDF") String linkAttributeDF,
+                @JsonProperty("folders") Collection<String> folders, @JsonProperty("grain") Collection<String> grain) {
             this.pk = pk;
             this.fk = fk;
             this.displayForms = displayForms;
             this.dimension = dimension;
+            this.direction = direction;
+            this.sort = sort;
+            this.type = type;
+            this.rel = rel;
+            this.compositeAttribute = compositeAttribute;
+            this.compositeAttributePk = compositeAttributePk;
+            this.drillDownStepAttributeDF = drillDownStepAttributeDF;
+            this.linkAttributeDF = linkAttributeDF;
+            this.folders = folders;
+            this.grain = grain;
         }
 
         public Collection<Key> getPk() {
@@ -95,6 +169,49 @@ public class NestedAttribute extends AbstractObj {
         @JsonProperty("dimension")
         public String getDimensionLink() {
             return dimension;
+        }
+
+        public String getDirection() {
+            return direction;
+        }
+
+        public String getSort() {
+            return sort;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        @JsonProperty("rel")
+        public Collection<String> getRelations() {
+            return rel;
+        }
+
+        public Collection<String> getCompositeAttribute() {
+            return compositeAttribute;
+        }
+
+        public Collection<String> getCompositeAttributePk() {
+            return compositeAttributePk;
+        }
+
+        @JsonProperty("drillDownStepAttributeDF")
+        public String getDrillDownStepDisplayFormLink() {
+            return drillDownStepAttributeDF;
+        }
+
+        @JsonProperty("linkAttributeDF")
+        public String getLinkedDisplayFormLink() {
+            return linkAttributeDF;
+        }
+
+        public Collection<String> getFolders() {
+            return folders;
+        }
+
+        public Collection<String> getGrain() {
+            return grain;
         }
     }
 

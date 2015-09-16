@@ -56,6 +56,16 @@ public class AttributeTest {
 
         assertThat(attribute.hasDimension(), is(true));
         assertThat(attribute.getDimensionLink(), is("/gdc/md/PROJECT_ID/obj/DIM_ID"));
+
+        assertThat(attribute.getDirection(), is("asc"));
+        assertThat(attribute.getSort(), is("pk"));
+        assertThat(attribute.getType(), is("GDC.time.date"));
+        assertThat(attribute.getLinkedDisplayFormLink(), is("/gdc/md/PROJECT_ID/obj/DF_LINK"));
+        assertThat(attribute.getCompositeAttribute(), hasSize(0));
+        assertThat(attribute.getCompositeAttributePk(), hasSize(0));
+        assertThat(attribute.getFolders(), hasSize(0));
+        assertThat(attribute.getGrain(), hasSize(0));
+        assertThat(attribute.getRelations(), hasSize(0));
     }
 
     @Test
@@ -64,6 +74,13 @@ public class AttributeTest {
                 new Key("/gdc/md/PROJECT_ID/obj/FK_ID", "col"));
 
         assertThat(attribute, serializesToJson("/md/attribute-input.json"));
+    }
+
+    @Test
+    public void shouldSerializeSameAsDeserializationInput() throws Exception {
+        final InputStream stream = getClass().getResourceAsStream("/md/attribute.json");
+        final Attribute attribute = new ObjectMapper().readValue(stream, Attribute.class);
+        assertThat(attribute, serializesToJson("/md/attribute-inputOrig.json"));
     }
 
 }

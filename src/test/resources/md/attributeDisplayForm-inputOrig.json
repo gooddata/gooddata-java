@@ -21,7 +21,9 @@
          "title" : "Person Name",
          "category" : "attributeDisplayForm",
          "updated" : "2014-04-11 13:45:56",
-         "contributor" : "/gdc/account/profile/USER_ID"
+         "contributor" : "/gdc/account/profile/USER_ID",
+         "locked": 0,
+         "unlisted": 0
       }
    }
 }
