@@ -3,6 +3,8 @@
  */
 package com.gooddata.md;
 
+import static org.apache.commons.lang.StringUtils.substring;
+
 import com.gooddata.util.*;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -20,6 +22,9 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = Inclusion.NON_NULL)
 public class Meta implements Serializable {
+
+    private static final int SUMMARY_MAX_LENGTH = 2048;
+    private static final int TITLE_MAX_LENGTH = 255;
 
     private String author;
     private String contributor;
@@ -54,8 +59,8 @@ public class Meta implements Serializable {
         this.uri = uri;
         this.tags = tags;
         this.created = created;
-        this.summary = summary;
-        this.title = title;
+        this.summary = substring(summary, 0, SUMMARY_MAX_LENGTH);
+        this.title = substring(title, 0, TITLE_MAX_LENGTH);
         this.updated = updated;
         this.category = category;
         this.deprecated = deprecated;
