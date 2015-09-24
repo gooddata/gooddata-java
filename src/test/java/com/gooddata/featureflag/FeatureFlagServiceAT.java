@@ -46,6 +46,13 @@ public class FeatureFlagServiceAT extends AbstractGoodDataAT {
                 new com.gooddata.featureflag.FeatureFlag(PROJECT_FEATURE_FLAG, true)));
     }
 
+    @Test(groups = "featureFlag", dependsOnMethods = "createProjectFeatureFlag")
+    public void getProjectFeatureFlag() throws Exception {
+        final ProjectFeatureFlag featureFlag =
+                gd.getFeatureFlagService().getProjectFeatureFlag(project, PROJECT_FEATURE_FLAG);
+        checkProjectFeatureFlag(featureFlag, true);
+    }
+
     private void checkProjectFeatureFlag(ProjectFeatureFlag featureFlag, boolean expectedValue) {
         assertThat(featureFlag, is(notNullValue()));
         assertThat(featureFlag.getName(), is(PROJECT_FEATURE_FLAG));

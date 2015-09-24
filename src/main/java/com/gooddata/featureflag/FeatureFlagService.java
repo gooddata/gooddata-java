@@ -12,7 +12,9 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 
 import static com.gooddata.featureflag.FeatureFlags.AGGREGATED_FEATURE_FLAGS_TEMPLATE;
+import static com.gooddata.featureflag.ProjectFeatureFlag.PROJECT_FEATURE_FLAG_TEMPLATE;
 import static com.gooddata.featureflag.ProjectFeatureFlags.PROJECT_FEATURE_FLAGS_TEMPLATE;
+import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 
 /**
@@ -78,6 +80,32 @@ public class FeatureFlagService extends AbstractService {
     }
 
     /**
+     * Returns project feature flag (only project scoped flags, use {@link #listFeatureFlags(Project)} for aggregated
+     * flags from all scopes) for given project by its unique name (aka "key").
+     * It doesn't matter whether feature flag is enabled or not, it'll be included in both cases.
+     *
+     * @param project project, cannot be null
+     * @param featureFlagName unique name (key) of feature flag, cannot be empty
+     * @return feature flag for given project with given name (key)
+     */
+    public ProjectFeatureFlag getProjectFeatureFlag(final Project project, final String featureFlagName) {
+        notNull(project, "project");
+        notEmpty(featureFlagName, "featureFlagName");
+
+        try {
+            final ProjectFeatureFlag flag = getProjectFeatureFlag(getProjectFeatureFlagUri(project, featureFlagName));
+
+            if (flag == null) {
+                throw new GoodDataException("empty response from API call");
+            }
+
+            return flag;
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to get project feature flag: " + featureFlagName, e);
+        }
+    }
+
+    /**
      * Creates new feature flag for given project.
      * <p/>
      * Usually, it doesn't make sense to create feature flag that is disabled because
@@ -104,6 +132,10 @@ public class FeatureFlagService extends AbstractService {
         }
     }
 
+
+    String getProjectFeatureFlagUri(final Project project, final String flagName) {
+        return PROJECT_FEATURE_FLAG_TEMPLATE.expand(project.getId(), flagName).toString();
+    }
 
     private ProjectFeatureFlag getProjectFeatureFlag(final String flagUri) {
         final ProjectFeatureFlag result = restTemplate.getForObject(flagUri, ProjectFeatureFlag.class);

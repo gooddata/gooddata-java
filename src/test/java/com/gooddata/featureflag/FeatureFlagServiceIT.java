@@ -24,7 +24,11 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
     private Project project;
 
     private static final String PROJECT_ID = "PROJECT_ID";
-    private static final String PROJECT_FEATURE_FLAGS_URI_STRING = PROJECT_FEATURE_FLAGS_TEMPLATE.expand(PROJECT_ID).toString();
+    private static final String PROJECT_FEATURE_FLAGS_URI_STRING = PROJECT_FEATURE_FLAGS_TEMPLATE.expand(PROJECT_ID)
+            .toString();
+    private static final String FEATURE_FLAG_NAME = "myCoolFeature";
+    private static final String PROJECT_FEATURE_FLAG_URI_STRING = PROJECT_FEATURE_FLAG_TEMPLATE
+            .expand(PROJECT_ID, FEATURE_FLAG_NAME).toString();
 
     @BeforeMethod
     public void setUp() throws Exception {
@@ -48,7 +52,6 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
                 new FeatureFlag("testFeature2", false)));
     }
 
-
     @Test
     public void listProjectFeatureFlagsShouldReturnProjectFeatureFlags() throws Exception {
         onRequest()
@@ -68,8 +71,7 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void createProjectFeatureFlagShouldCreateAndReturnNewProjectFeatureFlag() {
-        final String featureFlagName = "myCoolFeature";
-        final String projectFeatureFlagUriString = getProjectFeatureFlagUriString(featureFlagName);
+        final String projectFeatureFlagUriString = service.getProjectFeatureFlagUri(project, FEATURE_FLAG_NAME);
 
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -85,16 +87,25 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
                 .withStatus(200);
 
         final ProjectFeatureFlag featureFlag = service.createProjectFeatureFlag(project,
-                new ProjectFeatureFlag(featureFlagName));
+                new ProjectFeatureFlag(FEATURE_FLAG_NAME));
 
         assertThat(featureFlag, is(notNullValue()));
-        assertThat(featureFlag.getName(), is(featureFlagName));
+        assertThat(featureFlag.getName(), is(FEATURE_FLAG_NAME));
         assertThat(featureFlag.isEnabled(), is(true));
     }
 
+    @Test
+    public void getProjectFeatureFlagShouldReturnProjectFeatureFlag() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(PROJECT_FEATURE_FLAG_URI_STRING)
+                .respond()
+                .withBody(readStringFromResource("/featureflag/projectFeatureFlag.json"))
+                .withStatus(200);
 
-    private String getProjectFeatureFlagUriString(String featureFlagName) {
-        return PROJECT_FEATURE_FLAG_TEMPLATE.expand(PROJECT_ID, featureFlagName).toString();
+        final ProjectFeatureFlag flag = service.getProjectFeatureFlag(project, FEATURE_FLAG_NAME);
+
+        assertThat(flag, is(new ProjectFeatureFlag(FEATURE_FLAG_NAME, true)));
     }
 
 }

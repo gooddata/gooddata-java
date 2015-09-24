@@ -142,4 +142,37 @@ public class FeatureFlagServiceTest {
         assertThat(result, is(flag));
     }
 
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void whenNullKeyThenGetProjectFeatureFlagShouldThrow() throws Exception {
+        service.getProjectFeatureFlag(project, null);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void whenNullProjectThenGetProjectFeatureFlagShouldThrow() throws Exception {
+        service.getProjectFeatureFlag(null, FLAG_NAME);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void whenEmptyResponseThenGetProjectFeatureFlagShouldThrow() throws Exception {
+        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class)).thenReturn(null);
+        service.getProjectFeatureFlag(project, FLAG_NAME);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void whenClientErrorResponseThenGetProjectFeatureFlagShouldThrow() throws Exception {
+        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class))
+                .thenThrow(new RestClientException(""));
+        service.getProjectFeatureFlag(project, FLAG_NAME);
+    }
+
+    @Test
+    public void testGetProjectFeatureFlag() throws Exception {
+        final ProjectFeatureFlag flag = new ProjectFeatureFlag(FLAG_NAME, true);
+        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class)).thenReturn(flag);
+
+        final ProjectFeatureFlag result = service.getProjectFeatureFlag(project, FLAG_NAME);
+
+        assertThat(result, is(flag));
+    }
+
 }

@@ -436,7 +436,9 @@ public class ProjectService extends AbstractService {
      * @param project project, cannot be null
      * @param featureFlagName name of feature flag, cannot be empty
      * @return feature flag
+     * @deprecated use {@link FeatureFlagService#getProjectFeatureFlag(Project, String)}
      */
+    @Deprecated
     @SuppressWarnings("deprecation")
     public ProjectFeatureFlag getFeatureFlag(final Project project, final String featureFlagName) {
         notNull(project, "project");

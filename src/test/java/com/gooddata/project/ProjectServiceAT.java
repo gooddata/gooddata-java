@@ -86,13 +86,6 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
         assertThat(results.getResults(), is(notNullValue()));
     }
 
-    @Test(groups = "project", dependsOnMethods = "createProjectFeatureFlag")
-    public void getProjectFeatureFlag() throws Exception {
-        final ProjectFeatureFlag featureFlag =
-                gd.getProjectService().getFeatureFlag(project, PROJECT_FEATURE_FLAG);
-        checkFeatureFlag(featureFlag, true);
-    }
-
     @Test(groups = "project", dependsOnMethods = "getProjectFeatureFlag")
     public void updateProjectFeatureFlag() throws Exception {
         final ProjectFeatureFlag featureFlag =
@@ -117,7 +110,7 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
         gd.getProjectService().deleteFeatureFlag(featureFlag);
 
         try {
-            gd.getProjectService().getFeatureFlag(project, featureFlag.getName());
+            gd.getFeatureFlagService().getProjectFeatureFlag(project, featureFlag.getName());
             fail("Feature flag has not been deleted properly. HTTP status NOT FOUND expected.");
         } catch (GoodDataRestException e) {
             assertThat(e.getStatusCode(), is(HttpStatus.NOT_FOUND.value()));
