@@ -191,6 +191,55 @@ public class WarehouseService extends AbstractService {
     }
 
     /**
+     * Add given user to given warehouse.
+     *
+     * @param warehouse warehouse the user should be added to
+     * @param user user to be added
+     * @return added user in warehouse
+     */
+    public FutureResult<WarehouseUser> addUserToWarehouse(final Warehouse warehouse, final WarehouseUser user) {
+        notNull(user, "user");
+        notNull(warehouse, "warehouse");
+        notNull(warehouse.getId(), "warehouse.id");
+
+        final WarehouseTask task;
+        try {
+            task = restTemplate.postForObject(WarehouseUsers.URI, user, WarehouseTask.class, warehouse.getId());
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable add user to warehouse " + warehouse.getId(), e);
+        }
+        if (task == null) {
+            throw new GoodDataException("Empty response when user POSTed to API");
+        }
+
+        return new PollResult<>(this,
+                new AbstractPollHandler<WarehouseTask, WarehouseUser>
+                        (task.getPollLink(), WarehouseTask.class, WarehouseUser.class) {
+
+            @Override
+            public boolean isFinished(ClientHttpResponse response) throws IOException {
+                return HttpStatus.CREATED.equals(response.getStatusCode());
+            }
+
+            @Override
+            public void handlePollResult(WarehouseTask pollResult) {
+                try {
+                    final WarehouseUser newUser = restTemplate.getForObject(pollResult.getWarehouseUserLink(), WarehouseUser.class);
+                    setResult(newUser);
+                } catch (GoodDataException | RestClientException e) {
+                    throw new GoodDataException("User added to warehouse, but can't get it back, uri: "
+                            + pollResult.getWarehouseUserLink(), e);
+                }
+            }
+
+            @Override
+            public void handlePollException(final GoodDataRestException e) {
+                throw new GoodDataException("Unable to add user to warehouse", e);
+            }
+        });
+    }
+
+    /**
      * Updates given Warehouse.
      *
      * @param toUpdate warehouse to be updated
