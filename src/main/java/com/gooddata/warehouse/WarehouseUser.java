@@ -25,6 +25,8 @@ public class WarehouseUser {
 
     public static final String URI = WarehouseUsers.URI + "/{userId}";
     public static final UriTemplate TEMPLATE = new UriTemplate(URI);
+    public static final String ADMIN_ROLE = "admin";
+    public static final String DATA_ADMIN_ROLE = "dataAdmin";
 
     private static final String SELF_LINK = "self";
 
