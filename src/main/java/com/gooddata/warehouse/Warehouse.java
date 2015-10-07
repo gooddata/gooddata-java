@@ -58,7 +58,7 @@ public class Warehouse {
 
     public Warehouse(String title, String authToken, String description) {
         this.title = notNull(title, "title");
-        this.authorizationToken = notNull(authToken, "authToken");
+        this.authorizationToken = authToken;
         this.description = description;
     }
 

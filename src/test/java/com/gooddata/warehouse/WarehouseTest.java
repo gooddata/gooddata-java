@@ -1,6 +1,7 @@
 package com.gooddata.warehouse;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -46,6 +47,12 @@ public class WarehouseTest {
     }
 
     @Test
+    public void testSerializationWithNullToken() throws Exception {
+        final Warehouse warehouse = new Warehouse(TITLE, null, DESCRIPTION, CREATED, UPDATED, CREATED_BY, UPDATED_BY, STATUS, ENVIRONMENT, LINKS);
+        assertThat(warehouse, serializesToJson("/warehouse/warehouse-null-token.json"));
+    }
+
+    @Test
     public void testDeserialization() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/warehouse/warehouse.json");
         final Warehouse warehouse = new ObjectMapper().readValue(stream, Warehouse.class);
@@ -53,6 +60,23 @@ public class WarehouseTest {
         assertThat(warehouse.getTitle(), is(TITLE));
         assertThat(warehouse.getDescription(), is(DESCRIPTION));
         assertThat(warehouse.getAuthorizationToken(), is(TOKEN));
+        assertThat(warehouse.getEnvironment(), is(ENVIRONMENT));
+        assertThat(warehouse.getCreatedBy(), is(CREATED_BY));
+        assertThat(warehouse.getUpdatedBy(), is(UPDATED_BY));
+        assertThat(warehouse.getCreated(), is(CREATED));
+        assertThat(warehouse.getUpdated(), is(UPDATED));
+        assertThat(warehouse.getStatus(), is(STATUS));
+        assertThat(warehouse.getLinks(), is(LINKS));
+    }
+
+    @Test
+    public void testDeserializationWithNullToken() throws Exception {
+        final InputStream stream = getClass().getResourceAsStream("/warehouse/warehouse-null-token.json");
+        final Warehouse warehouse = new ObjectMapper().readValue(stream, Warehouse.class);
+
+        assertThat(warehouse.getTitle(), is(TITLE));
+        assertThat(warehouse.getDescription(), is(DESCRIPTION));
+        assertThat(warehouse.getAuthorizationToken(), is(nullValue()));
         assertThat(warehouse.getEnvironment(), is(ENVIRONMENT));
         assertThat(warehouse.getCreatedBy(), is(CREATED_BY));
         assertThat(warehouse.getUpdatedBy(), is(UPDATED_BY));
