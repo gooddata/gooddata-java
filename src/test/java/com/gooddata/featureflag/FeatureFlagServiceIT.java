@@ -108,4 +108,29 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
         assertThat(flag, is(new ProjectFeatureFlag(FEATURE_FLAG_NAME, true)));
     }
 
+    @Test
+    public void updateProjectFeatureFlagShouldUpdateAndReturnUpdatedProjectFeatureFlag() throws Exception {
+        final String projectFeatureFlagUriString = service.getProjectFeatureFlagUri(project, FEATURE_FLAG_NAME);
+
+        onRequest()
+                .havingMethodEqualTo("PUT")
+                .havingPathEqualTo(PROJECT_FEATURE_FLAG_URI_STRING)
+                .respond()
+                .withStatus(200);
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(projectFeatureFlagUriString)
+                .respond()
+                .withBody(readStringFromResource("/featureflag/projectFeatureFlag.json"))
+                .withStatus(200);
+
+        final ProjectFeatureFlag flag = MAPPER
+                .readValue(readFromResource("/featureflag/projectFeatureFlag.json"), ProjectFeatureFlag.class);
+        final ProjectFeatureFlag featureFlag = service.updateProjectFeatureFlag(flag);
+
+        assertThat(featureFlag, is(notNullValue()));
+        assertThat(featureFlag.getName(), is(FEATURE_FLAG_NAME));
+        assertThat(featureFlag.isEnabled(), is(true));
+    }
+
 }

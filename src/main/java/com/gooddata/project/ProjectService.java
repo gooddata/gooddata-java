@@ -453,7 +453,9 @@ public class ProjectService extends AbstractService {
      *
      * @param featureFlag updated feature flag
      * @return updated feature flag
+     * @deprecated use {@link FeatureFlagService#updateProjectFeatureFlag(com.gooddata.featureflag.ProjectFeatureFlag)}
      */
+    @Deprecated
     @SuppressWarnings("deprecation")
     public ProjectFeatureFlag updateFeatureFlag(final ProjectFeatureFlag featureFlag) {
         notNull(featureFlag, "featureFlag");

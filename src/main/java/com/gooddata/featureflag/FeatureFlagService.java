@@ -132,6 +132,25 @@ public class FeatureFlagService extends AbstractService {
         }
     }
 
+    /**
+     * Updates existing project's feature flag.
+     * Note that it doesn't make sense to update any other property than {@link ProjectFeatureFlag#enabled}.
+     *
+     * @param flag feature flag to be updated, cannot be null and it has to contain URI
+     * @return updated feature flag
+     */
+    public ProjectFeatureFlag updateProjectFeatureFlag(final ProjectFeatureFlag flag) {
+        notNull(flag, "flag");
+        notEmpty(flag.getUri(), "flag.uri");
+
+        try {
+            restTemplate.put(flag.getUri(), flag);
+            return getProjectFeatureFlag(flag.getUri());
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to update feature flag: " + flag, e);
+        }
+    }
+
 
     String getProjectFeatureFlagUri(final Project project, final String flagName) {
         return PROJECT_FEATURE_FLAG_TEMPLATE.expand(project.getId(), flagName).toString();

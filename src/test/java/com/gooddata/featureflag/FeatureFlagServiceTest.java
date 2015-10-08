@@ -18,6 +18,7 @@ import static java.util.Collections.singleton;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class FeatureFlagServiceTest {
@@ -173,6 +174,39 @@ public class FeatureFlagServiceTest {
         final ProjectFeatureFlag result = service.getProjectFeatureFlag(project, FLAG_NAME);
 
         assertThat(result, is(flag));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void whenNullFlagThenUpdateProjectFeatureFlagShouldThrow() throws Exception {
+        service.updateProjectFeatureFlag(null);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void whenEmptyResponseThenUpdateProjectFeatureFlagShouldThrow() throws Exception {
+        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
+        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class)).thenReturn(null);
+        service.updateProjectFeatureFlag(projectFeatureFlag);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void whenClientErrorResponseThenUpdateProjectFeatureFlagShouldThrow() throws Exception {
+        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
+        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class))
+                .thenThrow(new RestClientException(""));
+        service.updateProjectFeatureFlag(projectFeatureFlag);
+    }
+
+    @Test
+    public void testUpdateProjectFeatureFlag() throws Exception {
+        final ProjectFeatureFlag newFlag = new ProjectFeatureFlag(FLAG_NAME, true);
+        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
+        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class))
+                .thenReturn(newFlag);
+
+        final ProjectFeatureFlag result = service.updateProjectFeatureFlag(projectFeatureFlag);
+
+        verify(restTemplate).put(PROJECT_FEATURE_FLAG_URI, projectFeatureFlag);
+        assertThat(result, is(newFlag));
     }
 
 }
