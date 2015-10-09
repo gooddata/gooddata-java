@@ -151,6 +151,22 @@ public class FeatureFlagService extends AbstractService {
         }
     }
 
+    /**
+     * Deletes existing project feature flag.
+     *
+     * @param flag existing project feature flag with links set properly, cannot be null
+     */
+    public void deleteFeatureFlag(final ProjectFeatureFlag flag) {
+        notNull(flag, "flag");
+        notEmpty(flag.getUri(), "flag URI");
+
+        try {
+            restTemplate.delete(flag.getUri());
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to delete feature flag=" + flag, e);
+        }
+    }
+
 
     String getProjectFeatureFlagUri(final Project project, final String flagName) {
         return PROJECT_FEATURE_FLAG_TEMPLATE.expand(project.getId(), flagName).toString();

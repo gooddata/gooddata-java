@@ -1,9 +1,7 @@
 package com.gooddata.project;
 
 import com.gooddata.AbstractGoodDataAT;
-import com.gooddata.GoodDataRestException;
 import com.gooddata.collections.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -19,14 +17,13 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
-import static org.testng.AssertJUnit.fail;
 
 /**
  * Project acceptance tests.
  */
 public class ProjectServiceAT extends AbstractGoodDataAT {
 
-    private static final String PROJECT_FEATURE_FLAG = "testFeatureFlag";
+    private final String projectToken;
 
     public ProjectServiceAT() {
         projectToken = getProperty("projectToken");
@@ -84,21 +81,6 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
         final ProjectValidationResults results = gd.getProjectService().validateProject(project).get();
         assertThat(results, is(notNullValue()));
         assertThat(results.getResults(), is(notNullValue()));
-    }
-
-    @Test(groups = "project", dependsOnMethods = "createProjectFeatureFlag")
-    public void deleteProjectFeatureFlag() throws Exception {
-        final ProjectFeatureFlag featureFlag =
-                gd.getProjectService().createFeatureFlag(project, new ProjectFeatureFlag("temporaryFeatureFlag"));
-
-        gd.getProjectService().deleteFeatureFlag(featureFlag);
-
-        try {
-            gd.getFeatureFlagService().getProjectFeatureFlag(project, featureFlag.getName());
-            fail("Feature flag has not been deleted properly. HTTP status NOT FOUND expected.");
-        } catch (GoodDataRestException e) {
-            assertThat(e.getStatusCode(), is(HttpStatus.NOT_FOUND.value()));
-        }
     }
 
 }

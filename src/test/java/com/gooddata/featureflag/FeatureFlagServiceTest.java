@@ -18,6 +18,7 @@ import static java.util.Collections.singleton;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -207,6 +208,25 @@ public class FeatureFlagServiceTest {
 
         verify(restTemplate).put(PROJECT_FEATURE_FLAG_URI, projectFeatureFlag);
         assertThat(result, is(newFlag));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void whenNullFlagThenDeleteProjectFeatureFlagShouldThrow() throws Exception {
+        service.deleteFeatureFlag(null);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void whenClientErrorResponseThenDeleteProjectFeatureFlagShouldThrow() throws Exception {
+        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
+        doThrow(new RestClientException("")).when(restTemplate).delete(PROJECT_FEATURE_FLAG_URI);
+        service.deleteFeatureFlag(projectFeatureFlag);
+    }
+
+    @Test
+    public void testDeleteProjectFeatureFlag() throws Exception {
+        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
+        service.deleteFeatureFlag(projectFeatureFlag);
+        verify(restTemplate).delete(PROJECT_FEATURE_FLAG_URI);
     }
 
 }

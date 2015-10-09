@@ -5,12 +5,16 @@
 package com.gooddata.featureflag;
 
 import com.gooddata.AbstractGoodDataAT;
+import com.gooddata.GoodDataException;
+import com.gooddata.GoodDataRestException;
+import org.springframework.http.HttpStatus;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.hasItems;
+import static org.testng.AssertJUnit.fail;
 
 /**
  * Feature flag acceptance tests.
@@ -68,6 +72,23 @@ public class FeatureFlagServiceAT extends AbstractGoodDataAT {
         final ProjectFeatureFlag enabledFlag = gd.getFeatureFlagService().updateProjectFeatureFlag(featureFlag);
         checkProjectFeatureFlag(enabledFlag, true);
     }
+
+    @Test(groups = "featureFlag", dependsOnMethods = "createProjectFeatureFlag")
+    public void deleteProjectFeatureFlag() throws Exception {
+        final ProjectFeatureFlag featureFlag =
+                gd.getFeatureFlagService().createProjectFeatureFlag(project,
+                        new ProjectFeatureFlag("temporaryFeatureFlag"));
+
+        gd.getFeatureFlagService().deleteFeatureFlag(featureFlag);
+
+        try {
+            gd.getFeatureFlagService().getProjectFeatureFlag(project, featureFlag.getName());
+            fail("Feature flag has not been deleted properly. HTTP status NOT FOUND expected.");
+        } catch (GoodDataException e) {
+            assertThat(((GoodDataRestException)e.getCause()).getStatusCode(), is(HttpStatus.NOT_FOUND.value()));
+        }
+    }
+
 
     private void checkProjectFeatureFlag(ProjectFeatureFlag featureFlag, boolean expectedValue) {
         assertThat(featureFlag, is(notNullValue()));

@@ -133,4 +133,17 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
         assertThat(featureFlag.isEnabled(), is(true));
     }
 
+    @Test
+    public void deleteProjectFeatureFlagShouldRemoveIt() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("DELETE")
+                .havingPathEqualTo(PROJECT_FEATURE_FLAG_URI_STRING)
+                .respond()
+                .withStatus(200);
+
+        final ProjectFeatureFlag flag = MAPPER
+                .readValue(readFromResource("/featureflag/projectFeatureFlag.json"), ProjectFeatureFlag.class);
+        service.deleteFeatureFlag(flag);
+    }
+
 }
