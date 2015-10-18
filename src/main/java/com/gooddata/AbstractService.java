@@ -67,7 +67,7 @@ public abstract class AbstractService {
             if (pollOnce(handler)) {
                 return handler.getResult();
             }
-            if (unit != null && start + unit.toMillis(timeout) > System.currentTimeMillis()) {
+            if (unit != null && start + unit.toMillis(timeout) < System.currentTimeMillis()) {
                 throw new GoodDataException("timeout");
             }
 
