@@ -5,7 +5,6 @@ package com.gooddata.md;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
@@ -42,12 +41,29 @@ public class Metric extends AbstractObj implements Queryable, Updatable {
         return content.getFormat();
     }
 
+    @JsonIgnore
+    public MaqlAst getMaqlAst() {
+        return content.getMaqlAst();
+    }
+
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     private static class Content {
+
         private final String expression;
-        private final String format;
+
+        @JsonProperty("format")
+        private String format;
+
+        @JsonProperty("tree")
+        private MaqlAst maqlAst;
+
 
         @JsonCreator
-        public Content(@JsonProperty("expression") String expression, @JsonProperty("format") String format) {
+        public Content(@JsonProperty("expression") String expression) {
+            this.expression = expression;
+        }
+
+        public Content(final String expression, final String format) {
             this.expression = expression;
             this.format = format;
         }
@@ -56,8 +72,21 @@ public class Metric extends AbstractObj implements Queryable, Updatable {
             return expression;
         }
 
+        public void setFormat(final String format) {
+            this.format = format;
+        }
+
         public String getFormat() {
             return format;
         }
+
+        public void setMaqlAst(final MaqlAst maqlAst) {
+            this.maqlAst = maqlAst;
+        }
+
+        public MaqlAst getMaqlAst() {
+            return maqlAst;
+        }
+
     }
 }

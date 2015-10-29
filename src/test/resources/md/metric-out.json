@@ -1,0 +1,58 @@
+{
+    "metric": {
+        "content": {
+            "format": "#,##0",
+            "tree": {
+                "content": [
+                    {
+                        "content": [
+                            {
+                                "value": "AVG",
+                                "content": [
+                                    {
+                                        "value": "/gdc/md/PROJECT_ID/obj/EXPR_ID",
+                                        "position": {
+                                            "column": 12,
+                                            "line": 2
+                                        },
+                                        "type": "fact object"
+                                    }
+                                ],
+                                "position": {
+                                    "column": 8,
+                                    "line": 2
+                                },
+                                "type": "function"
+                            }
+                        ],
+                        "position": {
+                            "column": 8,
+                            "line": 2
+                        },
+                        "type": "expression"
+                    }
+                ],
+                "position": {
+                    "column": 1,
+                    "line": 2
+                },
+                "type": "metric"
+            },
+            "expression": "SELECT AVG([/gdc/md/PROJECT_ID/obj/EXPR_ID])"
+        },
+        "meta": {
+            "author": "/gdc/account/profile/PROFILE_ID",
+            "uri": "/gdc/md/PROJECT_ID/obj/47",
+            "tags": "",
+            "created": "2015-10-10 12:56:13",
+            "identifier": "MY_ID",
+            "deprecated": "0",
+            "summary": "",
+            "isProduction": 1,
+            "title": "Avg shoe size",
+            "category": "metric",
+            "updated": "2015-10-10 12:56:13",
+            "contributor": "/gdc/account/profile/PROFILE_ID"
+        }
+    }
+}
