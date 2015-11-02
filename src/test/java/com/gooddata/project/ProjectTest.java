@@ -1,6 +1,11 @@
 package com.gooddata.project;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
+import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
@@ -11,6 +16,9 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import com.gooddata.md.AbstractObj;
+import com.gooddata.md.Meta;
 
 public class ProjectTest {
 
@@ -80,10 +88,10 @@ public class ProjectTest {
         assertThat(serializedProject, not(containsString("\"contributor\"")));
         assertThat(serializedProject, not(containsString("\"created\"")));
         assertThat(serializedProject, not(containsString("\"updated\"")));
+        assertThat(serializedProject, not(containsString("\"deprecated\"")));
 
         assertThat(serializedProject, not(containsString("\"links\"")));
     }
-
 
     @Test
     public void testDeserializeVerticaProject() throws Exception {

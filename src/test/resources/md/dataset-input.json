@@ -8,10 +8,7 @@
       "hasUploadConfiguration": "0"
     },
     "meta" : {
-      "title" : "Dataset",
-      "deprecated" : "0",
-      "locked": 0,
-      "unlisted": 0
+      "title" : "Dataset"
     }
   }
 }

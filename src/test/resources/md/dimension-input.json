@@ -4,10 +4,7 @@
       "attributes" : []
     },
     "meta" : {
-      "title" : "Dimension",
-      "deprecated" : "0",
-      "locked": 0,
-      "unlisted": 0
+      "title" : "Dimension"
     }
   }
 }

@@ -28,6 +28,8 @@ public class MetaTest {
     public static final String IDENTIFIER = "attr.person.id.name";
     public static final boolean LOCKED = false;
     public static final boolean UNLISTED = true;
+    public static final boolean PRODUCTION = true;
+    public static final boolean SHARED_WITH_SOMEONE = false;
 
     @Test
     public void testDeserialization() throws Exception {
@@ -46,12 +48,14 @@ public class MetaTest {
         assertThat(meta.getIdentifier(), is(IDENTIFIER));
         assertThat(meta.isLocked(), is(LOCKED));
         assertThat(meta.isUnlisted(), is(UNLISTED));
+        assertThat(meta.isProduction(), is(PRODUCTION));
+        assertThat(meta.isSharedWithSomeone(), is(SHARED_WITH_SOMEONE));
     }
 
     @Test
     public void testSerialization() throws Exception {
-        final Meta meta = new Meta(AUTHOR, CONTRIBUTOR, CREATED, UPDATED, SUMMARY, TITLE, CATEGORY, TAGS, URI,
-                DEPRECATED, IDENTIFIER, LOCKED, UNLISTED);
+        final Meta meta = new Meta(AUTHOR, CONTRIBUTOR, CREATED, UPDATED, SUMMARY, TITLE, CATEGORY, TAGS, URI, IDENTIFIER,
+                DEPRECATED, PRODUCTION, LOCKED, UNLISTED, SHARED_WITH_SOMEONE);
 
         assertThat(meta, serializesToJson("/md/meta.json"));
     }

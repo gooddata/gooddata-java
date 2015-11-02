@@ -9,10 +9,7 @@
             ]
         },
         "meta" : {
-            "title" : "Beers Consumed This Week",
-	        "deprecated" : "0",
-	        "locked": 0,
-	        "unlisted": 0
+            "title" : "Beers Consumed This Week"
         }
     }
 }
