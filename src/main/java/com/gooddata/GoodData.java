@@ -165,6 +165,7 @@ public class GoodData {
      * @param password GoodData user's password
      * @param port     GoodData Platform's API port (e.g. 443)
      * @param protocol GoodData Platform's API protocol (e.g. https)
+     * @param settings additional settings
      */
     protected GoodData(String hostname, String login, String password, int port, String protocol, GoodDataSettings settings) {
         notEmpty(hostname, "hostname");

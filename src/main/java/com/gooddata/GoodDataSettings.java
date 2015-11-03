@@ -7,7 +7,7 @@ import static org.springframework.util.Assert.isTrue;
 /**
  * Gather various additional settings of {@link GoodData}. Can be passed to the {@link GoodData} constructor to tune up
  * it's behaviour.
- * <p/>
+ * <p>
  * Settings are applied only once at the beginning. Changing this bean after it's passed to {@link GoodData} has
  * no effect.
  */
@@ -22,7 +22,7 @@ public class GoodDataSettings {
     /**
      * Set maximum number of connections used. This applies same for connections per host as for total connections.
      * (As we assume GoodData connects to single host).
-     * <p/>
+     * <p>
      * The default value is 20.
      *
      * @param maxConnections maximum number of connections used.
@@ -43,9 +43,9 @@ public class GoodDataSettings {
 
     /**
      * Set timeout milliseconds until connection established.
-     * <p/>
+     * <p>
      * The default value is 10 seconds (10000 ms).
-     * <p/>
+     * <p>
      * Set to 0 for infinite.
      *
      * @param connectionTimeout connection timeout milliseconds
@@ -57,9 +57,9 @@ public class GoodDataSettings {
 
     /**
      * Set timeout seconds until connection established.
-     * <p/>
+     * <p>
      * The default value is 10 seconds.
-     * <p/>
+     * <p>
      * Set to 0 for infinite.
      *
      * @param connectionTimeout connection timeout seconds
@@ -79,9 +79,9 @@ public class GoodDataSettings {
 
     /**
      * Set timeout in milliseconds used when requesting a connection from the connection manager.
-     * <p/>
+     * <p>
      * The default value is 10 seconds (10000 ms).
-     * <p/>
+     * <p>
      * Set to 0 for infinite.
      *
      * @param connectionRequestTimeout connection request timeout milliseconds
@@ -93,11 +93,11 @@ public class GoodDataSettings {
 
     /**
      * Set timeout in seconds used when requesting a connection from the connection manager.
-     * <p/>
+     * <p>
      * The default value is 10 seconds.
-     * <p/>
+     * <p>
      * Set to 0 for infinite.
-     * <p/>
+     * <p>
      *
      * @param connectionRequestTimeout connection request timeout seconds
      */
@@ -116,9 +116,9 @@ public class GoodDataSettings {
 
     /**
      * Set socket timeout (maximum period inactivity between two consecutive data packets) milliseconds.
-     * <p/>
+     * <p>
      * The default value is 60 seconds (60000 ms).
-     * <p/>
+     * <p>
      * Set to 0 for infinite.
      *
      * @param socketTimeout socket timeout milliseconds
@@ -130,9 +130,9 @@ public class GoodDataSettings {
 
     /**
      * Set socket timeout (maximum period inactivity between two consecutive data packets) seconds.
-     * <p/>
+     * <p>
      * The default value is 60 seconds.
-     * <p/>
+     * <p>
      * Set to 0 for infinite.
      *
      * @param socketTimeout socket timeout seconds
