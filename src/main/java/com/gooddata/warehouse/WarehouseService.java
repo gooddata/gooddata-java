@@ -157,6 +157,7 @@ public class WarehouseService extends AbstractService {
      * Lists Warehouses. Returns empty list in case there are no warehouses.
      * Returns requested page (by page limit and offset). Use {@link #listWarehouses()} to get first page with default setting.
      *
+     * @param page page to be listed
      * @return requested page of list of instances or empty list
      */
     public PageableList<Warehouse> listWarehouses(Page page) {

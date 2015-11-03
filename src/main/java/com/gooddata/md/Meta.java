@@ -151,6 +151,7 @@ public class Meta implements Serializable {
 
     /**
      * Default is false/not-deprecated.
+     * @return true when the linked object is deprecated, null if not set
      */
     @JsonProperty("deprecated")
     @JsonSerialize(using = BooleanStringSerializer.class, include = Inclusion.NON_NULL)
@@ -174,6 +175,7 @@ public class Meta implements Serializable {
 
     /**
      * Is the object production or not? Defaults to true.
+     * @return true when the linked object is production, null if not set
      */
     @JsonProperty("isProduction")
     @JsonSerialize(using = BooleanIntegerSerializer.class, include = Inclusion.NON_NULL)
@@ -189,6 +191,7 @@ public class Meta implements Serializable {
 
     /**
      * Flag that MD object is locked; default is false/unlocked.
+     * @return true when the linked object is locked, null if not set
      */
     @JsonProperty("locked")
     @JsonSerialize(using = BooleanIntegerSerializer.class, include = Inclusion.NON_NULL)
@@ -204,6 +207,7 @@ public class Meta implements Serializable {
 
     /**
      * Default is false/listed.
+     * @return true when the linked object is unlisted, null if not set
      */
     @JsonProperty("unlisted")
     @JsonSerialize(using = BooleanIntegerSerializer.class, include = Inclusion.NON_NULL)
@@ -219,6 +223,7 @@ public class Meta implements Serializable {
 
     /**
      * Is the linked object shared with someone via ACLs?
+     * @return true when the linked object is shared, null if not set
      */
     @JsonProperty("sharedWithSomeone")
     @JsonSerialize(using = BooleanIntegerSerializer.class, include = Inclusion.NON_NULL)

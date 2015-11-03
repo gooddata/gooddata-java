@@ -300,6 +300,7 @@ public class MetadataService extends AbstractService {
 
     /**
      * Find all objects which use the given object.
+     * @param project project
      * @param obj     object to find using objects for
      * @param nearest find nearest objects only
      * @param types   what types (categories) to search for (for example 'reportDefinition', 'report', 'tableDataLoad',
@@ -313,6 +314,7 @@ public class MetadataService extends AbstractService {
 
     /**
      * Find all objects which use the given object.
+     * @param project project
      * @param uri     URI of object to find using objects for
      * @param nearest find nearest objects only
      * @param types   what types (categories) to search for (for example 'reportDefinition', 'report', 'tableDataLoad',
