@@ -11,5 +11,7 @@
     "updated": "2014-04-11 13:45:57",
     "contributor": "/gdc/account/profile/CONTRIBUTOR_USER_ID",
     "locked": 0,
-    "unlisted": 1
+    "unlisted": 1,
+    "isProduction": 1,
+    "sharedWithSomeone": 0
 }

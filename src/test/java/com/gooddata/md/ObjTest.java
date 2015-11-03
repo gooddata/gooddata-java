@@ -56,8 +56,8 @@ public class ObjTest {
     @Test
     public void testSerialization() throws Exception {
         final ConcreteObj obj = new ConcreteObj(
-                new Meta(AUTHOR, CONTRIBUTOR, CREATED, UPDATED, SUMMARY, TITLE, CATEGORY, TAGS, URI, DEPRECATED,
-                        IDENTIFIER, LOCKED, UNLISTED)
+                new Meta(AUTHOR, CONTRIBUTOR, CREATED, UPDATED, SUMMARY, TITLE, CATEGORY, TAGS, URI, IDENTIFIER,
+                        DEPRECATED, null, LOCKED, UNLISTED, null)
         );
 
         assertThat(obj, serializesToJson("/md/objCommon.json"));

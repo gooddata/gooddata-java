@@ -20,10 +20,7 @@
             "filters" : [ { "expression" : "(SELECT [/gdc/md/projectId/obj/123]) >= 2" } ]
         },
         "meta" : {
-            "title" : "Untitled",
-	        "deprecated" : "0",
-	        "locked": 0,
-	        "unlisted": 0
+            "title" : "Untitled"
         }
     }
 }

@@ -15,6 +15,7 @@ import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.joda.time.DateTime;
 import org.springframework.web.util.UriTemplate;
 
@@ -31,7 +32,7 @@ import static java.util.Arrays.asList;
 @JsonTypeName("project")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonSerialize(include = Inclusion.NON_NULL)
 public class Project {
 
     public static final String PROJECTS_URI = "/gdc/account/profile/{id}/projects";
@@ -261,7 +262,7 @@ public class Project {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @JsonSerialize(include = Inclusion.NON_NULL)
     private static class ProjectContent {
 
         @JsonProperty("authorizationToken")
@@ -476,18 +477,24 @@ public class Project {
         private String projectTemplate;
 
         @JsonCreator
-        private ProjectMeta(@JsonProperty("author") String author, @JsonProperty("contributor") String contributor,
+        private ProjectMeta(@JsonProperty("author") String author,
+                            @JsonProperty("contributor") String contributor,
                             @JsonProperty("created") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime created,
                             @JsonProperty("updated") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime updated,
-                            @JsonProperty("summary") String summary, @JsonProperty("title") String title,
-                            @JsonProperty("category") String category, @JsonProperty("tags") String tags,
+                            @JsonProperty("summary") String summary,
+                            @JsonProperty("title") String title,
+                            @JsonProperty("category") String category,
+                            @JsonProperty("tags") String tags,
                             @JsonProperty("uri") String uri,
-                            @JsonProperty("deprecated") @JsonDeserialize(using = BooleanStringDeserializer.class) boolean deprecated,
                             @JsonProperty("identifier") String identifier,
-                            @JsonProperty("locked") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean locked,
-                            @JsonProperty("unlisted") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean unlisted) {
-            super(author, contributor, created, updated, summary, title, category, tags, uri, deprecated, identifier,
-                    locked, unlisted);
+                            @JsonProperty("deprecated") @JsonDeserialize(using = BooleanStringDeserializer.class) Boolean deprecated,
+                            @JsonProperty("isProduction") @JsonDeserialize(using = BooleanIntegerDeserializer.class) Boolean production,
+                            @JsonProperty("locked") @JsonDeserialize(using = BooleanIntegerDeserializer.class) Boolean locked,
+                            @JsonProperty("unlisted") @JsonDeserialize(using = BooleanIntegerDeserializer.class) Boolean unlisted,
+                            @JsonProperty("sharedWithSomeone") @JsonDeserialize(using = BooleanIntegerDeserializer.class) Boolean sharedWithSomeone) {
+            super(author, contributor, created, updated, summary, title, category, tags, uri, identifier,
+                    deprecated, production, locked, unlisted, sharedWithSomeone);
+
         }
 
         private ProjectMeta(String title) {

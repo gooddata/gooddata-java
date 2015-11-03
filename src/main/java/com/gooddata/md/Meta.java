@@ -3,8 +3,6 @@
  */
 package com.gooddata.md;
 
-import static org.apache.commons.lang.StringUtils.substring;
-
 import com.gooddata.util.*;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -15,6 +13,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
+
+import static org.apache.commons.lang.StringUtils.substring;
 
 /**
  * Metadata meta information (meant just for internal SDK usage)
@@ -31,14 +31,16 @@ public class Meta implements Serializable {
     private DateTime created;
     private DateTime updated;
     private String summary;
+    private String title;
     private String category;
     private String tags; //TODO collection
     private String uri;
-    private boolean deprecated;
-    private String title;
     private String identifier;
-    private boolean locked;
-    private boolean unlisted;
+    private Boolean deprecated;
+    private Boolean production;
+    private Boolean locked;
+    private Boolean unlisted;
+    private Boolean sharedWithSomeone;
 
     @JsonCreator
     protected Meta(@JsonProperty("author") String author,
@@ -50,10 +52,7 @@ public class Meta implements Serializable {
                    @JsonProperty("category") String category,
                    @JsonProperty("tags") String tags,
                    @JsonProperty("uri") String uri,
-                   @JsonProperty("deprecated") @JsonDeserialize(using = BooleanStringDeserializer.class) boolean deprecated,
-                   @JsonProperty("identifier") String identifier,
-                   @JsonProperty("locked") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean locked,
-                   @JsonProperty("unlisted") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean unlisted) {
+                   @JsonProperty("identifier") String identifier) {
         super();
         this.author = author;
         this.uri = uri;
@@ -63,15 +62,32 @@ public class Meta implements Serializable {
         this.title = substring(title, 0, TITLE_MAX_LENGTH);
         this.updated = updated;
         this.category = category;
-        this.deprecated = deprecated;
         this.identifier = identifier;
         this.contributor = contributor;
+    }
+
+    public Meta(String author, String contributor, DateTime created, DateTime updated, String summary,
+            String title, String category, String tags, String uri, String identifier,
+            Boolean deprecated, Boolean production, Boolean locked, Boolean unlisted, Boolean sharedWithSomeone) {
+        this.author = author;
+        this.contributor = contributor;
+        this.created = created;
+        this.updated = updated;
+        this.summary = summary;
+        this.title = title;
+        this.category = category;
+        this.tags = tags;
+        this.uri = uri;
+        this.identifier = identifier;
+        this.deprecated = deprecated;
+        this.production = production;
         this.locked = locked;
         this.unlisted = unlisted;
+        this.sharedWithSomeone = sharedWithSomeone;
     }
 
     public Meta(String title) {
-        this.title = title;
+        this(title, null);
     }
 
     public Meta(String title, String summary) {
@@ -133,12 +149,18 @@ public class Meta implements Serializable {
         return uri;
     }
 
-    @JsonSerialize(using = BooleanStringSerializer.class)
-    public boolean isDeprecated() {
+    /**
+     * Default is false/not-deprecated.
+     */
+    @JsonProperty("deprecated")
+    @JsonSerialize(using = BooleanStringSerializer.class, include = Inclusion.NON_NULL)
+    public Boolean isDeprecated() {
         return deprecated;
     }
 
-    public void setDeprecated(boolean deprecated) {
+    @JsonProperty("deprecated")
+    @JsonDeserialize(using = BooleanStringDeserializer.class)
+    public void setDeprecated(Boolean deprecated) {
         this.deprecated = deprecated;
     }
 
@@ -150,21 +172,63 @@ public class Meta implements Serializable {
         this.identifier = identifier;
     }
 
-    @JsonSerialize(using = BooleanIntegerSerializer.class)
-    public boolean isLocked() {
+    /**
+     * Is the object production or not? Defaults to true.
+     */
+    @JsonProperty("isProduction")
+    @JsonSerialize(using = BooleanIntegerSerializer.class, include = Inclusion.NON_NULL)
+    public Boolean isProduction() {
+        return production;
+    }
+
+    @JsonProperty("isProduction")
+    @JsonDeserialize(using = BooleanIntegerDeserializer.class)
+    public void setProduction(final Boolean production) {
+        this.production = production;
+    }
+
+    /**
+     * Flag that MD object is locked; default is false/unlocked.
+     */
+    @JsonProperty("locked")
+    @JsonSerialize(using = BooleanIntegerSerializer.class, include = Inclusion.NON_NULL)
+    public Boolean isLocked() {
         return locked;
     }
 
-    public void setLocked(boolean locked) {
+    @JsonProperty("locked")
+    @JsonDeserialize(using = BooleanIntegerDeserializer.class)
+    public void setLocked(Boolean locked) {
         this.locked = locked;
     }
 
-    @JsonSerialize(using = BooleanIntegerSerializer.class)
-    public boolean isUnlisted() {
+    /**
+     * Default is false/listed.
+     */
+    @JsonProperty("unlisted")
+    @JsonSerialize(using = BooleanIntegerSerializer.class, include = Inclusion.NON_NULL)
+    public Boolean isUnlisted() {
         return unlisted;
     }
 
-    public void setUnlisted(boolean unlisted) {
+    @JsonProperty("unlisted")
+    @JsonDeserialize(using = BooleanIntegerDeserializer.class)
+    public void setUnlisted(Boolean unlisted) {
         this.unlisted = unlisted;
+    }
+
+    /**
+     * Is the linked object shared with someone via ACLs?
+     */
+    @JsonProperty("sharedWithSomeone")
+    @JsonSerialize(using = BooleanIntegerSerializer.class, include = Inclusion.NON_NULL)
+    public Boolean isSharedWithSomeone() {
+        return sharedWithSomeone;
+    }
+
+    @JsonProperty("sharedWithSomeone")
+    @JsonDeserialize(using = BooleanIntegerDeserializer.class)
+    public void setSharedWithSomeone(final Boolean sharedWithSomeone) {
+        this.sharedWithSomeone = sharedWithSomeone;
     }
 }

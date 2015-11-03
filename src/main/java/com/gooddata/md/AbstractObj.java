@@ -84,10 +84,10 @@ public abstract class AbstractObj {
 
     @JsonIgnore
     public boolean isDeprecated() {
-        return meta.isDeprecated();
+        return Boolean.TRUE.equals(meta.isDeprecated());
     }
 
-    public void setDeprecated(boolean deprecated) {
+    public void setDeprecated(Boolean deprecated) {
         meta.setDeprecated(deprecated);
     }
 
@@ -102,20 +102,38 @@ public abstract class AbstractObj {
 
     @JsonIgnore
     public boolean isLocked() {
-        return meta.isLocked();
+        return Boolean.TRUE.equals(meta.isLocked());
     }
 
-    public void setLocked(boolean locked) {
+    public void setLocked(Boolean locked) {
         meta.setLocked(locked);
     }
 
     @JsonIgnore
     public boolean isUnlisted() {
-        return meta.isUnlisted();
+        return Boolean.TRUE.equals(meta.isUnlisted());
     }
 
-    public void setUnlisted(boolean unlisted) {
+    public void setUnlisted(Boolean unlisted) {
         meta.setUnlisted(unlisted);
+    }
+
+    @JsonIgnore
+    public boolean isProduction() {
+        return Boolean.TRUE.equals(meta.isProduction());
+    }
+
+    public void setProduction(Boolean production) {
+        meta.setProduction(production);
+    }
+
+    @JsonIgnore
+    public boolean isSharedWithSomeone() {
+        return Boolean.TRUE.equals(meta.isSharedWithSomeone());
+    }
+
+    public void setSharedWithSomeone(Boolean sharedWithSomeone) {
+        meta.setSharedWithSomeone(sharedWithSomeone);
     }
 
     /**

@@ -15,16 +15,27 @@ public class MetricTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final Metric metric = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/metric.json"), Metric.class);
+        final Metric metric = new ObjectMapper()
+                .readValue(getClass().getResourceAsStream("/md/metric-out.json"), Metric.class);
         assertThat(metric, is(notNullValue()));
-        assertThat(metric.getExpression(), is("[/gdc/md/PROJECT_ID/obj/EXPR_ID]"));
-        assertThat(metric.getFormat(), is("FORMAT"));
+        assertThat(metric.getExpression(), is("SELECT AVG([/gdc/md/PROJECT_ID/obj/EXPR_ID])"));
+        assertThat(metric.getFormat(), is("#,##0"));
+        assertThat(metric.getMaqlAst().getPosition().getLine(), is(2));
+        assertThat(metric.getMaqlAst().getPosition().getColumn(), is(1));
+        assertThat(metric.getMaqlAst().getType(), is("metric"));
+        assertThat(metric.getMaqlAst().getContent().length, is(1));
     }
 
     @Test
     public void testSerialization() throws Exception {
         final Metric metric = new Metric("Person Name", "SELECT SUM([/gdc/md/PROJECT_ID/obj/EXPR_ID])", "FORMAT");
-
         assertThat(metric, serializesToJson("/md/metric-new.json"));
+    }
+
+    @Test
+    public void fullJsonShouldStayTheSameAfterDeserializationAndSerializationBack() throws Exception {
+        final Metric metric = new ObjectMapper()
+                .readValue(getClass().getResourceAsStream("/md/metric-out.json"), Metric.class);
+        assertThat(metric, serializesToJson("/md/metric-out.json"));
     }
 }
