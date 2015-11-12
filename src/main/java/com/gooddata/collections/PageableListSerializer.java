@@ -3,10 +3,11 @@
  */
 package com.gooddata.collections;
 
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.ObjectCodec;
-import org.codehaus.jackson.map.JsonSerializer;
-import org.codehaus.jackson.map.SerializerProvider;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.ObjectCodec;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 
 import java.io.IOException;
 
@@ -47,6 +48,12 @@ public abstract class PageableListSerializer extends JsonSerializer<PageableList
 
         jgen.writeEndObject();
         jgen.writeEndObject();
+    }
+
+    @Override
+    public void serializeWithType(final PageableList<?> value, final JsonGenerator gen, final SerializerProvider provider,
+                                  final TypeSerializer typeSer) throws IOException {
+        serialize(value, gen, provider);
     }
 
     private void writeObjectOrEmpty(final JsonGenerator jgen, final ObjectCodec codec, final String name, final Object object) throws IOException {

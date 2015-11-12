@@ -1,6 +1,6 @@
 package com.gooddata.project;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

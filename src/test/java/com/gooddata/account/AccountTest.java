@@ -1,6 +1,6 @@
 package com.gooddata.account;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import static com.gooddata.JsonMatchers.serializesToJson;

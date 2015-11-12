@@ -6,7 +6,7 @@ package com.gooddata;
 import com.gooddata.util.ResourceUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 

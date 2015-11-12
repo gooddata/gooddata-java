@@ -1,7 +1,7 @@
 package com.gooddata.util;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -16,7 +16,7 @@ public class BooleanIntegerSerializerTest {
         final String json = MAPPER.writeValueAsString(new BooleanIntegerClass(true));
 
         final JsonNode node = MAPPER.readTree(json);
-        assertThat(node.path("foo").getNumberValue().intValue(), is(1));
+        assertThat(node.path("foo").numberValue().intValue(), is(1));
     }
 
     @Test
@@ -24,6 +24,6 @@ public class BooleanIntegerSerializerTest {
         final String json = MAPPER.writeValueAsString(new BooleanIntegerClass(false));
 
         final JsonNode node = MAPPER.readTree(json);
-        assertThat(node.path("foo").getNumberValue().intValue(), is(0));
+        assertThat(node.path("foo").numberValue().intValue(), is(0));
     }
 }

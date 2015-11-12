@@ -5,7 +5,7 @@ package com.gooddata.md;
 
 import com.gooddata.JsonMatchers;
 import com.gooddata.report.ReportExportFormat;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
 

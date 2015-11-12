@@ -1,9 +1,9 @@
 package com.gooddata.util;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
@@ -21,6 +21,6 @@ public class GDDateTimeDeserializer extends JsonDeserializer<DateTime> {
         if (root == null || root.isNull()) {
             return null;
         }
-        return FORMATTER.parseDateTime(root.getTextValue());
+        return FORMATTER.parseDateTime(root.textValue());
     }
 }

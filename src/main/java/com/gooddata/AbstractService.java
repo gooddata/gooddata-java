@@ -7,7 +7,7 @@ import static com.gooddata.util.Validate.notNull;
 import static java.lang.String.format;
 import static org.springframework.http.HttpMethod.GET;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequest;

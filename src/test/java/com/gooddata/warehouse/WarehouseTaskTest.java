@@ -3,7 +3,7 @@ package com.gooddata.warehouse;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.*;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import java.io.InputStream;

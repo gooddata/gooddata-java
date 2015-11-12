@@ -1,7 +1,7 @@
 package com.gooddata.report;
 
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import static com.gooddata.util.Validate.notNull;
 

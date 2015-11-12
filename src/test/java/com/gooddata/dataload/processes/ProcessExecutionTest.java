@@ -3,7 +3,7 @@ package com.gooddata.dataload.processes;
 import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;

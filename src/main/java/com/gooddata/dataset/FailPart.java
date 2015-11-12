@@ -1,8 +1,8 @@
 package com.gooddata.dataset;
 
 import com.gooddata.gdc.ErrorStructure;
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Describe status of uploaded parts
