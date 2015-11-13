@@ -8,6 +8,8 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
+import java.util.Collections;
+
 import static com.gooddata.connector.Status.Code.ERROR;
 import static com.gooddata.connector.Status.Code.SYNCHRONIZED;
 import static com.gooddata.connector.Status.Code.UPLOADING;
@@ -32,65 +34,67 @@ public class IntegrationProcessStatusTest {
         assertThat(process.getStatus().getCode(), is(ERROR.name()));
         assertThat(process.getStatus().getDetail(), is("GDC-INTERNAL-ERROR"));
         assertThat(process.getStatus().getDescription(), is(nullValue()));
+        assertThat(process.getUri(), is("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/FINISHED_PROCESS_ID"));
+        assertThat(process.getId(), is("FINISHED_PROCESS_ID"));
     }
 
     @Test
     public void testIsFinishedOnError() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(ERROR.name(), "", ""), now(), now());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(ERROR.name(), "", ""), now(), now(), Collections.<String, String>emptyMap());
         assertThat(process.isFinished(), is(true));
     }
 
     @Test
     public void testIsFinishedOnSynchronized() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(SYNCHRONIZED.name(), "", ""), now(), now());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(SYNCHRONIZED.name(), "", ""), now(), now(), Collections.<String, String>emptyMap());
         assertThat(process.isFinished(), is(true));
     }
 
     @Test
     public void testIsFinishedOnUploading() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(UPLOADING.name(), "", ""), now(), now());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(UPLOADING.name(), "", ""), now(), now(), Collections.<String, String>emptyMap());
         assertThat(process.isFinished(), is(false));
     }
 
     @Test
     public void testIsFinishedOnNullCode() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(null, "", ""), now(), now());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(null, "", ""), now(), now(), Collections.<String, String>emptyMap());
         assertThat(process.isFinished(), is(false));
     }
 
     @Test
     public void testIsFinishedOnUnknownCode() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status("unknown code", "", ""), now(), now());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status("unknown code", "", ""), now(), now(), Collections.<String, String>emptyMap());
         assertThat(process.isFinished(), is(false));
     }
 
     @Test
     public void testIsFailedOnError() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(ERROR.name(), "", ""), now(), now());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(ERROR.name(), "", ""), now(), now(), Collections.<String, String>emptyMap());
         assertThat(process.isFailed(), is(true));
     }
 
     @Test
     public void testIsFailedOnUserError() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(USER_ERROR.name(), "", ""), now(), now());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(USER_ERROR.name(), "", ""), now(), now(), Collections.<String, String>emptyMap());
         assertThat(process.isFailed(), is(true));
     }
 
     @Test
     public void testIsFailedOnSynchronized() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(SYNCHRONIZED.name(), "", ""), now(), now());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(SYNCHRONIZED.name(), "", ""), now(), now(), Collections.<String, String>emptyMap());
         assertThat(process.isFailed(), is(false));
     }
 
     @Test
     public void testIsFailedOnNullCode() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(null, "", ""), now(), now());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(null, "", ""), now(), now(), Collections.<String, String>emptyMap());
         assertThat(process.isFailed(), is(false));
     }
 
     @Test
     public void testIsFailedOnUnknownCode() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status("unknown code", "", ""), now(), now());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status("unknown code", "", ""), now(), now(), Collections.<String, String>emptyMap());
         assertThat(process.isFailed(), is(false));
     }
 

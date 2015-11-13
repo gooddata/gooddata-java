@@ -2,10 +2,8 @@ package com.gooddata.connector;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
-import com.gooddata.JsonMatchers;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.project.Project;
-import com.gooddata.util.ResourceUtils;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -13,6 +11,7 @@ import static com.gooddata.JsonMatchers.serializesToJson;
 import static com.gooddata.connector.Status.Code.ERROR;
 import static com.gooddata.connector.Status.Code.SYNCHRONIZED;
 import static com.gooddata.util.ResourceUtils.*;
+import static java.util.Collections.singletonMap;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -118,7 +117,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         assertThat(process.getStatus().getCode(), is(SYNCHRONIZED.name()));
     }
 
-    @Test(expectedExceptions = ConnectorException.class, expectedExceptionsMessageRegExp = ".*process failed.*")
+    @Test(expectedExceptions = ConnectorException.class, expectedExceptionsMessageRegExp = ".*zendesk4 process PROCESS failed.*")
     public void shouldFailExecuteProcessPolling() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -146,6 +145,45 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
                 .withBody(readFromResource("/connector/process-status-error.json"));
 
         final ProcessStatus process = connectors.executeProcess(project, new Zendesk4ProcessExecution()).get();
+        assertThat(process.getStatus().getCode(), is(ERROR.name()));
+    }
+
+    @Test
+    public void shouldGetProcessStatus() throws Exception {
+        onRequest()
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID")
+            .respond()
+                .withBody(readFromResource("/connector/process-status-scheduled.json"))
+            .thenRespond()
+                .withBody(readFromResource("/connector/process-status-finished.json"));
+
+        final IntegrationProcessStatus runningProcess = new IntegrationProcessStatus(null, null, null,
+                singletonMap("self", "/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID"));
+        final ProcessStatus process = connectors.getProcessStatus(runningProcess).get();
+        assertThat(process.getStatus().getCode(), is(SYNCHRONIZED.name()));
+    }
+
+    @Test(expectedExceptions = ConnectorException.class, expectedExceptionsMessageRegExp = ".*zendesk4 process PROCESS_ID failed.*")
+    public void shouldFailGetProcessStatusPolling() throws Exception {
+        onRequest()
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID")
+            .respond()
+                .withStatus(400);
+        final IntegrationProcessStatus runningProcess = new IntegrationProcessStatus(null, null, null,
+                singletonMap("self", "/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID"));
+        connectors.getProcessStatus(runningProcess).get();
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void shouldFailGetProcessStatus() throws Exception {
+        onRequest()
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID")
+            .respond()
+                .withBody(readFromResource("/connector/process-status-error.json"));
+
+        final IntegrationProcessStatus runningProcess = new IntegrationProcessStatus(null, null, null,
+                singletonMap("self", "/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID"));
+        final ProcessStatus process = connectors.getProcessStatus(runningProcess).get();
         assertThat(process.getStatus().getCode(), is(ERROR.name()));
     }
 

@@ -22,6 +22,8 @@ public class ProcessStatusTest {
         assertThat(process.getStatus().getCode(), is(ERROR.name()));
         assertThat(process.getStatus().getDetail(), is("GDC-INTERNAL-ERROR"));
         assertThat(process.getStatus().getDescription(), is("Data load unsuccessful. Please check your settings and try again or contact us at support@gooddata.com"));
+        assertThat(process.getUri(), is("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID"));
+        assertThat(process.getId(), is("PROCESS_ID"));
     }
 
 }

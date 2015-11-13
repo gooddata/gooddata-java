@@ -20,8 +20,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Map;
 
 import static com.gooddata.util.Validate.notNull;
+import static java.lang.String.format;
 
 /**
  * Service for connector integration creation, update of its settings or execution of its process.
@@ -197,31 +199,55 @@ public class ConnectorService extends AbstractService {
         try {
             final UriResponse response = restTemplate
                     .postForObject(ProcessStatus.URL, execution, UriResponse.class, project.getId(), connectorType);
-            return new PollResult<>(this, new SimplePollHandler<ProcessStatus>(response.getUri(), ProcessStatus.class) {
-                @Override
-                public boolean isFinished(final ClientHttpResponse response) throws IOException {
-                    final ProcessStatus process = extractData(response, ProcessStatus.class);
-                    return process.isFinished();
-                }
-
-                @Override
-                public void handlePollResult(final ProcessStatus pollResult) {
-                    super.handlePollResult(pollResult);
-                    if (pollResult.isFailed()) {
-                        throw new ConnectorException(connectorType + " process failed: " +
-                                pollResult.getStatus().getDescription());
-                    }
-                }
-
-                @Override
-                public void handlePollException(final GoodDataRestException e) {
-                    throw new ConnectorException(connectorType + " process failed: " + e.getText(), e);
-                }
-            });
+            return createProcessPollResult(response.getUri());
         } catch (GoodDataRestException | RestClientException e) {
             throw new ConnectorException("Unable to execute " + connectorType + " process", e);
         }
     }
 
+
+    /**
+     * Gets status of provided connector process.
+     * <p/>
+     * You can use process retrieved by <code>getXXXProcess</code> methods on {@link Integration} as well as a result of
+     * {@link ConnectorService#executeProcess(Project, ProcessExecution)}.
+     *
+     * @param process process to be executed
+     * @return executed process
+     * @throws ConnectorException if process execution fails
+     */
+    public FutureResult<ProcessStatus> getProcessStatus(final IntegrationProcessStatus process) {
+        notNull(process, "process");
+        notNull(process.getUri(), "process.getUri");
+        return createProcessPollResult(process.getUri());
+    }
+
+    private FutureResult<ProcessStatus> createProcessPollResult(final String uri) {
+        final Map<String, String> match = IntegrationProcessStatus.TEMPLATE.match(uri);
+        final String connectorType = match.get("connector");
+        final String processId = match.get("process");
+        return new PollResult<>(this, new SimplePollHandler<ProcessStatus>(uri, ProcessStatus.class) {
+            @Override
+            public boolean isFinished(final ClientHttpResponse response) throws IOException {
+                final ProcessStatus process = extractData(response, ProcessStatus.class);
+                return process.isFinished();
+            }
+
+            @Override
+            public void handlePollResult(final ProcessStatus pollResult) {
+                super.handlePollResult(pollResult);
+                if (pollResult.isFailed()) {
+                    throw new ConnectorException(format("%s process %s failed: %s", connectorType, processId,
+                            pollResult.getStatus().getDescription()));
+                }
+            }
+
+            @Override
+            public void handlePollException(final GoodDataRestException e) {
+                throw new ConnectorException(format("%s process %s failed: %s", connectorType, processId,
+                        e.getText()), e);
+            }
+        });
+    }
 
 }
