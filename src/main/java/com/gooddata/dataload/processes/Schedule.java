@@ -1,14 +1,14 @@
 package com.gooddata.dataload.processes;
 
 import com.gooddata.util.ISODateTimeDeserializer;
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.annotate.JsonTypeInfo;
-import org.codehaus.jackson.annotate.JsonTypeName;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.web.util.UriTemplate;
@@ -93,6 +93,7 @@ public class Schedule {
         this.state = notEmpty(state, "state");
     }
 
+    @JsonIgnore
     public void setState(final ScheduleState state) {
         this.state = notNull(state, "state").name();
     }
@@ -154,6 +155,7 @@ public class Schedule {
         this.timezone = timezone;
     }
 
+    @JsonIgnore
     public void setTimezone(final DateTimeZone timezone) {
         this.timezone = notNull(timezone, "timezone").getID();
     }

@@ -4,7 +4,7 @@
 package com.gooddata.dataset;
 
 import org.apache.commons.io.IOUtils;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.CoreMatchers.is;

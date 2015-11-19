@@ -3,7 +3,7 @@
  */
 package com.gooddata.md;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 

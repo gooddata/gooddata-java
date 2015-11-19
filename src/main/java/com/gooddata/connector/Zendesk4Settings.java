@@ -3,8 +3,8 @@
  */
 package com.gooddata.connector;
 
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.connector.ConnectorType.ZENDESK4;

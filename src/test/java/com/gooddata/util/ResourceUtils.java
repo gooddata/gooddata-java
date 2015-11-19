@@ -9,7 +9,7 @@ import static com.gooddata.util.Validate.notNull;
 import static java.lang.String.format;
 
 import org.apache.commons.io.IOUtils;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.io.InputStream;

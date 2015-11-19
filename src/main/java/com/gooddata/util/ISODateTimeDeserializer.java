@@ -2,10 +2,10 @@ package com.gooddata.util;
 
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import org.joda.time.DateTime;
 
 import static com.gooddata.util.ISODateTimeSerializer.FORMATTER;
@@ -21,7 +21,7 @@ public class ISODateTimeDeserializer extends JsonDeserializer<DateTime> {
         if (root == null || root.isNull()) {
             return null;
         }
-        return FORMATTER.parseDateTime(root.getTextValue());
+        return FORMATTER.parseDateTime(root.textValue());
     }
 
 }

@@ -1,7 +1,7 @@
 package com.gooddata.util;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
@@ -19,6 +19,6 @@ public class ISODateTimeSerializerTest {
         final String json = MAPPER.writeValueAsString(foo);
         final JsonNode node = MAPPER.readTree(json);
 
-        assertThat(node.path("date").getTextValue(), is("2012-03-20T14:31:05.003Z"));
+        assertThat(node.path("date").textValue(), is("2012-03-20T14:31:05.003Z"));
     }
 }

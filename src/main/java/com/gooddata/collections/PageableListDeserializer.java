@@ -1,12 +1,13 @@
 package com.gooddata.collections;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.JsonDeserializer;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,12 +50,12 @@ public abstract class PageableListDeserializer<T, E> extends JsonDeserializer<T>
         final ObjectMapper objectMapper = (ObjectMapper) jp.getCodec();
 
         final JsonNode pagingNode = root.get(PAGING_NODE);
-        final Paging paging = pagingNode == null ? null : objectMapper.readValue(pagingNode, Paging.class);
+        final Paging paging = pagingNode == null ? null : objectMapper.convertValue(pagingNode, Paging.class);
 
         final JsonNode linksNode = root.get(LINKS_NODE);
         final Map<String, String> links;
         if (linksNode != null) {
-            links = objectMapper.readValue(linksNode, LINKS_TYPE);
+            links = objectMapper.convertValue(linksNode, LINKS_TYPE);
         } else {
             links = null;
         }
@@ -66,9 +67,10 @@ public abstract class PageableListDeserializer<T, E> extends JsonDeserializer<T>
         } else {
             items = new ArrayList<>(itemsNode.size());
             for (JsonNode item : itemsNode) {
-                items.add(objectMapper.readValue(item, elementType));
+                items.add(objectMapper.convertValue(item, elementType));
             }
         }
         return createList(items, paging, links);
     }
+
 }

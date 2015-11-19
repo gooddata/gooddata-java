@@ -5,7 +5,7 @@ import com.gooddata.FutureResult;
 import com.gooddata.collections.PageableList;
 import com.gooddata.project.Project;
 import com.gooddata.util.ResourceUtils;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 

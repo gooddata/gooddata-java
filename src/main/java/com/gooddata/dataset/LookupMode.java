@@ -1,6 +1,6 @@
 package com.gooddata.dataset;
 
-import org.codehaus.jackson.annotate.JsonValue;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * Enum containing ETL lookup modes.

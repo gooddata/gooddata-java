@@ -1,7 +1,7 @@
 package com.gooddata.dataset;
 
 import com.gooddata.gdc.ErrorStructure;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.hamcrest.Matchers;

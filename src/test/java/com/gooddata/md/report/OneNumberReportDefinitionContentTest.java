@@ -3,7 +3,7 @@
  */
 package com.gooddata.md.report;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import java.io.InputStream;

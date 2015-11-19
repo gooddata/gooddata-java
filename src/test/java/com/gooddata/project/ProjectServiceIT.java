@@ -8,7 +8,7 @@ import com.gooddata.gdc.FeatureFlag;
 import com.gooddata.gdc.FeatureFlags;
 import com.gooddata.gdc.TaskStatus;
 import com.gooddata.gdc.UriResponse;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 

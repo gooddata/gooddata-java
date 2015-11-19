@@ -3,10 +3,10 @@
  */
 package com.gooddata.util;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
@@ -31,7 +31,7 @@ public class GDDateDeserializer extends JsonDeserializer<LocalDate> {
         if (root == null || root.isNull()) {
             return null;
         }
-        return FORMATTER.parseLocalDate(root.getTextValue());
+        return FORMATTER.parseLocalDate(root.textValue());
     }
 
 }
