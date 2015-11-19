@@ -10,6 +10,7 @@ import com.gooddata.collections.Page;
 import com.gooddata.collections.PageableList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -25,21 +26,14 @@ import static com.gooddata.util.Validate.notNull;
  */
 public class WarehouseService extends AbstractService {
 
-    private final String warehouseHost;
-    private final int warehousePort;
-
     /**
      * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
      * this abstract one.
      *
      * @param restTemplate RESTful HTTP Spring template
-     * @param warehouseHost host to connect warehouses
-     * @param warehousePort port to connect warehouses
      */
-    public WarehouseService(RestTemplate restTemplate, String warehouseHost, int warehousePort) {
+    public WarehouseService(RestTemplate restTemplate) {
         super(restTemplate);
-        this.warehouseHost = notNull(warehouseHost, "warehouseHost");
-        this.warehousePort = warehousePort;
     }
 
     /**
@@ -80,7 +74,7 @@ public class WarehouseService extends AbstractService {
             public void handlePollResult(WarehouseTask pollResult) {
                 try {
                     final Warehouse warehouse = restTemplate.getForObject(pollResult.getWarehouseLink(), Warehouse.class);
-                    setResult(setWarehouseConnection(warehouse));
+                    setResult(warehouse);
                 } catch (GoodDataException | RestClientException e) {
                     throw new GoodDataException("Warehouse creation finished, but can't get created warehouse, uri: "
                             + pollResult.getWarehouseLink(), e);
@@ -116,7 +110,7 @@ public class WarehouseService extends AbstractService {
     public Warehouse getWarehouseByUri(String uri) {
         notEmpty(uri, "uri");
         try {
-            return setWarehouseConnection(restTemplate.getForObject(uri, Warehouse.class));
+            return restTemplate.getForObject(uri, Warehouse.class);
         } catch (GoodDataRestException e) {
             if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
                 throw new WarehouseNotFoundException(uri, e);
@@ -171,7 +165,7 @@ public class WarehouseService extends AbstractService {
             if (result == null) {
                 return new PageableList<>();
             }
-            return setWarehouseConnection(result);
+            return result;
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to list Warehouses", e);
         }
@@ -256,20 +250,5 @@ public class WarehouseService extends AbstractService {
         }
 
         return getWarehouseByUri(toUpdate.getUri());
-    }
-
-    private Warehouse setWarehouseConnection(Warehouse warehouse) {
-        notNull(warehouse, "warehouse");
-        warehouse.setWarehouseHost(warehouseHost);
-        warehouse.setWarehousePort(warehousePort);
-        return warehouse;
-    }
-
-    private PageableList<Warehouse> setWarehouseConnection(PageableList<Warehouse> warehouses) {
-        notNull(warehouses, "warehouses");
-        for (Warehouse warehouse : warehouses) {
-            setWarehouseConnection(warehouse);
-        }
-        return warehouses;
     }
 }

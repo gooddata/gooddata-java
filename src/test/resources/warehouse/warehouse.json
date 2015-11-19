@@ -9,6 +9,7 @@
         "createdBy" : "/gdc/account/profile/createdBy",
         "updatedBy" : "/gdc/account/profile/updatedBy",
         "environment" : "TESTING",
+        "connectionUrl" : "CONNECTION_URL",
         "links" : {
             "self" : "/gdc/datawarehouse/instances/instanceId",
             "parent" : "/gdc/datawarehouse/instances",
