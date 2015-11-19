@@ -6,7 +6,9 @@ and currently the SDK is transitioned to be an official GoodData project.
 
 ## Usage
 
-See [Wiki](https://github.com/martiner/gooddata-java/wiki) for [Code Examples](https://github.com/martiner/gooddata-java/wiki/Code-Examples)
+See [Wiki](https://github.com/martiner/gooddata-java/wiki) for
+[Upgrading Guide](https://github.com/martiner/gooddata-java/wiki/Upgrading-GoodData-Java-SDK),
+[Code Examples](https://github.com/martiner/gooddata-java/wiki/Code-Examples)
 and [Extensibility How-To](https://github.com/martiner/gooddata-java/wiki/Extending-GoodData-Java-SDK).
 
 The *GoodData Java SDK* is available in Maven Central Repository, to use it from Maven add to `pom.xml`:
