@@ -6,11 +6,30 @@ package com.gooddata.gdc;
 import com.github.sardine.Sardine;
 import com.github.sardine.impl.SardineImpl;
 import com.gooddata.UriPrefixer;
+import org.apache.commons.lang.Validate;
+import org.apache.http.Header;
+import org.apache.http.HeaderIterator;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.ProtocolVersion;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HttpContext;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Locale;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
@@ -28,16 +47,14 @@ public class DataStoreService {
 
     /**
      * Creates new DataStoreService
-     * @param httClientBuilder httpClientBuilder to build datastore connection
+     * @param httpClient httpClient to make datastore connection
      * @param gdcService used to obtain datastore URI
      * @param gdcUri complete GDC URI used to prefix possibly relative datastore path
-     * @param user datastore user
-     * @param pass datastore password
      */
-    public DataStoreService(HttpClientBuilder httClientBuilder, GdcService gdcService, String gdcUri, String user, String pass) {
+    public DataStoreService(HttpClient httpClient, GdcService gdcService, String gdcUri) {
         this.gdcService = notNull(gdcService, "gdcService");
         this.gdcUri = URI.create(notEmpty(gdcUri, "gdcUri"));
-        sardine = new SardineImpl(httClientBuilder, user, pass);
+        sardine = new SardineImpl(new CustomHttpClientBuilder(httpClient));
     }
 
     private UriPrefixer getPrefixer() {
@@ -107,6 +124,250 @@ public class DataStoreService {
             sardine.delete(uri.toString());
         } catch (IOException e) {
             throw new DataStoreException("Unable to delete " + uri, e);
+        }
+    }
+
+    /**
+     * This class is needed to provide Sardine with instance of {@link CloseableHttpClient}, because
+     * used {@link com.gooddata.http.client.GoodDataHttpClient} is not Closeable at all (on purpose).
+     * Thanks to that we can use proper GoodData authentication mechanism instead of basic auth.
+     *
+     * It creates simple closeable wrapper around plain {@link HttpClient} where {@code close()}
+     * is implemented as noop (respectively for the response used).
+     */
+    private static class CustomHttpClientBuilder extends HttpClientBuilder {
+
+        private final HttpClient client;
+
+        private CustomHttpClientBuilder(HttpClient client) {
+            this.client = client;
+        }
+
+        @Override
+        public CloseableHttpClient build() {
+            return new FakeCloseableHttpClient(client);
+        }
+    }
+
+    private static class FakeCloseableHttpClient extends CloseableHttpClient {
+        private final HttpClient client;
+
+        private FakeCloseableHttpClient(HttpClient client) {
+            notNull(client, "client can't be null");
+            this.client = client;
+        }
+
+        @Override
+        protected CloseableHttpResponse doExecute(HttpHost target, HttpRequest request, HttpContext context) throws IOException, ClientProtocolException {
+            // nothing to do - this method is never called, because we override all methods from CloseableHttpClient
+            return null;
+        }
+
+        @Override
+        public void close() throws IOException {
+            // nothing to close - wrappedClient doesn't have to implement CloseableHttpClient
+        }
+
+        @Override
+        @Deprecated
+        public HttpParams getParams() {
+            return client.getParams();
+        }
+
+        @Override
+        @Deprecated
+        public ClientConnectionManager getConnectionManager() {
+            return client.getConnectionManager();
+        }
+
+        @Override
+        public CloseableHttpResponse execute(HttpUriRequest request) throws IOException, ClientProtocolException {
+            return new FakeCloseableHttpResponse(client.execute(request));
+        }
+
+        @Override
+        public CloseableHttpResponse execute(HttpUriRequest request, HttpContext context) throws IOException, ClientProtocolException {
+            return new FakeCloseableHttpResponse(client.execute(request, context));
+        }
+
+        @Override
+        public CloseableHttpResponse execute(HttpHost target, HttpRequest request) throws IOException, ClientProtocolException {
+            return new FakeCloseableHttpResponse(client.execute(target, request));
+        }
+
+        @Override
+        public CloseableHttpResponse execute(HttpHost target, HttpRequest request, HttpContext context) throws IOException, ClientProtocolException {
+            return new FakeCloseableHttpResponse(client.execute(target, request, context));
+        }
+
+        @Override
+        public <T> T execute(HttpUriRequest request, ResponseHandler<? extends T> responseHandler) throws IOException, ClientProtocolException {
+            return client.execute(request, responseHandler);
+        }
+
+        @Override
+        public <T> T execute(HttpUriRequest request, ResponseHandler<? extends T> responseHandler, HttpContext context) throws IOException, ClientProtocolException {
+            return client.execute(request, responseHandler, context);
+        }
+
+        @Override
+        public <T> T execute(HttpHost target, HttpRequest request, ResponseHandler<? extends T> responseHandler) throws IOException, ClientProtocolException {
+            return client.execute(target, request, responseHandler);
+        }
+
+        @Override
+        public <T> T execute(HttpHost target, HttpRequest request, ResponseHandler<? extends T> responseHandler, HttpContext context) throws IOException, ClientProtocolException {
+            return client.execute(target, request, responseHandler, context);
+        }
+    }
+
+    private static class FakeCloseableHttpResponse implements CloseableHttpResponse {
+
+        private final HttpResponse wrappedResponse;
+
+        public FakeCloseableHttpResponse(HttpResponse wrappedResponse) {
+            Validate.notNull(wrappedResponse, "wrappedResponse cannot be null!");
+            this.wrappedResponse = wrappedResponse;
+        }
+
+        @Override
+        public void close() throws IOException {
+            // nothing to close - wrappedClient doesn't have to implement CloseableHttpResponse
+        }
+
+        @Override
+        public StatusLine getStatusLine() {
+            return wrappedResponse.getStatusLine();
+        }
+
+        @Override
+        public void setStatusLine(StatusLine statusline) {
+            wrappedResponse.setStatusLine(statusline);
+        }
+
+        @Override
+        public void setStatusLine(ProtocolVersion ver, int code) {
+            wrappedResponse.setStatusLine(ver, code);
+        }
+
+        @Override
+        public void setStatusLine(ProtocolVersion ver, int code, String reason) {
+            wrappedResponse.setStatusLine(ver, code, reason);
+        }
+
+        @Override
+        public void setStatusCode(int code) throws IllegalStateException {
+            wrappedResponse.setStatusCode(code);
+        }
+
+        @Override
+        public void setReasonPhrase(String reason) throws IllegalStateException {
+            wrappedResponse.setReasonPhrase(reason);
+        }
+
+        @Override
+        public HttpEntity getEntity() {
+            return wrappedResponse.getEntity();
+        }
+
+        @Override
+        public void setEntity(HttpEntity entity) {
+            wrappedResponse.setEntity(entity);
+        }
+
+        @Override
+        public Locale getLocale() {
+            return wrappedResponse.getLocale();
+        }
+
+        @Override
+        public void setLocale(Locale loc) {
+            wrappedResponse.setLocale(loc);
+        }
+
+        @Override
+        public ProtocolVersion getProtocolVersion() {
+            return wrappedResponse.getProtocolVersion();
+        }
+
+        @Override
+        public boolean containsHeader(String name) {
+            return wrappedResponse.containsHeader(name);
+        }
+
+        @Override
+        public Header[] getHeaders(String name) {
+            return wrappedResponse.getHeaders(name);
+        }
+
+        @Override
+        public Header getFirstHeader(String name) {
+            return wrappedResponse.getFirstHeader(name);
+        }
+
+        @Override
+        public Header getLastHeader(String name) {
+            return wrappedResponse.getLastHeader(name);
+        }
+
+        @Override
+        public Header[] getAllHeaders() {
+            return wrappedResponse.getAllHeaders();
+        }
+
+        @Override
+        public void addHeader(Header header) {
+            wrappedResponse.addHeader(header);
+        }
+
+        @Override
+        public void addHeader(String name, String value) {
+            wrappedResponse.addHeader(name, value);
+        }
+
+        @Override
+        public void setHeader(Header header) {
+            wrappedResponse.setHeader(header);
+        }
+
+        @Override
+        public void setHeader(String name, String value) {
+            wrappedResponse.setHeader(name, value);
+        }
+
+        @Override
+        public void setHeaders(Header[] headers) {
+            wrappedResponse.setHeaders(headers);
+        }
+
+        @Override
+        public void removeHeader(Header header) {
+            wrappedResponse.removeHeader(header);
+        }
+
+        @Override
+        public void removeHeaders(String name) {
+            wrappedResponse.removeHeaders(name);
+        }
+
+        @Override
+        public HeaderIterator headerIterator() {
+            return wrappedResponse.headerIterator();
+        }
+
+        @Override
+        public HeaderIterator headerIterator(String name) {
+            return wrappedResponse.headerIterator(name);
+        }
+
+        @Override
+        public HttpParams getParams() {
+            return wrappedResponse.getParams();
+        }
+
+        @Override
+        public void setParams(HttpParams params) {
+            wrappedResponse.setParams(params);
         }
     }
 }
