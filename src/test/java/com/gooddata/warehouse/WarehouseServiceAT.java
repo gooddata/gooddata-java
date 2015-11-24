@@ -39,7 +39,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         final Warehouse wh = new Warehouse(title, warehouseToken);
         wh.setEnvironment(Environment.TESTING);
         warehouse = service.createWarehouse(wh).get();
-        String jdbc = warehouse.getJdbcConnectionString();
+        String jdbc = warehouse.getConnectionUrl();
     }
 
     @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")

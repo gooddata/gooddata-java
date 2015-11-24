@@ -178,7 +178,7 @@ public class GoodData {
         datasetService = new DatasetService(getRestTemplate(), dataStoreService);
         reportService = new ReportService(getRestTemplate());
         processService = new ProcessService(getRestTemplate(), accountService, dataStoreService);
-        warehouseService = new WarehouseService(getRestTemplate(), hostname, port);
+        warehouseService = new WarehouseService(getRestTemplate());
         connectorService = new ConnectorService(getRestTemplate(), projectService);
     }
 

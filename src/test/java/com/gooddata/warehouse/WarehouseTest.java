@@ -26,6 +26,7 @@ public class WarehouseTest {
     public static final String CREATED_BY = "/gdc/account/profile/createdBy";
     public static final String UPDATED_BY = "/gdc/account/profile/updatedBy";
     public static final String STATUS = "ENABLED";
+    public static final String CONNECTION_URL = "CONNECTION_URL";
     public static final Map<String, String> LINKS = new LinkedHashMap<String, String>() {{
         put("self", "/gdc/datawarehouse/instances/instanceId");
         put("parent", "/gdc/datawarehouse/instances");
@@ -42,13 +43,13 @@ public class WarehouseTest {
 
     @Test
     public void testSerialization() throws Exception {
-        final Warehouse warehouse = new Warehouse(TITLE, TOKEN, DESCRIPTION, CREATED, UPDATED, CREATED_BY, UPDATED_BY, STATUS, ENVIRONMENT, LINKS);
+        final Warehouse warehouse = new Warehouse(TITLE, TOKEN, DESCRIPTION, CREATED, UPDATED, CREATED_BY, UPDATED_BY, STATUS, ENVIRONMENT, CONNECTION_URL, LINKS);
         assertThat(warehouse, serializesToJson("/warehouse/warehouse.json"));
     }
 
     @Test
     public void testSerializationWithNullToken() throws Exception {
-        final Warehouse warehouse = new Warehouse(TITLE, null, DESCRIPTION, CREATED, UPDATED, CREATED_BY, UPDATED_BY, STATUS, ENVIRONMENT, LINKS);
+        final Warehouse warehouse = new Warehouse(TITLE, null, DESCRIPTION, CREATED, UPDATED, CREATED_BY, UPDATED_BY, STATUS, ENVIRONMENT, CONNECTION_URL, LINKS);
         assertThat(warehouse, serializesToJson("/warehouse/warehouse-null-token.json"));
     }
 
@@ -67,6 +68,7 @@ public class WarehouseTest {
         assertThat(warehouse.getUpdated(), is(UPDATED));
         assertThat(warehouse.getStatus(), is(STATUS));
         assertThat(warehouse.getLinks(), is(LINKS));
+        assertThat(warehouse.getConnectionUrl(), is(CONNECTION_URL));
     }
 
     @Test
@@ -84,5 +86,6 @@ public class WarehouseTest {
         assertThat(warehouse.getUpdated(), is(UPDATED));
         assertThat(warehouse.getStatus(), is(STATUS));
         assertThat(warehouse.getLinks(), is(LINKS));
+        assertThat(warehouse.getConnectionUrl(), is(CONNECTION_URL));
     }
 }

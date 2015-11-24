@@ -32,7 +32,6 @@ public class Warehouse {
     public static final String URI = Warehouses.URI + "/{" + ID_PARAM + "}";
 
     public static final UriTemplate TEMPLATE = new UriTemplate(URI);
-    public static final UriTemplate JDBC_CONNECTION_TEMPLATE = new UriTemplate("jdbc:gdc:datawarehouse://{host}:{port}/gdc/datawarehouse/instances/{id}");
 
     private static final String SELF_LINK = "self";
     private static final String STATUS_ENABLED = "ENABLED";
@@ -48,9 +47,7 @@ public class Warehouse {
     private String status;
     private String environment;
     private Map<String, String> links;
-
-    private String warehouseHost;
-    private int warehousePort = 443;
+    private String connectionUrl;
 
     public Warehouse(String title, String authToken) {
         this(title, authToken, null);
@@ -64,12 +61,13 @@ public class Warehouse {
 
     @JsonCreator
     public Warehouse(@JsonProperty("title") String title, @JsonProperty("authorizationToken") String authToken,
-              @JsonProperty("description") String description,
-              @JsonProperty("created")  @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime created,
-              @JsonProperty("updated")  @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime updated,
-              @JsonProperty("createdBy") String createdBy, @JsonProperty("updatedBy") String updatedBy,
-              @JsonProperty("status") String status, @JsonProperty("environment") String environment,
-              @JsonProperty("links") Map<String, String> links) {
+                     @JsonProperty("description") String description,
+                     @JsonProperty("created") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime created,
+                     @JsonProperty("updated") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime updated,
+                     @JsonProperty("createdBy") String createdBy, @JsonProperty("updatedBy") String updatedBy,
+                     @JsonProperty("status") String status, @JsonProperty("environment") String environment,
+                     @JsonProperty("connectionUrl") String connectionUrl,
+                     @JsonProperty("links") Map<String, String> links) {
         this(title, authToken, description);
         this.created = created;
         this.updated = updated;
@@ -77,6 +75,7 @@ public class Warehouse {
         this.updatedBy = updatedBy;
         this.status = status;
         this.environment = environment;
+        this.connectionUrl = connectionUrl;
         this.links = links;
     }
 
@@ -91,6 +90,13 @@ public class Warehouse {
     public String getDescription() {
         return description;
     }
+
+    /**
+     * Gets the JDBC connection string.
+     *
+     * @return JDBC connection string
+     */
+    public String getConnectionUrl() { return connectionUrl; }
 
     public void setTitle(String title) {
         this.title = title;
@@ -122,14 +128,6 @@ public class Warehouse {
         return status;
     }
 
-    void setWarehouseHost(String warehouseHost) {
-        this.warehouseHost = warehouseHost;
-    }
-
-    void setWarehousePort(int warehousePort) {
-        this.warehousePort = warehousePort;
-    }
-
     public String getEnvironment() {
         return environment;
     }
@@ -150,15 +148,13 @@ public class Warehouse {
 
     /**
      * Get jdbc connection string. Works only on Warehouse loaded from API (using WarehouseService).
+     * @deprecated Use {@link #getConnectionUrl()} instead.
      * @return jdbc connection string
      */
     @JsonIgnore
+    @Deprecated
     public String getJdbcConnectionString() {
-        if (warehouseHost == null) {
-            throw new IllegalStateException("Please set warehouseHost " +
-                    "to be able to construct jdbc connection string");
-        }
-        return JDBC_CONNECTION_TEMPLATE.expand(warehouseHost, warehousePort, getId()).toString();
+        return getConnectionUrl();
     }
 
     @JsonIgnore

@@ -10,6 +10,7 @@
                 "updated" : "2014-03-17T13:02:41.000Z",
                 "createdBy" : "/gdc/account/profile/{profile-id}",
                 "updatedBy" : "/gdc/account/profile/{profile-id}",
+                "connectionUrl" : "test",
                 "links" : {
                     "self" : "/gdc/datawarehouse/instances/{instance-id}",
                     "parent" : "/gdc/datawarehouse/instances",
@@ -27,6 +28,7 @@
                 "updated" : "2014-04-09T22:10:26.000Z",
                 "createdBy" : "/gdc/account/profile/{profile-id}",
                 "updatedBy" : "/gdc/account/profile/{profile-id}",
+                "connectionUrl" : "test",
                 "links" : {
                     "self" : "/gdc/datawarehouse/instances/{instance-id}",
                     "parent" : "/gdc/datawarehouse/instances",

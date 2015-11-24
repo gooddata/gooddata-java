@@ -34,6 +34,8 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
     private static final String WAREHOUSE_URI = Warehouse.TEMPLATE.expand(WAREHOUSE_ID).toString();
     private static final String WAREHOUSE_USER_URI = WarehouseUsers.TEMPLATE.expand(WAREHOUSE_ID).toString();
 
+    private static final String CONNECTION_URL = "CONNECTION_URL";
+
     private WarehouseTask pollingTask;
     private WarehouseTask finishedTask;
     private Warehouse warehouse;
@@ -71,7 +73,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         final Warehouse created = gd.getWarehouseService().createWarehouse(new Warehouse(TITLE, "{Token}", "Storage")).get();
         assertThat(created, notNullValue());
         assertThat(created.getTitle(), is(TITLE));
-        assertThat(created.getJdbcConnectionString(), is("jdbc:gdc:datawarehouse://localhost:" + port() + WAREHOUSE_URI));
+        assertThat(created.getConnectionUrl(), is(CONNECTION_URL));
     }
 
     @Test(expectedExceptions = GoodDataException.class)
@@ -103,6 +105,8 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         final PageableList<Warehouse> list = gd.getWarehouseService().listWarehouses();
         assertThat(list, notNullValue());
         assertThat(list, hasSize(2));
+        assertThat(list.get(0).getConnectionUrl(), notNullValue());
+        assertThat(list.get(1).getConnectionUrl(), notNullValue());
     }
 
     @Test
@@ -128,6 +132,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         final Warehouse warehouse = gd.getWarehouseService().getWarehouseById(WAREHOUSE_ID);
         assertThat(warehouse, notNullValue());
         assertThat(warehouse.getTitle(), is(TITLE));
+        assertThat(warehouse.getConnectionUrl(), notNullValue());
     }
 
     @Test
