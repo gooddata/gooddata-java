@@ -6,6 +6,9 @@
                     "data" : "/gdc/md/PROJECT_ID/obj/COL_ID",
                     "type" : "col"
                 }
+            ],
+            "folders" : [
+                "/gdc/md/PROJECT_ID/obj/FOLDER_ID"
             ]
         },
         "meta" : {
