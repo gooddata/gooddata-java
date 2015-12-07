@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Collection;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 /**
  * Fact of GoodData project dataset
@@ -32,9 +32,9 @@ public class Fact extends AbstractObj implements Queryable, Updatable {
     }
 
     /* Just for serialization test */
-    Fact(String title, String data, String type) {
+    Fact(String title, String data, String type, String folder) {
         super(new Meta(title));
-        content = new Content(asList(new Expression(data, type)));
+        content = new Content(singletonList(new Expression(data, type)), singletonList(folder));
     }
 
     @JsonIgnore
@@ -42,18 +42,32 @@ public class Fact extends AbstractObj implements Queryable, Updatable {
         return content.getExpression();
     }
 
+    @JsonIgnore
+    public Collection<String> getFolders() {
+        return content.getFolders();
+    }
+
+    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
     private static class Content {
 
         @JsonProperty("expr")
         private final Collection<Expression> expression;
 
+        @JsonProperty("folders")
+        private final Collection<String> folders;
+
         @JsonCreator
-        public Content(@JsonProperty("expr") Collection<Expression> expression) {
+        public Content(@JsonProperty("expr") Collection<Expression> expression, @JsonProperty("folders") Collection<String> folders) {
             this.expression = expression;
+            this.folders = folders;
         }
 
         public Collection<Expression> getExpression() {
             return expression;
+        }
+
+        public Collection<String> getFolders() {
+            return folders;
         }
     }
 }
