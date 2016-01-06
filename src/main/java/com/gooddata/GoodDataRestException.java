@@ -20,6 +20,28 @@ public class GoodDataRestException extends GoodDataException {
 
     private final String text;
 
+    private final String errorCode;
+
+    /**
+     * Construct a GoodDataRestException with specified details.
+     * @param statusCode the HTTP status code of the response
+     * @param requestId  the GoodData request ID (from header)
+     * @param message    the detail message
+     * @param component  the GoodData component where error occurred
+     * @param errorClass the class of the error
+     * @param errorCode  the code of the error
+     */
+    public GoodDataRestException(int statusCode, String requestId, String message, String component,
+                                 String errorClass, String errorCode) {
+        super(statusCode + (requestId != null ? ": [requestId=" + requestId + "] " : ": ") + message);
+        this.statusCode = statusCode;
+        this.requestId = requestId;
+        this.component = component;
+        this.errorClass = errorClass;
+        this.text = message;
+        this.errorCode = errorCode;
+    }
+
     /**
      * Construct a GoodDataRestException with specified details.
      *
@@ -31,12 +53,7 @@ public class GoodDataRestException extends GoodDataException {
      */
     public GoodDataRestException(int statusCode, String requestId, String message, String component,
                                  String errorClass) {
-        super(statusCode + (requestId != null ? ": [requestId=" + requestId + "] " : ": ") + message);
-        this.statusCode = statusCode;
-        this.requestId = requestId;
-        this.component = component;
-        this.errorClass = errorClass;
-        this.text = message;
+        this(statusCode, requestId, message, component, errorClass, null);
     }
 
     /**
@@ -52,7 +69,8 @@ public class GoodDataRestException extends GoodDataException {
                 error != null && error.getRequestId() != null ? error.getRequestId() : requestId,
                 error != null && error.getMessage() != null ? error.getFormattedMessage() : statusText,
                 error != null ? error.getComponent() : null,
-                error != null ? error.getErrorClass() : null);
+                error != null ? error.getErrorClass() : null,
+                error != null ? error.getErrorCode() : null);
     }
 
     /**
@@ -89,6 +107,15 @@ public class GoodDataRestException extends GoodDataException {
      */
     public String getErrorClass() {
         return errorClass;
+    }
+
+    /**
+     * Get the code of the error
+     *
+     * @return the code of the error
+     */
+    public String getErrorCode() {
+        return errorCode;
     }
 
     /**
