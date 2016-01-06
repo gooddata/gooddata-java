@@ -16,6 +16,18 @@ import static org.testng.Assert.*;
 public class GoodDataRestExceptionTest {
     @Test
     public void shouldCreateDefaultInstance() throws Exception {
+        final GoodDataRestException e = new GoodDataRestException(500, "a123", "message", "component", "gdc.error", "code");
+        assertThat(e.getMessage(), is("500: [requestId=a123] message"));
+        assertThat(e.getStatusCode(), is(500));
+        assertThat(e.getRequestId(), is("a123"));
+        assertThat(e.getText(), is("message"));
+        assertThat(e.getComponent(), is("component"));
+        assertThat(e.getErrorClass(), is("gdc.error"));
+        assertThat(e.getErrorCode(), is("code"));
+    }
+
+    @Test
+    public void shouldCreateDefaultInstanceWithoutErrorCode() throws Exception {
         final GoodDataRestException e = new GoodDataRestException(500, "a123", "message", "component", "gdc.error");
         assertThat(e.getMessage(), is("500: [requestId=a123] message"));
         assertThat(e.getStatusCode(), is(500));
@@ -56,6 +68,6 @@ public class GoodDataRestExceptionTest {
         assertThat(e.getErrorClass(), is("CLASS"));
         assertThat(e.getComponent(), is("COMPONENT"));
         assertThat(e.getRequestId(), is("REQ"));
-
+        assertThat(e.getErrorCode(), is("CODE"));
     }
 }
