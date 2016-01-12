@@ -1,9 +1,11 @@
 package com.gooddata.collections;
 
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import java.net.URI;
+import java.util.List;
+import java.util.Map.Entry;
 
 import static com.gooddata.util.Validate.notNull;
 
@@ -12,7 +14,7 @@ import static com.gooddata.util.Validate.notNull;
  */
 class UriPage implements Page {
 
-    private final URI pageUri;
+    private final UriComponents pageUri;
 
     /**
      * Creates new instance with defined page URI.
@@ -20,7 +22,7 @@ class UriPage implements Page {
      * @param pageUri page URI
      */
     public UriPage(final String pageUri) {
-        this.pageUri = new UriTemplate(notNull(pageUri, "pageUri")).expand();
+        this.pageUri = UriComponentsBuilder.fromUriString(notNull(pageUri, "pageUri")).build();
     }
 
     /**
@@ -31,6 +33,22 @@ class UriPage implements Page {
      */
     @Override
     public URI getPageUri(final UriComponentsBuilder uriBuilder) {
-        return pageUri;
+        return pageUri.toUri();
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p/>
+     * Note that by using this method you might end up with URI that will be different from the one returned by
+     * {@link #getPageUri(UriComponentsBuilder)}. Method only copies query parameters and does not care about
+     * URI path.
+     */
+    @Override
+    public UriComponentsBuilder updateWithPageParams(final UriComponentsBuilder uriBuilder) {
+        notNull(uriBuilder, "uriBuilder");
+        for (Entry<String, List<String>> entry : pageUri.getQueryParams().entrySet()) {
+            uriBuilder.queryParam(entry.getKey(), entry.getValue().toArray());
+        }
+        return uriBuilder;
     }
 }
