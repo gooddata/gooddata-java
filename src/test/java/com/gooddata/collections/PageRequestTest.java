@@ -28,4 +28,20 @@ public class PageRequestTest {
         assertThat(pageUri, notNullValue());
         assertThat(pageUri.toString(), is("test_uri?offset=17&limit=10"));
     }
+
+    @Test
+    public void testUpdateWithPageParams() throws Exception {
+        final PageRequest pageRequest = new PageRequest(12, 10);
+        final UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("test_uri/{test}");
+        final String pageUri = pageRequest.updateWithPageParams(uriBuilder).build().toUriString();
+        assertThat(pageUri, is("test_uri/{test}?offset=12&limit=10"));
+    }
+
+    @Test
+    public void testUpdateWithPageParamsWithStringOffset() throws Exception {
+        final PageRequest pageRequest = new PageRequest("17", 10);
+        final UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("test_uri/{test}");
+        final String pageUri = pageRequest.updateWithPageParams(uriBuilder).build().toUriString();
+        assertThat(pageUri, is("test_uri/{test}?offset=17&limit=10"));
+    }
 }

@@ -46,11 +46,17 @@ public class PageRequest implements Page {
     @Override
     public URI getPageUri(final UriComponentsBuilder uriBuilder) {
         notNull(uriBuilder, "uriBuilder");
+        final UriComponentsBuilder copy = UriComponentsBuilder.fromUriString(uriBuilder.build().toUriString());
+        return updateWithPageParams(copy).build().toUri();
+    }
+
+    @Override
+    public UriComponentsBuilder updateWithPageParams(final UriComponentsBuilder uriBuilder) {
         if (offset != null) {
             uriBuilder.queryParam("offset", offset);
         }
         uriBuilder.queryParam("limit", limit);
-        return uriBuilder.build().toUri();
+        return uriBuilder;
     }
 
     @Override
