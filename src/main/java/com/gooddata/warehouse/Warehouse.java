@@ -32,6 +32,7 @@ public class Warehouse {
     public static final String URI = Warehouses.URI + "/{" + ID_PARAM + "}";
 
     public static final UriTemplate TEMPLATE = new UriTemplate(URI);
+    public static final UriTemplate JDBC_CONNECTION_TEMPLATE = new UriTemplate("jdbc:gdc:datawarehouse://{host}:{port}/gdc/datawarehouse/instances/{id}");
 
     private static final String SELF_LINK = "self";
     private static final String STATUS_ENABLED = "ENABLED";
