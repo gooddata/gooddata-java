@@ -1,17 +1,13 @@
 package com.gooddata.project;
 
-import com.gooddata.md.Meta;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import org.springframework.web.util.UriTemplate;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User.
