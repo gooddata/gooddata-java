@@ -5,10 +5,10 @@ package com.gooddata.md;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Collection;
 
@@ -19,7 +19,7 @@ import static java.util.Collections.singletonList;
  */
 @JsonTypeName("fact")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Fact extends AbstractObj implements Queryable, Updatable {
 
     @JsonProperty("content")
@@ -47,7 +47,7 @@ public class Fact extends AbstractObj implements Queryable, Updatable {
         return content.getFolders();
     }
 
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private static class Content {
 
         @JsonProperty("expr")

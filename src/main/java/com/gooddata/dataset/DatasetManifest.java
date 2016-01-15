@@ -3,6 +3,7 @@
  */
 package com.gooddata.dataset;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.util.BooleanIntegerDeserializer;
 import com.gooddata.util.BooleanIntegerSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -28,7 +29,7 @@ import static com.gooddata.util.Validate.notNull;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("dataSetSLIManifest")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DatasetManifest {
 
     public static final String URI = "/gdc/md/{projectId}/ldm/singleloadinterface/{dataSet}/manifest";
@@ -123,7 +124,7 @@ public class DatasetManifest {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Part {
 
         @JsonProperty("mode")

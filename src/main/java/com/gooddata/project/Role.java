@@ -1,5 +1,6 @@
 package com.gooddata.project;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.md.Meta;
 import com.gooddata.util.BooleanStringDeserializer;
 import com.gooddata.util.BooleanStringSerializer;
@@ -26,7 +27,7 @@ import java.util.Set;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("projectRole")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Role {
     public static final String URI = "/gdc/projects/{projectId}/roles/{roleId}";
     public static final UriTemplate TEMPLATE = new UriTemplate(URI);

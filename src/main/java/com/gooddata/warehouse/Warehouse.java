@@ -1,8 +1,8 @@
 package com.gooddata.warehouse;
 
 import static com.gooddata.util.Validate.notNull;
-import static com.fasterxml.jackson.databind.annotation.JsonSerialize.Inclusion.NON_NULL;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.project.Environment;
 import com.gooddata.util.ISODateTimeDeserializer;
 import com.gooddata.util.ISODateTimeSerializer;
@@ -25,7 +25,7 @@ import java.util.Map;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("instance")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Warehouse {
 
     private static final String ID_PARAM = "id";
@@ -106,12 +106,12 @@ public class Warehouse {
         this.description = description;
     }
 
-    @JsonSerialize(using = ISODateTimeSerializer.class, include = NON_NULL)
+    @JsonSerialize(using = ISODateTimeSerializer.class)
     public DateTime getCreated() {
         return created;
     }
 
-    @JsonSerialize(using = ISODateTimeSerializer.class, include = NON_NULL)
+    @JsonSerialize(using = ISODateTimeSerializer.class)
     public DateTime getUpdated() {
         return updated;
     }

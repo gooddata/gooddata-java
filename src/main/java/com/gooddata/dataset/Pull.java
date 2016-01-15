@@ -3,14 +3,14 @@
  */
 package com.gooddata.dataset;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * ETL Pull DTO (for internal use).
  * Serialization only.
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Pull {
 
     public static final String URI = "/gdc/md/{projectId}/etl/pull";

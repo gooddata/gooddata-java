@@ -3,6 +3,7 @@
  */
 package com.gooddata.project;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.md.Meta;
 import com.gooddata.util.BooleanIntegerDeserializer;
 import com.gooddata.util.BooleanStringDeserializer;
@@ -14,8 +15,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize.Inclusion;
 import org.joda.time.DateTime;
 import org.springframework.web.util.UriTemplate;
 
@@ -32,7 +31,7 @@ import static java.util.Arrays.asList;
 @JsonTypeName("project")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Project {
 
     public static final String PROJECTS_URI = "/gdc/account/profile/{id}/projects";
@@ -262,7 +261,7 @@ public class Project {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    @JsonSerialize(include = Inclusion.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private static class ProjectContent {
 
         @JsonProperty("authorizationToken")

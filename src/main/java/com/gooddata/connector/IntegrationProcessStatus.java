@@ -3,6 +3,7 @@
  */
 package com.gooddata.connector;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.util.ISODateTimeDeserializer;
 import com.gooddata.util.ISODateTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -20,7 +21,7 @@ import java.util.Map;
  * Connector process (i.e. single ETL run) status used in integration object. Deserialization only.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class IntegrationProcessStatus {
 
     public static final String URI = "/gdc/projects/{project}/connectors/{connector}/integration/processes/{process}";

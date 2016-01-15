@@ -3,6 +3,7 @@
  */
 package com.gooddata.md.report;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.md.AbstractObj;
 import com.gooddata.md.Meta;
 import com.gooddata.md.Queryable;
@@ -12,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Map;
 
@@ -21,7 +21,7 @@ import java.util.Map;
  */
 @JsonTypeName("reportDefinition")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReportDefinition extends AbstractObj implements Queryable, Updatable {
 
     private static final String EXPLAIN_LINK = "explain2";

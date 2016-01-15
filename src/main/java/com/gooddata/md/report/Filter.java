@@ -2,8 +2,8 @@ package com.gooddata.md.report;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import static com.gooddata.util.Validate.notEmpty;
 
@@ -11,7 +11,7 @@ import static com.gooddata.util.Validate.notEmpty;
  * Filter (in report definition)
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Filter {
 
     private final String expression;

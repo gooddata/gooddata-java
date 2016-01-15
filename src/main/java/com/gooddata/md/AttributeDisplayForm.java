@@ -1,5 +1,6 @@
 package com.gooddata.md;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.util.BooleanIntegerDeserializer;
 import com.gooddata.util.BooleanIntegerSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -15,7 +16,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  */
 @JsonTypeName("attributeDisplayForm")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AttributeDisplayForm extends DisplayForm implements Updatable {
 
     @JsonProperty("content")
@@ -35,16 +36,16 @@ public class AttributeDisplayForm extends DisplayForm implements Updatable {
 
     @JsonIgnore
     public boolean isDefault() {
-        return content.isDefault();
+        return Boolean.TRUE.equals(content.isDefault());
     }
 
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private static class Content extends DisplayForm.Content {
 
         private final boolean isDefault;
 
         private Content(@JsonProperty("formOf") String formOf, @JsonProperty("expression") String expression,
-                @JsonProperty("default") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean isDefault,
+                @JsonProperty("default") @JsonDeserialize(using = BooleanIntegerDeserializer.class) Boolean isDefault,
                 @JsonProperty("ldmexpression") String ldmExpression,
                 @JsonProperty("type") String type) {
             super(formOf, expression, ldmExpression, type);
@@ -53,7 +54,7 @@ public class AttributeDisplayForm extends DisplayForm implements Updatable {
 
         @JsonProperty("default")
         @JsonSerialize(using = BooleanIntegerSerializer.class)
-        public boolean isDefault() {
+        public Boolean isDefault() {
             return isDefault;
         }
     }

@@ -4,6 +4,7 @@
 
 package com.gooddata.md;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.util.BooleanStringDeserializer;
 import com.gooddata.util.BooleanStringSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -23,7 +24,7 @@ import java.util.Map;
  */
 @JsonTypeName("dataSet")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Dataset extends AbstractObj implements Queryable, Updatable {
 
     private static final String DATA_UPLOADS_LINK = "dataUploads";
@@ -89,7 +90,7 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
         return links != null ? links.get(UPLOAD_CONFIGURATION_LINK) : null;
     }
 
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private static class Content {
         private final List<String> ties;
         private final String mode;

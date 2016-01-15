@@ -1,5 +1,6 @@
 package com.gooddata.md;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.util.BooleanStringDeserializer;
 import com.gooddata.util.BooleanStringSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -25,7 +26,7 @@ import static java.beans.Introspector.decapitalize;
 @JsonTypeName("inUseMany")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 class InUseMany {
 
     public static final String USEDBY_URI = "/gdc/md/{projectId}/usedby2";
