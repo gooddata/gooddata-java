@@ -76,7 +76,7 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
 
     @JsonIgnore
     public boolean hasUploadConfiguration() {
-        return content.hasUploadConfiguration();
+        return Boolean.TRUE.equals(content.hasUploadConfiguration());
     }
 
     @JsonIgnore
@@ -96,7 +96,7 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
         private final List<String> facts;
         private final List<String> dataLoadingColumns;
         private final List<String> attributes;
-        private final boolean hasUploadConfiguration;
+        private final Boolean hasUploadConfiguration;
 
         @JsonCreator
         private Content(@JsonProperty("ties") List<String> ties,
@@ -104,7 +104,7 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
                 @JsonProperty("facts") List<String> facts,
                 @JsonProperty("dataLoadingColumns") List<String> dataLoadingColumns,
                 @JsonProperty("attributes") List<String> attributes,
-                @JsonProperty("hasUploadConfiguration") @JsonDeserialize(using = BooleanStringDeserializer.class) boolean hasUploadConfiguration) {
+                @JsonProperty("hasUploadConfiguration") @JsonDeserialize(using = BooleanStringDeserializer.class) Boolean hasUploadConfiguration) {
             this.ties = ties;
             this.mode = mode;
             this.facts = facts;
@@ -135,7 +135,7 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
 
         @JsonProperty("hasUploadConfiguration")
         @JsonSerialize(using = BooleanStringSerializer.class)
-        public boolean hasUploadConfiguration() {
+        public Boolean hasUploadConfiguration() {
             return hasUploadConfiguration;
         }
     }
