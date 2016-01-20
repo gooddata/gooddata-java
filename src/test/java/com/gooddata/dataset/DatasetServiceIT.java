@@ -49,6 +49,11 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
             .respond()
                 .withStatus(200);
         onRequest()
+                .havingPath(startsWith("/uploads/"))
+                .havingMethodEqualTo("DELETE")
+            .respond()
+                .withStatus(200);
+        onRequest()
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/etl/pull")
                 .havingMethodEqualTo("POST")
             .respond()

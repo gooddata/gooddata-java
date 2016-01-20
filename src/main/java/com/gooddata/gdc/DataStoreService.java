@@ -25,6 +25,11 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HttpContext;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,18 +47,22 @@ public class DataStoreService {
     private final Sardine sardine;
     private final GdcService gdcService;
     private final URI gdcUri;
+    private final RestTemplate restTemplate;
+
     private UriPrefixer prefixer;
 
 
     /**
      * Creates new DataStoreService
      * @param httpClient httpClient to make datastore connection
+     * @param restTemplate restTemplate to make datastore connection
      * @param gdcService used to obtain datastore URI
      * @param gdcUri complete GDC URI used to prefix possibly relative datastore path
      */
-    public DataStoreService(HttpClient httpClient, GdcService gdcService, String gdcUri) {
+    public DataStoreService(HttpClient httpClient, RestTemplate restTemplate, GdcService gdcService, String gdcUri) {
         this.gdcService = notNull(gdcService, "gdcService");
         this.gdcUri = URI.create(notEmpty(gdcUri, "gdcUri"));
+        this.restTemplate = notNull(restTemplate, "restTemplate");
         sardine = new SardineImpl(new CustomHttpClientBuilder(httpClient));
     }
 
@@ -121,8 +130,13 @@ public class DataStoreService {
         notEmpty(path, "path");
         final URI uri = getUri(path);
         try {
-            sardine.delete(uri.toString());
-        } catch (IOException e) {
+            final ResponseEntity result = restTemplate.exchange(uri, HttpMethod.DELETE, org.springframework.http.HttpEntity.EMPTY, Void.class);
+
+            // in case we get redirect (i.e. when we want to delete collection) we will follow redirect to the new location
+            if (HttpStatus.MOVED_PERMANENTLY.equals(result.getStatusCode())) {
+                restTemplate.exchange(result.getHeaders().getLocation(), HttpMethod.DELETE, org.springframework.http.HttpEntity.EMPTY, Void.class);
+            }
+        } catch (RestClientException e) {
             throw new DataStoreException("Unable to delete " + uri, e);
         }
     }
