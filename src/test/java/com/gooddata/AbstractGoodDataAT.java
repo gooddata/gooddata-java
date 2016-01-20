@@ -40,11 +40,9 @@ public abstract class AbstractGoodDataAT {
 
     @AfterSuite
     public static void removeProjectAndLogout() {
-        if (gd != null) {
-            if (project != null) {
-                gd.getProjectService().removeProject(project);
-            }
-            gd.logout();
+        if (project != null) {
+            gd.getProjectService().removeProject(project);
         }
+        gd.logout();
     }
 }

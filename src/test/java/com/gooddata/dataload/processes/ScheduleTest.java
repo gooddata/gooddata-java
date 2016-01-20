@@ -1,7 +1,6 @@
 package com.gooddata.dataload.processes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.collection.IsMapContaining;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.mockito.Matchers;
@@ -14,7 +13,6 @@ import org.testng.annotations.Test;
 import java.util.Collections;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
-import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;

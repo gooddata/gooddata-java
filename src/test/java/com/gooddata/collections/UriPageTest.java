@@ -4,17 +4,12 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 import static java.util.Collections.singletonList;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
-import static org.testng.Assert.fail;
 
 public class UriPageTest {
 
