@@ -6,23 +6,17 @@ package com.gooddata.md;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Collection;
-import java.util.Collections;
-
-import static java.util.Arrays.asList;
 
 /**
  * Attribute representation which is nested in some other metadata object (i.e. within {@link Dimension}).
  * Can't be queried, get or updated directly - use {@link Attribute} for these operations.
- * Deserialization only.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class NestedAttribute extends AbstractObj {
 
     @JsonProperty("content")
@@ -113,7 +107,7 @@ public class NestedAttribute extends AbstractObj {
         return content.getGrain();
     }
 
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected static class Content {
         private final Collection<Key> pk;
         private final Collection<Key> fk;

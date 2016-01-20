@@ -3,6 +3,7 @@
  */
 package com.gooddata.dataset;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.util.BooleanIntegerDeserializer;
 import com.gooddata.util.BooleanIntegerSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -28,7 +29,7 @@ import static com.gooddata.util.Validate.notNull;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("dataSetSLIManifest")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DatasetManifest {
 
     public static final String URI = "/gdc/md/{projectId}/ldm/singleloadinterface/{dataSet}/manifest";
@@ -123,21 +124,21 @@ public class DatasetManifest {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Part {
 
         @JsonProperty("mode")
         private String uploadMode;
         private String columnName;
         private List<String> populates;
-        private boolean referenceKey;
+        private Boolean referenceKey;
         private Map<String, String> constraints;
 
         @JsonCreator
         Part(@JsonProperty("mode") String uploadMode,
              @JsonProperty("columnName") String columnName,
              @JsonProperty("populates") List<String> populates,
-             @JsonProperty("referenceKey") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean referenceKey,
+             @JsonProperty("referenceKey") @JsonDeserialize(using = BooleanIntegerDeserializer.class) Boolean referenceKey,
              @JsonProperty("constraints") Map<String, String> constraints) {
             this.uploadMode = uploadMode;
             this.columnName = columnName;
@@ -170,8 +171,16 @@ public class DatasetManifest {
             this.populates = populates;
         }
 
-	    @JsonSerialize(using = BooleanIntegerSerializer.class)
+        /**
+         * @return true if the referenceKey is set and is true
+         */
+        @JsonIgnore
         public boolean isReferenceKey() {
+            return Boolean.TRUE.equals(referenceKey);
+        }
+
+        @JsonSerialize(using = BooleanIntegerSerializer.class)
+        public Boolean getReferenceKey() {
             return referenceKey;
         }
 

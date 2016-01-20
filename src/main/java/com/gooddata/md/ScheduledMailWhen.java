@@ -3,6 +3,7 @@
  */
 package com.gooddata.md;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.util.GDDateDeserializer;
 import com.gooddata.util.GDDateSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -37,7 +38,8 @@ public class ScheduledMailWhen {
 
     public String getRecurrency() { return recurrency; }
 
-    @JsonSerialize(using = GDDateSerializer.class, include = JsonSerialize.Inclusion.NON_NULL)
+    @JsonSerialize(using = GDDateSerializer.class)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public LocalDate getStartDate() { return startDate; }
 
     public String getTimeZone() { return timeZone; }

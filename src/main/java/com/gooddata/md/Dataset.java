@@ -4,6 +4,7 @@
 
 package com.gooddata.md;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.util.BooleanStringDeserializer;
 import com.gooddata.util.BooleanStringSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -23,7 +24,7 @@ import java.util.Map;
  */
 @JsonTypeName("dataSet")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Dataset extends AbstractObj implements Queryable, Updatable {
 
     private static final String DATA_UPLOADS_LINK = "dataUploads";
@@ -76,7 +77,7 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
 
     @JsonIgnore
     public boolean hasUploadConfiguration() {
-        return content.hasUploadConfiguration();
+        return Boolean.TRUE.equals(content.hasUploadConfiguration());
     }
 
     @JsonIgnore
@@ -89,14 +90,14 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
         return links != null ? links.get(UPLOAD_CONFIGURATION_LINK) : null;
     }
 
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private static class Content {
         private final List<String> ties;
         private final String mode;
         private final List<String> facts;
         private final List<String> dataLoadingColumns;
         private final List<String> attributes;
-        private final boolean hasUploadConfiguration;
+        private final Boolean hasUploadConfiguration;
 
         @JsonCreator
         private Content(@JsonProperty("ties") List<String> ties,
@@ -104,7 +105,7 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
                 @JsonProperty("facts") List<String> facts,
                 @JsonProperty("dataLoadingColumns") List<String> dataLoadingColumns,
                 @JsonProperty("attributes") List<String> attributes,
-                @JsonProperty("hasUploadConfiguration") @JsonDeserialize(using = BooleanStringDeserializer.class) boolean hasUploadConfiguration) {
+                @JsonProperty("hasUploadConfiguration") @JsonDeserialize(using = BooleanStringDeserializer.class) Boolean hasUploadConfiguration) {
             this.ties = ties;
             this.mode = mode;
             this.facts = facts;
@@ -135,7 +136,7 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
 
         @JsonProperty("hasUploadConfiguration")
         @JsonSerialize(using = BooleanStringSerializer.class)
-        public boolean hasUploadConfiguration() {
+        public Boolean hasUploadConfiguration() {
             return hasUploadConfiguration;
         }
     }

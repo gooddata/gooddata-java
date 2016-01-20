@@ -4,9 +4,9 @@
 package com.gooddata.md.report;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Collection;
 
@@ -20,7 +20,7 @@ import java.util.Collection;
                 value = OneNumberReportDefinitionContent.class)
         //TODO chart
 })
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class ReportDefinitionContent {
 
     private final String format;

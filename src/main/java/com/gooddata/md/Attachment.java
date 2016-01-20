@@ -5,10 +5,10 @@ package com.gooddata.md;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Common ancestor to {@link ScheduledMail} attachments.
@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
         @JsonSubTypes.Type(name = "dashboardAttachment", value = DashboardAttachment.class),
         @JsonSubTypes.Type(name = "reportAttachment", value = ReportAttachment.class),
 })
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Attachment {
 
     private final String uri;

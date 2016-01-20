@@ -3,13 +3,13 @@
  */
 package com.gooddata.md;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.util.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize.Inclusion;
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
@@ -20,7 +20,7 @@ import static org.apache.commons.lang.StringUtils.substring;
  * Metadata meta information (meant just for internal SDK usage)
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Meta implements Serializable {
 
     private static final int SUMMARY_MAX_LENGTH = 2048;
@@ -103,7 +103,7 @@ public class Meta implements Serializable {
         return contributor;
     }
 
-    @JsonSerialize(using = GDDateTimeSerializer.class, include = Inclusion.NON_NULL)
+    @JsonSerialize(using = GDDateTimeSerializer.class)
     public DateTime getCreated() {
         return created;
     }
@@ -124,7 +124,7 @@ public class Meta implements Serializable {
         this.title = title;
     }
 
-    @JsonSerialize(using = GDDateTimeSerializer.class, include = Inclusion.NON_NULL)
+    @JsonSerialize(using = GDDateTimeSerializer.class)
     public DateTime getUpdated() {
         return updated;
     }
@@ -154,7 +154,7 @@ public class Meta implements Serializable {
      * @return true when the linked object is deprecated, null if not set
      */
     @JsonProperty("deprecated")
-    @JsonSerialize(using = BooleanStringSerializer.class, include = Inclusion.NON_NULL)
+    @JsonSerialize(using = BooleanStringSerializer.class)
     public Boolean isDeprecated() {
         return deprecated;
     }
@@ -178,7 +178,7 @@ public class Meta implements Serializable {
      * @return true when the linked object is production, null if not set
      */
     @JsonProperty("isProduction")
-    @JsonSerialize(using = BooleanIntegerSerializer.class, include = Inclusion.NON_NULL)
+    @JsonSerialize(using = BooleanIntegerSerializer.class)
     public Boolean isProduction() {
         return production;
     }
@@ -194,7 +194,7 @@ public class Meta implements Serializable {
      * @return true when the linked object is locked, null if not set
      */
     @JsonProperty("locked")
-    @JsonSerialize(using = BooleanIntegerSerializer.class, include = Inclusion.NON_NULL)
+    @JsonSerialize(using = BooleanIntegerSerializer.class)
     public Boolean isLocked() {
         return locked;
     }
@@ -210,7 +210,7 @@ public class Meta implements Serializable {
      * @return true when the linked object is unlisted, null if not set
      */
     @JsonProperty("unlisted")
-    @JsonSerialize(using = BooleanIntegerSerializer.class, include = Inclusion.NON_NULL)
+    @JsonSerialize(using = BooleanIntegerSerializer.class)
     public Boolean isUnlisted() {
         return unlisted;
     }
@@ -226,7 +226,7 @@ public class Meta implements Serializable {
      * @return true when the linked object is shared, null if not set
      */
     @JsonProperty("sharedWithSomeone")
-    @JsonSerialize(using = BooleanIntegerSerializer.class, include = Inclusion.NON_NULL)
+    @JsonSerialize(using = BooleanIntegerSerializer.class)
     public Boolean isSharedWithSomeone() {
         return sharedWithSomeone;
     }
