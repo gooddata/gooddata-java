@@ -3,16 +3,12 @@
  */
 package com.gooddata;
 
-import com.gooddata.util.ResourceUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-import java.io.InputStream;
-
-import static com.gooddata.util.Validate.notNull;
 import static net.jadler.Jadler.closeJadler;
 import static net.jadler.Jadler.initJadler;
 import static net.jadler.Jadler.port;

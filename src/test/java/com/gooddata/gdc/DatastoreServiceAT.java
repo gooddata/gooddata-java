@@ -1,7 +1,7 @@
 package com.gooddata.gdc;
 
 import com.gooddata.AbstractGoodDataAT;
-import com.gooddata.gdc.DataStoreService;
+import com.gooddata.GoodDataRestException;
 import org.apache.commons.io.IOUtils;
 import org.testng.annotations.Test;
 
@@ -10,18 +10,23 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.UUID;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
+
 /**
  * Data store acceptance test
  */
 public class DatastoreServiceAT extends AbstractGoodDataAT {
 
     private String file;
+    private String directory;
 
     @Test(groups = "datastore", dependsOnGroups = "account")
     public void datastoreUpload() throws Exception {
         DataStoreService dataStoreService = gd.getDataStoreService();
 
-        file = "/" + UUID.randomUUID().toString() + "/file.csv";
+        directory = "/" + UUID.randomUUID().toString();
+        file = directory + "/file.csv";
         dataStoreService.upload(file, getClass().getResourceAsStream("/person.csv"));
     }
 
@@ -42,5 +47,13 @@ public class DatastoreServiceAT extends AbstractGoodDataAT {
     public void datastoreDelete() throws Exception {
         DataStoreService dataStoreService = gd.getDataStoreService();
         dataStoreService.delete(this.file);
+        dataStoreService.delete(this.directory);
+
+        try {
+            dataStoreService.delete(this.directory);
+            fail("Exception was expected, as there is nothing to delete");
+        } catch (GoodDataRestException e) {
+            assertEquals(404, e.getStatusCode());
+        }
     }
 }

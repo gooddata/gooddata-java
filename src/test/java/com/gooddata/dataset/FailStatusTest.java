@@ -4,7 +4,6 @@ import com.gooddata.gdc.ErrorStructure;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
 import java.io.InputStream;

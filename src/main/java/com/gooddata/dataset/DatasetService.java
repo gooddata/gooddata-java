@@ -206,7 +206,7 @@ public class DatasetService extends AbstractService {
             @Override
             protected void onFinish() {
                 try {
-                    dataStoreService.delete(dirPath.toString() + "/");
+                    dataStoreService.delete(dirPath.toString());
                 } catch (DataStoreException ignored) {
                     // todo log?
                 }

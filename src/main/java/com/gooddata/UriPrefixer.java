@@ -54,7 +54,7 @@ public class UriPrefixer {
      */
     public URI mergeUris(URI uri) {
         notNull(uri, "uri");
-        final String path = trimTrailingCharacter(trimLeadingCharacter(uri.getRawPath(), '/'), '/');
+        final String path = trimLeadingCharacter(uri.getRawPath(), '/');
         return UriComponentsBuilder.fromUri(uriPrefix)
                 .pathSegment(path)
                 .query(uri.getRawQuery())
