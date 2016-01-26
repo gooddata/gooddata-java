@@ -1,0 +1,8 @@
+{
+  "projectEvent": {
+    "type": "etl.test",
+    "parameters": {
+      "text": "cool"
+    }
+  }
+}
