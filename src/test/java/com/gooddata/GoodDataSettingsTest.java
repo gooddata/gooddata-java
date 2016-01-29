@@ -21,6 +21,7 @@ public class GoodDataSettingsTest {
         assertTrue(settings.getConnectionTimeout() >= 0);
         assertTrue(settings.getConnectionRequestTimeout() >= 0);
         assertTrue(settings.getSocketTimeout() >= 0);
+        assertTrue(settings.getWaitForContinueTimeout() > 0);
     }
 
     @Test
@@ -28,10 +29,12 @@ public class GoodDataSettingsTest {
         settings.setConnectionTimeoutSeconds(53);
         settings.setConnectionRequestTimeoutSeconds(69);
         settings.setSocketTimeoutSeconds(71);
+        settings.setWaitForContinueTimeoutSeconds(2);
 
         assertEquals(53000, settings.getConnectionTimeout());
         assertEquals(69000, settings.getConnectionRequestTimeout());
         assertEquals(71000, settings.getSocketTimeout());
+        assertEquals(2000, settings.getWaitForContinueTimeout());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -52,5 +55,10 @@ public class GoodDataSettingsTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void setZeroMaxConnectionsFails() throws Exception {
         settings.setMaxConnections(0);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void setNegativeWaitForContinueTimeoutFails() throws Exception {
+        settings.setWaitForContinueTimeout(-2);
     }
 }

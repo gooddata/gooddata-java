@@ -1,8 +1,11 @@
 package com.gooddata.gdc;
 
 import com.gooddata.AbstractGoodDataAT;
+import com.gooddata.GoodData;
 import com.gooddata.GoodDataRestException;
 import org.apache.commons.io.IOUtils;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -21,11 +24,15 @@ public class DatastoreServiceAT extends AbstractGoodDataAT {
     private String file;
     private String directory;
 
+    @BeforeClass
+    public void setUp() throws Exception {
+        directory = "/" + UUID.randomUUID().toString();
+    }
+
     @Test(groups = "datastore", dependsOnGroups = "account")
     public void datastoreUpload() throws Exception {
         DataStoreService dataStoreService = gd.getDataStoreService();
 
-        directory = "/" + UUID.randomUUID().toString();
         file = directory + "/file.csv";
         dataStoreService.upload(file, getClass().getResourceAsStream("/person.csv"));
     }
@@ -54,6 +61,22 @@ public class DatastoreServiceAT extends AbstractGoodDataAT {
             fail("Exception was expected, as there is nothing to delete");
         } catch (GoodDataRestException e) {
             assertEquals(404, e.getStatusCode());
+        }
+    }
+
+    @Test(groups = "datastore")
+    public void datastoreUploadWithAuthentication() throws Exception {
+
+        //TODO this doesn't work because we can't read the underlying stream twice
+        final GoodData datastoreGd = new GoodData(getProperty("host"), getProperty("login"), getProperty("pass"));
+        DataStoreService dataStoreService = datastoreGd.getDataStoreService();
+
+        try {
+            final String fileWithAuth = directory + "/fileWithAuth.csv";
+            dataStoreService.upload(fileWithAuth, getClass().getResourceAsStream("/person.csv"));
+            dataStoreService.delete(fileWithAuth);
+        } finally {
+            datastoreGd.logout();
         }
     }
 }

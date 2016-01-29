@@ -17,6 +17,7 @@ public class GoodDataSettings {
     private int connectionTimeout = secondsToMillis(10);
     private int connectionRequestTimeout = secondsToMillis(10);
     private int socketTimeout = secondsToMillis(60);
+    private int waitForContinueTimeout = secondsToMillis(1);
 
 
     /**
@@ -150,6 +151,45 @@ public class GoodDataSettings {
         return socketTimeout;
     }
 
+    /**
+     * Set timeout for wait on 100 (Continue) or final response after sending initial part of the request.
+     * It typically affects WebDAV PUT requests (when Expect: 100-continue header is set).
+     * <p>
+     * The default value is 1 second (1000 milliseconds).
+     * </p>
+     * Can't be zero or negative.
+     *
+     * @param waitForContinueTimeout wait for continue timeout milliseconds
+     */
+    public void setWaitForContinueTimeout(int waitForContinueTimeout) {
+        isTrue(waitForContinueTimeout > 0, "waitForContinueTimeout must be positive");
+        this.waitForContinueTimeout = waitForContinueTimeout;
+    }
+
+    /**
+     * Set timeout for wait on 100 (Continue) or final response seconds after sending initial part of the request.
+     * It typically affects WebDAV PUT requests (when Expect: 100-continue header is set).
+     * <p>
+     * The default value is 1 second .
+     * </p>
+     * Can't be zero or negative.
+     *
+     * @param waitForContinueTimeout wait for continue timeout seconds
+     */
+    public void setWaitForContinueTimeoutSeconds(int waitForContinueTimeout) {
+        setWaitForContinueTimeout(secondsToMillis(waitForContinueTimeout));
+    }
+
+    /**
+     * Milliseconds for wait on 100 (Continue) or final response after sending initial part of the request.
+     * It typically affects WebDAV PUT requests (when Expect: 100-continue header is set).
+     *
+     * @return milliseconds for wait on 100 (Continue) after sending initial part of the request
+     */
+    public int getWaitForContinueTimeout() {
+        return waitForContinueTimeout;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
@@ -160,7 +200,8 @@ public class GoodDataSettings {
         if (maxConnections != that.maxConnections) return false;
         if (connectionTimeout != that.connectionTimeout) return false;
         if (connectionRequestTimeout != that.connectionRequestTimeout) return false;
-        return socketTimeout == that.socketTimeout;
+        if (socketTimeout != that.socketTimeout) return false;
+        return waitForContinueTimeout == that.waitForContinueTimeout;
 
     }
 
@@ -170,6 +211,7 @@ public class GoodDataSettings {
         result = 31 * result + connectionTimeout;
         result = 31 * result + connectionRequestTimeout;
         result = 31 * result + socketTimeout;
+        result = 31 * result + waitForContinueTimeout;
         return result;
     }
 
@@ -180,6 +222,7 @@ public class GoodDataSettings {
                 ", maxConnections=" + maxConnections +
                 ", connectionTimeout=" + connectionTimeout +
                 ", socketTimeout=" + socketTimeout +
+                ", waitForContinueTimeout=" + waitForContinueTimeout +
                 '}';
     }
 
