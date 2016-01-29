@@ -24,6 +24,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.protocol.HttpRequestExecutor;
 import org.apache.http.util.VersionInfo;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -211,7 +212,8 @@ public class GoodData {
         return HttpClientBuilder.create()
                 .setUserAgent(getUserAgent())
                 .setConnectionManager(connectionManager)
-                .setDefaultRequestConfig(requestConfig.build());
+                .setDefaultRequestConfig(requestConfig.build())
+                .setRequestExecutor(new HttpRequestExecutor(settings.getWaitForContinueTimeout()));
     }
 
     /*
