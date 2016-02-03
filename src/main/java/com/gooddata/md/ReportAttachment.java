@@ -94,7 +94,7 @@ public class ReportAttachment extends Attachment {
      *   </li>
      * </ul>
      *
-     * @return
+     * @return map of export options
      */
     public Map<String, String> getExportOptions() { return exportOptions; }
 

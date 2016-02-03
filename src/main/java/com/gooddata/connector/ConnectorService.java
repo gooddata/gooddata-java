@@ -208,7 +208,7 @@ public class ConnectorService extends AbstractService {
 
     /**
      * Gets status of provided connector process.
-     * <p/>
+     * <p>
      * You can use process retrieved by <code>getXXXProcess</code> methods on {@link Integration} as well as a result of
      * {@link ConnectorService#executeProcess(Project, ProcessExecution)}.
      *

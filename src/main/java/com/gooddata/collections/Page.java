@@ -12,7 +12,7 @@ public interface Page {
 
     /**
      * Creates {@link URI} for this page request.
-     * <p/>
+     * <p>
      * Use {@link #updateWithPageParams(UriComponentsBuilder)} if you have URI template and only want to update it with
      * page query params.
      *
@@ -23,17 +23,17 @@ public interface Page {
 
     /**
      * Updates provided URI builder query params according to this page configuration.
-     * <p/>
+     * <p>
      * As {@link #getPageUri(UriComponentsBuilder)} returns expanded page URI it is not very useful for cases that
      * require use of URI template with URI variables. This method allows you to use URI templates and benefit
      * from pagination support implemented in {@link Page} implementations. It is especially useful if you need to handle
      * multiple requests of the same URI template in the same way - e.g. monitor request made by {@link RestOperations}
      * methods.
-     * <p/>
+     * <p>
      * Use this in the situation when you have URI template with placeholders and URI variables separately.
      * This method is useful when you have URI template with placeholders and only want to add query parameters based
      * on this page to it.
-     * <p/>
+     * <p>
      * Use {@link #getPageUri(UriComponentsBuilder)} if you want to get concrete page URI and don't have URI template.
      *
      * @param uriBuilder URI builder used for constructing page URI

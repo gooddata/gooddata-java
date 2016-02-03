@@ -38,7 +38,7 @@ class UriPage implements Page {
 
     /**
      * {@inheritDoc}
-     * <p/>
+     * <p>
      * Note that by using this method you might end up with URI that will be different from the one returned by
      * {@link #getPageUri(UriComponentsBuilder)}. Method only copies query parameters and does not care about
      * URI path.
