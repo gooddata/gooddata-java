@@ -280,4 +280,54 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
 
         gd.getDatasetService().updateProjectData(project, DML_MAQL).get();
     }
+
+    @Test
+    public void shouldReadBatchErrorMessages() throws Exception {
+        onRequest()
+                .havingPathEqualTo("/gdc/md/PROJECT/etl/task/ID")
+                .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/dataset/pullTaskStatusError.json"));
+        onRequest()
+                .havingPath(containsString("upload_status.json"))
+                .havingMethodEqualTo("GET")
+                .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/dataset/batchFailStatus1.json"));
+
+        final DatasetManifest manifest = MAPPER.readValue(readFromResource("/dataset/datasetManifest.json"), DatasetManifest.class);
+        final InputStream source = new ByteArrayInputStream(new byte[]{});
+        manifest.setSource(source);
+        try {
+            gd.getDatasetService().loadDatasets(project, manifest).get();
+            fail("Exception should be thrown");
+        } catch (DatasetException e) {
+            assertThat(e.getMessage(), is("Load datasets [dataset.person] failed: [Manifest consist of columns that are not in single CSV file dataset.stats.csv: f_competitors.nm_name., Manifest consist of columns that are not in single CSV file dataset.stats.csv: f_competitors.nm_name.]"));
+        }
+    }
+
+    @Test
+    public void shouldReadBatchErrorMessagesNoFailStatuses() throws Exception {
+        onRequest()
+                .havingPathEqualTo("/gdc/md/PROJECT/etl/task/ID")
+                .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/dataset/pullTaskStatusError.json"));
+        onRequest()
+                .havingPath(containsString("upload_status.json"))
+                .havingMethodEqualTo("GET")
+                .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/dataset/batchFailStatus2.json"));
+
+        final DatasetManifest manifest = MAPPER.readValue(readFromResource("/dataset/datasetManifest.json"), DatasetManifest.class);
+        final InputStream source = new ByteArrayInputStream(new byte[]{});
+        manifest.setSource(source);
+        try {
+            gd.getDatasetService().loadDatasets(project, manifest).get();
+            fail("Exception should be thrown");
+        } catch (DatasetException e) {
+            assertThat(e.getMessage(), is("Load datasets [dataset.person] failed: status: ERROR"));
+        }
+    }
 }
