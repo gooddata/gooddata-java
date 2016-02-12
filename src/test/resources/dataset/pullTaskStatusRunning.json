@@ -1,0 +1,6 @@
+{
+  "wTaskStatus": {
+    "poll": "/gdc/md/PROJECT_ID/task/tasks/ID/status",
+    "status": "RUNNING"
+  }
+}

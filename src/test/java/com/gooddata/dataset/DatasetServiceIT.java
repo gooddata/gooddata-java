@@ -16,7 +16,6 @@ import java.util.Collection;
 import static com.gooddata.util.ResourceUtils.readFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -54,7 +53,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
             .respond()
                 .withStatus(200);
         onRequest()
-                .havingPathEqualTo("/gdc/md/PROJECT_ID/etl/pull")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/etl/pull2")
                 .havingMethodEqualTo("POST")
             .respond()
                 .withStatus(201)
@@ -64,10 +63,10 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
     @Test
     public void shouldLoadDataset() throws Exception {
         onRequest()
-                .havingPathEqualTo("/gdc/md/PROJECT/etl/task/ID")
+                .havingPathEqualTo("/gdc/md/PROJECT/tasks/task/ID/status")
             .respond()
                 .withStatus(202)
-                .withBody(readFromResource("/dataset/pullTask.json"))
+                .withBody(readFromResource("/dataset/pullTaskStatusRunning.json"))
             .thenRespond()
                 .withStatus(200)
                 .withBody(readFromResource("/dataset/pullTaskStatusOk.json"));
@@ -79,10 +78,10 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
     @Test
     public void shouldLoadDatasets() throws Exception {
         onRequest()
-                .havingPathEqualTo("/gdc/md/PROJECT/etl/task/ID")
+                .havingPathEqualTo("/gdc/md/PROJECT/tasks/task/ID/status")
             .respond()
                 .withStatus(202)
-                .withBody(readFromResource("/dataset/pullTask.json"))
+                .withBody(readFromResource("/dataset/pullTaskStatusRunning.json"))
             .thenRespond()
                 .withStatus(200)
                 .withBody(readFromResource("/dataset/pullTaskStatusOk.json"));
@@ -98,7 +97,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
     @Test(expectedExceptions = DatasetException.class, expectedExceptionsMessageRegExp = ".*dataset.person.*Unable to load.*")
     public void shouldFailPolling() throws Exception {
         onRequest()
-                .havingPathEqualTo("/gdc/md/PROJECT/etl/task/ID")
+                .havingPathEqualTo("/gdc/md/PROJECT/tasks/task/ID/status")
                 .respond()
                 .withStatus(400);
 
@@ -109,7 +108,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
     @Test
     public void shouldFailLoading() throws Exception {
         onRequest()
-                .havingPathEqualTo("/gdc/md/PROJECT/etl/task/ID")
+                .havingPathEqualTo("/gdc/md/PROJECT/tasks/task/ID/status")
             .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/dataset/pullTaskStatusError.json"));
@@ -118,36 +117,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
             gd.getDatasetService().loadDataset(project, manifest, new ByteArrayInputStream(new byte[]{})).get();
             fail("Exception should be thrown");
         } catch (DatasetException e) {
-            assertThat(e.getMessage(), is("Load datasets [dataset.person] failed: status: ERROR"));
-        }
-    }
-
-    @Test
-    public void shouldReadErrorMessages() throws Exception {
-        onRequest()
-                .havingPathEqualTo("/gdc/md/PROJECT/etl/task/ID")
-            .respond()
-                .withStatus(200)
-                .withBody(readFromResource("/dataset/pullTaskStatusError.json"));
-        onRequest()
-                .havingPath(containsString("upload_status.json"))
-                .havingMethodEqualTo("GET")
-            .respond()
-                .withStatus(200)
-                .withBody(readFromResource("/dataset/failStatusComplex.json"));
-        onRequest()
-                .havingPath(containsString("d_adstpch_querynum.csv.log"))
-                .havingMethodEqualTo("GET")
-            .respond()
-                .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(new String[]{"Very error indeed"}));
-
-        final DatasetManifest manifest = MAPPER.readValue(readFromResource("/dataset/datasetManifest.json"), DatasetManifest.class);
-        try {
-            gd.getDatasetService().loadDataset(project, manifest, new ByteArrayInputStream(new byte[]{})).get();
-            fail("Exception should be thrown");
-        } catch (DatasetException e) {
-            assertThat(e.getMessage(), is("Load datasets [dataset.person] failed: [Very error indeed, 1 errors occured during csv import]"));
+            assertThat(e.getMessage(), is("Load datasets [dataset.person] failed: [status: ERROR. Missing field [attr.person.age]]"));
         }
     }
 
@@ -279,55 +249,5 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
         ;
 
         gd.getDatasetService().updateProjectData(project, DML_MAQL).get();
-    }
-
-    @Test
-    public void shouldReadBatchErrorMessages() throws Exception {
-        onRequest()
-                .havingPathEqualTo("/gdc/md/PROJECT/etl/task/ID")
-                .respond()
-                .withStatus(200)
-                .withBody(readFromResource("/dataset/pullTaskStatusError.json"));
-        onRequest()
-                .havingPath(containsString("upload_status.json"))
-                .havingMethodEqualTo("GET")
-                .respond()
-                .withStatus(200)
-                .withBody(readFromResource("/dataset/batchFailStatus1.json"));
-
-        final DatasetManifest manifest = MAPPER.readValue(readFromResource("/dataset/datasetManifest.json"), DatasetManifest.class);
-        final InputStream source = new ByteArrayInputStream(new byte[]{});
-        manifest.setSource(source);
-        try {
-            gd.getDatasetService().loadDatasets(project, manifest).get();
-            fail("Exception should be thrown");
-        } catch (DatasetException e) {
-            assertThat(e.getMessage(), is("Load datasets [dataset.person] failed: [Manifest consist of columns that are not in single CSV file dataset.stats.csv: f_competitors.nm_name., Manifest consist of columns that are not in single CSV file dataset.stats.csv: f_competitors.nm_name.]"));
-        }
-    }
-
-    @Test
-    public void shouldReadBatchErrorMessagesNoFailStatuses() throws Exception {
-        onRequest()
-                .havingPathEqualTo("/gdc/md/PROJECT/etl/task/ID")
-                .respond()
-                .withStatus(200)
-                .withBody(readFromResource("/dataset/pullTaskStatusError.json"));
-        onRequest()
-                .havingPath(containsString("upload_status.json"))
-                .havingMethodEqualTo("GET")
-                .respond()
-                .withStatus(200)
-                .withBody(readFromResource("/dataset/batchFailStatus2.json"));
-
-        final DatasetManifest manifest = MAPPER.readValue(readFromResource("/dataset/datasetManifest.json"), DatasetManifest.class);
-        final InputStream source = new ByteArrayInputStream(new byte[]{});
-        manifest.setSource(source);
-        try {
-            gd.getDatasetService().loadDatasets(project, manifest).get();
-            fail("Exception should be thrown");
-        } catch (DatasetException e) {
-            assertThat(e.getMessage(), is("Load datasets [dataset.person] failed: status: ERROR"));
-        }
     }
 }

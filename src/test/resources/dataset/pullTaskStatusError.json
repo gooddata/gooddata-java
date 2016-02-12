@@ -1,3 +1,17 @@
 {
-    "taskStatus" : "ERROR"
+    "wTaskStatus": {
+        "messages": [
+            {
+                "error": {
+                    "parameters": ["ERROR", "[attr.person.age]"],
+                    "requestId": "REQUEST_ID",
+                    "component": "GDC::ETL::PULL2",
+                    "errorClass": "GDC::Exception::EtlFailed",
+                    "message": "status: %s. Missing field %s"
+                }
+            }
+        ],
+        "poll": "/gdc/md/PROJECT_ID/tasks/task/ID/status",
+        "status": "ERROR"
+    }
 }
