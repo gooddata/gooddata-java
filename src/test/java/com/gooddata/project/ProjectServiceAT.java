@@ -31,8 +31,6 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
 
     private static final String PROJECT_FEATURE_FLAG = "testFeatureFlag";
 
-    private final String projectToken;
-
     public ProjectServiceAT() {
         projectToken = getProperty("projectToken");
     }
