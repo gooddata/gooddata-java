@@ -1,0 +1,8 @@
+{
+  "partialMDImport": {
+    "token": "TOKEN123",
+    "overwriteNewer": true,
+    "updateLDMObjects": true,
+    "importAttributeProperties": true
+  }
+}

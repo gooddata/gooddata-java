@@ -1,0 +1,17 @@
+{
+  "wTaskStatus": {
+    "messages": [
+      {
+        "error": {
+          "parameters": ["TOKEN123"],
+          "requestId": "REQUEST_ID",
+          "component": "GDC::MAINTENANCE::PARTIAL_IMPORT",
+          "errorClass": "GDC::Exception::User",
+          "message": "The token (%s) is not valid."
+        }
+      }
+    ],
+    "poll": "/gdc/md/PROJECT_ID/tasks/TASK_ID/status",
+    "status": "ERROR"
+  }
+}

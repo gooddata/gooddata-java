@@ -42,6 +42,7 @@ public abstract class AbstractGoodDataAT {
 
     protected static PoolingHttpClientConnectionManager connManager;
 
+    protected static String projectToken;
     protected static Project project;
 
     protected static String fact;

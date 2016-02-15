@@ -1,0 +1,10 @@
+{
+  "partialMDExport": {
+    "uris": [
+      "/gdc/md/projectId/obj/123",
+      "/gdc/md/projectId/obj/234"
+    ],
+    "crossDataCenterExport": true,
+    "exportAttributeProperties": true
+  }
+}
