@@ -4,6 +4,7 @@
 package com.gooddata.gdc;
 
 import com.github.sardine.Sardine;
+import com.github.sardine.impl.SardineException;
 import com.github.sardine.impl.SardineImpl;
 import com.gooddata.UriPrefixer;
 import org.apache.commons.lang.Validate;
@@ -100,6 +101,13 @@ public class DataStoreService {
     private void upload(URI url, InputStream stream) {
         try {
             sardine.put(url.toString(), stream);
+        } catch (SardineException e) {
+            if (HttpStatus.INTERNAL_SERVER_ERROR.value() == e.getStatusCode()) {
+                throw new DataStoreException("Got 500 while uploading to " + url + "."
+                        + "\nThis can be known limitation, see https://github.com/martiner/gooddata-java/wiki/Known-limitations", e);
+            } else {
+                throw new DataStoreException("Unable to upload to " + url + " got status " + e.getStatusCode(), e);
+            }
         } catch (IOException e) {
             throw new DataStoreException("Unable to upload to " + url, e);
         }
