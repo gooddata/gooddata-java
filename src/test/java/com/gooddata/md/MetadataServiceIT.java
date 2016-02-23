@@ -7,7 +7,8 @@ import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.FutureResult;
 import com.gooddata.JsonMatchers;
 import com.gooddata.gdc.UriResponse;
-import com.gooddata.md.maintenance.MaintenanceException;
+import com.gooddata.md.maintenance.ExportImportException;
+import com.gooddata.md.maintenance.PartialImportToken;
 import com.gooddata.md.maintenance.PartialMdExport;
 import com.gooddata.md.maintenance.PartialMdImport;
 import com.gooddata.md.report.ReportDefinition;
@@ -383,13 +384,13 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .withStatus(200)
                 .withBody(readFromResource("/gdc/task-status.json"));
 
-        final FutureResult<String> partialExport = gd.getMetadataService()
-                .partialExport(project, asList("/gdc/md/projectId/obj/123", "/gdc/md/projectId/obj/234"), false, false);
+        final FutureResult<PartialImportToken> partialExport = gd.getMetadataService()
+                .partialExport(project, new PartialMdExport(false, false, "/gdc/md/projectId/obj/123", "/gdc/md/projectId/obj/234"));
 
-        assertThat(partialExport.get(), is("TOKEN123"));
+        assertThat(partialExport.get().getToken(), is("TOKEN123"));
     }
 
-    @Test(expectedExceptions = MaintenanceException.class,
+    @Test(expectedExceptions = ExportImportException.class,
             expectedExceptionsMessageRegExp = ".*The object with uri \\(/gdc/md/PROJECT_ID/obj/123\\) doesn't exists.*")
     public void shouldPartialExportFailWhenErrorResult() throws Exception {
         onRequest()
@@ -406,10 +407,10 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .withStatus(200)
                 .withBody(readFromResource("/md/maintenance/partial-export-task-status-fail.json"));
 
-        gd.getMetadataService().partialExport(project, asList("/gdc/md/projectId/obj/123", "/gdc/md/projectId/obj/234"), false, false).get();
+        gd.getMetadataService().partialExport(project, new PartialMdExport(false, false, "/gdc/md/projectId/obj/123", "/gdc/md/projectId/obj/234")).get();
     }
 
-    @Test(expectedExceptions = MaintenanceException.class)
+    @Test(expectedExceptions = ExportImportException.class)
     public void shouldPartialExportFailWhenPollingError() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -424,7 +425,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         .respond()
                 .withStatus(404);
 
-        gd.getMetadataService().partialExport(project, asList("/gdc/md/projectId/obj/123", "/gdc/md/projectId/obj/234"), false, false).get();
+        gd.getMetadataService().partialExport(project, new PartialMdExport(false, false, "/gdc/md/projectId/obj/123", "/gdc/md/projectId/obj/234")).get();
     }
 
     @Test
@@ -444,10 +445,10 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .withStatus(200)
                 .withBody(readFromResource("/gdc/task-status.json"));
 
-        gd.getMetadataService().partialImport(project, "TOKEN123", true, true, true).get();
+        gd.getMetadataService().partialImport(project, new PartialMdImport("TOKEN123", true, true, true)).get();
     }
 
-    @Test(expectedExceptions = MaintenanceException.class,
+    @Test(expectedExceptions = ExportImportException.class,
             expectedExceptionsMessageRegExp = ".*The token \\(TOKEN123\\) is not valid.*")
     public void shouldPartialImportFailWhenErrorResult() throws Exception {
         onRequest()
@@ -464,10 +465,10 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .withStatus(200)
                 .withBody(readFromResource("/md/maintenance/partial-import-task-status-fail.json"));
 
-        gd.getMetadataService().partialImport(project, "TOKEN123", false, false, false).get();
+        gd.getMetadataService().partialImport(project, new PartialMdImport("TOKEN123", false, false, false)).get();
     }
 
-    @Test(expectedExceptions = MaintenanceException.class)
+    @Test(expectedExceptions = ExportImportException.class)
     public void shouldPartialImportFailWhenPollingError() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -482,6 +483,6 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         .respond()
                 .withStatus(404);
 
-        gd.getMetadataService().partialImport(project, "TOKEN123", false, false, false).get();
+        gd.getMetadataService().partialImport(project, new PartialMdImport("TOKEN123", false, false, false)).get();
     }
 }

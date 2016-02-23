@@ -379,7 +379,7 @@ public class MetadataServiceTest {
         when(restTemplate.postForObject(eq(PartialMdExport.URI), any(PartialMdExport.class), eq(PartialMdArtifact.class), eq(PROJECT_ID)))
                 .thenThrow(new GoodDataException("Failed"));
 
-        service.partialExport(project, Collections.singletonList("uri123"), false, false);
+        //service.partialExport(project, Collections.singletonList("uri123"), false, false);
     }
 
     @Test(expectedExceptions = GoodDataException.class)
