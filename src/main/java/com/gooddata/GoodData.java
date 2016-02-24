@@ -6,6 +6,7 @@ package com.gooddata;
 import com.gooddata.account.AccountService;
 import com.gooddata.connector.ConnectorService;
 import com.gooddata.dataload.processes.ProcessService;
+import com.gooddata.md.maintenance.MaintenanceService;
 import com.gooddata.notification.NotificationService;
 import com.gooddata.util.ResponseErrorHandler;
 import com.gooddata.warehouse.WarehouseService;
@@ -73,6 +74,7 @@ public class GoodData {
     private final ProcessService processService;
     private final WarehouseService warehouseService;
     private final NotificationService notificationService;
+    private final MaintenanceService maintenanceService;
 
     /**
      * Create instance configured to communicate with GoodData Platform under user with given credentials.
@@ -183,6 +185,7 @@ public class GoodData {
         warehouseService = new WarehouseService(getRestTemplate());
         connectorService = new ConnectorService(getRestTemplate(), projectService);
         notificationService = new NotificationService(getRestTemplate());
+        maintenanceService = new MaintenanceService(getRestTemplate());
     }
 
     private RestTemplate createRestTemplate(String hostname, HttpClient httpClient, int port, String protocol) {
@@ -366,5 +369,14 @@ public class GoodData {
      */
     public NotificationService getNotificationService() {
         return notificationService;
+    }
+
+    /**
+     * Get initialized service for metadata maintenance.
+     *
+     * @return initialized service for metadata maintenance
+     */
+    public MaintenanceService getMaintenanceService() {
+        return maintenanceService;
     }
 }

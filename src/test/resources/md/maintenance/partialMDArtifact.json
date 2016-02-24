@@ -1,0 +1,8 @@
+{
+  "partialMDArtifact": {
+    "status": {
+      "uri": "/gdc/md/projectId/tasks/taskId/status"
+    },
+    "token": "TOKEN123"
+  }
+}
