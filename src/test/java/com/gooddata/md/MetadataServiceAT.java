@@ -14,15 +14,9 @@ import com.gooddata.md.report.Filter;
 import com.gooddata.md.report.GridElement;
 import com.gooddata.md.report.GridReportDefinitionContent;
 import com.gooddata.md.report.Report;
-import com.gooddata.model.ModelDiff;
-import com.gooddata.model.ModelService;
-import com.gooddata.project.Environment;
-import com.gooddata.project.Project;
-import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
 
-import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -35,8 +29,6 @@ import java.util.Set;
  * Metadata acceptance tests.
  */
 public class MetadataServiceAT extends AbstractGoodDataAT {
-
-    private String partialExportToken;
 
     @Test(groups = "md", dependsOnGroups = "model")
     public void getObjs() throws Exception {
@@ -177,38 +169,5 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
             titles.add(element.getTitle());
         }
         assertThat(titles, hasItems("DevOps", "HR"));
-    }
-
-    @Test(groups = "md", dependsOnMethods = "createMetric")
-    public void partialExportMetric() throws Exception {
-        //final String token = gd.getMetadataService().partialExport(project, Collections.singletonList(metric.getUri()), false, true).get();
-        //assertThat(token, not(isEmptyOrNullString()));
-        //partialExportToken = token;
-    }
-
-    @Test(groups = "md", dependsOnMethods = "partialExportMetric")
-    public void partialImportDataset() throws Exception {
-        final Project newProject = new Project(title + " - metadata import", projectToken);
-        newProject.setEnvironment(Environment.TESTING);
-
-        Project importProject = null;
-        try {
-            importProject = gd.getProjectService().createProject(newProject).get();
-
-            final ModelService modelService = gd.getModelService();
-            final ModelDiff projectModelDiff = modelService.getProjectModelDiff(importProject,
-                    new InputStreamReader(getClass().getResourceAsStream("/person.json"))).get();
-            modelService.updateProjectModel(importProject, projectModelDiff).get();
-
-            gd.getMetadataService().partialImport(importProject, partialExportToken, true, true, true).get();
-            final Metric importedMetric = gd.getMetadataService().getObjById(importProject,
-                    StringUtils.substringAfterLast(metric.getUri(), "/"), Metric.class);
-
-            assertThat(importedMetric, is(notNullValue()));
-        } finally {
-            if (importProject != null) {
-                gd.getProjectService().removeProject(importProject);
-            }
-        }
     }
 }

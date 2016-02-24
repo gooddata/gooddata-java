@@ -1,21 +1,15 @@
 package com.gooddata.md.maintenance;
 
 import static com.gooddata.util.Validate.notEmpty;
-import static java.util.Arrays.stream;
+import static java.util.Arrays.asList;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gooddata.util.Validate;
-
 import org.springframework.web.util.UriTemplate;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Partial metadata export configuration structure.
@@ -29,7 +23,7 @@ public class PartialMdExport {
     public static final String URI = "/gdc/md/{projectId}/maintenance/partialmdexport";
     public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
-    private final Set<String> uris;
+    private final Collection<String> uris;
     private final boolean crossDataCenterExport;
     private final boolean exportAttributeProperties;
 
@@ -40,7 +34,7 @@ public class PartialMdExport {
      * @param mdObjectsUris list of uris to metadata objects which should be exported
      */
     public PartialMdExport(String... mdObjectsUris) {
-        this(stream(mdObjectsUris).collect(Collectors.<String>toSet()));
+        this(new HashSet<>(asList(mdObjectsUris)));
     }
 
     /**
@@ -49,7 +43,7 @@ public class PartialMdExport {
      *
      * @param mdObjectsUris list of uris to metadata objects which should be exported
      */
-    public PartialMdExport(Set<String> mdObjectsUris) {
+    public PartialMdExport(Collection<String> mdObjectsUris) {
         this(true, false, mdObjectsUris);
     }
 
@@ -61,7 +55,7 @@ public class PartialMdExport {
      * @param mdObjectsUris list of uris to metadata objects which should be exported
      */
     public PartialMdExport(boolean exportAttributeProperties, boolean crossDataCenterExport, String... mdObjectsUris) {
-        this(exportAttributeProperties, crossDataCenterExport, stream(mdObjectsUris).collect(Collectors.<String>toSet()));
+        this(exportAttributeProperties, crossDataCenterExport, new HashSet<>(asList(mdObjectsUris)));
     }
 
     /**
@@ -71,14 +65,14 @@ public class PartialMdExport {
      * @param crossDataCenterExport whether export should be usable in any Data Center
      * @param mdObjectsUris list of uris to metadata objects which should be exported
      */
-    public PartialMdExport(boolean exportAttributeProperties, boolean crossDataCenterExport, Set<String> mdObjectsUris) {
+    public PartialMdExport(boolean exportAttributeProperties, boolean crossDataCenterExport, Collection<String> mdObjectsUris) {
         notEmpty(mdObjectsUris, "uris");
         this.uris = mdObjectsUris;
         this.crossDataCenterExport = crossDataCenterExport;
         this.exportAttributeProperties = exportAttributeProperties;
     }
 
-    public Set<String> getUris() {
+    public Collection<String> getUris() {
         return uris;
     }
 

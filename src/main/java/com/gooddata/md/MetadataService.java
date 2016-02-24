@@ -3,19 +3,10 @@
  */
 package com.gooddata.md;
 
-import com.gooddata.AbstractPollHandler;
 import com.gooddata.AbstractService;
-import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.PollResult;
-import com.gooddata.gdc.TaskStatus;
 import com.gooddata.gdc.UriResponse;
-import com.gooddata.md.maintenance.ExportImportException;
-import com.gooddata.md.maintenance.PartialImportToken;
-import com.gooddata.md.maintenance.PartialMdArtifact;
-import com.gooddata.md.maintenance.PartialMdExport;
-import com.gooddata.md.maintenance.PartialMdImport;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
 import org.springframework.http.HttpStatus;
@@ -31,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.gooddata.util.Validate.noNullElements;
-import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 import static java.util.Arrays.asList;
 
@@ -452,75 +442,6 @@ public class MetadataService extends AbstractService {
         } catch (GoodDataRestException | RestClientException e) {
             throw new GoodDataException("Unable to get attribute elements from " + elementsLink + ".", e);
         }
-    }
-
-    /**
-     * Exports partial metadata from project and returns token identifying this export
-     *
-     * @param project project from which metadata should be exported
-     * @param export export to execute
-     * @return {@link FutureResult} of the task containing token identifying partial export after the task is completed
-     */
-    public FutureResult<PartialImportToken> partialExport(Project project, final PartialMdExport export) {
-        notNull(project, "project");
-
-        final PartialMdArtifact partialMdArtifact;
-        try {
-            partialMdArtifact = restTemplate.postForObject(PartialMdExport.URI, export, PartialMdArtifact.class, project.getId());
-        } catch (GoodDataRestException | RestClientException e) {
-            throw new GoodDataException("Unable to export metadata from objects " + export.getUris() + ".", e);
-        }
-
-        return new PollResult<>(this, new AbstractPollHandler<TaskStatus, PartialImportToken>(partialMdArtifact.getStatus().getUri(),
-                TaskStatus.class, PartialImportToken.class) {
-            @Override
-            public void handlePollResult(TaskStatus pollResult) {
-                if (!pollResult.isSuccess()) {
-                    throw new ExportImportException("Partial metadata export failed with errors: " + pollResult.getMessages());
-                }
-                setResult(new PartialImportToken(partialMdArtifact.getToken(), export.isExportAttributeProperties()));
-            }
-
-            @Override
-            public void handlePollException(GoodDataRestException e) {
-                throw new ExportImportException("Unable to to export partial metadata.", e);
-            }
-        });
-    }
-
-    /**
-     * Imports partial metadata to project based on given token
-     *
-     * @param project project to which metadata should be imported
-     * @param mdImport metadata import to execute
-     * @return {@link FutureResult} of the task
-     */
-    public FutureResult<Void> partialImport(Project project, PartialMdImport mdImport) {
-        notNull(project, "project");
-        notNull(mdImport, "mdImport");
-
-        final UriResponse importResponse;
-        try {
-            importResponse = restTemplate.postForObject(PartialMdImport.URI, mdImport, UriResponse.class, project.getId());
-        } catch (GoodDataRestException | RestClientException e) {
-            throw new GoodDataException("Unable to import partial metadata to project '" + project.getUri()
-                    + "' with token '" + mdImport.getToken() + "'.", e);
-        }
-
-        return new PollResult<>(this, new AbstractPollHandler<TaskStatus, Void>(importResponse.getUri(), TaskStatus.class, Void.class) {
-            @Override
-            public void handlePollResult(TaskStatus pollResult) {
-                if (!pollResult.isSuccess()) {
-                    throw new ExportImportException("Partial metadata import failed with errors: " + pollResult.getMessages());
-                }
-                setResult(null);
-            }
-
-            @Override
-            public void handlePollException(GoodDataRestException e) {
-                throw new ExportImportException("Unable to import partial metadata.", e);
-            }
-        });
     }
 
     private IdentifiersAndUris getUrisForIdentifiers(final Project project, final Collection<String> identifiers) {

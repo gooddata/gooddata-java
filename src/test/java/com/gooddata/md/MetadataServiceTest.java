@@ -6,9 +6,6 @@ package com.gooddata.md;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.gdc.UriResponse;
-import com.gooddata.md.maintenance.PartialMdArtifact;
-import com.gooddata.md.maintenance.PartialMdExport;
-import com.gooddata.md.maintenance.PartialMdImport;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
 import org.mockito.Mock;
@@ -31,8 +28,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -374,19 +369,4 @@ public class MetadataServiceTest {
         assertThat(elements, allOf(hasItem(result1), hasItem(result2)));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void testCreatePartialExportError() throws Exception {
-        when(restTemplate.postForObject(eq(PartialMdExport.URI), any(PartialMdExport.class), eq(PartialMdArtifact.class), eq(PROJECT_ID)))
-                .thenThrow(new GoodDataException("Failed"));
-
-        //service.partialExport(project, Collections.singletonList("uri123"), false, false);
-    }
-
-    @Test(expectedExceptions = GoodDataException.class)
-    public void testCreatePartialImportError() throws Exception {
-        when(restTemplate.postForObject(eq(PartialMdImport.URI), any(PartialMdImport.class), eq(UriResponse.class), eq(PROJECT_ID)))
-                .thenThrow(new GoodDataException("Failed"));
-
-        service.partialImport(project, "TOKEN123", false, false, false);
-    }
 }

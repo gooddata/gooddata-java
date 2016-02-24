@@ -4,13 +4,7 @@
 package com.gooddata.md;
 
 import com.gooddata.AbstractGoodDataIT;
-import com.gooddata.FutureResult;
-import com.gooddata.JsonMatchers;
 import com.gooddata.gdc.UriResponse;
-import com.gooddata.md.maintenance.ExportImportException;
-import com.gooddata.md.maintenance.PartialImportToken;
-import com.gooddata.md.maintenance.PartialMdExport;
-import com.gooddata.md.maintenance.PartialMdImport;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
 import org.hamcrest.Matchers;
@@ -365,124 +359,5 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         assertThat(attributeElements, is(Matchers.notNullValue()));
         assertThat(attributeElements, hasSize(3));
         assertThat(attributeElements.get(0).getTitle(), is("1167"));
-    }
-
-    @Test
-    public void shouldExportPartialMetadata() throws Exception {
-        onRequest()
-                .havingMethodEqualTo("POST")
-                .havingPathEqualTo(PartialMdExport.TEMPLATE.expand(project.getId()).toString())
-                .havingBody(JsonMatchers.isJsonString("/md/maintenance/partialMDExport-defaultVals.json"))
-        .respond()
-                .withStatus(200)
-                .withBody(readFromResource("/md/maintenance/partialMDArtifact.json"));
-
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo("/gdc/md/projectId/tasks/taskId/status")
-        .respond()
-                .withStatus(200)
-                .withBody(readFromResource("/gdc/task-status.json"));
-
-        final FutureResult<PartialImportToken> partialExport = gd.getMetadataService()
-                .partialExport(project, new PartialMdExport(false, false, "/gdc/md/projectId/obj/123", "/gdc/md/projectId/obj/234"));
-
-        assertThat(partialExport.get().getToken(), is("TOKEN123"));
-    }
-
-    @Test(expectedExceptions = ExportImportException.class,
-            expectedExceptionsMessageRegExp = ".*The object with uri \\(/gdc/md/PROJECT_ID/obj/123\\) doesn't exists.*")
-    public void shouldPartialExportFailWhenErrorResult() throws Exception {
-        onRequest()
-                .havingMethodEqualTo("POST")
-                .havingPathEqualTo(PartialMdExport.TEMPLATE.expand(project.getId()).toString())
-        .respond()
-                .withStatus(200)
-                .withBody(readFromResource("/md/maintenance/partialMDArtifact.json"));
-
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo("/gdc/md/projectId/tasks/taskId/status")
-        .respond()
-                .withStatus(200)
-                .withBody(readFromResource("/md/maintenance/partial-export-task-status-fail.json"));
-
-        gd.getMetadataService().partialExport(project, new PartialMdExport(false, false, "/gdc/md/projectId/obj/123", "/gdc/md/projectId/obj/234")).get();
-    }
-
-    @Test(expectedExceptions = ExportImportException.class)
-    public void shouldPartialExportFailWhenPollingError() throws Exception {
-        onRequest()
-                .havingMethodEqualTo("POST")
-                .havingPathEqualTo(PartialMdExport.TEMPLATE.expand(project.getId()).toString())
-        .respond()
-                .withStatus(200)
-                .withBody(readFromResource("/md/maintenance/partialMDArtifact.json"));
-
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo("/gdc/md/projectId/tasks/taskId/status")
-        .respond()
-                .withStatus(404);
-
-        gd.getMetadataService().partialExport(project, new PartialMdExport(false, false, "/gdc/md/projectId/obj/123", "/gdc/md/projectId/obj/234")).get();
-    }
-
-    @Test
-    public void shouldImportPartialMetadata() throws Exception {
-        onRequest()
-                .havingMethodEqualTo("POST")
-                .havingPathEqualTo(PartialMdImport.TEMPLATE.expand(project.getId()).toString())
-                .havingBody(JsonMatchers.isJsonString("/md/maintenance/partialMDImport.json"))
-        .respond()
-                .withStatus(200)
-                .withBody("{ \"uri\": \"/gdc/md/projectId/tasks/taskId/status\" }");
-
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo("/gdc/md/projectId/tasks/taskId/status")
-        .respond()
-                .withStatus(200)
-                .withBody(readFromResource("/gdc/task-status.json"));
-
-        gd.getMetadataService().partialImport(project, new PartialMdImport("TOKEN123", true, true, true)).get();
-    }
-
-    @Test(expectedExceptions = ExportImportException.class,
-            expectedExceptionsMessageRegExp = ".*The token \\(TOKEN123\\) is not valid.*")
-    public void shouldPartialImportFailWhenErrorResult() throws Exception {
-        onRequest()
-                .havingMethodEqualTo("POST")
-                .havingPathEqualTo(PartialMdImport.TEMPLATE.expand(project.getId()).toString())
-        .respond()
-                .withStatus(200)
-                .withBody("{ \"uri\": \"/gdc/md/projectId/tasks/taskId/status\" }");
-
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo("/gdc/md/projectId/tasks/taskId/status")
-        .respond()
-                .withStatus(200)
-                .withBody(readFromResource("/md/maintenance/partial-import-task-status-fail.json"));
-
-        gd.getMetadataService().partialImport(project, new PartialMdImport("TOKEN123", false, false, false)).get();
-    }
-
-    @Test(expectedExceptions = ExportImportException.class)
-    public void shouldPartialImportFailWhenPollingError() throws Exception {
-        onRequest()
-                .havingMethodEqualTo("POST")
-                .havingPathEqualTo(PartialMdImport.TEMPLATE.expand(project.getId()).toString())
-        .respond()
-                .withStatus(200)
-                .withBody("{ \"uri\": \"/gdc/md/projectId/tasks/taskId/status\" }");
-
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo("/gdc/md/projectId/tasks/taskId/status")
-        .respond()
-                .withStatus(404);
-
-        gd.getMetadataService().partialImport(project, new PartialMdImport("TOKEN123", false, false, false)).get();
     }
 }

@@ -1,10 +1,7 @@
 package com.gooddata.md.maintenance;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
-import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
 
