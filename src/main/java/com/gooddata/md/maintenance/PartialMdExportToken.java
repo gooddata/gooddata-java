@@ -24,7 +24,7 @@ public class PartialMdExportToken {
 
     /**
      * Creates new PartialMdExportToken.
-     * <br/>
+     * <br>
      * Sets default values to properties:
      * <ul>
      *     <li>importAttributeProperties - default false</li>
@@ -76,6 +76,8 @@ public class PartialMdExportToken {
     /**
      * Sets the flag {@code overwriteNewer}.
      * If {@code true}, UDM/ADM objects are overwritten without checking modification time.
+     *
+     * @param overwriteNewer flag value to be set
      */
     public void setOverwriteNewer(boolean overwriteNewer) {
         this.overwriteNewer = overwriteNewer;
@@ -84,6 +86,8 @@ public class PartialMdExportToken {
     /**
      * Sets the flag {@code updateLDMObjects}.
      * If {@code true}, related LDM objects name, description and tags are overwritten
+     *
+     * @param updateLDMObjects flag value to be set
      */
     public void setUpdateLDMObjects(boolean updateLDMObjects) {
         this.updateLDMObjects = updateLDMObjects;
@@ -96,8 +100,10 @@ public class PartialMdExportToken {
      *     <li>for attribute - import drillDownStepAttributeDF setting</li>
      *     <li>for attributeDisplayForm - import type setting</li>
      * </ul>
-     * It also implies {@code 'updateLDMObjects = true'} for all mentioned types.<br/>
+     * It also implies {@code 'updateLDMObjects = true'} for all mentioned types.<br>
      * It will not reliably work (can fail) for exports without {@code 'exportAttributeProperties = true'}.
+     *
+     * @param importAttributeProperties flag value to be set
      */
     public void setImportAttributeProperties(boolean importAttributeProperties) {
         this.importAttributeProperties = importAttributeProperties;
