@@ -1,0 +1,17 @@
+{
+  "wTaskStatus": {
+    "messages": [
+      {
+        "error": {
+          "parameters": ["/gdc/md/PROJECT_ID/obj/123"],
+          "requestId": "REQUEST_ID",
+          "component": "GDC::MAINTENANCE::PARTIAL_EXPORT",
+          "errorClass": "GDC::Exception::User",
+          "message": "The object with uri (%s) doesn't exists."
+        }
+      }
+    ],
+    "poll": "/gdc/md/PROJECT_ID/tasks/TASK_ID/status",
+    "status": "ERROR"
+  }
+}

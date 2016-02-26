@@ -3,7 +3,6 @@ package com.gooddata.gdc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
@@ -13,7 +12,7 @@ public class TaskStatusTest {
 
     @Test
     public void testDeser() throws Exception {
-        final TaskStatus status = MAPPER.readValue(getClass().getResourceAsStream("/model/maql-ddl-task-status.json"), TaskStatus.class);
+        final TaskStatus status = MAPPER.readValue(getClass().getResourceAsStream("/gdc/task-status.json"), TaskStatus.class);
         assertThat(status.getStatus(), is("OK"));
         assertThat(status.getPollUri(), is("/gdc/md/PROJECT_ID/tasks/TASK_ID/status"));
     }
