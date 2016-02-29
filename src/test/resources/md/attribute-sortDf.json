@@ -1,0 +1,71 @@
+{
+  "attribute" : {
+    "content" : {
+      "pk" : [
+        {
+          "data" : "/gdc/md/PROJECT_ID/obj/PK_ID",
+          "type" : "col"
+        }
+      ],
+      "direction" : "asc",
+      "sort": {
+        "df": {
+          "uri": "/gdc/md/PROJECT_ID/obj/1806"
+        }
+      },
+      "type" : "GDC.time.date",
+      "rel" : [],
+      "compositeAttribute" : [],
+      "compositeAttributePk" : [],
+      "drillDownStepAttributeDF" : "/gdc/md/PROJECT_ID/obj/DF_DRILL_DOWN",
+      "linkAttributeDF" : "/gdc/md/PROJECT_ID/obj/DF_LINK",
+      "folders" : [],
+      "grain" : [],
+      "displayForms" : [
+        {
+          "content" : {
+            "formOf" : "/gdc/md/PROJECT_ID/obj/DF_FORM_OF_ID",
+            "expression" : "[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]",
+            "ldmexpression" : "[/gdc/md/PROJECT_ID/obj/DF_LDM_EXPRESSION_ID]"
+          },
+          "links" : {
+            "elements" : "/gdc/md/PROJECT_ID/obj/DF_ID/elements"
+          },
+          "meta" : {
+            "author" : "/gdc/account/profile/USER_ID",
+            "uri" : "/gdc/md/PROJECT_ID/obj/DF_ID",
+            "tags" : "",
+            "created" : "2014-04-11 13:45:56",
+            "identifier" : "attr.person.id.name",
+            "deprecated" : "0",
+            "summary" : "",
+            "title" : "Person Name",
+            "category" : "attributeDisplayForm",
+            "updated" : "2014-04-11 13:45:56",
+            "contributor" : "/gdc/account/profile/USER_ID"
+          }
+        }
+      ],
+      "fk" : [
+        {
+          "data" : "/gdc/md/PROJECT_ID/obj/FK_ID",
+          "type" : "col"
+        }
+      ],
+      "dimension": "/gdc/md/PROJECT_ID/obj/DIM_ID"
+    },
+    "meta" : {
+      "author" : "/gdc/account/profile/USER_ID",
+      "uri" : "/gdc/md/PROJECT_ID/obj/28",
+      "tags" : "",
+      "created" : "2014-04-11 13:45:56",
+      "identifier" : "attr.person.id",
+      "deprecated" : "0",
+      "summary" : "",
+      "title" : "Person ID",
+      "category" : "attribute",
+      "updated" : "2014-04-11 13:45:56",
+      "contributor" : "/gdc/account/profile/USER_ID"
+    }
+  }
+}

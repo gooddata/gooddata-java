@@ -59,6 +59,9 @@ public class AttributeTest {
 
         assertThat(attribute.getDirection(), is("asc"));
         assertThat(attribute.getSort(), is("pk"));
+        assertThat(attribute.isSortedByPk(), is(true));
+        assertThat(attribute.isSortedByUsedDf(), is(false));
+        assertThat(attribute.isSortedByLinkedDf(), is(false));
         assertThat(attribute.getType(), is("GDC.time.date"));
         assertThat(attribute.getLinkedDisplayFormLink(), is("/gdc/md/PROJECT_ID/obj/DF_LINK"));
         assertThat(attribute.getCompositeAttribute(), hasSize(0));
@@ -83,4 +86,14 @@ public class AttributeTest {
         assertThat(attribute, serializesToJson("/md/attribute-inputOrig.json"));
     }
 
+    @Test
+    public void shouldDeserializeAttributeWithSort() throws Exception {
+        final InputStream stream = getClass().getResourceAsStream("/md/attribute-sortDf.json");
+        final Attribute attribute = new ObjectMapper().readValue(stream, Attribute.class);
+
+        assertThat(attribute.getSort(), is("/gdc/md/PROJECT_ID/obj/1806"));
+        assertThat(attribute.isSortedByLinkedDf(), is(true));
+        assertThat(attribute.isSortedByUsedDf(), is(false));
+        assertThat(attribute.isSortedByPk(), is(false));
+    }
 }

@@ -67,9 +67,37 @@ public class NestedAttribute extends AbstractObj {
         return content.getDirection();
     }
 
+    /**
+     * @see {@link #isSortedByLinkedDf()}, {@link #isSortedByUsedDf()} and {@link #isSortedByPk()}
+     * @return sort setting - pk, byUsedDF or uri linking some display form, null if not set
+     */
     @JsonIgnore
     public String getSort() {
-        return content.getSort();
+        return content.getSort() != null ? content.getSort().getValue() : null;
+    }
+
+    /**
+     * @return true when the sort is set and it is a link to display form, false otherwise
+     */
+    @JsonIgnore
+    public boolean isSortedByLinkedDf() {
+        return content.getSort() != null && content.getSort().isLinkType();
+    }
+
+    /**
+     * @return true when the sort is set to byUsedDF (used display form), false otherwise
+     */
+    @JsonIgnore
+    public boolean isSortedByUsedDf() {
+        return content.getSort() != null && AttributeSort.BY_USED_DF.equals(content.getSort().getValue());
+    }
+
+    /**
+     * @return true when the sort is set to pk (primary key), false otherwise
+     */
+    @JsonIgnore
+    public boolean isSortedByPk() {
+        return content.getSort() != null && AttributeSort.PK.equals(content.getSort().getValue());
     }
 
     @JsonIgnore
@@ -114,7 +142,7 @@ public class NestedAttribute extends AbstractObj {
         private final Collection<DisplayForm> displayForms;
         private final String dimension;
         private final String direction;
-        private final String sort;
+        private final AttributeSort sort;
         private final String type;
         private final Collection<String> rel;
         private final Collection<String> compositeAttribute;
@@ -127,7 +155,7 @@ public class NestedAttribute extends AbstractObj {
         @JsonCreator
         protected Content(@JsonProperty("pk") Collection<Key> pk, @JsonProperty("fk") Collection<Key> fk,
                 @JsonProperty("displayForms") Collection<DisplayForm> displayForms, @JsonProperty("dimension") String dimension,
-                @JsonProperty("direction") String direction, @JsonProperty("sort") String sort, @JsonProperty("type") String type,
+                @JsonProperty("direction") String direction, @JsonProperty("sort") AttributeSort sort, @JsonProperty("type") String type,
                 @JsonProperty("rel") Collection<String> rel, @JsonProperty("compositeAttribute") Collection<String> compositeAttribute,
                 @JsonProperty("compositeAttributePk") Collection<String> compositeAttributePk,
                 @JsonProperty("drillDownStepAttributeDF") String drillDownStepAttributeDF, @JsonProperty("linkAttributeDF") String linkAttributeDF,
@@ -169,7 +197,7 @@ public class NestedAttribute extends AbstractObj {
             return direction;
         }
 
-        public String getSort() {
+        public AttributeSort getSort() {
             return sort;
         }
 
