@@ -27,9 +27,11 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.VersionInfo;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.DefaultUriTemplateHandler;
 
 import java.util.Arrays;
 
@@ -190,13 +192,18 @@ public class GoodData {
 
     private RestTemplate createRestTemplate(String hostname, HttpClient httpClient, int port, String protocol) {
 
-        final UriPrefixingClientHttpRequestFactory factory = new UriPrefixingClientHttpRequestFactory(
-                new HttpComponentsClientHttpRequestFactory(httpClient), hostname, port, protocol);
+        final ClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
         final RestTemplate restTemplate = new RestTemplate(factory);
         restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(
                 new HeaderSettingRequestInterceptor(singletonMap("Accept", getAcceptHeaderValue()))));
 
         restTemplate.setErrorHandler(new ResponseErrorHandler(restTemplate.getMessageConverters()));
+
+        final DefaultUriTemplateHandler uriTemplateHandler = new DefaultUriTemplateHandler();
+        uriTemplateHandler.setBaseUrl(String.format("%s://%s:%s", protocol, hostname, port));
+        uriTemplateHandler.setParsePath(false);
+
+        restTemplate.setUriTemplateHandler(uriTemplateHandler);
 
         return restTemplate;
     }
