@@ -62,6 +62,7 @@ public class GoodData {
     private static final int RESTAPI_VERSION = 1;
 
     private final RestTemplate restTemplate;
+    private final HttpClient httpClient;
     private final AccountService accountService;
     private final ProjectService projectService;
     private final MetadataService metadataService;
@@ -168,7 +169,7 @@ public class GoodData {
         notEmpty(login, "login");
         notEmpty(password, "password");
         notEmpty(protocol, "protocol");
-        final HttpClient httpClient = createHttpClient(login, password, hostname, port, protocol,
+        httpClient = createHttpClient(login, password, hostname, port, protocol,
                 createHttpClientBuilder(settings));
 
         restTemplate = createRestTemplate(hostname, httpClient, port, protocol);
@@ -178,7 +179,7 @@ public class GoodData {
         metadataService = new MetadataService(getRestTemplate());
         modelService = new ModelService(getRestTemplate());
         gdcService = new GdcService(getRestTemplate());
-        dataStoreService = new DataStoreService(httpClient, getRestTemplate(), gdcService, new HttpHost(hostname, port, protocol).toURI());
+        dataStoreService = new DataStoreService(getHttpClient(), getRestTemplate(), gdcService, new HttpHost(hostname, port, protocol).toURI());
         datasetService = new DatasetService(getRestTemplate(), dataStoreService);
         reportService = new ReportService(getRestTemplate());
         processService = new ProcessService(getRestTemplate(), accountService, dataStoreService);
@@ -253,6 +254,15 @@ public class GoodData {
      */
     protected final RestTemplate getRestTemplate() {
         return restTemplate;
+    }
+
+    /**
+     * Get the configured {@link HttpClient} used by the library.
+     * This is the extension point for inheriting classes providing additional services.
+     * @return HTTP client
+     */
+    protected final HttpClient getHttpClient() {
+        return httpClient;
     }
 
     /**
