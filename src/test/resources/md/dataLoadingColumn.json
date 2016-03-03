@@ -1,0 +1,34 @@
+{
+  "dataLoadingColumn" : {
+    "content" : {
+      "columnName" : "COLUMN_NAME",
+      "columnUnique" : 0,
+      "columnPrecision" : null,
+      "columnNull" : 1,
+      "columnType" : "INT",
+      "columnLength" : 128,
+      "column" : {
+        "uri" : "/gdc/md/PROJECT_ID/obj/COLUMN_ID"
+      },
+      "columnSynchronize" : {
+        "columnType" : "INT",
+        "columnLength" : 128,
+        "precision" : 0
+      }
+    },
+    "meta" : {
+      "author" : "/gdc/account/profile/PROFILE_ID",
+      "uri" : "/gdc/md/PROJECT_ID/obj/DATA_LOADING_COLUMN_ID",
+      "tags" : "",
+      "created" : "2016-02-29 13:24:37",
+      "identifier" : "IDENTIFIER",
+      "deprecated" : "0",
+      "summary" : "",
+      "isProduction" : 1,
+      "title" : "TITLE",
+      "category" : "dataLoadingColumn",
+      "updated" : "2016-03-03 13:14:04",
+      "contributor" : "/gdc/account/profile/PROFILE_ID"
+    }
+  }
+}
