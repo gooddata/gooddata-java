@@ -44,7 +44,8 @@ is specific enough.
   * `get*()` when searching form single object (throw exception when no or multiple objects are found,
   never return `null`)
   * `find*()` when searching for multiple objects (collection of objects, never return `null`)
-  * `remove*()` (i.e. `remove(Project project)`) instead od `delete*()` 
+  * `list*()` when listing whole or paged collection of objects (return collection or collection wrapped by DTO)
+  * `remove*()` (i.e. `remove(Project project)`) instead od `delete*()`
 * Write **integration tests** for services using _[Jadler](https://github.com/jadler-mocking/jadler/wiki)_.
 * If it is possible write **acceptance tests** to be run with the real backend.
 * Update [documentation](https://github.com/martiner/gooddata-java/wiki/Code-Examples) with usage examples.

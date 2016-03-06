@@ -11,14 +11,15 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.testng.AssertJUnit.assertNotNull;
 
+@SuppressWarnings("deprecation")
 public class FeatureFlagsTest {
 
     @Test
     public void testDeserialize() {
         final FeatureFlags featureFlags = readObjectFromResource(getClass(), "/gdc/featureFlags.json",
                 FeatureFlags.class);
-        assertNotNull(featureFlags);
 
+        assertNotNull(featureFlags);
         assertThat(featureFlags.getFeatureFlags(), hasSize(2));
         assertThat(featureFlags.getFeatureFlags(), contains(
                 new FeatureFlag("testFeature", true),

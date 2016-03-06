@@ -13,6 +13,7 @@ import com.gooddata.SimplePollHandler;
 import com.gooddata.account.AccountService;
 import com.gooddata.collections.Page;
 import com.gooddata.collections.PageableList;
+import com.gooddata.featureflag.FeatureFlagService;
 import com.gooddata.gdc.AsyncTask;
 import com.gooddata.gdc.FeatureFlag;
 import com.gooddata.gdc.FeatureFlags;
@@ -353,7 +354,10 @@ public class ProjectService extends AbstractService {
      *
      * @param project project, cannot be null
      * @return list of aggregated feature flags for given project and current user
+     * @deprecated use {@link FeatureFlagService#listFeatureFlags(Project)} instead
      */
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public List<FeatureFlag> listAggregatedFeatureFlags(final Project project) {
         notNull(project, "project");
         try {
@@ -372,13 +376,16 @@ public class ProjectService extends AbstractService {
     }
 
     /**
-     * Lists all project feature flags (only project scoped flags, use {@link #listAggregatedFeatureFlags(Project)} for
-     * aggregated flags from all scopes).
+     * Lists all project feature flags (only project scoped flags, use {@link FeatureFlagService#listFeatureFlags(Project)}
+     * for aggregated flags from all scopes).
      * It doesn't matter whether feature flag is enabled or not, it'll be included in all cases.
      *
      * @param project project, cannot be null
      * @return list of all feature flags for given project
+     * @deprecated use {@link FeatureFlagService#listProjectFeatureFlags(Project)} instead
      */
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public List<ProjectFeatureFlag> listFeatureFlags(Project project) {
         notNull(project, "project");
         try {
@@ -404,7 +411,10 @@ public class ProjectService extends AbstractService {
      * @param project project for which the feature flag should be created, cannot be null
      * @param featureFlag feature flag to be created, cannot be null
      * @return created feature flag
+     * @deprecated use {@link FeatureFlagService#createProjectFeatureFlag(Project, com.gooddata.featureflag.ProjectFeatureFlag)}
      */
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public ProjectFeatureFlag createFeatureFlag(final Project project, final ProjectFeatureFlag featureFlag) {
         notNull(project, "project");
         notNull(featureFlag, "featureFlag");
@@ -426,7 +436,10 @@ public class ProjectService extends AbstractService {
      * @param project project, cannot be null
      * @param featureFlagName name of feature flag, cannot be empty
      * @return feature flag
+     * @deprecated use {@link FeatureFlagService#getProjectFeatureFlag(Project, String)}
      */
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public ProjectFeatureFlag getFeatureFlag(final Project project, final String featureFlagName) {
         notNull(project, "project");
         notEmpty(featureFlagName, "featureFlagName");
@@ -440,7 +453,10 @@ public class ProjectService extends AbstractService {
      *
      * @param featureFlag updated feature flag
      * @return updated feature flag
+     * @deprecated use {@link FeatureFlagService#updateProjectFeatureFlag(com.gooddata.featureflag.ProjectFeatureFlag)}
      */
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public ProjectFeatureFlag updateFeatureFlag(final ProjectFeatureFlag featureFlag) {
         notNull(featureFlag, "featureFlag");
         notEmpty(featureFlag.getUri(), "featureFlag");
@@ -457,7 +473,10 @@ public class ProjectService extends AbstractService {
      * Deletes existing project feature flag.
      *
      * @param featureFlag existing project feature flag with links set properly, cannot be null
+     * @deprecated use {@link FeatureFlagService#deleteFeatureFlag(com.gooddata.featureflag.ProjectFeatureFlag)}
      */
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public void deleteFeatureFlag(ProjectFeatureFlag featureFlag) {
         notNull(featureFlag, "featureFlag");
         notEmpty(featureFlag.getUri(), "featureFlag URI");
@@ -470,6 +489,7 @@ public class ProjectService extends AbstractService {
     }
 
 
+    @SuppressWarnings("deprecation")
     private ProjectFeatureFlag getFeatureFlag(String featureFlagUri) {
         return restTemplate.getForObject(featureFlagUri, ProjectFeatureFlag.class);
     }

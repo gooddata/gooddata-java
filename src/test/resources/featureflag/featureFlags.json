@@ -1,0 +1,6 @@
+{
+    "featureFlags": {
+        "testFeature": true,
+        "testFeature2": false
+    }
+}
