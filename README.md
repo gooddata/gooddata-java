@@ -26,7 +26,7 @@ See [releases page](https://github.com/martiner/gooddata-java/releases) for info
 ### Dependencies
 
 The *GoodData Java SDK* uses:
-* the [GoodData HTTP client](https://github.com/gooddata/gooddata-http-client) version 0.8.2 or later
+* the [GoodData HTTP client](https://github.com/gooddata/gooddata-http-client) version 0.9.3 or later
 * the *Apache HTTP Client* version 4.3 or later (for white-labeled domains at least version 4.3.2 is required)
 * the *Spring Framework* version 3.x
 * the *Jackson JSON Processor* version 2.7.0 (*GoodData Java SDK* version 0.x requires version 1.9)
