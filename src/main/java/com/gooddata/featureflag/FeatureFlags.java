@@ -35,15 +35,13 @@ public class FeatureFlags implements Iterable<FeatureFlag> {
 
     /**
      * @deprecated use {@link #isEnabled(String)} method or {@link Iterable} feature of this class
+     * @return list of feature flags
      */
     @Deprecated
     public List<FeatureFlag> getFeatureFlags() {
         return featureFlags;
     }
 
-    /**
-     * {@inheritDoc Iterable#iterator}
-     */
     @Override
     public Iterator<FeatureFlag> iterator() {
         return featureFlags.iterator();

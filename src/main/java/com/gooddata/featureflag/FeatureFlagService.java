@@ -107,7 +107,7 @@ public class FeatureFlagService extends AbstractService {
 
     /**
      * Creates new feature flag for given project.
-     * <p/>
+     * <p>
      * Usually, it doesn't make sense to create feature flag that is disabled because
      * this is the same as having no feature flag at all.
      *

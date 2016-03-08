@@ -31,9 +31,6 @@ public class ProjectFeatureFlags implements Iterable<ProjectFeatureFlag> {
         }
     }
 
-    /**
-     *{@inheritDoc Iterable#iterator}
-     */
     @Override
     public Iterator<ProjectFeatureFlag> iterator() {
         return items.iterator();
@@ -57,6 +54,7 @@ public class ProjectFeatureFlags implements Iterable<ProjectFeatureFlag> {
 
     /**
      * @deprecated use {@link #isEnabled(String)} method or {@link Iterable} feature of this class
+     * @return list of project feature flags
      */
     @Deprecated
     public List<ProjectFeatureFlag> getItems() {

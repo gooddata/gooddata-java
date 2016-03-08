@@ -68,8 +68,10 @@ public class NestedAttribute extends AbstractObj {
     }
 
     /**
-     * @see {@link #isSortedByLinkedDf()}, {@link #isSortedByUsedDf()} and {@link #isSortedByPk()}
      * @return sort setting - pk, byUsedDF or uri linking some display form, null if not set
+     * @see #isSortedByLinkedDf()
+     * @see #isSortedByUsedDf()
+     * @see #isSortedByPk()
      */
     @JsonIgnore
     public String getSort() {

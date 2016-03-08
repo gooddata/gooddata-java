@@ -38,6 +38,7 @@ public class FeatureFlags {
 
     /**
      * @deprecated use {@link com.gooddata.featureflag.FeatureFlags#isEnabled(String)} method or its {@link Iterable} feature
+     * @return list of feature flags
      */
     @Deprecated
     public List<FeatureFlag> getFeatureFlags() {
