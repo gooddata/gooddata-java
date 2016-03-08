@@ -1,8 +1,9 @@
 language: java
 install: true
-script: mvn verify coveralls:report -Pcoverage
+script: mvn verify javadoc:javadoc coveralls:report -Pcoverage
 jdk:
   - openjdk7
+  - oraclejdk8
 branches:
   only:
      - master
