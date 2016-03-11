@@ -47,7 +47,7 @@ public class ExportImportService extends AbstractService {
             throw new ExportImportException("Unable to export metadata from objects " + export.getUris() + ".", e);
         }
 
-        return new PollResult<>(this, new AbstractPollHandler<TaskStatus, PartialMdExportToken>(partialMdArtifact.getStatus().getUri(),
+        return new PollResult<>(this, new AbstractPollHandler<TaskStatus, PartialMdExportToken>(partialMdArtifact.getStatusUri(),
                 TaskStatus.class, PartialMdExportToken.class) {
             @Override
             public void handlePollResult(TaskStatus pollResult) {
