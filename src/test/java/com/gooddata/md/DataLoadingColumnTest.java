@@ -22,8 +22,7 @@ public class DataLoadingColumnTest {
         final DataLoadingColumn column = new ObjectMapper().readValue(stream, DataLoadingColumn.class);
         assertThat(column, is(notNullValue()));
 
-        assertThat(column.getColumnUri(), is(notNullValue()));
-        assertThat(column.getColumnUri().getUri(), is("/gdc/md/PROJECT_ID/obj/COLUMN_ID"));
+        assertThat(column.getColumnUri(), is("/gdc/md/PROJECT_ID/obj/COLUMN_ID"));
 
         assertThat(column.getType(), is("INT"));
         assertThat(column.hasTypeInt(), is(true));

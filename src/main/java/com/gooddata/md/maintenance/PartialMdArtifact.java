@@ -1,10 +1,6 @@
 package com.gooddata.md.maintenance;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import com.gooddata.gdc.UriResponse;
 
 /**
@@ -16,6 +12,7 @@ import com.gooddata.gdc.UriResponse;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 class PartialMdArtifact {
 
+    @JsonProperty("status")
     private final UriResponse status;
     private final String token;
 
@@ -25,8 +22,9 @@ class PartialMdArtifact {
         this.token = token;
     }
 
-    public UriResponse getStatus() {
-        return status;
+    @JsonIgnore
+    public String getStatusUri() {
+        return status.getUri();
     }
 
     public String getToken() {
