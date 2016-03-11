@@ -7,22 +7,22 @@ import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
+import com.gooddata.util.ResourceUtils;
+import net.javacrumbs.jsonunit.JsonMatchers;
 import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.gooddata.util.ResourceUtils.readFromResource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.util.ResourceUtils.readStringFromResource;
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static net.jadler.Jadler.onRequest;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -115,6 +115,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(IDENTIFIERS_URI)
+                .havingBody(jsonEquals(readStringFromResource("/md/identifierToUri.json")))
                 .respond()
                 .withStatus(200)
                 .withBody(MAPPER.writeValueAsString(response));
@@ -135,11 +136,12 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(IDENTIFIERS_URI)
+                .havingBody(jsonEquals(readStringFromResource("/md/identifierToUri.json")))
                 .respond()
                 .withStatus(200)
                 .withBody(MAPPER.writeValueAsString(response));
 
-        final Map<String, String> uris = gd.getMetadataService().identifiersToUris(project, asList(ID));
+        final Map<String, String> uris = gd.getMetadataService().identifiersToUris(project, singletonList(ID));
         assertThat(uris.keySet(), hasSize(1));
         assertThat(uris.get(ID), is(OBJ_URI));
     }
