@@ -9,7 +9,6 @@ import com.gooddata.FutureResult;
 import com.gooddata.PollResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.SimplePollHandler;
 import com.gooddata.gdc.DataStoreException;
 import com.gooddata.gdc.DataStoreService;
 import com.gooddata.gdc.TaskStatus;
@@ -44,7 +43,7 @@ import static org.springframework.util.StringUtils.isEmpty;
 public class DatasetService extends AbstractService {
 
     private static final String MANIFEST_FILE_NAME = "upload_info.json";
-    private static final String STATUS_FILE_NAME = "upload_status.json";
+    private static final String ETL_PULL_DEFAULT_ERROR_MESSAGE = "ETL Pull failed with status %s";
 
     private final DataStoreService dataStoreService;
 
@@ -102,7 +101,7 @@ public class DatasetService extends AbstractService {
             final ByteArrayInputStream inputStream = new ByteArrayInputStream(manifestJson.getBytes(UTF_8));
             dataStoreService.upload(dirPath.resolve(MANIFEST_FILE_NAME).toString(), inputStream);
 
-            return pullLoad(project, dirPath, manifest.getDataSet(), false);
+            return pullLoad(project, dirPath, manifest.getDataSet());
         } catch (IOException e) {
             throw new DatasetException("Unable to serialize manifest", manifest.getDataSet(), e);
         } catch (DataStoreException | GoodDataRestException | RestClientException e) {
@@ -157,7 +156,7 @@ public class DatasetService extends AbstractService {
             final ByteArrayInputStream inputStream = new ByteArrayInputStream(manifestJson.getBytes(UTF_8));
             dataStoreService.upload(dirPath.resolve(MANIFEST_FILE_NAME).toString(), inputStream);
 
-            return pullLoad(project, dirPath, datasetsNames, true);
+            return pullLoad(project, dirPath, datasetsNames);
         } catch (IOException e) {
             throw new DatasetException("Unable to serialize manifest", datasetsNames, e);
         } catch (DataStoreException | GoodDataRestException | RestClientException e) {
@@ -180,23 +179,24 @@ public class DatasetService extends AbstractService {
         }
     }
 
-    private FutureResult<Void> pullLoad(Project project, final Path dirPath, final String dataset, boolean isBatchUpload) {
-        return pullLoad(project, dirPath, singletonList(dataset), isBatchUpload);
+    private FutureResult<Void> pullLoad(Project project, final Path dirPath, final String dataset) {
+        return pullLoad(project, dirPath, singletonList(dataset));
     }
 
-    private FutureResult<Void> pullLoad(Project project, final Path dirPath, final Collection<String> datasets, final boolean isBatchUpload) {
+    private FutureResult<Void> pullLoad(Project project, final Path dirPath, final Collection<String> datasets) {
         final PullTask pullTask = restTemplate
                 .postForObject(Pull.URI, new Pull(dirPath.toString()), PullTask.class, project.getId());
-        return new PollResult<>(this, new SimplePollHandler<Void>(pullTask.getUri(), Void.class) {
+
+        return new PollResult<>(this, new AbstractPollHandler<TaskStatus, Void>(pullTask.getPollUri(), TaskStatus.class, Void.class) {
             @Override
-            public boolean isFinished(ClientHttpResponse response) throws IOException {
-                final PullTaskStatus status = extractData(response, PullTaskStatus.class);
-                final boolean finished = status.isFinished();
-                if (finished && !status.isSuccess()) {
-                    final String message = getErrorMessage(status, dirPath, isBatchUpload);
+            public void handlePollResult(TaskStatus pollResult) {
+                if (!pollResult.isSuccess()) {
+                    final String message = isEmpty(pollResult.getMessages())
+                            ? String.format(ETL_PULL_DEFAULT_ERROR_MESSAGE, pollResult.getStatus())
+                            : pollResult.getMessages().toString();
                     throw new DatasetException(message, datasets);
                 }
-                return finished;
+                setResult(null);
             }
 
             @Override
@@ -213,65 +213,6 @@ public class DatasetService extends AbstractService {
                 }
             }
         });
-
-    }
-
-    private String getErrorMessage(final PullTaskStatus status, final Path dirPath, boolean isBatchUpload) {
-        String message = "status: " + status.getStatus();
-        try {
-            Path statusFile = dirPath.resolve(STATUS_FILE_NAME);
-            if (isBatchUpload) {
-                final BatchFailStatus batchFailStatus = download(statusFile, BatchFailStatus.class);
-                message = getBatchFailStatusErrorMsg(dirPath, message, batchFailStatus);
-            } else {
-                final FailStatus failStatus = download(statusFile, FailStatus.class);
-                message = getFailStatusErrorMsg(dirPath, message, failStatus);
-            }
-        } catch (IOException | DataStoreException ignored) {
-            // todo log?
-        }
-        return message;
-    }
-
-    private String getBatchFailStatusErrorMsg(final Path dirPath, final String defaultMessage, final BatchFailStatus batchFailStatus) {
-        if (batchFailStatus == null || batchFailStatus.getFailStatuses() == null) {
-            return defaultMessage;
-        }
-        final List<String> messages = new ArrayList<>();
-        for (FailStatus failStatus : batchFailStatus.getFailStatuses()) {
-            messages.add(getFailStatusErrorMsg(dirPath, defaultMessage, failStatus));
-        }
-        return messages.isEmpty() ? defaultMessage : messages.toString();
-    }
-
-    private String getFailStatusErrorMsg(final Path dirPath, final String defaultMessage, final FailStatus failStatus) {
-        if (failStatus == null) {
-            return defaultMessage;
-        }
-        final List<FailPart> errorParts = failStatus.getErrorParts();
-        if (errorParts.isEmpty()){
-            return (failStatus.getError() != null) ? failStatus.getError().getFormattedMessage() : defaultMessage;
-        }
-        final List<String> errors = new ArrayList<>();
-        for (FailPart part : errorParts) {
-            if (part.getLogName() != null) {
-                try {
-                    final String[] msg = download(dirPath.resolve(part.getLogName()), String[].class);
-                    errors.addAll(asList(msg));
-                } catch (IOException | DataStoreException e) {
-                    if (part.getError() != null) {
-                        errors.add(part.getError().getFormattedMessage());
-                    }
-                }
-            }
-        }
-        return errors.toString();
-    }
-
-    private <T> T download(final Path path, final Class<T> type) throws IOException {
-        try (final InputStream input = dataStoreService.download(path.toString())) {
-            return mapper.readValue(input, type);
-        }
     }
 
     /**

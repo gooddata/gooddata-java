@@ -1,5 +1,7 @@
 {
-    "pullTask" : {
-        "uri" : "/gdc/md/PROJECT/etl/task/ID"
+    "pull2Task" : {
+        "links" : {
+            "poll": "/gdc/md/PROJECT/tasks/task/ID/status"
+        }
     }
 }

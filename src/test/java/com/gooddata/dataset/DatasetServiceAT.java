@@ -48,7 +48,7 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
             datasetService.loadDataset(project, manifest, getClass().getResourceAsStream("/corruptedPerson.csv")).get();
             fail();
         } catch (DatasetException ex){
-            assertThat(ex.getMessage(),is(equalTo("Load datasets [dataset.person] failed: Number of columns doesn't corespond on line 3 in dataset.person.csv")));
+            assertThat(ex.getMessage(),is(equalTo("Load datasets [dataset.person] failed: [Number of columns doesn't corespond on line 3 in dataset.person.csv]")));
         }
     }
 
@@ -65,7 +65,7 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
             datasetService.loadDatasets(project, personManifest, cityManifest).get();
             fail();
         } catch (DatasetException ex){
-            assertThat(ex.getMessage(),is(equalTo("Load datasets [dataset.person, dataset.city] failed: [Number of columns doesn't corespond on line 3 in dataset.person.csv, Number of columns doesn't corespond on line 3 in dataset.person.csv]")));
+            assertThat(ex.getMessage(),is(equalTo("Load datasets [dataset.person, dataset.city] failed: [Number of columns doesn't corespond on line 3 in dataset.person.csv]")));
         }
     }
 }

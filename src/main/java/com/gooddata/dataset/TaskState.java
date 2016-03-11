@@ -12,14 +12,14 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * ETL Pull task status (for internal use).
+ * Update Project Data task status (for internal use).
  * Deserialization only.
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("taskState")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TaskState {
+class TaskState {
 
     private static final String OK = "OK";
     private static final String ERROR = "ERROR";

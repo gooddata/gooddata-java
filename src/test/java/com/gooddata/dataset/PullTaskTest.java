@@ -15,6 +15,6 @@ public class PullTaskTest {
         final InputStream stream = getClass().getResourceAsStream("/dataset/pullTask.json");
         final PullTask task = new ObjectMapper().readValue(stream, PullTask.class);
 
-        assertThat(task.getUri(), is("/gdc/md/PROJECT/etl/task/ID"));
+        assertThat(task.getPollUri(), is("/gdc/md/PROJECT/tasks/task/ID/status"));
     }
 }
