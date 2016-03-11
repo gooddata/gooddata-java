@@ -106,19 +106,13 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void testFindIdentifierUris() throws IOException {
-        final IdentifierAndUri identifierAndUri = new IdentifierAndUri(ID, OBJ_URI);
-
-        final List<IdentifierAndUri> identifiersAndUris = new ArrayList<>();
-        identifiersAndUris.add(identifierAndUri);
-        IdentifiersAndUris response = new IdentifiersAndUris(identifiersAndUris);
-
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(IDENTIFIERS_URI)
                 .havingBody(jsonEquals(readStringFromResource("/md/identifierToUri.json")))
                 .respond()
                 .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(response));
+                .withBody(readFromResource("/md/identifiersAndUris.json"));
 
         final Collection<String> uris = gd.getMetadataService().findUris(project, Restriction.identifier(ID));
         assertThat(uris, hasSize(1));
@@ -127,19 +121,13 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void testIdentifiersToUris() throws IOException {
-        final IdentifierAndUri identifierAndUri = new IdentifierAndUri(ID, OBJ_URI);
-
-        final List<IdentifierAndUri> identifiersAndUris = new ArrayList<>();
-        identifiersAndUris.add(identifierAndUri);
-        IdentifiersAndUris response = new IdentifiersAndUris(identifiersAndUris);
-
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(IDENTIFIERS_URI)
                 .havingBody(jsonEquals(readStringFromResource("/md/identifierToUri.json")))
                 .respond()
                 .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(response));
+                .withBody(readFromResource("/md/identifiersAndUris.json"));
 
         final Map<String, String> uris = gd.getMetadataService().identifiersToUris(project, singletonList(ID));
         assertThat(uris.keySet(), hasSize(1));

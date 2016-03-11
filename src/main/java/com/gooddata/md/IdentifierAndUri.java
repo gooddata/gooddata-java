@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Encapsulates identifier and its uri.
+ * Encapsulates identifier and its URI.
  */
 class IdentifierAndUri {
 
