@@ -6,7 +6,6 @@ package com.gooddata.md;
 import com.gooddata.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
 import org.springframework.http.HttpStatus;
@@ -14,12 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.gooddata.util.Validate.noNullElements;
 import static com.gooddata.util.Validate.notNull;
@@ -380,20 +374,13 @@ public class MetadataService extends AbstractService {
             ids.add(restriction.getValue());
         }
 
-        final IdentifiersAndUris response = getUrisForIdentifiers(project, ids);
-
-        final List<String> uris = new ArrayList<>();
-        for (IdentifierAndUri idAndUri : response.getIdentifiers()) {
-            uris.add(idAndUri.getUri());
-        }
-
-        return uris;
+        return getUrisForIdentifiers(project, ids).getUris();
     }
 
     /**
      * Find metadata URIs for given identifiers.
      *
-     * @param project      project where to search for the metadata
+     * @param project     project where to search for the metadata
      * @param identifiers query restrictions
      * @return the map of identifiers as keys and metadata URIs as values
      * @throws com.gooddata.GoodDataException if unable to query metadata
@@ -403,14 +390,7 @@ public class MetadataService extends AbstractService {
         notNull(project, "project" );
         noNullElements(identifiers, "identifiers");
 
-        final IdentifiersAndUris response = getUrisForIdentifiers(project, identifiers);
-
-        final Map<String, String> identifiersToUris = new HashMap<>();
-        for (IdentifierAndUri idAndUri : response.getIdentifiers()) {
-            identifiersToUris.put(idAndUri.getIdentifier(), idAndUri.getUri());
-        }
-
-        return Collections.unmodifiableMap(identifiersToUris);
+        return getUrisForIdentifiers(project, identifiers).asMap();
     }
 
     /**
