@@ -1,21 +1,22 @@
 package com.gooddata;
 
-import net.javacrumbs.jsonunit.core.Configuration;
-import net.javacrumbs.jsonunit.core.internal.Diff;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.hamcrest.Factory;
-import org.hamcrest.Matcher;
+import static java.lang.String.format;
+import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
+import static net.javacrumbs.jsonunit.core.internal.Diff.create;
 
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static java.lang.String.format;
-import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
-import static net.javacrumbs.jsonunit.core.Option.TREATING_NULL_AS_ABSENT;
-import static net.javacrumbs.jsonunit.core.internal.Diff.create;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import net.javacrumbs.jsonunit.core.Configuration;
+import net.javacrumbs.jsonunit.core.internal.Diff;
 
 /**
  * Contains Hamcrest matchers to be used with Hamcrest assertThat and other tools.
@@ -81,7 +82,7 @@ public class JsonMatchers {
             }
 
             this.expectedJsonString = expectedJsonString;
-            final Diff diff = create(expectedJsonString, actual, "fullJson", "", Configuration.empty().withOptions(TREATING_NULL_AS_ABSENT, IGNORING_ARRAY_ORDER));
+            final Diff diff = create(expectedJsonString, actual, "fullJson", "", Configuration.empty().withOptions(IGNORING_ARRAY_ORDER));
             if (!diff.similar()) {
                 differences = diff.differences();
             }

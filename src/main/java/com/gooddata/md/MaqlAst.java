@@ -4,12 +4,13 @@
 package com.gooddata.md;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * MAQL AST representation
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MaqlAst {
 
     private final String type;
