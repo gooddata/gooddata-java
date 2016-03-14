@@ -23,8 +23,6 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
  */
 public class ProjectServiceAT extends AbstractGoodDataAT {
 
-    private final String projectToken;
-
     public ProjectServiceAT() {
         projectToken = getProperty("projectToken");
     }
