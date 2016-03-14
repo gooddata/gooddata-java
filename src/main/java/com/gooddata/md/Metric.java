@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import java.util.Collection;
+
 /**
  * Metric
  */
@@ -46,6 +48,15 @@ public class Metric extends AbstractObj implements Queryable, Updatable {
         return content.getMaqlAst();
     }
 
+    /**
+     * URIs of folders containing this object
+     * @return collection of URIs or null
+     */
+    @JsonIgnore
+    public Collection<String> getFolders() {
+        return content.getFolders();
+    }
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private static class Content {
 
@@ -57,15 +68,18 @@ public class Metric extends AbstractObj implements Queryable, Updatable {
         @JsonProperty("tree")
         private MaqlAst maqlAst;
 
+        private final Collection<String> folders;
 
         @JsonCreator
-        public Content(@JsonProperty("expression") String expression) {
+        public Content(@JsonProperty("expression") String expression, @JsonProperty("folders") Collection<String> folders) {
             this.expression = expression;
+            this.folders = folders;
         }
 
         public Content(final String expression, final String format) {
             this.expression = expression;
             this.format = format;
+            this.folders = null;
         }
 
         public String getExpression() {
@@ -88,5 +102,8 @@ public class Metric extends AbstractObj implements Queryable, Updatable {
             return maqlAst;
         }
 
+        public Collection<String> getFolders() {
+            return folders;
+        }
     }
 }
