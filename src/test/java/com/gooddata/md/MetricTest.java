@@ -10,6 +10,7 @@ import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 
 public class MetricTest {
 
@@ -24,6 +25,13 @@ public class MetricTest {
         assertThat(metric.getMaqlAst().getPosition().getColumn(), is(1));
         assertThat(metric.getMaqlAst().getType(), is("metric"));
         assertThat(metric.getMaqlAst().getContent().length, is(1));
+    }
+
+    @Test
+    public void shouldDeserializeFolder() throws Exception {
+        final Metric metric = new ObjectMapper()
+                .readValue(getClass().getResourceAsStream("/md/metric-folder.json"), Metric.class);
+        assertThat(metric.getFolders(), contains("/gdc/md/ge06jy0jr6h1hzaxei6d53evw276p3xc/obj/51430"));
     }
 
     @Test

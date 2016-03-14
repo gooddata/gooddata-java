@@ -127,6 +127,10 @@ public class NestedAttribute extends AbstractObj {
         return content.getLinkedDisplayFormLink();
     }
 
+    /**
+     * URIs of folders containing this object
+     * @return collection of URIs or null
+     */
     @JsonIgnore
     public Collection<String> getFolders() {
         return content.getFolders();
