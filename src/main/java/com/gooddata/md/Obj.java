@@ -8,6 +8,7 @@ import org.springframework.web.util.UriTemplate;
 public interface Obj {
 
     String URI = "/gdc/md/{projectId}/obj";
+    String CREATE_URI = URI + "?createAndGet=true";
     String OBJ_URI = URI + "/{objId}";
     UriTemplate OBJ_TEMPLATE = new UriTemplate(OBJ_URI);
 
