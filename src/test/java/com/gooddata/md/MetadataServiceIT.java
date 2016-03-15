@@ -149,12 +149,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(OBJ_URI)
-            .respond()
-                .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(new UriResponse(SPECIFIC_OBJ_URI)));
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo(SPECIFIC_OBJ_URI)
+                .havingParameterEqualTo("createAndGet", "true")
             .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/metric.json"));
@@ -219,12 +214,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(OBJ_URI)
-                .respond()
-                .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(new UriResponse(SPECIFIC_OBJ_URI)));
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo(SPECIFIC_OBJ_URI)
+                .havingParameterEqualTo("createAndGet", "true")
                 .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/scheduledMail.json"));

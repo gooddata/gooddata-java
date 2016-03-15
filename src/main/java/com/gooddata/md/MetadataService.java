@@ -52,9 +52,9 @@ public class MetadataService extends AbstractService {
         notNull(project, "project");
         notNull(obj, "obj");
 
-        final UriResponse response;
+        final T response;
         try {
-            response = restTemplate.postForObject(Obj.URI, obj, UriResponse.class, project.getId());
+            response = restTemplate.postForObject(Obj.CREATE_URI, obj, (Class<T>)obj.getClass(), project.getId());
         } catch (GoodDataRestException | RestClientException e) {
             throw new ObjCreateException(obj, e);
         }
@@ -62,7 +62,7 @@ public class MetadataService extends AbstractService {
         if (response == null) {
             throw new ObjCreateException("empty response from API call", obj);
         }
-        return getObjByUri(response.getUri(), (Class<T>) obj.getClass());
+        return response;
     }
 
     /**

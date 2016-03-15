@@ -8,6 +8,7 @@ import com.gooddata.GoodDataRestException;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -80,11 +82,9 @@ public class MetadataServiceTest {
     public void testCreateObj() throws Exception {
         final Obj obj = mock(Obj.class);
         final Obj resultObj = mock(Obj.class);
-        final UriResponse uriResp = mock(UriResponse.class);
 
-        when(restTemplate.postForObject(Obj.URI, obj, UriResponse.class, PROJECT_ID)).thenReturn(uriResp);
-        when(uriResp.getUri()).thenReturn(URI);
-        when(restTemplate.getForObject(URI, obj.getClass())).thenReturn(resultObj);
+        when(restTemplate.postForObject(eq(Obj.CREATE_URI), eq(obj), Matchers.<Class<Obj>>any(), eq(PROJECT_ID)))
+                .thenReturn(resultObj);
 
         final Obj result = service.createObj(project, obj);
         assertThat(result, is(notNullValue()));
