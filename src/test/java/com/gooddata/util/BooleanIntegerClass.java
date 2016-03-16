@@ -9,7 +9,7 @@ public class BooleanIntegerClass {
     private final boolean foo;
 
     @JsonCreator
-    public BooleanIntegerClass(@JsonProperty("foo") @JsonDeserialize(using = BooleanIntegerDeserializer.class) final boolean foo) {
+    public BooleanIntegerClass(@JsonProperty("foo") @JsonDeserialize(using = BooleanDeserializer.class) final boolean foo) {
         this.foo = foo;
     }
 

@@ -5,7 +5,7 @@
 package com.gooddata.md;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.gooddata.util.BooleanStringDeserializer;
+import com.gooddata.util.BooleanDeserializer;
 import com.gooddata.util.BooleanStringSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -105,7 +105,7 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
                 @JsonProperty("facts") List<String> facts,
                 @JsonProperty("dataLoadingColumns") List<String> dataLoadingColumns,
                 @JsonProperty("attributes") List<String> attributes,
-                @JsonProperty("hasUploadConfiguration") @JsonDeserialize(using = BooleanStringDeserializer.class) Boolean hasUploadConfiguration) {
+                @JsonProperty("hasUploadConfiguration") @JsonDeserialize(using = BooleanDeserializer.class) Boolean hasUploadConfiguration) {
             this.ties = ties;
             this.mode = mode;
             this.facts = facts;

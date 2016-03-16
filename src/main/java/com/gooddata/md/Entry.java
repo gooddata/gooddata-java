@@ -38,13 +38,13 @@ public class Entry {
                  @JsonProperty("category") String category,
                  @JsonProperty("author") String author,
                  @JsonProperty("contributor") String contributor,
-                 @JsonProperty("deprecated") @JsonDeserialize(using = BooleanStringDeserializer.class) Boolean deprecated,
+                 @JsonProperty("deprecated") @JsonDeserialize(using = BooleanDeserializer.class) Boolean deprecated,
                  @JsonProperty("identifier") String identifier,
                  @JsonProperty("tags") String tags,
                  @JsonProperty("created") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime created,
                  @JsonProperty("updated") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime updated,
-                 @JsonProperty("locked") @JsonDeserialize(using = BooleanIntegerDeserializer.class) Boolean locked,
-                 @JsonProperty("unlisted") @JsonDeserialize(using = BooleanIntegerDeserializer.class) Boolean unlisted) {
+                 @JsonProperty("locked") @JsonDeserialize(using = BooleanDeserializer.class) Boolean locked,
+                 @JsonProperty("unlisted") @JsonDeserialize(using = BooleanDeserializer.class) Boolean unlisted) {
         this.link = link;
         this.title = title;
         this.summary = summary;

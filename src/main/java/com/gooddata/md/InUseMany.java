@@ -1,7 +1,7 @@
 package com.gooddata.md;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.gooddata.util.BooleanStringDeserializer;
+import com.gooddata.util.BooleanDeserializer;
 import com.gooddata.util.BooleanStringSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -39,7 +39,7 @@ class InUseMany {
 
     @JsonCreator
     InUseMany(@JsonProperty("uris") Collection<String> uris,
-          @JsonProperty("nearest") @JsonDeserialize(using = BooleanStringDeserializer.class) boolean nearest,
+          @JsonProperty("nearest") @JsonDeserialize(using = BooleanDeserializer.class) boolean nearest,
           @JsonProperty("types") Set<String> types) {
 
         this.uris = notEmpty(uris, "uris");

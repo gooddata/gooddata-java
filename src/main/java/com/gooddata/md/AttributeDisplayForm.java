@@ -1,7 +1,7 @@
 package com.gooddata.md;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.gooddata.util.BooleanIntegerDeserializer;
+import com.gooddata.util.BooleanDeserializer;
 import com.gooddata.util.BooleanIntegerSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,7 +45,7 @@ public class AttributeDisplayForm extends DisplayForm implements Updatable {
         private final boolean isDefault;
 
         private Content(@JsonProperty("formOf") String formOf, @JsonProperty("expression") String expression,
-                @JsonProperty("default") @JsonDeserialize(using = BooleanIntegerDeserializer.class) Boolean isDefault,
+                @JsonProperty("default") @JsonDeserialize(using = BooleanDeserializer.class) Boolean isDefault,
                 @JsonProperty("ldmexpression") String ldmExpression,
                 @JsonProperty("type") String type) {
             super(formOf, expression, ldmExpression, type);

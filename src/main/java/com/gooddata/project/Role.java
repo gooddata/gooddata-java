@@ -2,7 +2,7 @@ package com.gooddata.project;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.md.Meta;
-import com.gooddata.util.BooleanStringDeserializer;
+import com.gooddata.util.BooleanDeserializer;
 import com.gooddata.util.BooleanStringSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,7 +34,7 @@ public class Role {
 
     private static final String SELF_LINK = "self";
 
-    @JsonDeserialize(contentUsing = BooleanStringDeserializer.class)
+    @JsonDeserialize(contentUsing = BooleanDeserializer.class)
     @JsonSerialize(contentUsing = BooleanStringSerializer.class)
     private final Map<String, Boolean> permissions;
 

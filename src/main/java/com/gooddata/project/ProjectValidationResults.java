@@ -1,6 +1,6 @@
 package com.gooddata.project;
 
-import com.gooddata.util.BooleanIntegerDeserializer;
+import com.gooddata.util.BooleanDeserializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,8 +28,8 @@ public class ProjectValidationResults {
     private final List<ProjectValidationResult> results = new LinkedList<>();
 
     @JsonCreator
-    private ProjectValidationResults(@JsonProperty("error_found") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean error,
-                                     @JsonProperty("fatal_error_found") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean fatalError,
+    private ProjectValidationResults(@JsonProperty("error_found") @JsonDeserialize(using = BooleanDeserializer.class) boolean error,
+                                     @JsonProperty("fatal_error_found") @JsonDeserialize(using = BooleanDeserializer.class) boolean fatalError,
                                      @JsonProperty("results") List<ProjectValidationResultItem> resultItems) {
         this.error = error;
         this.fatalError = fatalError;
