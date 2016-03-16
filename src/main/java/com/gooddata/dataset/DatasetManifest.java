@@ -4,7 +4,7 @@
 package com.gooddata.dataset;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.gooddata.util.BooleanIntegerDeserializer;
+import com.gooddata.util.BooleanDeserializer;
 import com.gooddata.util.BooleanIntegerSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -138,7 +138,7 @@ public class DatasetManifest {
         Part(@JsonProperty("mode") String uploadMode,
              @JsonProperty("columnName") String columnName,
              @JsonProperty("populates") List<String> populates,
-             @JsonProperty("referenceKey") @JsonDeserialize(using = BooleanIntegerDeserializer.class) Boolean referenceKey,
+             @JsonProperty("referenceKey") @JsonDeserialize(using = BooleanDeserializer.class) Boolean referenceKey,
              @JsonProperty("constraints") Map<String, String> constraints) {
             this.uploadMode = uploadMode;
             this.columnName = columnName;

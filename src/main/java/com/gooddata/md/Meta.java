@@ -160,7 +160,7 @@ public class Meta implements Serializable {
     }
 
     @JsonProperty("deprecated")
-    @JsonDeserialize(using = BooleanStringDeserializer.class)
+    @JsonDeserialize(using = BooleanDeserializer.class)
     public void setDeprecated(Boolean deprecated) {
         this.deprecated = deprecated;
     }
@@ -184,7 +184,7 @@ public class Meta implements Serializable {
     }
 
     @JsonProperty("isProduction")
-    @JsonDeserialize(using = BooleanIntegerDeserializer.class)
+    @JsonDeserialize(using = BooleanDeserializer.class)
     public void setProduction(final Boolean production) {
         this.production = production;
     }
@@ -200,7 +200,7 @@ public class Meta implements Serializable {
     }
 
     @JsonProperty("locked")
-    @JsonDeserialize(using = BooleanIntegerDeserializer.class)
+    @JsonDeserialize(using = BooleanDeserializer.class)
     public void setLocked(Boolean locked) {
         this.locked = locked;
     }
@@ -216,7 +216,7 @@ public class Meta implements Serializable {
     }
 
     @JsonProperty("unlisted")
-    @JsonDeserialize(using = BooleanIntegerDeserializer.class)
+    @JsonDeserialize(using = BooleanDeserializer.class)
     public void setUnlisted(Boolean unlisted) {
         this.unlisted = unlisted;
     }
@@ -232,7 +232,7 @@ public class Meta implements Serializable {
     }
 
     @JsonProperty("sharedWithSomeone")
-    @JsonDeserialize(using = BooleanIntegerDeserializer.class)
+    @JsonDeserialize(using = BooleanDeserializer.class)
     public void setSharedWithSomeone(final Boolean sharedWithSomeone) {
         this.sharedWithSomeone = sharedWithSomeone;
     }

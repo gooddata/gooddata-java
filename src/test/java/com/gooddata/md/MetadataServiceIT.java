@@ -152,7 +152,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingParameterEqualTo("createAndGet", "true")
             .respond()
                 .withStatus(200)
-                .withBody(readFromResource("/md/metric.json"));
+                .withBody(readFromResource("/md/metric-created.json"));
 
         final Obj result = gd.getMetadataService().createObj(project, metricInput);
 

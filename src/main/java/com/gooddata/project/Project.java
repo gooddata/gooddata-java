@@ -5,8 +5,7 @@ package com.gooddata.project;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.md.Meta;
-import com.gooddata.util.BooleanIntegerDeserializer;
-import com.gooddata.util.BooleanStringDeserializer;
+import com.gooddata.util.BooleanDeserializer;
 import com.gooddata.util.GDDateTimeDeserializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -486,11 +485,11 @@ public class Project {
                             @JsonProperty("tags") String tags,
                             @JsonProperty("uri") String uri,
                             @JsonProperty("identifier") String identifier,
-                            @JsonProperty("deprecated") @JsonDeserialize(using = BooleanStringDeserializer.class) Boolean deprecated,
-                            @JsonProperty("isProduction") @JsonDeserialize(using = BooleanIntegerDeserializer.class) Boolean production,
-                            @JsonProperty("locked") @JsonDeserialize(using = BooleanIntegerDeserializer.class) Boolean locked,
-                            @JsonProperty("unlisted") @JsonDeserialize(using = BooleanIntegerDeserializer.class) Boolean unlisted,
-                            @JsonProperty("sharedWithSomeone") @JsonDeserialize(using = BooleanIntegerDeserializer.class) Boolean sharedWithSomeone) {
+                            @JsonProperty("deprecated") @JsonDeserialize(using = BooleanDeserializer.class) Boolean deprecated,
+                            @JsonProperty("isProduction") @JsonDeserialize(using = BooleanDeserializer.class) Boolean production,
+                            @JsonProperty("locked") @JsonDeserialize(using = BooleanDeserializer.class) Boolean locked,
+                            @JsonProperty("unlisted") @JsonDeserialize(using = BooleanDeserializer.class) Boolean unlisted,
+                            @JsonProperty("sharedWithSomeone") @JsonDeserialize(using = BooleanDeserializer.class) Boolean sharedWithSomeone) {
             super(author, contributor, created, updated, summary, title, category, tags, uri, identifier,
                     deprecated, production, locked, unlisted, sharedWithSomeone);
 

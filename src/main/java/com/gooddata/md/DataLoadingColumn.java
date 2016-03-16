@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.gooddata.gdc.UriResponse;
-import com.gooddata.util.BooleanIntegerDeserializer;
+import com.gooddata.util.BooleanDeserializer;
 
 /**
  * Represents datasets' loading column.
@@ -100,8 +100,8 @@ public class DataLoadingColumn extends AbstractObj implements Queryable {
 
         private Content(@JsonProperty("column") UriResponse columnUri, @JsonProperty("columnName") String columnName, @JsonProperty("type") String columnType,
                 @JsonProperty("length") Integer columnLength, @JsonProperty("precision") Integer columnPrecision,
-                @JsonProperty("columnUnique") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean columnUnique,
-                @JsonProperty("columnNull") @JsonDeserialize(using = BooleanIntegerDeserializer.class) boolean columnNull,
+                @JsonProperty("columnUnique") @JsonDeserialize(using = BooleanDeserializer.class) boolean columnUnique,
+                @JsonProperty("columnNull") @JsonDeserialize(using = BooleanDeserializer.class) boolean columnNull,
                 @JsonProperty("columnSynchronize") ColumnSynchronize columnSynchronize) {
             this.columnUri = columnUri;
             this.columnName = columnName;
