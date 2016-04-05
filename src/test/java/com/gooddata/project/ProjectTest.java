@@ -1,24 +1,14 @@
 package com.gooddata.project;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.core.StringStartsWith.startsWith;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import com.gooddata.md.AbstractObj;
-import com.gooddata.md.Meta;
 
 public class ProjectTest {
 
@@ -44,22 +34,37 @@ public class ProjectTest {
         assertThat(project.getUpdated(), is(new DateTime(2014, 4, 11, 11, 43, 47, DateTimeZone.UTC)));
 
         assertThat(project.getLdmThumbnailLink(), is("/gdc/projects/PROJECT_ID/ldm?thumbnail=1"));
+        assertThat(project.getLdmThumbnailUri(), is("/gdc/projects/PROJECT_ID/ldm?thumbnail=1"));
         assertThat(project.getUri(), is("/gdc/projects/PROJECT_ID"));
         assertThat(project.getClearCachesLink(), is("/gdc/projects/PROJECT_ID/clearCaches"));
+        assertThat(project.getClearCachesUri(), is("/gdc/projects/PROJECT_ID/clearCaches"));
         assertThat(project.getInvitationsLink(), is("/gdc/projects/PROJECT_ID/invitations"));
+        assertThat(project.getInvitationsUri(), is("/gdc/projects/PROJECT_ID/invitations"));
         assertThat(project.getUsersLink(), is("/gdc/projects/PROJECT_ID/users?link=1"));
+        assertThat(project.getUsersUri(), is("/gdc/projects/PROJECT_ID/users?link=1"));
         assertThat(project.getGroupsLink(), is("/gdc/projects/PROJECT_ID/groups"));
+        assertThat(project.getGroupsUri(), is("/gdc/projects/PROJECT_ID/groups"));
         assertThat(project.getUploadsLink(), is("https://ea-di.staging.getgooddata.com/project-uploads/PROJECT_ID/"));
+        assertThat(project.getUploadsUri(), is("https://ea-di.staging.getgooddata.com/project-uploads/PROJECT_ID/"));
         assertThat(project.getLdmLink(), is("/gdc/projects/PROJECT_ID/ldm"));
+        assertThat(project.getLdmUri(), is("/gdc/projects/PROJECT_ID/ldm"));
         assertThat(project.getMetadataLink(), is("/gdc/md/PROJECT_ID"));
+        assertThat(project.getMetadataUri(), is("/gdc/md/PROJECT_ID"));
         assertThat(project.getPublicArtifactsLink(), is("/gdc/projects/PROJECT_ID/publicartifacts"));
+        assertThat(project.getPublicArtifactsUri(), is("/gdc/projects/PROJECT_ID/publicartifacts"));
         assertThat(project.getRolesLink(), is("/gdc/projects/PROJECT_ID/roles"));
+        assertThat(project.getRolesUri(), is("/gdc/projects/PROJECT_ID/roles"));
         assertThat(project.getDataLoadLink(), is("/gdc/projects/PROJECT_ID/dataload"));
+        assertThat(project.getDataLoadUri(), is("/gdc/projects/PROJECT_ID/dataload"));
         assertThat(project.getConnectorsLink(), is("/gdc/projects/PROJECT_ID/connectors"));
+        assertThat(project.getConnectorsUri(), is("/gdc/projects/PROJECT_ID/connectors"));
         assertThat(project.getExecuteLink(), is("/gdc/projects/PROJECT_ID/execute"));
+        assertThat(project.getExecuteUri(), is("/gdc/projects/PROJECT_ID/execute"));
         assertThat(project.getSchedulesLink(), is("/gdc/projects/PROJECT_ID/schedules"));
+        assertThat(project.getSchedulesUri(), is("/gdc/projects/PROJECT_ID/schedules"));
         assertThat(project.getTemplatesLink(), is("/gdc/md/PROJECT_ID/templates"));
         assertThat(project.getEventStoresLink(), is("/gdc/projects/PROJECT_ID/dataload/eventstore/stores"));
+        assertThat(project.getEventStoresUri(), is("/gdc/projects/PROJECT_ID/dataload/eventstore/stores"));
     }
 
     @Test

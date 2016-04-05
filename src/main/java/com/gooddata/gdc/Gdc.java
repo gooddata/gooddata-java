@@ -35,132 +35,288 @@ public class Gdc {
     }
 
     /**
-     * Get GoodData API root link
+     * Get GoodData API root URI string
      *
-     * @return GoodData API root link
+     * @return GoodData API root URI string
+     * @deprecated use {@link #getHomeUri()} instead
      */
+    @Deprecated
     @JsonIgnore
     public String getHomeLink() {
+        return getHomeUri();
+    }
+
+    /**
+     * Get GoodData API root URI string
+     *
+     * @return GoodData API root URI string
+     */
+    @JsonIgnore
+    public String getHomeUri() {
         return getLink(LinkCategory.HOME).getUri();
     }
 
     /**
-     * Get temporary token generator link
+     * Get temporary token generator URI string
      *
-     * @return temporary token generator link
+     * @return temporary token generator URI string
+     * @deprecated use {@link #getTokenUri()} instead
      */
+    @Deprecated
     @JsonIgnore
     public String getTokenLink() {
+        return getTokenUri();
+    }
+
+    /**
+     * Get temporary token generator URI string
+     *
+     * @return temporary token generator URI string
+     */
+    @JsonIgnore
+    public String getTokenUri() {
         return getLink(LinkCategory.TOKEN).getUri();
     }
 
     /**
-     * Get authentication service link
+     * Get authentication service URI string
      *
-     * @return authentication service link
+     * @return authentication service URI string
+     * @deprecated use {@link #getLoginUri()} instead
      */
+    @Deprecated
     @JsonIgnore
     public String getLoginLink() {
+        return getLoginUri();
+    }
+
+    /**
+     * Get authentication service URI string
+     *
+     * @return authentication service URI string
+     */
+    @JsonIgnore
+    public String getLoginUri() {
         return getLink(LinkCategory.LOGIN).getUri();
     }
 
     /**
-     * Get metadata resources link
+     * Get metadata resources URI string
      *
-     * @return metadata resources link
+     * @return metadata resources URI string
+     * @deprecated use {@link #getMetadataUri()} instead
      */
+    @Deprecated
     @JsonIgnore
     public String getMetadataLink() {
+        return getMetadataUri();
+    }
+
+    /**
+     * Get metadata resources URI string
+     *
+     * @return metadata resources URI string
+     */
+    @JsonIgnore
+    public String getMetadataUri() {
         return getLink(LinkCategory.METADATA).getUri();
     }
 
     /**
-     * Get report execution resource link
+     * Get report execution resource URI string
      *
-     * @return report execution resource link
+     * @return report execution resource URI string
+     * @deprecated use {@link #getXTabUri()} instead
      */
+    @Deprecated
     @JsonIgnore
     public String getXTabLink() {
+        return getXTabUri();
+    }
+
+    /**
+     * Get report execution resource URI string
+     *
+     * @return report execution resource URI string
+     */
+    @JsonIgnore
+    public String getXTabUri() {
         return getLink(LinkCategory.XTAB).getUri();
     }
 
     /**
-     * Get link of resource used to determine valid attribute values in the context of a report
+     * Get URI string of resource used to determine valid attribute values in the context of a report
      *
-     * @return link of resource used to determine valid attribute values in the context of a report
+     * @return URI string of resource used to determine valid attribute values in the context of a report
+     * @deprecated use {@link #getAvailableElementsUri()} instead
      */
+    @Deprecated
     @JsonIgnore
     public String getAvailableElementsLink() {
+        return getAvailableElementsUri();
+    }
+
+    /**
+     * Get URI string of resource used to determine valid attribute values in the context of a report
+     *
+     * @return URI string of resource used to determine valid attribute values in the context of a report
+     */
+    @JsonIgnore
+    public String getAvailableElementsUri() {
         return getLink(LinkCategory.AVAILABLE_ELEMENTS).getUri();
     }
 
     /**
-     * Get report exporting resource link
+     * Get report exporting resource URI string
      *
-     * @return report exporting resource link
+     * @return report exporting resource URI string
+     * @deprecated use {@link #getReportExporterUri()} instead
      */
+    @Deprecated
     @JsonIgnore
     public String getReportExporterLink() {
+        return getReportExporterUri();
+    }
+
+    /**
+     * Get report exporting resource URI string
+     *
+     * @return report exporting resource URI string
+     */
+    @JsonIgnore
+    public String getReportExporterUri() {
         return getLink(LinkCategory.REPORT_EXPORTER).getUri();
     }
 
     /**
-     * Get account manipulation resource link
+     * Get account manipulation resource URI string
      *
-     * @return account manipulation resource link
+     * @return account manipulation resource URI string
+     * @deprecated use {@link #getAccountUri()} instead
      */
+    @Deprecated
     @JsonIgnore
     public String getAccountLink() {
+        return getAccountUri();
+    }
+
+    /**
+     * Get account manipulation resource URI string
+     *
+     * @return account manipulation resource URI string
+     */
+    @JsonIgnore
+    public String getAccountUri() {
         return getLink(LinkCategory.ACCOUNT).getUri();
     }
 
     /**
-     * Get user and project management resource link
+     * Get user and project management resource URI string
      *
-     * @return user and project management resource link
+     * @return user and project management resource URI string
+     * @deprecated use {@link #getProjectsUri()} instead
      */
+    @Deprecated
     @JsonIgnore
     public String getProjectsLink() {
+        return getProjectsUri();
+    }
+
+    /**
+     * Get user and project management resource URI string
+     *
+     * @return user and project management resource URI string
+     */
+    @JsonIgnore
+    public String getProjectsUri() {
         return getLink(LinkCategory.PROJECTS).getUri();
     }
 
     /**
-     * Get miscellaneous tool resource link
+     * Get miscellaneous tool resource URI string
      *
-     * @return miscellaneous tool resource link
+     * @return miscellaneous tool resource URI string
+     * @deprecated use {@link #getToolUri()} instead
      */
+    @Deprecated
     @JsonIgnore
     public String getToolLink() {
+        return getToolUri();
+    }
+
+    /**
+     * Get miscellaneous tool resource URI string
+     *
+     * @return miscellaneous tool resource URI string
+     */
+    @JsonIgnore
+    public String getToolUri() {
         return getLink(LinkCategory.TOOL).getUri();
     }
 
     /**
-     * Get template resource link
+     * Get template resource URI string
      *
-     * @return template resource link
+     * @return template resource URI string
+     * @deprecated use {@link #getTemplatesUri()} instead
      */
+    @Deprecated
     @JsonIgnore
     public String getTemplatesLink() {
+        return getTemplatesUri();
+    }
+
+    /**
+     * Get template resource URI string
+     *
+     * @return template resource URI string
+     */
+    @JsonIgnore
+    public String getTemplatesUri() {
         return getLink(LinkCategory.TEMPLATES).getUri();
     }
 
     /**
-     * Get release information link
+     * Get release information URI string
      *
-     * @return release information link
+     * @return release information URI string
+     * @deprecated use {@link #getReleaseInfoUri()} instead
      */
+    @Deprecated
     @JsonIgnore
     public String getReleaseInfoLink() {
+        return getReleaseInfoUri();
+    }
+
+    /**
+     * Get release information URI string
+     *
+     * @return release information URI string
+     */
+    @JsonIgnore
+    public String getReleaseInfoUri() {
         return getLink(LinkCategory.RELEASE_INFO).getUri();
     }
 
     /**
-     * Get user data staging area link
+     * Get user data staging area URI string
      *
-     * @return user data staging area link
+     * @return user data staging area URI string
+     * @deprecated use {@link #getUserStagingUri()} instead
      */
+    @Deprecated
     @JsonIgnore
     public String getUserStagingLink() {
+        return getUserStagingUri();
+    }
+
+    /**
+     * Get user data staging area URI string
+     *
+     * @return user data staging area URI string
+     */
+    @JsonIgnore
+    public String getUserStagingUri() {
         return getLink(LinkCategory.USER_STAGING).getUri();
     }
 
@@ -186,15 +342,15 @@ public class Gdc {
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class Link {
         private final String category;
-        private final String link;
+        private final String uri;
         private final String summary;
         private final String title;
 
         @JsonCreator
-        public Link(@JsonProperty("category") String category, @JsonProperty("link") String link,
+        public Link(@JsonProperty("category") String category, @JsonProperty("link") String uri,
                     @JsonProperty("summary") String summary, @JsonProperty("title") String title) {
             this.category = category;
-            this.link = link;
+            this.uri = uri;
             this.summary = summary;
             this.title = title;
         }
@@ -214,7 +370,7 @@ public class Gdc {
          * @return link URI
          */
         public String getUri() {
-            return link;
+            return uri;
         }
 
         /**
@@ -239,7 +395,7 @@ public class Gdc {
     /**
      * GoodData API root link category enum
      */
-    private static enum LinkCategory {
+    private enum LinkCategory {
         /**
          * GoodData API root
          */
@@ -295,7 +451,7 @@ public class Gdc {
 
         private final String value;
 
-        private LinkCategory(final String value) {
+        LinkCategory(final String value) {
             this.value = value;
         }
     }

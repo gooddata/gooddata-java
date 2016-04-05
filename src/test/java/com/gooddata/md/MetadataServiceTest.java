@@ -236,7 +236,7 @@ public class MetadataServiceTest {
         when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryable")).thenReturn(queryResult);
         when(queryResult.getEntries()).thenReturn(asList(resultEntry));
         when(resultEntry.getTitle()).thenReturn(title);
-        when(resultEntry.getLink()).thenReturn(uri);
+        when(resultEntry.getUri()).thenReturn(uri);
 
         final String result = service.getObjUri(project, Queryable.class, Restriction.title(title));
         assertThat(result, is(uri));
@@ -274,7 +274,7 @@ public class MetadataServiceTest {
         when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryable")).thenReturn(queryResult);
         when(queryResult.getEntries()).thenReturn(asList(resultEntry));
         when(resultEntry.getIdentifier()).thenReturn(id);
-        when(resultEntry.getLink()).thenReturn(uri);
+        when(resultEntry.getUri()).thenReturn(uri);
         when(restTemplate.getForObject(uri, Queryable.class)).thenReturn(intendedResult);
 
         final Queryable result = service.getObj(project, Queryable.class, Restriction.identifier(id));
@@ -333,8 +333,8 @@ public class MetadataServiceTest {
         when(queryResult.getEntries()).thenReturn(asList(resultEntry1, resultEntry2));
         when(resultEntry1.getSummary()).thenReturn(summary);
         when(resultEntry2.getSummary()).thenReturn(summary);
-        when(resultEntry1.getLink()).thenReturn(uri1);
-        when(resultEntry2.getLink()).thenReturn(uri2);
+        when(resultEntry1.getUri()).thenReturn(uri1);
+        when(resultEntry2.getUri()).thenReturn(uri2);
 
         final Collection<String> results = service.findUris(project, Queryable.class, Restriction.summary(summary));
         assertThat(results, allOf(hasItem(uri1), hasItem(uri2)));
@@ -343,11 +343,11 @@ public class MetadataServiceTest {
     @Test
     public void testGetAttributeElementsEmpty() throws Exception {
         final DisplayForm attrDisplayForm = mock(AttributeDisplayForm.class);
-        when(attrDisplayForm.getElementsLink()).thenReturn("elementsLink");
+        when(attrDisplayForm.getElementsUri()).thenReturn("elementsUri");
         final Attribute attr = mock(Attribute.class);
         when(attr.getDefaultDisplayForm()).thenReturn(attrDisplayForm);
 
-        when(restTemplate.getForObject("elementsLink", AttributeElements.class))
+        when(restTemplate.getForObject("elementsUri", AttributeElements.class))
                 .thenReturn(new AttributeElements(Collections.<AttributeElement>emptyList()));
         final List<AttributeElement> elements = service.getAttributeElements(attr);
         assertThat(elements, hasSize(0));
@@ -356,14 +356,14 @@ public class MetadataServiceTest {
     @Test
     public void testGetAttributeElements() throws Exception {
         final DisplayForm attrDisplayForm = mock(AttributeDisplayForm.class);
-        when(attrDisplayForm.getElementsLink()).thenReturn("elementsLink");
+        when(attrDisplayForm.getElementsUri()).thenReturn("elementsUri");
         final Attribute attr = mock(Attribute.class);
         when(attr.getDefaultDisplayForm()).thenReturn(attrDisplayForm);
 
         final AttributeElement result1 = mock(AttributeElement.class);
         final AttributeElement result2 = mock(AttributeElement.class);
 
-        when(restTemplate.getForObject("elementsLink", AttributeElements.class))
+        when(restTemplate.getForObject("elementsUri", AttributeElements.class))
                 .thenReturn(new AttributeElements(asList(result1, result2)));
         final List<AttributeElement> elements = service.getAttributeElements(attr);
         assertThat(elements, allOf(hasItem(result1), hasItem(result2)));

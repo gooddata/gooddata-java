@@ -26,10 +26,19 @@ class MaqlDdlLinks extends LinkEntries {
         super(entries);
     }
 
+    /**
+     * @return status URI string
+     * @deprecated use {@link #getStatusUri()} instead
+     */
+    @Deprecated
     public String getStatusLink() {
+        return getStatusUri();
+    }
+
+    public String getStatusUri() {
         for (LinkEntry linkEntry : getEntries()) {
             if (TASKS_STATUS.equals(linkEntry.getCategory())) {
-                return linkEntry.getLink();
+                return linkEntry.getUri();
             }
         }
         return null;

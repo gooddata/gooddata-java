@@ -56,7 +56,7 @@ public class WarehouseService extends AbstractService {
             throw new GoodDataException("Empty response when Warehouse POSTed to API");
         }
 
-        return new PollResult<>(this, new AbstractPollHandler<WarehouseTask,Warehouse>(task.getPollLink(), WarehouseTask.class, Warehouse.class) {
+        return new PollResult<>(this, new AbstractPollHandler<WarehouseTask,Warehouse>(task.getPollUri(), WarehouseTask.class, Warehouse.class) {
 
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
@@ -73,11 +73,11 @@ public class WarehouseService extends AbstractService {
             @Override
             public void handlePollResult(WarehouseTask pollResult) {
                 try {
-                    final Warehouse warehouse = restTemplate.getForObject(pollResult.getWarehouseLink(), Warehouse.class);
+                    final Warehouse warehouse = restTemplate.getForObject(pollResult.getWarehouseUri(), Warehouse.class);
                     setResult(warehouse);
                 } catch (GoodDataException | RestClientException e) {
                     throw new GoodDataException("Warehouse creation finished, but can't get created warehouse, uri: "
-                            + pollResult.getWarehouseLink(), e);
+                            + pollResult.getWarehouseUri(), e);
                 }
             }
 
@@ -209,7 +209,7 @@ public class WarehouseService extends AbstractService {
 
         return new PollResult<>(this,
                 new AbstractPollHandler<WarehouseTask, WarehouseUser>
-                        (task.getPollLink(), WarehouseTask.class, WarehouseUser.class) {
+                        (task.getPollUri(), WarehouseTask.class, WarehouseUser.class) {
 
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
@@ -219,11 +219,11 @@ public class WarehouseService extends AbstractService {
             @Override
             public void handlePollResult(WarehouseTask pollResult) {
                 try {
-                    final WarehouseUser newUser = restTemplate.getForObject(pollResult.getWarehouseUserLink(), WarehouseUser.class);
+                    final WarehouseUser newUser = restTemplate.getForObject(pollResult.getWarehouseUserUri(), WarehouseUser.class);
                     setResult(newUser);
                 } catch (GoodDataException | RestClientException e) {
                     throw new GoodDataException("User added to warehouse, but can't get it back, uri: "
-                            + pollResult.getWarehouseUserLink(), e);
+                            + pollResult.getWarehouseUserUri(), e);
                 }
             }
 

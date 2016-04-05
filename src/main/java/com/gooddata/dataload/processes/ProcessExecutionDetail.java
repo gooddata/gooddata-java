@@ -1,23 +1,18 @@
 package com.gooddata.dataload.processes;
 
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
-
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gooddata.gdc.ErrorStructure;
 import com.gooddata.util.ISODateTimeDeserializer;
 import com.gooddata.util.ISODateTimeSerializer;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.joda.time.DateTime;
 
 import java.net.URI;
 import java.util.Map;
+
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Dataload process execution detail. Deserialization only.
@@ -48,7 +43,7 @@ public class ProcessExecutionDetail {
                                    @JsonProperty("updated") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime updated,
                                    @JsonProperty("finished") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime finished,
                                    @JsonProperty("error") ErrorStructure error,
-            @JsonProperty("links") Map<String, String> links) {
+                                   @JsonProperty("links") Map<String, String> links) {
         this.status = notEmpty(status, "status");
         this.created = notNull(created, "created");
         this.started = started;
@@ -86,8 +81,18 @@ public class ProcessExecutionDetail {
         return error;
     }
 
+    /**
+     * @return log URI string
+     * @deprecated use {@link #getLogUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getLogLink() {
+        return getLogUri();
+    }
+
+    @JsonIgnore
+    public String getLogUri() {
         return links != null ? links.get(LOG_LINK) : null;
     }
 
@@ -96,8 +101,18 @@ public class ProcessExecutionDetail {
         return links != null ? links.get(SELF_LINK) : null;
     }
 
+    /**
+     * @return execution URI string
+     * @deprecated use {@link #getExecutionUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getExecutionLink() {
+        return getExecutionUri();
+    }
+
+    @JsonIgnore
+    public String getExecutionUri() {
         return links != null ? links.get(EXECUTION_LINK) : null;
     }
 

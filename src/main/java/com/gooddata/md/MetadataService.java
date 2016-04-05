@@ -287,7 +287,7 @@ public class MetadataService extends AbstractService {
         final Collection<Entry> entries = find(project, cls, restrictions);
         final Collection<String> result = new ArrayList<>(entries.size());
         for (Entry entry : entries) {
-            result.add(entry.getLink());
+            result.add(entry.getUri());
         }
         return result;
     }
@@ -415,16 +415,16 @@ public class MetadataService extends AbstractService {
     public List<AttributeElement> getAttributeElements(DisplayForm displayForm) {
         notNull(displayForm, "displayForm");
 
-        final String elementsLink = displayForm.getElementsLink();
-        if (StringUtils.isEmpty(elementsLink)) {
+        final String elementsUri = displayForm.getElementsUri();
+        if (StringUtils.isEmpty(elementsUri)) {
             return Collections.emptyList();
         }
 
         try {
-            final AttributeElements attributeElements = restTemplate.getForObject(elementsLink, AttributeElements.class);
+            final AttributeElements attributeElements = restTemplate.getForObject(elementsUri, AttributeElements.class);
             return attributeElements.getElements();
         } catch (GoodDataRestException | RestClientException e) {
-            throw new GoodDataException("Unable to get attribute elements from " + elementsLink + ".", e);
+            throw new GoodDataException("Unable to get attribute elements from " + elementsUri + ".", e);
         }
     }
 

@@ -59,8 +59,18 @@ public class ReportDefinition extends AbstractObj implements Queryable, Updatabl
         return content.getGrid();
     }
 
+    /**
+     * @return explain URI string
+     * @deprecated use {@link #getExplainUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getExplainLink() {
+        return getExplainUri();
+    }
+
+    @JsonIgnore
+    public String getExplainUri() {
         return links != null ? links.get(EXPLAIN_LINK) : null;
     }
 

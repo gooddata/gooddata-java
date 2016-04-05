@@ -128,7 +128,8 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         Collection<Entry> result = md.find(project, ScheduledMail.class);
         assertThat(result, hasSize(1));
         for (Entry e : result) {
-            ScheduledMail schedule = md.getObjByUri(e.getLink(), ScheduledMail.class);
+            ScheduledMail schedule = md.getObjByUri(e.getUri(), ScheduledMail.class);
+            assertThat(schedule.getTitle(), is("Scheduled Mail Title"));
         }
     }
 

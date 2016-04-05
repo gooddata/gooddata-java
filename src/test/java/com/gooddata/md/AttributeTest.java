@@ -56,6 +56,7 @@ public class AttributeTest {
 
         assertThat(attribute.hasDimension(), is(true));
         assertThat(attribute.getDimensionLink(), is("/gdc/md/PROJECT_ID/obj/DIM_ID"));
+        assertThat(attribute.getDimensionUri(), is("/gdc/md/PROJECT_ID/obj/DIM_ID"));
 
         assertThat(attribute.getDirection(), is("asc"));
         assertThat(attribute.getSort(), is("pk"));
@@ -64,6 +65,7 @@ public class AttributeTest {
         assertThat(attribute.isSortedByLinkedDf(), is(false));
         assertThat(attribute.getType(), is("GDC.time.date"));
         assertThat(attribute.getLinkedDisplayFormLink(), is("/gdc/md/PROJECT_ID/obj/DF_LINK"));
+        assertThat(attribute.getLinkedDisplayFormUri(), is("/gdc/md/PROJECT_ID/obj/DF_LINK"));
         assertThat(attribute.getCompositeAttribute(), hasSize(0));
         assertThat(attribute.getCompositeAttributePk(), hasSize(0));
         assertThat(attribute.getFolders(), hasSize(0));
