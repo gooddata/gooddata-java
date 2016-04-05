@@ -14,12 +14,14 @@ public class WarehouseTaskTest {
     public void testDeserializePoll() throws Exception {
         final WarehouseTask warehouseTask = deserialize("/warehouse/warehouseTask-poll.json");
         assertThat(warehouseTask.getPollLink(), is("/gdc/datawarehouse/executions/executionId"));
+        assertThat(warehouseTask.getPollUri(), is("/gdc/datawarehouse/executions/executionId"));
     }
 
     @Test
     public void testDeserializeInstance() throws Exception {
         final WarehouseTask warehouseTask = deserialize("/warehouse/warehouseTask-finished.json");
         assertThat(warehouseTask.getWarehouseLink(), is("/gdc/datawarehouse/instances/instanceId"));
+        assertThat(warehouseTask.getWarehouseUri(), is("/gdc/datawarehouse/instances/instanceId"));
     }
 
     private WarehouseTask deserialize(String path) throws Exception {

@@ -27,8 +27,9 @@ public class ProcessExecutionDetailTest {
         assertThat(executionDetail.getError().getErrorCode(), is("executor.error"));
         assertThat(executionDetail.getError().getFormattedMessage(),
                 is("Error message with some placeholders for parameters - like this one."));
-
+        assertThat(executionDetail.getUri(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId/detail"));
+        assertThat(executionDetail.getLogUri(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId/log"));
+        assertThat(executionDetail.getExecutionUri(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId"));
     }
-
 
 }

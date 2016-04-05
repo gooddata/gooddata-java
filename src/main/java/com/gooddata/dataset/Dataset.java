@@ -3,11 +3,11 @@ package com.gooddata.dataset;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.gdc.AboutLinks;
 import com.gooddata.gdc.AboutLinks.Link;
 
 /**
  * Dataset link
+ *
  * @deprecated use {@link Link} instead
  */
 @Deprecated

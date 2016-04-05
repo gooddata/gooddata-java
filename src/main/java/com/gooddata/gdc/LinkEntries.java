@@ -29,17 +29,26 @@ public class LinkEntries {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     protected static class LinkEntry {
-        private final String link;
+        private final String uri;
         private final String category;
 
         @JsonCreator
-        private LinkEntry(@JsonProperty("link") String link, @JsonProperty("category") String category) {
-            this.link = link;
+        private LinkEntry(@JsonProperty("link") String uri, @JsonProperty("category") String category) {
+            this.uri = uri;
             this.category = category;
         }
 
+        /**
+         * @return self URI string
+         * @deprecated use {@link #getUri()} instead
+         */
+        @Deprecated
         public String getLink() {
-            return link;
+            return getUri();
+        }
+
+        public String getUri() {
+            return uri;
         }
 
         public String getCategory() {

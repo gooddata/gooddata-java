@@ -21,6 +21,7 @@ public class AccountTest {
         assertThat(account.getId(), is("ID"));
         assertThat(account.getUri(), is("/gdc/account/profile/ID"));
         assertThat(account.getProjectsLink(), is("/gdc/account/profile/ID/projects"));
+        assertThat(account.getProjectsUri(), is("/gdc/account/profile/ID/projects"));
     }
 
     @Test

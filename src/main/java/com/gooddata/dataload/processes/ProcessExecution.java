@@ -35,7 +35,7 @@ public class ProcessExecution {
 
     public ProcessExecution(DataloadProcess process, String executable, Map<String, String> params, Map<String, String> hiddenParams) {
         notNull(process, "process");
-        this.executionsUri = notEmpty(process.getExecutionsLink(), "process executions link");
+        this.executionsUri = notEmpty(process.getExecutionsUri(), "process executions link");
         this.executable = executable;
         this.params = notNull(params, "params");
         this.hiddenParams = notNull(hiddenParams, "hiddenParams");

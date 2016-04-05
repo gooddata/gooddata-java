@@ -19,7 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class EntryTest {
 
-    public static final String LINK = "/gdc/md/PROJECT_ID/obj/ENTRY_ID";
+    public static final String URI = "/gdc/md/PROJECT_ID/obj/ENTRY_ID";
     public static final String AUTHOR = "/gdc/account/profile/AUTHOR_USER_ID";
     public static final String CONTRIBUTOR = "/gdc/account/profile/CONTRIBUTOR_USER_ID";
     public static final DateTime CREATED = new DateTime(2014, 4, 11, 13, 45, 54, DateTimeZone.UTC);
@@ -37,7 +37,8 @@ public class EntryTest {
     public void testDeserialize() throws Exception {
         final Entry entry = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/entry.json"), Entry.class);
         assertThat(entry, is(notNullValue()));
-        assertThat(entry.getLink(), is(LINK));
+        assertThat(entry.getLink(), is(URI));
+        assertThat(entry.getUri(), is(URI));
         assertThat(entry.getTitle(), is(TITLE));
         assertThat(entry.getSummary(), is(SUMMARY));
         assertThat(entry.getCategory(), is(CATEGORY));
@@ -54,7 +55,7 @@ public class EntryTest {
 
     @Test
     public void testSerialization() throws Exception {
-        final Entry entry = new Entry(LINK, TITLE, SUMMARY, CATEGORY, AUTHOR, CONTRIBUTOR, DEPRECATED, IDENTIFIER, TAGS,
+        final Entry entry = new Entry(URI, TITLE, SUMMARY, CATEGORY, AUTHOR, CONTRIBUTOR, DEPRECATED, IDENTIFIER, TAGS,
                 CREATED, UPDATED, LOCKED, UNLISTED);
 
         assertThat(entry, serializesToJson("/md/entry.json"));

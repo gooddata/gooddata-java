@@ -15,7 +15,7 @@ import java.util.Set;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Entry {
 
-    private final String link;
+    private final String uri;
     private final String title;
     private final String summary;
     private final String category;
@@ -30,7 +30,7 @@ public class Entry {
     private final Boolean unlisted;
 
     @JsonCreator
-    public Entry(@JsonProperty("link") String link,
+    public Entry(@JsonProperty("link") String uri,
                  @JsonProperty("title") String title,
                  @JsonProperty("summary") String summary,
                  @JsonProperty("category") String category,
@@ -43,7 +43,7 @@ public class Entry {
                  @JsonProperty("updated") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime updated,
                  @JsonProperty("locked") @JsonDeserialize(using = BooleanDeserializer.class) Boolean locked,
                  @JsonProperty("unlisted") @JsonDeserialize(using = BooleanDeserializer.class) Boolean unlisted) {
-        this.link = link;
+        this.uri = uri;
         this.title = title;
         this.summary = summary;
         this.category = category;
@@ -58,8 +58,18 @@ public class Entry {
         this.unlisted = unlisted;
     }
 
+    /**
+     * @return self URI string
+     * @deprecated use {@link #getUri()} instead
+     */
+    @Deprecated
     public String getLink() {
-        return link;
+        return getUri();
+    }
+
+    @JsonIgnore
+    public String getUri() {
+        return uri;
     }
 
     public String getTitle() {
