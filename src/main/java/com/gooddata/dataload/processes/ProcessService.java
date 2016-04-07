@@ -186,7 +186,7 @@ public class ProcessService extends AbstractService {
         notNull(outputStream, "outputStream");
         try {
             restTemplate.execute(process.getSourceLink(), HttpMethod.GET,
-                    noopRequestCallback, new OutputStreamResponseExtractor(outputStream));
+                    null, new OutputStreamResponseExtractor(outputStream));
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to get process source " + process.getSourceLink(), e);
         }
@@ -202,7 +202,7 @@ public class ProcessService extends AbstractService {
         notNull(outputStream, "outputStream");
         try {
             restTemplate.execute(executionDetail.getLogLink(), HttpMethod.GET,
-                    noopRequestCallback, new OutputStreamResponseExtractor(outputStream));
+                    null, new OutputStreamResponseExtractor(outputStream));
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to get process execution log " + executionDetail.getLogLink(), e);
         }
