@@ -94,7 +94,7 @@ public class ReportService extends AbstractService {
             @Override
             protected void onFinish() {
                 try {
-                    restTemplate.execute(uri, GET, noopRequestCallback, new OutputStreamResponseExtractor(output));
+                    restTemplate.execute(uri, GET, null, new OutputStreamResponseExtractor(output));
                 } catch (GoodDataException | RestClientException e) {
                     throw new ReportException("Unable to export report", e);
                 }

@@ -10,11 +10,9 @@ import static org.springframework.http.HttpMethod.GET;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.client.HttpMessageConverterExtractor;
-import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,7 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.TimeUnit;
-
 
 /**
  * Parent for GoodData services providing helpers for REST API calls and polling.
@@ -35,12 +32,6 @@ public abstract class AbstractService {
     protected final RestTemplate restTemplate;
 
     protected final ObjectMapper mapper = new ObjectMapper();
-
-    protected final RequestCallback noopRequestCallback = new RequestCallback() {
-        @Override
-        public void doWithRequest(final ClientHttpRequest request) throws IOException {
-        }
-    };
 
     private final ResponseExtractor<ClientHttpResponse> reusableResponseExtractor = new ResponseExtractor<ClientHttpResponse>() {
         @Override
@@ -83,7 +74,7 @@ public abstract class AbstractService {
         notNull(handler, "handler");
         final ClientHttpResponse response;
         try {
-            response = restTemplate.execute(handler.getPollingUri(), GET, noopRequestCallback, reusableResponseExtractor);
+            response = restTemplate.execute(handler.getPollingUri(), GET, null, reusableResponseExtractor);
         } catch (GoodDataRestException e) {
             handler.handlePollException(e);
             throw new GoodDataException("Handler " + handler.getClass().getName() + " didn't handle exception", e);
