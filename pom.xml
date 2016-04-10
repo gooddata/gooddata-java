@@ -21,8 +21,8 @@
         </license>
     </licenses>
     <scm>
-        <url>git@github.com:martiner/java.git</url>
-        <connection>scm:git:git@github.com:martiner/java.git</connection>
+        <url>git@github.com:martiner/gooddata-java.git</url>
+        <connection>scm:git:git@github.com:martiner/gooddata-java.git</connection>
         <developerConnection>scm:git:${basedir}</developerConnection>
     </scm>
     <developers>
