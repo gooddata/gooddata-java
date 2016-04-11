@@ -9,6 +9,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 /**
+ * Service to work with GoodData API root.
  */
 public class GdcService extends AbstractService {
 
@@ -16,6 +17,11 @@ public class GdcService extends AbstractService {
         super(restTemplate);
     }
 
+    /**
+     * Obtains GoodData API root links.
+     *
+     * @return GoodData API root links
+     */
     public Gdc getGdc() {
         try {
             return restTemplate.getForObject(Gdc.URI, Gdc.class);

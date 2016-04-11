@@ -10,28 +10,24 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.gdc.AboutLinks.Link;
 
 import java.util.List;
 
 /**
- * GoodData API root response (aka "about" or "home")
+ * GoodData API root links (aka "about" or "home").
+ * Deserialization only.
  */
-@JsonTypeName("about")
-@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class Gdc {
+public class Gdc extends AboutLinks {
 
     /**
      * URI of GoodData API root
      */
     public static final String URI = "/gdc";
 
-    private final List<Link> links;
-
     @JsonCreator
     public Gdc(@JsonProperty("links") List<Link> links) {
-        this.links = links;
+        super(null, null, null, links);
     }
 
     /**
@@ -172,7 +168,7 @@ public class Gdc {
      */
     @JsonIgnore
     private Link getLink(LinkCategory category) {
-        for (Link link : links) {
+        for (Link link : getLinks()) {
             if (category.value.equals(link.getCategory())) {
                 return link;
             }
@@ -181,65 +177,9 @@ public class Gdc {
     }
 
     /**
-     * GoodData API root link
-     */
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class Link {
-        private final String category;
-        private final String link;
-        private final String summary;
-        private final String title;
-
-        @JsonCreator
-        public Link(@JsonProperty("category") String category, @JsonProperty("link") String link,
-                    @JsonProperty("summary") String summary, @JsonProperty("title") String title) {
-            this.category = category;
-            this.link = link;
-            this.summary = summary;
-            this.title = title;
-        }
-
-        /**
-         * Get link category
-         *
-         * @return link category
-         */
-        public String getCategory() {
-            return category;
-        }
-
-        /**
-         * Get link URI
-         *
-         * @return link URI
-         */
-        public String getUri() {
-            return link;
-        }
-
-        /**
-         * Get link summary
-         *
-         * @return link summary
-         */
-        public String getSummary() {
-            return summary;
-        }
-
-        /**
-         * Get link title
-         *
-         * @return link title
-         */
-        public String getTitle() {
-            return title;
-        }
-    }
-
-    /**
      * GoodData API root link category enum
      */
-    private static enum LinkCategory {
+    private enum LinkCategory {
         /**
          * GoodData API root
          */
@@ -295,7 +235,7 @@ public class Gdc {
 
         private final String value;
 
-        private LinkCategory(final String value) {
+        LinkCategory(final String value) {
             this.value = value;
         }
     }
