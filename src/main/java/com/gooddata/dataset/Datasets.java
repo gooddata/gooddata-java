@@ -10,11 +10,9 @@ import java.util.List;
 
 /**
  * Dataset links
+ * @deprecated use {@link DatasetLinks} instead.
  */
-@JsonTypeName("about")
-@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Deprecated
 class Datasets extends AboutLinks {
 
     public static final String URI = "/gdc/md/{project}/ldm/singleloadinterface";

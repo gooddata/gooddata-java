@@ -138,7 +138,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/ldm/singleloadinterface")
             .respond()
-                .withBody(readFromResource("/dataset/datasets.json"))
+                .withBody(readFromResource("/dataset/datasetLinks.json"))
         ;
 
         final Collection<Dataset> datasets = gd.getDatasetService().listDatasets(project);
@@ -153,7 +153,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/ldm/singleloadinterface")
             .respond()
-                .withBody(readFromResource("/dataset/datasets.json"))
+                .withBody(readFromResource("/dataset/datasetLinks.json"))
         ;
 
         final Collection<Link> datasets = gd.getDatasetService().listDatasetLinks(project);
