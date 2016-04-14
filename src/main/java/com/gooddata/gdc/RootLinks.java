@@ -1,26 +1,20 @@
 /*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2007-2016, GoodData(R) Corporation. All rights reserved.
  */
 package com.gooddata.gdc;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gooddata.gdc.AboutLinks.Link;
+import com.gooddata.GoodDataException;
 
 import java.util.List;
 
 /**
  * GoodData API root links (aka "about" or "home").
  * Deserialization only.
- * @deprecated use {@link RootLinks} instead
  */
-@Deprecated
-public class Gdc extends AboutLinks {
+public class RootLinks extends AboutLinks {
 
     /**
      * URI of GoodData API root
@@ -28,7 +22,7 @@ public class Gdc extends AboutLinks {
     public static final String URI = "/gdc";
 
     @JsonCreator
-    public Gdc(@JsonProperty("links") List<Link> links) {
+    public RootLinks(@JsonProperty("links") List<Link> links) {
         super(null, null, null, links);
     }
 
@@ -36,6 +30,7 @@ public class Gdc extends AboutLinks {
      * Get GoodData API root link
      *
      * @return GoodData API root link
+     * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getHomeLink() {
@@ -46,6 +41,7 @@ public class Gdc extends AboutLinks {
      * Get temporary token generator link
      *
      * @return temporary token generator link
+     * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getTokenLink() {
@@ -56,6 +52,7 @@ public class Gdc extends AboutLinks {
      * Get authentication service link
      *
      * @return authentication service link
+     * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getLoginLink() {
@@ -66,6 +63,7 @@ public class Gdc extends AboutLinks {
      * Get metadata resources link
      *
      * @return metadata resources link
+     * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getMetadataLink() {
@@ -76,6 +74,7 @@ public class Gdc extends AboutLinks {
      * Get report execution resource link
      *
      * @return report execution resource link
+     * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getXTabLink() {
@@ -86,6 +85,7 @@ public class Gdc extends AboutLinks {
      * Get link of resource used to determine valid attribute values in the context of a report
      *
      * @return link of resource used to determine valid attribute values in the context of a report
+     * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getAvailableElementsLink() {
@@ -96,6 +96,7 @@ public class Gdc extends AboutLinks {
      * Get report exporting resource link
      *
      * @return report exporting resource link
+     * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getReportExporterLink() {
@@ -106,6 +107,7 @@ public class Gdc extends AboutLinks {
      * Get account manipulation resource link
      *
      * @return account manipulation resource link
+     * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getAccountLink() {
@@ -116,6 +118,7 @@ public class Gdc extends AboutLinks {
      * Get user and project management resource link
      *
      * @return user and project management resource link
+     * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getProjectsLink() {
@@ -126,6 +129,7 @@ public class Gdc extends AboutLinks {
      * Get miscellaneous tool resource link
      *
      * @return miscellaneous tool resource link
+     * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getToolLink() {
@@ -136,6 +140,7 @@ public class Gdc extends AboutLinks {
      * Get template resource link
      *
      * @return template resource link
+     * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getTemplatesLink() {
@@ -146,6 +151,7 @@ public class Gdc extends AboutLinks {
      * Get release information link
      *
      * @return release information link
+     * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getReleaseInfoLink() {
@@ -156,6 +162,7 @@ public class Gdc extends AboutLinks {
      * Get user data staging area link
      *
      * @return user data staging area link
+     * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getUserStagingLink() {
@@ -167,6 +174,7 @@ public class Gdc extends AboutLinks {
      *
      * @param category requested link category
      * @return link by given category
+     * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     private Link getLink(LinkCategory category) {
@@ -175,7 +183,7 @@ public class Gdc extends AboutLinks {
                 return link;
             }
         }
-        return null;
+        throw new GoodDataException("No link with such category found");
     }
 
     /**
