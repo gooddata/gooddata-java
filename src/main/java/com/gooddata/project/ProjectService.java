@@ -473,7 +473,7 @@ public class ProjectService extends AbstractService {
      * Deletes existing project feature flag.
      *
      * @param featureFlag existing project feature flag with links set properly, cannot be null
-     * @deprecated use {@link FeatureFlagService#deleteFeatureFlag(com.gooddata.featureflag.ProjectFeatureFlag)}
+     * @deprecated use {@link FeatureFlagService#deleteProjectFeatureFlag(com.gooddata.featureflag.ProjectFeatureFlag)}
      */
     @Deprecated
     @SuppressWarnings("deprecation")

@@ -124,16 +124,16 @@ public class FeatureFlagService extends AbstractService {
         try {
             final URI featureFlagUri = restTemplate.postForLocation(featureFlagsUri, flag);
             if (featureFlagUri == null) {
-                throw new GoodDataException("URI of new flag can't be null");
+                throw new GoodDataException("URI of new project feature flag can't be null");
             }
             return getProjectFeatureFlag(featureFlagUri.toString());
         } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to create feature flag: " + flag, e);
+            throw new GoodDataException("Unable to create project feature flag: " + flag, e);
         }
     }
 
     /**
-     * Updates existing project's feature flag.
+     * Updates existing project feature flag.
      * Note that it doesn't make sense to update any other property than {@link ProjectFeatureFlag#enabled}.
      *
      * @param flag feature flag to be updated, cannot be null and it has to contain URI
@@ -147,7 +147,7 @@ public class FeatureFlagService extends AbstractService {
             restTemplate.put(flag.getUri(), flag);
             return getProjectFeatureFlag(flag.getUri());
         } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to update feature flag: " + flag, e);
+            throw new GoodDataException("Unable to update project feature flag: " + flag, e);
         }
     }
 
@@ -155,15 +155,26 @@ public class FeatureFlagService extends AbstractService {
      * Deletes existing project feature flag.
      *
      * @param flag existing project feature flag with links set properly, cannot be null
+     * @deprecated use {@link #deleteProjectFeatureFlag(ProjectFeatureFlag)} instead
      */
+    @Deprecated
     public void deleteFeatureFlag(final ProjectFeatureFlag flag) {
+        deleteProjectFeatureFlag(flag);
+    }
+
+    /**
+     * Deletes existing project feature flag.
+     *
+     * @param flag existing project feature flag with links set properly, cannot be null
+     */
+    public void deleteProjectFeatureFlag(final ProjectFeatureFlag flag) {
         notNull(flag, "flag");
         notEmpty(flag.getUri(), "flag URI");
 
         try {
             restTemplate.delete(flag.getUri());
         } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to delete feature flag=" + flag, e);
+            throw new GoodDataException("Unable to delete project feature flag: " + flag, e);
         }
     }
 
@@ -175,7 +186,7 @@ public class FeatureFlagService extends AbstractService {
     private ProjectFeatureFlag getProjectFeatureFlag(final String flagUri) {
         final ProjectFeatureFlag result = restTemplate.getForObject(flagUri, ProjectFeatureFlag.class);
         if (result == null) {
-            throw new GoodDataException("flag cannot be retrieved");
+            throw new GoodDataException("Project feature flag cannot be retrieved from URI " + flagUri);
         }
         return result;
     }

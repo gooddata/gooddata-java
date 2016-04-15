@@ -211,21 +211,40 @@ public class FeatureFlagServiceTest {
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullFlagThenDeleteProjectFeatureFlagShouldThrow() throws Exception {
+    public void whenNullFlagThenDeleteFeatureFlagShouldThrow() throws Exception {
         service.deleteFeatureFlag(null);
     }
 
     @Test(expectedExceptions = GoodDataException.class)
-    public void whenClientErrorResponseThenDeleteProjectFeatureFlagShouldThrow() throws Exception {
+    public void whenClientErrorResponseThenDeleteFeatureFlagShouldThrow() throws Exception {
         when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
         doThrow(new RestClientException("")).when(restTemplate).delete(PROJECT_FEATURE_FLAG_URI);
         service.deleteFeatureFlag(projectFeatureFlag);
     }
 
     @Test
-    public void testDeleteProjectFeatureFlag() throws Exception {
+    public void testDeleteFeatureFlag() throws Exception {
         when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
         service.deleteFeatureFlag(projectFeatureFlag);
+        verify(restTemplate).delete(PROJECT_FEATURE_FLAG_URI);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void whenNullFlagThenDeleteProjectFeatureFlagShouldThrow() throws Exception {
+        service.deleteProjectFeatureFlag(null);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void whenClientErrorResponseThenDeleteProjectFeatureFlagShouldThrow() throws Exception {
+        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
+        doThrow(new RestClientException("")).when(restTemplate).delete(PROJECT_FEATURE_FLAG_URI);
+        service.deleteProjectFeatureFlag(projectFeatureFlag);
+    }
+
+    @Test
+    public void testDeleteProjectFeatureFlag() throws Exception {
+        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
+        service.deleteProjectFeatureFlag(projectFeatureFlag);
         verify(restTemplate).delete(PROJECT_FEATURE_FLAG_URI);
     }
 

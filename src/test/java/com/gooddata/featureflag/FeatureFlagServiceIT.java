@@ -143,7 +143,7 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
 
         final ProjectFeatureFlag flag = MAPPER
                 .readValue(readFromResource("/featureflag/projectFeatureFlag.json"), ProjectFeatureFlag.class);
-        service.deleteFeatureFlag(flag);
+        service.deleteProjectFeatureFlag(flag);
     }
 
 }
