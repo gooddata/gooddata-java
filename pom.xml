@@ -7,6 +7,7 @@
     <version>1.5.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>GoodData Java SDK</description>
+    <url>https://github.com/martiner/gooddata-java</url>
 
     <parent>
         <groupId>org.sonatype.oss</groupId>
