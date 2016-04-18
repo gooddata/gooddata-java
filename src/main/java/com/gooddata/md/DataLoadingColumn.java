@@ -153,7 +153,7 @@ public class DataLoadingColumn extends AbstractObj implements Queryable {
 
         @JsonCreator
         private ColumnSynchronize(@JsonProperty("columnType") String type, @JsonProperty("columnLength") Integer length,
-                @JsonProperty("precision") Integer precision) {
+                @JsonProperty("columnPrecision") Integer precision) {
             this.type = type;
             this.length = length;
             this.precision = precision;

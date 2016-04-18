@@ -13,7 +13,7 @@
       "columnSynchronize" : {
         "columnType" : "INT",
         "columnLength" : 128,
-        "precision" : 0
+        "columnPrecision" : 0
       }
     },
     "meta" : {
