@@ -1,13 +1,12 @@
-package com.gooddata.md.data;
+package com.gooddata.dataset.uploads;
 
 import static com.gooddata.util.ResourceUtils.readFromResource;
-import static org.testng.Assert.*;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.project.Project;
 import org.testng.annotations.BeforeClass;
 
-public class DataServiceIT extends AbstractGoodDataIT {
+public class DatasetUploadsServiceIT extends AbstractGoodDataIT {
 
     private Project project;
 
