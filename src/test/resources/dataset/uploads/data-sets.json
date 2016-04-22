@@ -1,0 +1,54 @@
+{
+  "dataSetsInfo": {
+    "sets": [
+      {
+        "etlInterface": "/etl/interface/uri/123",
+        "lastUpload": {
+          "dataUploadShort": {
+            "msg": "1 of 7 parts went with warnings",
+            "date": "2011-10-04 10:35:05",
+            "progress": "1.000",
+            "status": "WARNING",
+            "uri": "/gdc/md/PROJECT_ID/data/upload/1076"
+          }
+        },
+        "lastSuccess": "2011-09-12 13:36:27",
+        "dataUploads": "/gdc/md/PROJECT_ID/data/uploads/814",
+        "meta": {
+          "author": "/gdc/account/profile/1",
+          "uri": "/gdc/md/PROJECT_ID/obj/814",
+          "tags": "",
+          "created": "2010-11-23 10:37:54",
+          "identifier": "dataset.campaign",
+          "deprecated": "0",
+          "summary": "Information about Medium, Campaign, Keyword, Ad Slot, Source and Referral Path",
+          "title": "Campaign",
+          "category": "dataSet",
+          "updated": "2010-11-23 10:58:02",
+          "contributor": "/gdc/account/profile/1"
+        },
+        "uploadConfiguration": "/configuration"
+      },
+      {
+        "etlInterface": null,
+        "lastUpload": null,
+        "lastSuccess": null,
+        "dataUploads": "/gdc/md/PROJECT_ID/data/uploads/356",
+        "meta": {
+          "author": "/gdc/account/profile/1",
+          "uri": "/gdc/md/PROJECT_ID/obj/356",
+          "tags": "",
+          "created": "2010-11-23 10:36:22",
+          "identifier": "dataset.os",
+          "deprecated": "0",
+          "summary": "Information about OS, OS version, Screen Colors and Screen Resolution",
+          "title": "OS",
+          "category": "dataSet",
+          "updated": "2010-11-23 10:57:59",
+          "contributor": "/gdc/account/profile/1"
+        }
+      }
+    ],
+    "links": {}
+  }
+}
