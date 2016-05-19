@@ -306,8 +306,7 @@ public class MetadataService extends AbstractService {
      *                'table'...)
      * @return objects using given objects.
      */
-    @SafeVarargs
-    public final Collection<Entry> usedBy(Project project, Obj obj, boolean nearest, Class<? extends Obj>... types) {
+    public Collection<Entry> usedBy(Project project, Obj obj, boolean nearest, Class<? extends Obj>... types) {
         notNull(obj, "obj");
         return usedBy(project, obj.getUri(), nearest, types);
     }
@@ -322,8 +321,7 @@ public class MetadataService extends AbstractService {
      * @return objects using given objects.
      * @see #usedBy(Project, Collection, boolean, Class[])
      */
-    @SafeVarargs
-    public final Collection<Entry> usedBy(Project project, String uri, boolean nearest, Class<? extends Obj>... types) {
+    public Collection<Entry> usedBy(Project project, String uri, boolean nearest, Class<? extends Obj>... types) {
         notNull(uri, "uri");
         notNull(project, "project");
 
@@ -341,8 +339,7 @@ public class MetadataService extends AbstractService {
      * @return objects usages
      * @see #usedBy(Project, String, boolean, Class[])
      */
-    @SafeVarargs
-    public final Collection<Usage> usedBy(Project project, Collection<String> uris, boolean nearest, Class<? extends Obj>... types) {
+    public Collection<Usage> usedBy(Project project, Collection<String> uris, boolean nearest, Class<? extends Obj>... types) {
         notNull(uris, "uris");
         notNull(project, "project");
 
