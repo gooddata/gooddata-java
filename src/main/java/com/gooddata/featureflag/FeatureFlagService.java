@@ -11,9 +11,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 
-import static com.gooddata.featureflag.FeatureFlags.AGGREGATED_FEATURE_FLAGS_TEMPLATE;
+import static com.gooddata.featureflag.FeatureFlags.AGGREGATED_FEATURE_FLAGS_URI;
 import static com.gooddata.featureflag.ProjectFeatureFlag.PROJECT_FEATURE_FLAG_TEMPLATE;
-import static com.gooddata.featureflag.ProjectFeatureFlags.PROJECT_FEATURE_FLAGS_TEMPLATE;
+import static com.gooddata.featureflag.ProjectFeatureFlags.PROJECT_FEATURE_FLAGS_URI;
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 
@@ -44,7 +44,7 @@ public class FeatureFlagService extends AbstractService {
         notNull(project, "project");
         try {
             final FeatureFlags featureFlags = restTemplate
-                    .getForObject(AGGREGATED_FEATURE_FLAGS_TEMPLATE.expand(project.getId()), FeatureFlags.class);
+                    .getForObject(AGGREGATED_FEATURE_FLAGS_URI, FeatureFlags.class, project.getId());
 
             if (featureFlags == null) {
                 throw new GoodDataException("empty response from API call");
@@ -67,7 +67,7 @@ public class FeatureFlagService extends AbstractService {
         notNull(project, "project");
         try {
             final ProjectFeatureFlags projectFeatureFlags = restTemplate
-                    .getForObject(PROJECT_FEATURE_FLAGS_TEMPLATE.expand(project.getId()), ProjectFeatureFlags.class);
+                    .getForObject(PROJECT_FEATURE_FLAGS_URI, ProjectFeatureFlags.class, project.getId());
 
             if (projectFeatureFlags == null) {
                 throw new GoodDataException("empty response from API call");
@@ -119,14 +119,12 @@ public class FeatureFlagService extends AbstractService {
         notNull(project, "project");
         notNull(flag, "flag");
 
-        final String featureFlagsUri = PROJECT_FEATURE_FLAGS_TEMPLATE.expand(project.getId()).toString();
-
         try {
-            final URI featureFlagUri = restTemplate.postForLocation(featureFlagsUri, flag);
+            final URI featureFlagUri = restTemplate.postForLocation(PROJECT_FEATURE_FLAGS_URI, flag, project.getId());
             if (featureFlagUri == null) {
                 throw new GoodDataException("URI of new project feature flag can't be null");
             }
-            return getProjectFeatureFlag(featureFlagUri.toString());
+            return getProjectFeatureFlag(featureFlagUri);
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to create project feature flag: " + flag, e);
         }
@@ -145,7 +143,7 @@ public class FeatureFlagService extends AbstractService {
 
         try {
             restTemplate.put(flag.getUri(), flag);
-            return getProjectFeatureFlag(flag.getUri());
+            return getProjectFeatureFlag(expandUri(flag.getUri()));
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to update project feature flag: " + flag, e);
         }
@@ -168,11 +166,11 @@ public class FeatureFlagService extends AbstractService {
     }
 
 
-    String getProjectFeatureFlagUri(final Project project, final String flagName) {
-        return PROJECT_FEATURE_FLAG_TEMPLATE.expand(project.getId(), flagName).toString();
+    URI getProjectFeatureFlagUri(final Project project, final String flagName) {
+        return expandUri(PROJECT_FEATURE_FLAG_TEMPLATE, project.getId(), flagName);
     }
 
-    private ProjectFeatureFlag getProjectFeatureFlag(final String flagUri) {
+    private ProjectFeatureFlag getProjectFeatureFlag(final URI flagUri) {
         final ProjectFeatureFlag result = restTemplate.getForObject(flagUri, ProjectFeatureFlag.class);
         if (result == null) {
             throw new GoodDataException("Project feature flag cannot be retrieved from URI " + flagUri);

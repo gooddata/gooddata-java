@@ -144,7 +144,7 @@ public class WarehouseService extends AbstractService {
      * @return first page of list of warehouse instances or empty list
      */
     public PageableList<Warehouse> listWarehouses() {
-        return listWarehouses(URI.create(Warehouses.URI));
+        return listWarehouses(expandUri(Warehouses.URI));
     }
 
     /**
@@ -156,7 +156,7 @@ public class WarehouseService extends AbstractService {
      */
     public PageableList<Warehouse> listWarehouses(Page page) {
         notNull(page, "page");
-        return listWarehouses(page.getPageUri(UriComponentsBuilder.fromUriString(Warehouses.URI)));
+        return listWarehouses(page.getPageUri(UriComponentsBuilder.fromUri(expandUri(Warehouses.URI))));
     }
 
     private PageableList<Warehouse> listWarehouses(final URI uri) {
@@ -176,7 +176,7 @@ public class WarehouseService extends AbstractService {
         notNull(warehouse.getId(), "warehouse.id");
         notNull(page, "page");
         try {
-            final UriComponentsBuilder builder = UriComponentsBuilder.fromUri(WarehouseUsers.TEMPLATE.expand(warehouse.getId()));
+            final UriComponentsBuilder builder = UriComponentsBuilder.fromUri(expandUri(WarehouseUsers.TEMPLATE, warehouse.getId()));
             final URI uri = page.getPageUri(builder);
             final WarehouseUsers result = restTemplate.getForObject(uri, WarehouseUsers.class);
             return result != null ? result : new PageableList<WarehouseUser>();

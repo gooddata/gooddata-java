@@ -15,11 +15,13 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriTemplate;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -173,6 +175,14 @@ public abstract class AbstractService {
         public Integer extractData(ClientHttpResponse response) throws IOException {
             return FileCopyUtils.copy(response.getBody(), output);
         }
+    }
+
+    protected URI expandUri(UriTemplate template, Object... variables) {
+        return expandUri(template.toString(), variables);
+    }
+
+    protected URI expandUri(String template, Object... variables) {
+        return restTemplate.getUriTemplateHandler().expand(template, variables);
     }
 
 }

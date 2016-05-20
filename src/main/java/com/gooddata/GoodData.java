@@ -31,6 +31,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.DefaultUriTemplateHandler;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Arrays;
 
@@ -194,9 +196,13 @@ public class GoodData {
 
     private RestTemplate createRestTemplate(String hostname, HttpClient httpClient, int port, String protocol) {
 
-        final UriPrefixingClientHttpRequestFactory factory = new UriPrefixingClientHttpRequestFactory(
-                new HttpComponentsClientHttpRequestFactory(httpClient), hostname, port, protocol);
-        final RestTemplate restTemplate = new RestTemplate(factory);
+        final RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));
+
+        final DefaultUriTemplateHandler uriTemplateHandler = new DefaultUriTemplateHandler();
+        uriTemplateHandler.setBaseUrl(UriComponentsBuilder.newInstance()
+                .scheme(protocol).host(hostname).port(port).build().toUriString());
+        restTemplate.setUriTemplateHandler(uriTemplateHandler);
+
         restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(
                 new HeaderSettingRequestInterceptor(singletonMap("Accept", getAcceptHeaderValue()))));
 

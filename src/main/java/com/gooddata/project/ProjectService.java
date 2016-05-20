@@ -296,8 +296,8 @@ public class ProjectService extends AbstractService {
         }
     }
 
-    private static URI getUsersUri(Project project) {
-        return Users.TEMPLATE.expand(project.getId());
+    private URI getUsersUri(Project project) {
+        return expandUri(Users.TEMPLATE, project.getId());
     }
 
     /**

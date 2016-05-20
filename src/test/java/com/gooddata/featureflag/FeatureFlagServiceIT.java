@@ -71,17 +71,15 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void createProjectFeatureFlagShouldCreateAndReturnNewProjectFeatureFlag() {
-        final String projectFeatureFlagUriString = service.getProjectFeatureFlagUri(project, FEATURE_FLAG_NAME);
-
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(PROJECT_FEATURE_FLAGS_URI_STRING)
                 .respond()
-                .withHeader("Location", projectFeatureFlagUriString)
+                .withHeader("Location", service.getProjectFeatureFlagUri(project, FEATURE_FLAG_NAME).toString())
                 .withStatus(201);
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(projectFeatureFlagUriString)
+                .havingPathEqualTo(PROJECT_FEATURE_FLAG_URI_STRING)
                 .respond()
                 .withBody(readStringFromResource("/featureflag/projectFeatureFlag.json"))
                 .withStatus(200);
@@ -110,7 +108,6 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void updateProjectFeatureFlagShouldUpdateAndReturnUpdatedProjectFeatureFlag() throws Exception {
-        final String projectFeatureFlagUriString = service.getProjectFeatureFlagUri(project, FEATURE_FLAG_NAME);
 
         onRequest()
                 .havingMethodEqualTo("PUT")
@@ -119,7 +116,7 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
                 .withStatus(200);
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(projectFeatureFlagUriString)
+                .havingPathEqualTo(PROJECT_FEATURE_FLAG_URI_STRING)
                 .respond()
                 .withBody(readStringFromResource("/featureflag/projectFeatureFlag.json"))
                 .withStatus(200);
