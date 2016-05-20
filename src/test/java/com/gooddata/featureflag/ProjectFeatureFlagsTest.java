@@ -23,7 +23,7 @@ public class ProjectFeatureFlagsTest {
 
     @Test
     public void testDeserialize() {
-        final ProjectFeatureFlags featureFlags = readObjectFromResource(getClass(), "/project/feature-flags.json",
+        final ProjectFeatureFlags featureFlags = readObjectFromResource(getClass(), "/featureflag/projectFeatureFlags.json",
                 ProjectFeatureFlags.class);
         assertNotNull(featureFlags);
 
@@ -48,7 +48,7 @@ public class ProjectFeatureFlagsTest {
 
     @Test
     public void shouldIterateThroughFlagsInForeach() throws Exception {
-        final ProjectFeatureFlags flags = readObjectFromResource(getClass(), "/project/feature-flags.json",
+        final ProjectFeatureFlags flags = readObjectFromResource(getClass(), "/featureflag/projectFeatureFlags.json",
                 ProjectFeatureFlags.class);
         for (ProjectFeatureFlag flag : flags) {
             assertThat(flag, isOneOf(
