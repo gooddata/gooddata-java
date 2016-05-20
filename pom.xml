@@ -44,7 +44,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <httpclient.version>4.3.3</httpclient.version>
         <jackson.version>2.7.0</jackson.version>
-        <spring.version>3.2.13.RELEASE</spring.version>
+        <spring.version>4.3.0.RC2</spring.version>
         <jadler.version>1.1.1</jadler.version>
         <json-unit.version>1.5.3</json-unit.version>
     </properties>
@@ -384,5 +384,16 @@
         </dependency>
 
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/libs-milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
 </project>
