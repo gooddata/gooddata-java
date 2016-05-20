@@ -1,9 +1,0 @@
-{
-    "featureFlag" : {
-        "key" : "myCoolFeature",
-        "value" : true,
-        "links" : {
-            "self" : "/gdc/projects/PROJECT_ID/projectFeatureFlags/myCoolFeature"
-        }
-    }
-}
