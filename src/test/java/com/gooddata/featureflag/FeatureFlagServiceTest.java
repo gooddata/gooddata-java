@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.DefaultUriTemplateHandler;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -18,6 +19,8 @@ import static java.util.Collections.singleton;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.matches;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -26,9 +29,9 @@ public class FeatureFlagServiceTest {
 
     private static final String PROJECT_ID = "11";
     private static final String FLAG_NAME = "flag1";
-    private static final String FEATURE_FLAGS_URI = "/gdc/internal/projects/11/featureFlags";
-    private static final String PROJECT_FEATURE_FLAGS_URI = "/gdc/projects/11/projectFeatureFlags";
-    private static final String PROJECT_FEATURE_FLAG_URI = "/gdc/projects/11/projectFeatureFlags/" + FLAG_NAME;
+    private static final String FEATURE_FLAGS_URI_PATTERN = "/gdc/internal/projects/\\{.+\\}/featureFlags";
+    private static final String PROJECT_FEATURE_FLAGS_URI_PATTERN = "/gdc/projects/\\{.+\\}/projectFeatureFlags";
+    private static final URI PROJECT_FEATURE_FLAG_URI = URI.create("/gdc/projects/" + PROJECT_ID + "/projectFeatureFlags/" + FLAG_NAME);
 
     @Mock
     private Project project;
@@ -48,6 +51,7 @@ public class FeatureFlagServiceTest {
         MockitoAnnotations.initMocks(this);
         service = new FeatureFlagService(restTemplate);
         when(project.getId()).thenReturn(PROJECT_ID);
+        when(restTemplate.getUriTemplateHandler()).thenReturn(new DefaultUriTemplateHandler());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -57,13 +61,13 @@ public class FeatureFlagServiceTest {
 
     @Test(expectedExceptions = GoodDataException.class)
     public void whenEmptyResponseThenGetFeatureFlagsShouldThrow() throws Exception {
-        when(restTemplate.getForObject(new URI(FEATURE_FLAGS_URI), FeatureFlags.class)).thenReturn(null);
+        when(restTemplate.getForObject(matches(FEATURE_FLAGS_URI_PATTERN), eq(FeatureFlags.class), eq(PROJECT_ID))).thenReturn(null);
         service.listFeatureFlags(project);
     }
 
     @Test(expectedExceptions = GoodDataException.class)
     public void whenClientErrorResponseThenGetFeatureFlagsShouldThrow() throws Exception {
-        when(restTemplate.getForObject(new URI(FEATURE_FLAGS_URI), FeatureFlags.class))
+        when(restTemplate.getForObject(FEATURE_FLAGS_URI_PATTERN, FeatureFlags.class, PROJECT_ID))
                 .thenThrow(new RestClientException(""));
         service.listFeatureFlags(project);
     }
@@ -71,7 +75,7 @@ public class FeatureFlagServiceTest {
     @Test
     public void testGetFeatureFlags() throws Exception {
         final FeatureFlag flag1 = new FeatureFlag(FLAG_NAME, true);
-        when(restTemplate.getForObject(new URI(FEATURE_FLAGS_URI), FeatureFlags.class)).thenReturn(featureFlags);
+        when(restTemplate.getForObject(matches(FEATURE_FLAGS_URI_PATTERN), eq(FeatureFlags.class), eq(PROJECT_ID))).thenReturn(featureFlags);
         when(featureFlags.iterator()).thenReturn(singleton(flag1).iterator());
 
         final FeatureFlags flags = service.listFeatureFlags(project);
@@ -86,13 +90,13 @@ public class FeatureFlagServiceTest {
 
     @Test(expectedExceptions = GoodDataException.class)
     public void whenEmptyResponseThenGetProjectFeatureFlagsShouldThrow() throws Exception {
-        when(restTemplate.getForObject(new URI(PROJECT_FEATURE_FLAGS_URI), ProjectFeatureFlags.class)).thenReturn(null);
+        when(restTemplate.getForObject(PROJECT_FEATURE_FLAGS_URI_PATTERN, ProjectFeatureFlags.class, PROJECT_ID)).thenReturn(null);
         service.listProjectFeatureFlags(project);
     }
 
     @Test(expectedExceptions = GoodDataException.class)
     public void whenClientErrorResponseThenGetProjectFeatureFlagsShouldThrow() throws Exception {
-        when(restTemplate.getForObject(new URI(PROJECT_FEATURE_FLAGS_URI), ProjectFeatureFlags.class))
+        when(restTemplate.getForObject(PROJECT_FEATURE_FLAGS_URI_PATTERN, ProjectFeatureFlags.class, PROJECT_ID))
                 .thenThrow(new RestClientException(""));
         service.listProjectFeatureFlags(project);
     }
@@ -100,7 +104,7 @@ public class FeatureFlagServiceTest {
     @Test
     public void testGetProjectFeatureFlags() throws Exception {
         final ProjectFeatureFlag flag1 = new ProjectFeatureFlag(FLAG_NAME, true);
-        when(restTemplate.getForObject(new URI(PROJECT_FEATURE_FLAGS_URI), ProjectFeatureFlags.class))
+        when(restTemplate.getForObject(matches(PROJECT_FEATURE_FLAGS_URI_PATTERN), eq(ProjectFeatureFlags.class), eq(PROJECT_ID)))
                 .thenReturn(projectFeatureFlags);
         when(projectFeatureFlags.iterator()).thenReturn(singleton(flag1).iterator());
 
@@ -135,9 +139,10 @@ public class FeatureFlagServiceTest {
     @Test
     public void testCreateProjectFeatureFlag() throws Exception {
         final ProjectFeatureFlag flag = new ProjectFeatureFlag(FLAG_NAME, true);
-        when(restTemplate.postForLocation(PROJECT_FEATURE_FLAGS_URI, flag))
-                .thenReturn(new URI(PROJECT_FEATURE_FLAG_URI));
-        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class)).thenReturn(flag);
+        when(restTemplate.postForLocation(matches(PROJECT_FEATURE_FLAGS_URI_PATTERN), eq(flag), eq(PROJECT_ID)))
+                .thenReturn(PROJECT_FEATURE_FLAG_URI);
+        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI,
+                ProjectFeatureFlag.class)).thenReturn(flag);
 
         final ProjectFeatureFlag result = service.createProjectFeatureFlag(project, flag);
 
@@ -170,7 +175,8 @@ public class FeatureFlagServiceTest {
     @Test
     public void testGetProjectFeatureFlag() throws Exception {
         final ProjectFeatureFlag flag = new ProjectFeatureFlag(FLAG_NAME, true);
-        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class)).thenReturn(flag);
+        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI,
+                ProjectFeatureFlag.class)).thenReturn(flag);
 
         final ProjectFeatureFlag result = service.getProjectFeatureFlag(project, FLAG_NAME);
 
@@ -184,14 +190,14 @@ public class FeatureFlagServiceTest {
 
     @Test(expectedExceptions = GoodDataException.class)
     public void whenEmptyResponseThenUpdateProjectFeatureFlagShouldThrow() throws Exception {
-        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
+        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI.toString());
         when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class)).thenReturn(null);
         service.updateProjectFeatureFlag(projectFeatureFlag);
     }
 
     @Test(expectedExceptions = GoodDataException.class)
     public void whenClientErrorResponseThenUpdateProjectFeatureFlagShouldThrow() throws Exception {
-        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
+        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI.toString());
         when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class))
                 .thenThrow(new RestClientException(""));
         service.updateProjectFeatureFlag(projectFeatureFlag);
@@ -200,33 +206,14 @@ public class FeatureFlagServiceTest {
     @Test
     public void testUpdateProjectFeatureFlag() throws Exception {
         final ProjectFeatureFlag newFlag = new ProjectFeatureFlag(FLAG_NAME, true);
-        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
+        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI.toString());
         when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class))
                 .thenReturn(newFlag);
 
         final ProjectFeatureFlag result = service.updateProjectFeatureFlag(projectFeatureFlag);
 
-        verify(restTemplate).put(PROJECT_FEATURE_FLAG_URI, projectFeatureFlag);
+        verify(restTemplate).put(PROJECT_FEATURE_FLAG_URI.toString(), projectFeatureFlag);
         assertThat(result, is(newFlag));
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullFlagThenDeleteFeatureFlagShouldThrow() throws Exception {
-        service.deleteFeatureFlag(null);
-    }
-
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenClientErrorResponseThenDeleteFeatureFlagShouldThrow() throws Exception {
-        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
-        doThrow(new RestClientException("")).when(restTemplate).delete(PROJECT_FEATURE_FLAG_URI);
-        service.deleteFeatureFlag(projectFeatureFlag);
-    }
-
-    @Test
-    public void testDeleteFeatureFlag() throws Exception {
-        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
-        service.deleteFeatureFlag(projectFeatureFlag);
-        verify(restTemplate).delete(PROJECT_FEATURE_FLAG_URI);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -236,16 +223,16 @@ public class FeatureFlagServiceTest {
 
     @Test(expectedExceptions = GoodDataException.class)
     public void whenClientErrorResponseThenDeleteProjectFeatureFlagShouldThrow() throws Exception {
-        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
-        doThrow(new RestClientException("")).when(restTemplate).delete(PROJECT_FEATURE_FLAG_URI);
+        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI.toString());
+        doThrow(new RestClientException("")).when(restTemplate).delete(PROJECT_FEATURE_FLAG_URI.toString());
         service.deleteProjectFeatureFlag(projectFeatureFlag);
     }
 
     @Test
     public void testDeleteProjectFeatureFlag() throws Exception {
-        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
+        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI.toString());
         service.deleteProjectFeatureFlag(projectFeatureFlag);
-        verify(restTemplate).delete(PROJECT_FEATURE_FLAG_URI);
+        verify(restTemplate).delete(PROJECT_FEATURE_FLAG_URI.toString());
     }
 
 }

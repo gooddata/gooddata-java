@@ -10,6 +10,7 @@ import com.gooddata.account.AccountService;
 import com.gooddata.gdc.DataStoreService;
 import com.gooddata.project.Project;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpEntity;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.DefaultUriTemplateHandler;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -39,6 +41,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyVararg;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.notNull;
 import static org.mockito.Mockito.verify;
@@ -78,6 +81,7 @@ public class ProcessServiceTest {
         when(project.getId()).thenReturn(PROJECT_ID);
         when(accountService.getCurrent()).thenReturn(account);
         when(account.getId()).thenReturn(ACCOUNT_ID);
+        when(restTemplate.getUriTemplateHandler()).thenReturn(new DefaultUriTemplateHandler());
     }
 
     @Test

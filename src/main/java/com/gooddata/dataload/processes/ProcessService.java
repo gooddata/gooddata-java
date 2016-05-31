@@ -76,7 +76,7 @@ public class ProcessService extends AbstractService {
         notNull(processData, "processData");
         notNull(project, "project");
 
-        return postProcess(process, processData, getProcessesUri(project));
+        return postProcess(process, processData, expandUri(DataloadProcesses.TEMPLATE, project.getId()));
     }
 
     /**
@@ -91,7 +91,11 @@ public class ProcessService extends AbstractService {
         notNull(project, "project");
         notNull(process, "process");
 
-        return postProcess(process, getProcessesUri(project));
+        try {
+            return restTemplate.postForObject(DataloadProcesses.URI, process, DataloadProcess.class, project.getId());
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to create dataload process.", e);
+        }
     }
 
     /**
@@ -107,7 +111,7 @@ public class ProcessService extends AbstractService {
         notNull(processData, "processData");
         notNull(project, "project");
 
-        return postProcess(process, processData, getProcessUri(project, process.getId()));
+        return postProcess(process, processData, expandUri(DataloadProcess.TEMPLATE, project.getId(), process.getId()));
     }
 
     /**
@@ -141,7 +145,7 @@ public class ProcessService extends AbstractService {
     public DataloadProcess getProcessById(Project project, String id) {
         notEmpty(id, "id");
         notNull(project, "project");
-        return getProcessByUri(getProcessUri(project, id).toString());
+        return getProcessByUri(DataloadProcess.TEMPLATE.expand(project.getId(), id).toString());
     }
 
     /**
@@ -151,7 +155,7 @@ public class ProcessService extends AbstractService {
      */
     public Collection<DataloadProcess> listProcesses(Project project) {
         notNull(project, "project");
-        return listProcesses(getProcessesUri(project));
+        return listProcesses(expandUri(DataloadProcesses.TEMPLATE, project.getId()));
     }
 
     /**
@@ -159,7 +163,7 @@ public class ProcessService extends AbstractService {
      * @return list of found processes or empty list
      */
     public Collection<DataloadProcess> listUserProcesses() {
-        return listProcesses(DataloadProcesses.USER_PROCESSES_TEMPLATE.expand(accountService.getCurrent().getId()));
+        return listProcesses(expandUri(DataloadProcesses.USER_PROCESSES_TEMPLATE, accountService.getCurrent().getId()));
     }
 
     /**
@@ -277,7 +281,11 @@ public class ProcessService extends AbstractService {
         notNull(schedule, "schedule");
         notNull(project, "project");
 
-        return postSchedule(schedule, getSchedulesUri(project));
+        try {
+            return restTemplate.postForObject(Schedules.URI, schedule, Schedule.class, project.getId());
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to post schedule.", e);
+        }
     }
 
     /**
@@ -387,7 +395,7 @@ public class ProcessService extends AbstractService {
 
     private PageableList<Schedule> listSchedules(URI uri) {
         try {
-            final Schedules schedules = restTemplate.getForObject(uri, Schedules.class);
+            final Schedules schedules = restTemplate.getForObject(uri.toString(), Schedules.class);
             if (schedules == null) {
                 return new PageableList<>();
             }
@@ -405,14 +413,6 @@ public class ProcessService extends AbstractService {
         return Schedules.TEMPLATE.expand(project.getId());
     }
 
-    private Schedule postSchedule(Schedule schedule, URI postUri) {
-        try {
-            return restTemplate.postForObject(postUri, schedule, Schedule.class);
-        } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to post schedule.", e);
-        }
-    }
-
     private Collection<DataloadProcess> listProcesses(URI uri) {
         try {
             final DataloadProcesses processes = restTemplate.getForObject(uri, DataloadProcesses.class);
@@ -425,14 +425,6 @@ public class ProcessService extends AbstractService {
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to list processes", e);
         }
-    }
-
-    private static URI getProcessUri(Project project, String id) {
-        return DataloadProcess.TEMPLATE.expand(project.getId(), id);
-    }
-
-    private static URI getProcessesUri(Project project) {
-        return DataloadProcesses.TEMPLATE.expand(project.getId());
     }
 
     private DataloadProcess postProcess(DataloadProcess process, File processData, URI postUri) {
@@ -478,14 +470,6 @@ public class ProcessService extends AbstractService {
             throw new GoodDataException("Unable to post dataload process.", e);
         } finally {
             deleteTempFile(tempFile);
-        }
-    }
-
-    private DataloadProcess postProcess(DataloadProcess process, URI postUri) {
-        try {
-            return restTemplate.postForObject(postUri, process, DataloadProcess.class);
-        } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to create dataload process.", e);
         }
     }
 

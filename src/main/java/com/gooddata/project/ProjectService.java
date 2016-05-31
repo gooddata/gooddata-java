@@ -13,10 +13,7 @@ import com.gooddata.SimplePollHandler;
 import com.gooddata.account.AccountService;
 import com.gooddata.collections.Page;
 import com.gooddata.collections.PageableList;
-import com.gooddata.featureflag.FeatureFlagService;
 import com.gooddata.gdc.AsyncTask;
-import com.gooddata.gdc.FeatureFlag;
-import com.gooddata.gdc.FeatureFlags;
 import com.gooddata.gdc.UriResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
@@ -31,9 +28,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.gooddata.gdc.FeatureFlags.AGGREGATED_FEATURE_FLAGS_TEMPLATE;
-import static com.gooddata.project.ProjectFeatureFlag.FEATURE_FLAG_TEMPLATE;
-import static com.gooddata.project.ProjectFeatureFlags.FEATURE_FLAGS_TEMPLATE;
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 import static java.util.Arrays.asList;
@@ -302,8 +296,8 @@ public class ProjectService extends AbstractService {
         }
     }
 
-    private static URI getUsersUri(Project project) {
-        return Users.TEMPLATE.expand(project.getId());
+    private URI getUsersUri(Project project) {
+        return expandUri(Users.TEMPLATE, project.getId());
     }
 
     /**
@@ -346,155 +340,5 @@ public class ProjectService extends AbstractService {
         } catch (RestClientException e) {
             throw new GoodDataException("Unable to get role " + uri, e);
         }
-    }
-
-    /**
-     * Lists aggregated feature flags for given project and current user (aggregates global, project group, project and user feature flags).
-     * It doesn't matter whether feature flag is enabled or not, it'll be included in all cases.
-     *
-     * @param project project, cannot be null
-     * @return list of aggregated feature flags for given project and current user
-     * @deprecated use {@link FeatureFlagService#listFeatureFlags(Project)} instead
-     */
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public List<FeatureFlag> listAggregatedFeatureFlags(final Project project) {
-        notNull(project, "project");
-        try {
-            final FeatureFlags featureFlags =
-                    restTemplate.getForObject(AGGREGATED_FEATURE_FLAGS_TEMPLATE.expand(project.getId()),
-                            FeatureFlags.class);
-
-            if (featureFlags == null) {
-                throw new GoodDataException("empty response from API call");
-            }
-
-            return featureFlags.getFeatureFlags();
-        } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to list aggregated feature flags for project ID=" + project.getId(), e);
-        }
-    }
-
-    /**
-     * Lists all project feature flags (only project scoped flags, use {@link FeatureFlagService#listFeatureFlags(Project)}
-     * for aggregated flags from all scopes).
-     * It doesn't matter whether feature flag is enabled or not, it'll be included in all cases.
-     *
-     * @param project project, cannot be null
-     * @return list of all feature flags for given project
-     * @deprecated use {@link FeatureFlagService#listProjectFeatureFlags(Project)} instead
-     */
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public List<ProjectFeatureFlag> listFeatureFlags(Project project) {
-        notNull(project, "project");
-        try {
-            final ProjectFeatureFlags projectFeatureFlags =
-                    restTemplate.getForObject(FEATURE_FLAGS_TEMPLATE.expand(project.getId()), ProjectFeatureFlags.class);
-
-            if (projectFeatureFlags == null) {
-                throw new GoodDataException("empty response from API call");
-            }
-
-            return projectFeatureFlags.getItems();
-        } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to list project feature flags for project ID=" + project.getId(), e);
-        }
-    }
-
-    /**
-     * Creates new feature flag for given project.
-     *
-     * Usually, it doesn't make sense to create feature flag that is disabled because
-     * this is the same as having no feature flag at all.
-     *
-     * @param project project for which the feature flag should be created, cannot be null
-     * @param featureFlag feature flag to be created, cannot be null
-     * @return created feature flag
-     * @deprecated use {@link FeatureFlagService#createProjectFeatureFlag(Project, com.gooddata.featureflag.ProjectFeatureFlag)}
-     */
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public ProjectFeatureFlag createFeatureFlag(final Project project, final ProjectFeatureFlag featureFlag) {
-        notNull(project, "project");
-        notNull(featureFlag, "featureFlag");
-
-        final String featureFlagsUri = FEATURE_FLAGS_TEMPLATE.expand(project.getId()).toString();
-
-        try {
-            final URI featureFlagUri = restTemplate.postForLocation(featureFlagsUri, featureFlag);
-            notNull(featureFlagsUri, "URI of new featureFlag");
-            return getFeatureFlag(featureFlagUri.toString());
-        } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to create feature flag: " + featureFlag, e);
-        }
-    }
-
-    /**
-     * Get feature flag by unique name (aka "key").
-     *
-     * @param project project, cannot be null
-     * @param featureFlagName name of feature flag, cannot be empty
-     * @return feature flag
-     * @deprecated use {@link FeatureFlagService#getProjectFeatureFlag(Project, String)}
-     */
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public ProjectFeatureFlag getFeatureFlag(final Project project, final String featureFlagName) {
-        notNull(project, "project");
-        notEmpty(featureFlagName, "featureFlagName");
-
-        return restTemplate.getForObject(getFeatureFlagUri(project, featureFlagName), ProjectFeatureFlag.class);
-    }
-
-    /**
-     * Updates existing feature flag.
-     * Note that it doesn't make sense to update any other field than {@link ProjectFeatureFlag#enabled}.
-     *
-     * @param featureFlag updated feature flag
-     * @return updated feature flag
-     * @deprecated use {@link FeatureFlagService#updateProjectFeatureFlag(com.gooddata.featureflag.ProjectFeatureFlag)}
-     */
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public ProjectFeatureFlag updateFeatureFlag(final ProjectFeatureFlag featureFlag) {
-        notNull(featureFlag, "featureFlag");
-        notEmpty(featureFlag.getUri(), "featureFlag");
-
-        try {
-            restTemplate.put(featureFlag.getUri(), featureFlag);
-            return getFeatureFlag(featureFlag.getUri());
-        } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to create feature flag: " + featureFlag, e);
-        }
-    }
-
-    /**
-     * Deletes existing project feature flag.
-     *
-     * @param featureFlag existing project feature flag with links set properly, cannot be null
-     * @deprecated use {@link FeatureFlagService#deleteProjectFeatureFlag(com.gooddata.featureflag.ProjectFeatureFlag)}
-     */
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public void deleteFeatureFlag(ProjectFeatureFlag featureFlag) {
-        notNull(featureFlag, "featureFlag");
-        notEmpty(featureFlag.getUri(), "featureFlag URI");
-
-        try {
-            restTemplate.delete(featureFlag.getUri());
-        } catch (GoodDataRestException | RestClientException e) {
-            throw new GoodDataException("Unable to delete feature flag=" + featureFlag, e);
-        }
-    }
-
-
-    @SuppressWarnings("deprecation")
-    private ProjectFeatureFlag getFeatureFlag(String featureFlagUri) {
-        return restTemplate.getForObject(featureFlagUri, ProjectFeatureFlag.class);
-    }
-
-    private String getFeatureFlagUri(final Project project, final String featureFlagName) {
-        return FEATURE_FLAG_TEMPLATE.expand(project.getId(), featureFlagName).toString();
     }
 }
