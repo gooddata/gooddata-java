@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.DateTime;
 
+import java.util.Set;
+
 import static com.gooddata.util.Validate.noNullElements;
 
 /**
@@ -69,11 +71,11 @@ public abstract class AbstractObj {
     }
 
     @JsonIgnore
-    public String getTags() {
+    public Set<String> getTags() {
         return meta.getTags();
     }
 
-    public void setTags(String tags) {
+    public void setTags(Set<String> tags) {
         meta.setTags(tags);
     }
 

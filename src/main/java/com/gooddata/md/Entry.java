@@ -1,14 +1,12 @@
 package com.gooddata.md;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import com.gooddata.util.*;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.joda.time.DateTime;
+
+import java.util.Set;
 
 /**
  * Metadata entry (can be named "LINK" in some API docs)
@@ -25,7 +23,7 @@ public class Entry {
     private final String contributor;
     private final Boolean deprecated;
     private final String identifier;
-    private final String tags; //TODO collection
+    private final Set<String> tags;
     private final DateTime created;
     private final DateTime updated;
     private final Boolean locked;
@@ -40,7 +38,7 @@ public class Entry {
                  @JsonProperty("contributor") String contributor,
                  @JsonProperty("deprecated") @JsonDeserialize(using = BooleanDeserializer.class) Boolean deprecated,
                  @JsonProperty("identifier") String identifier,
-                 @JsonProperty("tags") String tags,
+                 @JsonProperty("tags") @JsonDeserialize(using = TagsDeserializer.class) Set<String> tags,
                  @JsonProperty("created") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime created,
                  @JsonProperty("updated") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime updated,
                  @JsonProperty("locked") @JsonDeserialize(using = BooleanDeserializer.class) Boolean locked,
@@ -101,7 +99,8 @@ public class Entry {
         return identifier;
     }
 
-    public String getTags() {
+    @JsonSerialize(using = TagsSerializer.class)
+    public Set<String> getTags() {
         return tags;
     }
 
