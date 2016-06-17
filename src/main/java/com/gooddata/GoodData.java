@@ -21,11 +21,13 @@ import com.gooddata.md.MetadataService;
 import com.gooddata.model.ModelService;
 import com.gooddata.project.ProjectService;
 import com.gooddata.report.ReportService;
+import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.util.VersionInfo;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -33,6 +35,8 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static java.util.Collections.singletonMap;
@@ -218,7 +222,16 @@ public class GoodData {
         return HttpClientBuilder.create()
                 .setUserAgent(getUserAgent())
                 .setConnectionManager(connectionManager)
+                .setDefaultHeaders(createHttpHeader(settings.getHttpHeaders()))
                 .setDefaultRequestConfig(requestConfig.build());
+    }
+
+    private static Collection<Header> createHttpHeader(Collection<GoodDataSettings.Header> headers) {
+        Collection<Header> httpHeaders = new LinkedList<>();
+        for (GoodDataSettings.Header header : headers) {
+            httpHeaders.add(new BasicHeader(header.getName(), header.getValue()));
+        }
+        return httpHeaders;
     }
 
     /*
