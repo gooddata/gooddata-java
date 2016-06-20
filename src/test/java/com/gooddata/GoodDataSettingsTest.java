@@ -2,8 +2,11 @@ package com.gooddata;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import com.gooddata.GoodDataSettings.Header;
+import java.util.Collections;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 public class GoodDataSettingsTest {
@@ -21,6 +24,7 @@ public class GoodDataSettingsTest {
         assertTrue(settings.getConnectionTimeout() >= 0);
         assertTrue(settings.getConnectionRequestTimeout() >= 0);
         assertTrue(settings.getSocketTimeout() >= 0);
+        assertTrue(settings.getHttpHeaders().isEmpty());
     }
 
     @Test
@@ -53,4 +57,22 @@ public class GoodDataSettingsTest {
     public void setZeroMaxConnectionsFails() throws Exception {
         settings.setMaxConnections(0);
     }
+
+    @Test
+    public void setHttpHeader() {
+        settings.setHttpHeader("X-GDC-HOST", "secure.gooddata.com");
+
+        assertFalse(settings.getHttpHeaders().isEmpty());
+    }
+
+    @Test
+    public void setHttpHeaders() {
+        settings.setHttpHeader("X-GDC-HOST", "secure.gooddata.com");
+
+        settings.setHttpHeaders(Collections.singleton(new Header("XXX", "yyy")));
+
+        assertTrue(settings.getHttpHeaders().size() == 1);
+        assertEquals(settings.getHttpHeaders().iterator().next().getName(), "XXX");
+    }
+
 }

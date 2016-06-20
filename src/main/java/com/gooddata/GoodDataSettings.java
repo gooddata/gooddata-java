@@ -1,8 +1,12 @@
 package com.gooddata;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 
 import static org.springframework.util.Assert.isTrue;
+import static org.springframework.util.Assert.notNull;
 
 /**
  * Gather various additional settings of {@link GoodData}. Can be passed to the {@link GoodData} constructor to tune up
@@ -17,7 +21,7 @@ public class GoodDataSettings {
     private int connectionTimeout = secondsToMillis(10);
     private int connectionRequestTimeout = secondsToMillis(10);
     private int socketTimeout = secondsToMillis(60);
-
+    private final Collection<Header> httpHeaders = new LinkedList<>();
 
     /**
      * Set maximum number of connections used. This applies same for connections per host as for total connections.
@@ -150,6 +154,34 @@ public class GoodDataSettings {
         return socketTimeout;
     }
 
+    /**
+     * Set http headers used in requests
+     * This call rewrites all headers set so far.
+     * @param httpHeaders collection of headers
+     */
+    public void setHttpHeaders(Collection<Header> httpHeaders) {
+        notNull(httpHeaders);
+        this.httpHeaders.clear();
+        this.httpHeaders.addAll(httpHeaders);
+    }
+
+    /**
+     * Set http header used in requests
+     * @param name name of the header (e.g. X-GDC-HOST)
+     * @param value value of the header (e.g. secure.gooddata.com)
+     */
+    public void setHttpHeader(String name, String value) {
+        httpHeaders.add(new Header(name, value));
+    }
+
+    /**
+     * Get all http headers
+     * @return Map of all headers
+     */
+    public Collection<Header> getHttpHeaders() {
+        return Collections.unmodifiableCollection(httpHeaders);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
@@ -180,6 +212,7 @@ public class GoodDataSettings {
                 ", maxConnections=" + maxConnections +
                 ", connectionTimeout=" + connectionTimeout +
                 ", socketTimeout=" + socketTimeout +
+                ", httpHeaders=" + httpHeaders +
                 '}';
     }
 
@@ -187,5 +220,22 @@ public class GoodDataSettings {
         return (int) TimeUnit.SECONDS.toMillis(seconds);
     }
 
+    public static class Header {
+        private final String name;
+        private final String value;
+
+        public Header(String name, String value) {
+            this.name = name;
+            this.value = value;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
 
 }
