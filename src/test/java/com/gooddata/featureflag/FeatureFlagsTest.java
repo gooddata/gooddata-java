@@ -16,7 +16,7 @@ public class FeatureFlagsTest {
 
     @Test
     public void testDeserialize() {
-        final FeatureFlags flags = readObjectFromResource(getClass(), "/gdc/featureFlags.json", FeatureFlags.class);
+        final FeatureFlags flags = readObjectFromResource(getClass(), "/featureFlag/featureFlags.json", FeatureFlags.class);
 
         assertNotNull(flags);
         assertThat(flags, containsInAnyOrder(
@@ -26,7 +26,7 @@ public class FeatureFlagsTest {
 
     @Test
     public void shouldIterateThroughFlagsInForeach() throws Exception {
-        final FeatureFlags flags = readObjectFromResource(getClass(), "/gdc/featureFlags.json", FeatureFlags.class);
+        final FeatureFlags flags = readObjectFromResource(getClass(), "/featureFlag/featureFlags.json", FeatureFlags.class);
         for (FeatureFlag flag : flags) {
             assertThat(flag, isOneOf(
                     new FeatureFlag("testFeature", true),

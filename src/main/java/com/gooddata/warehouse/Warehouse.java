@@ -147,17 +147,6 @@ public class Warehouse {
         return links;
     }
 
-    /**
-     * Get jdbc connection string. Works only on Warehouse loaded from API (using WarehouseService).
-     * @deprecated Use {@link #getConnectionUrl()} instead.
-     * @return jdbc connection string
-     */
-    @JsonIgnore
-    @Deprecated
-    public String getJdbcConnectionString() {
-        return getConnectionUrl();
-    }
-
     @JsonIgnore
     public String getUri() {
         return links != null ? links.get(SELF_LINK): null;
