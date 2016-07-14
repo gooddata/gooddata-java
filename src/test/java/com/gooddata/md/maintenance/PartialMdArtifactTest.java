@@ -17,7 +17,7 @@ public class PartialMdArtifactTest {
         final InputStream input = getClass().getResourceAsStream("/md/maintenance/partialMDArtifact.json");
         final PartialMdArtifact partialMdArtifact = new ObjectMapper().readValue(input, PartialMdArtifact.class);
 
-        assertThat(partialMdArtifact.getStatus().getUri(), is("/gdc/md/projectId/tasks/taskId/status"));
+        assertThat(partialMdArtifact.getStatusUri(), is("/gdc/md/projectId/tasks/taskId/status"));
         assertThat(partialMdArtifact.getToken(), is("TOKEN123"));
     }
 
