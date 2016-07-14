@@ -7,4 +7,5 @@ jdk:
 branches:
   only:
      - master
+     - /\D\.0\.0-RC/
 sudo: false
