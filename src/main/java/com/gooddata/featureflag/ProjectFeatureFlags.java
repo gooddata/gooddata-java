@@ -22,6 +22,7 @@ public class ProjectFeatureFlags implements Iterable<ProjectFeatureFlag> {
     public static final String PROJECT_FEATURE_FLAGS_URI = Project.URI + "/projectFeatureFlags";
     public static final UriTemplate PROJECT_FEATURE_FLAGS_TEMPLATE = new UriTemplate(PROJECT_FEATURE_FLAGS_URI);
 
+    @JsonProperty("items")
     private final List<ProjectFeatureFlag> items = new LinkedList<>();
 
     @JsonCreator
@@ -52,12 +53,4 @@ public class ProjectFeatureFlags implements Iterable<ProjectFeatureFlag> {
         return false;
     }
 
-    /**
-     * @deprecated use {@link #isEnabled(String)} method or {@link Iterable} feature of this class
-     * @return list of project feature flags
-     */
-    @Deprecated
-    public List<ProjectFeatureFlag> getItems() {
-        return items;
-    }
 }

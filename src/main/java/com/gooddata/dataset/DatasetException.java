@@ -41,13 +41,4 @@ public class DatasetException extends GoodDataException {
         return datasets;
     }
 
-    /**
-     * @return string representation of collection containing dataset names
-     * @deprecated since this exception may contain more than one dataset, use {@link #getDatasets} instead
-     * @see #getDatasets()
-     */
-    @Deprecated
-    public String getDataset() {
-        return datasets.toString();
-    }
 }

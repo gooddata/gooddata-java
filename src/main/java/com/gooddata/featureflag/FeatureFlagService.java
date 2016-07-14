@@ -155,17 +155,6 @@ public class FeatureFlagService extends AbstractService {
      * Deletes existing project feature flag.
      *
      * @param flag existing project feature flag with links set properly, cannot be null
-     * @deprecated use {@link #deleteProjectFeatureFlag(ProjectFeatureFlag)} instead
-     */
-    @Deprecated
-    public void deleteFeatureFlag(final ProjectFeatureFlag flag) {
-        deleteProjectFeatureFlag(flag);
-    }
-
-    /**
-     * Deletes existing project feature flag.
-     *
-     * @param flag existing project feature flag with links set properly, cannot be null
      */
     public void deleteProjectFeatureFlag(final ProjectFeatureFlag flag) {
         notNull(flag, "flag");
