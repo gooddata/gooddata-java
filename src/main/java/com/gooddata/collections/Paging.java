@@ -28,11 +28,6 @@ public class Paging {
         this.next = next == null ? null : new UriPage(next);
     }
 
-    @Deprecated
-    public Paging(final int offset, final int count, final String next) {
-        this(Integer.toString(offset), next);
-    }
-
     public Paging(final String next) {
         this(null, next);
     }
