@@ -3,33 +3,20 @@ package com.gooddata.dataset;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.gdc.AboutLinks;
+import com.gooddata.gdc.AboutLinks.Link;
 
 /**
- * Dataset
+ * Dataset link
+ * @deprecated use {@link Link} instead
  */
+@Deprecated
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Dataset {
-    private final String identifier;
-    private final String link;
-    private final String title;
+public class Dataset extends Link {
 
     @JsonCreator
-    public Dataset(@JsonProperty("identifier") String identifier, @JsonProperty("link") String link,
+    public Dataset(@JsonProperty("identifier") String identifier, @JsonProperty("link") String uri,
                    @JsonProperty("title") String title) {
-        this.identifier = identifier;
-        this.link = link;
-        this.title = title;
-    }
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public String getTitle() {
-        return title;
+        super(identifier, uri, title, null, null);
     }
 }

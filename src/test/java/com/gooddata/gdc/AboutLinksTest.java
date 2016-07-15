@@ -1,7 +1,9 @@
-package com.gooddata.dataset;
+/*
+ * Copyright (C) 2007-2016, GoodData(R) Corporation. All rights reserved.
+ */
+package com.gooddata.gdc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gooddata.gdc.AboutLinks.Link;
 import org.testng.annotations.Test;
 
 import java.io.InputStream;
@@ -12,22 +14,22 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 
-public class DatasetsTest {
+public class AboutLinksTest {
 
     @Test
     public void deserialize() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/dataset/datasetLinks.json");
-        final Datasets datasets = new ObjectMapper().readValue(stream, Datasets.class);
-        assertThat(datasets, is(notNullValue()));
-        assertThat(datasets.getCategory(), is("singleloadinterface"));
-        assertThat(datasets.getInstance(), is("MD::LDM::SingleLoadInterface"));
-        assertThat(datasets.getSummary(), is("single loading interfaces"));
+        final AboutLinks aboutLinks = new ObjectMapper().readValue(stream, AboutLinks.class);
+        assertThat(aboutLinks, is(notNullValue()));
+        assertThat(aboutLinks.getCategory(), is("singleloadinterface"));
+        assertThat(aboutLinks.getInstance(), is("MD::LDM::SingleLoadInterface"));
+        assertThat(aboutLinks.getSummary(), is("single loading interfaces"));
 
-        final Collection<Link> links = datasets.getLinks();
+        final Collection<AboutLinks.Link> links = aboutLinks.getLinks();
         assertThat(links, is(notNullValue()));
         assertThat(links, hasSize(1));
 
-        final Link link = links.iterator().next();
+        final AboutLinks.Link link = links.iterator().next();
         assertThat(link, is(notNullValue()));
         assertThat(link.getIdentifier(), is("dataset.person"));
         assertThat(link.getUri(), is("/gdc/md/PROJECT_ID/ldm/singleloadinterface/dataset.person"));
@@ -35,4 +37,5 @@ public class DatasetsTest {
         assertThat(link.getTitle(), is("Person"));
         assertThat(link.getSummary(), is("dataset single data loading interface specifications"));
     }
+
 }
