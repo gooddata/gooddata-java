@@ -143,7 +143,7 @@ public class ModelService extends AbstractService {
                 try {
                     final MaqlDdlLinks links = restTemplate.postForObject(MaqlDdl.URI, new MaqlDdl(maqlChunks.poll()),
                         MaqlDdlLinks.class, projectId);
-                    this.pollUri = links.getStatusLink();
+                    this.pollUri = links.getStatusUri();
                 } catch (GoodDataRestException | RestClientException e) {
                     throw new ModelException("Unable to update project model", e);
                 }

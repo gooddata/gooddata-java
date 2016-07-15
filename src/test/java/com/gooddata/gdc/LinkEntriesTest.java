@@ -24,6 +24,7 @@ public class LinkEntriesTest {
         assertThat(linkEntries.getEntries(), hasSize(1));
         assertThat(linkEntries.getEntries().get(0), is(notNullValue()));
         assertThat(linkEntries.getEntries().get(0).getLink(), is("URI"));
+        assertThat(linkEntries.getEntries().get(0).getUri(), is("URI"));
         assertThat(linkEntries.getEntries().get(0).getCategory(), is("tasks-status"));
     }
 }

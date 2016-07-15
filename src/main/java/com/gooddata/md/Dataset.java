@@ -80,13 +80,33 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
         return Boolean.TRUE.equals(content.hasUploadConfiguration());
     }
 
+    /**
+     * @return data uploads URI string
+     * @deprecated use {@link #getDataUploadsUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getDataUploadsLink() {
-        return links != null ? links.get(DATA_UPLOADS_LINK) : null;
+        return getDataUploadsUri();
     }
 
     @JsonIgnore
+    public String getDataUploadsUri() {
+        return links != null ? links.get(DATA_UPLOADS_LINK) : null;
+    }
+
+    /**
+     * @return upload configuration URI string
+     * @deprecated use {@link #getUploadConfigurationUri()} instead
+     */
+    @Deprecated
+    @JsonIgnore
     public String getUploadConfigurationLink() {
+        return getUploadConfigurationUri();
+    }
+
+    @JsonIgnore
+    public String getUploadConfigurationUri() {
         return links != null ? links.get(UPLOAD_CONFIGURATION_LINK) : null;
     }
 

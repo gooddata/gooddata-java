@@ -26,6 +26,7 @@ public class ReportDefinitionTest {
         assertThat(def, is(notNullValue()));
         assertThat(def.getFormat(), is(FORMAT));
         assertThat(def.getGrid(), is(notNullValue()));
+        assertThat(def.getExplainUri(), is("/gdc/md/PROJECT_ID/obj/2274/explain2"));
     }
 
     @Test

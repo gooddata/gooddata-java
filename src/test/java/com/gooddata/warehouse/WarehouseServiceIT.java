@@ -57,7 +57,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withStatus(202);
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(pollingTask.getPollLink())
+                .havingPathEqualTo(pollingTask.getPollUri())
             .respond()
                 .withStatus(202)
                 .thenRespond()
@@ -65,7 +65,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withStatus(201);
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(finishedTask.getWarehouseLink())
+                .havingPathEqualTo(finishedTask.getWarehouseUri())
             .respond()
                 .withBody(readFromResource(WAREHOUSE))
                 .withStatus(200);
@@ -86,7 +86,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withStatus(202);
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(pollingTask.getPollLink())
+                .havingPathEqualTo(pollingTask.getPollUri())
             .respond()
                 .withStatus(400)
         ;
@@ -205,7 +205,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withStatus(202);
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(pollingTask.getPollLink())
+                .havingPathEqualTo(pollingTask.getPollUri())
                 .respond()
                 .withStatus(202)
                 .thenRespond()
@@ -213,7 +213,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withStatus(201);
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(finishedTask.getWarehouseUserLink())
+                .havingPathEqualTo(finishedTask.getWarehouseUserUri())
                 .respond()
                 .withBody(readFromResource(WAREHOUSE_USER))
                 .withStatus(200);
@@ -236,7 +236,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withStatus(202);
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(pollingTask.getPollLink())
+                .havingPathEqualTo(pollingTask.getPollUri())
                 .respond()
                 .withStatus(409);
 

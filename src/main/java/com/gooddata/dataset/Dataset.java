@@ -10,14 +10,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Dataset {
     private final String identifier;
-    private final String link;
+    private final String uri;
     private final String title;
 
     @JsonCreator
-    public Dataset(@JsonProperty("identifier") String identifier, @JsonProperty("link") String link,
+    public Dataset(@JsonProperty("identifier") String identifier, @JsonProperty("link") String uri,
                    @JsonProperty("title") String title) {
         this.identifier = identifier;
-        this.link = link;
+        this.uri = uri;
         this.title = title;
     }
 
@@ -25,8 +25,17 @@ public class Dataset {
         return identifier;
     }
 
+    /**
+     * @return self URI string
+     * @deprecated use {@link #getUri()} instead
+     */
+    @Deprecated
     public String getLink() {
-        return link;
+        return getUri();
+    }
+
+    public String getUri() {
+        return uri;
     }
 
     public String getTitle() {

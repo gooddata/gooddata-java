@@ -32,6 +32,7 @@ public class DisplayFormTest {
         assertThat(displayForm.getLdmExpression(), is(LDM_EXPRESSION));
         assertThat(displayForm.getType(), is(nullValue()));
         assertThat(displayForm.getElementsLink(), is(ELEMENTS_LINK));
+        assertThat(displayForm.getElementsUri(), is(ELEMENTS_LINK));
     }
 
     @Test

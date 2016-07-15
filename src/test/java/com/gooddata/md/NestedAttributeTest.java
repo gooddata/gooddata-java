@@ -51,5 +51,6 @@ public class NestedAttributeTest {
 
         assertThat(attribute.hasDimension(), is(true));
         assertThat(attribute.getDimensionLink(), is("/gdc/md/PROJECT_ID/obj/DIM_ID"));
+        assertThat(attribute.getDimensionUri(), is("/gdc/md/PROJECT_ID/obj/DIM_ID"));
     }
 }

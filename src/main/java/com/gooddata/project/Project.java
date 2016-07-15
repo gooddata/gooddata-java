@@ -139,83 +139,243 @@ public class Project {
         return links.getSelf();
     }
 
+    /**
+     * @return users URI string
+     * @deprecated use {@link #getUsersUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getUsersLink() {
+        return getUsersUri();
+    }
+
+    @JsonIgnore
+    public String getUsersUri() {
         return links.getUsers();
     }
 
+    /**
+     * @return roles URI string
+     * @deprecated use {@link #getRolesUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getRolesLink() {
+        return getRolesUri();
+    }
+
+    @JsonIgnore
+    public String getRolesUri() {
         return links.getRoles();
     }
 
+    /**
+     * @return groups URI string
+     * @deprecated use {@link #getGroupsUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getGroupsLink() {
+        return getGroupsUri();
+    }
+
+    @JsonIgnore
+    public String getGroupsUri() {
         return links.getGroups();
     }
 
+    /**
+     * @return invitations URI string
+     * @deprecated use {@link #getInvitationsUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getInvitationsLink() {
+        return getInvitationsUri();
+    }
+
+    @JsonIgnore
+    public String getInvitationsUri() {
         return links.getInvitations();
     }
 
+    /**
+     * @return LDM URI string
+     * @deprecated use {@link #getLdmUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getLdmLink() {
+        return getLdmUri();
+    }
+
+    @JsonIgnore
+    public String getLdmUri() {
         return links.getLdm();
     }
 
+    /**
+     * @return LDM thumbnail URI string
+     * @deprecated use {@link #getLdmThumbnailUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getLdmThumbnailLink() {
+        return getLdmThumbnailUri();
+    }
+
+    @JsonIgnore
+    public String getLdmThumbnailUri() {
         return links.getLdmThumbnail();
     }
 
+    /**
+     * @return metadata URI string
+     * @deprecated use {@link #getMetadataUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getMetadataLink() {
+        return getMetadataUri();
+    }
+
+    @JsonIgnore
+    public String getMetadataUri() {
         return links.getMetadata();
     }
 
+    /**
+     * @return public artifacts URI string
+     * @deprecated use {@link #getPublicArtifactsUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getPublicArtifactsLink() {
+        return getPublicArtifactsUri();
+    }
+
+    @JsonIgnore
+    public String getPublicArtifactsUri() {
         return links.getPublicArtifacts();
     }
 
+    /**
+     * @return templates URI string
+     * @deprecated use {@link #getTemplatesUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getTemplatesLink() {
+        return getTemplatesUri();
+    }
+
+    @JsonIgnore
+    public String getTemplatesUri() {
         return links.getTemplates();
     }
 
+    /**
+     * @return connectors URI string
+     * @deprecated use {@link #getConnectorsUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getConnectorsLink() {
+        return getConnectorsUri();
+    }
+
+    @JsonIgnore
+    public String getConnectorsUri() {
         return links.getConnectors();
     }
 
+    /**
+     * @return data load URI string
+     * @deprecated use {@link #getDataLoadUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getDataLoadLink() {
+        return getDataLoadUri();
+    }
+
+    @JsonIgnore
+    public String getDataLoadUri() {
         return links.getDataLoad();
     }
 
+    /**
+     * @return schedules URI string
+     * @deprecated use {@link #getSchedulesUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getSchedulesLink() {
+        return getSchedulesUri();
+    }
+
+    @JsonIgnore
+    public String getSchedulesUri() {
         return links.getSchedules();
     }
 
+    /**
+     * @return execute URI string
+     * @deprecated use {@link #getExecuteUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getExecuteLink() {
+        return getExecuteUri();
+    }
+
+    @JsonIgnore
+    public String getExecuteUri() {
         return links.getExecute();
     }
 
+    /**
+     * @return event stores URI string
+     * @deprecated use {@link #getEventStoresUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getEventStoresLink() {
+        return getEventStoresUri();
+    }
+
+    @JsonIgnore
+    public String getEventStoresUri() {
         return links.getEventStores();
     }
 
+    /**
+     * @return clear caches URI string
+     * @deprecated use {@link #getClearCachesUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getClearCachesLink() {
-        return links.getClearCaches();
+        return getClearCachesUri();
     }
 
     @JsonIgnore
+    public String getClearCachesUri() {
+        return links.getClearCaches();
+    }
+
+    /**
+     * @return uploads URI string
+     * @deprecated use {@link #getUploadsUri()} instead
+     */
+    @Deprecated
+    @JsonIgnore
     public String getUploadsLink() {
+        return getUploadsUri();
+    }
+
+    @JsonIgnore
+    public String getUploadsUri() {
         return links.getUploads();
     }
 
