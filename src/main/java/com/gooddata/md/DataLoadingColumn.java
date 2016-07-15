@@ -33,8 +33,8 @@ public class DataLoadingColumn extends AbstractObj implements Queryable {
         this.content = content;
     }
 
-    public UriResponse getColumnUri() {
-        return content.getColumnUri();
+    public String getColumnUri() {
+        return content.getColumnUri().getUri();
     }
 
     public String getName() {
