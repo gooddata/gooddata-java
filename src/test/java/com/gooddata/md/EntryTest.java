@@ -8,7 +8,11 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
+import java.util.Collections;
+import java.util.Set;
+
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static java.util.Collections.singleton;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,7 +27,7 @@ public class EntryTest {
     public static final String TITLE = "Entry title";
     public static final DateTime UPDATED = new DateTime(2014, 4, 11, 13, 45, 55, DateTimeZone.UTC);
     public static final String CATEGORY = "ENTRY_CATEGORY";
-    public static final String TAGS = "TAG";
+    public static final Set<String> TAGS = singleton("TAG");
     public static final boolean DEPRECATED = true;
     public static final String IDENTIFIER = "ID";
     public static final boolean LOCKED = true;

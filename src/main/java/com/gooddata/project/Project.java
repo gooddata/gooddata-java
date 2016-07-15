@@ -482,7 +482,7 @@ public class Project {
                             @JsonProperty("summary") String summary,
                             @JsonProperty("title") String title,
                             @JsonProperty("category") String category,
-                            @JsonProperty("tags") String tags,
+                            @JsonProperty("tags") Set<String> tags,
                             @JsonProperty("uri") String uri,
                             @JsonProperty("identifier") String identifier,
                             @JsonProperty("deprecated") @JsonDeserialize(using = BooleanDeserializer.class) Boolean deprecated,
