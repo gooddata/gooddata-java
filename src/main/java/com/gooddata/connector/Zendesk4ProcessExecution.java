@@ -8,10 +8,9 @@ import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gooddata.util.ISODateTimeSerializer;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -21,11 +20,9 @@ import java.util.TreeMap;
  */
 public class Zendesk4ProcessExecution implements ProcessExecution {
 
-    private static final DateTimeFormatter FORMATTER = ISODateTimeFormat.dateTime().withZone(DateTimeZone.UTC);
-
     private Boolean incremental;
 
-    private Map<String, String> startTimes;
+    private Map<String, DateTime> startTimes;
 
     @Override
     public ConnectorType getConnectorType() {
@@ -41,7 +38,8 @@ public class Zendesk4ProcessExecution implements ProcessExecution {
     }
 
     @JsonAnyGetter
-    public Map<String, String> getStartTimes() {
+    @JsonSerialize(contentUsing = ISODateTimeSerializer.class)
+    public Map<String, DateTime> getStartTimes() {
         return startTimes;
     }
 
@@ -50,8 +48,8 @@ public class Zendesk4ProcessExecution implements ProcessExecution {
         notEmpty(resource, "resource can't be empty");
         notNull(startTime, "startTime can't be null");
 
-        startTimes = startTimes == null ? new TreeMap<String, String>() : startTimes;
+        startTimes = startTimes == null ? new TreeMap<String, DateTime>() : startTimes;
 
-        startTimes.put(resource + "StartDate", FORMATTER.print(startTime));
+        startTimes.put(resource + "StartDate", startTime);
     }
 }
