@@ -233,8 +233,8 @@ public class GoodData {
                                           final int port, final String protocol, final HttpClientBuilder builder) {
         final HttpHost host = new HttpHost(hostname, port, protocol);
         final HttpClient httpClient = builder.build();
-        final SSTRetrievalStrategy strategy = new LoginSSTRetrievalStrategy(httpClient, host, login, password);
-        return new GoodDataHttpClient(httpClient, strategy);
+        final SSTRetrievalStrategy strategy = new LoginSSTRetrievalStrategy(login, password);
+        return new GoodDataHttpClient(httpClient, host, strategy);
     }
 
     private String getUserAgent() {
