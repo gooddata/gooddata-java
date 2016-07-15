@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ import static java.util.Collections.singletonList;
 import static org.springframework.util.StringUtils.isEmpty;
 
 /**
- * Service to work with datasets and manifests.
+ * Service to work with datasets, manifests and dataset uploads.
  */
 public class DatasetService extends AbstractService {
 
@@ -323,5 +324,95 @@ public class DatasetService extends AbstractService {
                 throw new GoodDataException(errorMessage + ": " + getPollingUri(), e);
             }
         });
+    }
+
+    /**
+     * Lists all uploads for the dataset with the given identifier in the given project. Returns empty list if there
+     * are no uploads for the given dataset.
+     *
+     * @param project GoodData project
+     * @param datasetId dataset identifier
+     * @return collection of {@link Upload} objects or empty list
+     */
+    public Collection<Upload> listUploadsForDataset(Project project, String datasetId) {
+        final UploadsInfo.DataSet dataSet = getDataSetInfo(project, datasetId);
+
+        if (isEmpty(dataSet.getUploadsUri())) {
+            return emptyList();
+        }
+
+        try {
+            final Uploads result = restTemplate.getForObject(dataSet.getUploadsUri(), Uploads.class);
+
+            if (result == null) {
+                throw new GoodDataException("Empty response from '" + dataSet.getUploadsUri() + "'.");
+            } else if (result.items() == null){
+                return emptyList();
+            }
+
+            return result.items();
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to get '" + dataSet.getUploadsUri() + "'.", e);
+        }
+    }
+
+    /**
+     * Returns last upload for the dataset with given identifier in the given project. Returns null if the last upload
+     * doesn't exist.
+     *
+     * @param project GoodData project
+     * @param datasetId dataset identifier
+     * @return last dataset upload or {@code null} if the upload doesn't exist
+     */
+    public Upload getLastUploadForDataset(Project project, String datasetId) {
+        final UploadsInfo.DataSet dataSet = getDataSetInfo(project, datasetId);
+
+        if (isEmpty(dataSet.getLastUploadUri())) {
+            return null;
+        }
+
+        try {
+            return restTemplate.getForObject(dataSet.getLastUploadUri(), Upload.class);
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to get '" + dataSet.getLastUploadUri() + "'.");
+        }
+    }
+
+    /**
+     * Returns global upload statistics for the given project.
+     *
+     * @param project GoodData project
+     * @return {@link UploadStatistics} object with project's upload statistics
+     */
+    public UploadStatistics getUploadStatistics(Project project) {
+        notNull(project, "project");
+
+        try {
+            return restTemplate.getForObject(UploadStatistics.URI, UploadStatistics.class, project.getId());
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to get dataset uploads statistics.", e);
+        }
+    }
+
+    /**
+     * Returns {@link UploadsInfo.DataSet} object containing upload information for the given dataset in the given project.
+     *
+     * Package-private for testing purposes.
+     */
+    UploadsInfo.DataSet getDataSetInfo(Project project, String datasetId) {
+        notNull(project, "project");
+        notEmpty(datasetId, "datasetId");
+
+        final URI uploadsInfoUri = UploadsInfo.URI_TEMPLATE.expand(project.getId());
+        try {
+            final UploadsInfo uploadsInfo = restTemplate.getForObject(uploadsInfoUri, UploadsInfo.class);
+            if (uploadsInfo == null) {
+                throw new GoodDataException("Empty response from '" + uploadsInfoUri.toString() + "'.");
+            }
+
+            return uploadsInfo.getDataSet(datasetId);
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to get '" + uploadsInfoUri.toString() + "'.", e);
+        }
     }
 }
