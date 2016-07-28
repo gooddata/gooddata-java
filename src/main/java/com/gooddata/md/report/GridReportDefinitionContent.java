@@ -40,13 +40,13 @@ public class GridReportDefinitionContent extends ReportDefinitionContent {
         return FORMAT;
     }
 
-    public static ReportDefinition create(String title, List<String> columns, List<AttributeInGrid> rows,
-                                          List<GridElement> metrics) {
+    public static ReportDefinition create(String title, List<? extends GridElement> columns, List<? extends GridElement> rows,
+                                          List<MetricElement> metrics) {
         return create(title, columns, rows, metrics, Collections.<Filter>emptyList());
     }
 
-    public static ReportDefinition create(String title, List<String> columns, List<AttributeInGrid> rows,
-                                          List<GridElement> metrics, Collection<Filter> filters) {
+    public static ReportDefinition create(String title, List<? extends GridElement> columns, List<? extends GridElement> rows,
+                                          List<MetricElement> metrics, Collection<Filter> filters) {
         return new ReportDefinition(new Meta(title), new GridReportDefinitionContent(new Grid(columns, rows, metrics), filters));
     }
 }

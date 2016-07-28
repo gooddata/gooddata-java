@@ -21,25 +21,26 @@ import java.util.LinkedList;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AttributeInGrid extends GridElement {
+public class AttributeInGrid implements GridElement {
 
+    private final String uri;
+    private final String alias;
     private Collection<Collection<String>> totals;
 
     @JsonCreator
     AttributeInGrid(@JsonProperty("uri") String uri, @JsonProperty("totals") Collection<Collection<String>> totals,
                     @JsonProperty("alias") String alias) {
-        super(uri, alias);
+        this.uri = uri;
+        this.alias = alias;
         this.totals = totals;
     }
 
     public AttributeInGrid(String uri) {
-        super(uri, "");
-        totals = new ArrayList<>();
+        this(uri, new ArrayList<Collection<String>>(), null);
     }
 
     public AttributeInGrid(String uri, String alias) {
-        super(uri, alias);
-        totals = new ArrayList<>();
+        this(uri, new ArrayList<Collection<String>>(), alias);
     }
 
     public Collection<Collection<String>> getTotals() {
@@ -48,5 +49,13 @@ public class AttributeInGrid extends GridElement {
             result.add(t);
         }
         return result;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public String getAlias() {
+        return alias;
     }
 }

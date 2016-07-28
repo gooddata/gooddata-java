@@ -74,13 +74,13 @@ public class OneNumberReportDefinitionContent extends ReportDefinitionContent {
         }
     }
 
-    public static ReportDefinition create(String title, List<String> columns, List<AttributeInGrid> rows,
-                                          List<GridElement> metrics) {
+    public static ReportDefinition create(String title, List<GridElement> columns, List<GridElement> rows,
+                                          List<MetricElement> metrics) {
         return create(title, columns, rows, metrics, Collections.<Filter>emptyList());
     }
 
-    public static ReportDefinition create(String title, List<String> columns, List<AttributeInGrid> rows,
-                                          List<GridElement> metrics, Collection<Filter> filters) {
+    public static ReportDefinition create(String title, List<GridElement> columns, List<GridElement> rows,
+                                          List<MetricElement> metrics, Collection<Filter> filters) {
         return new ReportDefinition(new Meta(title), new OneNumberReportDefinitionContent(
                 new Grid(columns, rows, metrics), title, filters));
     }

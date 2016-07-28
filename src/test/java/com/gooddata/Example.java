@@ -15,6 +15,8 @@ import com.gooddata.md.Metric;
 import com.gooddata.md.report.AttributeInGrid;
 import com.gooddata.md.report.GridElement;
 import com.gooddata.md.report.GridReportDefinitionContent;
+import com.gooddata.md.report.MetricElement;
+import com.gooddata.md.report.MetricGroup;
 import com.gooddata.md.report.Report;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.model.ModelDiff;
@@ -29,9 +31,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.Collection;
 
 import static com.gooddata.md.Restriction.identifier;
+import static com.gooddata.md.report.MetricGroup.METRIC_GROUP;
 import static java.util.Arrays.asList;
 
 public class Example {
@@ -70,9 +74,9 @@ public class Example {
 
         ReportDefinition definition = GridReportDefinitionContent.create(
                 "Department avg shoe size",
-                asList("metricGroup"),
+                asList(METRIC_GROUP),
                 asList(new AttributeInGrid(attr.getDefaultDisplayForm().getUri())),
-                asList(new GridElement(m.getUri(), "Avg shoe size"))
+                asList(new MetricElement(m.getUri(), "Avg shoe size"))
         );
         definition = md.createObj(project, definition);
         Report report = md.createObj(project, new Report(definition.getTitle(), definition));
