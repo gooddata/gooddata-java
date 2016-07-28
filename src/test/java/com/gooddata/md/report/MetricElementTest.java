@@ -15,8 +15,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class MetricElementTest {
 
-    public static final String URI = "/ELEM_URI";
-    public static final String ALIAS = "ELEM_ALIAS";
+    private static final String URI = "/ELEM_URI";
+    private static final String ALIAS = "ELEM_ALIAS";
+    private static final String FORMAT = "FORMAT";
+    private static final String DRILL_URI = "/DRILL_URI";
 
     @Test
     public void testDeserialization() throws Exception {
@@ -25,11 +27,13 @@ public class MetricElementTest {
         assertThat(element, is(notNullValue()));
         assertThat(element.getUri(), is(URI));
         assertThat(element.getAlias(), is(ALIAS));
+        assertThat(element.getFormat(), is(FORMAT));
+        assertThat(element.getDrillAcrossStepAttributeDisplayFormUri(), is(DRILL_URI));
     }
 
     @Test
     public void testSerialization() throws Exception {
-        final MetricElement element = new MetricElement(URI, ALIAS);
+        final MetricElement element = new MetricElement(URI, ALIAS, FORMAT, DRILL_URI);
         assertThat(element, serializesToJson("/md/report/metricElement.json"));
     }
 

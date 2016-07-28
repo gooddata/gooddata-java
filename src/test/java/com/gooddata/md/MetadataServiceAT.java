@@ -12,7 +12,6 @@ import static org.testng.AssertJUnit.assertTrue;
 import com.gooddata.AbstractGoodDataAT;
 import com.gooddata.md.report.AttributeInGrid;
 import com.gooddata.md.report.Filter;
-import com.gooddata.md.report.GridElement;
 import com.gooddata.md.report.GridReportDefinitionContent;
 import com.gooddata.md.report.MetricElement;
 import com.gooddata.md.report.MetricGroup;
@@ -20,7 +19,6 @@ import com.gooddata.md.report.Report;
 import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
