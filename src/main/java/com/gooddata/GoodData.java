@@ -24,6 +24,7 @@ import com.gooddata.report.ReportService;
 import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.config.SocketConfig;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.VersionInfo;
@@ -209,6 +210,10 @@ public class GoodData {
         final PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
         connectionManager.setDefaultMaxPerRoute(settings.getMaxConnections());
         connectionManager.setMaxTotal(settings.getMaxConnections());
+
+        final SocketConfig.Builder socketConfig = SocketConfig.copy(SocketConfig.DEFAULT);
+        socketConfig.setSoTimeout(settings.getSocketTimeout());
+        connectionManager.setDefaultSocketConfig(socketConfig.build());
 
         final RequestConfig.Builder requestConfig = RequestConfig.copy(RequestConfig.DEFAULT);
         requestConfig.setConnectTimeout(settings.getConnectionTimeout());
