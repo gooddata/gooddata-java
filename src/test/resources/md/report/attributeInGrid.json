@@ -1,7 +1,7 @@
 {
     "attribute": {
         "uri": "/URI",
-        "totals": [ ["TOTAL1"], ["TOTAL2", "TOTAL3"] ],
+        "totals": [ ["sum"], ["avg", "med"] ],
         "alias": "ALIAS"
     }
 }

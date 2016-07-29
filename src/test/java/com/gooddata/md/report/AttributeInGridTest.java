@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
 import static java.util.Arrays.asList;
@@ -24,8 +25,8 @@ import static org.mockito.Mockito.when;
 
 public class AttributeInGridTest {
 
-    public static final String URI = "/URI";
-    public static final String ALIAS = "ALIAS";
+    private static final String URI = "/URI";
+    private static final String ALIAS = "ALIAS";
 
     @Test
     public void testDeserialization() throws Exception {
@@ -36,23 +37,22 @@ public class AttributeInGridTest {
         assertThat(attr.getUri(), is(URI));
         assertThat(attr.getAlias(), is(ALIAS));
 
-        assertThat(attr.getTotals(), is(notNullValue()));
-        assertThat(attr.getTotals(), hasSize(2));
-        final Iterator<Collection<String>> i = attr.getTotals().iterator();
-        final Collection<String> subTotal1 = i.next();
+        assertThat(attr.getStringTotals(), is(notNullValue()));
+        assertThat(attr.getStringTotals(), hasSize(2));
+        final Iterator<List<Total>> i = attr.getTotals().iterator();
+        final List<Total> subTotal1 = i.next();
         assertThat(subTotal1, hasSize(1));
-        assertThat(subTotal1.iterator().next(), is("TOTAL1"));
-        final Collection<String> subTotal2 = i.next();
+        assertThat(subTotal1.iterator().next(), is(Total.SUM));
+        final List<Total> subTotal2 = i.next();
         assertThat(subTotal2, hasSize(2));
-        assertThat(subTotal2.iterator().next(), isOneOf("TOTAL2", "TOTAL3"));
-        assertThat(subTotal2.iterator().next(), isOneOf("TOTAL2", "TOTAL3"));
+        assertThat(subTotal2.get(0), is(Total.AVG));
+        assertThat(subTotal2.get(1), is(Total.MED));
     }
 
     @Test
     public void testSerialization() throws Exception {
-        final Collection<Collection<String>> totals = asList((Collection<String>) asList("TOTAL1"),
-                asList("TOTAL2", "TOTAL3"));
-        final AttributeInGrid attr = new AttributeInGrid(URI, totals, ALIAS);
+        final List<List<Total>> totals = asList(asList(Total.SUM), asList(Total.AVG, Total.MED));
+        final AttributeInGrid attr = new AttributeInGrid(URI, ALIAS, totals);
         assertThat(attr, serializesToJson("/md/report/attributeInGrid.json"));
     }
 
