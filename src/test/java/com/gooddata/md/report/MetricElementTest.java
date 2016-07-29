@@ -4,6 +4,7 @@
 package com.gooddata.md.report;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gooddata.md.Metric;
 import org.testng.annotations.Test;
 
 import java.io.InputStream;
@@ -12,6 +13,8 @@ import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class MetricElementTest {
 
@@ -37,4 +40,14 @@ public class MetricElementTest {
         assertThat(element, serializesToJson("/md/report/metricElement.json"));
     }
 
+    @Test
+    public void testCreateFromMetric() throws Exception {
+        final Metric metric = mock(Metric.class);
+        when(metric.getTitle()).thenReturn(ALIAS);
+        when(metric.getUri()).thenReturn(URI);
+
+        final MetricElement element = new MetricElement(metric);
+        assertThat(element.getUri(), is(URI));
+        assertThat(element.getAlias(), is(ALIAS));
+    }
 }

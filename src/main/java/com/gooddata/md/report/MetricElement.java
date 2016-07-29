@@ -8,6 +8,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.md.Metric;
+
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Metric used in {@link Grid} for report definition.
@@ -34,6 +37,14 @@ public class MetricElement {
 
     public MetricElement(String uri, String alias) {
         this(uri, alias, null, null);
+    }
+
+    /**
+     * Creates new instance using uri of given metric and it's title as alias.
+     * @param metric metric to create element from
+     */
+    public MetricElement(final Metric metric) {
+        this(notNull(notNull(metric, "metric").getUri(), "uri"), notNull(metric, "metric").getTitle());
     }
 
     public String getUri() {

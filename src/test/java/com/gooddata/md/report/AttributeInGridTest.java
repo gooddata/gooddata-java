@@ -4,6 +4,8 @@
 package com.gooddata.md.report;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gooddata.md.Attribute;
+import com.gooddata.md.DisplayForm;
 import org.testng.annotations.Test;
 
 import java.io.InputStream;
@@ -17,6 +19,8 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.isOneOf;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class AttributeInGridTest {
 
@@ -52,4 +56,16 @@ public class AttributeInGridTest {
         assertThat(attr, serializesToJson("/md/report/attributeInGrid.json"));
     }
 
+    @Test
+    public void testCreateFromAttribute() throws Exception {
+        final Attribute attr = mock(Attribute.class);
+        final DisplayForm displayForm = mock(DisplayForm.class);
+        when(attr.getDefaultDisplayForm()).thenReturn(displayForm);
+        when(displayForm.getUri()).thenReturn(URI);
+        when(displayForm.getTitle()).thenReturn(ALIAS);
+
+        final AttributeInGrid attrInGrid = new AttributeInGrid(attr);
+        assertThat(attrInGrid.getUri(), is(URI));
+        assertThat(attrInGrid.getAlias(), is(ALIAS));
+    }
 }

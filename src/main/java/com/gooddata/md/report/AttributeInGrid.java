@@ -9,10 +9,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.md.Attribute;
+import com.gooddata.md.DisplayForm;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Attribute in Grid
@@ -41,6 +45,22 @@ public class AttributeInGrid implements GridElement {
 
     public AttributeInGrid(String uri, String alias) {
         this(uri, new ArrayList<Collection<String>>(), alias);
+    }
+
+    /**
+     * Creates new AttributeInGrid using given DisplayForm's uri and it's title as alias.
+     * @param displayForm displayForm to create AttributeInGrid from
+     */
+    public AttributeInGrid(final DisplayForm displayForm) {
+        this(notNull(notNull(displayForm, "displayForm").getUri(), "uri"), notNull(displayForm, "displayForm").getTitle());
+    }
+
+    /**
+     * Creates new AttributeInGrid using given Attribute's default DisplayForm's uri and it's title as alias.
+     * @param attribute attribute to create AttributeInGrid from
+     */
+    public AttributeInGrid(final Attribute attribute) {
+        this(notNull(attribute, "attribute").getDefaultDisplayForm());
     }
 
     public Collection<Collection<String>> getTotals() {
