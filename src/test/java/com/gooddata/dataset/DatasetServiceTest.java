@@ -5,6 +5,7 @@ package com.gooddata.dataset;
 
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.gdc.AboutLinks.Link;
 import com.gooddata.gdc.DataStoreException;
 import com.gooddata.gdc.DataStoreService;
 import com.gooddata.project.Project;
@@ -20,6 +21,7 @@ import java.util.Collection;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -41,7 +43,7 @@ public class DatasetServiceTest {
     @Mock
     private Project project;
     @Mock
-    private Dataset dataset;
+    private Link datasetLink;
     @Mock
     private DatasetManifest manifest;
     @Mock
@@ -152,13 +154,13 @@ public class DatasetServiceTest {
 
     @Test(expectedExceptions = GoodDataException.class)
     public void testListDatasetsWithNullResponse() throws Exception {
-        when(restTemplate.getForObject(Datasets.URI, Dataset.class, PROJECT_ID)).thenReturn(null);
+        when(restTemplate.getForObject(Datasets.URI, Link.class, PROJECT_ID)).thenReturn(null);
         service.listDatasets(project);
     }
 
     @Test(expectedExceptions = GoodDataException.class)
     public void testListDatasetsWithRestClientError() throws Exception {
-        when(restTemplate.getForObject(Datasets.URI, Dataset.class, PROJECT_ID)).thenThrow(new RestClientException(""));
+        when(restTemplate.getForObject(Datasets.URI, Link.class, PROJECT_ID)).thenThrow(new RestClientException(""));
         service.listDatasets(project);
     }
 
@@ -166,10 +168,41 @@ public class DatasetServiceTest {
     public void testListDatasetsWithEmptyResponse() throws Exception {
         final Datasets datasets = mock(Datasets.class);
         when(restTemplate.getForObject(Datasets.URI, Datasets.class, PROJECT_ID)).thenReturn(datasets);
-        when(datasets.getLinks()).thenReturn(asList(dataset));
+        when(datasets.getLinks()).thenReturn(asList(datasetLink));
+        when(datasetLink.getIdentifier()).thenReturn("ID");
 
         final Collection<Dataset> result = service.listDatasets(project);
         assertThat(result, hasSize(1));
-        assertThat(result, contains(dataset));
+        final Dataset dataset = result.iterator().next();
+        assertThat(dataset, is(notNullValue()));
+        assertThat(dataset.getIdentifier(), is("ID"));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testListDatasetLinksWithNullProject() throws Exception {
+        service.listDatasetLinks(null);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void testListDatasetLinksWithNullResponse() throws Exception {
+        when(restTemplate.getForObject(Datasets.URI, Link.class, PROJECT_ID)).thenReturn(null);
+        service.listDatasetLinks(project);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void testListDatasetLinksWithRestClientError() throws Exception {
+        when(restTemplate.getForObject(Datasets.URI, Link.class, PROJECT_ID)).thenThrow(new RestClientException(""));
+        service.listDatasetLinks(project);
+    }
+
+    @Test
+    public void testListDatasetLinksWithEmptyResponse() throws Exception {
+        final Datasets datasets = mock(Datasets.class);
+        when(restTemplate.getForObject(Datasets.URI, Datasets.class, PROJECT_ID)).thenReturn(datasets);
+        when(datasets.getLinks()).thenReturn(asList(datasetLink));
+
+        final Collection<Link> result = service.listDatasetLinks(project);
+        assertThat(result, hasSize(1));
+        assertThat(result, contains(datasetLink));
     }
 }

@@ -39,4 +39,32 @@ public class GdcServiceIT extends AbstractGoodDataIT {
         final Gdc gdc = gd.getGdcService().getGdc();
         assertThat(gdc, is(notNullValue()));
     }
+
+    @Test
+    public void shouldReturnRootLinks() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc")
+            .respond()
+                .withBody(readFromResource("/gdc/gdc.json"))
+                .withStatus(200);
+
+        final RootLinks rootLinks = gd.getGdcService().getRootLinks();
+        assertThat(rootLinks, is(notNullValue()));
+        assertThat(rootLinks.getUserStagingLink(), is("/uploads"));
+    }
+
+    @Test
+    public void rootLinksShouldUseProperVersionHeader() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc")
+                .havingHeaderEqualTo("Accept", "application/json;version=1")
+                .respond()
+                .withBody(readFromResource("/gdc/gdc.json"))
+                .withStatus(200);
+
+        final RootLinks rootLinks = gd.getGdcService().getRootLinks();
+        assertThat(rootLinks, is(notNullValue()));
+    }
 }

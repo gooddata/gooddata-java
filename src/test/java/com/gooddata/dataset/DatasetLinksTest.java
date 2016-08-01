@@ -1,7 +1,10 @@
+/*
+ * Copyright (C) 2007-2016, GoodData(R) Corporation. All rights reserved.
+ */
 package com.gooddata.dataset;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gooddata.gdc.AboutLinks.Link;
+import com.gooddata.gdc.AboutLinks;
 import org.testng.annotations.Test;
 
 import java.io.InputStream;
@@ -12,22 +15,22 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 
-public class DatasetsTest {
+public class DatasetLinksTest {
 
     @Test
     public void deserialize() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/dataset/datasetLinks.json");
-        final Datasets datasets = new ObjectMapper().readValue(stream, Datasets.class);
-        assertThat(datasets, is(notNullValue()));
-        assertThat(datasets.getCategory(), is("singleloadinterface"));
-        assertThat(datasets.getInstance(), is("MD::LDM::SingleLoadInterface"));
-        assertThat(datasets.getSummary(), is("single loading interfaces"));
+        final DatasetLinks datasetLinks = new ObjectMapper().readValue(stream, DatasetLinks.class);
+        assertThat(datasetLinks, is(notNullValue()));
+        assertThat(datasetLinks.getCategory(), is("singleloadinterface"));
+        assertThat(datasetLinks.getInstance(), is("MD::LDM::SingleLoadInterface"));
+        assertThat(datasetLinks.getSummary(), is("single loading interfaces"));
 
-        final Collection<Link> links = datasets.getLinks();
+        final Collection<AboutLinks.Link> links = datasetLinks.getLinks();
         assertThat(links, is(notNullValue()));
         assertThat(links, hasSize(1));
 
-        final Link link = links.iterator().next();
+        final AboutLinks.Link link = links.iterator().next();
         assertThat(link, is(notNullValue()));
         assertThat(link.getIdentifier(), is("dataset.person"));
         assertThat(link.getUri(), is("/gdc/md/PROJECT_ID/ldm/singleloadinterface/dataset.person"));
