@@ -79,6 +79,15 @@ public class AboutLinks {
             return uri;
         }
 
+        /**
+         * @return self URI string
+         * @deprecated use {@link #getUri()} instead
+         */
+        @Deprecated
+        public String getLink() {
+            return getUri();
+        }
+
         public String getTitle() {
             return title;
         }

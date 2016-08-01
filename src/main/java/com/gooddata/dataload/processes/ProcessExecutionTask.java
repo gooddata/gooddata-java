@@ -26,11 +26,21 @@ class ProcessExecutionTask {
         this.links = links;
     }
 
+    @Deprecated
     String getPollLink() {
+        return getPollUri();
+    }
+
+    String getPollUri() {
         return links != null ? links.get(POLL_LINK) : null;
     }
 
+    @Deprecated
     String getDetailLink() {
+        return getDetailUri();
+    }
+
+    String getDetailUri() {
         return links != null ? links.get(DETAIL_LINK) : null;
     }
 }

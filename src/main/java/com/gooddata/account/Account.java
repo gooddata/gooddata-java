@@ -64,8 +64,18 @@ public class Account {
         return links.getSelf();
     }
 
+    /**
+     * @return projects URI string
+     * @deprecated use {@link #getProjectsUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getProjectsLink() {
+        return getProjectsUri();
+    }
+
+    @JsonIgnore
+    public String getProjectsUri() {
         return links.getProjects();
     }
 

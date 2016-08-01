@@ -22,8 +22,10 @@ public class DataloadProcessTest {
         assertThat(process.getType(), is("GROOVY"));
         assertThat(process.getExecutables(), hasSize(1));
         assertThat(process.getId(), is("processId"));
+        assertThat(process.getUri(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId"));
         assertThat(process.getExecutionsLink(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions"));
-
+        assertThat(process.getExecutionsUri(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions"));
+        assertThat(process.getSourceUri(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/source"));
     }
 
     @Test
