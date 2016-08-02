@@ -5,7 +5,10 @@ package com.gooddata.project;
 
 import java.util.List;
 
-abstract class ProjectValidationResultElParam extends ProjectValidationResultParam {
+/**
+ * Parent class for all validation result params containing ids with values.
+ */
+public abstract class ProjectValidationResultElParam extends ProjectValidationResultParam {
 
     private final List<String> ids;
     private final List<String> vals;
