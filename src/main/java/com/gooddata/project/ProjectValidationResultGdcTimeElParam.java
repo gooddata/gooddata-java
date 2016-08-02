@@ -6,31 +6,52 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import java.util.List;
+import java.util.Objects;
 
 @JsonTypeName("gdctime_el")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ProjectValidationResultGdcTimeElParam extends ProjectValidationResultElParam {
+public class ProjectValidationResultGdcTimeElParam extends ProjectValidationResultParam {
 
-    ProjectValidationResultGdcTimeElParam(final List<String> ids, final List<String> vals) {
-        super(ids, vals);
+    private final List<String> ids;
+
+    ProjectValidationResultGdcTimeElParam(final List<String> ids) {
+        this.ids = ids;
     }
 
     @JsonCreator
-    private static ProjectValidationResultGdcTimeElParam create(@JsonProperty("ids") List<String> ids, @JsonProperty("vals") List<String> vals) {
-        return new ProjectValidationResultGdcTimeElParam(ids, vals);
+    private static ProjectValidationResultGdcTimeElParam create(@JsonProperty("ids") List<String> ids) {
+        return new ProjectValidationResultGdcTimeElParam(ids);
+    }
+
+    public List<String> getIds() {
+        return ids;
+    }
+
+    /**
+     * @deprecated for backward compatibility only. Do not use this method, it always returns null.
+     */
+    @Deprecated
+    public List<String> getVals() {
+        return null;
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ProjectValidationResultGdcTimeElParam)) return false;
-
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof ProjectValidationResultGdcTimeElParam))
+            return false;
         ProjectValidationResultGdcTimeElParam that = (ProjectValidationResultGdcTimeElParam) o;
-
-        if (getIds() != null ? !getIds().equals(that.getIds()) : that.getIds() != null) return false;
-        if (getVals() != null ? !getVals().equals(that.getVals()) : that.getVals() != null) return false;
-
-        return true;
+        return Objects.equals(ids, that.ids);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(ids);
+    }
+
+    @Override
+    public String toString() {
+        return ids.toString();
+    }
 }
