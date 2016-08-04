@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -75,7 +75,7 @@ public class ProjectValidationResultSliElParam extends ProjectValidationResultPa
                     + " is not equal.", ids.size(), vals.size()));
         }
 
-        final HashMap<String, String> sliElParamMap = new HashMap<>(ids.size());
+        final Map<String, String> sliElParamMap = new LinkedHashMap<>(ids.size());
         for (int index = 0; index < ids.size(); index++) {
             sliElParamMap.put(ids.get(index), vals.get(index));
         }
