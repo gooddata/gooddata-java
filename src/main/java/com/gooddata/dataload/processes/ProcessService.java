@@ -6,6 +6,7 @@ import com.gooddata.FutureResult;
 import com.gooddata.PollResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.SimplePollHandler;
 import com.gooddata.account.AccountService;
 import com.gooddata.collections.Page;
 import com.gooddata.collections.PageableList;
@@ -38,6 +39,7 @@ import java.util.Collection;
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 import static java.util.Collections.emptyList;
+import static org.apache.commons.lang.Validate.isTrue;
 
 /**
  * Service to manage dataload processes and process executions.
@@ -95,6 +97,33 @@ public class ProcessService extends AbstractService {
     }
 
     /**
+     * Create new ruby process from ruby appstore.
+     * Processes can be deployed only from predefined repos, which are substituted by placeholders
+     *
+     * @param project project to which the process belongs
+     * @param process to create
+     * @param repoPlaceholderName name of repo placeholder, (e.g. PUBLIC_APPSTORE)
+     * @param commitIdentifier string in format commit/COMMIT_HASH or tag/TAG or branch/BRANCH
+     * @param pathInRepo string representing path in git repo to application (e.g. /test/rubyHello)
+     * @return created process
+     */
+    public FutureResult<DataloadProcess> createProcess(Project project, DataloadProcess process, String repoPlaceholderName, String commitIdentifier,
+                                                       String pathInRepo) {
+        notNull(project, "project");
+        notNull(process, "process");
+        notNull(repoPlaceholderName, "placeholderName");
+        notNull(commitIdentifier, "commitIdentifier");
+        notNull(pathInRepo, "pathInRepo");
+        isTrue(process.getType().equals(ProcessType.RUBY.toString()), "only ruby processes can be deployed from appstore");
+        String path = getAppstorePath(repoPlaceholderName, commitIdentifier, pathInRepo);
+        return postProcess(process, path, getProcessesUri(project), HttpMethod.POST);
+    }
+
+    private String getAppstorePath(String repoPlaceholderName, String commitIdentifier, String pathInRepo) {
+        return String.format("${%s}:%s:%s", repoPlaceholderName, commitIdentifier, pathInRepo);
+    }
+
+    /**
      * Update process with given data by given project.
      *
      * @param project project to which the process belongs
@@ -108,6 +137,27 @@ public class ProcessService extends AbstractService {
         notNull(project, "project");
 
         return postProcess(process, processData, getProcessUri(project, process.getId()));
+    }
+
+    /**
+     * Update process with data from appstore by given project.
+     *
+     * @param project project to which the process belongs
+     * @param process to update
+     * @param repoPlaceholderName name of repo placeholder, (e.g. PUBLIC_APPSTORE)
+     * @param commitIdentifier string in format commit/COMMIT_HASH or tag/TAG or branch/BRANCH
+     * @param pathInRepo string representing path in git repo to application (e.g. /test/rubyHello)
+     * @return updated process
+     */
+    public FutureResult<DataloadProcess> updateProcess(Project project, DataloadProcess process, String repoPlaceholderName, String commitIdentifier,
+                                                       String pathInRepo) {
+        notNull(project, "project");
+        notNull(process, "process");
+        notNull(repoPlaceholderName, "placeholderName");
+        notNull(commitIdentifier, "commitIdentifier");
+        notNull(pathInRepo, "pathInRepo");
+        String path = getAppstorePath(repoPlaceholderName, commitIdentifier, pathInRepo);
+        return postProcess(process, path, getProcessUri(project, process.getId()), HttpMethod.PUT);
     }
 
     /**
@@ -478,6 +528,36 @@ public class ProcessService extends AbstractService {
             throw new GoodDataException("Unable to post dataload process.", e);
         } finally {
             deleteTempFile(tempFile);
+        }
+    }
+
+    private FutureResult<DataloadProcess> postProcess(DataloadProcess process, String appstorePath, URI postUri, HttpMethod method) {
+        try {
+            process.setPath(appstorePath);
+            ResponseEntity<String> exchange = restTemplate.exchange(postUri, method, new HttpEntity<>(process), String.class);
+            if (exchange.getStatusCode() == HttpStatus.ACCEPTED) { //deployment worker will create process
+                String uri = mapper.readTree(exchange.getBody()).findPath("poll").asText();
+                return new PollResult<>(this, new SimplePollHandler<DataloadProcess>(uri, DataloadProcess.class) {
+
+                    @Override
+                    public void handlePollException(GoodDataRestException e) {
+                        throw new GoodDataException("Creating process failed", e);
+                    }
+                });
+            } else if (exchange.getStatusCode() == HttpStatus.OK) { //object has been found in package registry, deployment worker is not triggered
+                final DataloadProcess dataloadProcess = mapper.readValue(exchange.getBody(), DataloadProcess.class);
+                return new PollResult<>(this, new SimplePollHandler<DataloadProcess>(dataloadProcess.getUri(), DataloadProcess.class) {
+
+                    @Override
+                    public void handlePollException(GoodDataRestException e) {
+                        throw new GoodDataException("Creating process failed", e);
+                    }
+                });
+            } else {
+                throw new IllegalStateException("Unexpected status code from resource: " + exchange.getStatusCode());
+            }
+        } catch (RestClientException | IOException e) {
+            throw new GoodDataException("Creating process failed", e);
         }
     }
 
