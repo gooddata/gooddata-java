@@ -143,7 +143,7 @@ public class ProcessServiceTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testUpdateProcessWithNullFile() throws Exception {
-        processService.updateProcess(project, process, null);
+        processService.updateProcess(project, process, (File) null);
     }
 
     @Test(expectedExceptions = GoodDataException.class)
