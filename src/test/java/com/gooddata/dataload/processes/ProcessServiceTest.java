@@ -231,4 +231,10 @@ public class ProcessServiceTest {
         assertThat(result, hasSize(1));
         assertThat(result, contains(process));
     }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void deployFromAppstoreBadProcessType(){
+        processService.createProcess(project, new DataloadProcess("testAppstoreProcess", ProcessType.GROOVY), "PUBLIC_APPSTORE",
+                                     "tag/prodigy-testing", "/test/rubyHello");
+    }
 }

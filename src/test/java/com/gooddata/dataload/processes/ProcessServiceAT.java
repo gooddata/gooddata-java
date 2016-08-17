@@ -24,6 +24,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
+import static org.hamcrest.core.IsCollectionContaining.hasItems;
 
 /**
  * Dataload processes acceptance tests.
@@ -31,6 +32,7 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 public class ProcessServiceAT extends AbstractGoodDataAT {
 
     private DataloadProcess process;
+    private DataloadProcess processAppstore;
 
     @Test(groups = "process", dependsOnGroups = "project")
     public void createProcess() throws Exception {
@@ -57,6 +59,23 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         } finally {
             FileUtils.deleteDirectory(dir);
         }
+    }
+
+    @Test(groups = "process", dependsOnGroups = "project")
+    public void createProcessFromGit() {
+        processAppstore = gd.getProcessService().createProcess(project,
+                new DataloadProcess("sdktest ruby appstore " + System.getenv("BUILD_NUMBER"), ProcessType.RUBY),
+                "PUBLIC_APPSTORE","tag/prodigy-testing","/test/rubyHello").get();
+
+        assertThat(processAppstore.getExecutables(), hasItem("hello.rb"));
+    }
+
+    @Test(groups = "process", dependsOnMethods = "createProcessFromGit")
+    public void updateProcessFromGit() {
+        processAppstore = gd.getProcessService().updateProcess(project, processAppstore,
+                "PUBLIC_APPSTORE","tag/prodigy-testing","/test/rubyBonjour").get();
+
+        assertThat(processAppstore.getExecutables(), hasItem("bonjour.rb"));
     }
 
     public void copy(final String file, final File dir) throws IOException {
@@ -92,8 +111,9 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
     @Test(dependsOnGroups = "process")
     public void removeProcess() throws Exception {
         gd.getProcessService().removeProcess(process);
+        gd.getProcessService().removeProcess(processAppstore);
         final Collection<DataloadProcess> processes = gd.getProcessService().listProcesses(project);
-        assertThat(processes, not(hasItem(hasSameIdAs(process))));
+        assertThat(processes, not(hasItems(hasSameIdAs(process), hasSameIdAs(processAppstore))));
     }
 
 }
