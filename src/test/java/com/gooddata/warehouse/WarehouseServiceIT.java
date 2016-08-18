@@ -11,10 +11,10 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.Collections;
 
 import static com.gooddata.util.ResourceUtils.readFromResource;
 import static net.jadler.Jadler.onRequest;
-import static net.jadler.Jadler.port;
 import static net.jadler.Jadler.verifyThatRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
@@ -33,6 +33,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
 
     private static final String WAREHOUSE_URI = Warehouse.TEMPLATE.expand(WAREHOUSE_ID).toString();
     private static final String WAREHOUSE_USER_URI = WarehouseUsers.TEMPLATE.expand(WAREHOUSE_ID).toString();
+    private static final String REMOVE_USER_TASK_DONE = "/warehouse/removeUserTask-finished.json";
 
     private static final String CONNECTION_URL = "CONNECTION_URL";
 
@@ -241,6 +242,58 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withStatus(409);
 
         gd.getWarehouseService().addUserToWarehouse(warehouse, new WarehouseUser("role", "profile", null)).get();
+    }
+
+    @Test
+    public void shouldRemoveUserFromWarehouse() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("DELETE")
+                .havingPathEqualTo(WAREHOUSE_USER_URI)
+                .respond()
+                .withBody(readFromResource(TASK_POLL))
+                .withStatus(202);
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(pollingTask.getPollLink())
+                .respond()
+                .withStatus(202)
+                .thenRespond()
+                .withBody(readFromResource(REMOVE_USER_TASK_DONE))
+                .withStatus(201);
+
+        gd.getWarehouseService()
+          .removeUserFromWarehouse(new WarehouseUser("role", "profile", "login", Collections.singletonMap("self", WAREHOUSE_USER_URI)))
+          .get();
+    }
+
+    @Test(expectedExceptions = WarehouseUserNotFoundException.class)
+    public void shouldFailToFindUserForRemovalFromWarehouse() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("DELETE")
+                .havingPathEqualTo(WAREHOUSE_USER_URI)
+                .respond()
+                .withStatus(404);
+
+        gd.getWarehouseService().removeUserFromWarehouse(new WarehouseUser("role", "profile", "login", Collections.singletonMap("self", WAREHOUSE_USER_URI)));
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void shouldFailWhenRemoveUserTaskFails() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("DELETE")
+                .havingPathEqualTo(WAREHOUSE_USER_URI)
+                .respond()
+                .withBody(readFromResource(TASK_POLL))
+                .withStatus(202);
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(pollingTask.getPollLink())
+                .respond()
+                .withStatus(409);
+
+        gd.getWarehouseService()
+          .removeUserFromWarehouse(new WarehouseUser("role", "profile", "login", Collections.singletonMap("self", WAREHOUSE_USER_URI)))
+          .get();
     }
 
 }

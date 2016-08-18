@@ -70,6 +70,11 @@ public class WarehouseUser {
     }
 
     @JsonIgnore
+    public String getId() {
+        return TEMPLATE.match(getUri()).get("userId");
+    }
+
+    @JsonIgnore
     public String getUri() {
         return links != null ? links.get(SELF_LINK): null;
     }
