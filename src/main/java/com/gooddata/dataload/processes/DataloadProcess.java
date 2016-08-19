@@ -43,9 +43,16 @@ public class DataloadProcess {
         this.type = notEmpty(type, "type");
     }
 
-    DataloadProcess(String name, String type, String path) {
+    /**
+     * Use this constructor, when you want to deploy process from appstore.
+     *
+     * @param name
+     * @param type
+     * @param appstorePath valid path to brick in appstore
+     */
+    public DataloadProcess(String name, String type, String appstorePath) {
         this(name, type);
-        this.path = path;
+        this.path = appstorePath;
     }
 
     public DataloadProcess(String name, ProcessType type) {
@@ -81,7 +88,7 @@ public class DataloadProcess {
         return path;
     }
 
-    void setPath(String path) {
+    public void setPath(String path) {
         this.path = path;
     }
 
