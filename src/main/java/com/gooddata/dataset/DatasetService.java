@@ -38,7 +38,7 @@ import static java.util.Collections.singletonList;
 import static org.springframework.util.StringUtils.isEmpty;
 
 /**
- * Service to work with datasets and manifests.
+ * Service to work with datasets, manifests and dataset uploads.
  */
 public class DatasetService extends AbstractService {
 
@@ -323,5 +323,83 @@ public class DatasetService extends AbstractService {
                 throw new GoodDataException(errorMessage + ": " + getPollingUri(), e);
             }
         });
+    }
+
+    /**
+     * Returns {@link ProjectUploadsInfo} object containing upload information for every single dataset
+     * in the given project.
+     *
+     * @param project GoodData project
+     * @return information about dataset uploads
+     */
+    public ProjectUploadsInfo getProjectUploadsInfo(Project project) {
+        notNull(project, "project");
+
+        try {
+            return restTemplate.getForObject(ProjectUploadsInfo.URI, ProjectUploadsInfo.class, project.getId());
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to get dataset uploads for project '" + project.getId() + "'.", e);
+        }
+    }
+
+    /**
+     * Lists all uploads for the given dataset. Returns empty list if there are no uploads for the given dataset.
+     *
+     * @param datasetUploadsInfo {@link DatasetUploadsInfo} object for the given dataset
+     * @return collection of {@link Upload} objects or empty list
+     */
+    public Collection<Upload> listUploadsForDataset(DatasetUploadsInfo datasetUploadsInfo) {
+        notNull(datasetUploadsInfo, "datasetUploadsInfo");
+
+        if (isEmpty(datasetUploadsInfo.getUploadsUri())) {
+            throw new GoodDataException("Uploads link for dataset '" + datasetUploadsInfo.getDatasetId()
+                    + "' does not exist.");
+        }
+
+        try {
+            final Uploads result = restTemplate.getForObject(datasetUploadsInfo.getUploadsUri(), Uploads.class);
+
+            if (result == null) {
+                throw new GoodDataException("empty response from API call");
+            } else if (result.items() == null){
+                return emptyList();
+            }
+
+            return result.items();
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to get uploads for dataset '" + datasetUploadsInfo.getDatasetId()
+                    + "'.", e);
+        }
+    }
+
+    /**
+     * Lists all uploads for the dataset with the given identifier in the given project. Returns empty list if there
+     * are no uploads for the given dataset.
+     *
+     * @param project GD project
+     * @param datasetId dataset identifier
+     * @return collection of {@link Upload} objects or empty list
+     */
+    public Collection<Upload> listUploadsForDataset(Project project, String datasetId) {
+        final ProjectUploadsInfo projectUploadsInfo = getProjectUploadsInfo(project);
+        final DatasetUploadsInfo datasetUploadsInfo = projectUploadsInfo.getDatasetUploadsInfo(datasetId);
+
+        return listUploadsForDataset(datasetUploadsInfo);
+    }
+
+    /**
+     * Returns global upload statistics for the given project.
+     *
+     * @param project GoodData project
+     * @return {@link UploadStatistics} object with project's upload statistics
+     */
+    public UploadStatistics getUploadStatistics(Project project) {
+        notNull(project, "project");
+
+        try {
+            return restTemplate.getForObject(UploadStatistics.URI, UploadStatistics.class, project.getId());
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to get dataset uploads statistics.", e);
+        }
     }
 }
