@@ -25,7 +25,7 @@ public abstract class AbstractGoodDataAT {
             "sdktest " + new LocalDate() + " " + System.getenv("BUILD_NUMBER");
 
     protected static final GoodData gd =
-            new GoodData(getProperty("host"), getProperty("login"), getProperty("pass")){
+            new GoodData(getProperty("host"), getProperty("login"), getProperty("pass")) {
                 /**
                  * had to be overriden to access connectionManager, to test how many connections were not closed
                  */

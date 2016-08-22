@@ -22,33 +22,68 @@ import org.springframework.web.util.UriTemplate;
 public class Account {
 
     public static final String URI = "/gdc/account/profile/{id}";
+    public static final String ACCOUNTS_URI = "/gdc/account/domains/{organization_name}/users";
     public static final UriTemplate TEMPLATE = new UriTemplate(URI);
+    public static final UriTemplate ACCOUNTS_TEMPLATE = new UriTemplate(ACCOUNTS_URI);
 
     public static final String LOGIN_URI = "/gdc/account/login/{id}";
     public static final UriTemplate LOGIN_TEMPLATE = new UriTemplate(LOGIN_URI);
 
     public static final String CURRENT_ID = "current";
 
-
+    private final String login;
+    private final String email;
+    private final String password;
+    private final String verifyPassword;
     private final String firstName;
     private final String lastName;
     @JsonIgnore
     private final Links links;
 
     @JsonCreator
-    public Account(@JsonProperty("firstName") String firstName,
-                   @JsonProperty("lastName") String lastName,
-                   @JsonProperty("links") Links links) {
+    private Account(
+            @JsonProperty("login") String login,
+            @JsonProperty("email") String email,
+            @JsonProperty("password") String password,
+            @JsonProperty("verifyPassword") String verifyPassword,
+            @JsonProperty("firstName") String firstName,
+            @JsonProperty("lastName") String lastName,
+            @JsonProperty("links") Links links
+    ) {
+        this.login = login;
+        this.email = email;
+        this.password = password;
+        this.verifyPassword = verifyPassword;
         this.firstName = firstName;
         this.lastName = lastName;
         this.links = links;
     }
 
-    /* Just for serialization test */
-    Account(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        links = null;
+    public Account(String firstName,String lastName, Links links) {
+        this(null, null, null, null, firstName, lastName, links);
+    }
+
+    /**
+     * Account creation constructor
+     */
+    public Account(String email, String password, String firstName, String lastName) {
+        this(email, email, password, password, firstName, lastName, null);
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getVerifyPassword() {
+        return verifyPassword;
     }
 
     public String getFirstName() {
@@ -81,7 +116,7 @@ public class Account {
 
     @JsonIgnore
     public String getId() {
-        return TEMPLATE.match(getUri()).get("id");
+        return getId(getUri());
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -102,5 +137,9 @@ public class Account {
         public String getProjects() {
             return projects;
         }
+    }
+
+    static String getId(String uri) {
+        return TEMPLATE.match(uri).get("id");
     }
 }

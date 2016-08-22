@@ -17,6 +17,7 @@ import static com.gooddata.dataload.processes.ProcessIdMatcher.hasSameIdAs;
 import static java.nio.file.Files.createTempDirectory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -24,6 +25,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
+import static org.hamcrest.core.IsCollectionContaining.hasItems;
 
 /**
  * Dataload processes acceptance tests.
@@ -31,6 +33,7 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 public class ProcessServiceAT extends AbstractGoodDataAT {
 
     private DataloadProcess process;
+    private DataloadProcess processAppstore;
 
     @Test(groups = "process", dependsOnGroups = "project")
     public void createProcess() throws Exception {
@@ -57,6 +60,23 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         } finally {
             FileUtils.deleteDirectory(dir);
         }
+    }
+
+    @Test(groups = "process", dependsOnGroups = "project")
+    public void createProcessFromGit() {
+        processAppstore = gd.getProcessService().createProcessFromAppstore(project,
+                new DataloadProcess("sdktest ruby appstore " + System.getenv("BUILD_NUMBER"), ProcessType.RUBY.toString(),
+                "${PUBLIC_APPSTORE}:tag/prodigy-testing:/test/rubyHello")).get();
+
+        assertThat(processAppstore.getExecutables(), contains("hello.rb"));
+    }
+
+    @Test(groups = "process", dependsOnMethods = "createProcessFromGit")
+    public void updateProcessFromGit() {
+        processAppstore.setPath("${PUBLIC_APPSTORE}:tag/prodigy-testing:/test/rubyBonjour");
+        processAppstore = gd.getProcessService().updateProcessFromAppstore(project, processAppstore).get();
+
+        assertThat(processAppstore.getExecutables(), contains("bonjour.rb"));
     }
 
     public void copy(final String file, final File dir) throws IOException {
@@ -92,8 +112,9 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
     @Test(dependsOnGroups = "process")
     public void removeProcess() throws Exception {
         gd.getProcessService().removeProcess(process);
+        gd.getProcessService().removeProcess(processAppstore);
         final Collection<DataloadProcess> processes = gd.getProcessService().listProcesses(project);
-        assertThat(processes, not(hasItem(hasSameIdAs(process))));
+        assertThat(processes, not(hasItems(hasSameIdAs(process), hasSameIdAs(processAppstore))));
     }
 
 }

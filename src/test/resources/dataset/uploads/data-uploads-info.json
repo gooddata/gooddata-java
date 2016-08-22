@@ -1,0 +1,9 @@
+{
+  "dataUploadsInfo" : {
+    "statusesCount" : {
+      "OK" : 845,
+      "RUNNING" : 1,
+      "ERROR" : 25
+    }
+  }
+}

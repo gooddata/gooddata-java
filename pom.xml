@@ -186,6 +186,7 @@
                             </execution>
                         </executions>
                         <configuration>
+                            <excludedGroups>isolated_domain</excludedGroups>
                             <includes>
                                 <include>**/*AT.java</include>
                             </includes>

@@ -9,6 +9,7 @@ import com.gooddata.gdc.AboutLinks.Link;
 import com.gooddata.gdc.DataStoreException;
 import com.gooddata.gdc.DataStoreService;
 import com.gooddata.project.Project;
+import org.hamcrest.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestClientException;
@@ -20,6 +21,7 @@ import java.io.InputStream;
 import java.util.Collection;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -50,6 +52,7 @@ public class DatasetServiceTest {
     private InputStream stream;
 
     private DatasetService service;
+    private static final String DATASET_UPLOADS_URI = "uploads/uri";
 
     @BeforeMethod
     public void setUp() throws Exception {
@@ -168,7 +171,7 @@ public class DatasetServiceTest {
     public void testListDatasetsWithEmptyResponse() throws Exception {
         final Datasets datasets = mock(Datasets.class);
         when(restTemplate.getForObject(Datasets.URI, Datasets.class, PROJECT_ID)).thenReturn(datasets);
-        when(datasets.getLinks()).thenReturn(asList(datasetLink));
+        when(datasets.getLinks()).thenReturn(singletonList(datasetLink));
         when(datasetLink.getIdentifier()).thenReturn("ID");
 
         final Collection<Dataset> result = service.listDatasets(project);
@@ -204,5 +207,61 @@ public class DatasetServiceTest {
         final Collection<Link> result = service.listDatasetLinks(project);
         assertThat(result, hasSize(1));
         assertThat(result, contains(datasetLink));
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void testGetProjectsUploadsInfoWithRestClientError() throws Exception {
+        when(restTemplate.getForObject(ProjectUploadsInfo.URI, ProjectUploadsInfo.class, PROJECT_ID))
+                .thenThrow(new RestClientException(""));
+        service.getProjectUploadsInfo(project);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void testListUploadsForDatasetWhenMissingUploadsUri() throws Exception {
+        final DatasetUploadsInfo uploadsInfo = mockDatasetUploadsInfo(null);
+
+        service.listUploadsForDataset(uploadsInfo);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void testListUploadsForDatasetWhenRestClientError() throws Exception {
+        final DatasetUploadsInfo uploadsInfo = mockDatasetUploadsInfo(DATASET_UPLOADS_URI);
+
+        when(restTemplate.getForObject(DATASET_UPLOADS_URI, Uploads.class)).thenThrow(new RestClientException(""));
+
+        service.listUploadsForDataset(uploadsInfo);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void testListUploadsForDatasetWithNoResponse() throws Exception {
+        final DatasetUploadsInfo uploadsInfo = mockDatasetUploadsInfo(DATASET_UPLOADS_URI);
+
+        when(restTemplate.getForObject(DATASET_UPLOADS_URI, Uploads.class)).thenReturn(null);
+
+        service.listUploadsForDataset(uploadsInfo);
+    }
+
+    @Test
+    public void testListUploadsForDatasetWithEmptyResponseBody() throws Exception {
+        final DatasetUploadsInfo datasetUploadsInfo = mockDatasetUploadsInfo(DATASET_UPLOADS_URI);
+
+        when(restTemplate.getForObject(DATASET_UPLOADS_URI, Uploads.class)).thenReturn(new Uploads(null));
+
+        assertThat(service.listUploadsForDataset(datasetUploadsInfo), Matchers.<Upload>empty());
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void testGetUploadStatisticsWhenRestClientError() throws Exception {
+        when(restTemplate.getForObject(UploadStatistics.URI, UploadStatistics.class, PROJECT_ID))
+                .thenThrow(new RestClientException(""));
+
+        service.getUploadStatistics(project);
+    }
+
+    private DatasetUploadsInfo mockDatasetUploadsInfo(String uploadsUri) {
+        final DatasetUploadsInfo uploadsInfo = mock(DatasetUploadsInfo.class);
+        when(uploadsInfo.getUploadsUri()).thenReturn(uploadsUri);
+
+        return uploadsInfo;
     }
 }

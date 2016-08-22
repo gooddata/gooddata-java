@@ -22,6 +22,6 @@ public class ProjectValidationResultParamTest {
         assertThat(result, hasItem(sameBeanAs(new ProjectValidationResultStringParam("report"))));
         assertThat(result, hasItem(sameBeanAs(new ProjectValidationResultObjectParam("Historical backlog", "/gdc/md/d45dlwq6fixqsgbukrlnir1qsw8y44q6/obj/41886"))));
         assertThat(result, hasItem(sameBeanAs(new ProjectValidationResultSliElParam(asList("4761"), asList("Deleted")))));
-        assertThat(result, hasItem(sameBeanAs(new ProjectValidationResultGdcTimeElParam(asList("4762"), asList("Deleted")))));
+        assertThat(result, hasItem(sameBeanAs(new ProjectValidationResultGdcTimeElParam(asList("4762")))));
     }
 }

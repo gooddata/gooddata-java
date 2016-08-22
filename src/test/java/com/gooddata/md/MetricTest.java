@@ -57,4 +57,11 @@ public class MetricTest {
         assertThat(metric, jsonNodeAbsent("metric.content.tree.content[0].content[0].content[0].content"));
         assertThat(metric, serializesToJson("/md/metric-out.json"));
     }
+
+    @Test
+    public void shouldIgnoreLinksProperty() throws Exception {
+        final Metric metric = new ObjectMapper()
+                .readValue(getClass().getResourceAsStream("/md/metric-links.json"), Metric.class);
+        assertThat(metric, serializesToJson("/md/metric-out.json"));
+    }
 }
