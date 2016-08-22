@@ -171,7 +171,7 @@ public class AccountServiceIT extends AbstractGoodDataIT {
                 .withBody(readFromResource(ACCOUNT))
                 .withStatus(200);
 
-        final Account created = gd.getAccountService().getAccount(ACCOUNT_ID);
+        final Account created = gd.getAccountService().getAccountById(ACCOUNT_ID);
 
         assertThat(created, notNullValue());
         assertThat(created.getFirstName(), is("Blah"));
@@ -185,7 +185,7 @@ public class AccountServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(404);
 
-        gd.getAccountService().getAccount(ACCOUNT_ID);
+        gd.getAccountService().getAccountById(ACCOUNT_ID);
     }
 
 }
