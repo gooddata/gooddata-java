@@ -7,7 +7,6 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -42,7 +41,7 @@ public class AccountServiceAT extends AbstractGoodDataAT {
 
     @Test(groups = "isolated_domain", dependsOnMethods = "createAccount")
     public void getAccount() {
-        final Account foundAccount = accountService.getAccount(this.account.getId());
+        final Account foundAccount = accountService.getAccountById(this.account.getId());
 
         assertThat(foundAccount, is(notNullValue()));
         assertThat(foundAccount.getId(), is(notNullValue()));

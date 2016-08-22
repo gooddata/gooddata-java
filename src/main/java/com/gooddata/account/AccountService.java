@@ -35,7 +35,7 @@ public class AccountService extends AbstractService {
      * @throws com.gooddata.GoodDataException when current account can't be accessed.
      */
     public Account getCurrent() {
-        return getAccount(Account.CURRENT_ID);
+        return getAccountById(Account.CURRENT_ID);
     }
 
     /**
@@ -66,7 +66,7 @@ public class AccountService extends AbstractService {
 
         try {
             final UriResponse uriResponse = restTemplate.postForObject(Account.ACCOUNTS_URI, account, UriResponse.class, organizationName);
-            return getAccount(Account.getId(uriResponse.getUri()));
+            return getAccountByUri(uriResponse.getUri());
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to create account", e);
         }
@@ -101,7 +101,7 @@ public class AccountService extends AbstractService {
      * @throws AccountNotFoundException when account for given id can't be found
      * @throws GoodDataException
      */
-    public Account getAccount(String id) {
+    public Account getAccountById(String id) {
         try {
             return restTemplate.getForObject(Account.URI, Account.class, id);
         } catch (GoodDataRestException e) {
@@ -113,6 +113,17 @@ public class AccountService extends AbstractService {
         } catch (RestClientException e) {
             throw new GoodDataException("Unable to get account", e);
         }
+    }
+
+    /**
+     * Get account for given account id
+     * @param uri to search for
+     * @return account for uri
+     * @throws AccountNotFoundException when account for given uri can't be found
+     * @throws GoodDataException
+     */
+    public Account getAccountByUri(String uri) {
+        return getAccountById(Account.getId(uri));
     }
 
 }
