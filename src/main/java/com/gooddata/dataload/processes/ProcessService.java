@@ -6,6 +6,7 @@ import com.gooddata.FutureResult;
 import com.gooddata.PollResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.SimplePollHandler;
 import com.gooddata.account.AccountService;
 import com.gooddata.collections.Page;
 import com.gooddata.collections.PageableList;
@@ -38,6 +39,7 @@ import java.util.Collection;
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 import static java.util.Collections.emptyList;
+import static org.apache.commons.lang.Validate.isTrue;
 
 /**
  * Service to manage dataload processes and process executions.
@@ -65,6 +67,7 @@ public class ProcessService extends AbstractService {
 
     /**
      * Create new process with given data by given project.
+     * Process must have null path to prevent clashes with deploying from appstore.
      *
      * @param project project to which the process belongs
      * @param process to create
@@ -75,13 +78,14 @@ public class ProcessService extends AbstractService {
         notNull(process, "process");
         notNull(processData, "processData");
         notNull(project, "project");
-
+        isTrue(process.getPath() == null, "Process path has to be null, use processData argument. If you want to create process from appstore, use method createProcessFromAppstore()");
         return postProcess(process, processData, getProcessesUri(project));
     }
 
     /**
      * Create new process without data.
      * Only some specific types of processes can be created without data.
+     * Process must have null path to prevent clashes with deploying from appstore.
      *
      * @param project project to which the process belongs
      * @param process to create
@@ -90,12 +94,29 @@ public class ProcessService extends AbstractService {
     public DataloadProcess createProcess(Project project, DataloadProcess process) {
         notNull(project, "project");
         notNull(process, "process");
-
+        isTrue(process.getPath() == null, "Process path has to be null. If you want to create process from appstore, use method createProcessFromAppstore()");
         return postProcess(process, getProcessesUri(project));
     }
 
     /**
+     * Create new process from appstore.
+     * Process must have set path field to valid appstore path in order to deploy from appstore.
+     * This method is asynchronous, because when deploying from appstore, deployment worker can be triggered.
+     *
+     * @param project project to which the process belongs
+     * @param process to create
+     * @return created process
+     */
+    public FutureResult<DataloadProcess> createProcessFromAppstore(Project project, DataloadProcess process) {
+        notNull(project, "project");
+        notNull(process, "process");
+        notEmpty(process.getPath(), "process path must not be empty");
+        return postProcess(process, getProcessesUri(project), HttpMethod.POST);
+    }
+
+    /**
      * Update process with given data by given project.
+     * Process must have null path to prevent clashes with deploying from appstore.
      *
      * @param project project to which the process belongs
      * @param process to create
@@ -106,8 +127,24 @@ public class ProcessService extends AbstractService {
         notNull(process, "process");
         notNull(processData, "processData");
         notNull(project, "project");
-
+        isTrue(process.getPath() == null, "Process path has to be null, use processData argument. If you want to update process from appstore, use method updateProcessFromAppstore()");
         return postProcess(process, processData, getProcessUri(project, process.getId()));
+    }
+
+    /**
+     * Update process with data from appstore by given project.
+     * Process must have set path field to valid appstore path in order to deploy from appstore.
+     * This method is asynchronous, because when deploying from appstore, deployment worker can be triggered.
+     *
+     * @param project project to which the process belongs
+     * @param process to update
+     * @return updated process
+     */
+    public FutureResult<DataloadProcess> updateProcessFromAppstore(Project project, DataloadProcess process) {
+        notNull(project, "project");
+        notNull(process, "process");
+        notEmpty(process.getPath(), "process path must not be empty");
+        return postProcess(process, getProcessUri(project, process.getId()), HttpMethod.PUT);
     }
 
     /**
@@ -481,6 +518,35 @@ public class ProcessService extends AbstractService {
         }
     }
 
+    private FutureResult<DataloadProcess> postProcess(DataloadProcess process, URI postUri, HttpMethod method) {
+        try {
+            ResponseEntity<String> exchange = restTemplate.exchange(postUri, method, new HttpEntity<>(process), String.class);
+            if (exchange.getStatusCode() == HttpStatus.ACCEPTED) { //deployment worker will create process
+                AsyncTask asyncTask = mapper.readValue(exchange.getBody(), AsyncTask.class);
+                return new PollResult<>(this, new SimplePollHandler<DataloadProcess>(asyncTask.getUri(), DataloadProcess.class) {
+
+                    @Override
+                    public void handlePollException(GoodDataRestException e) {
+                        throw new GoodDataException("Creating process failed", e);
+                    }
+                });
+            } else if (exchange.getStatusCode() == HttpStatus.OK) { //object has been found in package registry, deployment worker is not triggered
+                final DataloadProcess dataloadProcess = mapper.readValue(exchange.getBody(), DataloadProcess.class);
+                return new PollResult<>(this, new SimplePollHandler<DataloadProcess>(dataloadProcess.getUri(), DataloadProcess.class) {
+
+                    @Override
+                    public void handlePollException(GoodDataRestException e) {
+                        throw new GoodDataException("Creating process failed", e);
+                    }
+                });
+            } else {
+                throw new IllegalStateException("Unexpected status code from resource: " + exchange.getStatusCode());
+            }
+        } catch (RestClientException | IOException e) {
+            throw new GoodDataException("Creating process failed", e);
+        }
+    }
+
     private DataloadProcess postProcess(DataloadProcess process, URI postUri) {
         try {
             return restTemplate.postForObject(postUri, process, DataloadProcess.class);
@@ -504,5 +570,4 @@ public class ProcessService extends AbstractService {
         notNull(file, "file");
         file.delete();
     }
-
 }

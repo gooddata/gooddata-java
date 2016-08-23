@@ -17,7 +17,13 @@ import java.util.Collection;
 import static com.gooddata.util.ResourceUtils.readFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.startsWith;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
 public class DatasetServiceIT extends AbstractGoodDataIT {
@@ -264,5 +270,72 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
         ;
 
         gd.getDatasetService().updateProjectData(project, DML_MAQL).get();
+    }
+
+    @Test
+    public void shouldGetProjectUploadsInfo() {
+        onRequest()
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/data/sets")
+        .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/dataset/uploads/data-sets.json"));
+
+        final ProjectUploadsInfo projectUploadsInfo = gd.getDatasetService().getProjectUploadsInfo(project);
+
+        assertThat(projectUploadsInfo, notNullValue());
+        assertTrue(projectUploadsInfo.hasDataset("dataset.campaign"));
+    }
+
+    @Test
+    public void shouldListUploadsForDataset() {
+        final String datasetUploadsUri = "/gdc/md/PROJECT_ID/uploads/DATASET_ID";
+
+        onRequest()
+                .havingPathEqualTo(datasetUploadsUri)
+        .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/dataset/uploads/uploads.json"));
+
+        final DatasetUploadsInfo info = mock(DatasetUploadsInfo.class);
+        when(info.getUploadsUri()).thenReturn(datasetUploadsUri);
+
+        final Collection<Upload> uploads = gd.getDatasetService().listUploadsForDataset(info);
+
+        assertThat(uploads, notNullValue());
+        assertThat(uploads, hasSize(2));
+    }
+
+    @Test
+    public void shouldListUploadsForDatasetId() throws Exception {
+        onRequest()
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/data/sets")
+        .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/dataset/uploads/data-sets.json"));
+
+        onRequest()
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/data/uploads/814")
+        .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/dataset/uploads/uploads.json"));
+
+        final Collection<Upload> uploads = gd.getDatasetService().listUploadsForDataset(project, "dataset.campaign");
+
+        assertThat(uploads, notNullValue());
+        assertThat(uploads, hasSize(2));
+    }
+
+    @Test
+    public void shouldGetUploadStatistics() throws Exception {
+        onRequest()
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/data/uploads_info")
+        .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/dataset/uploads/data-uploads-info.json"));
+
+        final UploadStatistics uploadStatistics = gd.getDatasetService().getUploadStatistics(project);
+
+        assertThat(uploadStatistics, notNullValue());
+        assertThat(uploadStatistics.getUploadsCount("OK"), is(845));
     }
 }
