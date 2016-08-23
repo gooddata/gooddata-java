@@ -1,14 +1,18 @@
 package com.gooddata.warehouse;
 
 import com.gooddata.AbstractGoodDataAT;
+import com.gooddata.account.Account;
 import com.gooddata.collections.Page;
 import com.gooddata.collections.PageRequest;
 import com.gooddata.collections.PageableList;
 import com.gooddata.project.Environment;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.Collection;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static com.gooddata.warehouse.WarehouseIdMatcher.hasSameIdAs;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,7 +25,10 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 /**
  * Warehouse acceptance tests
  */
+
 public class WarehouseServiceAT extends AbstractGoodDataAT {
+
+    private static final String LOGIN = "john.smith." + UUID.randomUUID() + "@gooddata.com";
 
     private final String warehouseToken;
     private final WarehouseService service;
@@ -29,16 +36,24 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
     private Warehouse warehouse;
     private Warehouse warehouse2;
 
+    private Account account;
+    private WarehouseUser warehouseUser;
+
     public WarehouseServiceAT() {
         warehouseToken = getProperty("warehouseToken");
         service = gd.getWarehouseService();
+    }
+
+    @BeforeClass(groups = "isolated_domain")
+    public void initIsolatedDomainGroup() {
+        account = gd.getAccountService().createAccount(new Account(LOGIN, "nnPvcGXU7f", "FirstName", "LastName"), getProperty("domain"));
     }
 
     @Test(groups = "warehouse", dependsOnGroups = "account")
     public void createWarehouse() throws Exception {
         final Warehouse wh = new Warehouse(title, warehouseToken);
         wh.setEnvironment(Environment.TESTING);
-        warehouse = service.createWarehouse(wh).get();
+        warehouse = service.createWarehouse(wh).get(60, TimeUnit.MINUTES);
         String jdbc = warehouse.getConnectionUrl();
     }
 
@@ -85,6 +100,19 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         assertThat(users.getNextPage(), is(nullValue()));
     }
 
+    @Test(groups = { "warehouse", "isolated_domain" }, dependsOnMethods = "shouldListUsers")
+    public void shouldAddUserToWarehouse() {
+        warehouseUser = service.addUserToWarehouse(warehouse, new WarehouseUser(WarehouseUser.ADMIN_ROLE, null, LOGIN)).get(60, TimeUnit.SECONDS);
+
+        assertThat(warehouseUser, is(notNullValue()));
+    }
+
+    @Test(groups = { "warehouse", "isolated_domain" }, dependsOnMethods = "shouldAddUserToWarehouse")
+    public void shouldRemoveUserFromWarehouse() {
+        service.removeUserFromWarehouse(warehouseUser).get(60, TimeUnit.SECONDS);
+        warehouseUser = null;
+    }
+
     @Test(dependsOnGroups = "warehouse")
     public void removeWarehouse() throws Exception {
         service.removeWarehouse(warehouse);
@@ -105,6 +133,19 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
                 service.removeWarehouse(warehouse2);
             }
         } catch (Exception ignored) {}
+    }
 
+    @AfterClass(groups = "isolated_domain")
+    public void tearDownIsolatedDomainGroup() {
+        try {
+            if (warehouseUser != null) {
+                service.removeUserFromWarehouse(warehouseUser);
+            }
+        }  catch (Exception ignored) {}
+        try {
+            if (account != null) {
+                gd.getAccountService().removeAccount(account);
+            }
+        } catch (Exception ignored) {}
     }
 }

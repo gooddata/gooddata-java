@@ -4,7 +4,6 @@ import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.FutureResult;
 import com.gooddata.collections.PageableList;
 import com.gooddata.project.Project;
-import com.gooddata.util.ResourceUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -18,6 +17,7 @@ import static net.jadler.Jadler.onRequest;
 import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -38,6 +38,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
     private static final String SCHEDULE_ID = "SCHEDULE_ID";
     private static final String SCHEDULE_PATH = Schedule.TEMPLATE.expand(PROJECT_ID, SCHEDULE_ID).toString();
     private static final String EXECUTABLE = "test.groovy";
+    private static final String PROCESS_DEPLOYMENT_POLLING_URI = "/gdc/projects/PROJECT_ID/dataload/processesDeploy/uri";
 
     private Project project;
 
@@ -301,5 +302,66 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .withStatus(204);
 
         gd.getProcessService().removeSchedule(schedule);
+    }
+
+    @Test
+    public void shouldCreateProcessFromAppstorePackageRegistryMiss() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(PROCESSES_PATH)
+             .respond()
+                .withBody(readFromResource("/dataload/processes/asyncTask.json"))
+                .withStatus(202);
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(PROCESS_DEPLOYMENT_POLLING_URI)
+             .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/dataload/processes/appstoreProcess.json"));
+        DataloadProcess process = gd.getProcessService().createProcessFromAppstore(project, new DataloadProcess("appstoreProcess", ProcessType.RUBY.toString(),
+                "${PUBLIC_APPSTORE}:tag/prodigy-testing:/test/rubyHello")).get();
+        assertThat(process, notNullValue());
+    }
+
+    @Test
+    public void shouldCreateProcessFromAppstorePackageRegistryHit() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(PROCESSES_PATH)
+            .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/dataload/processes/appstoreProcess.json"));
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(PROCESS_PATH)
+            .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/dataload/processes/appstoreProcess.json"));
+
+        DataloadProcess process = gd.getProcessService().createProcessFromAppstore(project, new DataloadProcess("appstoreProcess", ProcessType.RUBY.toString(),
+                "${PUBLIC_APPSTORE}:tag/prodigy-testing:/test/rubyHello")).get();
+        assertThat(process, notNullValue());
+    }
+
+    @Test
+    public void shouldUpdateProcessFromAppstore() {
+        onRequest()
+                .havingMethodEqualTo("PUT")
+                .havingPathEqualTo(PROCESS_PATH)
+             .respond()
+                .withBody(readFromResource("/dataload/processes/asyncTask.json"))
+                .withStatus(202);
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(PROCESS_DEPLOYMENT_POLLING_URI)
+             .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/dataload/processes/appstoreProcess.json"));
+
+        process.setPath("${PUBLIC_APPSTORE}:tag/prodigy-testing:/test/rubyHello");
+        DataloadProcess updatedProcess = gd.getProcessService().updateProcessFromAppstore(project, process).get();
+        assertThat(updatedProcess, notNullValue());
+        assertThat(updatedProcess.getType(), is(equalTo(ProcessType.RUBY.toString())));
+        assertThat(updatedProcess.getExecutables(), contains("hello.rb") );
     }
 }

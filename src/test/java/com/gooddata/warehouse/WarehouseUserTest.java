@@ -50,4 +50,10 @@ public class WarehouseUserTest {
         assertThat(user.getUri(), is(SELF_LINK));
         assertThat(user.getLinks(), is(LINKS));
     }
+
+    @Test
+    public void testGetId() throws Exception {
+        final WarehouseUser user = new WarehouseUser(ROLE, PROFILE, LOGIN, LINKS);
+        assertThat(user.getId(), is("{profile-id}"));
+    }
 }

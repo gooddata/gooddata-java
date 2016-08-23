@@ -8,9 +8,9 @@ import com.gooddata.GoodDataRestException;
 import com.gooddata.PollResult;
 import com.gooddata.collections.Page;
 import com.gooddata.collections.PageableList;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -231,6 +231,52 @@ public class WarehouseService extends AbstractService {
             public void handlePollException(final GoodDataRestException e) {
                 throw new GoodDataException("Unable to add user to warehouse", e);
             }
+        });
+    }
+
+    /**
+     * Remove given user from warehouse instance
+     * @param user to remove from warehouse
+     * @throws WarehouseUserNotFoundException when user for removal can't be found
+     * @throws GoodDataException any other reason
+     */
+    public FutureResult<Void> removeUserFromWarehouse(final WarehouseUser user) {
+        notNull(user, "user");
+
+        final WarehouseTask task;
+        try {
+            task = restTemplate.exchange(user.getUri(), HttpMethod.DELETE, null, WarehouseTask.class).getBody();
+        } catch (GoodDataRestException e) {
+            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+                throw new WarehouseUserNotFoundException(user.getUri(), e);
+            } else {
+                throw e;
+            }
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to remove Warehouse user from instance " + user.getUri(), e);
+        }
+        if (task == null) {
+            throw new GoodDataException("Empty response when user removed");
+        }
+
+        return new PollResult<>(this,
+                new AbstractPollHandler<WarehouseTask, Void>
+                        (task.getPollLink(), WarehouseTask.class, Void.class) {
+
+                @Override
+                public boolean isFinished(ClientHttpResponse response) throws IOException {
+                    return HttpStatus.CREATED.equals(response.getStatusCode());
+                }
+
+                @Override
+                public void handlePollResult(WarehouseTask pollResult) {
+                    setResult(null);
+                }
+
+                @Override
+                public void handlePollException(final GoodDataRestException e) {
+                    throw new GoodDataException("Unable to remove user from warehouse", e);
+                }
         });
     }
 
