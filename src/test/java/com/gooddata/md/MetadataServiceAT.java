@@ -1,6 +1,7 @@
 package com.gooddata.md;
 
 import static com.gooddata.md.Restriction.identifier;
+import static com.gooddata.md.report.MetricGroup.METRIC_GROUP;
 import static com.gooddata.report.ReportExportFormat.PDF;
 import static com.gooddata.report.ReportExportFormat.XLS;
 import static java.util.Arrays.asList;
@@ -11,8 +12,9 @@ import static org.testng.AssertJUnit.assertTrue;
 import com.gooddata.AbstractGoodDataAT;
 import com.gooddata.md.report.AttributeInGrid;
 import com.gooddata.md.report.Filter;
-import com.gooddata.md.report.GridElement;
 import com.gooddata.md.report.GridReportDefinitionContent;
+import com.gooddata.md.report.MetricElement;
+import com.gooddata.md.report.MetricGroup;
 import com.gooddata.md.report.Report;
 import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
@@ -60,9 +62,9 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
 
         reportDefinition = md.createObj(project, GridReportDefinitionContent.create(
                 "Department avg shoe size",
-                asList("metricGroup"),
+                asList(METRIC_GROUP),
                 asList(new AttributeInGrid(attr.getDefaultDisplayForm().getUri())),
-                asList(new GridElement(metric.getUri(), "Avg shoe size")),
+                asList(new MetricElement(metric.getUri(), "Avg shoe size")),
                 asList(new Filter("(SELECT [" + metric.getUri() + "]) >= 0"))
         ));
         report = md.createObj(project, new Report(reportDefinition.getTitle(), reportDefinition));

@@ -21,9 +21,7 @@
         {
             "attribute": {
                 "alias": "attr",
-                "totals": [
-                    []
-                ],
+                "totals": [],
                 "uri": "/gdc/md/PROJECT_ID/obj/ATTR_ID"
             }
         }
