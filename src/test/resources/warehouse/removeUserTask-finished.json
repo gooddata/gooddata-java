@@ -1,0 +1,7 @@
+{
+    "asyncTask": {
+        "links": {
+            "users": "/gdc/datawarehouse/instances/instanceId/users"
+        }
+    }
+}
