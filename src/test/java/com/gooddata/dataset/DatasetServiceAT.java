@@ -76,32 +76,18 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = "dataset", dependsOnMethods = {"loadDataset"})
-    public void getProjectsUploadsInfo() throws Exception {
-        final ProjectUploadsInfo projectUploadsInfo = gd.getDatasetService().getProjectUploadsInfo(project);
-
-        assertThat(projectUploadsInfo, notNullValue());
-        assertTrue(projectUploadsInfo.hasDataset("dataset.person"));
-        assertThat(projectUploadsInfo.getDatasetUploadsInfo("dataset.person").getLastUpload(), notNullValue());
-    }
-
-    @Test(groups = "dataset", dependsOnMethods = {"getProjectsUploadsInfo"})
     public void listUploadsForDataset() throws Exception {
-        final DatasetService datasetService = gd.getDatasetService();
-
-        final DatasetUploadsInfo datasetUploadsInfo =
-                datasetService.getProjectUploadsInfo(project).getDatasetUploadsInfo("dataset.person");
-        final Collection<Upload> uploads = datasetService.listUploadsForDataset(datasetUploadsInfo);
-
-        assertThat(uploads, notNullValue());
-        assertFalse(uploads.isEmpty());
-    }
-
-    @Test(groups = "dataset", dependsOnMethods = {"getProjectsUploadsInfo"})
-    public void listUploadsForDatasetId() throws Exception {
         final Collection<Upload> uploads = gd.getDatasetService().listUploadsForDataset(project, "dataset.person");
 
         assertThat(uploads, notNullValue());
         assertFalse(uploads.isEmpty());
+    }
+
+    @Test(groups = "dataset", dependsOnMethods = {"loadDataset"})
+    public void getLastUploadForDataset() throws Exception {
+        final Upload lastUpload = gd.getDatasetService().getLastUploadForDataset(project, "dataset.person");
+
+        assertThat(lastUpload, notNullValue());
     }
 
     @Test(groups = "dataset", dependsOnMethods = {"loadDataset", "loadDatasetFail"})
