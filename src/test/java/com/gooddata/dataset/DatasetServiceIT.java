@@ -255,40 +255,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldGetProjectUploadsInfo() {
-        onRequest()
-                .havingPathEqualTo("/gdc/md/PROJECT_ID/data/sets")
-        .respond()
-                .withStatus(200)
-                .withBody(readFromResource("/dataset/uploads/data-sets.json"));
-
-        final ProjectUploadsInfo projectUploadsInfo = gd.getDatasetService().getProjectUploadsInfo(project);
-
-        assertThat(projectUploadsInfo, notNullValue());
-        assertTrue(projectUploadsInfo.hasDataset("dataset.campaign"));
-    }
-
-    @Test
-    public void shouldListUploadsForDataset() {
-        final String datasetUploadsUri = "/gdc/md/PROJECT_ID/uploads/DATASET_ID";
-
-        onRequest()
-                .havingPathEqualTo(datasetUploadsUri)
-        .respond()
-                .withStatus(200)
-                .withBody(readFromResource("/dataset/uploads/uploads.json"));
-
-        final DatasetUploadsInfo info = mock(DatasetUploadsInfo.class);
-        when(info.getUploadsUri()).thenReturn(datasetUploadsUri);
-
-        final Collection<Upload> uploads = gd.getDatasetService().listUploadsForDataset(info);
-
-        assertThat(uploads, notNullValue());
-        assertThat(uploads, hasSize(2));
-    }
-
-    @Test
-    public void shouldListUploadsForDatasetId() throws Exception {
+    public void shouldListUploadsForDataset() throws Exception {
         onRequest()
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/data/sets")
         .respond()
@@ -305,6 +272,26 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
 
         assertThat(uploads, notNullValue());
         assertThat(uploads, hasSize(2));
+    }
+
+    @Test
+    public void shouldGetLastUploadForDataset() throws Exception {
+        onRequest()
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/data/sets")
+        .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/dataset/uploads/data-sets.json"));
+
+        onRequest()
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/data/upload/1076")
+        .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/dataset/uploads/upload.json"));
+
+        final Upload upload = gd.getDatasetService().getLastUploadForDataset(project, "dataset.campaign");
+
+        assertThat(upload, notNullValue());
+        assertThat(upload.getStatus(), is("OK"));
     }
 
     @Test
