@@ -23,6 +23,7 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -176,44 +177,71 @@ public class DatasetServiceTest {
     }
 
     @Test(expectedExceptions = GoodDataException.class)
-    public void testGetProjectsUploadsInfoWithRestClientError() throws Exception {
-        when(restTemplate.getForObject(ProjectUploadsInfo.URI, ProjectUploadsInfo.class, PROJECT_ID))
+    public void testGetDataSetInfoRestClientError() throws Exception {
+        when(restTemplate.getForObject(UploadsInfo.URI, UploadsInfo.class, PROJECT_ID))
                 .thenThrow(new RestClientException(""));
-        service.getProjectUploadsInfo(project);
+        service.getDataSetInfo(project, "dataset.id");
     }
 
     @Test(expectedExceptions = GoodDataException.class)
-    public void testListUploadsForDatasetWhenMissingUploadsUri() throws Exception {
-        final DatasetUploadsInfo uploadsInfo = mockDatasetUploadsInfo(null);
-
-        service.listUploadsForDataset(uploadsInfo);
-    }
-
-    @Test(expectedExceptions = GoodDataException.class)
-    public void testListUploadsForDatasetWhenRestClientError() throws Exception {
-        final DatasetUploadsInfo uploadsInfo = mockDatasetUploadsInfo(DATASET_UPLOADS_URI);
-
-        when(restTemplate.getForObject(DATASET_UPLOADS_URI, Uploads.class)).thenThrow(new RestClientException(""));
-
-        service.listUploadsForDataset(uploadsInfo);
-    }
-
-    @Test(expectedExceptions = GoodDataException.class)
-    public void testListUploadsForDatasetWithNoResponse() throws Exception {
-        final DatasetUploadsInfo uploadsInfo = mockDatasetUploadsInfo(DATASET_UPLOADS_URI);
-
-        when(restTemplate.getForObject(DATASET_UPLOADS_URI, Uploads.class)).thenReturn(null);
-
-        service.listUploadsForDataset(uploadsInfo);
+    public void testGetDataSetInfoEmptyResponse() throws Exception {
+        when(restTemplate.getForObject(UploadsInfo.URI, UploadsInfo.class, PROJECT_ID)).thenReturn(null);
+        service.getDataSetInfo(project, "dataset.id");
     }
 
     @Test
-    public void testListUploadsForDatasetWithEmptyResponseBody() throws Exception {
-        final DatasetUploadsInfo datasetUploadsInfo = mockDatasetUploadsInfo(DATASET_UPLOADS_URI);
+    public void testListUploadsForDatasetMissingUri() throws Exception {
+        mockDataSetInfo();
+
+        assertThat(service.listUploadsForDataset(project, DATASET_ID), Matchers.<Upload>empty());
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void testListUploadsForDatasetRestClientError() throws Exception {
+        final UploadsInfo.DataSet dataSetInfo = mockDataSetInfo();
+        when(dataSetInfo.getUploadsUri()).thenReturn(DATASET_UPLOADS_URI);
+
+        when(restTemplate.getForObject(DATASET_UPLOADS_URI, Uploads.class)).thenThrow(new RestClientException(""));
+
+        service.listUploadsForDataset(project, DATASET_ID);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void testListUploadsForDatasetEmptyResponse() throws Exception {
+        final UploadsInfo.DataSet dataSetInfo = mockDataSetInfo();
+        when(dataSetInfo.getUploadsUri()).thenReturn(DATASET_UPLOADS_URI);
+
+        when(restTemplate.getForObject(DATASET_UPLOADS_URI, Uploads.class)).thenReturn(null);
+
+        service.listUploadsForDataset(project, DATASET_ID);
+    }
+
+    @Test
+    public void testListUploadsForDatasetEmptyResponseBody() throws Exception {
+        final UploadsInfo.DataSet dataSetInfo = mockDataSetInfo();
+        when(dataSetInfo.getUploadsUri()).thenReturn(DATASET_UPLOADS_URI);
 
         when(restTemplate.getForObject(DATASET_UPLOADS_URI, Uploads.class)).thenReturn(new Uploads(null));
 
-        assertThat(service.listUploadsForDataset(datasetUploadsInfo), Matchers.<Upload>empty());
+        assertThat(service.listUploadsForDataset(project, DATASET_ID), Matchers.<Upload>empty());
+    }
+
+    @Test
+    public void testGetLastUploadForDatasetMissingUri() throws Exception {
+        mockDataSetInfo();
+
+        assertThat(service.getLastUploadForDataset(project, DATASET_ID), nullValue());
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void testGetLastUploadForDatasetRestClientError() throws Exception {
+        final UploadsInfo.DataSet dataSetInfo = mockDataSetInfo();
+        final String lastUploadUri = "last/upload/uri";
+        when(dataSetInfo.getLastUploadUri()).thenReturn(lastUploadUri);
+
+        when(restTemplate.getForObject(lastUploadUri, Upload.class)).thenThrow(new RestClientException(""));
+
+        service.getLastUploadForDataset(project, DATASET_ID);
     }
 
     @Test(expectedExceptions = GoodDataException.class)
@@ -224,10 +252,15 @@ public class DatasetServiceTest {
         service.getUploadStatistics(project);
     }
 
-    private DatasetUploadsInfo mockDatasetUploadsInfo(String uploadsUri) {
-        final DatasetUploadsInfo uploadsInfo = mock(DatasetUploadsInfo.class);
-        when(uploadsInfo.getUploadsUri()).thenReturn(uploadsUri);
+    private UploadsInfo.DataSet mockDataSetInfo() {
+        final UploadsInfo.DataSet dataSetInfo = mock(UploadsInfo.DataSet.class);
+        when(dataSetInfo.getDatasetId()).thenReturn(DATASET_ID);
 
-        return uploadsInfo;
+        final UploadsInfo uploadsInfo = new UploadsInfo(singletonList(dataSetInfo));
+
+        when(restTemplate.getForObject(UploadsInfo.URI_TEMPLATE.expand(PROJECT_ID), UploadsInfo.class))
+                .thenReturn(uploadsInfo);
+
+        return dataSetInfo;
     }
 }
