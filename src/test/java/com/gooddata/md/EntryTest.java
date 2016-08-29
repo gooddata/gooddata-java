@@ -33,6 +33,7 @@ public class EntryTest {
     public static final boolean LOCKED = true;
     public static final boolean UNLISTED = false;
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testDeserialize() throws Exception {
         final Entry entry = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/entry.json"), Entry.class);

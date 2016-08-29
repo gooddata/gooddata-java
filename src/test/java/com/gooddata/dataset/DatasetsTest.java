@@ -14,6 +14,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 public class DatasetsTest {
 
+    @SuppressWarnings("deprecation")
     @Test
     public void deserialize() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/dataset/datasetLinks.json");

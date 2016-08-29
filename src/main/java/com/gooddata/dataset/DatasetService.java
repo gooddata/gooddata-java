@@ -237,7 +237,7 @@ public class DatasetService extends AbstractService {
     public Collection<Link> listDatasetLinks(final Project project) {
         notNull(project, "project");
         try {
-            final Datasets result = restTemplate.getForObject(Datasets.URI, Datasets.class, project.getId());
+            final DatasetLinks result = restTemplate.getForObject(DatasetLinks.URI, DatasetLinks.class, project.getId());
             if (result == null) {
                 throw new GoodDataException("Empty response from API call");
             } else if (result.getLinks() == null) {

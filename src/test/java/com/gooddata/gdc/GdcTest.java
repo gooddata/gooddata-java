@@ -11,6 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GdcTest {
 
+    @SuppressWarnings("deprecation")
     @Test
     public void deserialize() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/gdc/gdc.json");

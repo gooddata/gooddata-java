@@ -10,6 +10,7 @@ import java.io.InputStream;
 
 public class WarehouseTaskTest {
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testDeserializePoll() throws Exception {
         final WarehouseTask warehouseTask = deserialize("/warehouse/warehouseTask-poll.json");
@@ -17,6 +18,7 @@ public class WarehouseTaskTest {
         assertThat(warehouseTask.getPollUri(), is("/gdc/datawarehouse/executions/executionId"));
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testDeserializeInstance() throws Exception {
         final WarehouseTask warehouseTask = deserialize("/warehouse/warehouseTask-finished.json");

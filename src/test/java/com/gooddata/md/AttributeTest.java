@@ -20,6 +20,7 @@ public class AttributeTest {
 
     public static final String TITLE = "Person ID";
 
+    @SuppressWarnings("deprecation")
     @Test
     public void shouldDeserialize() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/md/attribute.json");

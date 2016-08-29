@@ -21,6 +21,7 @@ public class DisplayFormTest {
     public static final String LDM_EXPRESSION = "";
     private static final String ELEMENTS_LINK = "/gdc/md/PROJECT_ID/obj/DF_ID/elements";
 
+    @SuppressWarnings("deprecation")
     @Test
     public void shouldDeserialize() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/md/displayForm.json");

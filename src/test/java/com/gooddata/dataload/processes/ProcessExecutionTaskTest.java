@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 
 public class ProcessExecutionTaskTest {
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testDeserialize() throws Exception {
         final ProcessExecutionTask task = new ObjectMapper()

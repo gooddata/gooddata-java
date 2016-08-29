@@ -261,7 +261,7 @@ public class WarehouseService extends AbstractService {
 
         return new PollResult<>(this,
                 new AbstractPollHandler<WarehouseTask, Void>
-                        (task.getPollLink(), WarehouseTask.class, Void.class) {
+                        (task.getPollUri(), WarehouseTask.class, Void.class) {
 
                 @Override
                 public boolean isFinished(ClientHttpResponse response) throws IOException {
