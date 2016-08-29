@@ -135,6 +135,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
         assertThat(manifest, is(notNullValue()));
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void shouldListDatasets() throws Exception {
         onRequest()

@@ -12,6 +12,7 @@ import static org.hamcrest.core.StringStartsWith.startsWith;
 
 public class ProjectTest {
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testDeserialize() throws Exception {
         final Project project = new ObjectMapper()

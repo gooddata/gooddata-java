@@ -19,6 +19,7 @@ import java.util.List;
 
 public class DatasetTest {
 
+    @SuppressWarnings("deprecation")
     @Test
     public void shouldDeserialize() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/md/dataset.json");

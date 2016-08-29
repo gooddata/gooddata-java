@@ -15,6 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class LinkEntriesTest {
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testDeserialization() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/gdc/linkEntries.json");

@@ -14,6 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class MaqlDdlLinksTest {
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testDeserialization() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/model/maqlDdlLinks.json");

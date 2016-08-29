@@ -12,6 +12,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GdcServiceIT extends AbstractGoodDataIT {
 
+    @SuppressWarnings("deprecation")
     @Test
     public void shouldReturnGdc() throws Exception {
         onRequest()
@@ -26,6 +27,7 @@ public class GdcServiceIT extends AbstractGoodDataIT {
         assertThat(gdc.getUserStagingUri(), is("/uploads"));
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void shouldUseProperVersionHeader() throws Exception {
         onRequest()
@@ -51,7 +53,7 @@ public class GdcServiceIT extends AbstractGoodDataIT {
 
         final RootLinks rootLinks = gd.getGdcService().getRootLinks();
         assertThat(rootLinks, is(notNullValue()));
-        assertThat(rootLinks.getUserStagingLink(), is("/uploads"));
+        assertThat(rootLinks.getUserStagingUri(), is("/uploads"));
     }
 
     @Test

@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 public class DataloadProcessTest {
 
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testDeserialization() throws Exception {
         final DataloadProcess process = new ObjectMapper()

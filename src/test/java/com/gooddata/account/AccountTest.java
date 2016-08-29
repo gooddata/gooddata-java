@@ -14,6 +14,7 @@ public class AccountTest {
     private static final String FIRST_NAME = "Blah";
     private static final String LAST_NAME = "Muhehe";
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testDeserialize() throws Exception {
         final Account account = new ObjectMapper()

@@ -20,6 +20,7 @@ public class AttributeDisplayFormTest {
     private static final String TYPE = "TYPE";
     private static final String ELEMENTS_LINK = "/gdc/md/PROJECT_ID/obj/DF_ID/elements";
 
+    @SuppressWarnings("deprecation")
     @Test
     public void shouldDeserialize() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/md/attributeDisplayForm.json");

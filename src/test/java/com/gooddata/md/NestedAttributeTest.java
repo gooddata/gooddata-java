@@ -16,6 +16,7 @@ import java.util.Collection;
 
 public class NestedAttributeTest {
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testDeserialization() throws Exception {
         final NestedAttribute attribute = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/dimensionAttribute.json"), NestedAttribute.class);
