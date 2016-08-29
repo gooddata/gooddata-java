@@ -25,7 +25,7 @@ public class MetricElement {
     private final String drillAcrossStepAttributeDisplayFormUri;
 
     @JsonCreator
-    public MetricElement(@JsonProperty("uri") final String uri,
+    MetricElement(@JsonProperty("uri") final String uri,
                          @JsonProperty("alias") final String alias,
                          @JsonProperty("format") final String format,
                          @JsonProperty("drillAcrossStepAttributeDF") String drillAcrossStepAttributeDisplayFormUri) {
