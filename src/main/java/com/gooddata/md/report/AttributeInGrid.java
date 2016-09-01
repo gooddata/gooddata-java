@@ -44,11 +44,13 @@ public class AttributeInGrid implements GridElement {
     }
 
     /**
-     * Creates new instance.
+     * Creates new instance from given uri with empty alias
      * @param uri uri of displayForm of attribute to be in grid
+     * @deprecated because empty alias does not make much sense
      */
+    @Deprecated
     public AttributeInGrid(String uri) {
-        this(uri, null);
+        this(uri, "");
     }
 
     /**
