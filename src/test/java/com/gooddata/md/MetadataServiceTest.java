@@ -96,7 +96,8 @@ public class MetadataServiceTest {
         final Updatable resultObj = mock(Updatable.class);
 
         when(obj.getUri()).thenReturn(URI);
-        when(restTemplate.getForObject(URI, obj.getClass())).thenReturn(resultObj);
+        final Updatable forObject = restTemplate.getForObject(URI, obj.getClass());
+        when(forObject).thenReturn(resultObj);
 
         final Obj result = service.updateObj(obj);
 
@@ -149,9 +150,9 @@ public class MetadataServiceTest {
     @Test
     public void testGetObjByUri() throws Exception {
         final Obj resultObj = mock(Obj.class);
-        when(restTemplate.getForObject(URI, resultObj.getClass())).thenReturn(resultObj);
+        when(restTemplate.getForObject(URI, Obj.class)).thenReturn(resultObj);
 
-        final Obj result = service.getObjByUri(URI, resultObj.getClass());
+        final Obj result = service.getObjByUri(URI, Obj.class);
         assertThat(result, is(resultObj));
     }
 
@@ -191,9 +192,9 @@ public class MetadataServiceTest {
     public void testGetObjById() throws Exception {
         final Obj resultObj = mock(Obj.class);
         final String uri = format("/gdc/md/%s/obj/%s", PROJECT_ID, ID);
-        when(restTemplate.getForObject(uri, resultObj.getClass())).thenReturn(resultObj);
+        when(restTemplate.getForObject(uri, Obj.class)).thenReturn(resultObj);
 
-        final Obj result = service.getObjById(project, ID, resultObj.getClass());
+        final Obj result = service.getObjById(project, ID, Obj.class);
         assertThat(result, is(resultObj));
     }
 
