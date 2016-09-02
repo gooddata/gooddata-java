@@ -17,7 +17,7 @@ The *GoodData Java SDK* is available in Maven Central Repository, to use it from
 <dependency>
     <groupId>com.gooddata</groupId>
     <artifactId>gooddata-java</artifactId>
-    <version>2.0.0.RC</version>
+    <version>2.0.0-RC.1</version>
 </dependency>
 ```
 
@@ -30,7 +30,7 @@ The *GoodData Java SDK* uses:
 * the *Apache HTTP Client* version 4.3 or later (for white-labeled domains at least version 4.3.2 is required)
 * the *Spring Framework* version 4.3.*
 * the *Jackson JSON Processor* version 2.8.*
-* the *Java Development Kit (JDK)* version 7 or later
+* the *Java Development Kit (JDK)* version 8 or later
 
 ## License
 The *GoodData Java SDK* is free and open-source software under [BSD License](LICENSE.txt).
