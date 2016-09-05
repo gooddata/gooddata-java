@@ -14,13 +14,9 @@ import com.gooddata.md.Attribute;
 import com.gooddata.md.DisplayForm;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.gooddata.util.Validate.notNull;
-import static java.util.Arrays.asList;
 
 /**
  * Attribute in Grid
@@ -59,7 +55,7 @@ public class AttributeInGrid implements GridElement {
      * @param alias alias used to label the attribute
      */
     public AttributeInGrid(String uri, String alias) {
-        this(uri, new ArrayList<List<String>>(), alias);
+        this(uri, new ArrayList<>(), alias);
     }
 
     /**
