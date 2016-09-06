@@ -14,13 +14,9 @@ import com.gooddata.md.Attribute;
 import com.gooddata.md.DisplayForm;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.gooddata.util.Validate.notNull;
-import static java.util.Arrays.asList;
 
 /**
  * Attribute in Grid
@@ -59,7 +55,7 @@ public class AttributeInGrid implements GridElement {
      * @param alias alias used to label the attribute
      */
     public AttributeInGrid(String uri, String alias) {
-        this(uri, new ArrayList<List<String>>(), alias);
+        this(uri, new ArrayList<>(), alias);
     }
 
     /**
@@ -90,11 +86,29 @@ public class AttributeInGrid implements GridElement {
     }
 
     /**
-     * Creates new AttributeInGrid using given Attribute's default DisplayForm's uri and it's title as alias.
+     * Creates new AttributeInGrid using given DisplayForm's uri and given alias.
+     * @param displayForm displayForm to create AttributeInGrid from
+     * @param alias alias used to label the attribute
+     */
+    public AttributeInGrid(final DisplayForm displayForm, final String alias) {
+        this(notNull(notNull(displayForm, "displayForm").getUri(), "uri"), alias);
+    }
+
+    /**
+     * Creates new AttributeInGrid using given Attribute's default DisplayForm's uri and Attribute's title as alias.
      * @param attribute attribute to create AttributeInGrid from
      */
     public AttributeInGrid(final Attribute attribute) {
-        this(notNull(attribute, "attribute").getDefaultDisplayForm());
+        this(notNull(attribute, "attribute").getDefaultDisplayForm(), notNull(attribute, "attribute").getTitle());
+    }
+
+    /**
+     * Creates new AttributeInGrid using given Attribute's default DisplayForm's uri and given alias.
+     * @param attribute attribute to create AttributeInGrid from
+     * @param alias alias used to label the attribute
+     */
+    public AttributeInGrid(final Attribute attribute, final String alias) {
+        this(notNull(attribute, "attribute").getDefaultDisplayForm(), alias);
     }
 
     @JsonProperty("totals")

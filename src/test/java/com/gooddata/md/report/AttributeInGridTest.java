@@ -27,6 +27,7 @@ public class AttributeInGridTest {
 
     private static final String URI = "/URI";
     private static final String ALIAS = "ALIAS";
+    private static final String ATTR_TITLE = "attrTitle";
 
     @Test
     public void testDeserialization() throws Exception {
@@ -61,10 +62,22 @@ public class AttributeInGridTest {
         final Attribute attr = mock(Attribute.class);
         final DisplayForm displayForm = mock(DisplayForm.class);
         when(attr.getDefaultDisplayForm()).thenReturn(displayForm);
+        when(attr.getTitle()).thenReturn(ATTR_TITLE);
         when(displayForm.getUri()).thenReturn(URI);
         when(displayForm.getTitle()).thenReturn(ALIAS);
 
         final AttributeInGrid attrInGrid = new AttributeInGrid(attr);
+        assertThat(attrInGrid.getUri(), is(URI));
+        assertThat(attrInGrid.getAlias(), is(ATTR_TITLE));
+    }
+
+    @Test
+    public void testCreateFromDisplayForm() throws Exception {
+        final DisplayForm displayForm = mock(DisplayForm.class);
+        when(displayForm.getUri()).thenReturn(URI);
+        when(displayForm.getTitle()).thenReturn(ALIAS);
+
+        final AttributeInGrid attrInGrid = new AttributeInGrid(displayForm);
         assertThat(attrInGrid.getUri(), is(URI));
         assertThat(attrInGrid.getAlias(), is(ALIAS));
     }
