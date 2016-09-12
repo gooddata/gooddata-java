@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ */
 package com.gooddata.md;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
