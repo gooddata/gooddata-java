@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ */
 package com.gooddata.collections;
 
 import org.springframework.web.util.UriComponents;
