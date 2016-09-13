@@ -166,7 +166,7 @@
                 <artifactId>license-maven-plugin</artifactId>
                 <version>3.0 </version>
                 <configuration>
-                    <inlineHeader>Copyright (C) ${inceptionYear}-${currentYear}, GoodData(R) Corporation. All rights reserved.</inlineHeader>
+                    <header>src/license_header.txt</header>
                     <failIfMissing>true</failIfMissing>
                     <failIfUnknown>true</failIfUnknown>
                     <skipExistingHeaders>true</skipExistingHeaders>
