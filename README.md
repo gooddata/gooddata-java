@@ -3,6 +3,8 @@
 The *GoodData Java SDK* encapsulates the REST API provided by the [GoodData](http://www.gooddata.com) platform.
 The first version was implemented during the [All Data Hackathon](http://hackathon.gooddata.com) April 10 - 11 2014
 and currently the SDK is transitioned to be an official GoodData project.
+GoodData Corporation provides this software "as-is" under conditions
+specified in the [license](LICENSE.txt).
 
 ## Usage
 
