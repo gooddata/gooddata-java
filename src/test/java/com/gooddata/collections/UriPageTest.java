@@ -47,4 +47,20 @@ public class UriPageTest {
         assertThat(components.getQueryParams(), hasEntry("limit", singletonList("10")));
     }
 
+    @Test
+    public void testIdempotency() throws Exception {
+        final UriPage uri = new UriPage("uri?offset=god&limit=10");
+        final UriComponentsBuilder builder = fromUriString("/this/is/{template}").query("other=false");
+
+        uri.updateWithPageParams(builder);
+        uri.updateWithPageParams(builder);
+        uri.updateWithPageParams(builder);
+
+        final UriComponents components = builder.build();
+        assertThat(components, is(notNullValue()));
+        assertThat(components.getPath(), is("/this/is/{template}"));
+        assertThat(components.getQueryParams(), hasEntry("other", singletonList("false")));
+        assertThat(components.getQueryParams(), hasEntry("offset", singletonList("god")));
+        assertThat(components.getQueryParams(), hasEntry("limit", singletonList("10")));
+    }
 }
