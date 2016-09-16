@@ -5,6 +5,7 @@
  */
 package com.gooddata.featureflag;
 
+import com.gooddata.JsonMatchers;
 import org.testng.annotations.Test;
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
@@ -12,6 +13,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.isOneOf;
+import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertNotNull;
 
 public class FeatureFlagsTest {
@@ -24,6 +26,15 @@ public class FeatureFlagsTest {
         assertThat(flags, containsInAnyOrder(
                 new FeatureFlag("testFeature", true),
                 new FeatureFlag("testFeature2", false)));
+    }
+
+    @Test
+    public void testSerialize() {
+        final FeatureFlags flags = new FeatureFlags();
+        flags.addFlag("testFeature", true);
+        flags.addFlag("testFeature2", false);
+
+        assertThat(flags, JsonMatchers.serializesToJson("/featureflag/featureFlags.json"));
     }
 
     @Test
@@ -53,4 +64,14 @@ public class FeatureFlagsTest {
         flags.isEnabled(null);
     }
 
+    @Test
+    public void testRemoveFlag() throws Exception {
+        final FeatureFlags flags = new FeatureFlags();
+        flags.addFlag("enabledFlag", true);
+
+        flags.removeFlag("enabledFlag");
+
+        assertFalse(flags.isEnabled("enabledFlag"));
+        assertFalse(flags.iterator().hasNext());
+    }
 }
