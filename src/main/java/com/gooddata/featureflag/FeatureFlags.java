@@ -5,6 +5,7 @@
  */
 package com.gooddata.featureflag;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -14,8 +15,12 @@ import org.springframework.web.util.UriTemplate;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.gooddata.util.Validate.notEmpty;
+import static java.util.stream.Collectors.toMap;
 import static org.springframework.util.Assert.notNull;
 
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
@@ -28,11 +33,34 @@ public class FeatureFlags implements Iterable<FeatureFlag> {
 
     private final List<FeatureFlag> featureFlags = new LinkedList<>();
 
-    /* protected helper method for JSON deserialization */
+    /**
+     * Adds the feature flag of given name and given value.
+     *
+     * @param name feature flag name
+     * @param enabled feature flag value (enabled / disabled)
+     */
     @JsonAnySetter
-    protected void addFlag(final String name, final boolean enabled) {
+    public void addFlag(final String name, final boolean enabled) {
         notNull(name);
         featureFlags.add(new FeatureFlag(name, enabled));
+    }
+
+    /**
+     * Removes flag of given name.
+     *
+     * @param flagName name of the flag to remove
+     */
+    public void removeFlag(final String flagName) {
+        findFlag(flagName).ifPresent(featureFlags::remove);
+    }
+
+    /**
+     * Converts feature flags to map where flags' names are the keys and values are flags' enabled property
+     * @return feature flags as map
+     */
+    @JsonAnyGetter
+    private Map<String, Boolean> asMap() {
+        return featureFlags.stream().collect(toMap(FeatureFlag::getName, FeatureFlag::isEnabled));
     }
 
     @Override
@@ -48,12 +76,11 @@ public class FeatureFlags implements Iterable<FeatureFlag> {
      */
     public boolean isEnabled(final String flagName) {
         notEmpty(flagName, "flagName");
-        for (final FeatureFlag flag : featureFlags) {
-            if (flagName.equalsIgnoreCase(flag.getName())) {
-                return flag.isEnabled();
-            }
-        }
-        return false;
+        return findFlag(flagName).map(FeatureFlag::isEnabled).orElse(false);
+    }
+
+    private Optional<FeatureFlag> findFlag(final String flagName) {
+        return featureFlags.stream().filter(f -> flagName.equalsIgnoreCase(f.getName())).findAny();
     }
 
     @Override
