@@ -58,9 +58,9 @@ public class PageRequest implements Page {
     @Override
     public UriComponentsBuilder updateWithPageParams(final UriComponentsBuilder uriBuilder) {
         if (offset != null) {
-            uriBuilder.queryParam("offset", offset);
+            uriBuilder.replaceQueryParam("offset", offset);
         }
-        uriBuilder.queryParam("limit", limit);
+        uriBuilder.replaceQueryParam("limit", limit);
         return uriBuilder;
     }
 

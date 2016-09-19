@@ -52,7 +52,7 @@ class UriPage implements Page {
     public UriComponentsBuilder updateWithPageParams(final UriComponentsBuilder uriBuilder) {
         notNull(uriBuilder, "uriBuilder");
         for (Entry<String, List<String>> entry : pageUri.getQueryParams().entrySet()) {
-            uriBuilder.queryParam(entry.getKey(), entry.getValue().toArray());
+            uriBuilder.replaceQueryParam(entry.getKey(), entry.getValue().toArray());
         }
         return uriBuilder;
     }
