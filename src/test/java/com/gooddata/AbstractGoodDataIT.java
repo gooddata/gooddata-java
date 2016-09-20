@@ -5,8 +5,7 @@
  */
 package com.gooddata;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
+import com.gooddata.authentication.LoginPasswordAuthentication;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -23,14 +22,11 @@ public abstract class AbstractGoodDataIT {
     @BeforeMethod
     public void commonSetUp() {
         initJadler().that().respondsWithDefaultContentType("application/json");
-        gd = new GoodData("localhost", "sdk@gooddata.com", "sdk", port(), "http", new GoodDataSettings()) {
-            @Override
-            protected HttpClient createHttpClient(final String login, final String password, final String hostname,
-                                                  final int port, final String protocol,
-                                                  final HttpClientBuilder builder) {
-                return builder.build();
-            }
-        };
+        gd = new GoodData(
+                new GoodDataEndpoint("localhost", port(), "http"),
+                new LoginPasswordAuthentication("sdk@gooddata.com", "sdk"),
+                new GoodDataSettings()
+        );
     }
 
     @AfterMethod
