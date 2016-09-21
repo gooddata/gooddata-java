@@ -115,8 +115,6 @@ public class GoodData {
         this(hostname, login, password, PORT, PROTOCOL, new GoodDataSettings());
     }
 
-
-
     /**
      * Create instance configured to communicate with GoodData Platform running on given host using given user's
      * credentials.
@@ -156,7 +154,6 @@ public class GoodData {
     public GoodData(String hostname, String login, String password, int port, GoodDataSettings settings) {
         this(hostname, login, password, port, PROTOCOL, settings);
     }
-
 
     /**
      * Create instance configured to communicate with GoodData Platform running on given host, port and protocol using

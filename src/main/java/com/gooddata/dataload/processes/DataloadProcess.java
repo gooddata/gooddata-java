@@ -51,8 +51,8 @@ public class DataloadProcess {
     /**
      * Use this constructor, when you want to deploy process from appstore.
      *
-     * @param name
-     * @param type
+     * @param name name
+     * @param type type
      * @param appstorePath valid path to brick in appstore
      */
     public DataloadProcess(String name, String type, String appstorePath) {

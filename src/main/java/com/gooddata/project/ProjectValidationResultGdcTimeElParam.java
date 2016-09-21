@@ -33,6 +33,7 @@ public class ProjectValidationResultGdcTimeElParam extends ProjectValidationResu
     }
 
     /**
+     * @return list of values
      * @deprecated for backward compatibility only. Do not use this method, it always returns null.
      */
     @Deprecated

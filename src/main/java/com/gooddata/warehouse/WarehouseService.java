@@ -242,6 +242,7 @@ public class WarehouseService extends AbstractService {
     /**
      * Remove given user from warehouse instance
      * @param user to remove from warehouse
+     * @return empty future result
      * @throws WarehouseUserNotFoundException when user for removal can't be found
      * @throws GoodDataException any other reason
      */

@@ -101,7 +101,7 @@ public class AccountService extends AbstractService {
      * @param id to search for
      * @return account for id
      * @throws AccountNotFoundException when account for given id can't be found
-     * @throws GoodDataException
+     * @throws GoodDataException when different error occurs
      */
     public Account getAccountById(String id) {
         try {
@@ -122,7 +122,7 @@ public class AccountService extends AbstractService {
      * @param uri to search for
      * @return account for uri
      * @throws AccountNotFoundException when account for given uri can't be found
-     * @throws GoodDataException
+     * @throws GoodDataException when different error occurs
      */
     public Account getAccountByUri(String uri) {
         return getAccountById(Account.getId(uri));

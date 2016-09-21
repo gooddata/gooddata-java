@@ -34,14 +34,14 @@ public class ProjectValidationResultSliElParam extends ProjectValidationResultPa
     }
 
     /**
-     * Returns list of IDs. IDs are primary property of this param.
+     * @return list of IDs. IDs are primary property of this param.
      */
     public List<String> getIds() {
         return ids;
     }
 
     /**
-     * Returns list of values. Values have only informative character and are connected to IDs.
+     * @return list of values. Values have only informative character and are connected to IDs.
      *
      * @see #getIds()
      */
