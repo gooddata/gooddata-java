@@ -3,6 +3,8 @@
 The *GoodData Java SDK* encapsulates the REST API provided by the [GoodData](http://www.gooddata.com) platform.
 The first version was implemented during the [All Data Hackathon](http://hackathon.gooddata.com) April 10 - 11 2014
 and currently the SDK is transitioned to be an official GoodData project.
+GoodData Corporation provides this software "as-is" under conditions
+specified in the [license](LICENSE.txt).
 
 ## Usage
 
@@ -28,9 +30,9 @@ See [releases page](https://github.com/martiner/gooddata-java/releases) for info
 The *GoodData Java SDK* uses:
 * the [GoodData HTTP client](https://github.com/gooddata/gooddata-http-client) version 0.9.3 or later
 * the *Apache HTTP Client* version 4.3 or later (for white-labeled domains at least version 4.3.2 is required)
-* the *Spring Framework* version 3.x
-* the *Jackson JSON Processor* version 2.7.0 (*GoodData Java SDK* version 0.x requires version 1.9)
-* the *Java Development Kit (JDK)* version 7 or later
+* the *Spring Framework* version 4.3.*
+* the *Jackson JSON Processor* version 2.8.*
+* the *Java Development Kit (JDK)* version 8 or later
 
 ## License
 The *GoodData Java SDK* is free and open-source software under [BSD License](LICENSE.txt).
