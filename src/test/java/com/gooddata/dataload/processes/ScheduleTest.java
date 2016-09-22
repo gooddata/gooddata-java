@@ -8,6 +8,7 @@ package com.gooddata.dataload.processes;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.Duration;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -19,6 +20,7 @@ import java.util.Collections;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -56,6 +58,7 @@ public class ScheduleTest {
         assertThat(schedule.isEnabled(), is(true));
         assertThat(schedule.getCron(), is("0 0 * * *"));
         assertThat(schedule.getTimezone(), is("UTC"));
+        assertThat(schedule.getRescheduleInMinutes(), is(26));
         assertThat(schedule.getConsecutiveFailedExecutionCount(), is(0));
         assertThat(schedule.getProcessId(), is("process_id"));
         assertThat(schedule.getExecutable(), is(EXECUTABLE));
@@ -67,6 +70,14 @@ public class ScheduleTest {
     public void testSerialization() {
         final Schedule schedule = new Schedule(process, EXECUTABLE, "0 0 * * *");
         assertThat(schedule, serializesToJson("/dataload/processes/schedule-input.json"));
+    }
+
+    @Test
+    public void testSerializationWithAllFields() {
+        final Schedule schedule = new Schedule(process, EXECUTABLE, "0 0 * * *");
+        schedule.setReschedule(Duration.standardMinutes(26));
+
+        assertThat(schedule, serializesToJson("/dataload/processes/schedule-input-all-fields.json"));
     }
 
     @DataProvider(name = "scheduleParams")
@@ -147,4 +158,22 @@ public class ScheduleTest {
         assertThat(schedule.getParams().size(), is(originalParamsSize));
     }
 
+    @Test
+    public void testReschedule() {
+        final Schedule schedule = new Schedule(process, EXECUTABLE, "0 0 * * *");
+        final Duration duration = Duration.standardMinutes(26);
+        schedule.setReschedule(duration);
+
+        assertThat(schedule.getRescheduleInMinutes(), is(equalTo(26)));
+        assertThat(schedule.getReschedule(), is(equalTo(duration)));
+    }
+
+    @Test
+    public void testRescheduleTooLowDuration() {
+        final Schedule schedule = new Schedule(process, EXECUTABLE, "0 0 * * *");
+        schedule.setReschedule(Duration.standardSeconds(26));
+
+        assertThat(schedule.getRescheduleInMinutes(), is(equalTo(0)));
+        assertThat(schedule.getReschedule(), is(equalTo(Duration.ZERO)));
+    }
 }

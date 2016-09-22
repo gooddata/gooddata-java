@@ -9,6 +9,7 @@ import com.gooddata.AbstractGoodDataAT;
 import com.gooddata.collections.PageableList;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.joda.time.Duration;
 import org.springframework.core.io.ClassPathResource;
 import org.testng.annotations.Test;
 
@@ -18,7 +19,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 
-import static com.gooddata.dataload.processes.ProcessIdMatcher.hasSameIdAs;
+import static com.gooddata.dataload.processes.ProcessIdMatcher.hasSameProcessIdAs;
+import static com.gooddata.dataload.processes.ScheduleIdMatcher.hasSameScheduleIdAs;
 import static java.nio.file.Files.createTempDirectory;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
@@ -39,6 +41,7 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
 
     private DataloadProcess process;
     private DataloadProcess processAppstore;
+    private Schedule schedule;
 
     @Test(groups = "process", dependsOnGroups = "project")
     public void createProcess() throws Exception {
@@ -48,23 +51,39 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
             copy("invalid.grf", dir);
             copy("workspace.prm", dir);
             process = gd.getProcessService().createProcess(project, new DataloadProcess(title, ProcessType.GRAPH), dir);
-            final Schedule schedule = gd.getProcessService().createSchedule(project, new Schedule(process, "sdktest.grf", "0 0 * * *"));
-
-            assertThat(schedule, notNullValue());
-            assertThat(schedule.getExecutable(), is("sdktest.grf"));
-
-            final PageableList<Schedule> collection = gd.getProcessService().listSchedules(project);
-            assertThat(collection, notNullValue());
-            assertThat(collection, hasSize(1));
-            assertThat(collection.getNextPage(), nullValue());
-
-            schedule.setState(ScheduleState.DISABLED);
-            assertThat(gd.getProcessService().updateSchedule(project, schedule).isEnabled(), is(false));
-
-            gd.getProcessService().removeSchedule(schedule);
         } finally {
             FileUtils.deleteDirectory(dir);
         }
+    }
+
+    @Test(groups = "process", dependsOnMethods = "createProcess")
+    public void createSchedule() {
+        schedule = gd.getProcessService().createSchedule(project, new Schedule(process, "sdktest.grf", "0 0 * * *"));
+        schedule.setReschedule(Duration.standardMinutes(15));
+
+        assertThat(schedule, notNullValue());
+        assertThat(schedule.getExecutable(), is("sdktest.grf"));
+        assertThat(schedule.getRescheduleInMinutes(), is(15));
+    }
+
+    @Test(groups = "process", dependsOnMethods = "createSchedule")
+    public void listSchedules() {
+        final PageableList<Schedule> collection = gd.getProcessService().listSchedules(project);
+
+        assertThat(collection, notNullValue());
+        assertThat(collection, hasSize(1));
+        assertThat(collection.getNextPage(), nullValue());
+    }
+
+    @Test(groups = "process", dependsOnMethods = "createSchedule")
+    public void updateSchedule() {
+        schedule.setState(ScheduleState.DISABLED);
+        schedule.setReschedule(Duration.standardMinutes(26));
+
+        schedule = gd.getProcessService().updateSchedule(project, schedule);
+
+        assertThat(schedule.isEnabled(), is(false));
+        assertThat(gd.getProcessService().updateSchedule(project, schedule).getRescheduleInMinutes(), is(26));
     }
 
     @Test(groups = "process", dependsOnGroups = "project")
@@ -94,7 +113,7 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
     @Test(groups = "process", dependsOnMethods = "createProcess")
     public void processes() {
         final Collection<DataloadProcess> processes = gd.getProcessService().listProcesses(project);
-        assertThat(processes, hasItem(hasSameIdAs(process)));
+        assertThat(processes, hasItem(hasSameProcessIdAs(process)));
     }
 
     @Test(groups = "process", dependsOnMethods = "createProcess")
@@ -119,7 +138,14 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         gd.getProcessService().removeProcess(process);
         gd.getProcessService().removeProcess(processAppstore);
         final Collection<DataloadProcess> processes = gd.getProcessService().listProcesses(project);
-        assertThat(processes, not(hasItems(hasSameIdAs(process), hasSameIdAs(processAppstore))));
+        assertThat(processes, not(hasItems(hasSameProcessIdAs(process), hasSameProcessIdAs(processAppstore))));
+    }
+
+    @Test(dependsOnGroups = "process")
+    public void removeSchedule() {
+        gd.getProcessService().removeSchedule(schedule);
+        final Collection<Schedule> schedules = gd.getProcessService().listSchedules(project);
+        assertThat(schedules, not(hasItems(hasSameScheduleIdAs(schedule))));
     }
 
 }

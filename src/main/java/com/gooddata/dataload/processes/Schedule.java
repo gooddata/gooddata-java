@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.Duration;
 import org.springframework.web.util.UriTemplate;
 
 import java.util.Collections;
@@ -47,6 +48,7 @@ public class Schedule {
     private String state;
     private String cron;
     private String timezone;
+    private Integer reschedule;
     private final DateTime nextExecutionTime;
     private final int consecutiveFailedExecutionCount;
     private final Map<String, String> params;
@@ -75,6 +77,7 @@ public class Schedule {
                      @JsonProperty("nextExecutionTime") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime nextExecutionTime,
                      @JsonProperty("consecutiveFailedExecutionCount") final int consecutiveFailedExecutionCount,
                      @JsonProperty("params") final Map<String, String> params,
+                     @JsonProperty("reschedule") final Integer reschedule,
                      @JsonProperty("links") final Map<String, String> links) {
         this.type = type;
         this.state = state;
@@ -83,6 +86,7 @@ public class Schedule {
         this.nextExecutionTime = nextExecutionTime;
         this.consecutiveFailedExecutionCount = consecutiveFailedExecutionCount;
         this.params = params;
+        this.reschedule = reschedule;
         this.links = links;
     }
 
@@ -158,6 +162,32 @@ public class Schedule {
 
     public void setTimezone(final String timezone) {
         this.timezone = timezone;
+    }
+
+    /**
+     * Duration after a failed execution of the schedule is executed again
+     * @return reschedule duration in minutes
+     */
+    @JsonProperty("reschedule")
+    public Integer getRescheduleInMinutes() {
+        return reschedule;
+    }
+
+    /**
+     * Duration after a failed execution of the schedule is executed again
+     * @return reschedule duration in minutes
+     */
+    @JsonIgnore
+    public Duration getReschedule() {
+        return reschedule != null ? Duration.standardMinutes(getRescheduleInMinutes()) : null;
+    }
+
+    /**
+     * Duration after a failed execution of the schedule is executed again
+     * @param reschedule this duration should not be too low, because it can be rejected by REST API (e.g. 15 minutes or more)
+     */
+    public void setReschedule(Duration reschedule) {
+        this.reschedule = notNull(reschedule, "reschedule").toStandardMinutes().getMinutes();
     }
 
     @JsonIgnore
