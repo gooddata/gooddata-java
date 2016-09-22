@@ -1,10 +1,13 @@
-/*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.dataset;
 
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.gdc.AboutLinks.Link;
 import com.gooddata.gdc.DataStoreException;
 import com.gooddata.gdc.DataStoreService;
 import com.gooddata.project.Project;
@@ -21,6 +24,7 @@ import java.util.Collection;
 
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.nullValue;
@@ -43,7 +47,7 @@ public class DatasetServiceTest {
     @Mock
     private Project project;
     @Mock
-    private Dataset dataset;
+    private Link datasetLink;
     @Mock
     private DatasetManifest manifest;
     @Mock
@@ -148,32 +152,67 @@ public class DatasetServiceTest {
         service.loadDataset(project, DATASET_ID, null);
     }
 
+    @SuppressWarnings("deprecation")
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testListDatasetsWithNullProject() throws Exception {
         service.listDatasets(null);
     }
 
+    @SuppressWarnings("deprecation")
     @Test(expectedExceptions = GoodDataException.class)
     public void testListDatasetsWithNullResponse() throws Exception {
-        when(restTemplate.getForObject(Datasets.URI, Dataset.class, PROJECT_ID)).thenReturn(null);
+        when(restTemplate.getForObject(Datasets.URI, Link.class, PROJECT_ID)).thenReturn(null);
         service.listDatasets(project);
     }
 
+    @SuppressWarnings("deprecation")
     @Test(expectedExceptions = GoodDataException.class)
     public void testListDatasetsWithRestClientError() throws Exception {
-        when(restTemplate.getForObject(Datasets.URI, Dataset.class, PROJECT_ID)).thenThrow(new RestClientException(""));
+        when(restTemplate.getForObject(Datasets.URI, Link.class, PROJECT_ID)).thenThrow(new RestClientException(""));
         service.listDatasets(project);
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testListDatasetsWithEmptyResponse() throws Exception {
-        final Datasets datasets = mock(Datasets.class);
-        when(restTemplate.getForObject(Datasets.URI, Datasets.class, PROJECT_ID)).thenReturn(datasets);
-        when(datasets.getLinks()).thenReturn(singletonList(dataset));
+        final DatasetLinks datasets = mock(DatasetLinks.class);
+        when(restTemplate.getForObject(DatasetLinks.URI, DatasetLinks.class, PROJECT_ID)).thenReturn(datasets);
+        when(datasets.getLinks()).thenReturn(singletonList(datasetLink));
+        when(datasetLink.getIdentifier()).thenReturn("ID");
 
         final Collection<Dataset> result = service.listDatasets(project);
         assertThat(result, hasSize(1));
-        assertThat(result, contains(dataset));
+        final Dataset dataset = result.iterator().next();
+        assertThat(dataset, is(notNullValue()));
+        assertThat(dataset.getIdentifier(), is("ID"));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testListDatasetLinksWithNullProject() throws Exception {
+        service.listDatasetLinks(null);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void testListDatasetLinksWithNullResponse() throws Exception {
+        when(restTemplate.getForObject(DatasetLinks.URI, Link.class, PROJECT_ID)).thenReturn(null);
+        service.listDatasetLinks(project);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void testListDatasetLinksWithRestClientError() throws Exception {
+        when(restTemplate.getForObject(DatasetLinks.URI, Link.class, PROJECT_ID)).thenThrow(new RestClientException(""));
+        service.listDatasetLinks(project);
+    }
+
+    @Test
+    public void testListDatasetLinksWithEmptyResponse() throws Exception {
+        final DatasetLinks datasets = mock(DatasetLinks.class);
+        when(restTemplate.getForObject(DatasetLinks.URI, DatasetLinks.class, PROJECT_ID)).thenReturn(datasets);
+        when(datasets.getLinks()).thenReturn(singletonList(datasetLink));
+
+        final Collection<Link> result = service.listDatasetLinks(project);
+        assertThat(result, hasSize(1));
+        assertThat(result, contains(datasetLink));
     }
 
     @Test(expectedExceptions = GoodDataException.class)

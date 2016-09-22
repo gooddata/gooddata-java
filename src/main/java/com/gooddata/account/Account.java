@@ -1,5 +1,7 @@
-/*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.account;
 
@@ -99,8 +101,18 @@ public class Account {
         return links.getSelf();
     }
 
+    /**
+     * @return projects URI string
+     * @deprecated use {@link #getProjectsUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getProjectsLink() {
+        return getProjectsUri();
+    }
+
+    @JsonIgnore
+    public String getProjectsUri() {
         return links.getProjects();
     }
 

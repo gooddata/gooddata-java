@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.collections;
 
 import org.springframework.web.util.UriComponentsBuilder;
@@ -43,5 +48,15 @@ public class PageRequestTest {
         final UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("test_uri/{test}");
         final String pageUri = pageRequest.updateWithPageParams(uriBuilder).build().toUriString();
         assertThat(pageUri, is("test_uri/{test}?offset=17&limit=10"));
+    }
+
+    @Test
+    public void testUpdateWithPageParamsIdempotency() throws Exception {
+        final PageRequest pageRequest = new PageRequest(12, 10);
+        final UriComponentsBuilder uriBuilder1 = UriComponentsBuilder.fromUriString("test_uri/{test}");
+        final UriComponentsBuilder uriBuilder2 = pageRequest.updateWithPageParams(uriBuilder1);
+        final UriComponentsBuilder uriBuilder3 = pageRequest.updateWithPageParams(uriBuilder2);
+        final String pageUri = uriBuilder3.build().toUriString();
+        assertThat(pageUri, is("test_uri/{test}?offset=12&limit=10"));
     }
 }

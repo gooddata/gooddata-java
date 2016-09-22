@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.dataload.processes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,8 +32,9 @@ public class ProcessExecutionDetailTest {
         assertThat(executionDetail.getError().getErrorCode(), is("executor.error"));
         assertThat(executionDetail.getError().getFormattedMessage(),
                 is("Error message with some placeholders for parameters - like this one."));
-
+        assertThat(executionDetail.getUri(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId/detail"));
+        assertThat(executionDetail.getLogUri(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId/log"));
+        assertThat(executionDetail.getExecutionUri(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId"));
     }
-
 
 }

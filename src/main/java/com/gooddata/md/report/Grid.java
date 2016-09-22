@@ -1,5 +1,7 @@
-/*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.md.report;
 
@@ -7,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -21,16 +25,28 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Grid {
 
-    private final Collection<String> columns;
-    private final Collection<AttributeInGrid> rows;
-    private final Collection<GridElement> metrics;
+    private final List<? extends GridElement> columns;
+    private final List<? extends GridElement> rows;
+    private final List<MetricElement> metrics;
     private final Map<String, List<String>> sort;
     private final Collection<Map<String, Object>> columnWidths;
 
+    /**
+     * Creates new instance.
+     * @param columns report's definition columns
+     * @param rows report's definition rows
+     * @param metrics report's definition metrics
+     * @param sort report's sort definition
+     * @param columnWidths report columns' widths definition
+     *
+     * @since 2.0.0
+     */
     @JsonCreator
-    public Grid(@JsonProperty("columns") Collection<String> columns,
-                @JsonProperty("rows") Collection<AttributeInGrid> rows,
-                @JsonProperty("metrics") Collection<GridElement> metrics,
+    public Grid(@JsonProperty("columns") @JsonDeserialize(contentUsing = GridElementDeserializer.class)
+                        List<? extends GridElement> columns,
+                @JsonProperty("rows")  @JsonDeserialize(contentUsing = GridElementDeserializer.class)
+                        List<? extends GridElement> rows,
+                @JsonProperty("metrics") List<MetricElement> metrics,
                 @JsonProperty("sort") Map<String, List<String>> sort,
                 @JsonProperty("columnWidths") Collection<Map<String, Object>> columnWidths) {
         this.columns = columns;
@@ -40,8 +56,7 @@ public class Grid {
         this.columnWidths = columnWidths;
     }
 
-    public Grid(final Collection<String> columns, final Collection<AttributeInGrid> rows,
-                final Collection<GridElement> metrics) {
+    public Grid(List<? extends GridElement> columns, List<? extends GridElement> rows, List<MetricElement> metrics) {
         this.columns = columns;
         this.rows = rows;
         this.metrics = metrics;
@@ -51,15 +66,17 @@ public class Grid {
         columnWidths = Collections.emptyList();
     }
 
-    public Collection<String> getColumns() {
+    @JsonSerialize(contentUsing = GridElementSerializer.class)
+    public List<? extends GridElement> getColumns() {
         return columns;
     }
 
-    public Collection<AttributeInGrid> getRows() {
+    @JsonSerialize(contentUsing = GridElementSerializer.class)
+    public List<? extends GridElement> getRows() {
         return rows;
     }
 
-    public Collection<GridElement> getMetrics() {
+    public List<MetricElement> getMetrics() {
         return metrics;
     }
 

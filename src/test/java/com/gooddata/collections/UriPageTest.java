@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.collections;
 
 import org.springframework.web.util.UriComponents;
@@ -42,4 +47,20 @@ public class UriPageTest {
         assertThat(components.getQueryParams(), hasEntry("limit", singletonList("10")));
     }
 
+    @Test
+    public void testIdempotency() throws Exception {
+        final UriPage uri = new UriPage("uri?offset=god&limit=10");
+        final UriComponentsBuilder builder = fromUriString("/this/is/{template}").query("other=false");
+
+        uri.updateWithPageParams(builder);
+        uri.updateWithPageParams(builder);
+        uri.updateWithPageParams(builder);
+
+        final UriComponents components = builder.build();
+        assertThat(components, is(notNullValue()));
+        assertThat(components.getPath(), is("/this/is/{template}"));
+        assertThat(components.getQueryParams(), hasEntry("other", singletonList("false")));
+        assertThat(components.getQueryParams(), hasEntry("offset", singletonList("god")));
+        assertThat(components.getQueryParams(), hasEntry("limit", singletonList("10")));
+    }
 }

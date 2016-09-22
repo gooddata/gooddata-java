@@ -1,5 +1,7 @@
-/*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.md;
 
@@ -13,6 +15,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import static org.apache.commons.lang.StringUtils.substring;
 
@@ -33,7 +36,7 @@ public class Meta implements Serializable {
     private String summary;
     private String title;
     private String category;
-    private String tags; //TODO collection
+    private Set<String> tags;
     private String uri;
     private String identifier;
     private Boolean deprecated;
@@ -50,7 +53,7 @@ public class Meta implements Serializable {
                    @JsonProperty("summary") String summary,
                    @JsonProperty("title") String title,
                    @JsonProperty("category") String category,
-                   @JsonProperty("tags") String tags,
+                   @JsonProperty("tags") @JsonDeserialize(using = TagsDeserializer.class) Set<String> tags,
                    @JsonProperty("uri") String uri,
                    @JsonProperty("identifier") String identifier) {
         super();
@@ -67,7 +70,7 @@ public class Meta implements Serializable {
     }
 
     public Meta(String author, String contributor, DateTime created, DateTime updated, String summary,
-            String title, String category, String tags, String uri, String identifier,
+            String title, String category, Set<String> tags, String uri, String identifier,
             Boolean deprecated, Boolean production, Boolean locked, Boolean unlisted, Boolean sharedWithSomeone) {
         this.author = author;
         this.contributor = contributor;
@@ -137,11 +140,12 @@ public class Meta implements Serializable {
         this.category = category;
     }
 
-    public String getTags() {
+    @JsonSerialize(using = TagsSerializer.class)
+    public Set<String> getTags() {
         return tags;
     }
 
-    public void setTags(String tags) {
+    public void setTags(Set<String> tags) {
         this.tags = tags;
     }
 

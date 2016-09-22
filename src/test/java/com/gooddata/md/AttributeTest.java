@@ -1,5 +1,7 @@
-/*
- * Copyright (C) 2007-2015, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.md;
 
@@ -20,6 +22,7 @@ public class AttributeTest {
 
     public static final String TITLE = "Person ID";
 
+    @SuppressWarnings("deprecation")
     @Test
     public void shouldDeserialize() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/md/attribute.json");
@@ -56,6 +59,7 @@ public class AttributeTest {
 
         assertThat(attribute.hasDimension(), is(true));
         assertThat(attribute.getDimensionLink(), is("/gdc/md/PROJECT_ID/obj/DIM_ID"));
+        assertThat(attribute.getDimensionUri(), is("/gdc/md/PROJECT_ID/obj/DIM_ID"));
 
         assertThat(attribute.getDirection(), is("asc"));
         assertThat(attribute.getSort(), is("pk"));
@@ -64,6 +68,7 @@ public class AttributeTest {
         assertThat(attribute.isSortedByLinkedDf(), is(false));
         assertThat(attribute.getType(), is("GDC.time.date"));
         assertThat(attribute.getLinkedDisplayFormLink(), is("/gdc/md/PROJECT_ID/obj/DF_LINK"));
+        assertThat(attribute.getLinkedDisplayFormUri(), is("/gdc/md/PROJECT_ID/obj/DF_LINK"));
         assertThat(attribute.getCompositeAttribute(), hasSize(0));
         assertThat(attribute.getCompositeAttributePk(), hasSize(0));
         assertThat(attribute.getFolders(), hasSize(0));

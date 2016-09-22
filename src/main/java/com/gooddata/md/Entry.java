@@ -1,14 +1,17 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.md;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import com.gooddata.util.*;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.joda.time.DateTime;
+
+import java.util.Set;
 
 /**
  * Metadata entry (can be named "LINK" in some API docs)
@@ -17,7 +20,7 @@ import org.joda.time.DateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Entry {
 
-    private final String link;
+    private final String uri;
     private final String title;
     private final String summary;
     private final String category;
@@ -25,14 +28,14 @@ public class Entry {
     private final String contributor;
     private final Boolean deprecated;
     private final String identifier;
-    private final String tags; //TODO collection
+    private final Set<String> tags;
     private final DateTime created;
     private final DateTime updated;
     private final Boolean locked;
     private final Boolean unlisted;
 
     @JsonCreator
-    public Entry(@JsonProperty("link") String link,
+    public Entry(@JsonProperty("link") String uri,
                  @JsonProperty("title") String title,
                  @JsonProperty("summary") String summary,
                  @JsonProperty("category") String category,
@@ -40,12 +43,12 @@ public class Entry {
                  @JsonProperty("contributor") String contributor,
                  @JsonProperty("deprecated") @JsonDeserialize(using = BooleanDeserializer.class) Boolean deprecated,
                  @JsonProperty("identifier") String identifier,
-                 @JsonProperty("tags") String tags,
+                 @JsonProperty("tags") @JsonDeserialize(using = TagsDeserializer.class) Set<String> tags,
                  @JsonProperty("created") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime created,
                  @JsonProperty("updated") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime updated,
                  @JsonProperty("locked") @JsonDeserialize(using = BooleanDeserializer.class) Boolean locked,
                  @JsonProperty("unlisted") @JsonDeserialize(using = BooleanDeserializer.class) Boolean unlisted) {
-        this.link = link;
+        this.uri = uri;
         this.title = title;
         this.summary = summary;
         this.category = category;
@@ -60,8 +63,18 @@ public class Entry {
         this.unlisted = unlisted;
     }
 
+    /**
+     * @return self URI string
+     * @deprecated use {@link #getUri()} instead
+     */
+    @Deprecated
     public String getLink() {
-        return link;
+        return getUri();
+    }
+
+    @JsonIgnore
+    public String getUri() {
+        return uri;
     }
 
     public String getTitle() {
@@ -101,7 +114,8 @@ public class Entry {
         return identifier;
     }
 
-    public String getTags() {
+    @JsonSerialize(using = TagsSerializer.class)
+    public Set<String> getTags() {
         return tags;
     }
 

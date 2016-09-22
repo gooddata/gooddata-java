@@ -1,7 +1,8 @@
-/*
- * Copyright (C) 2007-2016, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
-
 package com.gooddata.md.maintenance;
 
 import static com.gooddata.util.Validate.notNull;
@@ -47,7 +48,7 @@ public class ExportImportService extends AbstractService {
             throw new ExportImportException("Unable to export metadata from objects " + export.getUris() + ".", e);
         }
 
-        return new PollResult<>(this, new AbstractPollHandler<TaskStatus, PartialMdExportToken>(partialMdArtifact.getStatus().getUri(),
+        return new PollResult<>(this, new AbstractPollHandler<TaskStatus, PartialMdExportToken>(partialMdArtifact.getStatusUri(),
                 TaskStatus.class, PartialMdExportToken.class) {
             @Override
             public void handlePollResult(TaskStatus pollResult) {

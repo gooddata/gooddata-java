@@ -1,5 +1,7 @@
-/*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.md;
 
@@ -7,22 +9,22 @@ import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
+import com.gooddata.util.ResourceUtils;
+import net.javacrumbs.jsonunit.JsonMatchers;
 import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.gooddata.util.ResourceUtils.readFromResource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.util.ResourceUtils.readStringFromResource;
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static net.jadler.Jadler.onRequest;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -106,18 +108,13 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void testFindIdentifierUris() throws IOException {
-        final IdentifierAndUri identifierAndUri = new IdentifierAndUri(ID, OBJ_URI);
-
-        final List<IdentifierAndUri> identifiersAndUris = new ArrayList<>();
-        identifiersAndUris.add(identifierAndUri);
-        IdentifiersAndUris response = new IdentifiersAndUris(identifiersAndUris);
-
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(IDENTIFIERS_URI)
+                .havingBody(jsonEquals(readStringFromResource("/md/identifierToUri.json")))
                 .respond()
                 .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(response));
+                .withBody(readFromResource("/md/identifiersAndUris.json"));
 
         final Collection<String> uris = gd.getMetadataService().findUris(project, Restriction.identifier(ID));
         assertThat(uris, hasSize(1));
@@ -126,20 +123,15 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void testIdentifiersToUris() throws IOException {
-        final IdentifierAndUri identifierAndUri = new IdentifierAndUri(ID, OBJ_URI);
-
-        final List<IdentifierAndUri> identifiersAndUris = new ArrayList<>();
-        identifiersAndUris.add(identifierAndUri);
-        IdentifiersAndUris response = new IdentifiersAndUris(identifiersAndUris);
-
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(IDENTIFIERS_URI)
+                .havingBody(jsonEquals(readStringFromResource("/md/identifierToUri.json")))
                 .respond()
                 .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(response));
+                .withBody(readFromResource("/md/identifiersAndUris.json"));
 
-        final Map<String, String> uris = gd.getMetadataService().identifiersToUris(project, asList(ID));
+        final Map<String, String> uris = gd.getMetadataService().identifiersToUris(project, singletonList(ID));
         assertThat(uris.keySet(), hasSize(1));
         assertThat(uris.get(ID), is(OBJ_URI));
     }

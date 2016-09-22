@@ -1,6 +1,10 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.md;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collection;
@@ -8,20 +12,21 @@ import java.util.Collection;
 import static com.gooddata.util.Validate.notNull;
 
 /**
- * Strucuture with list of symbolic names to be expanded by related uri.
+ * Structure with list of symbolic names (identifiers) to be expanded to list of URIs.
+ * Serialization only.
  */
 class IdentifierToUri {
 
-    private final Collection<String> identifierToUri;
+    private final Collection<String> identifiers;
 
-    @JsonCreator
-    IdentifierToUri(@JsonProperty("identifierToUri") final Collection<String> identifierToUri) {
-        notNull(identifierToUri, "identifierToUri");
-        this.identifierToUri = identifierToUri;
+    IdentifierToUri(final Collection<String> identifiers) {
+        notNull(identifiers, "identifiers");
+        this.identifiers = identifiers;
     }
 
-    public Collection<String> getIdentifierToUri() {
-        return identifierToUri;
+    @JsonProperty("identifierToUri")
+    public Collection<String> getIdentifiers() {
+        return identifiers;
     }
 
     @Override
@@ -31,13 +36,13 @@ class IdentifierToUri {
 
         IdentifierToUri that = (IdentifierToUri) o;
 
-        if (!identifierToUri.equals(that.identifierToUri)) return false;
+        if (!identifiers.equals(that.identifiers)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return identifierToUri.hashCode();
+        return identifiers.hashCode();
     }
 }

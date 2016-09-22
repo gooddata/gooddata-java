@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +19,7 @@ public class AccountTest {
     private static final String FIRST_NAME = "Blah";
     private static final String LAST_NAME = "Muhehe";
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testDeserialize() throws Exception {
         final Account account = new ObjectMapper()
@@ -25,6 +31,7 @@ public class AccountTest {
         assertThat(account.getId(), is("ID"));
         assertThat(account.getUri(), is("/gdc/account/profile/ID"));
         assertThat(account.getProjectsLink(), is("/gdc/account/profile/ID/projects"));
+        assertThat(account.getProjectsUri(), is("/gdc/account/profile/ID/projects"));
     }
 
     @Test

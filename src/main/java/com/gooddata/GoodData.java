@@ -1,5 +1,7 @@
-/*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata;
 
@@ -24,6 +26,7 @@ import com.gooddata.report.ReportService;
 import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.config.SocketConfig;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.VersionInfo;
@@ -210,6 +213,10 @@ public class GoodData {
         connectionManager.setDefaultMaxPerRoute(settings.getMaxConnections());
         connectionManager.setMaxTotal(settings.getMaxConnections());
 
+        final SocketConfig.Builder socketConfig = SocketConfig.copy(SocketConfig.DEFAULT);
+        socketConfig.setSoTimeout(settings.getSocketTimeout());
+        connectionManager.setDefaultSocketConfig(socketConfig.build());
+
         final RequestConfig.Builder requestConfig = RequestConfig.copy(RequestConfig.DEFAULT);
         requestConfig.setConnectTimeout(settings.getConnectionTimeout());
         requestConfig.setConnectionRequestTimeout(settings.getConnectionRequestTimeout());
@@ -233,8 +240,8 @@ public class GoodData {
                                           final int port, final String protocol, final HttpClientBuilder builder) {
         final HttpHost host = new HttpHost(hostname, port, protocol);
         final HttpClient httpClient = builder.build();
-        final SSTRetrievalStrategy strategy = new LoginSSTRetrievalStrategy(httpClient, host, login, password);
-        return new GoodDataHttpClient(httpClient, strategy);
+        final SSTRetrievalStrategy strategy = new LoginSSTRetrievalStrategy(login, password);
+        return new GoodDataHttpClient(httpClient, host, strategy);
     }
 
     private String getUserAgent() {

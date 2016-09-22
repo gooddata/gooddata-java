@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.collections;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -26,11 +31,6 @@ public class Paging {
     public Paging(@JsonProperty("offset") final String offset, @JsonProperty("next") final String next) {
         this.offset = offset;
         this.next = next == null ? null : new UriPage(next);
-    }
-
-    @Deprecated
-    public Paging(final int offset, final int count, final String next) {
-        this(Integer.toString(offset), next);
     }
 
     public Paging(final String next) {

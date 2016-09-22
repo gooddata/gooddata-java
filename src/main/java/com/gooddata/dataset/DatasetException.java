@@ -1,5 +1,7 @@
-/*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.dataset;
 
@@ -41,13 +43,4 @@ public class DatasetException extends GoodDataException {
         return datasets;
     }
 
-    /**
-     * @return string representation of collection containing dataset names
-     * @deprecated since this exception may contain more than one dataset, use {@link #getDatasets} instead
-     * @see #getDatasets()
-     */
-    @Deprecated
-    public String getDataset() {
-        return datasets.toString();
-    }
 }

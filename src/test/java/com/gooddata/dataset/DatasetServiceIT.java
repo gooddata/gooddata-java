@@ -1,7 +1,13 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.dataset;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
+import com.gooddata.gdc.AboutLinks.Link;
 import com.gooddata.gdc.TaskStatus;
 import com.gooddata.project.Project;
 import org.testng.annotations.BeforeClass;
@@ -16,10 +22,7 @@ import java.util.Collection;
 import static com.gooddata.util.ResourceUtils.readFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.startsWith;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertTrue;
@@ -137,17 +140,35 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
         assertThat(manifest, is(notNullValue()));
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void shouldListDatasets() throws Exception {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/ldm/singleloadinterface")
             .respond()
-                .withBody(readFromResource("/dataset/datasets.json"))
+                .withBody(readFromResource("/dataset/datasetLinks.json"))
         ;
 
         final Collection<Dataset> datasets = gd.getDatasetService().listDatasets(project);
         assertThat(datasets, hasSize(1));
+        assertThat(datasets.iterator().next().getUri(),
+                is("/gdc/md/PROJECT_ID/ldm/singleloadinterface/dataset.person"));
+    }
+
+    @Test
+    public void shouldListDatasetLinks() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/ldm/singleloadinterface")
+            .respond()
+                .withBody(readFromResource("/dataset/datasetLinks.json"))
+        ;
+
+        final Collection<Link> datasets = gd.getDatasetService().listDatasetLinks(project);
+        assertThat(datasets, hasSize(1));
+        assertThat(datasets.iterator().next().getUri(),
+                is("/gdc/md/PROJECT_ID/ldm/singleloadinterface/dataset.person"));
     }
 
     @Test

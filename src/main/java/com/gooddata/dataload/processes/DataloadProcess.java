@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.dataload.processes;
 
 import static com.gooddata.util.Validate.notEmpty;
@@ -107,13 +112,33 @@ public class DataloadProcess {
         return TEMPLATE.match(getUri()).get("processId");
     }
 
+    /**
+     * @return executions URI string
+     * @deprecated use {@link #getExecutionsUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getExecutionsLink() {
-        return links != null ? links.get(EXECUTIONS_LINK) : null;
+        return getExecutionsUri();
     }
 
     @JsonIgnore
+    public String getExecutionsUri() {
+        return links != null ? links.get(EXECUTIONS_LINK) : null;
+    }
+
+    /**
+     * @return source URI string
+     * @deprecated use {@link #getSourceUri()} instead
+     */
+    @Deprecated
+    @JsonIgnore
     public String getSourceLink() {
+        return getSourceUri();
+    }
+
+    @JsonIgnore
+    public String getSourceUri() {
         return getUri() != null ? getUri() + "/source" : null;
     }
 

@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.warehouse;
 
 import static org.hamcrest.core.Is.is;
@@ -10,16 +15,20 @@ import java.io.InputStream;
 
 public class WarehouseTaskTest {
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testDeserializePoll() throws Exception {
         final WarehouseTask warehouseTask = deserialize("/warehouse/warehouseTask-poll.json");
         assertThat(warehouseTask.getPollLink(), is("/gdc/datawarehouse/executions/executionId"));
+        assertThat(warehouseTask.getPollUri(), is("/gdc/datawarehouse/executions/executionId"));
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testDeserializeInstance() throws Exception {
         final WarehouseTask warehouseTask = deserialize("/warehouse/warehouseTask-finished.json");
         assertThat(warehouseTask.getWarehouseLink(), is("/gdc/datawarehouse/instances/instanceId"));
+        assertThat(warehouseTask.getWarehouseUri(), is("/gdc/datawarehouse/instances/instanceId"));
     }
 
     private WarehouseTask deserialize(String path) throws Exception {

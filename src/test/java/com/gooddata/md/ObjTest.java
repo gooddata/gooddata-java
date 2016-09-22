@@ -1,5 +1,7 @@
-/*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.md;
 
@@ -10,8 +12,11 @@ import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
 import java.io.InputStream;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,7 +30,7 @@ public class ObjTest {
     public static final String TITLE = "Obj title";
     public static final DateTime UPDATED = new DateTime(2014, 4, 11, 13, 45, 57, DateTimeZone.UTC);
     public static final String CATEGORY = "attributeDisplayForm";
-    public static final String TAGS = "TAG1 TAG2";
+    public static final Set<String> TAGS = new LinkedHashSet<>(asList("TAG1", "TAG2"));
     public static final String URI = "/gdc/md/PROJECT_ID/obj/OBJ_ID";
     public static final boolean DEPRECATED = false;
     public static final String IDENTIFIER = "attr.person.id.name";

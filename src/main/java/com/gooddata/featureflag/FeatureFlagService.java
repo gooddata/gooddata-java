@@ -1,5 +1,7 @@
-/*
- * Copyright (C) 2007-2015, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.featureflag;
 
@@ -149,17 +151,6 @@ public class FeatureFlagService extends AbstractService {
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to update project feature flag: " + flag, e);
         }
-    }
-
-    /**
-     * Deletes existing project feature flag.
-     *
-     * @param flag existing project feature flag with links set properly, cannot be null
-     * @deprecated use {@link #deleteProjectFeatureFlag(ProjectFeatureFlag)} instead
-     */
-    @Deprecated
-    public void deleteFeatureFlag(final ProjectFeatureFlag flag) {
-        deleteProjectFeatureFlag(flag);
     }
 
     /**

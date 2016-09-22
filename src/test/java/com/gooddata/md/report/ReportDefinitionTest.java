@@ -1,5 +1,7 @@
-/*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.md.report;
 
@@ -26,14 +28,15 @@ public class ReportDefinitionTest {
         assertThat(def, is(notNullValue()));
         assertThat(def.getFormat(), is(FORMAT));
         assertThat(def.getGrid(), is(notNullValue()));
+        assertThat(def.getExplainUri(), is("/gdc/md/PROJECT_ID/obj/2274/explain2"));
     }
 
     @Test
     public void testSerialization() throws Exception {
         final ReportDefinition def = new ReportDefinition("Untitled",
                 new OneNumberReportDefinitionContent(
-                        new Grid(Collections.<String>emptyList(), Collections.<AttributeInGrid>emptyList(),
-                                Collections.<GridElement>emptyList()), "desc", asList(new Filter("(SELECT [/gdc/md/projectId/obj/123]) >= 2")))
+                        new Grid(Collections.<GridElement>emptyList(), Collections.<GridElement>emptyList(),
+                                Collections.<MetricElement>emptyList()), "desc", asList(new Filter("(SELECT [/gdc/md/projectId/obj/123]) >= 2")))
         );
         assertThat(def, serializesToJson("/md/report/oneNumberReportDefinition-input.json"));
     }

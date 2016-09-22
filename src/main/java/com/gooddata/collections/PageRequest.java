@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.collections;
 
 import org.springframework.web.util.UriComponentsBuilder;
@@ -53,9 +58,9 @@ public class PageRequest implements Page {
     @Override
     public UriComponentsBuilder updateWithPageParams(final UriComponentsBuilder uriBuilder) {
         if (offset != null) {
-            uriBuilder.queryParam("offset", offset);
+            uriBuilder.replaceQueryParam("offset", offset);
         }
-        uriBuilder.queryParam("limit", limit);
+        uriBuilder.replaceQueryParam("limit", limit);
         return uriBuilder;
     }
 

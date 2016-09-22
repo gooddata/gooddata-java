@@ -1,5 +1,7 @@
-/*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.project;
 
@@ -7,8 +9,6 @@ import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.account.Account;
 import com.gooddata.account.AccountService;
-import com.gooddata.gdc.FeatureFlag;
-import com.gooddata.gdc.FeatureFlags;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestClientException;
@@ -16,9 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.net.URI;
 import java.util.Collection;
-import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -28,13 +26,11 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
 
-@SuppressWarnings("deprecation")
 public class ProjectServiceTest {
 
     private static final String ACCOUNT_ID = "17";
     private static final String ID = "11";
     private static final String URI = "/gdc/projects/11";
-    private static final String FEATURE_FLAGS_URI = "/gdc/internal/projects/11/featureFlags";
 
     @Mock
     private Project project;
@@ -116,37 +112,4 @@ public class ProjectServiceTest {
         final Project result = service.getProjectById(ID);
         assertThat(result, is(project));
     }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testListAggregatedFeatureFlagsWithNullId() throws Exception {
-        service.listAggregatedFeatureFlags(null);
-    }
-
-    @Test(expectedExceptions = GoodDataException.class)
-    public void testListAggregatedFeatureFlagsWithEmptyResponse() throws Exception {
-        when(restTemplate.getForObject(new URI(FEATURE_FLAGS_URI), FeatureFlags.class)).thenReturn(null);
-        service.listAggregatedFeatureFlags(project);
-    }
-
-    @Test(expectedExceptions = GoodDataException.class)
-    public void testListAggregatedFeatureFlagsWithClientErrorResponse() throws Exception {
-        when(restTemplate.getForObject(new URI(FEATURE_FLAGS_URI), FeatureFlags.class))
-                .thenThrow(new RestClientException(""));
-        service.listAggregatedFeatureFlags(project);
-    }
-
-    @Test
-    public void testListAggregatedFeatureFlags() throws Exception {
-        when(restTemplate.getForObject(new URI(FEATURE_FLAGS_URI), FeatureFlags.class))
-                .thenReturn(new FeatureFlags() {{
-                    this.addFlag("flag1", true);
-                }});
-
-        final List<FeatureFlag> flagList = service.listAggregatedFeatureFlags(project);
-
-        assertThat(flagList, hasSize(1));
-        assertThat(flagList, contains(
-                new FeatureFlag("flag1", true)));
-    }
-
 }

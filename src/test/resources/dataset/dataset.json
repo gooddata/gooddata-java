@@ -1,0 +1,7 @@
+{
+    "link": "/gdc/md/PROJECT_ID/ldm/singleloadinterface/dataset.person",
+    "identifier": "dataset.person",
+    "summary": "dataset single data loading interface specifications",
+    "category": "dataset-singleloadinterface",
+    "title": "Person"
+}

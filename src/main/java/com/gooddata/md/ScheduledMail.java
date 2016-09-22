@@ -1,16 +1,13 @@
-/*
- * Copyright (C) 2007-2015, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.md;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.report.ReportExportFormat;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.joda.time.LocalDate;
 
 import java.util.*;
@@ -35,14 +32,17 @@ public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
         this.content = content;
     }
 
-    private ScheduledMail(String title, String summary, String tags, boolean deprecated, String recurrency, LocalDate startDate, String timeZone,
-                  Collection<String> toAddresses, Collection<String> bccAddresses, String subject, String body, List<Attachment> attachments) {
-        super(new Meta(null, null, null, null, summary, title, null, tags, null, null, deprecated, null, false, false, null));
+    private ScheduledMail(String title, String summary, Set<String> tags, boolean deprecated, String recurrency,
+                          LocalDate startDate, String timeZone, Collection<String> toAddresses,
+                          Collection<String> bccAddresses, String subject, String body, List<Attachment> attachments) {
+        super(new Meta(null, null, null, null, summary, title, null, tags, null, null, deprecated, null, false, false,
+                null));
         notNull(toAddresses, "toAddresses");
         notNull(subject, "subject");
         notNull(body, "body");
         notNull(attachments, "attachments");
-        content = new Content(new ScheduledMailWhen(recurrency, startDate, timeZone), toAddresses, bccAddresses, subject, body, attachments);
+        content = new Content(new ScheduledMailWhen(recurrency, startDate, timeZone), toAddresses, bccAddresses,
+                subject, body, attachments);
     }
 
     /**
@@ -52,7 +52,8 @@ public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
      * @param summary the summary of the MD object
      */
     public ScheduledMail(String title, String summary) {
-        super(new Meta(null, null, null, null, summary, title, null, "", null, null, false, null, false, false, null));
+        super(new Meta(null, null, null, null, summary, title, null, Collections.<String>emptySet(), null, null, false,
+                null, false, false, null));
         this.content = new Content();
     }
 
@@ -73,7 +74,8 @@ public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
     public ScheduledMail(String title, String summary, String recurrency, LocalDate startDate, String timeZone,
                          Collection<String> toAddresses, Collection<String> bccAddresses, String subject, String body,
                          List<Attachment> attachments) {
-        this(title, summary, "", false, recurrency, startDate, timeZone, toAddresses, bccAddresses, subject, body, attachments);
+        this(title, summary, Collections.<String>emptySet(), false, recurrency, startDate, timeZone, toAddresses,
+                bccAddresses, subject, body, attachments);
     }
 
     /**

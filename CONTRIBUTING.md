@@ -18,7 +18,7 @@ Below are few **rules, recommendations and best practices** we try to follow whe
 ### DTOs
 * All DTOs which can be updated should be **mutable**. Please keep mutable only the fields which are subject of change,
 the rest should be immutable.
-* Create method named `String getUri()` to provide **link to self**.
+* Create method named `String getUri()` to provide **URI string to self**.
 * Introduce **constants**:
 ```java
 public static final String URI = "/gdc/someresource/{resource-id}";
@@ -28,6 +28,10 @@ public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 * Consider the **visibility** - use `package protected` when DTO is not intended for SDK user, but is needed
 in related service.
 * Test all DTOs using _[JsonUnit](https://github.com/lukas-krecan/JsonUnit)_.
+* **Naming**:
+  * `Uri` for _URI string_ of some resource
+  * `Link` for structure containing at least _category_ (e.g. "self") and _URI string_
+    (can contain also others like _title_, _summary_, etc.)
 
 ### Enums
 * Use enums sparingly, because they don't work with REST API changes (eg. new value added on the backend) **never use

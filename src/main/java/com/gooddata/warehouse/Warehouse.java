@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.warehouse;
 
 import static com.gooddata.util.Validate.notNull;
@@ -145,17 +150,6 @@ public class Warehouse {
 
     public Map<String, String> getLinks() {
         return links;
-    }
-
-    /**
-     * Get jdbc connection string. Works only on Warehouse loaded from API (using WarehouseService).
-     * @deprecated Use {@link #getConnectionUrl()} instead.
-     * @return jdbc connection string
-     */
-    @JsonIgnore
-    @Deprecated
-    public String getJdbcConnectionString() {
-        return getConnectionUrl();
     }
 
     @JsonIgnore

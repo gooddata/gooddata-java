@@ -1,12 +1,13 @@
-/*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.md;
 
 import com.gooddata.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
 import org.springframework.http.HttpStatus;
@@ -14,12 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.gooddata.util.Validate.noNullElements;
 import static com.gooddata.util.Validate.notNull;
@@ -292,7 +288,7 @@ public class MetadataService extends AbstractService {
         final Collection<Entry> entries = find(project, cls, restrictions);
         final Collection<String> result = new ArrayList<>(entries.size());
         for (Entry entry : entries) {
-            result.add(entry.getLink());
+            result.add(entry.getUri());
         }
         return result;
     }
@@ -306,6 +302,7 @@ public class MetadataService extends AbstractService {
      *                'table'...)
      * @return objects using given objects.
      */
+    @SuppressWarnings("unchecked")
     public Collection<Entry> usedBy(Project project, Obj obj, boolean nearest, Class<? extends Obj>... types) {
         notNull(obj, "obj");
         return usedBy(project, obj.getUri(), nearest, types);
@@ -321,6 +318,7 @@ public class MetadataService extends AbstractService {
      * @return objects using given objects.
      * @see #usedBy(Project, Collection, boolean, Class[])
      */
+    @SuppressWarnings("unchecked")
     public Collection<Entry> usedBy(Project project, String uri, boolean nearest, Class<? extends Obj>... types) {
         notNull(uri, "uri");
         notNull(project, "project");
@@ -339,6 +337,7 @@ public class MetadataService extends AbstractService {
      * @return objects usages
      * @see #usedBy(Project, String, boolean, Class[])
      */
+    @SuppressWarnings("unchecked")
     public Collection<Usage> usedBy(Project project, Collection<String> uris, boolean nearest, Class<? extends Obj>... types) {
         notNull(uris, "uris");
         notNull(project, "project");
@@ -377,20 +376,13 @@ public class MetadataService extends AbstractService {
             ids.add(restriction.getValue());
         }
 
-        final IdentifiersAndUris response = getUrisForIdentifiers(project, ids);
-
-        final List<String> uris = new ArrayList<>();
-        for (IdentifierAndUri idAndUri : response.getIdentifiers()) {
-            uris.add(idAndUri.getUri());
-        }
-
-        return uris;
+        return getUrisForIdentifiers(project, ids).getUris();
     }
 
     /**
      * Find metadata URIs for given identifiers.
      *
-     * @param project      project where to search for the metadata
+     * @param project     project where to search for the metadata
      * @param identifiers query restrictions
      * @return the map of identifiers as keys and metadata URIs as values
      * @throws com.gooddata.GoodDataException if unable to query metadata
@@ -400,14 +392,7 @@ public class MetadataService extends AbstractService {
         notNull(project, "project" );
         noNullElements(identifiers, "identifiers");
 
-        final IdentifiersAndUris response = getUrisForIdentifiers(project, identifiers);
-
-        final Map<String, String> identifiersToUris = new HashMap<>();
-        for (IdentifierAndUri idAndUri : response.getIdentifiers()) {
-            identifiersToUris.put(idAndUri.getIdentifier(), idAndUri.getUri());
-        }
-
-        return Collections.unmodifiableMap(identifiersToUris);
+        return getUrisForIdentifiers(project, identifiers).asMap();
     }
 
     /**
@@ -431,16 +416,16 @@ public class MetadataService extends AbstractService {
     public List<AttributeElement> getAttributeElements(DisplayForm displayForm) {
         notNull(displayForm, "displayForm");
 
-        final String elementsLink = displayForm.getElementsLink();
-        if (StringUtils.isEmpty(elementsLink)) {
+        final String elementsUri = displayForm.getElementsUri();
+        if (StringUtils.isEmpty(elementsUri)) {
             return Collections.emptyList();
         }
 
         try {
-            final AttributeElements attributeElements = restTemplate.getForObject(elementsLink, AttributeElements.class);
+            final AttributeElements attributeElements = restTemplate.getForObject(elementsUri, AttributeElements.class);
             return attributeElements.getElements();
         } catch (GoodDataRestException | RestClientException e) {
-            throw new GoodDataException("Unable to get attribute elements from " + elementsLink + ".", e);
+            throw new GoodDataException("Unable to get attribute elements from " + elementsUri + ".", e);
         }
     }
 

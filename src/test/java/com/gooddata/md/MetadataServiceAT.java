@@ -1,6 +1,12 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.md;
 
 import static com.gooddata.md.Restriction.identifier;
+import static com.gooddata.md.report.MetricGroup.METRIC_GROUP;
 import static com.gooddata.report.ReportExportFormat.PDF;
 import static com.gooddata.report.ReportExportFormat.XLS;
 import static java.util.Arrays.asList;
@@ -11,8 +17,9 @@ import static org.testng.AssertJUnit.assertTrue;
 import com.gooddata.AbstractGoodDataAT;
 import com.gooddata.md.report.AttributeInGrid;
 import com.gooddata.md.report.Filter;
-import com.gooddata.md.report.GridElement;
 import com.gooddata.md.report.GridReportDefinitionContent;
+import com.gooddata.md.report.MetricElement;
+import com.gooddata.md.report.MetricGroup;
 import com.gooddata.md.report.Report;
 import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
@@ -60,9 +67,9 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
 
         reportDefinition = md.createObj(project, GridReportDefinitionContent.create(
                 "Department avg shoe size",
-                asList("metricGroup"),
+                asList(METRIC_GROUP),
                 asList(new AttributeInGrid(attr.getDefaultDisplayForm().getUri())),
-                asList(new GridElement(metric.getUri(), "Avg shoe size")),
+                asList(new MetricElement(metric.getUri(), "Avg shoe size")),
                 asList(new Filter("(SELECT [" + metric.getUri() + "]) >= 0"))
         ));
         report = md.createObj(project, new Report(reportDefinition.getTitle(), reportDefinition));
@@ -128,7 +135,8 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         Collection<Entry> result = md.find(project, ScheduledMail.class);
         assertThat(result, hasSize(1));
         for (Entry e : result) {
-            ScheduledMail schedule = md.getObjByUri(e.getLink(), ScheduledMail.class);
+            ScheduledMail schedule = md.getObjByUri(e.getUri(), ScheduledMail.class);
+            assertThat(schedule.getTitle(), is("Scheduled Mail Title"));
         }
     }
 

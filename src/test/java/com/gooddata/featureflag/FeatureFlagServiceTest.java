@@ -1,5 +1,7 @@
-/*
- * Copyright (C) 2007-2015, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.featureflag;
 
@@ -208,25 +210,6 @@ public class FeatureFlagServiceTest {
 
         verify(restTemplate).put(PROJECT_FEATURE_FLAG_URI, projectFeatureFlag);
         assertThat(result, is(newFlag));
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullFlagThenDeleteFeatureFlagShouldThrow() throws Exception {
-        service.deleteFeatureFlag(null);
-    }
-
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenClientErrorResponseThenDeleteFeatureFlagShouldThrow() throws Exception {
-        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
-        doThrow(new RestClientException("")).when(restTemplate).delete(PROJECT_FEATURE_FLAG_URI);
-        service.deleteFeatureFlag(projectFeatureFlag);
-    }
-
-    @Test
-    public void testDeleteFeatureFlag() throws Exception {
-        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
-        service.deleteFeatureFlag(projectFeatureFlag);
-        verify(restTemplate).delete(PROJECT_FEATURE_FLAG_URI);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)

@@ -1,7 +1,8 @@
-/*
- * Copyright (C) 2007-2015, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
-
 package com.gooddata.md;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
@@ -19,6 +20,7 @@ import java.util.List;
 
 public class DatasetTest {
 
+    @SuppressWarnings("deprecation")
     @Test
     public void shouldDeserialize() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/md/dataset.json");
@@ -45,8 +47,10 @@ public class DatasetTest {
         assertThat(attributes, hasSize(3));
 
         assertThat(dataset.getDataUploadsLink(), is("/gdc/md/PROJECT_ID/data/uploads/688536"));
+        assertThat(dataset.getDataUploadsUri(), is("/gdc/md/PROJECT_ID/data/uploads/688536"));
         assertThat(dataset.hasUploadConfiguration(), is(false));
         assertThat(dataset.getUploadConfigurationLink(), is(nullValue()));
+        assertThat(dataset.getUploadConfigurationUri(), is(nullValue()));
     }
 
     @Test

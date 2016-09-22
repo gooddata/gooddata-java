@@ -2,10 +2,9 @@ language: java
 install: true
 script: mvn verify javadoc:javadoc coveralls:report -Pcoverage
 jdk:
-  - openjdk7
   - oraclejdk8
 branches:
   only:
      - master
-     - /\D\.0\.0-RC/
+     - /\d\.0\.0-RC/
 sudo: false

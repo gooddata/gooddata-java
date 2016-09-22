@@ -1,5 +1,7 @@
-/*
- * Copyright (C) 2007-2015, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.md;
 
@@ -16,6 +18,7 @@ import java.util.Collection;
 
 public class NestedAttributeTest {
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testDeserialization() throws Exception {
         final NestedAttribute attribute = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/dimensionAttribute.json"), NestedAttribute.class);
@@ -51,5 +54,6 @@ public class NestedAttributeTest {
 
         assertThat(attribute.hasDimension(), is(true));
         assertThat(attribute.getDimensionLink(), is("/gdc/md/PROJECT_ID/obj/DIM_ID"));
+        assertThat(attribute.getDimensionUri(), is("/gdc/md/PROJECT_ID/obj/DIM_ID"));
     }
 }

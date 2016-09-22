@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.dataload.processes;
 
 import com.gooddata.AbstractPollHandler;
@@ -222,10 +227,10 @@ public class ProcessService extends AbstractService {
         notNull(process, "process");
         notNull(outputStream, "outputStream");
         try {
-            restTemplate.execute(process.getSourceLink(), HttpMethod.GET,
+            restTemplate.execute(process.getSourceUri(), HttpMethod.GET,
                     null, new OutputStreamResponseExtractor(outputStream));
         } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to get process source " + process.getSourceLink(), e);
+            throw new GoodDataException("Unable to get process source " + process.getSourceUri(), e);
         }
     }
 
@@ -238,10 +243,10 @@ public class ProcessService extends AbstractService {
         notNull(executionDetail, "executionDetail");
         notNull(outputStream, "outputStream");
         try {
-            restTemplate.execute(executionDetail.getLogLink(), HttpMethod.GET,
+            restTemplate.execute(executionDetail.getLogUri(), HttpMethod.GET,
                     null, new OutputStreamResponseExtractor(outputStream));
         } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to get process execution log " + executionDetail.getLogLink(), e);
+            throw new GoodDataException("Unable to get process execution log " + executionDetail.getLogUri(), e);
         }
     }
 
@@ -265,9 +270,9 @@ public class ProcessService extends AbstractService {
             throw new ProcessExecutionException("Cannot find started execution.");
         }
 
-        final String detailLink = executionTask.getDetailLink();
+        final String detailLink = executionTask.getDetailUri();
 
-        return new PollResult<>(this, new AbstractPollHandler<Void, ProcessExecutionDetail>(executionTask.getPollLink(), Void.class, ProcessExecutionDetail.class) {
+        return new PollResult<>(this, new AbstractPollHandler<Void, ProcessExecutionDetail>(executionTask.getPollUri(), Void.class, ProcessExecutionDetail.class) {
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
                 return HttpStatus.NO_CONTENT.equals(response.getStatusCode());

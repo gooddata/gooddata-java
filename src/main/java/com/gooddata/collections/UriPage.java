@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.collections;
 
 import org.springframework.web.util.UriComponents;
@@ -47,7 +52,7 @@ class UriPage implements Page {
     public UriComponentsBuilder updateWithPageParams(final UriComponentsBuilder uriBuilder) {
         notNull(uriBuilder, "uriBuilder");
         for (Entry<String, List<String>> entry : pageUri.getQueryParams().entrySet()) {
-            uriBuilder.queryParam(entry.getKey(), entry.getValue().toArray());
+            uriBuilder.replaceQueryParam(entry.getKey(), entry.getValue().toArray());
         }
         return uriBuilder;
     }

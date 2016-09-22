@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.md.maintenance;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
@@ -17,7 +22,7 @@ public class PartialMdArtifactTest {
         final InputStream input = getClass().getResourceAsStream("/md/maintenance/partialMDArtifact.json");
         final PartialMdArtifact partialMdArtifact = new ObjectMapper().readValue(input, PartialMdArtifact.class);
 
-        assertThat(partialMdArtifact.getStatus().getUri(), is("/gdc/md/projectId/tasks/taskId/status"));
+        assertThat(partialMdArtifact.getStatusUri(), is("/gdc/md/projectId/tasks/taskId/status"));
         assertThat(partialMdArtifact.getToken(), is("TOKEN123"));
     }
 

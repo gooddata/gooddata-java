@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.warehouse;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -27,15 +32,30 @@ class WarehouseTask {
         this.links = links;
     }
 
+    @Deprecated
     String getPollLink() {
+        return getPollUri();
+    }
+
+    String getPollUri() {
         return links.get(POLL_LINK);
     }
 
+    @Deprecated
     String getWarehouseLink() {
+        return getWarehouseUri();
+    }
+
+    String getWarehouseUri() {
         return links.get(WAREHOUSE_LINK);
     }
 
+    @Deprecated
     String getWarehouseUserLink() {
+        return getWarehouseUserUri();
+    }
+
+    String getWarehouseUserUri() {
         return links.get(WAREHOUSE_USER_LINK);
     }
 }

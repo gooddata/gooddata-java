@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
 package com.gooddata.md;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +25,7 @@ public class AttributeDisplayFormTest {
     private static final String TYPE = "TYPE";
     private static final String ELEMENTS_LINK = "/gdc/md/PROJECT_ID/obj/DF_ID/elements";
 
+    @SuppressWarnings("deprecation")
     @Test
     public void shouldDeserialize() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/md/attributeDisplayForm.json");
@@ -32,6 +38,7 @@ public class AttributeDisplayFormTest {
         assertThat(attrDF.getLdmExpression(), is(LDM_EXPRESSION));
         assertThat(attrDF.getType(), is(TYPE));
         assertThat(attrDF.getElementsLink(), is(ELEMENTS_LINK));
+        assertThat(attrDF.getElementsUri(), is(ELEMENTS_LINK));
     }
 
     @Test

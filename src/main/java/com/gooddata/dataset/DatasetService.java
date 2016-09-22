@@ -1,5 +1,7 @@
-/*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.dataset;
 
@@ -9,10 +11,8 @@ import com.gooddata.FutureResult;
 import com.gooddata.PollResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.gdc.DataStoreException;
-import com.gooddata.gdc.DataStoreService;
-import com.gooddata.gdc.TaskStatus;
-import com.gooddata.gdc.UriResponse;
+import com.gooddata.gdc.*;
+import com.gooddata.gdc.AboutLinks.Link;
 import com.gooddata.project.Project;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.http.client.ClientHttpResponse;
@@ -25,9 +25,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
@@ -217,15 +215,31 @@ public class DatasetService extends AbstractService {
     }
 
     /**
-     * Lists datasets in project. Returns empty list in case there are no datasets.
+     * Lists datasets (links) in project. Returns empty list in case there are no datasets.
      *
      * @param project project to list datasets in
-     * @return collection of datasets in project or empty list
+     * @return collection of dataset links or empty list
+     * @deprecated use {@link #listDatasetLinks(Project)} instead
      */
+    @Deprecated
     public Collection<Dataset> listDatasets(Project project) {
+        final HashSet<Dataset> datasets = new HashSet<>();
+        for (final Link link : listDatasetLinks(project)) {
+            datasets.add(new Dataset(link.getIdentifier(), link.getUri(), link.getTitle()));
+        }
+        return datasets;
+    }
+
+    /**
+     * Lists datasets (links) in project. Returns empty list in case there are no datasets.
+     *
+     * @param project project to list datasets in
+     * @return collection of dataset links or empty list
+     */
+    public Collection<Link> listDatasetLinks(final Project project) {
         notNull(project, "project");
         try {
-            final Datasets result = restTemplate.getForObject(Datasets.URI, Datasets.class, project.getId());
+            final DatasetLinks result = restTemplate.getForObject(DatasetLinks.URI, DatasetLinks.class, project.getId());
             if (result == null) {
                 throw new GoodDataException("Empty response from API call");
             } else if (result.getLinks() == null) {

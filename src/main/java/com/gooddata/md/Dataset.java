@@ -1,7 +1,8 @@
-/*
- * Copyright (C) 2007-2015, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
-
 package com.gooddata.md;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -80,13 +81,33 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
         return Boolean.TRUE.equals(content.hasUploadConfiguration());
     }
 
+    /**
+     * @return data uploads URI string
+     * @deprecated use {@link #getDataUploadsUri()} instead
+     */
+    @Deprecated
     @JsonIgnore
     public String getDataUploadsLink() {
-        return links != null ? links.get(DATA_UPLOADS_LINK) : null;
+        return getDataUploadsUri();
     }
 
     @JsonIgnore
+    public String getDataUploadsUri() {
+        return links != null ? links.get(DATA_UPLOADS_LINK) : null;
+    }
+
+    /**
+     * @return upload configuration URI string
+     * @deprecated use {@link #getUploadConfigurationUri()} instead
+     */
+    @Deprecated
+    @JsonIgnore
     public String getUploadConfigurationLink() {
+        return getUploadConfigurationUri();
+    }
+
+    @JsonIgnore
+    public String getUploadConfigurationUri() {
         return links != null ? links.get(UPLOAD_CONFIGURATION_LINK) : null;
     }
 

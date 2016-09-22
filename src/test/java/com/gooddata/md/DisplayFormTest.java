@@ -1,5 +1,7 @@
-/*
- * Copyright (C) 2007-2014, GoodData(R) Corporation. All rights reserved.
+/**
+ * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.md;
 
@@ -21,6 +23,7 @@ public class DisplayFormTest {
     public static final String LDM_EXPRESSION = "";
     private static final String ELEMENTS_LINK = "/gdc/md/PROJECT_ID/obj/DF_ID/elements";
 
+    @SuppressWarnings("deprecation")
     @Test
     public void shouldDeserialize() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/md/displayForm.json");
@@ -32,6 +35,7 @@ public class DisplayFormTest {
         assertThat(displayForm.getLdmExpression(), is(LDM_EXPRESSION));
         assertThat(displayForm.getType(), is(nullValue()));
         assertThat(displayForm.getElementsLink(), is(ELEMENTS_LINK));
+        assertThat(displayForm.getElementsUri(), is(ELEMENTS_LINK));
     }
 
     @Test
