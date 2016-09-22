@@ -46,6 +46,7 @@ public class ScheduleTest {
 
         assertThat(schedule, is(notNullValue()));
         assertThat(schedule.getId(), is("SCHEDULE_ID"));
+        assertThat(schedule.getProjectId(), is("PROJECT_ID"));
         assertThat(schedule.getType(), is("MSETL"));
         assertThat(schedule.getState(), is("ENABLED"));
         assertThat(schedule.isEnabled(), is(true));

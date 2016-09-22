@@ -108,6 +108,11 @@ public class DataloadProcess {
     }
 
     @JsonIgnore
+    public String getProjectId() {
+        return TEMPLATE.match(getUri()).get("projectId");
+    }
+
+    @JsonIgnore
     public String getExecutionsLink() {
         return links != null ? links.get(EXECUTIONS_LINK) : null;
     }
