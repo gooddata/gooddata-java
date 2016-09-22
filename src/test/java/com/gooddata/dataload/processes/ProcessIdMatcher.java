@@ -21,7 +21,7 @@ class ProcessIdMatcher extends TypeSafeMatcher<DataloadProcess> {
         description.appendText("Process id " + process.getId());
     }
 
-    public static ProcessIdMatcher hasSameIdAs(final DataloadProcess process) {
+    public static ProcessIdMatcher hasSameProcessIdAs(final DataloadProcess process) {
         return new ProcessIdMatcher(process);
     }
 

@@ -1,0 +1,12 @@
+{
+  "schedule": {
+    "type": "MSETL",
+    "state": "ENABLED",
+    "reschedule" : 26,
+    "params": {
+      "PROCESS_ID": "process_id",
+      "EXECUTABLE": "Twitter/graph/twitter.grf"
+    },
+    "cron": "0 0 * * *"
+  }
+}

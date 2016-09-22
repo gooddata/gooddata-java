@@ -8,6 +8,7 @@
     },
     "cron": "0 0 * * *",
     "timezone": "UTC",
+    "reschedule" : 26,
     "nextExecutionTime": "2013-11-16T00:00:00.000Z",
     "lastSuccessful": {
       "execution": {
