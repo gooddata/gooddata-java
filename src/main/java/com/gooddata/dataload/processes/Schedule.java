@@ -180,4 +180,9 @@ public class Schedule {
         return TEMPLATE.match(getUri()).get("scheduleId");
     }
 
+    @JsonIgnore
+    public String getProjectId() {
+        return TEMPLATE.match(getUri()).get("projectId");
+    }
+
 }
