@@ -49,17 +49,33 @@ public class Schedule {
     private String cron;
     private String timezone;
     private Integer reschedule;
+    private String triggerScheduleId;
     private final DateTime nextExecutionTime;
     private final int consecutiveFailedExecutionCount;
     private final Map<String, String> params;
     private final Map<String,String> links;
 
     public Schedule(final DataloadProcess process, final String executable, final String cron) {
+        this(process, executable);
+        this.cron = notEmpty(cron, "cron");
+    }
+
+    /**
+     * Creates schedule, which is triggered by execution of different schedule
+     * @param process process to create schedule for
+     * @param executable executable to be scheduled for execution
+     * @param triggerSchedule schedule, which will trigger created schedule
+     */
+    public Schedule(final DataloadProcess process, final String executable, final Schedule triggerSchedule) {
+        this(process, executable);
+        this.triggerScheduleId = notEmpty(notNull(triggerSchedule, "triggerSchedule").getId(), "triggerSchedule ID");
+    }
+
+    private Schedule(final DataloadProcess process, final String executable) {
         notNull(process, "process");
 
         this.type = MSETL_TYPE;
         this.state = ScheduleState.ENABLED.name();
-        this.cron = notEmpty(cron, "cron");
         this.params = new HashMap<>();
         this.params.put(PROCESS_ID, process.getId());
         process.validateExecutable(executable);
@@ -78,6 +94,7 @@ public class Schedule {
                      @JsonProperty("consecutiveFailedExecutionCount") final int consecutiveFailedExecutionCount,
                      @JsonProperty("params") final Map<String, String> params,
                      @JsonProperty("reschedule") final Integer reschedule,
+                     @JsonProperty("triggerScheduleId") final String triggerScheduleId,
                      @JsonProperty("links") final Map<String, String> links) {
         this.type = type;
         this.state = state;
@@ -87,6 +104,7 @@ public class Schedule {
         this.consecutiveFailedExecutionCount = consecutiveFailedExecutionCount;
         this.params = params;
         this.reschedule = reschedule;
+        this.triggerScheduleId = triggerScheduleId;
         this.links = links;
     }
 
@@ -188,6 +206,14 @@ public class Schedule {
      */
     public void setReschedule(Duration reschedule) {
         this.reschedule = notNull(reschedule, "reschedule").toStandardMinutes().getMinutes();
+    }
+
+    public String getTriggerScheduleId() {
+        return triggerScheduleId;
+    }
+
+    public void setTriggerScheduleId(final String triggerScheduleId) {
+        this.triggerScheduleId = triggerScheduleId;
     }
 
     @JsonIgnore

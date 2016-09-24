@@ -42,6 +42,7 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
     private DataloadProcess process;
     private DataloadProcess processAppstore;
     private Schedule schedule;
+    private Schedule triggeredSchedule;
 
     @Test(groups = "process", dependsOnGroups = "project")
     public void createProcess() throws Exception {
@@ -67,11 +68,20 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = "process", dependsOnMethods = "createSchedule")
+    public void createTriggeredSchedule() {
+        triggeredSchedule = gd.getProcessService().createSchedule(project, new Schedule(process, "sdktest.grf", schedule));
+
+        assertThat(triggeredSchedule, notNullValue());
+        assertThat(triggeredSchedule.getExecutable(), is("sdktest.grf"));
+        assertThat(triggeredSchedule.getTriggerScheduleId(), is(schedule.getId()));
+    }
+
+    @Test(groups = "process", dependsOnMethods = {"createSchedule", "createTriggeredSchedule"})
     public void listSchedules() {
         final PageableList<Schedule> collection = gd.getProcessService().listSchedules(project);
 
         assertThat(collection, notNullValue());
-        assertThat(collection, hasSize(1));
+        assertThat(collection, hasSize(2));
         assertThat(collection.getNextPage(), nullValue());
     }
 
@@ -144,8 +154,9 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
     @Test(dependsOnGroups = "process")
     public void removeSchedule() {
         gd.getProcessService().removeSchedule(schedule);
+        gd.getProcessService().removeSchedule(triggeredSchedule);
         final Collection<Schedule> schedules = gd.getProcessService().listSchedules(project);
-        assertThat(schedules, not(hasItems(hasSameScheduleIdAs(schedule))));
+        assertThat(schedules, not(hasItems(hasSameScheduleIdAs(schedule), hasSameScheduleIdAs(triggeredSchedule))));
     }
 
 }
