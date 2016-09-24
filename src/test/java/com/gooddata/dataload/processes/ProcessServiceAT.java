@@ -61,6 +61,7 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
     public void createSchedule() {
         schedule = gd.getProcessService().createSchedule(project, new Schedule(process, "sdktest.grf", "0 0 * * *"));
         schedule.setReschedule(Duration.standardMinutes(15));
+        schedule.setName("sdkTestSchedule");
 
         assertThat(schedule, notNullValue());
         assertThat(schedule.getExecutable(), is("sdktest.grf"));

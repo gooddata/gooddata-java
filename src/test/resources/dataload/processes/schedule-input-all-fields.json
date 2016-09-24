@@ -1,5 +1,6 @@
 {
   "schedule": {
+    "name" : "scheduleName",
     "type": "MSETL",
     "state": "ENABLED",
     "reschedule" : 26,

@@ -68,6 +68,7 @@ public class ScheduleTest {
         assertThat(schedule.getExecutable(), is(EXECUTABLE));
         assertThat(schedule.getNextExecutionTime(), is(DateTime.parse("2013-11-16T00:00:00.000Z")));
         assertThat(schedule.getUri(), is("/gdc/projects/PROJECT_ID/schedules/SCHEDULE_ID"));
+        assertThat(schedule.getName(), is("scheduleName"));
     }
 
     @Test
@@ -105,6 +106,7 @@ public class ScheduleTest {
     public void testSerializationWithAllFields() {
         final Schedule schedule = new Schedule(process, EXECUTABLE, "0 0 * * *");
         schedule.setReschedule(Duration.standardMinutes(26));
+        schedule.setName("scheduleName");
 
         assertThat(schedule, serializesToJson("/dataload/processes/schedule-input-all-fields.json"));
     }

@@ -50,6 +50,7 @@ public class Schedule {
     private String timezone;
     private Integer reschedule;
     private String triggerScheduleId;
+    private String name;
     private final DateTime nextExecutionTime;
     private final int consecutiveFailedExecutionCount;
     private final Map<String, String> params;
@@ -95,6 +96,7 @@ public class Schedule {
                      @JsonProperty("params") final Map<String, String> params,
                      @JsonProperty("reschedule") final Integer reschedule,
                      @JsonProperty("triggerScheduleId") final String triggerScheduleId,
+                     @JsonProperty("name") final String name,
                      @JsonProperty("links") final Map<String, String> links) {
         this.type = type;
         this.state = state;
@@ -105,6 +107,7 @@ public class Schedule {
         this.params = params;
         this.reschedule = reschedule;
         this.triggerScheduleId = triggerScheduleId;
+        this.name = name;
         this.links = links;
     }
 
@@ -214,6 +217,14 @@ public class Schedule {
 
     public void setTriggerScheduleId(final String triggerScheduleId) {
         this.triggerScheduleId = triggerScheduleId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
     }
 
     @JsonIgnore
