@@ -3,15 +3,8 @@
 The *GoodData Java SDK* encapsulates the REST API provided by the [GoodData](http://www.gooddata.com) platform.
 The first version was implemented during the [All Data Hackathon](http://hackathon.gooddata.com) April 10 - 11 2014
 and currently the SDK is transitioned to be an official GoodData project.
-GoodData Corporation provides this software "as-is" under conditions
-specified in the [license](LICENSE.txt).
 
 ## Usage
-
-See [Wiki](https://github.com/martiner/gooddata-java/wiki) for
-[Upgrading Guide](https://github.com/martiner/gooddata-java/wiki/Upgrading-GoodData-Java-SDK),
-[Code Examples](https://github.com/martiner/gooddata-java/wiki/Code-Examples)
-and [Extensibility How-To](https://github.com/martiner/gooddata-java/wiki/Extending-GoodData-Java-SDK).
 
 The *GoodData Java SDK* is available in Maven Central Repository, to use it from Maven add to `pom.xml`:
 
@@ -22,8 +15,13 @@ The *GoodData Java SDK* is available in Maven Central Repository, to use it from
     <version>2.0.0</version>
 </dependency>
 ```
+See [releases page](https://github.com/martiner/gooddata-java/releases) for information about versions and notable changes,
+the [Upgrading Guide](https://github.com/martiner/gooddata-java/wiki/Upgrading-GoodData-Java-SDK) will navigate you
+through changes between major versions.
 
-See [releases page](https://github.com/martiner/gooddata-java/releases) for information about versions and notable changes.
+See [Wiki](https://github.com/martiner/gooddata-java/wiki) for
+[Code Examples](https://github.com/martiner/gooddata-java/wiki/Code-Examples)
+and [Extensibility How-To](https://github.com/martiner/gooddata-java/wiki/Extending-GoodData-Java-SDK).
 
 ### Dependencies
 
@@ -34,9 +32,11 @@ The *GoodData Java SDK* uses:
 * the *Jackson JSON Processor* version 2.8.*
 * the *Java Development Kit (JDK)* version 8 or later
 
-## License
-The *GoodData Java SDK* is free and open-source software under [BSD License](LICENSE.txt).
+## License and conditions
 
-##Contribute
-Missing functionality? Found a BUG? Please create an [issue](https://github.com/martiner/gooddata-java/issues)
-or simply [contribute your code](CONTRIBUTING.md).
+The *GoodData Java SDK* is free and open-source software provided by GoodData Corporation "as-is" under [BSD License](LICENSE.txt).
+
+## Contribute
+
+Found a bug? Please create an [issue](https://github.com/martiner/gooddata-java/issues). Missing functionality? 
+[Contribute your code](CONTRIBUTING.md).
