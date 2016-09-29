@@ -1,0 +1,18 @@
+{
+  "schedule": {
+    "type": "MSETL",
+    "state": "DISABLED",
+    "params": {
+      "PROCESS_ID": "process_id",
+      "EXECUTABLE": "Twitter/graph/twitter.grf"
+    },
+    "triggerScheduleId": "trigger_schedule_id",
+    "timezone": "UTC",
+    "nextExecutionTime": "2013-11-16T00:00:00.000Z",
+    "consecutiveFailedExecutionCount": 0,
+    "links": {
+      "self": "/gdc/projects/PROJECT_ID/schedules/SCHEDULE_ID",
+      "executions": "/gdc/projects/PROJECT_ID/schedules/SCHEDULE_ID/executions"
+    }
+  }
+}

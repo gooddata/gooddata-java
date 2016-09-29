@@ -37,12 +37,16 @@ public class ScheduleTest {
     @Mock
     private DataloadProcess process;
 
+    @Mock
+    private Schedule triggerSchedule;
+
     @BeforeMethod
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
         when(process.getExecutables()).thenReturn(Collections.singleton(EXECUTABLE));
         when(process.getId()).thenReturn("process_id");
+        when(triggerSchedule.getId()).thenReturn("schedule_id");
         doThrow(new IllegalArgumentException("wrong executable")).when(process).validateExecutable(Matchers.argThat(not(is(EXECUTABLE))));
     }
 
@@ -64,6 +68,26 @@ public class ScheduleTest {
         assertThat(schedule.getExecutable(), is(EXECUTABLE));
         assertThat(schedule.getNextExecutionTime(), is(DateTime.parse("2013-11-16T00:00:00.000Z")));
         assertThat(schedule.getUri(), is("/gdc/projects/PROJECT_ID/schedules/SCHEDULE_ID"));
+        assertThat(schedule.getName(), is("scheduleName"));
+    }
+
+    @Test
+    public void testTriggeredScheduleDeserialization() throws Exception {
+        final Schedule schedule = new ObjectMapper()
+                .readValue(getClass().getResourceAsStream("/dataload/processes/schedule-triggered.json"), Schedule.class);
+
+        assertThat(schedule, is(notNullValue()));
+        assertThat(schedule.getId(), is("SCHEDULE_ID"));
+        assertThat(schedule.getType(), is("MSETL"));
+        assertThat(schedule.getState(), is("DISABLED"));
+        assertThat(schedule.isEnabled(), is(false));
+        assertThat(schedule.getTimezone(), is("UTC"));
+        assertThat(schedule.getConsecutiveFailedExecutionCount(), is(0));
+        assertThat(schedule.getProcessId(), is("process_id"));
+        assertThat(schedule.getExecutable(), is(EXECUTABLE));
+        assertThat(schedule.getNextExecutionTime(), is(DateTime.parse("2013-11-16T00:00:00.000Z")));
+        assertThat(schedule.getUri(), is("/gdc/projects/PROJECT_ID/schedules/SCHEDULE_ID"));
+        assertThat(schedule.getTriggerScheduleId(), is("trigger_schedule_id"));
     }
 
     @Test
@@ -73,9 +97,16 @@ public class ScheduleTest {
     }
 
     @Test
+    public void testTriggeredScheduleSerialization() {
+        final Schedule schedule = new Schedule(process, EXECUTABLE, triggerSchedule);
+        assertThat(schedule, serializesToJson("/dataload/processes/schedule-triggered-input.json"));
+    }
+
+    @Test
     public void testSerializationWithAllFields() {
         final Schedule schedule = new Schedule(process, EXECUTABLE, "0 0 * * *");
         schedule.setReschedule(Duration.standardMinutes(26));
+        schedule.setName("scheduleName");
 
         assertThat(schedule, serializesToJson("/dataload/processes/schedule-input-all-fields.json"));
     }
@@ -175,5 +206,11 @@ public class ScheduleTest {
 
         assertThat(schedule.getRescheduleInMinutes(), is(equalTo(0)));
         assertThat(schedule.getReschedule(), is(equalTo(Duration.ZERO)));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testCreateTriggeredScheduleWithNotCreatedSchedule() {
+        final Schedule schedule = new Schedule(process, EXECUTABLE, "0 0 * * *");
+        new Schedule(process, EXECUTABLE, schedule);
     }
 }
