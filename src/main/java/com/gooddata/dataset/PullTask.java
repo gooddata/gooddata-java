@@ -6,7 +6,7 @@
 package com.gooddata.dataset;
 
 import static com.gooddata.util.Validate.notEmpty;
-import static org.apache.commons.lang.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -31,7 +31,7 @@ class PullTask {
 
     @JsonCreator
     private PullTask(@JsonProperty("links") Links links) {
-        notNull(links, "links cannot be null!");
+        notNull(links, "links");
 
         this.links = links;
     }

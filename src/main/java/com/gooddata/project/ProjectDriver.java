@@ -14,7 +14,7 @@ public enum ProjectDriver {
     private final String value;
 
     ProjectDriver(String value) {
-        notEmpty(value, "value cannot be empty!");
+        notEmpty(value, "value");
         this.value = value;
     }
 

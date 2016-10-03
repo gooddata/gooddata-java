@@ -5,8 +5,6 @@
  */
 package com.gooddata.md;
 
-import static org.apache.commons.lang.Validate.notNull;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -16,6 +14,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.springframework.web.util.UriTemplate;
 
 import java.util.List;
+
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Represents elements of attribute

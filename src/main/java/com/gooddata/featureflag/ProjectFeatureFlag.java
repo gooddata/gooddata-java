@@ -74,7 +74,7 @@ public class ProjectFeatureFlag {
 
     @JsonIgnore
     public String getUri() {
-        notNull(links, "links cannot be null if you want to get feature flag uri!");
+        notNull(links, "links (if you want to get feature flag uri)");
         return links.getSelf();
     }
 

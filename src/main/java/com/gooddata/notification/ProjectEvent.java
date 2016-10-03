@@ -38,8 +38,8 @@ public class ProjectEvent {
     }
 
     public ProjectEvent(final String type, final Map<String, String> parameters) {
-        notEmpty(type, "type can't be empty");
-        notNull(parameters, "parameters can't be null");
+        notEmpty(type, "type");
+        notNull(parameters, "parameters");
         this.type = type;
         this.parameters = parameters;
     }
@@ -50,8 +50,8 @@ public class ProjectEvent {
      * @param value parameter value
      */
     public void setParameter(final String key, final String value) {
-        notNull(key, "parameter key can't be null");
-        notNull(value, "parameter value can't be null");
+        notNull(key, "parameter key");
+        notNull(value, "parameter value");
         parameters.put(key, value);
     }
 

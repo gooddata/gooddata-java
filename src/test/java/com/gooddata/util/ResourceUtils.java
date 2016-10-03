@@ -52,7 +52,7 @@ public class ResourceUtils {
 
     private static InputStream readFromResource(String resourcePath, Class<?> testClass) {
         notEmpty(resourcePath, "resourcePath");
-        notNull(testClass, "testClass cannot be null!");
+        notNull(testClass, "testClass");
 
         return testClass.getResourceAsStream(resourcePath);
     }

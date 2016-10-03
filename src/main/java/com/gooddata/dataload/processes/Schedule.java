@@ -158,13 +158,13 @@ public class Schedule {
     }
 
     public void addParam(String key, String value) {
-        notEmpty(key, "param cannot be empty!");
-        notNull(value, "value cannot be null!");
+        notEmpty(key, "param");
+        notNull(value, "value");
         params.put(key, value);
     }
 
     public void removeParam(String paramKey) {
-        notEmpty(paramKey, "paramKey cannot be empty!");
+        notEmpty(paramKey, "paramKey!");
         params.remove(paramKey);
     }
 
