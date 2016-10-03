@@ -251,7 +251,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .withStatus(200);
 
         schedule.setState(ScheduleState.DISABLED);
-        final Schedule updated = gd.getProcessService().updateSchedule(project, schedule);
+        final Schedule updated = gd.getProcessService().updateSchedule(schedule);
         assertThat(updated, notNullValue());
         assertThat(updated.isEnabled(), is(false));
     }
@@ -364,7 +364,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .withBody(readFromResource("/dataload/processes/appstoreProcess.json"));
 
         process.setPath("${PUBLIC_APPSTORE}:tag/prodigy-testing:/test/rubyHello");
-        DataloadProcess updatedProcess = gd.getProcessService().updateProcessFromAppstore(project, process).get();
+        DataloadProcess updatedProcess = gd.getProcessService().updateProcessFromAppstore(process).get();
         assertThat(updatedProcess, notNullValue());
         assertThat(updatedProcess.getType(), is(equalTo(ProcessType.RUBY.toString())));
         assertThat(updatedProcess.getExecutables(), contains("hello.rb") );
