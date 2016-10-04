@@ -67,6 +67,10 @@ public class Account {
 
     /**
      * Account creation constructor
+     * @param email email
+     * @param firstName first name
+     * @param lastName last name
+     * @param password password
      */
     public Account(String email, String password, String firstName, String lastName) {
         this(email, email, password, password, firstName, lastName, null);
