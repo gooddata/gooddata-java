@@ -392,12 +392,12 @@ public class Project {
     }
 
     public void setDriver(String driver) {
-        notEmpty(driver, "driver cannot be empty!");
+        notEmpty(driver, "driver");
         content.setDriver(driver);
     }
 
     public void setDriver(ProjectDriver driver) {
-        notNull(driver, "driver cannot be null!");
+        notNull(driver, "driver");
         setDriver(driver.getValue());
     }
 

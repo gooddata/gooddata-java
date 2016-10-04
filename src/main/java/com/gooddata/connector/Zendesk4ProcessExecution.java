@@ -47,8 +47,8 @@ public class Zendesk4ProcessExecution implements ProcessExecution {
 
 
     public void setStartTime(final String resource, final DateTime startTime) {
-        notEmpty(resource, "resource can't be empty");
-        notNull(startTime, "startTime can't be null");
+        notEmpty(resource, "resource");
+        notNull(startTime, "startTime");
 
         startTimes = startTimes == null ? new TreeMap<String, DateTime>() : startTimes;
 

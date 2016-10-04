@@ -9,7 +9,6 @@ import com.github.sardine.Sardine;
 import com.github.sardine.impl.SardineException;
 import com.github.sardine.impl.SardineImpl;
 import com.gooddata.UriPrefixer;
-import org.apache.commons.lang.Validate;
 import org.apache.http.Header;
 import org.apache.http.HeaderIterator;
 import org.apache.http.HttpEntity;
@@ -177,7 +176,7 @@ public class DataStoreService {
         private final HttpClient client;
 
         private FakeCloseableHttpClient(HttpClient client) {
-            notNull(client, "client can't be null");
+            notNull(client, "client");
             this.client = client;
         }
 
@@ -250,7 +249,7 @@ public class DataStoreService {
         private final HttpResponse wrappedResponse;
 
         public FakeCloseableHttpResponse(HttpResponse wrappedResponse) {
-            Validate.notNull(wrappedResponse, "wrappedResponse cannot be null!");
+            notNull(wrappedResponse, "wrappedResponse");
             this.wrappedResponse = wrappedResponse;
         }
 

@@ -30,8 +30,8 @@ public class NotificationService extends AbstractService {
      * @param event event to trigger
      */
     public void triggerEvent(final Project project, final ProjectEvent event) {
-        notNull(project, "project can't be null");
-        notNull(event, "event can't be null");
+        notNull(project, "project");
+        notNull(event, "event");
         try {
             restTemplate.postForEntity(ProjectEvent.URI, event, Void.class, project.getId());
         } catch (GoodDataRestException | RestClientException e) {

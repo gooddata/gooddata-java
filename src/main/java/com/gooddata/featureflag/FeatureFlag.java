@@ -17,7 +17,7 @@ public class FeatureFlag {
     private boolean enabled;
 
     public FeatureFlag(final String name, final boolean enabled) {
-        this.name = notNull(name, "name cannot be null");
+        this.name = notNull(name, "name");
         this.enabled = enabled;
     }
 

@@ -115,7 +115,7 @@ public class ProcessService extends AbstractService {
     public FutureResult<DataloadProcess> createProcessFromAppstore(Project project, DataloadProcess process) {
         notNull(project, "project");
         notNull(process, "process");
-        notEmpty(process.getPath(), "process path must not be empty");
+        notEmpty(process.getPath(), "process path");
         return postProcess(process, getProcessesUri(project), HttpMethod.POST);
     }
 
@@ -148,7 +148,7 @@ public class ProcessService extends AbstractService {
     public FutureResult<DataloadProcess> updateProcessFromAppstore(Project project, DataloadProcess process) {
         notNull(project, "project");
         notNull(process, "process");
-        notEmpty(process.getPath(), "process path must not be empty");
+        notEmpty(process.getPath(), "process path");
         return postProcess(process, getProcessUri(project, process.getId()), HttpMethod.PUT);
     }
 
