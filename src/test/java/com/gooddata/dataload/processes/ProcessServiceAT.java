@@ -91,10 +91,10 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         schedule.setState(ScheduleState.DISABLED);
         schedule.setReschedule(Duration.standardMinutes(26));
 
-        schedule = gd.getProcessService().updateSchedule(project, schedule);
+        schedule = gd.getProcessService().updateSchedule(schedule);
 
         assertThat(schedule.isEnabled(), is(false));
-        assertThat(gd.getProcessService().updateSchedule(project, schedule).getRescheduleInMinutes(), is(26));
+        assertThat(gd.getProcessService().updateSchedule(schedule).getRescheduleInMinutes(), is(26));
     }
 
     @Test(groups = "process", dependsOnGroups = "project")
@@ -109,7 +109,7 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
     @Test(groups = "process", dependsOnMethods = "createProcessFromGit")
     public void updateProcessFromGit() {
         processAppstore.setPath("${PUBLIC_APPSTORE}:tag/prodigy-testing:/test/rubyBonjour");
-        processAppstore = gd.getProcessService().updateProcessFromAppstore(project, processAppstore).get();
+        processAppstore = gd.getProcessService().updateProcessFromAppstore(processAppstore).get();
 
         assertThat(processAppstore.getExecutables(), contains("bonjour.rb"));
     }

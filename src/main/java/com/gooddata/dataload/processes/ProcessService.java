@@ -127,13 +127,27 @@ public class ProcessService extends AbstractService {
      * @param process to create
      * @param processData process data to upload
      * @return updated process
+     * @deprecated use {@link #updateProcess(DataloadProcess, File)}
      */
+    @Deprecated
     public DataloadProcess updateProcess(Project project, DataloadProcess process, File processData) {
+        return updateProcess(process, processData);
+    }
+
+    /**
+     * Update process with given data by given project.
+     * Process must have null path to prevent clashes with deploying from appstore.
+     *
+     * @param process to create
+     * @param processData process data to upload
+     * @return updated process
+     */
+    public DataloadProcess updateProcess(DataloadProcess process, File processData) {
         notNull(process, "process");
+        notNull(process.getUri(), "process.uri");
         notNull(processData, "processData");
-        notNull(project, "project");
         isTrue(process.getPath() == null, "Process path has to be null, use processData argument. If you want to update process from appstore, use method updateProcessFromAppstore()");
-        return postProcess(process, processData, getProcessUri(project, process.getId()));
+        return postProcess(process, processData, URI.create(process.getUri()));
     }
 
     /**
@@ -144,12 +158,29 @@ public class ProcessService extends AbstractService {
      * @param project project to which the process belongs
      * @param process to update
      * @return updated process
+     * @deprecated use {@link #updateProcessFromAppstore(DataloadProcess)}
      */
+    @Deprecated
     public FutureResult<DataloadProcess> updateProcessFromAppstore(Project project, DataloadProcess process) {
         notNull(project, "project");
         notNull(process, "process");
         notEmpty(process.getPath(), "process path");
         return postProcess(process, getProcessUri(project, process.getId()), HttpMethod.PUT);
+    }
+
+    /**
+     * Update process with data from appstore by given project.
+     * Process must have set path field to valid appstore path in order to deploy from appstore.
+     * This method is asynchronous, because when deploying from appstore, deployment worker can be triggered.
+     *
+     * @param process to update
+     * @return updated process
+     */
+    public FutureResult<DataloadProcess> updateProcessFromAppstore(DataloadProcess process) {
+        notNull(process, "process");
+        notNull(process.getUri(), "process.uri");
+        notEmpty(process.getPath(), "process path must not be empty");
+        return postProcess(process, URI.create(process.getUri()), HttpMethod.PUT);
     }
 
     /**
@@ -323,18 +354,31 @@ public class ProcessService extends AbstractService {
     }
 
     /**
-     * Update connector integration
+     * Update the given schedule
      *
      * @param project  project
      * @param schedule to update
      * @return updated Schedule
      * @throws ScheduleNotFoundException when the schedule doesn't exist
+     * @deprecated use {@link #updateSchedule(Schedule)}
      */
+    @Deprecated
     public Schedule updateSchedule(final Project project, Schedule schedule) {
-        notNull(schedule, "schedule");
-        notNull(project, "project");
+        return updateSchedule(schedule);
+    }
 
-        final String uri = getScheduleUri(project, schedule.getId()).toString();
+    /**
+     * Update the given schedule
+     *
+     * @param schedule to update
+     * @return updated Schedule
+     * @throws ScheduleNotFoundException when the schedule doesn't exist
+     */
+    public Schedule updateSchedule(Schedule schedule) {
+        notNull(schedule, "schedule");
+        notNull(schedule.getUri(), "schedule.uri");
+
+        final String uri = schedule.getUri();
         try {
             final ResponseEntity<Schedule> response = restTemplate
                     .exchange(uri, HttpMethod.PUT, new HttpEntity<>(schedule), Schedule.class);

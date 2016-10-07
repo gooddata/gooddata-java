@@ -77,6 +77,7 @@ public class ProcessServiceTest {
         MockitoAnnotations.initMocks(this);
         processService = new ProcessService(restTemplate, accountService, dataStoreService);
         when(process.getId()).thenReturn(PROCESS_ID);
+        when(process.getUri()).thenReturn(DataloadProcess.TEMPLATE.expand(PROJECT_ID, PROCESS_ID).toString());
         when(project.getId()).thenReturn(PROJECT_ID);
         when(accountService.getCurrent()).thenReturn(account);
         when(account.getId()).thenReturn(ACCOUNT_ID);
@@ -134,32 +135,22 @@ public class ProcessServiceTest {
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testUpdateProcessWithNullProject() throws Exception {
-        processService.updateProcess(null, process, File.createTempFile("test", null));
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testUpdateProcessWithNullProcess() throws Exception {
-        processService.updateProcess(project, null, File.createTempFile("test", null));
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testUpdateProcessWithNullFile() throws Exception {
-        processService.updateProcess(project, process, (File) null);
+        processService.updateProcess(null, File.createTempFile("test", null));
     }
 
     @Test(expectedExceptions = GoodDataException.class)
     public void testUpdateProcessWithRestClientError() throws Exception {
         when(restTemplate.exchange(eq(create(PROCESS_URI)), any(HttpMethod.class), any(HttpEntity.class),
                 eq(DataloadProcess.class))).thenThrow(new RestClientException(""));
-        processService.updateProcess(project, process, File.createTempFile("test", null));
+        processService.updateProcess(process, File.createTempFile("test", null));
     }
 
     @Test(expectedExceptions = GoodDataException.class)
     public void testUpdateProcessWithNoApiResponse() throws Exception {
         when(restTemplate.exchange(eq(create(PROCESS_URI)), any(HttpMethod.class), any(HttpEntity.class),
                 eq(DataloadProcess.class))).thenReturn(null);
-        processService.updateProcess(project, process, File.createTempFile("test", null));
+        processService.updateProcess(process, File.createTempFile("test", null));
     }
 
     @Test
@@ -167,7 +158,7 @@ public class ProcessServiceTest {
         when(restTemplate.exchange(eq(create(PROCESS_URI)), any(HttpMethod.class), any(HttpEntity.class),
                 eq(DataloadProcess.class))).thenReturn(new ResponseEntity<>(process, HttpStatus.OK));
         final DataloadProcess result = processService
-                .updateProcess(project, process, File.createTempFile("test", null));
+                .updateProcess(process, File.createTempFile("test", null));
         assertThat(result, is(process));
     }
 
