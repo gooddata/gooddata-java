@@ -133,7 +133,7 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         processService.executeProcess(new ProcessExecution(process, "invalid.grf")).get();
     }
 
-    @Test(dependsOnGroups = "process")
+    @Test(dependsOnGroups = "process", dependsOnMethods = "removeSchedule")
     public void removeProcess() throws Exception {
         gd.getProcessService().removeProcess(process);
         gd.getProcessService().removeProcess(processAppstore);
