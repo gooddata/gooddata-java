@@ -1,9 +1,7 @@
 {
     "report" : {
         "content" : {
-            "domains" : [
-                "/gdc/md/PROJECT_ID/obj/DOM_ID"
-            ],
+            "domains" : [],
             "definitions" : [
                 "/gdc/md/PROJECT_ID/obj/DEF_ID"
             ]
