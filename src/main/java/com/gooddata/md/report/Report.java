@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.Collection;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 
 /**
  * Report
@@ -37,14 +38,14 @@ public class Report extends AbstractObj implements Queryable, Updatable {
         this.content = content;
     }
 
-    /* Just for serialization test */
-    Report(String title, String domain, String... definitions) {
-        super(new Meta(title));
-        content = new Content(asList(definitions), asList(domain));
-    }
-
+    /**
+     * Creates new report with given title and definitions
+     * @param title report title
+     * @param definitions report definitions
+     */
     public Report(String title, ReportDefinition... definitions) {
-        this(title, null, uris(definitions));
+        // domains must be empty list to be included in serialized form properly
+        this(new Meta(title), new Content(asList(uris(definitions)), emptyList()));
     }
 
     @JsonIgnore
@@ -57,7 +58,6 @@ public class Report extends AbstractObj implements Queryable, Updatable {
         return content.getDomains();
     }
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private static class Content {
         private final Collection<String> definitions;
         private final Collection<String> domains;

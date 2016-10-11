@@ -13,11 +13,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ReportTest {
 
-    public static final String DEFINITION = "/gdc/md/PROJECT_ID/obj/DEF_ID";
-    public static final String DOMAIN = "/gdc/md/PROJECT_ID/obj/DOM_ID";
+    private static final String DEFINITION_URI = "/gdc/md/PROJECT_ID/obj/DEF_ID";
+    private static final String DOMAIN_URI = "/gdc/md/PROJECT_ID/obj/DOM_ID";
 
     @Test
     public void testDeserialization() throws Exception {
@@ -25,16 +27,19 @@ public class ReportTest {
         assertThat(report, is(notNullValue()));
         assertThat(report.getDefinitions(), is(notNullValue()));
         assertThat(report.getDefinitions(), hasSize(1));
-        assertThat(report.getDefinitions().iterator().next(), is(DEFINITION));
+        assertThat(report.getDefinitions().iterator().next(), is(DEFINITION_URI));
 
         assertThat(report.getDomains(), is(notNullValue()));
         assertThat(report.getDomains(), hasSize(1));
-        assertThat(report.getDomains().iterator().next(), is(DOMAIN));
+        assertThat(report.getDomains().iterator().next(), is(DOMAIN_URI));
     }
 
     @Test
     public void testSerialization() throws Exception {
-        final Report report = new Report("Beers Consumed This Week", DOMAIN, DEFINITION);
+        final ReportDefinition definition = mock(ReportDefinition.class);
+        when(definition.getUri()).thenReturn(DEFINITION_URI);
+
+        final Report report = new Report("Beers Consumed This Week", definition);
         assertThat(report, serializesToJson("/md/report/report-input.json"));
     }
 
