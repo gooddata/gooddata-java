@@ -10,6 +10,9 @@ import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gooddata.util.ISODateTimeSerializer;
 import org.joda.time.DateTime;
@@ -25,6 +28,8 @@ public class Zendesk4ProcessExecution implements ProcessExecution {
     private Boolean incremental;
 
     private Map<String, DateTime> startTimes;
+
+    private DownloadParams downloadParams;
 
     @Override
     public ConnectorType getConnectorType() {
@@ -50,8 +55,75 @@ public class Zendesk4ProcessExecution implements ProcessExecution {
         notEmpty(resource, "resource");
         notNull(startTime, "startTime");
 
-        startTimes = startTimes == null ? new TreeMap<String, DateTime>() : startTimes;
+        startTimes = startTimes == null ? new TreeMap<>() : startTimes;
 
         startTimes.put(resource + "StartDate", startTime);
+    }
+
+    @JsonIgnore
+    public DownloadParams getDownloadParams() {
+        if (downloadParams == null) {
+            downloadParams = new DownloadParams();
+        }
+        return downloadParams;
+    }
+
+    @JsonProperty("downloadParams")
+    private DownloadParams getDownloadParamsPlain() {
+        return downloadParams;
+    }
+
+    public void setDownloadParams(DownloadParams downloadParams) {
+        this.downloadParams = downloadParams;
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    static class DownloadParams {
+        private Boolean useBackup;
+        private Integer parallelWorkers;
+        private Integer parallelBatchSeconds;
+
+        public DownloadParams(Boolean useBackup, Integer parallelWorkers, Integer parallelBatchSeconds) {
+            this.useBackup = useBackup;
+            this.parallelWorkers = parallelWorkers;
+            this.parallelBatchSeconds = parallelBatchSeconds;
+        }
+
+        public DownloadParams(Integer parallelWorkers, Integer parallelBatchSeconds) {
+            this(null, parallelWorkers, parallelBatchSeconds);
+        }
+
+        public DownloadParams(Boolean useBackup) {
+            this(useBackup, null, null);
+        }
+
+        private DownloadParams() {}
+
+        @JsonProperty("useBackup")
+        public Boolean getUseBackup() {
+            return useBackup;
+        }
+
+        public void setUseBackup(Boolean useBackup) {
+            this.useBackup = useBackup;
+        }
+
+        @JsonProperty("parallelWorkers")
+        public Integer getParallelWorkers() {
+            return parallelWorkers;
+        }
+
+        public void setParallelWorkers(Integer parallelWorkers) {
+            this.parallelWorkers = parallelWorkers;
+        }
+
+        @JsonProperty("parallelBatchSeconds")
+        public Integer getParallelBatchSeconds() {
+            return parallelBatchSeconds;
+        }
+
+        public void setParallelBatchSeconds(Integer parallelBatchSeconds) {
+            this.parallelBatchSeconds = parallelBatchSeconds;
+        }
     }
 }

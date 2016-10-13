@@ -6,10 +6,12 @@
 package com.gooddata.connector;
 
 import com.gooddata.JsonMatchers;
+import com.gooddata.connector.Zendesk4ProcessExecution.DownloadParams;
 import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class Zendesk4ProcessExecutionTest {
 
@@ -34,5 +36,20 @@ public class Zendesk4ProcessExecutionTest {
         execution.setStartTime("tickets", new DateTime(0L));
         assertThat(execution, JsonMatchers.serializesToJson(
                 "/connector/process-execution-startDate.json"));
+    }
+
+    @Test
+    public void testShouldSerializeDownloadParams() throws Exception {
+        final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
+        execution.setDownloadParams(new DownloadParams(true, 5, 3600));
+        assertThat(execution, JsonMatchers.serializesToJson(
+                "/connector/process-execution-download.json"));
+    }
+
+    @Test
+    public void testGetDownloadParams() throws Exception {
+        final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
+        final DownloadParams downloadParams = execution.getDownloadParams();
+        assertThat(downloadParams, notNullValue());
     }
 }
