@@ -78,7 +78,7 @@ public class Zendesk4ProcessExecution implements ProcessExecution {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    static class DownloadParams {
+    public static class DownloadParams {
         private Boolean useBackup;
         private Integer parallelWorkers;
         private Integer parallelBatchSeconds;
