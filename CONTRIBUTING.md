@@ -63,16 +63,3 @@ is specific enough.
 * When you need some **utility code**, look for handy utilities in used libraries first (e.g. _Spring_ has
 its `StreamUtils`, `FileCopyUtils`, ...). When you decide to create new utility class,
 use _abstract utility class pattern_.
-
-## How-tos
-### Run acceptance tests
-These tests have to be run against GoodData API, so one has to first set endpoint and credentials. It's being set by
-environment variables: `host`, `login`, `pass`, `projectToken`, `warehouseToken`. Tests can be then run by:
-`mvn verify -Pat`.
-
-One can also use one-liner like this:
-`host=... login=... pass=... projectToken=... warehouseToken=... mvn verify -Pat`
-
-One can also run only subset by specifying tests or groups to be run:
-`mvn -Dgroups=featureFlag,project,account verify -Pat` or
-`mvn -Dit.test=FeatureFlagServiceAT,ProjectServiceAT,AccountServiceAT verify -Pat`.
