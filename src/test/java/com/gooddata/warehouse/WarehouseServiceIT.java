@@ -22,6 +22,7 @@ import static com.gooddata.util.ResourceUtils.readFromResource;
 import static net.jadler.Jadler.onRequest;
 import static net.jadler.Jadler.verifyThatRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -30,11 +31,13 @@ import static org.hamcrest.core.Is.is;
 public class WarehouseServiceIT extends AbstractGoodDataIT {
 
     private static final String TITLE = "Test";
+    private static final String SCHEMA_NAME = "default";
     private static final String TASK_POLL = "/warehouse/warehouseTask-poll.json";
     private static final String TASK_DONE = "/warehouse/warehouseTask-finished.json";
     private static final String WAREHOUSE_ID = "instanceId";
     private static final String WAREHOUSE = "/warehouse/warehouse.json";
     private static final String WAREHOUSE_USER = "/warehouse/user.json";
+    private static final String WAREHOUSE_SCHEMA = "/warehouse/schema.json";
 
     private static final String WAREHOUSE_URI = Warehouse.TEMPLATE.expand(WAREHOUSE_ID).toString();
     private static final String WAREHOUSE_USER_URI = WarehouseUsers.TEMPLATE.expand(WAREHOUSE_ID).toString();
@@ -45,12 +48,14 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
     private WarehouseTask pollingTask;
     private WarehouseTask finishedTask;
     private Warehouse warehouse;
+    private WarehouseSchema warehouseSchema;
 
     @BeforeClass
     public void setUp() throws Exception {
         pollingTask = MAPPER.readValue(readFromResource(TASK_POLL), WarehouseTask.class);
         finishedTask = MAPPER.readValue(readFromResource(TASK_DONE), WarehouseTask.class);
         warehouse = MAPPER.readValue(readFromResource(WAREHOUSE), Warehouse.class);
+        warehouseSchema = MAPPER.readValue(readFromResource(WAREHOUSE_SCHEMA), WarehouseSchema.class);
     }
 
     @Test
@@ -301,4 +306,73 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
           .get();
     }
 
+    @Test
+    public void shouldGetWarehouseSchemaByName() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(warehouseSchema.getUri())
+                .respond()
+                .withBody(readFromResource(WAREHOUSE_SCHEMA))
+                .withStatus(200);
+
+        final WarehouseSchema result = gd.getWarehouseService().getWarehouseSchemaByName(warehouse, SCHEMA_NAME);
+        assertThat(result, notNullValue());
+        assertThat(result.getName(), is(SCHEMA_NAME));
+    }
+
+    @Test
+    public void shouldGetDefaultWarehouseSchema() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(warehouseSchema.getUri())
+                .respond()
+                .withBody(readFromResource(WAREHOUSE_SCHEMA))
+                .withStatus(200);
+
+        final WarehouseSchema result = gd.getWarehouseService().getDefaultWarehouseSchema(warehouse);
+        assertThat(result, notNullValue());
+        assertThat(result.getName(), is(SCHEMA_NAME));
+    }
+
+    @Test
+    public void shouldGetWarehouseSchemaByUri() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(warehouseSchema.getUri())
+                .respond()
+                .withBody(readFromResource(WAREHOUSE_SCHEMA))
+                .withStatus(200);
+
+        final WarehouseSchema result = gd.getWarehouseService().getWarehouseSchemaByUri(warehouseSchema.getUri());
+        assertThat(result, notNullValue());
+        assertThat(result.getName(), is(SCHEMA_NAME));
+    }
+
+    @Test
+    public void shouldListWarehouseSchemas() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(WarehouseSchemas.TEMPLATE.expand(warehouse.getId()).toString())
+                .respond()
+                .withBody(readFromResource("/warehouse/schemas.json"))
+                .withStatus(200);
+
+        final PageableList<WarehouseSchema> list = gd.getWarehouseService().listWarehouseSchemas(warehouse);
+        assertThat(list, notNullValue());
+        assertThat(list, hasSize(1));
+        assertThat(list.get(0).getName(), is(equalTo(SCHEMA_NAME)));
+    }
+
+    @Test(expectedExceptions = WarehouseSchemaNotFoundException.class)
+    public void shouldFailWarehouseSchemaByNameNotFound() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(warehouseSchema.getUri())
+                .respond()
+                .withStatus(404);
+
+        final WarehouseSchema result = gd.getWarehouseService().getWarehouseSchemaByName(warehouse, SCHEMA_NAME);
+        assertThat(result, notNullValue());
+        assertThat(result.getName(), is(SCHEMA_NAME));
+    }
 }
