@@ -36,6 +36,11 @@ The *GoodData Java SDK* uses:
 
 The *GoodData Java SDK* is free and open-source software provided by GoodData Corporation "as-is" under [BSD License](LICENSE.txt).
 
+## Development
+
+Build the library with `mvn package`, see the
+[Testing](https://github.com/martiner/gooddata-java/wiki/Testing) page for different testing methods.
+
 ## Contribute
 
 Found a bug? Please create an [issue](https://github.com/martiner/gooddata-java/issues). Missing functionality? 
