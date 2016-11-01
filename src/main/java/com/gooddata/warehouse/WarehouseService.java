@@ -31,6 +31,8 @@ import static com.gooddata.util.Validate.notNull;
  */
 public class WarehouseService extends AbstractService {
 
+    private static final String DEFAULT_SCHEMA_NAME = "default";
+
     /**
      * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
      * this abstract one.
@@ -302,5 +304,68 @@ public class WarehouseService extends AbstractService {
         }
 
         return getWarehouseByUri(toUpdate.getUri());
+    }
+
+    /**
+     * list schemas for Warehouse
+     *
+     * @param warehouse to list schemas for
+     * @return pageable list of warehouse schemas
+     */
+    public PageableList<WarehouseSchema> listWarehouseSchemas(final Warehouse warehouse) {
+        try {
+            final WarehouseSchemas result = restTemplate.getForObject(WarehouseSchemas.TEMPLATE.expand(warehouse.getId()), WarehouseSchemas.class);
+            if (result == null) {
+                return new PageableList<>();
+            }
+            return result;
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to list Warehouse schemas", e);
+        }
+    }
+
+    /**
+     * get warehouse schema by name
+     *
+     * @param warehouse to get schema for
+     * @param name of schema
+     * @return warehouse schema
+     */
+    public WarehouseSchema getWarehouseSchemaByName(final Warehouse warehouse, final String name) {
+        notNull(warehouse, "warehouse");
+        notEmpty(name, "name");
+        final String uri = WarehouseSchema.TEMPLATE.expand(warehouse.getId(), name).toString();
+        return getWarehouseSchemaByUri(uri);
+    }
+
+    /**
+     * get warehouse schema by uri
+     *
+     * @param uri of schema
+     * @return warehouse schema
+     */
+    public WarehouseSchema getWarehouseSchemaByUri(final String uri) {
+        notEmpty(uri, "uri");
+        try {
+            return restTemplate.getForObject(uri, WarehouseSchema.class);
+        } catch (GoodDataRestException e) {
+            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+                throw new WarehouseSchemaNotFoundException(uri.toString(), e);
+            } else {
+                throw e;
+            }
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to get Warehouse instance " + uri, e);
+        }
+    }
+
+    /**
+     * get default warehouse schema
+     *
+     * @param warehouse to get default schema for
+     * @return default warehouse schema
+     */
+    public WarehouseSchema getDefaultWarehouseSchema(final Warehouse warehouse) {
+        return getWarehouseSchemaByName(warehouse, DEFAULT_SCHEMA_NAME);
     }
 }

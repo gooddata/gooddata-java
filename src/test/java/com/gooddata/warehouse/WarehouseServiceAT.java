@@ -21,6 +21,9 @@ import java.util.concurrent.TimeUnit;
 
 import static com.gooddata.warehouse.WarehouseIdMatcher.hasSameIdAs;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -34,6 +37,7 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 public class WarehouseServiceAT extends AbstractGoodDataAT {
 
     private static final String LOGIN = "john.smith." + UUID.randomUUID() + "@gooddata.com";
+    private static final String SCHEMA_NAME = "default";
 
     private final String warehouseToken;
     private final WarehouseService service;
@@ -116,6 +120,24 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
     public void shouldRemoveUserFromWarehouse() {
         service.removeUserFromWarehouse(warehouseUser).get(60, TimeUnit.SECONDS);
         warehouseUser = null;
+    }
+
+    @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
+    public void listWarehouseSchemas() {
+        PageableList<WarehouseSchema> warehouseSchemas = service.listWarehouseSchemas(warehouse);
+        assertThat(warehouseSchemas, contains(hasProperty("name", equalTo(SCHEMA_NAME))));
+    }
+
+    @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
+    public void getWarehouseSchema() {
+        WarehouseSchema warehouseSchema = service.getWarehouseSchemaByName(warehouse, SCHEMA_NAME);
+        assertThat(warehouseSchema, is(notNullValue()));
+    }
+
+    @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
+    public void getDefaultWarehouseSchema() {
+        WarehouseSchema warehouseSchema = service.getDefaultWarehouseSchema(warehouse);
+        assertThat(warehouseSchema, is(notNullValue()));
     }
 
     @Test(dependsOnGroups = "warehouse")
