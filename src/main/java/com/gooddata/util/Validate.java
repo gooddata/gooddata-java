@@ -82,7 +82,7 @@ public abstract class Validate {
 
     public static <T> T[] noNullElements(T[] array, String argument) {
         notNull(array, argument);
-        for (int i = 0; i<array.length; i++) {
+        for (int i = 0; i < array.length; i++) {
             if (array[i] == null) {
                 throw new IllegalArgumentException(argument + " contains null element at index: " + i);
             }
@@ -105,4 +105,15 @@ public abstract class Validate {
         return value;
     }
 
+    /**
+     * throws new {@link IllegalArgumentException} if expression is false
+     *
+     * @param expression boolean expression
+     * @param message    of exception
+     */
+    public static void isTrue(boolean expression, String message) {
+        if (!expression) {
+            throw new IllegalArgumentException(message);
+        }
+    }
 }

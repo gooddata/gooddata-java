@@ -7,6 +7,7 @@ package com.gooddata;
 
 import com.gooddata.account.AccountService;
 import com.gooddata.connector.ConnectorService;
+import com.gooddata.dataload.OutputStageService;
 import com.gooddata.dataload.processes.ProcessService;
 import com.gooddata.featureflag.FeatureFlagService;
 import com.gooddata.md.maintenance.ExportImportService;
@@ -78,6 +79,7 @@ public class GoodData {
     private final NotificationService notificationService;
     private final ExportImportService exportImportService;
     private final FeatureFlagService featureFlagService;
+    private final OutputStageService outputStageService;
 
     /**
      * Create instance configured to communicate with GoodData Platform under user with given credentials.
@@ -209,6 +211,7 @@ public class GoodData {
         notificationService = new NotificationService(getRestTemplate());
         exportImportService = new ExportImportService(getRestTemplate());
         featureFlagService = new FeatureFlagService(restTemplate);
+        outputStageService = new OutputStageService(restTemplate);
     }
 
     static RestTemplate createRestTemplate(GoodDataEndpoint endpoint, HttpClient httpClient) {
@@ -421,5 +424,14 @@ public class GoodData {
      */
     public FeatureFlagService getFeatureFlagService() {
         return featureFlagService;
+    }
+
+    /**
+     * Get initialized service for output stage management.
+     *
+     * @return initialized service for output stage management
+     */
+    public OutputStageService getOutputStageService() {
+        return outputStageService;
     }
 }
