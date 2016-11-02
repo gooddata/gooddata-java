@@ -7,7 +7,6 @@ package com.gooddata.gdc;
 
 import com.github.sardine.Sardine;
 import com.github.sardine.impl.SardineException;
-import com.github.sardine.impl.SardineImpl;
 import com.gooddata.UriPrefixer;
 import org.apache.http.Header;
 import org.apache.http.HeaderIterator;
@@ -19,6 +18,7 @@ import org.apache.http.ProtocolVersion;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.NonRepeatableRequestException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -104,14 +104,28 @@ public class DataStoreService {
             sardine.put(url.toString(), stream);
         } catch (SardineException e) {
             if (HttpStatus.INTERNAL_SERVER_ERROR.value() == e.getStatusCode()) {
-                throw new DataStoreException("Got 500 while uploading to " + url + "."
-                        + "\nThis can be known limitation, see https://github.com/martiner/gooddata-java/wiki/Known-limitations", e);
+                // this error may occur when user issues request to WebDAV before SST and TT were obtained
+                // and WebDAV is deployed on a separate hostname
+                // see https://github.com/martiner/gooddata-java/wiki/Known-limitations
+                throw new DataStoreException(createUnAuthRequestWarningMessage(url), e);
             } else {
                 throw new DataStoreException("Unable to upload to " + url + " got status " + e.getStatusCode(), e);
             }
         } catch (IOException e) {
-            throw new DataStoreException("Unable to upload to " + url, e);
+            // this error may occur when user issues request to WebDAV before SST and TT were obtained
+            // and WebDAV deployed on the same hostname
+            // see https://github.com/martiner/gooddata-java/wiki/Known-limitations
+            if (e.getCause() instanceof NonRepeatableRequestException) {
+                throw new DataStoreException(createUnAuthRequestWarningMessage(url), e);
+            } else {
+                throw new DataStoreException("Unable to upload to " + url, e);
+            }
         }
+    }
+
+    private String createUnAuthRequestWarningMessage(final URI url) {
+        return "Got 500 while uploading to " + url + "."
+                + "\nThis can be known limitation, see https://github.com/martiner/gooddata-java/wiki/Known-limitations";
     }
 
     /**

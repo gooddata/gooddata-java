@@ -95,7 +95,7 @@ public class DatastoreServiceAT extends AbstractGoodDataAT {
 
     @Test(groups = "datastore", expectedExceptions = DataStoreException.class,
             expectedExceptionsMessageRegExp = "(?s).* 500 .*https://github.com/.*/Known-limitations")
-    public void datastoreUploadWithAuthentication() throws Exception {
+    public void shouldThrowExceptionWithMessageOnUnAuthRequest() throws Exception {
         final GoodData datastoreGd = new GoodData(getProperty("host"), getProperty("login"), getProperty("pass"));
         DataStoreService dataStoreService = datastoreGd.getDataStoreService();
 
