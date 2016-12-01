@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.*;
 import org.springframework.web.util.UriTemplate;
 
 import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNullState;
 
 /**
  * Project feature flag is a boolean flag used for enabling / disabling some specific feature of GoodData platform
@@ -74,8 +74,7 @@ public class ProjectFeatureFlag {
 
     @JsonIgnore
     public String getUri() {
-        notNull(links, "links (if you want to get feature flag uri)");
-        return links.getSelf();
+        return notNullState(links, "links").getSelf();
     }
 
     @Override

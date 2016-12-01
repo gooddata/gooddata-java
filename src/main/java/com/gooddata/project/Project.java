@@ -24,6 +24,7 @@ import java.util.Set;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNullState;
 import static java.util.Arrays.asList;
 
 /**
@@ -138,7 +139,7 @@ public class Project {
 
     @JsonIgnore
     public String getUri() {
-        return links.getSelf();
+        return notNullState(links, "links").getSelf();
     }
 
     /**
@@ -153,7 +154,7 @@ public class Project {
 
     @JsonIgnore
     public String getUsersUri() {
-        return links.getUsers();
+        return notNullState(links, "links").getUsers();
     }
 
     /**
@@ -168,7 +169,7 @@ public class Project {
 
     @JsonIgnore
     public String getRolesUri() {
-        return links.getRoles();
+        return notNullState(links, "links").getRoles();
     }
 
     /**
@@ -183,7 +184,7 @@ public class Project {
 
     @JsonIgnore
     public String getGroupsUri() {
-        return links.getGroups();
+        return notNullState(links, "links").getGroups();
     }
 
     /**
@@ -198,7 +199,7 @@ public class Project {
 
     @JsonIgnore
     public String getInvitationsUri() {
-        return links.getInvitations();
+        return notNullState(links, "links").getInvitations();
     }
 
     /**
@@ -228,7 +229,7 @@ public class Project {
 
     @JsonIgnore
     public String getLdmThumbnailUri() {
-        return links.getLdmThumbnail();
+        return notNullState(links, "links").getLdmThumbnail();
     }
 
     /**
@@ -243,7 +244,7 @@ public class Project {
 
     @JsonIgnore
     public String getMetadataUri() {
-        return links.getMetadata();
+        return notNullState(links, "links").getMetadata();
     }
 
     /**
@@ -258,7 +259,7 @@ public class Project {
 
     @JsonIgnore
     public String getPublicArtifactsUri() {
-        return links.getPublicArtifacts();
+        return notNullState(links, "links").getPublicArtifacts();
     }
 
     /**
@@ -273,7 +274,7 @@ public class Project {
 
     @JsonIgnore
     public String getTemplatesUri() {
-        return links.getTemplates();
+        return notNullState(links, "links").getTemplates();
     }
 
     /**
@@ -288,7 +289,7 @@ public class Project {
 
     @JsonIgnore
     public String getConnectorsUri() {
-        return links.getConnectors();
+        return notNullState(links, "links").getConnectors();
     }
 
     /**
@@ -303,7 +304,7 @@ public class Project {
 
     @JsonIgnore
     public String getDataLoadUri() {
-        return links.getDataLoad();
+        return notNullState(links, "links").getDataLoad();
     }
 
     /**
@@ -318,7 +319,7 @@ public class Project {
 
     @JsonIgnore
     public String getSchedulesUri() {
-        return links.getSchedules();
+        return notNullState(links, "links").getSchedules();
     }
 
     /**
@@ -333,7 +334,7 @@ public class Project {
 
     @JsonIgnore
     public String getExecuteUri() {
-        return links.getExecute();
+        return notNullState(links, "links").getExecute();
     }
 
     /**
@@ -348,7 +349,7 @@ public class Project {
 
     @JsonIgnore
     public String getEventStoresUri() {
-        return links.getEventStores();
+        return notNullState(links, "links").getEventStores();
     }
 
     /**
@@ -363,7 +364,7 @@ public class Project {
 
     @JsonIgnore
     public String getClearCachesUri() {
-        return links.getClearCaches();
+        return notNullState(links, "links").getClearCaches();
     }
 
     /**
@@ -378,7 +379,7 @@ public class Project {
 
     @JsonIgnore
     public String getUploadsUri() {
-        return links.getUploads();
+        return notNullState(links, "links").getUploads();
     }
 
     @JsonIgnore

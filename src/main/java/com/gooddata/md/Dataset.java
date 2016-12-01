@@ -5,6 +5,8 @@
  */
 package com.gooddata.md;
 
+import static com.gooddata.util.Validate.notNullState;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.util.BooleanDeserializer;
 import com.gooddata.util.BooleanStringSerializer;
@@ -93,7 +95,7 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
 
     @JsonIgnore
     public String getDataUploadsUri() {
-        return links != null ? links.get(DATA_UPLOADS_LINK) : null;
+        return notNullState(links, "links").get(DATA_UPLOADS_LINK);
     }
 
     /**
@@ -108,7 +110,7 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
 
     @JsonIgnore
     public String getUploadConfigurationUri() {
-        return links != null ? links.get(UPLOAD_CONFIGURATION_LINK) : null;
+        return notNullState(links, "links").get(UPLOAD_CONFIGURATION_LINK);
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
