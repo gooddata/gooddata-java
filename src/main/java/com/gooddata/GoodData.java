@@ -28,6 +28,7 @@ import org.apache.http.config.SocketConfig;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.VersionInfo;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
@@ -303,6 +304,7 @@ public class GoodData {
      *
      * @return initialized service for project management
      */
+    @Bean
     public ProjectService getProjectService() {
         return projectService;
     }
@@ -312,6 +314,7 @@ public class GoodData {
      *
      * @return initialized service for account management
      */
+    @Bean
     public AccountService getAccountService() {
         return accountService;
     }
@@ -322,6 +325,7 @@ public class GoodData {
      *
      * @return initialized service for metadata management
      */
+    @Bean
     public MetadataService getMetadataService() {
         return metadataService;
     }
@@ -331,6 +335,7 @@ public class GoodData {
      *
      * @return initialized service for model management
      */
+    @Bean
     public ModelService getModelService() {
         return modelService;
     }
@@ -340,6 +345,7 @@ public class GoodData {
      *
      * @return initialized service for API root management
      */
+    @Bean
     public GdcService getGdcService() {
         return gdcService;
     }
@@ -349,6 +355,7 @@ public class GoodData {
      *
      * @return initialized service for data store management
      */
+    @Bean
     public DataStoreService getDataStoreService() {
         return dataStoreService;
     }
@@ -358,6 +365,7 @@ public class GoodData {
      *
      * @return initialized service for dataset management
      */
+    @Bean
     public DatasetService getDatasetService() {
         return datasetService;
     }
@@ -367,6 +375,7 @@ public class GoodData {
      *
      * @return initialized service for report management
      */
+    @Bean
     public ReportService getReportService() {
         return reportService;
     }
@@ -376,6 +385,7 @@ public class GoodData {
      *
      * @return initialized service for dataload processes management and process executions
      */
+    @Bean
     public ProcessService getProcessService() {
         return processService;
     }
@@ -385,6 +395,7 @@ public class GoodData {
      *
      * @return initialized service for ADS management
      */
+    @Bean
     public WarehouseService getWarehouseService() {
         return warehouseService;
     }
@@ -394,6 +405,7 @@ public class GoodData {
      *
      * @return initialized service for connector integration management
      */
+    @Bean
     public ConnectorService getConnectorService() {
         return connectorService;
     }
@@ -403,6 +415,7 @@ public class GoodData {
      *
      * @return initialized service for project notifications management
      */
+    @Bean
     public NotificationService getNotificationService() {
         return notificationService;
     }
@@ -412,6 +425,7 @@ public class GoodData {
      *
      * @return initialized service for metadata export/import
      */
+    @Bean
     public ExportImportService getExportImportService() {
         return exportImportService;
     }
@@ -421,6 +435,7 @@ public class GoodData {
      *
      * @return initialized service for feature flag management
      */
+    @Bean
     public FeatureFlagService getFeatureFlagService() {
         return featureFlagService;
     }
@@ -430,6 +445,7 @@ public class GoodData {
      *
      * @return initialized service for output stage management
      */
+    @Bean
     public OutputStageService getOutputStageService() {
         return outputStageService;
     }
