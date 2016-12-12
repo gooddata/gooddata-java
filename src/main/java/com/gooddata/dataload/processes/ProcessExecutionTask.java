@@ -5,6 +5,8 @@
  */
 package com.gooddata.dataload.processes;
 
+import static com.gooddata.util.Validate.notNullState;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -37,7 +39,7 @@ class ProcessExecutionTask {
     }
 
     String getPollUri() {
-        return links != null ? links.get(POLL_LINK) : null;
+        return notNullState(links, "links").get(POLL_LINK);
     }
 
     @Deprecated
@@ -46,6 +48,6 @@ class ProcessExecutionTask {
     }
 
     String getDetailUri() {
-        return links != null ? links.get(DETAIL_LINK) : null;
+        return notNullState(links, "links").get(DETAIL_LINK);
     }
 }

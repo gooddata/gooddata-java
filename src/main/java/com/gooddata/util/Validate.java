@@ -90,4 +90,19 @@ public abstract class Validate {
         return array;
     }
 
+    /**
+     * Throws IllegalStateException if the value is null, otherwise returns the value.
+     *
+     * @param value        input value
+     * @param argumentName the name of input argument
+     * @param <T>          the type of the argument
+     * @return the value
+     */
+    public static <T> T notNullState(T value, String argumentName) {
+        if (value == null) {
+            throw new IllegalStateException(argumentName + " is null");
+        }
+        return value;
+    }
+
 }

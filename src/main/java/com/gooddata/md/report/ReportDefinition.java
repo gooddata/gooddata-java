@@ -5,6 +5,8 @@
  */
 package com.gooddata.md.report;
 
+import static com.gooddata.util.Validate.notNullState;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.md.AbstractObj;
 import com.gooddata.md.Meta;
@@ -73,7 +75,7 @@ public class ReportDefinition extends AbstractObj implements Queryable, Updatabl
 
     @JsonIgnore
     public String getExplainUri() {
-        return links != null ? links.get(EXPLAIN_LINK) : null;
+        return notNullState(links, "links").get(EXPLAIN_LINK);
     }
 
 }

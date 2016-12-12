@@ -7,6 +7,7 @@ package com.gooddata.dataload.processes;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNullState;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -104,7 +105,7 @@ public class DataloadProcess {
 
     @JsonIgnore
     public String getUri() {
-        return links != null ? links.get(SELF_LINK) : null;
+        return notNullState(links, "links").get(SELF_LINK);
     }
 
     @JsonIgnore
@@ -124,7 +125,7 @@ public class DataloadProcess {
 
     @JsonIgnore
     public String getExecutionsUri() {
-        return links != null ? links.get(EXECUTIONS_LINK) : null;
+        return notNullState(links, "links").get(EXECUTIONS_LINK);
     }
 
     /**
@@ -139,7 +140,7 @@ public class DataloadProcess {
 
     @JsonIgnore
     public String getSourceUri() {
-        return getUri() != null ? getUri() + "/source" : null;
+        return getUri() + "/source";
     }
 
     public void validateExecutable(final String executable) {

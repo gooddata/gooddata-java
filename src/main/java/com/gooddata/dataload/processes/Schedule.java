@@ -25,6 +25,7 @@ import java.util.Map;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNullState;
 
 /**
  * Schedule.
@@ -244,7 +245,7 @@ public class Schedule {
 
     @JsonIgnore
     public String getUri() {
-        return links != null ? links.get(SELF_LINK) : null;
+        return notNullState(links, "links").get(SELF_LINK);
     }
 
     @JsonIgnore

@@ -6,6 +6,7 @@
 package com.gooddata.warehouse;
 
 import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNullState;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.project.Environment;
@@ -154,7 +155,7 @@ public class Warehouse {
 
     @JsonIgnore
     public String getUri() {
-        return links != null ? links.get(SELF_LINK): null;
+        return notNullState(links, "links").get(SELF_LINK);
     }
 
     @JsonIgnore

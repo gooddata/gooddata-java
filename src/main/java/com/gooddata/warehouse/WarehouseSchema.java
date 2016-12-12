@@ -5,6 +5,8 @@
  */
 package com.gooddata.warehouse;
 
+import static com.gooddata.util.Validate.notNullState;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -59,11 +61,11 @@ public class WarehouseSchema {
 
     @JsonIgnore
     public String getUri() {
-        return links != null ? links.get(SELF_LINK): null;
+        return notNullState(links, "links").get(SELF_LINK);
     }
 
     @JsonIgnore
     public String getInstanceUri() {
-        return links != null ? links.get(INSTANCE_LINK): null;
+        return notNullState(links, "links").get(INSTANCE_LINK);
     }
 }

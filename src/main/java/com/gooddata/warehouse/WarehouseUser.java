@@ -17,6 +17,7 @@ import org.springframework.web.util.UriTemplate;
 import java.util.Map;
 
 import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNullState;
 
 /**
  * Warehouse user
@@ -81,7 +82,7 @@ public class WarehouseUser {
 
     @JsonIgnore
     public String getUri() {
-        return links != null ? links.get(SELF_LINK): null;
+        return notNullState(links, "links").get(SELF_LINK);
     }
 
 }

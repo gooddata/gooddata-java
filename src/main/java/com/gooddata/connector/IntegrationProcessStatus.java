@@ -5,6 +5,8 @@
  */
 package com.gooddata.connector;
 
+import static com.gooddata.util.Validate.notNullState;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.util.ISODateTimeDeserializer;
 import com.gooddata.util.ISODateTimeSerializer;
@@ -84,7 +86,7 @@ public class IntegrationProcessStatus {
 
     @JsonIgnore
     public String getUri() {
-        return links != null ? links.get(SELF_LINK): null;
+        return notNullState(links, "links").get(SELF_LINK);
     }
 
     @JsonIgnore
