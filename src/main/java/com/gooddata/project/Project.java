@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.gooddata.util.GoodDataToStringBuilder;
 import org.joda.time.DateTime;
 import org.springframework.web.util.UriTemplate;
 
@@ -422,6 +423,11 @@ public class Project {
         setEnvironment(environment.name());
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private static class ProjectContent {
@@ -504,6 +510,11 @@ public class Project {
 
         public void setEnvironment(final String environment) {
             this.environment = environment;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.toStringExclude(this);
         }
     }
 
@@ -672,6 +683,11 @@ public class Project {
 
         public void setProjectTemplate(String projectTemplate) {
             this.projectTemplate = projectTemplate;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.toStringExclude(this);
         }
     }
 }

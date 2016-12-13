@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.gooddata.util.BooleanDeserializer;
 import com.gooddata.util.GDDateTimeDeserializer;
+import com.gooddata.util.GoodDataToStringBuilder;
 import org.joda.time.DateTime;
 import org.springframework.web.util.UriTemplate;
 
@@ -120,5 +121,10 @@ public class Upload {
         }
 
         return fullUpload ? UploadMode.FULL : UploadMode.INCREMENTAL;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 }

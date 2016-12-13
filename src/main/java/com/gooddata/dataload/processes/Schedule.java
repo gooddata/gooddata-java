@@ -6,6 +6,7 @@
 package com.gooddata.dataload.processes;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.gooddata.util.GoodDataToStringBuilder;
 import com.gooddata.util.ISODateTimeDeserializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -253,4 +254,8 @@ public class Schedule {
         return TEMPLATE.match(getUri()).get("scheduleId");
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
+    }
 }

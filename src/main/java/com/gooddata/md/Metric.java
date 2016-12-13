@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
 
@@ -61,6 +62,11 @@ public class Metric extends AbstractObj implements Queryable, Updatable {
         return content.getFolders();
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
+    }
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private static class Content {
 
@@ -108,6 +114,11 @@ public class Metric extends AbstractObj implements Queryable, Updatable {
 
         public Collection<String> getFolders() {
             return folders;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.toStringExclude(this);
         }
     }
 }
