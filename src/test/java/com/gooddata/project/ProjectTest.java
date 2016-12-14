@@ -71,6 +71,8 @@ public class ProjectTest {
         assertThat(project.getTemplatesLink(), is("/gdc/md/PROJECT_ID/templates"));
         assertThat(project.getEventStoresLink(), is("/gdc/projects/PROJECT_ID/dataload/eventstore/stores"));
         assertThat(project.getEventStoresUri(), is("/gdc/projects/PROJECT_ID/dataload/eventstore/stores"));
+
+        System.out.println(project);
     }
 
     @Test

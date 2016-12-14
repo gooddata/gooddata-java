@@ -6,6 +6,7 @@
 package com.gooddata.gdc;
 
 import com.fasterxml.jackson.annotation.*;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,6 +49,11 @@ public class AboutLinks {
 
     public Collection<Link> getLinks() {
         return links;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 
     /**
@@ -100,6 +106,11 @@ public class AboutLinks {
 
         public String getSummary() {
             return summary;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.toStringExclude(this);
         }
     }
 }

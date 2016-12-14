@@ -240,4 +240,9 @@ public class Meta implements Serializable {
     public void setSharedWithSomeone(final Boolean sharedWithSomeone) {
         this.sharedWithSomeone = sharedWithSomeone;
     }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
+    }
 }

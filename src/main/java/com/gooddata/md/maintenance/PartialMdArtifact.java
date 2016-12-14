@@ -7,6 +7,7 @@ package com.gooddata.md.maintenance;
 
 import com.fasterxml.jackson.annotation.*;
 import com.gooddata.gdc.UriResponse;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 /**
  * Partial metadata export result structure.
@@ -38,5 +39,10 @@ class PartialMdArtifact {
     @JsonProperty("status")
     private UriResponse getStatus() {
         return status;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 }

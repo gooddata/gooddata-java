@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,5 +64,10 @@ public class ProcessExecution {
     @JsonIgnore
     String getExecutionsUri() {
         return executionsUri;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this, "hiddenParams", "executionsUri");
     }
 }

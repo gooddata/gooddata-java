@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gooddata.util.GoodDataToStringBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import java.util.Collections;
@@ -129,5 +130,10 @@ public class Role {
         int result = permissions.hashCode();
         result = 31 * result + (getIdentifier() != null ? getIdentifier().hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 }

@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.io.InputStream;
 import java.util.List;
@@ -125,6 +126,11 @@ public class DatasetManifest {
         this.source = notNull(source, "source");
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this, "source");
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Part {
@@ -196,6 +202,11 @@ public class DatasetManifest {
 
         public void setConstraints(Map<String, String> constraints) {
             this.constraints = constraints;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.toStringExclude(this);
         }
     }
 }

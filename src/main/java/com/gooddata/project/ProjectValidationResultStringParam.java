@@ -8,6 +8,7 @@ package com.gooddata.project;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 @JsonTypeName("common")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -30,7 +31,7 @@ public class ProjectValidationResultStringParam extends ProjectValidationResultP
 
     @Override
     public String toString() {
-        return value;
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 
     @Override
