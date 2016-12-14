@@ -10,6 +10,7 @@ import static com.gooddata.util.Validate.notNullState;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.project.Environment;
+import com.gooddata.util.GoodDataToStringBuilder;
 import com.gooddata.util.ISODateTimeDeserializer;
 import com.gooddata.util.ISODateTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -166,5 +167,10 @@ public class Warehouse {
     @JsonIgnore
     public boolean isEnabled() {
         return STATUS_ENABLED.equals(status);
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 }

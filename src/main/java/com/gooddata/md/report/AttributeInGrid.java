@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.md.Attribute;
 import com.gooddata.md.DisplayForm;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,5 +138,10 @@ public class AttributeInGrid implements GridElement {
 
     public String getAlias() {
         return alias;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 }

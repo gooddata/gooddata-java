@@ -34,6 +34,8 @@ public class UploadsInfoTest {
         assertThat(dataset.getDatasetId(), is("dataset.campaign"));
         assertThat(dataset.getUploadsUri(), is("/gdc/md/PROJECT_ID/data/uploads/814"));
         assertThat(dataset.getLastUploadUri(), is("/gdc/md/PROJECT_ID/data/upload/1076"));
+
+        System.out.println(uploadsInfo);
     }
 
     @Test(expectedExceptions = DatasetNotFoundException.class)

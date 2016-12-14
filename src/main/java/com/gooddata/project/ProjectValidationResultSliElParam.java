@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -109,6 +110,6 @@ public class ProjectValidationResultSliElParam extends ProjectValidationResultPa
 
     @Override
     public String toString() {
-        return  ids + " " + vals;
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 }

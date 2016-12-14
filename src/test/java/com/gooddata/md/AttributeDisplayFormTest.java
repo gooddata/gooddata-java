@@ -39,6 +39,8 @@ public class AttributeDisplayFormTest {
         assertThat(attrDF.getType(), is(TYPE));
         assertThat(attrDF.getElementsLink(), is(ELEMENTS_LINK));
         assertThat(attrDF.getElementsUri(), is(ELEMENTS_LINK));
+
+        System.out.println(attrDF);
     }
 
     @Test

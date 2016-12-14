@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 @JsonTypeName("object")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -36,7 +37,7 @@ public class ProjectValidationResultObjectParam extends ProjectValidationResultP
 
     @Override
     public String toString() {
-        return name + " (" + uri + ")";
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 
     @Override

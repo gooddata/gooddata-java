@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.util.GoodDataToStringBuilder;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.util.UriTemplate;
 
@@ -148,5 +149,10 @@ public class DataloadProcess {
                 !getExecutables().contains(executable)) {
             throw new IllegalArgumentException("Executable " + executable + " not found in process executables " + getExecutables());
         }
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 }

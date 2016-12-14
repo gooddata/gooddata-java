@@ -7,6 +7,7 @@ package com.gooddata.md;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -61,13 +62,9 @@ public class DashboardAttachment extends Attachment {
         return result;
     }
 
+
     @Override
     public String toString() {
-        return "DashboardAttachment{" +
-                "uri=" + getUri() +
-                ", allTabs=" + allTabs +
-                ", tabs=" + tabs +
-                ", executionContext='" + executionContext + '\'' +
-                '}';
+        return new GoodDataToStringBuilder(this).append("uri", getUri()).toString();
     }
 }

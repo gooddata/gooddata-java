@@ -8,6 +8,7 @@ package com.gooddata.md;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 /**
  * MAQL AST representation
@@ -57,6 +58,11 @@ public class MaqlAst {
         this.value = value;
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
+    }
+
     public static class MaqlAstPosition {
 
         private final int line;
@@ -74,6 +80,11 @@ public class MaqlAst {
 
         public int getLine() {
             return line;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.toStringExclude(this);
         }
     }
 }
