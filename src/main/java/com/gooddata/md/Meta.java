@@ -17,7 +17,7 @@ import org.joda.time.DateTime;
 import java.io.Serializable;
 import java.util.Set;
 
-import static org.apache.commons.lang.StringUtils.substring;
+import static org.apache.commons.lang3.StringUtils.substring;
 
 /**
  * Metadata meta information (meant just for internal SDK usage)
@@ -239,5 +239,10 @@ public class Meta implements Serializable {
     @JsonDeserialize(using = BooleanDeserializer.class)
     public void setSharedWithSomeone(final Boolean sharedWithSomeone) {
         this.sharedWithSomeone = sharedWithSomeone;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 }
