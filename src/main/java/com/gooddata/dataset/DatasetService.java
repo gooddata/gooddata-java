@@ -14,7 +14,7 @@ import com.gooddata.GoodDataRestException;
 import com.gooddata.gdc.*;
 import com.gooddata.gdc.AboutLinks.Link;
 import com.gooddata.project.Project;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
