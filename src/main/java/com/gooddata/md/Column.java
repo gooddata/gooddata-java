@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 /**
  * Represents physical data model column. Doesn't implement all fields right now.
@@ -88,6 +89,10 @@ public class Column extends AbstractObj implements Queryable {
         return TYPE_DISPLAY_FORM.equals(getType());
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
+    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class Content {
@@ -113,6 +118,11 @@ public class Column extends AbstractObj implements Queryable {
 
         public String getColumnType() {
             return columnType;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.toStringExclude(this);
         }
     }
 }

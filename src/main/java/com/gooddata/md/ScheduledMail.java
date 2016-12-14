@@ -8,6 +8,7 @@ package com.gooddata.md;
 import com.fasterxml.jackson.annotation.*;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.report.ReportExportFormat;
+import com.gooddata.util.GoodDataToStringBuilder;
 import org.joda.time.LocalDate;
 
 import java.util.*;
@@ -164,6 +165,10 @@ public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
             this.attachments = attachments;
         }
 
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.toStringExclude(this);
+        }
     }
 
     @JsonIgnore
@@ -252,4 +257,8 @@ public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
+    }
 }

@@ -5,6 +5,8 @@
  */
 package com.gooddata.md;
 
+import com.gooddata.util.GoodDataToStringBuilder;
+
 /**
  * Metadata query restriction. See static factory methods to get instance of desired restriction type.
  */
@@ -55,6 +57,11 @@ public class Restriction {
      */
     public static Restriction summary(String value) {
         return new Restriction(Type.SUMMARY, value);
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 
     static enum Type {

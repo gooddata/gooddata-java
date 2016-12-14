@@ -11,6 +11,7 @@ import static java.util.Arrays.asList;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.util.GoodDataToStringBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import java.util.Collection;
@@ -87,5 +88,10 @@ public class PartialMdExport {
 
     public boolean isExportAttributeProperties() {
         return exportAttributeProperties;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 }

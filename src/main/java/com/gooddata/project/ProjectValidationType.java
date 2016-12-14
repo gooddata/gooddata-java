@@ -7,6 +7,7 @@ package com.gooddata.project;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 /**
  * Represents project validation type.
@@ -48,5 +49,10 @@ public class ProjectValidationType {
     @Override
     public int hashCode() {
         return value.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 }

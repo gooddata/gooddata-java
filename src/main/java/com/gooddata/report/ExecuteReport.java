@@ -7,6 +7,7 @@ package com.gooddata.report;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import static com.gooddata.util.Validate.notNull;
 
@@ -21,5 +22,10 @@ class ExecuteReport extends ReportRequest {
     @JsonProperty("report")
     public String getReportUri() {
         return reportUri;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 }

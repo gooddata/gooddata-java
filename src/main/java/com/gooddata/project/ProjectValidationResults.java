@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -95,4 +96,8 @@ public class ProjectValidationResults {
         return results;
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
+    }
 }

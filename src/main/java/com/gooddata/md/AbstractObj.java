@@ -7,6 +7,7 @@ package com.gooddata.md;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 import org.joda.time.DateTime;
 
 import java.util.Set;
@@ -154,6 +155,11 @@ public abstract class AbstractObj {
             uris[i] = objs[i].getUri();
         }
         return uris;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 
 }

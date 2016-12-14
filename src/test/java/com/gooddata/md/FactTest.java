@@ -24,6 +24,8 @@ public class FactTest {
         assertThat(fact.getExpressions(), hasSize(1));
         assertThat(fact.getFolders(), is(notNullValue()));
         assertThat(fact.getFolders(), hasSize(2));
+
+        System.out.println(fact);
     }
 
     @Test

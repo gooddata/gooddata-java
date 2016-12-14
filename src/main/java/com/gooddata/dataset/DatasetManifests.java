@@ -7,6 +7,7 @@ package com.gooddata.dataset;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
 
@@ -31,5 +32,10 @@ class DatasetManifests {
     @JsonProperty("dataSetSLIManifestList")
     public Collection<DatasetManifest> getManifests() {
         return manifests;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 }

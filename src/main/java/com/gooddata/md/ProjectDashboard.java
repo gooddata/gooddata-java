@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -62,6 +63,11 @@ public class ProjectDashboard extends AbstractObj implements Queryable {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private static class Content {
@@ -71,6 +77,11 @@ public class ProjectDashboard extends AbstractObj implements Queryable {
         @JsonCreator
         private Content(@JsonProperty("tabs") Collection<Tab> tabs) {
             this.tabs = tabs;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.toStringExclude(this);
         }
     }
 
@@ -93,6 +104,11 @@ public class ProjectDashboard extends AbstractObj implements Queryable {
 
         public String getTitle() {
             return title;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.toStringExclude(this);
         }
     }
 }

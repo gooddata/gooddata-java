@@ -8,6 +8,7 @@ package com.gooddata.gdc;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.List;
 
@@ -27,6 +28,11 @@ public class LinkEntries {
 
     protected List<LinkEntry> getEntries() {
         return entries;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -55,6 +61,11 @@ public class LinkEntries {
 
         public String getCategory() {
             return category;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.toStringExclude(this);
         }
     }
 }

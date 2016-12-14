@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
 
@@ -58,6 +59,11 @@ public class Report extends AbstractObj implements Queryable, Updatable {
         return content.getDomains();
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
+    }
+
     private static class Content {
         private final Collection<String> definitions;
         private final Collection<String> domains;
@@ -75,6 +81,11 @@ public class Report extends AbstractObj implements Queryable, Updatable {
 
         public Collection<String> getDomains() {
             return domains;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.toStringExclude(this);
         }
     }
 }

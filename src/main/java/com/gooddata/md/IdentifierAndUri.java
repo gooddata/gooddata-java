@@ -7,6 +7,7 @@ package com.gooddata.md;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 /**
  * Encapsulates identifier and its URI.
@@ -29,5 +30,10 @@ class IdentifierAndUri {
 
     public String getUri() {
         return uri;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 }

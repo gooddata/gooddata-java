@@ -7,6 +7,7 @@ package com.gooddata.dataset;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 import org.springframework.web.util.UriTemplate;
 
 /**
@@ -29,5 +30,10 @@ class Pull {
 
     public String getRemoteDir() {
         return remoteDir;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
     }
 }

@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 /**
  * Display form of attribute
@@ -44,6 +45,11 @@ public class AttributeDisplayForm extends DisplayForm implements Updatable {
         return Boolean.TRUE.equals(content.isDefault());
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.toStringExclude(this);
+    }
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private static class Content extends DisplayForm.Content {
 
@@ -61,6 +67,11 @@ public class AttributeDisplayForm extends DisplayForm implements Updatable {
         @JsonSerialize(using = BooleanIntegerSerializer.class)
         public Boolean isDefault() {
             return isDefault;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.toStringExclude(this);
         }
     }
 }
