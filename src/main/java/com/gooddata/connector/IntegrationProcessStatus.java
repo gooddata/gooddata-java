@@ -8,6 +8,7 @@ package com.gooddata.connector;
 import static com.gooddata.util.Validate.notNullState;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.gooddata.util.GoodDataToStringBuilder;
 import com.gooddata.util.ISODateTimeDeserializer;
 import com.gooddata.util.ISODateTimeSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -92,5 +93,10 @@ public class IntegrationProcessStatus {
     @JsonIgnore
     public String getId() {
         return TEMPLATE.match(getUri()).get("process");
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 }

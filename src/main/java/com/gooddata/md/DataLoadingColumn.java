@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.util.BooleanDeserializer;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 /**
  * Represents datasets' loading column.
@@ -88,6 +89,11 @@ public class DataLoadingColumn extends AbstractObj implements Queryable {
         return content.getColumnSynchronize() !=  null ? content.getColumnSynchronize().getPrecision() : null;
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
+    }
+
     private static class Content {
 
         private final UriResponse columnUri;
@@ -145,6 +151,11 @@ public class DataLoadingColumn extends AbstractObj implements Queryable {
         public ColumnSynchronize getColumnSynchronize() {
             return columnSynchronize;
         }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.defaultToString(this);
+        }
     }
 
     private static class ColumnSynchronize {
@@ -170,6 +181,11 @@ public class DataLoadingColumn extends AbstractObj implements Queryable {
 
         public Integer getPrecision() {
             return precision;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.defaultToString(this);
         }
     }
 }

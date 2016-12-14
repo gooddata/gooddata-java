@@ -20,6 +20,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.joda.time.DateTime.now;
 
 public class IntegrationProcessStatusTest {
@@ -98,6 +99,13 @@ public class IntegrationProcessStatusTest {
     public void testIsFailedOnUnknownCode() throws Exception {
         final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status("unknown code", "", ""), now(), now(), Collections.emptyMap());
         assertThat(process.isFailed(), is(false));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status("unknown code", "", ""), now(), now(), Collections.<String, String>emptyMap());
+
+        assertThat(process.toString(),  matchesPattern(IntegrationProcessStatus.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

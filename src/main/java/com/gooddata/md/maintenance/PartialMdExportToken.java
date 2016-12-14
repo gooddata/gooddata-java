@@ -9,6 +9,7 @@ import static com.gooddata.util.Validate.notEmpty;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.util.GoodDataToStringBuilder;
 import org.springframework.web.util.UriTemplate;
 
 /**
@@ -112,5 +113,10 @@ public class PartialMdExportToken {
      */
     public void setImportAttributeProperties(boolean importAttributeProperties) {
         this.importAttributeProperties = importAttributeProperties;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 }

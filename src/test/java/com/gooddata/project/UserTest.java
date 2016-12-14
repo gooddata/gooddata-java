@@ -14,6 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class UserTest {
 
@@ -30,6 +31,14 @@ public class UserTest {
         assertThat(user.getStatus(), is("ENABLED"));
         assertThat(user.getLastName(), is("ads-testing"));
         assertThat(user.getLogin(), is("ateam+ads-testing@gooddata.com"));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final InputStream stream = getClass().getResourceAsStream("/project/project-user.json");
+        final User user = new ObjectMapper().readValue(stream, User.class);
+
+        assertThat(user.toString(), matchesPattern(User.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

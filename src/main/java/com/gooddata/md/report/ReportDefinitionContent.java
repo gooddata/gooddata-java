@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
 
@@ -46,5 +47,10 @@ public abstract class ReportDefinitionContent {
 
     public Collection<Filter> getFilters() {
         return filters;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 }

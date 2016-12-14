@@ -8,6 +8,7 @@ package com.gooddata.md;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
@@ -29,4 +30,11 @@ public class AttributeElementTest {
         assertThat(element.getTitle(), is(TITLE));
     }
 
+    @Test
+    public void testToStringFormat() throws Exception {
+        final InputStream stream = getClass().getResourceAsStream("/md/attributeElement.json");
+        final AttributeElement element = new ObjectMapper().readValue(stream, AttributeElement.class);
+
+        assertThat(element.toString(), matchesPattern(AttributeElement.class.getSimpleName() + "\\[.*\\]"));
+    }
 }

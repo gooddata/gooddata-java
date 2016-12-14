@@ -7,6 +7,7 @@ package com.gooddata.featureflag;
 
 import com.fasterxml.jackson.annotation.*;
 import com.gooddata.project.Project;
+import com.gooddata.util.GoodDataToStringBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import java.util.Iterator;
@@ -55,4 +56,8 @@ public class ProjectFeatureFlags implements Iterable<ProjectFeatureFlag> {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
+    }
 }

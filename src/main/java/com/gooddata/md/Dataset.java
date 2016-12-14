@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collections;
 import java.util.List;
@@ -113,6 +114,11 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
         return notNullState(links, "links").get(UPLOAD_CONFIGURATION_LINK);
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
+    }
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private static class Content {
         private final List<String> ties;
@@ -161,6 +167,11 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
         @JsonSerialize(using = BooleanStringSerializer.class)
         public Boolean hasUploadConfiguration() {
             return hasUploadConfiguration;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.defaultToString(this);
         }
     }
 }

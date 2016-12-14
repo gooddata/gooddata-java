@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -86,5 +87,10 @@ public class Grid {
 
     public Map<String, List<String>> getSort() {
         return sort;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 }

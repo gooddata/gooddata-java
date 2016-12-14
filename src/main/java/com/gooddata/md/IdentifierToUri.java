@@ -6,6 +6,7 @@
 package com.gooddata.md;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
 
@@ -44,5 +45,10 @@ class IdentifierToUri {
     @Override
     public int hashCode() {
         return identifiers.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 }

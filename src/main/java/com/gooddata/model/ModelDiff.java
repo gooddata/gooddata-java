@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collections;
 import java.util.List;
@@ -101,6 +102,11 @@ public class ModelDiff {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
+    }
+
     /**
      * Set of MAQL DDL scripts with one variant of side-effects (truncation of loaded data, drops of related objects...).
      */
@@ -165,6 +171,11 @@ public class ModelDiff {
          */
         public Boolean isCascadeDrops() {
             return cascadeDrops;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.defaultToString(this);
         }
     }
 }

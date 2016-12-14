@@ -7,6 +7,7 @@ package com.gooddata.connector;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.connector.ConnectorType.ZENDESK4;
@@ -64,4 +65,9 @@ public class Zendesk4Settings implements Settings {
      * Type of Zendesk account.
      */
     public enum Zendesk4Type {plus, enterprise}
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
+    }
 }

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -39,6 +40,11 @@ class ProjectValidations {
     @JsonProperty("validateProject")
     public Set<ProjectValidationType> getValidations() {
         return validations;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 
 }

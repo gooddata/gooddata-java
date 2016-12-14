@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.util.GoodDataToStringBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import java.util.Iterator;
@@ -100,6 +101,6 @@ public class FeatureFlags implements Iterable<FeatureFlag> {
 
     @Override
     public String toString() {
-        return "FeatureFlags{" + featureFlags + "}";
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 }

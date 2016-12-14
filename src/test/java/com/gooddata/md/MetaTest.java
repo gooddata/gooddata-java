@@ -18,6 +18,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class MetaTest {
 
@@ -64,6 +65,14 @@ public class MetaTest {
                 DEPRECATED, PRODUCTION, LOCKED, UNLISTED, SHARED_WITH_SOMEONE);
 
         assertThat(meta, serializesToJson("/md/meta.json"));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final Meta meta = new Meta(AUTHOR, CONTRIBUTOR, CREATED, UPDATED, SUMMARY, TITLE, CATEGORY, TAGS, URI, IDENTIFIER,
+                DEPRECATED, PRODUCTION, LOCKED, UNLISTED, SHARED_WITH_SOMEONE);
+
+        assertThat(meta.toString(), matchesPattern(Meta.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class ProjectTemplateTest {
 
@@ -23,5 +24,13 @@ public class ProjectTemplateTest {
         assertThat(template.getUrl(), is("/projectTemplates/ZendeskAnalytics/11"));
         assertThat(template.getUrn(), is("urn:gooddata:ZendeskAnalytics"));
         assertThat(template.getVersion(), is("11"));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final ProjectTemplate template = new ObjectMapper()
+                .readValue(getClass().getResource("/project/project-template.json"), ProjectTemplate.class);
+
+        assertThat(template.toString(), matchesPattern(ProjectTemplate.class.getSimpleName() + "\\[.*\\]"));
     }
 }

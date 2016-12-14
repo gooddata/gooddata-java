@@ -243,6 +243,6 @@ public class Meta implements Serializable {
 
     @Override
     public String toString() {
-        return GoodDataToStringBuilder.toStringExclude(this);
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 }

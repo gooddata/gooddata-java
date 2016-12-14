@@ -154,4 +154,9 @@ public class Entry {
     public Boolean getUnlisted() {
         return unlisted;
     }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
+    }
 }

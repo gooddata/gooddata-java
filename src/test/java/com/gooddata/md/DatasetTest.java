@@ -11,6 +11,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
@@ -57,6 +58,13 @@ public class DatasetTest {
     public void shouldSerialize() throws Exception {
         final Dataset dataset = new Dataset("Dataset");
         assertThat(dataset, serializesToJson("/md/dataset-input.json"));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final Dataset dataset = new Dataset("Dataset");
+
+        assertThat(dataset.toString(), matchesPattern(Dataset.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

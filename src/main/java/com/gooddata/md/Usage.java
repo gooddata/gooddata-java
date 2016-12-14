@@ -5,6 +5,8 @@
  */
 package com.gooddata.md;
 
+import com.gooddata.util.GoodDataToStringBuilder;
+
 import java.util.Collection;
 
 /**
@@ -32,5 +34,10 @@ public class Usage {
 
     public Collection<Entry> getUsedBy() {
         return usedBy;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 }

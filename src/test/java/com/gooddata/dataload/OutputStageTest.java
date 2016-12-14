@@ -10,6 +10,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
@@ -66,7 +67,7 @@ public class OutputStageTest {
         assertThat(outputStage.hasOutputStagePrefix(), is(false));
     }
 
-    @Test(dependsOnMethods = "testDeserialization")
+    @Test
     public void testSerializationAfterDeserialization() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/dataload/outputStage.json");
         final OutputStage outputStage = new ObjectMapper().readValue(stream, OutputStage.class);
@@ -75,5 +76,13 @@ public class OutputStageTest {
         outputStage.setClientId(CLIENT_ID);
         outputStage.setOutputStagePrefix(OUTPUT_STAGE_PREFIX);
         assertThat(outputStage, serializesToJson("/dataload/outputStageNoProcess.json"));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final InputStream stream = getClass().getResourceAsStream("/dataload/outputStage.json");
+        final OutputStage outputStage = new ObjectMapper().readValue(stream, OutputStage.class);
+
+        assertThat(outputStage.toString(), matchesPattern(OutputStage.class.getSimpleName() + "\\[.*\\]"));
     }
 }

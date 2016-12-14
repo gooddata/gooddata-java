@@ -14,6 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class RolesTest {
 
@@ -26,5 +27,13 @@ public class RolesTest {
         assertThat(roles.getRoles(), hasSize(2));
         assertThat(roles.getRoles(), hasItem("/gdc/projects/PROJECT_ID/roles/ROLE1"));
         assertThat(roles.getRoles(), hasItem("/gdc/projects/PROJECT_ID/roles/ROLE2"));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final InputStream stream = getClass().getResourceAsStream("/project/project-roles.json");
+        final Roles roles = new ObjectMapper().readValue(stream, Roles.class);
+
+        assertThat(roles.toString(), matchesPattern(Roles.class.getSimpleName() + "\\[.*\\]"));
     }
 }

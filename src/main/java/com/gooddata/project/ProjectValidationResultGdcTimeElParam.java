@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.List;
 import java.util.Objects;
@@ -58,6 +59,6 @@ public class ProjectValidationResultGdcTimeElParam extends ProjectValidationResu
 
     @Override
     public String toString() {
-        return ids.toString();
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 }

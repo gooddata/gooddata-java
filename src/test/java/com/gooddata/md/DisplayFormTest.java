@@ -15,6 +15,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class DisplayFormTest {
 
@@ -44,6 +45,14 @@ public class DisplayFormTest {
                 new DisplayForm.Content(FORM_OF, EXPRESSION,  LDM_EXPRESSION, null), new DisplayForm.Links(ELEMENTS_LINK));
 
         assertThat(displayForm, serializesToJson("/md/displayForm-input.json"));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final DisplayForm displayForm = new DisplayForm(new Meta("Person Name"),
+                new DisplayForm.Content(FORM_OF, EXPRESSION,  LDM_EXPRESSION, null), new DisplayForm.Links(ELEMENTS_LINK));
+
+        assertThat(displayForm.toString(), matchesPattern(DisplayForm.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

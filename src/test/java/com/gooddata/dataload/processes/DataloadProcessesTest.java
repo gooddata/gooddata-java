@@ -12,6 +12,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class DataloadProcessesTest {
 
@@ -22,6 +23,14 @@ public class DataloadProcessesTest {
 
         assertThat(processes, is(notNullValue()));
         assertThat(processes.getItems(), hasSize(1));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final DataloadProcesses processes = new ObjectMapper()
+                .readValue(getClass().getResourceAsStream("/dataload/processes/processes.json"), DataloadProcesses.class);
+
+        assertThat(processes.toString(), matchesPattern(DataloadProcesses.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

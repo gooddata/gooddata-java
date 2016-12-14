@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gooddata.util.GoodDataToStringBuilder;
 import com.gooddata.util.ISODateTimeSerializer;
 import org.joda.time.DateTime;
 
@@ -77,6 +78,11 @@ public class Zendesk4ProcessExecution implements ProcessExecution {
         this.downloadParams = downloadParams;
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
+    }
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class DownloadParams {
         private Boolean useBackup;
@@ -124,6 +130,11 @@ public class Zendesk4ProcessExecution implements ProcessExecution {
 
         public void setParallelBatchSeconds(Integer parallelBatchSeconds) {
             this.parallelBatchSeconds = parallelBatchSeconds;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.defaultToString(this);
         }
     }
 }

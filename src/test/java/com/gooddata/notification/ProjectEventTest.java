@@ -7,6 +7,7 @@ package com.gooddata.notification;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import org.testng.annotations.Test;
 
@@ -19,4 +20,10 @@ public class ProjectEventTest {
         assertThat(projectEvent, serializesToJson("/notification/projectEvent.json"));
     }
 
+    @Test
+    public void testToStringFormat() {
+        final ProjectEvent projectEvent = new ProjectEvent("etl.test");
+
+        assertThat(projectEvent.toString(), matchesPattern(ProjectEvent.class.getSimpleName() + "\\[.*\\]"));
+    }
 }

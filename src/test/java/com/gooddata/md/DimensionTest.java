@@ -10,6 +10,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
@@ -35,5 +36,12 @@ public class DimensionTest {
         final Dimension dimension = new Dimension("Dimension");
         assertThat(dimension, serializesToJson("/md/dimension-input.json"));
 
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final Dimension dimension = new Dimension("Dimension");
+
+        assertThat(dimension.toString(), matchesPattern(Dimension.class.getSimpleName() + "\\[.*\\]"));
     }
 }

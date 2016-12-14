@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class Zendesk4ProcessExecutionTest {
 
@@ -51,5 +52,12 @@ public class Zendesk4ProcessExecutionTest {
         final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
         final DownloadParams downloadParams = execution.getDownloadParams();
         assertThat(downloadParams, notNullValue());
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
+
+        assertThat(execution.toString(), matchesPattern(Zendesk4ProcessExecution.class.getSimpleName() + "\\[.*\\]"));
     }
 }

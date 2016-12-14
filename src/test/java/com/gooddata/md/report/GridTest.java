@@ -21,6 +21,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class GridTest {
 
@@ -64,6 +65,15 @@ public class GridTest {
 
         new ObjectMapper().writeValueAsString(grid);
         assertThat(grid, serializesToJson("/md/report/grid-input.json"));
+    }
+
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final Grid grid = new ObjectMapper()
+                .readValue(getClass().getResourceAsStream("/md/report/grid.json"), Grid.class);
+
+        assertThat(grid.toString(), matchesPattern(Grid.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

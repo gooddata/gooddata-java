@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class ProcessExecutionDetailTest {
 
@@ -35,6 +36,14 @@ public class ProcessExecutionDetailTest {
         assertThat(executionDetail.getUri(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId/detail"));
         assertThat(executionDetail.getLogUri(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId/log"));
         assertThat(executionDetail.getExecutionUri(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId"));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final ProcessExecutionDetail executionDetail = MAPPER.readValue(getClass().getResourceAsStream("/dataload/processes/executionDetail.json"),
+                ProcessExecutionDetail.class);
+
+        assertThat(executionDetail.toString(), matchesPattern(ProcessExecutionDetail.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

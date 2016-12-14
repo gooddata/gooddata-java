@@ -9,6 +9,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
@@ -38,6 +39,14 @@ public class DataLoadingColumnTest {
         assertThat(column.getSynchronizeType(), is("INT"));
         assertThat(column.getSynchronizeLength(), is(128));
         assertThat(column.getSynchronizePrecision(), is(0));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final InputStream stream = getClass().getResourceAsStream("/md/dataLoadingColumn.json");
+        final DataLoadingColumn column = new ObjectMapper().readValue(stream, DataLoadingColumn.class);
+
+        assertThat(column.toString(), matchesPattern(DataLoadingColumn.class.getSimpleName() + "\\[.*\\]"));
     }
 
 

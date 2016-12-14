@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class PullTest {
 
@@ -16,5 +17,12 @@ public class PullTest {
     public void testSerialization() throws Exception {
         final Pull pull = new Pull("DIR");
         assertThat(pull, serializesToJson("/dataset/pull.json"));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final Pull pull = new Pull("DIR");
+
+        assertThat(pull.toString(), matchesPattern(Pull.class.getSimpleName() + "\\[.*\\]"));
     }
 }

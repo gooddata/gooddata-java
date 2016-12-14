@@ -17,6 +17,7 @@ import static java.util.Collections.singletonMap;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class DatasetManifestTest {
 
@@ -93,5 +94,12 @@ public class DatasetManifestTest {
     public void shouldFailOnSetFileNull() {
         final DatasetManifest manifest = new DatasetManifest("dataset.name");
         manifest.setFile(null);
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final DatasetManifest manifest = new DatasetManifest("dataset.name");
+
+        assertThat(manifest.toString(), matchesPattern(DatasetManifest.class.getSimpleName() + "\\[.*\\]"));
     }
 }

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gooddata.gdc.ErrorStructure;
+import com.gooddata.util.GoodDataToStringBuilder;
 import com.gooddata.util.ISODateTimeDeserializer;
 import com.gooddata.util.ISODateTimeSerializer;
 import org.joda.time.DateTime;
@@ -130,5 +131,10 @@ public class ProcessExecutionDetail {
 
     public static URI uriFromExecutionUri(URI executionUri) {
         return URI.create(executionUri.toString() + "/detail");
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 }

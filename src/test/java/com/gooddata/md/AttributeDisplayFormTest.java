@@ -14,6 +14,7 @@ import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class AttributeDisplayFormTest {
 
@@ -54,6 +55,14 @@ public class AttributeDisplayFormTest {
         final InputStream stream = getClass().getResourceAsStream("/md/attributeDisplayForm.json");
         final AttributeDisplayForm attrDF = new ObjectMapper().readValue(stream, AttributeDisplayForm.class);
         assertThat(attrDF, serializesToJson("/md/attributeDisplayForm-inputOrig.json"));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final DisplayForm attrDF = new AttributeDisplayForm("Person Name", FORM_OF, EXPRESSION, DEFAULT,
+                LDM_EXPRESSION, TYPE, ELEMENTS_LINK);
+
+        assertThat(attrDF.toString(), matchesPattern(AttributeDisplayForm.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

@@ -10,6 +10,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
@@ -41,5 +42,12 @@ public class DataloadProcessTest {
 
         final DataloadProcess processWithPath = new DataloadProcess("testProcess", "GROOVY", "/uploads/process.zip");
         assertThat(processWithPath, serializesToJson("/dataload/processes/process-input-withPath.json"));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final DataloadProcess process = new DataloadProcess("testProcess", "GROOVY");
+
+        assertThat(process.toString(), matchesPattern(DataloadProcess.class.getSimpleName() + "\\[.*\\]"));
     }
 }

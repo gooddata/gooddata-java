@@ -14,6 +14,7 @@ import static com.gooddata.connector.Zendesk4Settings.Zendesk4Type.plus;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class Zendesk4SettingsTest {
 
@@ -57,5 +58,12 @@ public class Zendesk4SettingsTest {
         final Zendesk4Settings settings = new Zendesk4Settings("old url");
         settings.setApiUrl("new url");
         assertThat(settings.getApiUrl(), is("new url"));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final Zendesk4Settings settings = new Zendesk4Settings("old url");
+
+        assertThat(settings.toString(), matchesPattern(Zendesk4Settings.class.getSimpleName() + "\\[.*\\]"));
     }
 }

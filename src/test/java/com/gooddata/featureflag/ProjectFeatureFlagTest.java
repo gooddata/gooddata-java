@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class ProjectFeatureFlagTest {
 
@@ -32,5 +33,12 @@ public class ProjectFeatureFlagTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testEmptyNameWithValue() throws Exception {
         new ProjectFeatureFlag(" ", false);
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final ProjectFeatureFlag flag = new ProjectFeatureFlag("test", false);
+
+        assertThat(flag.toString(), matchesPattern(ProjectFeatureFlag.class.getSimpleName() + "\\[.*\\]"));
     }
 }

@@ -15,6 +15,7 @@ import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -51,5 +52,12 @@ public class MetricElementTest {
         final MetricElement element = new MetricElement(metric);
         assertThat(element.getUri(), is(URI));
         assertThat(element.getAlias(), is(ALIAS));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final MetricElement element = new MetricElement(URI, ALIAS, FORMAT, DRILL_URI);
+
+        assertThat(element.toString(), matchesPattern(MetricElement.class.getSimpleName() + "\\[.*\\]"));
     }
 }

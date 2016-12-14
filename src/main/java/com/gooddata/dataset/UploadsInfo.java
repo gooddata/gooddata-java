@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.md.Meta;
+import com.gooddata.util.GoodDataToStringBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import java.util.Collection;
@@ -57,6 +58,11 @@ class UploadsInfo {
         } else {
             throw new DatasetNotFoundException(datasetId);
         }
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 
     /**
@@ -105,6 +111,11 @@ class UploadsInfo {
         String getLastUploadUri() {
             return lastUpload.uri;
         }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.defaultToString(this);
+        }
     }
 
     /**
@@ -120,6 +131,11 @@ class UploadsInfo {
 
         private LastUpload(@JsonProperty("uri") String uri) {
             this.uri = uri;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.defaultToString(this);
         }
     }
 }

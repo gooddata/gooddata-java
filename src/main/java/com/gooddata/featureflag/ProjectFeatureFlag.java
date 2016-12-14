@@ -6,6 +6,7 @@
 package com.gooddata.featureflag;
 
 import com.fasterxml.jackson.annotation.*;
+import com.gooddata.util.GoodDataToStringBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import static com.gooddata.util.Validate.notEmpty;
@@ -104,11 +105,7 @@ public class ProjectFeatureFlag {
 
     @Override
     public String toString() {
-        return "ProjectFeatureFlag{" +
-                "name='" + name + '\'' +
-                ", enabled=" + enabled +
-                ", links=" + links +
-                '}';
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -126,9 +123,7 @@ public class ProjectFeatureFlag {
 
         @Override
         public String toString() {
-            return "Links{" +
-                    "self='" + self + '\'' +
-                    '}';
+            return GoodDataToStringBuilder.defaultToString(this);
         }
     }
 }

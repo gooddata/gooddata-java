@@ -8,6 +8,7 @@ package com.gooddata.project;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.List;
 
@@ -94,6 +95,11 @@ public class ProjectValidationResult {
         result = 31 * result + (params != null ? params.hashCode() : 0);
         result = 31 * result + (validation != null ? validation.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 
 }

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.md.Metric;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import static com.gooddata.util.Validate.notNull;
 
@@ -80,5 +81,10 @@ public class MetricElement {
     @JsonProperty("drillAcrossStepAttributeDF")
     public String getDrillAcrossStepAttributeDisplayFormUri() {
         return drillAcrossStepAttributeDisplayFormUri;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 }
