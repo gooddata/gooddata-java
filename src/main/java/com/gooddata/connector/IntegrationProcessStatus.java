@@ -35,7 +35,7 @@ public class IntegrationProcessStatus {
     private final Status status;
     private final DateTime started;
     private final DateTime finished;
-    private Map<String, String> links;
+    private final Map<String, String> links;
 
     @JsonCreator
     protected IntegrationProcessStatus(@JsonProperty("status") Status status,

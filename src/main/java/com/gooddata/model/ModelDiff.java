@@ -109,9 +109,9 @@ public class ModelDiff {
     @JsonIgnoreProperties(ignoreUnknown = true)
     static class UpdateScript {
 
-        private List<String> maqlChunks;
-        private Boolean preserveData;
-        private Boolean cascadeDrops;
+        private final List<String> maqlChunks;
+        private final Boolean preserveData;
+        private final Boolean cascadeDrops;
 
         /**
          * Create set of MAQL DDL scripts with one variant of side-effects (truncation of loaded data, drops of related objects...).

@@ -31,7 +31,7 @@ public class AttributeInGrid implements GridElement {
 
     private final String uri;
     private final String alias;
-    private List<List<String>> totals;
+    private final List<List<String>> totals;
 
     @JsonCreator
     AttributeInGrid(@JsonProperty("uri") String uri, @JsonProperty("totals") List<List<String>> totals,

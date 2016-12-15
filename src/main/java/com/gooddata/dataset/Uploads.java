@@ -21,7 +21,7 @@ import java.util.Collection;
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Uploads {
 
-    private Collection<Upload> uploads;
+    private final Collection<Upload> uploads;
 
     Uploads(@JsonProperty("uploads") Collection<Upload> uploads) {
         this.uploads = uploads;

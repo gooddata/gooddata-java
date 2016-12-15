@@ -24,7 +24,7 @@ import static com.gooddata.util.Validate.notNull;
 public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
 
     @JsonProperty("content")
-    private Content content;
+    private final Content content;
 
     @JsonCreator
     ScheduledMail(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {

@@ -45,7 +45,7 @@ public class Schedule {
     private static final String PROCESS_ID = "PROCESS_ID";
     private static final String EXECUTABLE = "EXECUTABLE";
 
-    private String type;
+    private final String type;
     private String state;
     private String cron;
     private String timezone;

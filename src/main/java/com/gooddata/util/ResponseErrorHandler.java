@@ -24,7 +24,7 @@ import static com.gooddata.util.Validate.noNullElements;
  */
 public class ResponseErrorHandler extends DefaultResponseErrorHandler {
 
-    private HttpMessageConverterExtractor<GdcError> gdcErrorExtractor;
+    private final HttpMessageConverterExtractor<GdcError> gdcErrorExtractor;
 
     public ResponseErrorHandler(List<HttpMessageConverter<?>> messageConverters) {
         gdcErrorExtractor = new HttpMessageConverterExtractor<>(GdcError.class,

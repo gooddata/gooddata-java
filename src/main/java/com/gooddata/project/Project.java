@@ -42,10 +42,10 @@ public class Project {
     private static final Set<String> PREPARING_STATES = new HashSet<>(asList("PREPARING", "PREPARED", "LOADING"));
 
     @JsonProperty("content")
-    private ProjectContent content;
+    private final ProjectContent content;
 
     @JsonProperty("meta")
-    private ProjectMeta meta;
+    private final ProjectMeta meta;
 
     @JsonIgnore
     private Links links;
@@ -427,13 +427,13 @@ public class Project {
     private static class ProjectContent {
 
         @JsonProperty("authorizationToken")
-        private String authorizationToken;
+        private final String authorizationToken;
 
         @JsonProperty("driver")
         private String driver;
 
         @JsonProperty("guidedNavigation")
-        private String guidedNavigation;
+        private final String guidedNavigation;
 
         @JsonIgnore
         private String cluster;
