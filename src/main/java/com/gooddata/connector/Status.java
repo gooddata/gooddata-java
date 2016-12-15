@@ -72,7 +72,7 @@ public class Status {
      */
     public enum Code {
         NEW, SCHEDULED, DOWNLOADING, DOWNLOADED, TRANSFORMING, TRANSFORMED, UPLOADING, UPLOADED, SYNCHRONIZED,
-        ERROR, USER_ERROR;
+        ERROR, USER_ERROR
     }
 
 }
