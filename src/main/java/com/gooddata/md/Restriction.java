@@ -57,7 +57,7 @@ public class Restriction {
         return new Restriction(Type.SUMMARY, value);
     }
 
-    static enum Type {
+    enum Type {
         IDENTIFIER, TITLE, SUMMARY
     }
 }
