@@ -53,7 +53,7 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
             copy("workspace.prm", dir);
             process = gd.getProcessService().createProcess(project, new DataloadProcess(title, ProcessType.GRAPH), dir);
         } finally {
-            FileUtils.deleteDirectory(dir);
+            FileUtils.deleteQuietly(dir);
         }
     }
 
