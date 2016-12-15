@@ -78,7 +78,7 @@ public class OneNumberReportDefinitionContent extends ReportDefinitionContent {
 
     public static ReportDefinition create(String title, List<GridElement> columns, List<GridElement> rows,
                                           List<MetricElement> metrics) {
-        return create(title, columns, rows, metrics, Collections.<Filter>emptyList());
+        return create(title, columns, rows, metrics, Collections.emptyList());
     }
 
     public static ReportDefinition create(String title, List<GridElement> columns, List<GridElement> rows,

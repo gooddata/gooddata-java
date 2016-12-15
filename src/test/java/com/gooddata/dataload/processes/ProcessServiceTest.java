@@ -211,7 +211,7 @@ public class ProcessServiceTest {
     @Test
     public void testListUserProcessesWithNoProcesses() throws Exception {
         when(restTemplate.getForObject(create(USER_PROCESS_URI), DataloadProcesses.class))
-                .thenReturn(new DataloadProcesses(Collections.<DataloadProcess>emptyList()));
+                .thenReturn(new DataloadProcesses(Collections.emptyList()));
         final Collection<DataloadProcess> result = processService.listUserProcesses();
         assertThat(result, empty());
     }

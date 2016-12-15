@@ -61,8 +61,8 @@ public class Grid {
         this.rows = rows;
         this.metrics = metrics;
         sort = new LinkedHashMap<>();
-        sort.put("columns", Collections.<String>emptyList());
-        sort.put("rows", Collections.<String>emptyList());
+        sort.put("columns", Collections.emptyList());
+        sort.put("rows", Collections.emptyList());
         columnWidths = Collections.emptyList();
     }
 

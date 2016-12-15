@@ -21,7 +21,7 @@ public class WarehouseUsersTest {
 
     private final WarehouseUsers users = readObjectFromResource("/warehouse/users.json", WarehouseUsers.class);
 
-    private final WarehouseUsers empty = new WarehouseUsers(Collections.<WarehouseUser>emptyList(), null);
+    private final WarehouseUsers empty = new WarehouseUsers(Collections.emptyList(), null);
 
     @Test
     public void testDeserialization() throws Exception {

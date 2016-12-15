@@ -225,7 +225,7 @@ public class GoodData {
                 endpoint.getProtocol()
         );
         final RestTemplate restTemplate = new RestTemplate(factory);
-        restTemplate.setInterceptors(Arrays.<ClientHttpRequestInterceptor>asList(
+        restTemplate.setInterceptors(Arrays.asList(
                 new HeaderSettingRequestInterceptor(singletonMap("Accept", getAcceptHeaderValue()))));
 
         restTemplate.setErrorHandler(new ResponseErrorHandler(restTemplate.getMessageConverters()));

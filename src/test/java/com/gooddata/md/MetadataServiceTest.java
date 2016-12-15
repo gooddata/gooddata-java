@@ -351,7 +351,7 @@ public class MetadataServiceTest {
         when(attr.getDefaultDisplayForm()).thenReturn(attrDisplayForm);
 
         when(restTemplate.getForObject("elementsUri", AttributeElements.class))
-                .thenReturn(new AttributeElements(Collections.<AttributeElement>emptyList()));
+                .thenReturn(new AttributeElements(Collections.emptyList()));
         final List<AttributeElement> elements = service.getAttributeElements(attr);
         assertThat(elements, hasSize(0));
     }

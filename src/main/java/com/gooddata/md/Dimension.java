@@ -34,7 +34,7 @@ public class Dimension extends AbstractObj implements Queryable, Updatable {
 
     /* for serialization test */
     Dimension(String title) {
-        this(new Meta(title), new Content(Collections.<NestedAttribute>emptyList()));
+        this(new Meta(title), new Content(Collections.emptyList()));
     }
 
     @JsonIgnore

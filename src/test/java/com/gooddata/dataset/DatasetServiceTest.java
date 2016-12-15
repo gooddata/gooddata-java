@@ -232,7 +232,7 @@ public class DatasetServiceTest {
     public void testListUploadsForDatasetMissingUri() throws Exception {
         mockDataSetInfo();
 
-        assertThat(service.listUploadsForDataset(project, DATASET_ID), Matchers.<Upload>empty());
+        assertThat(service.listUploadsForDataset(project, DATASET_ID), Matchers.empty());
     }
 
     @Test(expectedExceptions = GoodDataException.class)
@@ -262,7 +262,7 @@ public class DatasetServiceTest {
 
         when(restTemplate.getForObject(DATASET_UPLOADS_URI, Uploads.class)).thenReturn(new Uploads(null));
 
-        assertThat(service.listUploadsForDataset(project, DATASET_ID), Matchers.<Upload>empty());
+        assertThat(service.listUploadsForDataset(project, DATASET_ID), Matchers.empty());
     }
 
     @Test

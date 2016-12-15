@@ -24,7 +24,7 @@ public class UploadsTest {
         final Uploads uploads = new ObjectMapper().readValue(input, Uploads.class);
 
         assertThat(uploads, notNullValue());
-        assertThat(uploads.items(), not(Matchers.<Upload>empty()));
+        assertThat(uploads.items(), not(Matchers.empty()));
         assertThat(uploads.items().size(), is(2));
     }
 }

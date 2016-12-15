@@ -35,7 +35,7 @@ public class ModelDiff {
      */
     @JsonCreator
     ModelDiff(@JsonProperty("updateScripts") List<UpdateScript> updateScripts) {
-        this.updateScripts = updateScripts == null ? Collections.<UpdateScript>emptyList() : updateScripts;
+        this.updateScripts = updateScripts == null ? Collections.emptyList() : updateScripts;
     }
 
     /**
@@ -126,7 +126,7 @@ public class ModelDiff {
                      @JsonProperty("maqlDdlChunks") List<String> maqlChunks) {
             this.preserveData = preserveData;
             this.cascadeDrops = cascadeDrops;
-            this.maqlChunks = maqlChunks == null ? Collections.<String>emptyList() : maqlChunks;
+            this.maqlChunks = maqlChunks == null ? Collections.emptyList() : maqlChunks;
         }
 
         /**

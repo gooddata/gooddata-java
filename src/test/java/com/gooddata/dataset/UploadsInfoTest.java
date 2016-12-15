@@ -34,6 +34,6 @@ public class UploadsInfoTest {
 
     @Test(expectedExceptions = DatasetNotFoundException.class)
     public void getDatasetUploadInfoFails() throws Exception {
-        new UploadsInfo(Collections.<UploadsInfo.DataSet>emptyList()).getDataSet("dataset.non_existing_one");
+        new UploadsInfo(Collections.emptyList()).getDataSet("dataset.non_existing_one");
     }
 }

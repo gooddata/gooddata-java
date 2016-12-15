@@ -35,7 +35,7 @@ public class GridReportDefinitionContent extends ReportDefinitionContent {
     }
 
     GridReportDefinitionContent(Grid grid) {
-        this(grid, Collections.<Filter>emptyList());
+        this(grid, Collections.emptyList());
     }
 
     public String getFormat() {
@@ -44,7 +44,7 @@ public class GridReportDefinitionContent extends ReportDefinitionContent {
 
     public static ReportDefinition create(String title, List<? extends GridElement> columns, List<? extends GridElement> rows,
                                           List<MetricElement> metrics) {
-        return create(title, columns, rows, metrics, Collections.<Filter>emptyList());
+        return create(title, columns, rows, metrics, Collections.emptyList());
     }
 
     public static ReportDefinition create(String title, List<? extends GridElement> columns, List<? extends GridElement> rows,

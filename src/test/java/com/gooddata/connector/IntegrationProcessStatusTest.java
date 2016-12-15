@@ -42,61 +42,61 @@ public class IntegrationProcessStatusTest {
 
     @Test
     public void testIsFinishedOnError() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(ERROR.name(), "", ""), now(), now(), Collections.<String, String>emptyMap());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(ERROR.name(), "", ""), now(), now(), Collections.emptyMap());
         assertThat(process.isFinished(), is(true));
     }
 
     @Test
     public void testIsFinishedOnSynchronized() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(SYNCHRONIZED.name(), "", ""), now(), now(), Collections.<String, String>emptyMap());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(SYNCHRONIZED.name(), "", ""), now(), now(), Collections.emptyMap());
         assertThat(process.isFinished(), is(true));
     }
 
     @Test
     public void testIsFinishedOnUploading() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(UPLOADING.name(), "", ""), now(), now(), Collections.<String, String>emptyMap());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(UPLOADING.name(), "", ""), now(), now(), Collections.emptyMap());
         assertThat(process.isFinished(), is(false));
     }
 
     @Test
     public void testIsFinishedOnNullCode() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(null, "", ""), now(), now(), Collections.<String, String>emptyMap());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(null, "", ""), now(), now(), Collections.emptyMap());
         assertThat(process.isFinished(), is(false));
     }
 
     @Test
     public void testIsFinishedOnUnknownCode() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status("unknown code", "", ""), now(), now(), Collections.<String, String>emptyMap());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status("unknown code", "", ""), now(), now(), Collections.emptyMap());
         assertThat(process.isFinished(), is(false));
     }
 
     @Test
     public void testIsFailedOnError() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(ERROR.name(), "", ""), now(), now(), Collections.<String, String>emptyMap());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(ERROR.name(), "", ""), now(), now(), Collections.emptyMap());
         assertThat(process.isFailed(), is(true));
     }
 
     @Test
     public void testIsFailedOnUserError() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(USER_ERROR.name(), "", ""), now(), now(), Collections.<String, String>emptyMap());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(USER_ERROR.name(), "", ""), now(), now(), Collections.emptyMap());
         assertThat(process.isFailed(), is(true));
     }
 
     @Test
     public void testIsFailedOnSynchronized() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(SYNCHRONIZED.name(), "", ""), now(), now(), Collections.<String, String>emptyMap());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(SYNCHRONIZED.name(), "", ""), now(), now(), Collections.emptyMap());
         assertThat(process.isFailed(), is(false));
     }
 
     @Test
     public void testIsFailedOnNullCode() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(null, "", ""), now(), now(), Collections.<String, String>emptyMap());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status(null, "", ""), now(), now(), Collections.emptyMap());
         assertThat(process.isFailed(), is(false));
     }
 
     @Test
     public void testIsFailedOnUnknownCode() throws Exception {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status("unknown code", "", ""), now(), now(), Collections.<String, String>emptyMap());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status("unknown code", "", ""), now(), now(), Collections.emptyMap());
         assertThat(process.isFailed(), is(false));
     }
 

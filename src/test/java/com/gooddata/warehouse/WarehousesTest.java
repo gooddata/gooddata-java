@@ -20,7 +20,7 @@ public class WarehousesTest {
 
     private final Warehouses warehouses = readObjectFromResource("/warehouse/warehouses.json", Warehouses.class);
 
-    private final Warehouses empty = new Warehouses(Collections.<Warehouse>emptyList(), null);
+    private final Warehouses empty = new Warehouses(Collections.emptyList(), null);
 
     @Test
     public void testDeserialization() throws Exception {

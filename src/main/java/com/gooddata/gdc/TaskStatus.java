@@ -41,7 +41,7 @@ public class TaskStatus {
     }
 
     public TaskStatus(final String status, final String pollUri) {
-        this(status, pollUri, Collections.<GdcError>emptyList());
+        this(status, pollUri, Collections.emptyList());
     }
 
     public String getStatus() {

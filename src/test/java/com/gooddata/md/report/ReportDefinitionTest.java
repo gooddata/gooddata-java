@@ -35,8 +35,8 @@ public class ReportDefinitionTest {
     public void testSerialization() throws Exception {
         final ReportDefinition def = new ReportDefinition("Untitled",
                 new OneNumberReportDefinitionContent(
-                        new Grid(Collections.<GridElement>emptyList(), Collections.<GridElement>emptyList(),
-                                Collections.<MetricElement>emptyList()), "desc", asList(new Filter("(SELECT [/gdc/md/projectId/obj/123]) >= 2")))
+                        new Grid(Collections.emptyList(), Collections.emptyList(),
+                                Collections.emptyList()), "desc", asList(new Filter("(SELECT [/gdc/md/projectId/obj/123]) >= 2")))
         );
         assertThat(def, serializesToJson("/md/report/oneNumberReportDefinition-input.json"));
     }

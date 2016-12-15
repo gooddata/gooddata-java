@@ -30,7 +30,7 @@ public class Attribute extends NestedAttribute implements Queryable, Updatable {
 
     /* Just for serialization test */
     Attribute(String title, Key primaryKey, Key foreignKey) {
-        this(new Meta(title),  new Content(asList(primaryKey), asList(foreignKey), Collections.<DisplayForm>emptyList(), null, null, null, null, null,
+        this(new Meta(title),  new Content(asList(primaryKey), asList(foreignKey), Collections.emptyList(), null, null, null, null, null,
                 null, null, null, null, null, null));
     }
 }
