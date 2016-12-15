@@ -10,7 +10,6 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
-import java.util.Collections;
 import java.util.Set;
 
 import static com.gooddata.JsonMatchers.serializesToJson;

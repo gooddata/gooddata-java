@@ -19,7 +19,6 @@ import com.gooddata.md.report.AttributeInGrid;
 import com.gooddata.md.report.Filter;
 import com.gooddata.md.report.GridReportDefinitionContent;
 import com.gooddata.md.report.MetricElement;
-import com.gooddata.md.report.MetricGroup;
 import com.gooddata.md.report.Report;
 import org.joda.time.LocalDate;
 import org.testng.annotations.Test;

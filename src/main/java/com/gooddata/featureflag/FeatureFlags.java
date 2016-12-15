@@ -17,7 +17,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static java.util.stream.Collectors.toMap;

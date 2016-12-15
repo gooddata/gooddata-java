@@ -7,7 +7,6 @@ package com.gooddata.project;
 
 import com.gooddata.collections.PageableListDeserializer;
 import com.gooddata.collections.Paging;
-import com.gooddata.dataload.processes.Schedule;
 
 import java.util.List;
 import java.util.Map;

@@ -6,7 +6,6 @@
 package com.gooddata.warehouse;
 
 import com.gooddata.collections.PageableList;
-import com.gooddata.collections.PageableListSerializer;
 import com.gooddata.collections.Paging;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

@@ -10,7 +10,6 @@ import com.gooddata.GoodData;
 import com.gooddata.GoodDataRestException;
 import org.apache.commons.io.IOUtils;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.File;

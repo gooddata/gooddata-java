@@ -5,7 +5,6 @@
  */
 package com.gooddata.md.report;
 
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import static com.gooddata.util.Validate.notNull;
