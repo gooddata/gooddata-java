@@ -46,7 +46,7 @@ public class GridTest {
         assertThat(grid.getColumnWidths(), hasSize(1));
 
         final Map<String, Object> colWidth = grid.getColumnWidths().iterator().next();
-        assertThat((Integer) colWidth.get("width"), is(343));
+        assertThat(colWidth.get("width"), is(343));
     }
 
 
