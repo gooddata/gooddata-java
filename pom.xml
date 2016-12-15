@@ -279,7 +279,7 @@
         <dependency>
             <groupId>com.gooddata</groupId>
             <artifactId>gooddata-http-client</artifactId>
-            <version>0.9.3</version>
+            <version>0.9.4</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
