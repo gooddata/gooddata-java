@@ -24,7 +24,7 @@ import static com.gooddata.util.Validate.notNull;
 public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
 
     @JsonProperty("content")
-    private Content content;
+    private final Content content;
 
     @JsonCreator
     ScheduledMail(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
@@ -52,7 +52,7 @@ public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
      * @param summary the summary of the MD object
      */
     public ScheduledMail(String title, String summary) {
-        super(new Meta(null, null, null, null, summary, title, null, Collections.<String>emptySet(), null, null, false,
+        super(new Meta(null, null, null, null, summary, title, null, Collections.emptySet(), null, null, false,
                 null, false, false, null));
         this.content = new Content();
     }
@@ -74,7 +74,7 @@ public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
     public ScheduledMail(String title, String summary, String recurrency, LocalDate startDate, String timeZone,
                          Collection<String> toAddresses, Collection<String> bccAddresses, String subject, String body,
                          List<Attachment> attachments) {
-        this(title, summary, Collections.<String>emptySet(), false, recurrency, startDate, timeZone, toAddresses,
+        this(title, summary, Collections.emptySet(), false, recurrency, startDate, timeZone, toAddresses,
                 bccAddresses, subject, body, attachments);
     }
 

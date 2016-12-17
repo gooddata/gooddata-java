@@ -35,9 +35,9 @@ public class WarehouseUser {
 
     private static final String SELF_LINK = "self";
 
-    private String role;
-    private String profile;
-    private String login;
+    private final String role;
+    private final String profile;
+    private final String login;
     private Map<String, String> links;
 
     public WarehouseUser(final String role, final String profile, final String login) {

@@ -49,8 +49,8 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
 
     /* Just for serialization test */
     Dataset(String title) {
-        this(new Meta(title), new Content(Collections.<String>emptyList(), null, Collections.<String>emptyList(), Collections.<String>emptyList(),
-                Collections.<String>emptyList(), false), null);
+        this(new Meta(title), new Content(Collections.emptyList(), null, Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), false), null);
     }
 
     @JsonIgnore

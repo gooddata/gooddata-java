@@ -6,7 +6,6 @@
 package com.gooddata.gdc;
 
 import com.gooddata.AbstractGoodDataIT;
-import com.gooddata.util.ResourceUtils;
 import org.apache.commons.io.IOUtils;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

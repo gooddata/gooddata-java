@@ -27,8 +27,8 @@ import java.io.IOException;
 @JsonSerialize(using = AttributeSort.Serializer.class)
 class AttributeSort {
 
-    static String PK = "pk";
-    static String BY_USED_DF = "byUsedDF";
+    static final String PK = "pk";
+    static final String BY_USED_DF = "byUsedDF";
 
     private final String value;
     private final boolean linkType;

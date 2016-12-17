@@ -12,11 +12,7 @@ import org.testng.annotations.Test;
 import java.io.InputStream;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.testng.Assert.*;
 
 public class GoodDataRestExceptionTest {
     @Test

@@ -33,7 +33,7 @@ public class PageableList<E> implements List<E> {
      * Creates empty list with no next page.
      */
     public PageableList() {
-        this(Collections.<E>emptyList(), null);
+        this(Collections.emptyList(), null);
     }
 
     /**

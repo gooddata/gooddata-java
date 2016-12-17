@@ -23,7 +23,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
 
-    private UserContent content;
+    private final UserContent content;
 
     @JsonCreator
     User(@JsonProperty("content") final UserContent content) {
@@ -63,25 +63,25 @@ public class User {
     private static class UserContent {
 
         @JsonProperty("email")
-        private String email;
+        private final String email;
 
         @JsonProperty("firstname")
-        private String firstName;
+        private final String firstName;
 
         @JsonProperty("userRoles")
-        private List<String> userRoles;
+        private final List<String> userRoles;
 
         @JsonProperty("phonenumber")
-        private String phoneNumber;
+        private final String phoneNumber;
 
         @JsonProperty("status")
-        private String status;
+        private final String status;
 
         @JsonProperty("lastname")
-        private String lastName;
+        private final String lastName;
 
         @JsonProperty("login")
-        private String login;
+        private final String login;
 
         @JsonCreator
         public UserContent(@JsonProperty("email") final String email,

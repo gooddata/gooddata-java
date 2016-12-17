@@ -35,7 +35,7 @@ public class ModelDiff {
      */
     @JsonCreator
     ModelDiff(@JsonProperty("updateScripts") List<UpdateScript> updateScripts) {
-        this.updateScripts = updateScripts == null ? Collections.<UpdateScript>emptyList() : updateScripts;
+        this.updateScripts = updateScripts == null ? Collections.emptyList() : updateScripts;
     }
 
     /**
@@ -109,9 +109,9 @@ public class ModelDiff {
     @JsonIgnoreProperties(ignoreUnknown = true)
     static class UpdateScript {
 
-        private List<String> maqlChunks;
-        private Boolean preserveData;
-        private Boolean cascadeDrops;
+        private final List<String> maqlChunks;
+        private final Boolean preserveData;
+        private final Boolean cascadeDrops;
 
         /**
          * Create set of MAQL DDL scripts with one variant of side-effects (truncation of loaded data, drops of related objects...).
@@ -126,7 +126,7 @@ public class ModelDiff {
                      @JsonProperty("maqlDdlChunks") List<String> maqlChunks) {
             this.preserveData = preserveData;
             this.cascadeDrops = cascadeDrops;
-            this.maqlChunks = maqlChunks == null ? Collections.<String>emptyList() : maqlChunks;
+            this.maqlChunks = maqlChunks == null ? Collections.emptyList() : maqlChunks;
         }
 
         /**

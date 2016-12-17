@@ -10,7 +10,6 @@ import static com.gooddata.util.Validate.notNull;
 import com.gooddata.AbstractPollHandler;
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
-import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.PollResult;
 import com.gooddata.gdc.TaskStatus;

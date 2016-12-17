@@ -28,7 +28,7 @@ public class ProjectFeatureFlag {
     private boolean enabled;
 
     @JsonIgnore
-    private Links links;
+    private final Links links;
 
     /**
      * Creates new project feature flag which is by default enabled (true).

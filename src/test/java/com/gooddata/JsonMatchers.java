@@ -57,7 +57,7 @@ public class JsonMatchers {
 
     private static class JsonFileMatcher<T> extends BaseMatcher<T> {
 
-        private String expectedResourceName;
+        private final String expectedResourceName;
         private String expectedJsonString;
         private String actualJsonString;
         private String errorString;

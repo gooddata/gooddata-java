@@ -14,7 +14,7 @@ import static com.gooddata.util.Validate.notNull;
 public class FeatureFlag {
 
     private final String name;
-    private boolean enabled;
+    private final boolean enabled;
 
     public FeatureFlag(final String name, final boolean enabled) {
         this.name = notNull(name, "name");

@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public interface Settings {
 
-    final String URL = "/gdc/projects/{project}/connectors/{connector}/integration/settings";
+    String URL = "/gdc/projects/{project}/connectors/{connector}/integration/settings";
 
     @JsonIgnore
     ConnectorType getConnectorType();

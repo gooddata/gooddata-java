@@ -29,7 +29,7 @@ public class TagsSerializerTest {
 
     @Test
     public void shouldSerializeZeroTags() throws Exception {
-        final TagsTestClass tags = new TagsTestClass(Collections.<String>emptySet());
+        final TagsTestClass tags = new TagsTestClass(Collections.emptySet());
         final String jsonString = MAPPER.writeValueAsString(tags);
         assertThat(jsonString, is("{\"tags\":\"\"}"));
     }

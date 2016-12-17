@@ -61,14 +61,14 @@ public class ModelDiffTest {
 
     @Test
     public void testGetUpdateMaqlsNoUpdateScript() throws Exception {
-        final ModelDiff diff = new ModelDiff(Collections.<UpdateScript>emptyList());
+        final ModelDiff diff = new ModelDiff(Collections.emptyList());
 
         assertThat(diff.getUpdateMaql(), hasSize(0));
     }
 
     @Test
     public void testGetUpdateMaqlsNoMaqlInUpdateScript() throws Exception {
-        final ModelDiff diff = new ModelDiff(new UpdateScript(true, false, Collections.<String>emptyList()));
+        final ModelDiff diff = new ModelDiff(new UpdateScript(true, false, Collections.emptyList()));
 
         assertThat(diff.getUpdateMaql(), hasSize(0));
     }

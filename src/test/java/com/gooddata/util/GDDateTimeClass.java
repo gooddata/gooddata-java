@@ -13,7 +13,7 @@ import org.joda.time.DateTime;
 
 class GDDateTimeClass {
 
-    private DateTime date;
+    private final DateTime date;
 
     @JsonCreator
     public GDDateTimeClass(@JsonProperty("date") @JsonDeserialize(using = GDDateTimeDeserializer.class) final DateTime date) {

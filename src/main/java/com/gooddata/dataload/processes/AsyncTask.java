@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 class AsyncTask {
 
     @JsonProperty
-    private Links links;
+    private final Links links;
 
     @JsonCreator
     private AsyncTask(@JsonProperty("links") Links links) {

@@ -6,7 +6,6 @@
 package com.gooddata.gdc;
 
 import com.gooddata.AbstractGoodDataIT;
-import com.gooddata.util.ResourceUtils;
 import org.testng.annotations.Test;
 
 import static com.gooddata.util.ResourceUtils.readFromResource;

@@ -324,7 +324,7 @@ public class MetadataService extends AbstractService {
         notNull(project, "project");
 
         final Collection<Usage> usages = usedBy(project, asList(uri), nearest, types);
-        return usages.size() > 0 ? usages.iterator().next().getUsedBy() : Collections.<Entry>emptyList();
+        return usages.size() > 0 ? usages.iterator().next().getUsedBy() : Collections.emptyList();
     }
 
     /**

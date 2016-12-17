@@ -13,9 +13,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 class IdentifierAndUri {
 
-    private String identifier;
+    private final String identifier;
 
-    private String uri;
+    private final String uri;
 
     @JsonCreator
     IdentifierAndUri(@JsonProperty("identifier") String identifier, @JsonProperty("uri") String uri) {

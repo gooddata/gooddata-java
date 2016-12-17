@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
 import org.testng.annotations.Test;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +32,7 @@ public class GridTest {
 
         assertThat(grid.getColumns(), is(notNullValue()));
         assertThat(grid.getColumns(), hasSize(1));
-        assertThat(grid.getColumns().iterator().next(), CoreMatchers.<GridElement>is(METRIC_GROUP));
+        assertThat(grid.getColumns().iterator().next(), CoreMatchers.is(METRIC_GROUP));
 
         assertThat(grid.getRows(), is(notNullValue()));
         assertThat(grid.getRows(), hasSize(1));
@@ -47,7 +46,7 @@ public class GridTest {
         assertThat(grid.getColumnWidths(), hasSize(1));
 
         final Map<String, Object> colWidth = grid.getColumnWidths().iterator().next();
-        assertThat((Integer) colWidth.get("width"), is(343));
+        assertThat(colWidth.get("width"), is(343));
     }
 
 
@@ -56,8 +55,8 @@ public class GridTest {
         final Map<String, Object> colWidths = new HashMap<>();
         final Map<String, List<String>> sort = new HashMap<>();
         colWidths.put("width", 343);
-        sort.put("columns", Collections.<String>emptyList());
-        sort.put("rows", Collections.<String>emptyList());
+        sort.put("columns", Collections.emptyList());
+        sort.put("rows", Collections.emptyList());
         final Grid grid = new Grid(
                 asList(METRIC_GROUP),
                 asList(new AttributeInGrid("/gdc/md/PROJECT_ID/obj/ATTR_ID", "attr")),

@@ -43,7 +43,7 @@ public class Role {
     @JsonSerialize(contentUsing = BooleanStringSerializer.class)
     private final Map<String, Boolean> permissions;
 
-    private Meta meta;
+    private final Meta meta;
 
     private final Map<String, String> links;
 

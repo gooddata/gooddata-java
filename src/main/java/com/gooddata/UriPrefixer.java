@@ -12,7 +12,6 @@ import java.net.URI;
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 import static org.springframework.util.StringUtils.trimLeadingCharacter;
-import static org.springframework.util.StringUtils.trimTrailingCharacter;
 
 /**
  * Used internally by GoodData SDK to hold and set URI prefix (hostname and port) of all requests.

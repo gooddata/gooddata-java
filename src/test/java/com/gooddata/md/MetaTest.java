@@ -10,7 +10,6 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 

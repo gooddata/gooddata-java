@@ -9,11 +9,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 public class GDDateClass {
-    private LocalDate date;
+    private final LocalDate date;
 
     @JsonCreator
     public GDDateClass(@JsonProperty("date") @JsonDeserialize(using = GDDateDeserializer.class) final LocalDate date) {

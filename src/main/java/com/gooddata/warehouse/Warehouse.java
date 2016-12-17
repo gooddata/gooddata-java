@@ -46,7 +46,7 @@ public class Warehouse {
     private String title;
     private String description;
 
-    private String authorizationToken;
+    private final String authorizationToken;
     private DateTime created;
     private DateTime updated;
     private String createdBy;

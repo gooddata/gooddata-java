@@ -6,14 +6,10 @@
 package com.gooddata.dataset;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.testng.Assert.assertTrue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
 import java.io.InputStream;
@@ -38,6 +34,6 @@ public class UploadsInfoTest {
 
     @Test(expectedExceptions = DatasetNotFoundException.class)
     public void getDatasetUploadInfoFails() throws Exception {
-        new UploadsInfo(Collections.<UploadsInfo.DataSet>emptyList()).getDataSet("dataset.non_existing_one");
+        new UploadsInfo(Collections.emptyList()).getDataSet("dataset.non_existing_one");
     }
 }
