@@ -350,7 +350,7 @@ public class WarehouseService extends AbstractService {
             return restTemplate.getForObject(uri, WarehouseSchema.class);
         } catch (GoodDataRestException e) {
             if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
-                throw new WarehouseSchemaNotFoundException(uri.toString(), e);
+                throw new WarehouseSchemaNotFoundException(uri, e);
             } else {
                 throw e;
             }
