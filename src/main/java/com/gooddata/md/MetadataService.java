@@ -16,6 +16,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.gooddata.util.Validate.noNullElements;
 import static com.gooddata.util.Validate.notNull;
@@ -287,9 +288,7 @@ public class MetadataService extends AbstractService {
                                                              Restriction... restrictions) {
         final Collection<Entry> entries = find(project, cls, restrictions);
         final Collection<String> result = new ArrayList<>(entries.size());
-        for (Entry entry : entries) {
-            result.add(entry.getUri());
-        }
+        result.addAll(entries.stream().map(Entry::getUri).collect(Collectors.toList()));
         return result;
     }
 
@@ -350,9 +349,7 @@ public class MetadataService extends AbstractService {
         }
         final List<Usage> usages = new ArrayList<>(uris.size());
         final Collection<UseManyEntries> useManyEntries = response.getUseMany();
-        for (UseManyEntries useMany : useManyEntries) {
-            usages.add(new Usage(useMany.getUri(), useMany.getEntries()));
-        }
+        usages.addAll(useManyEntries.stream().map(useMany -> new Usage(useMany.getUri(), useMany.getEntries())).collect(Collectors.toList()));
         return usages;
     }
 

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Encapsulates list of identifiers and their URIs.
@@ -27,11 +28,7 @@ class IdentifiersAndUris {
     }
 
     public List<String> getUris() {
-        final List<String> uris = new ArrayList<>();
-        for (IdentifierAndUri idAndUri : identifiersAndUris) {
-            uris.add(idAndUri.getUri());
-        }
-        return uris;
+        return identifiersAndUris.stream().map(IdentifierAndUri::getUri).collect(Collectors.toList());
     }
 
     public Map<String, String> asMap() {

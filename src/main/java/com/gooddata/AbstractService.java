@@ -35,12 +35,7 @@ public abstract class AbstractService {
 
     protected final ObjectMapper mapper = new ObjectMapper();
 
-    private final ResponseExtractor<ClientHttpResponse> reusableResponseExtractor = new ResponseExtractor<ClientHttpResponse>() {
-        @Override
-        public ClientHttpResponse extractData(final ClientHttpResponse response) throws IOException {
-            return new ReusableClientHttpResponse(response);
-        }
-    };
+    private final ResponseExtractor<ClientHttpResponse> reusableResponseExtractor = ReusableClientHttpResponse::new;
 
 
     /**

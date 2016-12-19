@@ -34,7 +34,7 @@ public class ProjectEvent {
     private final Map<String, String> parameters;
 
     public ProjectEvent(final String type) {
-        this(type, new HashMap<String, String>());
+        this(type, new HashMap<>());
     }
 
     public ProjectEvent(final String type, final Map<String, String> parameters) {

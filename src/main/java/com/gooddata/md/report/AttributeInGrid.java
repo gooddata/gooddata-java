@@ -18,6 +18,7 @@ import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.gooddata.util.Validate.notNull;
 
@@ -73,9 +74,7 @@ public class AttributeInGrid implements GridElement {
         notNull(totals, "totals");
         for (List<Total> totalList : totals) {
             final List<String> totalStringList = new ArrayList<>(totalList.size());
-            for (Total total : totalList) {
-                totalStringList.add(total.toString());
-            }
+            totalStringList.addAll(totalList.stream().map(Total::toString).collect(Collectors.toList()));
             this.totals.add(totalStringList);
         }
     }
@@ -124,9 +123,7 @@ public class AttributeInGrid implements GridElement {
         final List<List<Total>> enumTotals = new ArrayList<>(totals.size());
         for (List<String> totalList : totals) {
             final List<Total> totalEnumList = new ArrayList<>(totalList.size());
-            for (String total : totalList) {
-                totalEnumList.add(Total.of(total));
-            }
+            totalEnumList.addAll(totalList.stream().map(Total::of).collect(Collectors.toList()));
             enumTotals.add(totalEnumList);
         }
         return enumTotals;

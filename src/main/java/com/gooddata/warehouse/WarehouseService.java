@@ -186,7 +186,7 @@ public class WarehouseService extends AbstractService {
             final UriComponentsBuilder builder = UriComponentsBuilder.fromUri(WarehouseUsers.TEMPLATE.expand(warehouse.getId()));
             final URI uri = page.getPageUri(builder);
             final WarehouseUsers result = restTemplate.getForObject(uri, WarehouseUsers.class);
-            return result != null ? result : new PageableList<WarehouseUser>();
+            return result != null ? result : new PageableList<>();
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to list users of warehouse " + warehouse.getId(), e);
         }
