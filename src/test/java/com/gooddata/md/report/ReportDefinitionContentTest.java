@@ -39,8 +39,8 @@ public class ReportDefinitionContentTest {
     @Test
     public void testToStringFormat() {
         final ReportDefinitionContent def = new GridReportDefinitionContent(
-                new Grid(Collections.<GridElement>emptyList(), Collections.<GridElement>emptyList(),
-                        Collections.<MetricElement>emptyList()));
+                new Grid(Collections.emptyList(), Collections.emptyList(),
+                        Collections.emptyList()));
 
         assertThat(def.toString(), matchesPattern(GridReportDefinitionContent.class.getSimpleName() + "\\[.*\\]"));
     }
