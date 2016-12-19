@@ -18,6 +18,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class ModelDiffTest {
 
@@ -85,5 +86,12 @@ public class ModelDiffTest {
         assertThat(diff.getUpdateScripts().get(0).getMaqlChunks(), hasSize(1));
         assertThat(diff.getUpdateScripts().get(0).getMaqlChunks(), contains(
                 "CREATE FOLDER {ffld.employee} VISUAL(TITLE \"Employee\") TYPE FACT;\nCREATE FACT {fact.employee.age} VISUAL(TITLE \"Employee Age\", FOLDER {ffld.employee}) AS {f_employee.f_age};\nALTER DATASET {dataset.employee} ADD {fact.employee.age};\nSYNCHRONIZE {dataset.employee} PRESERVE DATA;"));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final ModelDiff diff = new ModelDiff(new UpdateScript(true, false, Collections.<String>emptyList()));
+
+        assertThat(diff.toString(), matchesPattern(ModelDiff.class.getSimpleName() + "\\[.*\\]"));
     }
 }

@@ -16,6 +16,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class ReportDefinitionTest {
 
@@ -39,6 +40,14 @@ public class ReportDefinitionTest {
                                 Collections.emptyList()), "desc", asList(new Filter("(SELECT [/gdc/md/projectId/obj/123]) >= 2")))
         );
         assertThat(def, serializesToJson("/md/report/oneNumberReportDefinition-input.json"));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final InputStream is = getClass().getResourceAsStream("/md/report/oneNumberReportDefinition.json");
+        final ReportDefinition def = new ObjectMapper().readValue(is, ReportDefinition.class);
+
+        assertThat(def.toString(), matchesPattern(ReportDefinition.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

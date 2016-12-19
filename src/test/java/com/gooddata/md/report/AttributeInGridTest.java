@@ -20,6 +20,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -80,5 +81,13 @@ public class AttributeInGridTest {
         final AttributeInGrid attrInGrid = new AttributeInGrid(displayForm);
         assertThat(attrInGrid.getUri(), is(URI));
         assertThat(attrInGrid.getAlias(), is(ALIAS));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final InputStream is = getClass().getResourceAsStream("/md/report/attributeInGrid.json");
+        final AttributeInGrid attr = new ObjectMapper().readValue(is, AttributeInGrid.class);
+
+        assertThat(attr.toString(), matchesPattern(AttributeInGrid.class.getSimpleName() + "\\[.*\\]"));
     }
 }

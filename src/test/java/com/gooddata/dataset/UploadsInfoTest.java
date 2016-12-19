@@ -8,6 +8,7 @@ package com.gooddata.dataset;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
@@ -35,5 +36,13 @@ public class UploadsInfoTest {
     @Test(expectedExceptions = DatasetNotFoundException.class)
     public void getDatasetUploadInfoFails() throws Exception {
         new UploadsInfo(Collections.emptyList()).getDataSet("dataset.non_existing_one");
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final InputStream input = getClass().getResourceAsStream("/dataset/uploads/data-sets.json");
+        final UploadsInfo uploadsInfo = new ObjectMapper().readValue(input, UploadsInfo.class);
+
+        assertThat(uploadsInfo.toString(), matchesPattern(UploadsInfo.class.getSimpleName() + "\\[.*\\]"));
     }
 }

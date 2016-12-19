@@ -15,6 +15,7 @@ import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class ReportDefinitionContentTest {
 
@@ -33,6 +34,15 @@ public class ReportDefinitionContentTest {
                 new Grid(Collections.emptyList(), Collections.emptyList(),
                         Collections.emptyList()));
         assertThat(def, serializesToJson("/md/report/gridReportDefinitionContent-input.json"));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final ReportDefinitionContent def = new GridReportDefinitionContent(
+                new Grid(Collections.<GridElement>emptyList(), Collections.<GridElement>emptyList(),
+                        Collections.<MetricElement>emptyList()));
+
+        assertThat(def.toString(), matchesPattern(GridReportDefinitionContent.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

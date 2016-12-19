@@ -14,6 +14,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class LinkEntriesTest {
 
@@ -29,5 +30,13 @@ public class LinkEntriesTest {
         assertThat(linkEntries.getEntries().get(0).getLink(), is("URI"));
         assertThat(linkEntries.getEntries().get(0).getUri(), is("URI"));
         assertThat(linkEntries.getEntries().get(0).getCategory(), is("tasks-status"));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final InputStream stream = getClass().getResourceAsStream("/gdc/linkEntries.json");
+        final LinkEntries linkEntries = new ObjectMapper().readValue(stream, LinkEntries.class);
+
+        assertThat(linkEntries.toString(), matchesPattern(LinkEntries.class.getSimpleName() + "\\[.*\\]"));
     }
 }

@@ -9,6 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -30,5 +31,12 @@ public class ProjectDashboardTest {
         assertThat(tab1.getIdentifier(), is("tab1abc"));
 
         assertThat(dashboard.getTabByName("Undefined"), nullValue());
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final ProjectDashboard dashboard = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/projectDashboard.json"), ProjectDashboard.class);
+
+        assertThat(dashboard.toString(), matchesPattern(ProjectDashboard.class.getSimpleName() + "\\[.*\\]"));
     }
 }

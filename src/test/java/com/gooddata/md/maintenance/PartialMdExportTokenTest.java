@@ -7,6 +7,7 @@ package com.gooddata.md.maintenance;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import org.testng.annotations.Test;
 
@@ -19,5 +20,12 @@ public class PartialMdExportTokenTest {
         partialMdExportToken.setImportAttributeProperties(true);
 
         assertThat(partialMdExportToken, serializesToJson("/md/maintenance/partialMDImport.json"));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final PartialMdExportToken partialMdExportToken = new PartialMdExportToken("TOKEN123");
+
+        assertThat(partialMdExportToken.toString(), matchesPattern(PartialMdExportToken.class.getSimpleName() + "\\[.*\\]"));
     }
 }

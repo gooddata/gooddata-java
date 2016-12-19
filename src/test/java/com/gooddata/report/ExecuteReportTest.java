@@ -9,6 +9,7 @@ import com.gooddata.JsonMatchers;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class ExecuteReportTest {
 
@@ -16,5 +17,12 @@ public class ExecuteReportTest {
     public void testSerialization() throws Exception {
         final ReportRequest request = new ExecuteReport("DEF-URI");
         assertThat(request, JsonMatchers.serializesToJson("/report/executeReport.json"));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final ReportRequest request = new ExecuteReport("DEF-URI");
+
+        assertThat(request.toString(), matchesPattern(ExecuteReport.class.getSimpleName() + "\\[.*\\]"));
     }
 }

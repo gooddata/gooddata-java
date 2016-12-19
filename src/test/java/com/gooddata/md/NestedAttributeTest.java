@@ -9,6 +9,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
@@ -55,5 +56,12 @@ public class NestedAttributeTest {
         assertThat(attribute.hasDimension(), is(true));
         assertThat(attribute.getDimensionLink(), is("/gdc/md/PROJECT_ID/obj/DIM_ID"));
         assertThat(attribute.getDimensionUri(), is("/gdc/md/PROJECT_ID/obj/DIM_ID"));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final NestedAttribute attribute = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/dimensionAttribute.json"), NestedAttribute.class);
+
+        assertThat(attribute.toString(), matchesPattern(NestedAttribute.class.getSimpleName() + "\\[.*\\]"));
     }
 }

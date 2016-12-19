@@ -7,6 +7,8 @@ package com.gooddata.featureflag;
 
 import static com.gooddata.util.Validate.notNull;
 
+import com.gooddata.util.GoodDataToStringBuilder;
+
 /**
  * Feature flag is a boolean flag used for enabling / disabling some specific feature of GoodData platform.
  * It can be used in various scopes (per project, per project group, per user, global etc.).
@@ -50,6 +52,6 @@ public class FeatureFlag {
 
     @Override
     public String toString() {
-        return "{name='" + name + '\'' + ", enabled=" + enabled + "}";
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 }

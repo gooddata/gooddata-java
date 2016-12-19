@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 /**
  * Display form
@@ -67,6 +68,11 @@ public class DisplayForm extends AbstractObj {
         return links.getElements();
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     protected static class Content {
@@ -101,6 +107,11 @@ public class DisplayForm extends AbstractObj {
         public String getType() {
             return type;
         }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.defaultToString(this);
+        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -114,6 +125,11 @@ public class DisplayForm extends AbstractObj {
 
         public String getElements() {
             return elements;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.defaultToString(this);
         }
     }
 

@@ -14,6 +14,7 @@ import java.util.Map;
 import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class WarehouseUserTest {
 
@@ -60,5 +61,13 @@ public class WarehouseUserTest {
     public void testGetId() throws Exception {
         final WarehouseUser user = new WarehouseUser(ROLE, PROFILE, LOGIN, LINKS);
         assertThat(user.getId(), is("{profile-id}"));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final WarehouseUser user =  new ObjectMapper()
+                .readValue(getClass().getResourceAsStream("/warehouse/user.json"), WarehouseUser.class);
+
+        assertThat(user.toString(), matchesPattern(WarehouseUser.class.getSimpleName() + "\\[.*\\]"));
     }
 }

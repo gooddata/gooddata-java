@@ -6,6 +6,7 @@
 package com.gooddata.md;
 
 import com.fasterxml.jackson.annotation.*;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
 
@@ -169,6 +170,11 @@ public class NestedAttribute extends AbstractObj {
         return content.getGrain();
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
+    }
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     protected static class Content {
         private final Collection<Key> pk;
@@ -305,6 +311,11 @@ public class NestedAttribute extends AbstractObj {
 
         public Collection<String> getGrain() {
             return grain;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.defaultToString(this);
         }
     }
 

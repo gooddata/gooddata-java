@@ -8,6 +8,7 @@ package com.gooddata.md;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
@@ -30,6 +31,14 @@ public class ColumnTest {
         assertThat(column.isFk(), is(false));
         assertThat(column.isFact(), is(false));
         assertThat(column.isDisplayForm(), is(false));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final InputStream stream = getClass().getResourceAsStream("/md/column.json");
+        final Column column = new ObjectMapper().readValue(stream, Column.class);
+
+        assertThat(column.toString(), matchesPattern(Column.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

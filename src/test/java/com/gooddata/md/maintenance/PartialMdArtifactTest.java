@@ -8,6 +8,7 @@ package com.gooddata.md.maintenance;
 import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooddata.gdc.UriResponse;
@@ -31,5 +32,12 @@ public class PartialMdArtifactTest {
         final PartialMdArtifact partialMdArtifact = new PartialMdArtifact(new UriResponse("/gdc/md/projectId/tasks/taskId/status"), "TOKEN123");
 
         assertThat(partialMdArtifact, serializesToJson("/md/maintenance/partialMDArtifact.json"));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final PartialMdArtifact partialMdArtifact = new PartialMdArtifact(new UriResponse("/gdc/md/projectId/tasks/taskId/status"), "TOKEN123");
+
+        assertThat(partialMdArtifact.toString(), matchesPattern(PartialMdArtifact.class.getSimpleName() + "\\[.*\\]"));
     }
 }

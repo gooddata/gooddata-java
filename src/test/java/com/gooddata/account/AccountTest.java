@@ -12,6 +12,7 @@ import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class AccountTest {
 
@@ -44,6 +45,13 @@ public class AccountTest {
     public void testSerializationOfCreateAccount() {
         final Account account = new Account(MAIL, "password", FIRST_NAME, LAST_NAME);
         assertThat(account, serializesToJson("/account/create-account.json"));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final Account account = new Account(FIRST_NAME, LAST_NAME, null);
+
+        assertThat(account.toString(), matchesPattern(Account.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

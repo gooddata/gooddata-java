@@ -12,6 +12,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import org.testng.annotations.Test;
 
@@ -65,5 +66,13 @@ public class MetricTest {
         final Metric metric = new ObjectMapper()
                 .readValue(getClass().getResourceAsStream("/md/metric-links.json"), Metric.class);
         assertThat(metric, serializesToJson("/md/metric-out.json"));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final Metric metric = new ObjectMapper()
+                .readValue(getClass().getResourceAsStream("/md/metric-out.json"), Metric.class);
+
+        assertThat(metric.toString(), matchesPattern(Metric.class.getSimpleName() + "\\[.*\\]"));
     }
 }

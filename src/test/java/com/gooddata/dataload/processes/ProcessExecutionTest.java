@@ -7,6 +7,7 @@ package com.gooddata.dataload.processes;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
@@ -29,6 +30,14 @@ public class ProcessExecutionTest {
 
         final ProcessExecution execution = new ProcessExecution(process, "test.groovy", params, hidden);
         assertThat(execution, serializesToJson("/dataload/processes/execution.json"));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final DataloadProcess process = new ObjectMapper().readValue(getClass().getResourceAsStream("/dataload/processes/process.json"), DataloadProcess.class);
+        final ProcessExecution execution = new ProcessExecution(process, "test.groovy");
+
+        assertThat(execution.toString(), matchesPattern(ProcessExecution.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

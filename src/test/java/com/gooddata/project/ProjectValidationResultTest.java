@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class ProjectValidationResultTest {
 
@@ -24,5 +25,13 @@ public class ProjectValidationResultTest {
         assertThat(log.getMessage(), is("There are inconsistent values between %s->%s->%s and %s->%s for %s value '%s'."));
         assertThat(log.getParams(), hasSize(7));
 
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final ProjectValidationResult log = new ObjectMapper()
+                .readValue(getClass().getResourceAsStream("/project/project-validationResultLog.json"), ProjectValidationResult.class);
+
+        assertThat(log.toString(), matchesPattern(ProjectValidationResult.class.getSimpleName() + "\\[.*\\]"));
     }
 }

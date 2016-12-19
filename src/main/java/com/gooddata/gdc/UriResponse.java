@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 /**
  * Response containing URI string.
@@ -32,6 +33,6 @@ public class UriResponse {
 
     @Override
     public String toString() {
-        return uri;
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 }

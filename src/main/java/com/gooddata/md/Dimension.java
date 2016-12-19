@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -42,6 +43,11 @@ public class Dimension extends AbstractObj implements Queryable, Updatable {
         return content.getAttributes();
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
+    }
+
     private static class Content {
 
         @JsonProperty("attributes")
@@ -54,6 +60,11 @@ public class Dimension extends AbstractObj implements Queryable, Updatable {
 
         public Collection<NestedAttribute> getAttributes() {
             return attributes;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.defaultToString(this);
         }
     }
 }

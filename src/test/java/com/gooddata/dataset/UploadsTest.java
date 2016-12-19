@@ -9,6 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
@@ -26,5 +27,13 @@ public class UploadsTest {
         assertThat(uploads, notNullValue());
         assertThat(uploads.items(), not(Matchers.empty()));
         assertThat(uploads.items().size(), is(2));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final InputStream input = getClass().getResourceAsStream("/dataset/uploads/uploads.json");
+        final Uploads uploads = new ObjectMapper().readValue(input, Uploads.class);
+
+        assertThat(uploads.toString(), matchesPattern(Uploads.class.getSimpleName() + "\\[.*\\]"));
     }
 }

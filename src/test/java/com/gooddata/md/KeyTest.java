@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class KeyTest {
 
@@ -32,5 +33,12 @@ public class KeyTest {
         final Key key = new Key(DATA, TYPE);
         final String json = MAPPER.writeValueAsString(key);
         assertThat(json, is(JSON));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final Key key = new Key(DATA, TYPE);
+
+        assertThat(key.toString(), matchesPattern(Key.class.getSimpleName() + "\\[.*\\]"));
     }
 }

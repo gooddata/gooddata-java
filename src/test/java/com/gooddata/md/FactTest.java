@@ -13,6 +13,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class FactTest {
 
@@ -30,6 +31,13 @@ public class FactTest {
     public void testSerialization() throws Exception {
         final Fact fact = new Fact("Person Shoe Size", "/gdc/md/PROJECT_ID/obj/COL_ID", "col", "/gdc/md/PROJECT_ID/obj/FOLDER_ID");
         assertThat(fact, serializesToJson("/md/fact-input.json"));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final Fact fact = new Fact("Person Shoe Size", "/gdc/md/PROJECT_ID/obj/COL_ID", "col", "/gdc/md/PROJECT_ID/obj/FOLDER_ID");
+
+        assertThat(fact.toString(), matchesPattern(Fact.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

@@ -7,6 +7,7 @@ package com.gooddata.md;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooddata.JsonMatchers;
@@ -40,5 +41,12 @@ public class AttributeSortTest {
         final AttributeSort attributeSort = MAPPER.readValue(getClass().getResourceAsStream("/md/attributeSort.json"), AttributeSort.class);
         assertThat(attributeSort, is(notNullValue()));
         assertThat(attributeSort.getValue(), is("/gdc/md/PROJECT_ID/obj/1806"));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final AttributeSort attributeSort = new AttributeSort("/gdc/md/PROJECT_ID/obj/1806", true);
+
+        assertThat(attributeSort.toString(), matchesPattern(AttributeSort.class.getSimpleName() + "\\[.*\\]"));
     }
 }

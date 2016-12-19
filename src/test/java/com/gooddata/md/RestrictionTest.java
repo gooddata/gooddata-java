@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class RestrictionTest {
 
@@ -35,5 +36,11 @@ public class RestrictionTest {
         assertThat(id, is(notNullValue()));
         assertThat(id.getType(), is(Restriction.Type.SUMMARY));
         assertThat(id.getValue(), is("my summary"));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final Restriction id = Restriction.summary("my summary");
+        assertThat(id.toString(), matchesPattern(Restriction.class.getSimpleName() + "\\[.*\\]"));
     }
 }

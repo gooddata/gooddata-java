@@ -8,6 +8,7 @@ package com.gooddata.warehouse;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
@@ -37,5 +38,13 @@ public class WarehouseSchemaTest {
         assertThat(warehouseSchema.getName(), is(NAME));
         assertThat(warehouseSchema.getDescription(), is(DESCRIPTION));
         assertThat(warehouseSchema.getLinks(), is(equalTo(LINKS)));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final InputStream stream = getClass().getResourceAsStream("/warehouse/schema.json");
+        final WarehouseSchema warehouseSchema = new ObjectMapper().readValue(stream, WarehouseSchema.class);
+
+        assertThat(warehouseSchema.toString(), matchesPattern(WarehouseSchema.class.getSimpleName() + "\\[.*\\]"));
     }
 }

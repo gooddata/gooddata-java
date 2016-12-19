@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class QueryTest {
 
@@ -21,5 +22,12 @@ public class QueryTest {
         assertThat(query.getCategory(), is("MD::Query::Object"));
         assertThat(query.getTitle(), is("List of allTypes"));
         assertThat(query.getSummary(), is("Metadata Query Resources for project 'PROJ_ID'"));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final Query query = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/query.json"), Query.class);
+
+        assertThat(query.toString(), matchesPattern(Query.class.getSimpleName() + "\\[.*\\]"));
     }
 }

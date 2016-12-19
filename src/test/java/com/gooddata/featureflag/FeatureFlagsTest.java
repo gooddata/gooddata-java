@@ -13,6 +13,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.isOneOf;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertNotNull;
 
@@ -73,5 +74,12 @@ public class FeatureFlagsTest {
 
         assertFalse(flags.isEnabled("enabledFlag"));
         assertFalse(flags.iterator().hasNext());
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final FeatureFlags flags = new FeatureFlags();
+
+        assertThat(flags.toString(), matchesPattern(FeatureFlags.class.getSimpleName() + "\\[.*\\]"));
     }
 }

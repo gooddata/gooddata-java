@@ -8,6 +8,7 @@ package com.gooddata.md;
 import com.gooddata.report.ReportExportFormat;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -123,10 +124,6 @@ public class ReportAttachment extends Attachment {
 
     @Override
     public String toString() {
-        return "ReportAttachment{" +
-                "uri=" + getUri() +
-                ", formats=" + formats +
-                ", exportOptions=" + exportOptions +
-                '}';
+        return new GoodDataToStringBuilder(this).append("uri", getUri()).toString();
     }
 }

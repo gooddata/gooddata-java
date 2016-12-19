@@ -8,6 +8,7 @@ package com.gooddata.project;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.List;
 
@@ -35,6 +36,11 @@ class ProjectValidationResultItem {
         return validation;
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class Body {
 
@@ -43,6 +49,11 @@ class ProjectValidationResultItem {
         @JsonCreator
         private Body(@JsonProperty("log") List<ProjectValidationResult> logs) {
             this.logs = logs;
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.defaultToString(this);
         }
     }
 }

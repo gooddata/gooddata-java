@@ -9,6 +9,7 @@ import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.gooddata.project.Environment;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -92,5 +93,12 @@ public class WarehouseTest {
         assertThat(warehouse.getStatus(), is(STATUS));
         assertThat(warehouse.getLinks(), is(LINKS));
         assertThat(warehouse.getConnectionUrl(), is(CONNECTION_URL));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final Warehouse warehouse = new Warehouse(TITLE, null, DESCRIPTION, CREATED, UPDATED, CREATED_BY, UPDATED_BY, STATUS, ENVIRONMENT, CONNECTION_URL, LINKS);
+
+        assertThat(warehouse.toString(), matchesPattern(Warehouse.class.getSimpleName() + "\\[.*\\]"));
     }
 }

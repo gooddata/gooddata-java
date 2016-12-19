@@ -7,6 +7,7 @@ package com.gooddata.md;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.*;
 
@@ -39,5 +40,10 @@ class IdentifiersAndUris {
             identifiersToUris.put(idAndUri.getIdentifier(), idAndUri.getUri());
         }
         return Collections.unmodifiableMap(identifiersToUris);
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 }

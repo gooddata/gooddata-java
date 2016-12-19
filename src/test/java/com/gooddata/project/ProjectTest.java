@@ -14,6 +14,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.core.StringStartsWith.startsWith;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class ProjectTest {
 
@@ -124,5 +125,12 @@ public class ProjectTest {
 
         assertThat(serializedProject, startsWith("{\"project\""));
         assertThat(serializedProject, containsString("\"driver\":\"vertica\""));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final Project project = new Project("TITLE", "SUMMARY", "TOKEN");
+
+        assertThat(project.toString(), matchesPattern(Project.class.getSimpleName() + "\\[.*\\]"));
     }
 }

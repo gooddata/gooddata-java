@@ -17,6 +17,7 @@ import static java.util.Collections.singleton;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class EntryTest {
 
@@ -61,6 +62,14 @@ public class EntryTest {
                 CREATED, UPDATED, LOCKED, UNLISTED);
 
         assertThat(entry, serializesToJson("/md/entry.json"));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final Entry entry = new Entry(URI, TITLE, SUMMARY, CATEGORY, AUTHOR, CONTRIBUTOR, DEPRECATED, IDENTIFIER, TAGS,
+                CREATED, UPDATED, LOCKED, UNLISTED);
+
+        assertThat(entry.toString(), matchesPattern(Entry.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

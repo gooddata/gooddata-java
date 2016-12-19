@@ -13,6 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class IntegrationTest {
 
@@ -41,6 +42,13 @@ public class IntegrationTest {
 
         assertThat(integration.getProjectTemplate(), is("template"));
         assertThat(integration.isActive(), is(true));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final Integration integration = new Integration("template");
+
+        assertThat(integration.toString(), matchesPattern(Integration.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

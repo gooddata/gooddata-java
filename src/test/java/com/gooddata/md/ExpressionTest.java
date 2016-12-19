@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class ExpressionTest {
 
@@ -31,5 +32,12 @@ public class ExpressionTest {
     public void testSerialize() throws Exception {
         final Expression expression = new Expression(DATA, TYPE);
         assertThat(MAPPER.writeValueAsString(expression), is(JSON));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final Expression expression = new Expression(DATA, TYPE);
+
+        assertThat(expression.toString(), matchesPattern(Expression.class.getSimpleName() + "\\[.*\\]"));
     }
 }

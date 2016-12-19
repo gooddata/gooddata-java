@@ -26,6 +26,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.fail;
@@ -212,5 +213,12 @@ public class ScheduleTest {
     public void testCreateTriggeredScheduleWithNotCreatedSchedule() {
         final Schedule schedule = new Schedule(process, EXECUTABLE, "0 0 * * *");
         new Schedule(process, EXECUTABLE, schedule);
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final Schedule schedule = new Schedule(process, EXECUTABLE, "0 0 * * *");
+
+        assertThat(schedule.toString(), matchesPattern(Schedule.class.getSimpleName() + "\\[.*\\]"));
     }
 }

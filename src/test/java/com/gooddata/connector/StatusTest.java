@@ -13,6 +13,7 @@ import static com.gooddata.connector.Status.Code.UPLOADING;
 import static com.gooddata.connector.Status.Code.USER_ERROR;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class StatusTest {
 
@@ -64,6 +65,13 @@ public class StatusTest {
     @Test
     public void testIsFailedOnUnknownCode() throws Exception {
         assertThat(new Status("unknown code", "", "").isFailed(), is(false));
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final Status status = new Status("unknown code", "", "");
+
+        assertThat(status.toString(), matchesPattern(Status.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

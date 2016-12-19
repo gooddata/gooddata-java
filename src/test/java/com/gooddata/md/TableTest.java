@@ -9,6 +9,7 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
@@ -28,6 +29,14 @@ public class TableTest {
         assertThat(table.getDataLoads(), hasItems(
                                             "/gdc/md/PROJECT_ID/obj/625283",
                                             "/gdc/md/PROJECT_ID/obj/625412"));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final InputStream stream = getClass().getResourceAsStream("/md/table.json");
+        final Table table = new ObjectMapper().readValue(stream, Table.class);
+
+        assertThat(table.toString(), matchesPattern(Table.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }

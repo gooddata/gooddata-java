@@ -44,7 +44,7 @@ import java.util.Collection;
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 import static java.util.Collections.emptyList;
-import static org.apache.commons.lang.Validate.isTrue;
+import static org.apache.commons.lang3.Validate.isTrue;
 
 /**
  * Service to manage dataload processes and process executions.

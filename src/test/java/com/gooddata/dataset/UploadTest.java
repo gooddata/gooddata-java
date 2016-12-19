@@ -9,6 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
@@ -33,5 +34,13 @@ public class UploadTest {
         assertThat(upload.getCreatedAt(), is(new DateTime(2016, 4, 8, 12, 55, 21, DateTimeZone.UTC)));
         assertThat(upload.getSize(), is(130501));
         assertThat(upload.getProcessedAt(), is(new DateTime(2016, 4, 8, 12, 55, 25, DateTimeZone.UTC)));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final InputStream input = getClass().getResourceAsStream("/dataset/uploads/upload.json");
+        final Upload upload = new ObjectMapper().readValue(input, Upload.class);
+
+        assertThat(upload.toString(), matchesPattern(Upload.class.getSimpleName() + "\\[.*\\]"));
     }
 }

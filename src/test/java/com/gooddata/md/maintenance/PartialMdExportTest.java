@@ -7,6 +7,7 @@ package com.gooddata.md.maintenance;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import org.testng.annotations.Test;
 
@@ -31,5 +32,13 @@ public class PartialMdExportTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testEmptyUris() throws Exception {
         new PartialMdExport();
+    }
+
+    @Test
+    public void testToStringFormat() {
+        final PartialMdExport partialMdExport =
+                new PartialMdExport(false, false, "/gdc/md/projectId/obj/123", "/gdc/md/projectId/obj/234");
+
+        assertThat(partialMdExport.toString(), matchesPattern(PartialMdExport.class.getSimpleName() + "\\[.*\\]"));
     }
 }

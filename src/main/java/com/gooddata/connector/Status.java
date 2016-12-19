@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import static com.gooddata.connector.Status.Code.ERROR;
 import static com.gooddata.connector.Status.Code.SYNCHRONIZED;
@@ -75,4 +76,8 @@ public class Status {
         ERROR, USER_ERROR
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
+    }
 }

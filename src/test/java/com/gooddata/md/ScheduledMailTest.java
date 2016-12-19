@@ -17,6 +17,7 @@ import java.util.Collections;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class ScheduledMailTest {
 
@@ -62,6 +63,13 @@ public class ScheduledMailTest {
                                                 .setAttachments(Arrays.asList(rp1, da1, da2));
 
         assertThat(scheduledMail, JsonMatchers.serializesToJson("/md/scheduledMail.json"));
+    }
+
+    @Test
+    public void testToStringFormat() throws Exception {
+        final ScheduledMail scheduledMail = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/scheduledMail.json"), ScheduledMail.class);
+
+        assertThat(scheduledMail.toString(), matchesPattern(ScheduledMail.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }
