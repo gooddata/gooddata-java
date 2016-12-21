@@ -15,12 +15,7 @@ public class ProcessExecutionTest {
 
     @Test
     public void shouldSerialize() throws Exception {
-        final ProcessExecution execution = new ProcessExecution(){
-            @Override
-            public ConnectorType getConnectorType() {
-                return ZENDESK4;
-            }
-        };
+        final ProcessExecution execution = () -> ZENDESK4;
 
         assertThat(execution, serializesToJson("/connector/process-execution-empty.json"));
     }

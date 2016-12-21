@@ -22,10 +22,10 @@ import org.springframework.web.util.UriTemplate;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Project Role
@@ -52,9 +52,9 @@ public class Role {
     Role(@JsonProperty("permissions") final Map<String, Boolean> permissions,
          @JsonProperty("meta") final Meta meta,
          @JsonProperty("links") final Map<String, String> links) {
-        this.permissions = permissions == null ? new HashMap<String, Boolean>() : permissions;
+        this.permissions = permissions == null ? new HashMap<>() : permissions;
         this.meta = meta == null ? new Meta(null) : meta;
-        this.links = links == null ? new HashMap<String, String>() : links;
+        this.links = links == null ? new HashMap<>() : links;
     }
 
     /**
@@ -72,13 +72,7 @@ public class Role {
      * @return set of granted permissions
      */
     public Set<String> getGrantedPermissions() {
-        final Set<String> permissions = new HashSet<>();
-        for (Entry<String, Boolean> entry : this.permissions.entrySet()) {
-            if (entry.getValue()) {
-                permissions.add(entry.getKey());
-            }
-        }
-        return permissions;
+        return permissions.entrySet().stream().filter(Entry::getValue).map(Entry::getKey).collect(Collectors.toSet());
     }
 
     /**

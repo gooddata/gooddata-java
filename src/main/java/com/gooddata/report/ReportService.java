@@ -122,9 +122,9 @@ public class ReportService extends AbstractService {
         final ObjectNode root = mapper.createObjectNode();
         final ObjectNode child = mapper.createObjectNode();
 
-        child.put("result", execResult);
+        child.set("result", execResult);
         child.put("format", format.getValue());
-        root.put("result_req", child);
+        root.set("result_req", child);
 
         try {
             return restTemplate.postForObject(EXPORTING_URI, root, UriResponse.class).getUri();

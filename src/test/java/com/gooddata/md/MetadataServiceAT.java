@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Metadata acceptance tests.
@@ -172,9 +173,7 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         final List<AttributeElement> elements = gd.getMetadataService().getAttributeElements(attr);
         assertThat("there should be 2 elements", elements, hasSize(2));
         final Set<String> titles = new HashSet<>(elements.size());
-        for (AttributeElement element : elements) {
-            titles.add(element.getTitle());
-        }
+        titles.addAll(elements.stream().map(AttributeElement::getTitle).collect(Collectors.toList()));
         assertThat(titles, hasItems("DevOps", "HR"));
     }
 }

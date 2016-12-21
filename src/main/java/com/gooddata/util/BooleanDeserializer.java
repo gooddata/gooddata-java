@@ -5,13 +5,13 @@
  */
 package com.gooddata.util;
 
+import static com.fasterxml.jackson.databind.JsonMappingException.from;
 import static com.gooddata.util.Validate.notNull;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 import java.io.IOException;
 
@@ -31,7 +31,7 @@ public class BooleanDeserializer extends JsonDeserializer<Boolean> {
         } else if (root.isTextual()) {
             return "1".equals(root.textValue());
         } else {
-            throw new JsonMappingException("Unknown value of type: " + root.getNodeType(), jp.getCurrentLocation());
+            throw from(jp, "Unknown value of type: " + root.getNodeType());
         }
     }
 

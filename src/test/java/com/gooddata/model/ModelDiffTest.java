@@ -90,7 +90,7 @@ public class ModelDiffTest {
 
     @Test
     public void testToStringFormat() {
-        final ModelDiff diff = new ModelDiff(new UpdateScript(true, false, Collections.<String>emptyList()));
+        final ModelDiff diff = new ModelDiff(new UpdateScript(true, false, Collections.emptyList()));
 
         assertThat(diff.toString(), matchesPattern(ModelDiff.class.getSimpleName() + "\\[.*\\]"));
     }

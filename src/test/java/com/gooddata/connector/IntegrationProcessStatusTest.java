@@ -103,7 +103,7 @@ public class IntegrationProcessStatusTest {
 
     @Test
     public void testToStringFormat() {
-        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status("unknown code", "", ""), now(), now(), Collections.<String, String>emptyMap());
+        final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status("unknown code", "", ""), now(), now(), Collections.emptyMap());
 
         assertThat(process.toString(),  matchesPattern(IntegrationProcessStatus.class.getSimpleName() + "\\[.*\\]"));
     }

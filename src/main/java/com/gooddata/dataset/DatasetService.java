@@ -26,6 +26,7 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
@@ -223,11 +224,7 @@ public class DatasetService extends AbstractService {
      */
     @Deprecated
     public Collection<Dataset> listDatasets(Project project) {
-        final HashSet<Dataset> datasets = new HashSet<>();
-        for (final Link link : listDatasetLinks(project)) {
-            datasets.add(new Dataset(link.getIdentifier(), link.getUri(), link.getTitle()));
-        }
-        return datasets;
+        return listDatasetLinks(project).stream().map(link -> new Dataset(link.getIdentifier(), link.getUri(), link.getTitle())).collect(Collectors.toCollection(HashSet::new));
     }
 
     /**

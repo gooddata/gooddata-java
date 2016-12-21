@@ -32,11 +32,11 @@ public class ProcessExecution {
     private final Map<String,String> hiddenParams;
 
     public ProcessExecution(DataloadProcess process, String executable) {
-        this(process, executable, new HashMap<String, String>(), new HashMap<String, String>());
+        this(process, executable, new HashMap<>(), new HashMap<>());
     }
 
     public ProcessExecution(DataloadProcess process, String executable, Map<String, String> params) {
-        this(process, executable, params, new HashMap<String, String>());
+        this(process, executable, params, new HashMap<>());
     }
 
     public ProcessExecution(DataloadProcess process, String executable, Map<String, String> params, Map<String, String> hiddenParams) {
