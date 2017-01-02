@@ -101,17 +101,17 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
     public void createProcessFromGit() {
         processAppstore = gd.getProcessService().createProcessFromAppstore(project,
                 new DataloadProcess("sdktest ruby appstore " + System.getenv("BUILD_NUMBER"), ProcessType.RUBY.toString(),
-                "${PUBLIC_APPSTORE}:tag/prodigy-testing:/test/rubyHello")).get();
+                "${PUBLIC_APPSTORE}:branch/demo:/test/HelloApp")).get();
 
         assertThat(processAppstore.getExecutables(), contains("hello.rb"));
     }
 
     @Test(groups = "process", dependsOnMethods = "createProcessFromGit")
     public void updateProcessFromGit() {
-        processAppstore.setPath("${PUBLIC_APPSTORE}:tag/prodigy-testing:/test/rubyBonjour");
+        processAppstore.setPath("${PUBLIC_APPSTORE}:branch/demo:/test/AhojApp");
         processAppstore = gd.getProcessService().updateProcessFromAppstore(processAppstore).get();
 
-        assertThat(processAppstore.getExecutables(), contains("bonjour.rb"));
+        assertThat(processAppstore.getExecutables(), contains("ahoj.rb"));
     }
 
     public void copy(final String file, final File dir) throws IOException {
