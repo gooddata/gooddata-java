@@ -16,8 +16,17 @@ import static com.gooddata.util.Validate.notNull;
  */
 public class PageRequest implements Page {
 
-    private final String offset;
-    private final int limit;
+    public static final Integer DEFAULT_LIMIT = 100;
+
+    private String offset;
+    private int limit;
+
+    /**
+     * Creates new page definition with default values
+     */
+    public PageRequest() {
+        this(null, DEFAULT_LIMIT);
+    }
 
     /**
      * Creates new page definition with provided values.
@@ -46,6 +55,27 @@ public class PageRequest implements Page {
      */
     public PageRequest(final int limit) {
         this(null, limit);
+    }
+
+
+    public String getOffset() {
+        return offset;
+    }
+
+    public void setOffset(final String offset) {
+        this.offset = offset;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public int getSanitizedLimit() {
+        return limit > 0 ? limit : DEFAULT_LIMIT;
+    }
+
+    public void setLimit(final int limit) {
+        this.limit = limit;
     }
 
     @Override

@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 
 import java.net.URI;
 
+import static com.gooddata.collections.PageRequest.DEFAULT_LIMIT;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -58,5 +59,21 @@ public class PageRequestTest {
         final UriComponentsBuilder uriBuilder3 = pageRequest.updateWithPageParams(uriBuilder2);
         final String pageUri = uriBuilder3.build().toUriString();
         assertThat(pageUri, is("test_uri/{test}?offset=12&limit=10"));
+    }
+
+    @Test
+    public void testGetPageUriDefaultValue() throws Exception {
+        final PageRequest pageRequest = new PageRequest();
+        final UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("test_uri");
+        final URI pageUri = pageRequest.getPageUri(uriBuilder);
+        assertThat(pageUri, notNullValue());
+        assertThat(pageUri.toString(), is("test_uri?limit=100"));
+    }
+
+    @Test
+    public void testGetSanitizedLimit() throws Exception {
+        final PageRequest pageRequest = new PageRequest();
+        pageRequest.setLimit(-2);
+        assertThat(pageRequest.getSanitizedLimit(), is(DEFAULT_LIMIT));
     }
 }
