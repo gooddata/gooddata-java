@@ -59,4 +59,13 @@ public class PageRequestTest {
         final String pageUri = uriBuilder3.build().toUriString();
         assertThat(pageUri, is("test_uri/{test}?offset=12&limit=10"));
     }
+
+    @Test
+    public void testGetPageUriDefaultValue() throws Exception {
+        final PageRequest pageRequest = new PageRequest();
+        final UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("test_uri");
+        final URI pageUri = pageRequest.getPageUri(uriBuilder);
+        assertThat(pageUri, notNullValue());
+        assertThat(pageUri.toString(), is("test_uri?limit=100"));
+    }
 }
