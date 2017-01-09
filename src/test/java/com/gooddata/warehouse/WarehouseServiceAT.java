@@ -16,6 +16,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -74,8 +75,17 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
 
     @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
     public void listWarehouses() throws Exception {
-        final Collection<Warehouse> warehouses = service.listWarehouses();
-        assertThat(warehouses, hasItem(hasSameIdAs(warehouse)));
+        final LinkedList<Warehouse> result = new LinkedList<>();
+        Page page = new PageRequest(1000);
+        PageableList<Warehouse> warehouses;
+
+        do {
+            warehouses = service.listWarehouses(page);
+            result.addAll(warehouses);
+            page = warehouses.getNextPage();
+        } while (warehouses.hasNextPage());
+
+        assertThat(result, hasItem(hasSameIdAs(warehouse)));
     }
 
     @Test(groups = "warehouse", dependsOnMethods = {"createWarehouse", "listWarehouses"})
