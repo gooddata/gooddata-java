@@ -1,4 +1,4 @@
-# GoodData Java SDK [![Build Status](https://travis-ci.org/martiner/gooddata-java.png?branch=master)](https://travis-ci.org/martiner/gooddata-java) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gooddata/gooddata-java/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gooddata/gooddata-java)
+# GoodData Java SDK [![Build Status](https://travis-ci.org/martiner/gooddata-java.png?branch=master)](https://travis-ci.org/martiner/gooddata-java) [![Javadocs](http://javadoc.io/badge/com.gooddata/gooddata-java.svg)](http://javadoc.io/doc/com.gooddata/gooddata-java) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gooddata/gooddata-java/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gooddata/gooddata-java)
 
 The *GoodData Java SDK* encapsulates the REST API provided by the [GoodData](http://www.gooddata.com) platform.
 The first version was implemented during the [All Data Hackathon](http://hackathon.gooddata.com) April 10 - 11 2014
@@ -19,9 +19,10 @@ See [releases page](https://github.com/martiner/gooddata-java/releases) for info
 the [Upgrading Guide](https://github.com/martiner/gooddata-java/wiki/Upgrading-GoodData-Java-SDK) will navigate you
 through changes between major versions.
 
-See [Wiki](https://github.com/martiner/gooddata-java/wiki) for
+See [Javadocs](http://javadoc.io/doc/com.gooddata/gooddata-java)
+or [Wiki](https://github.com/martiner/gooddata-java/wiki) for
 [Code Examples](https://github.com/martiner/gooddata-java/wiki/Code-Examples)
-and [Extensibility How-To](https://github.com/martiner/gooddata-java/wiki/Extending-GoodData-Java-SDK).
+and [Extensibility How-To](https://github.com/martiner/gooddata-java/wiki/Extending-).
 
 ### Dependencies
 
