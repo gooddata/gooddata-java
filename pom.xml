@@ -314,11 +314,13 @@
                     <groupId>org.springframework</groupId>
                     <artifactId>spring-aop</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-context</artifactId>
-                </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -418,7 +420,6 @@
             <version>0.11</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
 </project>
