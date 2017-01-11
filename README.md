@@ -22,7 +22,7 @@ through changes between major versions.
 See [Javadocs](http://javadoc.io/doc/com.gooddata/gooddata-java)
 or [Wiki](https://github.com/martiner/gooddata-java/wiki) for
 [Code Examples](https://github.com/martiner/gooddata-java/wiki/Code-Examples)
-and [Extensibility How-To](https://github.com/martiner/gooddata-java/wiki/Extending-).
+and [Extensibility How-To](https://github.com/martiner/gooddata-java/wiki/Extending).
 
 ### Dependencies
 
