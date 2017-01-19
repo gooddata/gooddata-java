@@ -8,16 +8,22 @@ package com.gooddata.dataload;
 import static com.gooddata.util.ResourceUtils.readFromResource;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.any;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooddata.project.Project;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -79,8 +85,12 @@ public class OutputStageServiceTest {
 
     @Test
     public void testUpdateOutputStage() throws Exception {
+        ResponseEntity responseEntity = mock(ResponseEntity.class);
+        when(restTemplate.exchange(eq(outputStage.getUri()), eq(HttpMethod.PUT), any(RequestEntity.class), eq(OutputStage.class))).thenReturn(responseEntity);
+        doReturn(outputStage).when(responseEntity).getBody();
+
         outputStageService.updateOutputStage(outputStage);
 
-        verify(restTemplate,times(1)).put(outputStage.getUri(), outputStage);
+        verify(restTemplate, times(1)).exchange(eq(outputStage.getUri()), eq(HttpMethod.PUT), any(RequestEntity.class), eq(OutputStage.class));
     }
 }

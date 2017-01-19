@@ -13,6 +13,9 @@ import com.gooddata.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.project.Project;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -66,11 +69,14 @@ public class OutputStageService extends AbstractService {
     public OutputStage updateOutputStage(final OutputStage outputStage) {
         notNull(outputStage, "outputStage");
         try {
-            restTemplate.put(outputStage.getUri(), outputStage);
+            HttpEntity<OutputStage> outputStageHttpEntity = new HttpEntity<>(outputStage);
+            ResponseEntity<OutputStage> response = restTemplate.exchange(outputStage.getUri(), HttpMethod.PUT, outputStageHttpEntity, OutputStage.class);
+            if (response.getBody() == null) {
+                throw new RestClientException("unexpected response body");
+            }
+            return response.getBody();
         } catch (GoodDataRestException | RestClientException e) {
             throw new GoodDataException("Unable to update output stage, uri: " + outputStage.getUri());
         }
-
-        return getOutputStageByUri(outputStage.getUri());
     }
 }

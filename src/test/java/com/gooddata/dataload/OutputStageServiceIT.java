@@ -86,12 +86,6 @@ public class OutputStageServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(outputStage.getUri())
                 .havingBody(jsonEquals(readStringFromResource(OUTPUT_STAGE_NO_PROCESS)))
                 .respond()
-                .withStatus(200);
-
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo(outputStage.getUri())
-                .respond()
                 .withBody(readFromResource(OUTPUT_STAGE_ALL_FIELDS))
                 .withStatus(200);
 
