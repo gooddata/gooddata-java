@@ -7,7 +7,7 @@ Below are few **rules, recommendations and best practices** we try to follow whe
 * Every closed non-rejected pull request and issue must be marked with exactly **one milestone version**.
 * Issue must be **properly labeled** (bug/enhancement/backward incompatible/...). 
 * Add usage examples of new high level functionality to
-[documentation](https://github.com/martiner/gooddata-java/wiki/Code-Examples).
+[documentation](https://github.com/gooddata/gooddata-java/wiki/Code-Examples).
 
 ## Design
 
@@ -52,7 +52,7 @@ is specific enough.
   * `remove*()` (i.e. `remove(Project project)`) instead od `delete*()`
 * Write **integration tests** for services using _[Jadler](https://github.com/jadler-mocking/jadler/wiki)_.
 * If it is possible write **acceptance tests** to be run with the real backend.
-* Update [documentation](https://github.com/martiner/gooddata-java/wiki/Code-Examples) with usage examples.
+* Update [documentation](https://github.com/gooddata/gooddata-java/wiki/Code-Examples) with usage examples.
 
 ## Best practices
 * **Test class naming**:

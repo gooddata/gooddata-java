@@ -106,7 +106,7 @@ public class DataStoreService {
             if (HttpStatus.INTERNAL_SERVER_ERROR.value() == e.getStatusCode()) {
                 // this error may occur when user issues request to WebDAV before SST and TT were obtained
                 // and WebDAV is deployed on a separate hostname
-                // see https://github.com/martiner/gooddata-java/wiki/Known-limitations
+                // see https://github.com/gooddata/gooddata-java/wiki/Known-limitations
                 throw new DataStoreException(createUnAuthRequestWarningMessage(url), e);
             } else {
                 throw new DataStoreException("Unable to upload to " + url + " got status " + e.getStatusCode(), e);
@@ -114,7 +114,7 @@ public class DataStoreService {
         } catch (IOException e) {
             // this error may occur when user issues request to WebDAV before SST and TT were obtained
             // and WebDAV deployed on the same hostname
-            // see https://github.com/martiner/gooddata-java/wiki/Known-limitations
+            // see https://github.com/gooddata/gooddata-java/wiki/Known-limitations
             if (e.getCause() instanceof NonRepeatableRequestException) {
                 throw new DataStoreException(createUnAuthRequestWarningMessage(url), e);
             } else {
@@ -125,7 +125,7 @@ public class DataStoreService {
 
     private String createUnAuthRequestWarningMessage(final URI url) {
         return "Got 500 while uploading to " + url + "."
-                + "\nThis can be known limitation, see https://github.com/martiner/gooddata-java/wiki/Known-limitations";
+                + "\nThis can be known limitation, see https://github.com/gooddata/gooddata-java/wiki/Known-limitations";
     }
 
     /**

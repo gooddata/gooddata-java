@@ -7,7 +7,7 @@
     <version>2.2.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>GoodData Java SDK</description>
-    <url>https://github.com/martiner/gooddata-java</url>
+    <url>https://github.com/gooddata/gooddata-java</url>
 
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -22,8 +22,8 @@
         </license>
     </licenses>
     <scm>
-        <url>git@github.com:martiner/gooddata-java.git</url>
-        <connection>scm:git:git@github.com:martiner/gooddata-java.git</connection>
+        <url>git@github.com:gooddata/gooddata-java.git</url>
+        <connection>scm:git:git@github.com:gooddata/gooddata-java.git</connection>
         <developerConnection>scm:git:${basedir}</developerConnection>
     </scm>
     <developers>
