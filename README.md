@@ -1,8 +1,8 @@
 # GoodData Java SDK [![Build Status](https://travis-ci.org/martiner/gooddata-java.png?branch=master)](https://travis-ci.org/martiner/gooddata-java) [![Javadocs](http://javadoc.io/badge/com.gooddata/gooddata-java.svg)](http://javadoc.io/doc/com.gooddata/gooddata-java) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gooddata/gooddata-java/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gooddata/gooddata-java)
 
-The *GoodData Java SDK* encapsulates the REST API provided by the [GoodData](http://www.gooddata.com) platform.
-The first version was implemented during the [All Data Hackathon](http://hackathon.gooddata.com) April 10 - 11 2014
-and currently the SDK is transitioned to be an official GoodData project.
+The *GoodData Java SDK* encapsulates the REST API of the **GoodData Platform**.
+The first version was implemented during the [All Data Hackathon](http://hackathon.gooddata.com) April 10 - 11 2014.
+It is free and open-source software provided "as-is" under the [BSD License](LICENSE.txt) as an official project by [GoodData Corporation](http://www.gooddata.com).
 
 ## Usage
 
@@ -32,10 +32,6 @@ The *GoodData Java SDK* uses:
 * the *Spring Framework* version 4.3.*
 * the *Jackson JSON Processor* version 2.8.*
 * the *Java Development Kit (JDK)* version 8 or later
-
-## License and conditions
-
-The *GoodData Java SDK* is free and open-source software provided by GoodData Corporation "as-is" under [BSD License](LICENSE.txt).
 
 ## Development
 
