@@ -8,7 +8,6 @@ package com.gooddata;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URI;
@@ -33,8 +32,7 @@ class UriPrefixingClientHttpRequestFactory implements ClientHttpRequestFactory {
      * @param uriPrefix the URI for setting hostname and port of all HTTP requests
      */
     UriPrefixingClientHttpRequestFactory(ClientHttpRequestFactory factory, URI uriPrefix) {
-        this.wrapped = notNull(factory, "factory");
-        this.prefixer = new UriPrefixer(uriPrefix);
+        this(factory, new UriPrefixer(uriPrefix));
     }
 
     /**
@@ -42,12 +40,15 @@ class UriPrefixingClientHttpRequestFactory implements ClientHttpRequestFactory {
      * and use the given hostname, port, and protocol for all HTTP requests
      *
      * @param factory  the factory to be wrapped
-     * @param hostname the hostname for all HTTP requests
-     * @param port     the port for all HTTP requests
-     * @param protocol the protocol for all HTTP requests
+     * @param endpoint GoodData Platform's endpoint
      */
-    UriPrefixingClientHttpRequestFactory(ClientHttpRequestFactory factory, String hostname, int port, String protocol) {
-        this(factory, UriComponentsBuilder.newInstance().scheme(protocol).host(hostname).port(port).build().toUri());
+    UriPrefixingClientHttpRequestFactory(ClientHttpRequestFactory factory, GoodDataEndpoint endpoint) {
+        this(factory, new UriPrefixer(notNull(endpoint, "prefixer").toUri()));
+    }
+
+    private UriPrefixingClientHttpRequestFactory(final ClientHttpRequestFactory factory, final UriPrefixer prefixer) {
+        this.wrapped = notNull(factory, "factory");
+        this.prefixer =  notNull(prefixer, "prefixer");
     }
 
     @Override
