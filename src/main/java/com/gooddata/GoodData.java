@@ -220,9 +220,7 @@ public class GoodData {
 
         final UriPrefixingClientHttpRequestFactory factory = new UriPrefixingClientHttpRequestFactory(
                 new HttpComponentsClientHttpRequestFactory(httpClient),
-                endpoint.getHostname(),
-                endpoint.getPort(),
-                endpoint.getProtocol()
+                endpoint
         );
         final RestTemplate restTemplate = new RestTemplate(factory);
         restTemplate.setInterceptors(Arrays.asList(
