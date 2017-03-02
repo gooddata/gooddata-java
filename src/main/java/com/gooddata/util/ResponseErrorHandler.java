@@ -1,12 +1,12 @@
 /**
- * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2017, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.util;
 
 import com.gooddata.GoodDataRestException;
-import com.gooddata.gdc.GdcError;
+import com.gooddata.gdc.ErrorStructure;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.DefaultResponseErrorHandler;
@@ -24,16 +24,16 @@ import static com.gooddata.util.Validate.noNullElements;
  */
 public class ResponseErrorHandler extends DefaultResponseErrorHandler {
 
-    private final HttpMessageConverterExtractor<GdcError> gdcErrorExtractor;
+    private final HttpMessageConverterExtractor<ErrorStructure> gdcErrorExtractor;
 
     public ResponseErrorHandler(List<HttpMessageConverter<?>> messageConverters) {
-        gdcErrorExtractor = new HttpMessageConverterExtractor<>(GdcError.class,
+        gdcErrorExtractor = new HttpMessageConverterExtractor<>(ErrorStructure.class,
                 noNullElements(messageConverters, "messageConverters"));
     }
 
     @Override
     public void handleError(ClientHttpResponse response) {
-        GdcError error = null;
+        ErrorStructure error = null;
         try {
             error = gdcErrorExtractor.extractData(response);
         } catch (RestClientException | IOException ignored) {

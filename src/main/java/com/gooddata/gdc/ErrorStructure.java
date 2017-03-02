@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2017, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import static com.gooddata.util.Validate.notNull;
 import static java.util.Arrays.copyOf;
@@ -18,6 +19,7 @@ import static java.util.Arrays.copyOf;
  * Deserialization only.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonDeserialize(using = ErrorStructureDeserializer.class)
 public class ErrorStructure {
     protected final String message;
     protected final Object[] parameters;
