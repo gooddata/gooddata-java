@@ -31,7 +31,7 @@ public abstract class AbstractGoodDataAT {
                     new GoodDataEndpoint(getProperty("host")),
                     new LoginPasswordAuthentication(getProperty("login"), getProperty("pass")) {
                         /**
-                         * had to be overriden to access connectionManager, to test how many connections were not closed
+                         * had to be overridden to access connectionManager, to test how many connections were not closed
                          */
                         @Override
                         public HttpClient createHttpClient(final GoodDataEndpoint endpoint, final HttpClientBuilder builder) {
