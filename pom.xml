@@ -49,6 +49,7 @@
         <json-unit.version>1.5.3</json-unit.version>
         <maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
         <currentYear>${maven.build.timestamp}</currentYear>
+        <pitest.mutationThreshold>65</pitest.mutationThreshold>
     </properties>
 
     <build>
@@ -187,6 +188,30 @@
                     </execution>
                 </executions>
                 <!-- add missing license: mvn com.mycila:license-maven-plugin:3.0:format -->
+            </plugin>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.1.11</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>mutationCoverage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <targetTests>
+                        <targetTest>*Test</targetTest>
+                    </targetTests>
+                    <excludedMethods>
+                        <excludedMethod>equals</excludedMethod>
+                        <excludedMethod>hashCode</excludedMethod>
+                    </excludedMethods>
+                    <threads>8</threads>
+                    <mutationThreshold>${pitest.mutationThreshold}</mutationThreshold>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -400,6 +425,13 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- just for pitest-maven plugin -->
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.21</version>
             <scope>test</scope>
         </dependency>
         <dependency>
