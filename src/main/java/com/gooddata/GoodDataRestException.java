@@ -1,11 +1,11 @@
 /**
- * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2017, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata;
 
-import com.gooddata.gdc.GdcError;
+import com.gooddata.gdc.ErrorStructure;
 
 /**
  * Signals client or server error during communication with GoodData REST API.
@@ -66,7 +66,7 @@ public class GoodDataRestException extends GoodDataException {
      * @param statusText the HTTP status text of the response
      * @param error      the GoodData REST API error structure
      */
-    public GoodDataRestException(int statusCode, String requestId, String statusText, GdcError error) {
+    public GoodDataRestException(int statusCode, String requestId, String statusText, ErrorStructure error) {
         this(statusCode,
                 error != null && error.getRequestId() != null ? error.getRequestId() : requestId,
                 error != null && error.getMessage() != null ? error.getFormattedMessage() : statusText,
