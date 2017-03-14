@@ -7,7 +7,9 @@ package com.gooddata.collections;
 
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.List;
 import java.util.Map.Entry;
@@ -27,7 +29,11 @@ class UriPage implements Page {
      * @param pageUri page URI
      */
     public UriPage(final String pageUri) {
-        this.pageUri = UriComponentsBuilder.fromUriString(notNull(pageUri, "pageUri")).build();
+        try {
+            this.pageUri = UriComponentsBuilder.fromUriString(UriUtils.decode(notNull(pageUri, "pageUri"), "UTF-8")).build();
+        } catch (final UnsupportedEncodingException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     /**
