@@ -3,9 +3,16 @@
 Below are few **rules, recommendations and best practices** we try to follow when developing the _GoodData Java SDK_.
 
 ## Paperwork
-* Every pull request with non-trivial change must be **associated with an issue**.
-* Every closed non-rejected pull request and issue must be marked with exactly **one milestone version**.
-* Issue must be **properly labeled** (bug/enhancement/backward incompatible/...). 
+* The **commit message**:
+  * must be written in the **imperative mood**
+  * must clearly **explain rationale** behind this change (describe _why_ you are doing the change rather than _what_ you are changing)
+* The **pull request**:
+  * must be **properly labeled** (trivial/bug/enhancement/backward incompatible/...)
+  * with non-trivial change must be **[associated with an issue](https://help.github.com/articles/closing-issues-via-commit-messages/)**
+  * must be marked with exactly one **milestone version**
+* The **issue**
+  * must be **properly labeled** (bug/enhancement/backward incompatible/...).
+  * must be marked with exactly one **milestone version**
 * Add usage examples of new high level functionality to
 [documentation](https://github.com/gooddata/gooddata-java/wiki/Code-Examples).
 
