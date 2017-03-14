@@ -63,4 +63,10 @@ public class UriPageTest {
         assertThat(components.getQueryParams(), hasEntry("offset", singletonList("god")));
         assertThat(components.getQueryParams(), hasEntry("limit", singletonList("10")));
     }
+
+    @Test
+    public void testEncoding() throws Exception {
+        final UriPage uri = new UriPage("uri?test=foo%20bar");
+        assertThat(uri.getPageUri(null).toString(), is("uri?test=foo%20bar"));
+    }
 }
