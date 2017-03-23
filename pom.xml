@@ -71,7 +71,7 @@
                             <Specification-Title>${project.description}</Specification-Title>
                             <Specification-Version>${project.version}</Specification-Version>
                             <Specification-Vendor>GoodData</Specification-Vendor>
-                            <Implementation-Title>HttpComponents ${project.description}</Implementation-Title>
+                            <Implementation-Title>${project.description}</Implementation-Title>
                             <Implementation-Version>${project.version}</Implementation-Version>
                             <Implementation-Vendor>GoodData</Implementation-Vendor>
                             <Implementation-Vendor-Id>com.gooddata</Implementation-Vendor-Id>
