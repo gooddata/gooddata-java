@@ -33,12 +33,11 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.Collection;
 
 import static com.gooddata.util.Validate.notEmpty;
@@ -524,7 +523,7 @@ public class ProcessService extends AbstractService {
     private DataloadProcess postProcess(DataloadProcess process, File processData, URI postUri) {
         File tempFile = createTempFile("process", ".zip");
 
-        try (FileOutputStream output = new FileOutputStream(tempFile)) {
+        try (OutputStream output = Files.newOutputStream(tempFile.toPath())) {
             ZipHelper.zip(processData, output);
         } catch (IOException e) {
             throw new GoodDataException("Unable to zip process data", e);
@@ -533,14 +532,14 @@ public class ProcessService extends AbstractService {
         Object processToSend;
         HttpMethod method = HttpMethod.POST;
         if (tempFile.length() > MAX_MULTIPART_SIZE) {
-            try {
+            try (final InputStream input = Files.newInputStream(tempFile.toPath())) {
                 process.setPath(dataStoreService.getUri(tempFile.getName()).getPath());
-                dataStoreService.upload(tempFile.getName(), new FileInputStream(tempFile));
+                dataStoreService.upload(tempFile.getName(), input);
                 processToSend = process;
                 if (DataloadProcess.TEMPLATE.matches(postUri.toString())) {
                     method = HttpMethod.PUT;
                 }
-            } catch (FileNotFoundException e) {
+            } catch (IOException e) {
                 throw new GoodDataException("Unable to access zipped process data at "
                         + tempFile.getAbsolutePath(), e);
             }
