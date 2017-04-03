@@ -10,9 +10,10 @@ import static com.gooddata.util.Validate.notNull;
 import org.springframework.util.StreamUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -50,7 +51,7 @@ public abstract class ZipHelper {
         notNull(output, "output");
 
         if (isZipped(file)) {
-            try (FileInputStream fis = new FileInputStream(file)) {
+            try (InputStream fis = Files.newInputStream(file.toPath())) {
                 StreamUtils.copy(fis, output);
             }
         } else {
@@ -77,15 +78,15 @@ public abstract class ZipHelper {
     private static void zipFile(Path rootPath, File file, ZipOutputStream zos) throws IOException {
         ZipEntry ze = new ZipEntry(rootPath.relativize(file.toPath()).toString());
         zos.putNextEntry(ze);
-        try (FileInputStream fis = new FileInputStream(file)) {
+        try (InputStream fis = Files.newInputStream(file.toPath())) {
             StreamUtils.copy(fis, zos);
         }
         zos.closeEntry();
     }
 
     private static boolean isZipped(File file) {
-        try {
-            return new ZipInputStream(new FileInputStream(file)).getNextEntry() != null;
+        try (final InputStream stream = Files.newInputStream(file.toPath())) {
+            return new ZipInputStream(stream).getNextEntry() != null;
         } catch (IOException e) {
             return false;
         }
