@@ -8,6 +8,7 @@ package com.gooddata.util;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.gdc.ErrorStructure;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.HttpMessageConverterExtractor;
@@ -36,7 +37,7 @@ public class ResponseErrorHandler extends DefaultResponseErrorHandler {
         ErrorStructure error = null;
         try {
             error = gdcErrorExtractor.extractData(response);
-        } catch (RestClientException | IOException ignored) {
+        } catch (RestClientException | IOException | HttpMessageConversionException ignored) {
         }
         final String requestId = response.getHeaders().getFirst(GDC_REQUEST_ID_HEADER);
         int statusCode;

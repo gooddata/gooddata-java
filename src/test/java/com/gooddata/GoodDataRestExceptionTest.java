@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 import java.io.InputStream;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.*;
 
 public class GoodDataRestExceptionTest {
@@ -55,6 +56,15 @@ public class GoodDataRestExceptionTest {
         assertThat(e.getStatusCode(), is(500));
         assertThat(e.getRequestId(), is("a123"));
         assertThat(e.getText(), is("message"));
+    }
+
+    @Test
+    public void shouldCreateInstanceWithNullStatusAndGdcError() throws Exception {
+        final GoodDataRestException e = new GoodDataRestException(500, "a123", null, null);
+        assertThat(e.getMessage(), is("500: [requestId=a123] Unknown error"));
+        assertThat(e.getStatusCode(), is(500));
+        assertThat(e.getRequestId(), is("a123"));
+        assertThat(e.getText(), is(nullValue()));
     }
 
     @Test

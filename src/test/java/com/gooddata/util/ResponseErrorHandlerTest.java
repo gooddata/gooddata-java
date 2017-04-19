@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
@@ -64,6 +65,21 @@ public class ResponseErrorHandlerTest {
         assertThat(exc.getErrorClass(), is("CLASS"));
         assertThat(exc.getErrorCode(), is("CODE"));
         assertThat(exc.getText(), is("MSG PARAM1 PARAM2 3"));
+    }
+
+    @Test
+    public void testHandleInvalidError() throws Exception {
+        final ClientHttpResponse response = prepareResponse("/gdc/invalidError.json");
+
+        final GoodDataRestException exc = assertException(response);
+
+        assertThat("GoodDataRestException should have been thrown!", exc, is(notNullValue()));
+        assertThat(exc.getStatusCode(), is(500));
+        assertThat(exc.getRequestId(), is("requestId"));
+        assertThat(exc.getComponent(), is(nullValue()));
+        assertThat(exc.getErrorClass(), is(nullValue()));
+        assertThat(exc.getErrorCode(), is(nullValue()));
+        assertThat(exc.getText(), is(nullValue()));
     }
 
     private ClientHttpResponse prepareResponse(String resourcePath) throws IOException {

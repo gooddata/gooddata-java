@@ -35,7 +35,9 @@ public class GoodDataRestException extends GoodDataException {
      */
     public GoodDataRestException(int statusCode, String requestId, String message, String component,
                                  String errorClass, String errorCode) {
-        super(statusCode + (requestId != null ? ": [requestId=" + requestId + "] " : ": ") + message);
+        super(statusCode +
+                (requestId != null ? ": [requestId=" + requestId + "] " : ": ") +
+                (message != null ? message : "Unknown error"));
         this.statusCode = statusCode;
         this.requestId = requestId;
         this.component = component;
