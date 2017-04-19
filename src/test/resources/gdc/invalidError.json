@@ -1,0 +1,8 @@
+{
+  "timestamp": 1492609090612,
+  "status": 500,
+  "error": "Internal Server Error",
+  "exception": "java.lang.NoSuchFieldError",
+  "message": "fail",
+  "path": "/foo"
+}
