@@ -24,7 +24,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertEquals;
 
 public class ResponseErrorHandlerTest {
 
@@ -41,30 +40,30 @@ public class ResponseErrorHandlerTest {
     public void testHandleGdcError() throws Exception {
         final ClientHttpResponse response = prepareResponse("/gdc/gdcError.json");
 
-        final GoodDataRestException exc = assertException(() -> responseErrorHandler.handleError(response));
+        final GoodDataRestException exc = assertException(response);
 
         assertThat("GoodDataRestException should have been thrown!", exc, is(notNullValue()));
-        assertEquals(exc.getStatusCode(), 500);
-        assertEquals(exc.getRequestId(), "REQ");
-        assertEquals(exc.getComponent(), "COMPONENT");
-        assertEquals(exc.getErrorClass(), "CLASS");
-        assertEquals(exc.getErrorCode(), "CODE");
-        assertEquals(exc.getText(), "MSG");
+        assertThat(exc.getStatusCode(), is(500));
+        assertThat(exc.getRequestId(), is("REQ"));
+        assertThat(exc.getComponent(), is("COMPONENT"));
+        assertThat(exc.getErrorClass(), is("CLASS"));
+        assertThat(exc.getErrorCode(), is("CODE"));
+        assertThat(exc.getText(), is("MSG"));
     }
 
     @Test
     public void testHandleErrorStructure() throws Exception {
         final ClientHttpResponse response = prepareResponse("/gdc/errorStructure.json");
 
-        final GoodDataRestException exc = assertException(() -> responseErrorHandler.handleError(response));
+        final GoodDataRestException exc = assertException(response);
 
         assertThat("GoodDataRestException should have been thrown!", exc, is(notNullValue()));
-        assertEquals(exc.getStatusCode(), 500);
-        assertEquals(exc.getRequestId(), "REQ");
-        assertEquals(exc.getComponent(), "COMPONENT");
-        assertEquals(exc.getErrorClass(), "CLASS");
-        assertEquals(exc.getErrorCode(), "CODE");
-        assertEquals(exc.getText(), "MSG PARAM1 PARAM2 3");
+        assertThat(exc.getStatusCode(), is(500));
+        assertThat(exc.getRequestId(), is("REQ"));
+        assertThat(exc.getComponent(), is("COMPONENT"));
+        assertThat(exc.getErrorClass(), is("CLASS"));
+        assertThat(exc.getErrorCode(), is("CODE"));
+        assertThat(exc.getText(), is("MSG PARAM1 PARAM2 3"));
     }
 
     private ClientHttpResponse prepareResponse(String resourcePath) throws IOException {
@@ -80,10 +79,10 @@ public class ResponseErrorHandlerTest {
         return response;
     }
 
-    private static GoodDataRestException assertException(Runnable runnable) {
+    private GoodDataRestException assertException(ClientHttpResponse response) {
         try {
-            runnable.run();
-            return null;
+            responseErrorHandler.handleError(response);
+            throw new AssertionError("Expected GoodDataRestException");
         } catch (GoodDataRestException e) {
             return e;
         }
