@@ -7,9 +7,10 @@ package com.gooddata.md;
 
 import org.testng.annotations.Test;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonNodeAbsent;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -46,7 +47,7 @@ public class MetricTest {
     @Test
     public void testSerialization() throws Exception {
         final Metric metric = new Metric("Person Name", "SELECT SUM([/gdc/md/PROJECT_ID/obj/EXPR_ID])", "FORMAT");
-        assertThat(metric, serializesToJson("/md/metric-new.json"));
+        assertThat(metric, jsonEquals(resource("md/metric-new.json")));
     }
 
     @Test
@@ -54,13 +55,13 @@ public class MetricTest {
         final Metric metric = readObjectFromResource("/md/metric-out.json", Metric.class);
 
         assertThat(metric, jsonNodeAbsent("metric.content.tree.content[0].content[0].content[0].content"));
-        assertThat(metric, serializesToJson("/md/metric-out.json"));
+        assertThat(metric, jsonEquals(resource("md/metric-out.json")));
     }
 
     @Test
     public void shouldIgnoreLinksProperty() throws Exception {
         final Metric metric = readObjectFromResource("/md/metric-links.json", Metric.class);
-        assertThat(metric, serializesToJson("/md/metric-out.json"));
+        assertThat(metric, jsonEquals(resource("md/metric-out.json")));
     }
 
     @Test

@@ -10,7 +10,8 @@ import org.testng.annotations.Test;
 
 import java.io.InputStream;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -48,7 +49,7 @@ public class PagingTest {
     @Test
     public void testSerialization() throws Exception {
         final Paging paging = new Paging("/nextUri?offset=17");
-        assertThat(paging, serializesToJson("/collections/paging_only_next.json"));
+        assertThat(paging, jsonEquals(resource("collections/paging_only_next.json")));
     }
 
 }

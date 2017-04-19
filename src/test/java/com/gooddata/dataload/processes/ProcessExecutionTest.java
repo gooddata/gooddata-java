@@ -10,8 +10,9 @@ import org.testng.annotations.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
@@ -29,7 +30,7 @@ public class ProcessExecutionTest {
         final DataloadProcess process = readObjectFromResource("/dataload/processes/process.json", DataloadProcess.class);
 
         final ProcessExecution execution = new ProcessExecution(process, "test.groovy", params, hidden);
-        assertThat(execution, serializesToJson("/dataload/processes/execution.json"));
+        assertThat(execution, jsonEquals(resource("dataload/processes/execution.json")));
     }
 
     @Test

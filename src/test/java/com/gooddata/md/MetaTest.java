@@ -12,9 +12,10 @@ import org.testng.annotations.Test;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -64,7 +65,7 @@ public class MetaTest {
         final Meta meta = new Meta(AUTHOR, CONTRIBUTOR, CREATED, UPDATED, SUMMARY, TITLE, CATEGORY, TAGS, URI, IDENTIFIER,
                 DEPRECATED, PRODUCTION, LOCKED, UNLISTED, SHARED_WITH_SOMEONE);
 
-        assertThat(meta, serializesToJson("/md/meta.json"));
+        assertThat(meta, jsonEquals(resource("md/meta.json")));
     }
 
     @Test

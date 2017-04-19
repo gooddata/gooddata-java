@@ -9,9 +9,10 @@ import org.testng.annotations.Test;
 
 import java.util.Collections;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,7 +38,7 @@ public class ReportDefinitionTest {
                         new Grid(Collections.emptyList(), Collections.emptyList(),
                                 Collections.emptyList()), "desc", asList(new Filter("(SELECT [/gdc/md/projectId/obj/123]) >= 2")))
         );
-        assertThat(def, serializesToJson("/md/report/oneNumberReportDefinition-input.json"));
+        assertThat(def, jsonEquals(resource("md/report/oneNumberReportDefinition-input.json")));
     }
 
     @Test

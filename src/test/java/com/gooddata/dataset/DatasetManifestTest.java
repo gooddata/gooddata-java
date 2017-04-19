@@ -7,11 +7,12 @@ package com.gooddata.dataset;
 
 import org.testng.annotations.Test;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -45,7 +46,7 @@ public class DatasetManifestTest {
                 singletonMap("date", "CONSTRAINT"));
         final DatasetManifest manifest = new DatasetManifest("DATASET", "FILE", singletonList(part));
 
-        assertThat(manifest, serializesToJson("/dataset/datasetManifest-input.json"));
+        assertThat(manifest, jsonEquals(resource("dataset/datasetManifest-input.json")));
     }
 
     @Test

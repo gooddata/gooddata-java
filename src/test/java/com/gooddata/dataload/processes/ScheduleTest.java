@@ -17,7 +17,8 @@ import org.testng.annotations.Test;
 
 import java.util.Collections;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -92,13 +93,13 @@ public class ScheduleTest {
     @Test
     public void testSerialization() {
         final Schedule schedule = new Schedule(process, EXECUTABLE, "0 0 * * *");
-        assertThat(schedule, serializesToJson("/dataload/processes/schedule-input.json"));
+        assertThat(schedule, jsonEquals(resource("dataload/processes/schedule-input.json")));
     }
 
     @Test
     public void testTriggeredScheduleSerialization() {
         final Schedule schedule = new Schedule(process, EXECUTABLE, triggerSchedule);
-        assertThat(schedule, serializesToJson("/dataload/processes/schedule-triggered-input.json"));
+        assertThat(schedule, jsonEquals(resource("dataload/processes/schedule-triggered-input.json")));
     }
 
     @Test
@@ -107,7 +108,7 @@ public class ScheduleTest {
         schedule.setReschedule(Duration.standardMinutes(26));
         schedule.setName("scheduleName");
 
-        assertThat(schedule, serializesToJson("/dataload/processes/schedule-input-all-fields.json"));
+        assertThat(schedule, jsonEquals(resource("dataload/processes/schedule-input-all-fields.json")));
     }
 
     @DataProvider(name = "scheduleParams")

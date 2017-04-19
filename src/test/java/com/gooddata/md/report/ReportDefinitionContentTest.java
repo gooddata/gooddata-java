@@ -9,7 +9,8 @@ import org.testng.annotations.Test;
 
 import java.util.Collections;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -31,7 +32,7 @@ public class ReportDefinitionContentTest {
         final ReportDefinitionContent def = new GridReportDefinitionContent(
                 new Grid(Collections.emptyList(), Collections.emptyList(),
                         Collections.emptyList()));
-        assertThat(def, serializesToJson("/md/report/gridReportDefinitionContent-input.json"));
+        assertThat(def, jsonEquals(resource("md/report/gridReportDefinitionContent-input.json")));
     }
 
     @Test

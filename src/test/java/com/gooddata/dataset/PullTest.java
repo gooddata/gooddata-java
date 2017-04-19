@@ -7,7 +7,8 @@ package com.gooddata.dataset;
 
 import org.testng.annotations.Test;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
@@ -16,7 +17,7 @@ public class PullTest {
     @Test
     public void testSerialization() throws Exception {
         final Pull pull = new Pull("DIR");
-        assertThat(pull, serializesToJson("/dataset/pull.json"));
+        assertThat(pull, jsonEquals(resource("dataset/pull.json")));
     }
 
     @Test

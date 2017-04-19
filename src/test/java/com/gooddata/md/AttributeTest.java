@@ -10,7 +10,8 @@ import org.testng.annotations.Test;
 
 import java.util.Collection;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -79,13 +80,13 @@ public class AttributeTest {
         final Attribute attribute = new Attribute(TITLE, new Key("/gdc/md/PROJECT_ID/obj/PK_ID", "col"),
                 new Key("/gdc/md/PROJECT_ID/obj/FK_ID", "col"));
 
-        assertThat(attribute, serializesToJson("/md/attribute-input.json"));
+        assertThat(attribute, jsonEquals(resource("md/attribute-input.json")));
     }
 
     @Test
     public void shouldSerializeSameAsDeserializationInput() throws Exception {
         final Attribute attribute = readObjectFromResource("/md/attribute.json", Attribute.class);
-        assertThat(attribute, serializesToJson("/md/attribute-inputOrig.json"));
+        assertThat(attribute, jsonEquals(resource("md/attribute-inputOrig.json")));
     }
 
     @Test

@@ -5,7 +5,8 @@
  */
 package com.gooddata.md.maintenance;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
@@ -19,7 +20,7 @@ public class PartialMdExportTokenTest {
         partialMdExportToken.setUpdateLDMObjects(true);
         partialMdExportToken.setImportAttributeProperties(true);
 
-        assertThat(partialMdExportToken, serializesToJson("/md/maintenance/partialMDImport.json"));
+        assertThat(partialMdExportToken, jsonEquals(resource("md/maintenance/partialMDImport.json")));
     }
 
     @Test

@@ -5,7 +5,8 @@
  */
 package com.gooddata.warehouse;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
@@ -13,12 +14,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 import com.gooddata.project.Environment;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -46,25 +45,25 @@ public class WarehouseTest {
     public void testSerializationForInstanceCreation() throws Exception {
         final Warehouse warehouse = new Warehouse("New ADS", "Your-ADS-Token", "ADS Description");
         warehouse.setEnvironment(Environment.TESTING);
-        assertThat(warehouse, serializesToJson("/warehouse/warehouse-create.json"));
+        assertThat(warehouse, jsonEquals(resource("warehouse/warehouse-create.json")));
     }
 
     @Test
     public void testSerialization() throws Exception {
         final Warehouse warehouse = new Warehouse(TITLE, TOKEN, DESCRIPTION, CREATED, UPDATED, CREATED_BY, UPDATED_BY, STATUS, ENVIRONMENT, CONNECTION_URL, LINKS);
-        assertThat(warehouse, serializesToJson("/warehouse/warehouse.json"));
+        assertThat(warehouse, jsonEquals(resource("warehouse/warehouse.json")));
     }
 
     @Test
     public void testSerializationWithNullToken() throws Exception {
         final Warehouse warehouse = new Warehouse(TITLE, null, DESCRIPTION, CREATED, UPDATED, CREATED_BY, UPDATED_BY, STATUS, ENVIRONMENT, CONNECTION_URL, LINKS);
-        assertThat(warehouse, serializesToJson("/warehouse/warehouse-null-token.json"));
+        assertThat(warehouse, jsonEquals(resource("warehouse/warehouse-null-token.json")));
     }
 
     @Test
     public void testSerializationWithLicense() throws Exception {
         final Warehouse warehouse = new Warehouse(TITLE, TOKEN, DESCRIPTION, CREATED, UPDATED, CREATED_BY, UPDATED_BY, STATUS, ENVIRONMENT, CONNECTION_URL, LINKS, PREMIUM_LICENSE);
-        assertThat(warehouse, serializesToJson("/warehouse/warehouse-withLicense.json"));
+        assertThat(warehouse, jsonEquals(resource("warehouse/warehouse-withLicense.json")));
     }
 
     @Test

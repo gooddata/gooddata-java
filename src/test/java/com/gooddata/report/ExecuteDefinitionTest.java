@@ -5,9 +5,10 @@
  */
 package com.gooddata.report;
 
-import com.gooddata.JsonMatchers;
 import org.testng.annotations.Test;
 
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
@@ -16,7 +17,7 @@ public class ExecuteDefinitionTest {
     @Test
     public void testSerialization() throws Exception {
         final ReportRequest request = new ExecuteDefinition("DEF-URI");
-        assertThat(request, JsonMatchers.serializesToJson("/report/executeDefinition.json"));
+        assertThat(request, jsonEquals(resource("report/executeDefinition.json")));
     }
 
     @Test

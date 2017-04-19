@@ -13,11 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
 import static com.gooddata.md.report.MetricGroup.METRIC_GROUP;
 import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -64,7 +65,7 @@ public class GridTest {
                 asList(new MetricElement("/gdc/md/PROJECT_ID/obj/METR_ID", "metr")), sort, asList(colWidths));
 
         OBJECT_MAPPER.writeValueAsString(grid);
-        assertThat(grid, serializesToJson("/md/report/grid-input.json"));
+        assertThat(grid, jsonEquals(resource("md/report/grid-input.json")));
     }
 
 

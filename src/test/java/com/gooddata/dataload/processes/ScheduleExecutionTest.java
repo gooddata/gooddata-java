@@ -12,8 +12,9 @@ import org.testng.annotations.Test;
 
 import java.util.HashMap;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -25,7 +26,7 @@ public class ScheduleExecutionTest {
     public void testEmptyScheduleExecutionSerialization() throws Exception {
         final ScheduleExecution scheduleExecution = new ScheduleExecution();
 
-        assertThat(scheduleExecution, serializesToJson("/dataload/processes/emptyScheduleExecution.json"));
+        assertThat(scheduleExecution, jsonEquals(resource("dataload/processes/emptyScheduleExecution.json")));
     }
 
     @Test

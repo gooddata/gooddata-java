@@ -5,7 +5,8 @@
  */
 package com.gooddata.connector;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.joda.time.LocalDate;
@@ -17,7 +18,7 @@ public class PardotProcessExecutionTest {
     public void shouldSerialize() throws Exception {
         final PardotProcessExecution execution = new PardotProcessExecution();
 
-        assertThat(execution, serializesToJson("/connector/process-execution-empty.json"));
+        assertThat(execution, jsonEquals(resource("connector/process-execution-empty.json")));
     }
 
     @Test
@@ -25,7 +26,7 @@ public class PardotProcessExecutionTest {
         final PardotProcessExecution execution = new PardotProcessExecution();
         execution.setIncremental(true);
 
-        assertThat(execution, serializesToJson("/connector/process-execution-incremental.json"));
+        assertThat(execution, jsonEquals(resource("connector/process-execution-incremental.json")));
     }
 
     @Test
@@ -33,7 +34,7 @@ public class PardotProcessExecutionTest {
         final PardotProcessExecution execution = new PardotProcessExecution();
         execution.setChangesFrom(new LocalDate(2018, 1, 25));
 
-        assertThat(execution, serializesToJson("/connector/process-execution-pardot-changesFrom.json"));
+        assertThat(execution, jsonEquals(resource("connector/process-execution-pardot-changesFrom.json")));
     }
 
 }

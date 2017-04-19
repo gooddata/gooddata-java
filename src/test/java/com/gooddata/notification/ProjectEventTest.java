@@ -5,7 +5,8 @@
  */
 package com.gooddata.notification;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
@@ -17,7 +18,7 @@ public class ProjectEventTest {
     public void testSerialization() {
         final ProjectEvent projectEvent = new ProjectEvent("etl.test");
         projectEvent.setParameter("text", "cool");
-        assertThat(projectEvent, serializesToJson("/notification/projectEvent.json"));
+        assertThat(projectEvent, jsonEquals(resource("notification/projectEvent.json")));
     }
 
     @Test

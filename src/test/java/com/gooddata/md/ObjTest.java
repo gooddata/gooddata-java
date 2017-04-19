@@ -13,9 +13,10 @@ import org.testng.annotations.Test;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -63,7 +64,7 @@ public class ObjTest {
                         DEPRECATED, null, LOCKED, UNLISTED, null)
         );
 
-        assertThat(obj, serializesToJson("/md/objCommon.json"));
+        assertThat(obj, jsonEquals(resource("md/objCommon.json")));
     }
 
     public static class ConcreteObj extends AbstractObj {

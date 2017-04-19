@@ -11,6 +11,7 @@ import com.gooddata.collections.PageRequest;
 import com.gooddata.gdc.AsyncTask;
 import com.gooddata.gdc.TaskStatus;
 import com.gooddata.gdc.UriResponse;
+import net.javacrumbs.jsonunit.core.Option;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -18,11 +19,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.gooddata.JsonMatchers.isJsonString;
 import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.util.ResourceUtils.readFromResource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
@@ -172,7 +175,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo(validateUri)
                 .havingMethodEqualTo("POST")
-                .havingBody(isJsonString("/project/project-validate.json"))
+                .havingBody(jsonEquals(resource("project/project-validate.json")).when(IGNORING_ARRAY_ORDER))
             .respond()
                 .withBody(OBJECT_MAPPER.writeValueAsString(new AsyncTask(task1Uri)))
                 .withStatus(201);
@@ -220,7 +223,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingPathEqualTo(validateUri)
                 .havingMethodEqualTo("POST")
-                .havingBody(isJsonString("/project/project-validate.json"))
+                .havingBody(jsonEquals(resource("project/project-validate.json")).when(IGNORING_ARRAY_ORDER))
             .respond()
                 .withBody(OBJECT_MAPPER.writeValueAsString(new AsyncTask(task1Uri)))
                 .withStatus(201);

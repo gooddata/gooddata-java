@@ -8,7 +8,8 @@ package com.gooddata.md.report;
 import com.gooddata.md.Metric;
 import org.testng.annotations.Test;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -37,7 +38,7 @@ public class MetricElementTest {
     @Test
     public void testSerialization() throws Exception {
         final MetricElement element = new MetricElement(URI, ALIAS, FORMAT, DRILL_URI);
-        assertThat(element, serializesToJson("/md/report/metricElement.json"));
+        assertThat(element, jsonEquals(resource("md/report/metricElement.json")));
     }
 
     @Test

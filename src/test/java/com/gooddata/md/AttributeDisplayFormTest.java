@@ -7,7 +7,8 @@ package com.gooddata.md;
 
 import org.testng.annotations.Test;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -44,13 +45,13 @@ public class AttributeDisplayFormTest {
         final DisplayForm attrDF = new AttributeDisplayForm("Person Name", FORM_OF, EXPRESSION, DEFAULT,
                 LDM_EXPRESSION, TYPE, ELEMENTS_LINK);
 
-        assertThat(attrDF, serializesToJson("/md/attributeDisplayForm-input.json"));
+        assertThat(attrDF, jsonEquals(resource("md/attributeDisplayForm-input.json")));
     }
 
     @Test
     public void shouldSerializeSameAsDeserializationInput() throws Exception {
         final AttributeDisplayForm attrDF = readObjectFromResource("/md/attributeDisplayForm.json", AttributeDisplayForm.class);
-        assertThat(attrDF, serializesToJson("/md/attributeDisplayForm-inputOrig.json"));
+        assertThat(attrDF, jsonEquals(resource("md/attributeDisplayForm-inputOrig.json")));
     }
 
     @Test

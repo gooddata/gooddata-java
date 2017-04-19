@@ -7,7 +7,8 @@ package com.gooddata.md;
 
 import org.testng.annotations.Test;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -41,7 +42,7 @@ public class DisplayFormTest {
         final DisplayForm displayForm = new DisplayForm(new Meta("Person Name"),
                 new DisplayForm.Content(FORM_OF, EXPRESSION,  LDM_EXPRESSION, null), new DisplayForm.Links(ELEMENTS_LINK));
 
-        assertThat(displayForm, serializesToJson("/md/displayForm-input.json"));
+        assertThat(displayForm, jsonEquals(resource("md/displayForm-input.json")));
     }
 
     @Test

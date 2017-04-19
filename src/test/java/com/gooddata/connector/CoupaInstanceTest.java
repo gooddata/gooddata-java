@@ -5,8 +5,9 @@
  */
 package com.gooddata.connector;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -19,7 +20,7 @@ public class CoupaInstanceTest {
         final CoupaInstance instance =
                 new CoupaInstance("instance 01", "https://gooddata-demo.coupacloud.com/api", "apikey123");
 
-        assertThat(instance, serializesToJson("/connector/coupa_instance.json"));
+        assertThat(instance, jsonEquals(resource("connector/coupa_instance.json")));
     }
 
     @Test

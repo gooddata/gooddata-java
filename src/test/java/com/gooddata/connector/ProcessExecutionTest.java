@@ -7,8 +7,9 @@ package com.gooddata.connector;
 
 import org.testng.annotations.Test;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
 import static com.gooddata.connector.ConnectorType.ZENDESK4;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ProcessExecutionTest {
@@ -17,6 +18,6 @@ public class ProcessExecutionTest {
     public void shouldSerialize() throws Exception {
         final ProcessExecution execution = () -> ZENDESK4;
 
-        assertThat(execution, serializesToJson("/connector/process-execution-empty.json"));
+        assertThat(execution, jsonEquals(resource("connector/process-execution-empty.json")));
     }
 }
