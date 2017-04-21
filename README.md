@@ -16,7 +16,7 @@ The *GoodData Java SDK* is available in Maven Central Repository, to use it from
 </dependency>
 ```
 See [releases page](https://github.com/gooddata/gooddata-java/releases) for information about versions and notable changes,
-the [Upgrading Guide](https://github.com/gooddata/gooddata-java/wiki/Upgrading-GoodData-Java-SDK) will navigate you
+the [Upgrading Guide](https://github.com/gooddata/gooddata-java/wiki/Upgrading) will navigate you
 through changes between major versions.
 
 See [Javadocs](http://javadoc.io/doc/com.gooddata/gooddata-java)
