@@ -5,6 +5,7 @@
  */
 package com.gooddata;
 
+import org.springframework.web.util.UriComponentsBuilder;
 import org.testng.annotations.Test;
 
 import java.net.URI;
@@ -22,9 +23,36 @@ public class UriPrefixerTest {
     }
 
     @Test
+    public void testMergeUrisWithSlashes() throws Exception {
+        final UriPrefixer prefixer = new UriPrefixer("http://localhost:1/uploads/");
+        final URI result = prefixer.mergeUris("/test");
+        assertThat(result.toString(), is("http://localhost:1/uploads/test"));
+    }
+
+    @Test
     public void testMergeUrisWithoutSlash() throws Exception {
+        final UriPrefixer prefixer = new UriPrefixer("http://localhost:1/uploads/");
+        final URI result = prefixer.mergeUris("test");
+        assertThat(result.toString(), is("http://localhost:1/uploads/test"));
+    }
+
+    @Test
+    public void testMergeUrisWithoutSlashes() throws Exception {
         final UriPrefixer prefixer = new UriPrefixer("http://localhost:1/uploads");
         final URI result = prefixer.mergeUris("test");
         assertThat(result.toString(), is("http://localhost:1/uploads/test"));
+    }
+
+    @Test
+    public void shouldNotDoubleEncodeQueryParam() throws Exception {
+        final UriPrefixer prefixer = new UriPrefixer("http://localhost:1/uploads");
+
+        final URI uri = UriComponentsBuilder.fromPath("/foo")
+                .queryParam("bar", "\n") // some crazy value which needs encoding
+                .build()
+                .toUri();
+
+        final URI result = prefixer.mergeUris(uri);
+        assertThat(result.toString(), is("http://localhost:1/uploads/foo?bar=%0A"));
     }
 }
