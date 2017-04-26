@@ -8,6 +8,7 @@ package com.gooddata;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
@@ -55,12 +56,21 @@ public class UriPrefixer {
      */
     public URI mergeUris(URI uri) {
         notNull(uri, "uri");
-        final String path = trimLeadingCharacter(uri.getRawPath(), '/');
+
         return UriComponentsBuilder.fromUri(uriPrefix)
-                .pathSegment(path)
+                .pathSegment(getPathSegments(uri))
                 .query(uri.getRawQuery())
                 .fragment(uri.getRawFragment())
-                .build().toUri();
+                .build(true) // we have an URI as the input, so it is already encoded
+                .toUri();
+    }
+
+    private static String[] getPathSegments(final URI uri) {
+        final List<String> pathSegments = UriComponentsBuilder
+                .fromPath(uri.getRawPath())
+                .build(true)
+                .getPathSegments();
+        return pathSegments.toArray(new String[pathSegments.size()]);
     }
 
     /**
