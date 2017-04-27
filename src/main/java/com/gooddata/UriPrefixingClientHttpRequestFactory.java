@@ -53,7 +53,8 @@ class UriPrefixingClientHttpRequestFactory implements ClientHttpRequestFactory {
 
     @Override
     public ClientHttpRequest createRequest(URI uri, HttpMethod httpMethod) throws IOException {
-        return wrapped.createRequest(prefixer.mergeUris(uri), httpMethod);
+        final URI merged = prefixer.mergeUris(uri);
+        return wrapped.createRequest(merged, httpMethod);
     }
 
 }

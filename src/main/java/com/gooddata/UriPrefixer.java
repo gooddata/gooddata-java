@@ -5,6 +5,7 @@
  */
 package com.gooddata;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -12,7 +13,6 @@ import java.util.List;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
-import static org.springframework.util.StringUtils.trimLeadingCharacter;
 
 /**
  * Used internally by GoodData SDK to hold and set URI prefix (hostname and port) of all requests.
@@ -57,17 +57,25 @@ public class UriPrefixer {
     public URI mergeUris(URI uri) {
         notNull(uri, "uri");
 
-        return UriComponentsBuilder.fromUri(uriPrefix)
-                .pathSegment(getPathSegments(uri))
+        final String path = uri.getRawPath();
+        final String[] pathSegments = getPathSegments(path);
+
+        final UriComponentsBuilder builder = UriComponentsBuilder.fromUri(uriPrefix)
+                .pathSegment(pathSegments)
                 .query(uri.getRawQuery())
-                .fragment(uri.getRawFragment())
+                .fragment(uri.getRawFragment());
+        if (StringUtils.endsWith(path, "/")) {
+            builder.path("/");
+        }
+
+        return builder
                 .build(true) // we have an URI as the input, so it is already encoded
                 .toUri();
     }
 
-    private static String[] getPathSegments(final URI uri) {
+    private static String[] getPathSegments(final String path) {
         final List<String> pathSegments = UriComponentsBuilder
-                .fromPath(uri.getRawPath())
+                .fromPath(path)
                 .build(true)
                 .getPathSegments();
         return pathSegments.toArray(new String[pathSegments.size()]);

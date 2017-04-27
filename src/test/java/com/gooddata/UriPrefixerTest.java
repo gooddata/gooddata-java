@@ -30,6 +30,13 @@ public class UriPrefixerTest {
     }
 
     @Test
+    public void testMergeUrisWithAllSlashes() throws Exception {
+        final UriPrefixer prefixer = new UriPrefixer("http://localhost:1/uploads/");
+        final URI result = prefixer.mergeUris("/test/");
+        assertThat(result.toString(), is("http://localhost:1/uploads/test/"));
+    }
+
+    @Test
     public void testMergeUrisWithoutSlash() throws Exception {
         final UriPrefixer prefixer = new UriPrefixer("http://localhost:1/uploads/");
         final URI result = prefixer.mergeUris("test");
@@ -54,5 +61,12 @@ public class UriPrefixerTest {
 
         final URI result = prefixer.mergeUris(uri);
         assertThat(result.toString(), is("http://localhost:1/uploads/foo?bar=%0A"));
+    }
+
+    @Test
+    public void shouldName() throws Exception {
+        final UriPrefixer prefixer = new UriPrefixer("https://localhost:1");
+        final URI result = prefixer.mergeUris("http://localhost:1/uploads/test/");
+        assertThat(result.toString(), is("https://localhost:1/uploads/test/"));
     }
 }
