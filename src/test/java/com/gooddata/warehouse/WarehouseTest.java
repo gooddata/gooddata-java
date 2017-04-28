@@ -33,6 +33,7 @@ public class WarehouseTest {
     public static final String UPDATED_BY = "/gdc/account/profile/updatedBy";
     public static final String STATUS = "ENABLED";
     public static final String CONNECTION_URL = "CONNECTION_URL";
+    public static final String PREMIUM_LICENSE = "PREMIUM";
     public static final Map<String, String> LINKS = new LinkedHashMap<String, String>() {{
         put("self", "/gdc/datawarehouse/instances/instanceId");
         put("parent", "/gdc/datawarehouse/instances");
@@ -60,6 +61,12 @@ public class WarehouseTest {
     }
 
     @Test
+    public void testSerializationWithLicense() throws Exception {
+        final Warehouse warehouse = new Warehouse(TITLE, TOKEN, DESCRIPTION, CREATED, UPDATED, CREATED_BY, UPDATED_BY, STATUS, ENVIRONMENT, CONNECTION_URL, LINKS, PREMIUM_LICENSE);
+        assertThat(warehouse, serializesToJson("/warehouse/warehouse-withLicense.json"));
+    }
+
+    @Test
     public void testDeserialization() throws Exception {
         final InputStream stream = getClass().getResourceAsStream("/warehouse/warehouse.json");
         final Warehouse warehouse = new ObjectMapper().readValue(stream, Warehouse.class);
@@ -75,6 +82,25 @@ public class WarehouseTest {
         assertThat(warehouse.getStatus(), is(STATUS));
         assertThat(warehouse.getLinks(), is(LINKS));
         assertThat(warehouse.getConnectionUrl(), is(CONNECTION_URL));
+    }
+
+    @Test
+    public void testDeserializationWithLicense() throws Exception {
+        final InputStream stream = getClass().getResourceAsStream("/warehouse/warehouse-withLicense.json");
+        final Warehouse warehouse = new ObjectMapper().readValue(stream, Warehouse.class);
+
+        assertThat(warehouse.getTitle(), is(TITLE));
+        assertThat(warehouse.getDescription(), is(DESCRIPTION));
+        assertThat(warehouse.getAuthorizationToken(), is(TOKEN));
+        assertThat(warehouse.getEnvironment(), is(ENVIRONMENT));
+        assertThat(warehouse.getCreatedBy(), is(CREATED_BY));
+        assertThat(warehouse.getUpdatedBy(), is(UPDATED_BY));
+        assertThat(warehouse.getCreated(), is(CREATED));
+        assertThat(warehouse.getUpdated(), is(UPDATED));
+        assertThat(warehouse.getStatus(), is(STATUS));
+        assertThat(warehouse.getLinks(), is(LINKS));
+        assertThat(warehouse.getConnectionUrl(), is(CONNECTION_URL));
+        assertThat(warehouse.getLicense(), is(PREMIUM_LICENSE));
     }
 
     @Test
