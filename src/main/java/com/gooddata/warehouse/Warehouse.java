@@ -56,6 +56,7 @@ public class Warehouse {
     private String environment;
     private Map<String, String> links;
     private String connectionUrl;
+    private String license;
 
     public Warehouse(String title, String authToken) {
         this(title, authToken, null);
@@ -67,15 +68,9 @@ public class Warehouse {
         this.description = description;
     }
 
-    @JsonCreator
-    public Warehouse(@JsonProperty("title") String title, @JsonProperty("authorizationToken") String authToken,
-                     @JsonProperty("description") String description,
-                     @JsonProperty("created") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime created,
-                     @JsonProperty("updated") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime updated,
-                     @JsonProperty("createdBy") String createdBy, @JsonProperty("updatedBy") String updatedBy,
-                     @JsonProperty("status") String status, @JsonProperty("environment") String environment,
-                     @JsonProperty("connectionUrl") String connectionUrl,
-                     @JsonProperty("links") Map<String, String> links) {
+    public Warehouse(String title, String authToken, String description, DateTime created, DateTime updated,
+                     String createdBy, String updatedBy, String status, String environment, String connectionUrl,
+                     Map<String, String> links) {
         this(title, authToken, description);
         this.created = created;
         this.updated = updated;
@@ -85,6 +80,21 @@ public class Warehouse {
         this.environment = environment;
         this.connectionUrl = connectionUrl;
         this.links = links;
+    }
+
+    @JsonCreator
+    public Warehouse(@JsonProperty("title") String title, @JsonProperty("authorizationToken") String authToken,
+                     @JsonProperty("description") String description,
+                     @JsonProperty("created") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime created,
+                     @JsonProperty("updated") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime updated,
+                     @JsonProperty("createdBy") String createdBy, @JsonProperty("updatedBy") String updatedBy,
+                     @JsonProperty("status") String status, @JsonProperty("environment") String environment,
+                     @JsonProperty("connectionUrl") String connectionUrl,
+                     @JsonProperty("links") Map<String, String> links,
+                     @JsonProperty("license") String license) {
+        this(title, authToken, description, created, updated, createdBy, updatedBy, status, environment, connectionUrl,
+            links);
+        this.license = license;
     }
 
     public String getTitle() {
@@ -143,6 +153,8 @@ public class Warehouse {
     public void setEnvironment(final String environment) {
         this.environment = environment;
     }
+
+    public String getLicense() { return license; }
 
     @JsonIgnore
     public void setEnvironment(final Environment environment) {
