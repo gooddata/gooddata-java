@@ -41,6 +41,7 @@ public class Schedule {
     public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
     private static final String SELF_LINK = "self";
+    private static final String EXECUTIONS_LINK = "executions";
 
     private static final String MSETL_TYPE = "MSETL";
     private static final String PROCESS_ID = "PROCESS_ID";
@@ -252,6 +253,11 @@ public class Schedule {
     @JsonIgnore
     public String getId() {
         return TEMPLATE.match(getUri()).get("scheduleId");
+    }
+
+    @JsonIgnore
+    public String getExecutionsUri() {
+        return notNullState(links, "links").get(EXECUTIONS_LINK);
     }
 
     @Override
