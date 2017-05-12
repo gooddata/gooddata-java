@@ -5,6 +5,8 @@
  */
 package com.gooddata;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.concurrent.TimeUnit;
 
 import static org.springframework.util.Assert.isTrue;
@@ -22,6 +24,7 @@ public class GoodDataSettings {
     private int connectionTimeout = secondsToMillis(10);
     private int connectionRequestTimeout = secondsToMillis(10);
     private int socketTimeout = secondsToMillis(60);
+    private String userAgent;
 
 
     /**
@@ -153,6 +156,22 @@ public class GoodDataSettings {
      */
     public int getSocketTimeout() {
         return socketTimeout;
+    }
+
+    /**
+     * User agent
+     * @return user agent string
+     */
+    public String getUserAgent() {
+        return userAgent;
+    }
+
+    /**
+     * Set custom user agent as prefix for default user agent
+     * @param userAgent user agent string
+     */
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
     }
 
     @Override
