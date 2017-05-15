@@ -470,6 +470,40 @@ public class ProcessService extends AbstractService {
         }
     }
 
+    /**
+     * Executes given schedule
+     *
+     * @param schedule to execute
+     * @return schedule execution
+     */
+    public FutureResult<ScheduleExecution> executeSchedule(final Schedule schedule) {
+        notNull(schedule, "schedule");
+        ScheduleExecution scheduleExecution;
+        try {
+            scheduleExecution = restTemplate.postForObject(schedule.getExecutionsUri(), new ScheduleExecution(), ScheduleExecution.class);
+        } catch (GoodDataException | RestClientException e) {
+            throw new ScheduleExecutionException("Cannot execute schedule", e);
+        }
+
+        return new PollResult<>(this, new AbstractPollHandler<ScheduleExecution, ScheduleExecution>(scheduleExecution.getUri(), ScheduleExecution.class, ScheduleExecution.class) {
+            @Override
+            public boolean isFinished(ClientHttpResponse response) throws IOException {
+                final ScheduleExecution pollResult = extractData(response, ScheduleExecution.class);
+                return pollResult.isFinished();
+            }
+
+            @Override
+            public void handlePollResult(final ScheduleExecution pollResult) {
+                setResult(pollResult);
+            }
+
+            @Override
+            public void handlePollException(final GoodDataRestException e) {
+                throw new ScheduleExecutionException("Cannot execute schedule", e);
+            }
+        });
+    }
+
     private PageableList<Schedule> listSchedules(URI uri) {
         try {
             final Schedules schedules = restTemplate.getForObject(uri, Schedules.class);

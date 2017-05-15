@@ -6,6 +6,7 @@
 package com.gooddata.dataload.processes;
 
 import com.gooddata.AbstractGoodDataAT;
+import com.gooddata.FutureResult;
 import com.gooddata.collections.PageableList;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -66,6 +67,14 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         assertThat(schedule, notNullValue());
         assertThat(schedule.getExecutable(), is("sdktest.grf"));
         assertThat(schedule.getRescheduleInMinutes(), is(15));
+    }
+
+    @Test(groups = "process", dependsOnMethods = "createSchedule")
+    public void executeSchedule() {
+        final FutureResult<ScheduleExecution> future = gd.getProcessService().executeSchedule(schedule);
+        final ScheduleExecution scheduleExecution = future.get();
+
+        assertThat(scheduleExecution.getStatus(),  is("OK"));
     }
 
     @Test(groups = "process", dependsOnMethods = "createSchedule")

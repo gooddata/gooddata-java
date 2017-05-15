@@ -44,6 +44,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
     private static final String SCHEDULE_PATH = Schedule.TEMPLATE.expand(PROJECT_ID, SCHEDULE_ID).toString();
     private static final String EXECUTABLE = "test.groovy";
     private static final String PROCESS_DEPLOYMENT_POLLING_URI = "/gdc/projects/PROJECT_ID/dataload/processesDeploy/uri";
+    private static final String EXECUTION_ID = "EXECUTION_ID";
 
     private Project project;
 
@@ -368,5 +369,38 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         assertThat(updatedProcess, notNullValue());
         assertThat(updatedProcess.getType(), is(equalTo(ProcessType.RUBY.toString())));
         assertThat(updatedProcess.getExecutables(), contains("hello.rb") );
+    }
+
+    @Test
+    public void shouldExecuteSchedule() {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(schedule.getExecutionsUri())
+             .respond()
+                .withBody(readFromResource("/dataload/processes/scheduleExecution.json"))
+                .withStatus(200);
+
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(ScheduleExecution.TEMPLATE.expand(PROJECT_ID, SCHEDULE_ID, EXECUTION_ID).toString())
+              .respond()
+                .withBody(readFromResource("/dataload/processes/scheduleExecution.json"))
+                .withStatus(200);
+
+        FutureResult<ScheduleExecution> futureResult = gd.getProcessService().executeSchedule(schedule);
+        ScheduleExecution scheduleExecution = futureResult.get();
+
+        assertThat(scheduleExecution.getStatus(), is("OK"));
+    }
+
+    @Test(expectedExceptions = ScheduleExecutionException.class)
+    public void shouldNotExecuteSchedule() {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(schedule.getExecutionsUri())
+                .respond()
+                .withStatus(409);
+
+        gd.getProcessService().executeSchedule(schedule);
     }
 }

@@ -5,6 +5,7 @@
  */
 package com.gooddata.dataload.processes;
 
+import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.account.Account;
@@ -43,9 +44,11 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.notNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpMethod.GET;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
@@ -54,6 +57,8 @@ public class ProcessServiceTest {
     private static final String PROCESS_ID = "PROCESS_ID";
     private static final String PROJECT_ID = "PROJECT_ID";
     private static final String ACCOUNT_ID = "ACCOUNT_ID";
+    private static final String SCHEDULE_EXECUTIONS_URI = "/gdc/projects/PROJECT_ID/schedules/SCHEDULE_ID/executions";
+    private static final String SCHEDULE_EXECUTION_URI = "/gdc/projects/PROJECT_ID/schedules/SCHEDULE_ID/executions/EXECUTION_ID";
     private static final String PROCESS_URI = "/gdc/projects/PROJECT_ID/dataload/processes/PROCESS_ID";
     private static final String USER_PROCESS_URI = "/gdc/account/profile/ACCOUNT_ID/dataload/processes";
 
@@ -223,5 +228,35 @@ public class ProcessServiceTest {
         final Collection<DataloadProcess> result = processService.listUserProcesses();
         assertThat(result, hasSize(1));
         assertThat(result, contains(process));
+    }
+
+    @Test(expectedExceptions = ScheduleExecutionException.class)
+    public void testExecuteScheduleException() throws Exception {
+        when(restTemplate.postForObject(eq(SCHEDULE_EXECUTIONS_URI), any(ScheduleExecution.class), eq(ScheduleExecution.class)))
+                .thenThrow(new RestClientException(""));
+
+        final Schedule schedule = mock(Schedule.class);
+
+        when(schedule.getExecutionsUri()).thenReturn(SCHEDULE_EXECUTIONS_URI);
+
+        processService.executeSchedule(schedule);
+    }
+
+    @Test(expectedExceptions = ScheduleExecutionException.class)
+    public void testExecuteScheduleExceptionDuringPolling() throws Exception {
+        final ScheduleExecution execution = mock(ScheduleExecution.class);
+        when(execution.getUri()).thenReturn(SCHEDULE_EXECUTION_URI);
+
+        final Schedule schedule = mock(Schedule.class);
+        when(schedule.getExecutionsUri()).thenReturn(SCHEDULE_EXECUTIONS_URI);
+
+        when(restTemplate.postForObject(eq(SCHEDULE_EXECUTIONS_URI), any(ScheduleExecution.class), eq(ScheduleExecution.class)))
+                .thenReturn(execution);
+
+        when(restTemplate.execute(eq(SCHEDULE_EXECUTION_URI), eq(GET), any(), any()))
+                .thenThrow(mock(GoodDataRestException.class));
+
+        FutureResult<ScheduleExecution> futureResult = processService.executeSchedule(schedule);
+        futureResult.get();
     }
 }
