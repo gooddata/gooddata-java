@@ -22,6 +22,7 @@ import com.gooddata.md.MetadataService;
 import com.gooddata.model.ModelService;
 import com.gooddata.project.ProjectService;
 import com.gooddata.report.ReportService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.SocketConfig;
@@ -246,7 +247,7 @@ public class GoodData {
         requestConfig.setSocketTimeout(settings.getSocketTimeout());
 
         return HttpClientBuilder.create()
-                .setUserAgent(getUserAgent())
+                .setUserAgent(StringUtils.isNotBlank(settings.getUserAgent()) ? String.format("%s %s", settings.getUserAgent(), getUserAgent()) : getUserAgent())
                 .setConnectionManager(connectionManager)
                 .setDefaultRequestConfig(requestConfig.build());
     }

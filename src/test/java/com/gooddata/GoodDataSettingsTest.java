@@ -8,6 +8,9 @@ package com.gooddata;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -26,6 +29,7 @@ public class GoodDataSettingsTest {
         assertTrue(settings.getConnectionTimeout() >= 0);
         assertTrue(settings.getConnectionRequestTimeout() >= 0);
         assertTrue(settings.getSocketTimeout() >= 0);
+        assertThat(settings.getUserAgent(), is(nullValue()));
     }
 
     @Test
@@ -57,5 +61,12 @@ public class GoodDataSettingsTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void setZeroMaxConnectionsFails() throws Exception {
         settings.setMaxConnections(0);
+    }
+
+    @Test
+    public void customUserAgentShouldBePrefixOfDefault() {
+        GoodDataSettings goodDataSettings = new GoodDataSettings();
+        goodDataSettings.setUserAgent("customAgent/X.Y");
+        assertThat(goodDataSettings.getUserAgent(), is("customAgent/X.Y"));
     }
 }
