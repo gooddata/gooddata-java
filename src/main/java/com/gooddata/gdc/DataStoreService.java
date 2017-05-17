@@ -14,6 +14,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
+import org.apache.http.NoHttpResponseException;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
@@ -111,6 +112,11 @@ public class DataStoreService {
             } else {
                 throw new DataStoreException("Unable to upload to " + url + " got status " + e.getStatusCode(), e);
             }
+        } catch (NoHttpResponseException e) {
+            // this error may occur when user issues request to WebDAV before SST and TT were obtained
+            // and WebDAV is deployed on a separate hostname since R136
+            // see https://github.com/gooddata/gooddata-java/wiki/Known-limitations
+            throw new DataStoreException(createUnAuthRequestWarningMessage(url), e);
         } catch (IOException e) {
             // this error may occur when user issues request to WebDAV before SST and TT were obtained
             // and WebDAV deployed on the same hostname
