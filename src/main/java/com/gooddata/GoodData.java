@@ -12,6 +12,7 @@ import com.gooddata.dataload.processes.ProcessService;
 import com.gooddata.featureflag.FeatureFlagService;
 import com.gooddata.md.maintenance.ExportImportService;
 import com.gooddata.notification.NotificationService;
+import com.gooddata.projecttemplate.ProjectTemplateService;
 import com.gooddata.util.ResponseErrorHandler;
 import com.gooddata.authentication.LoginPasswordAuthentication;
 import com.gooddata.warehouse.WarehouseService;
@@ -81,6 +82,7 @@ public class GoodData {
     private final ExportImportService exportImportService;
     private final FeatureFlagService featureFlagService;
     private final OutputStageService outputStageService;
+    private final ProjectTemplateService projectTemplateService;
 
     /**
      * Create instance configured to communicate with GoodData Platform under user with given credentials.
@@ -211,8 +213,9 @@ public class GoodData {
         connectorService = new ConnectorService(getRestTemplate(), projectService);
         notificationService = new NotificationService(getRestTemplate());
         exportImportService = new ExportImportService(getRestTemplate());
-        featureFlagService = new FeatureFlagService(restTemplate);
-        outputStageService = new OutputStageService(restTemplate);
+        featureFlagService = new FeatureFlagService(getRestTemplate());
+        outputStageService = new OutputStageService(getRestTemplate());
+        projectTemplateService = new ProjectTemplateService(getRestTemplate());
     }
 
     static RestTemplate createRestTemplate(GoodDataEndpoint endpoint, HttpClient httpClient) {
@@ -447,5 +450,15 @@ public class GoodData {
     @Bean
     public OutputStageService getOutputStageService() {
         return outputStageService;
+    }
+
+    /**
+     * Get initialized service for project templates
+     *
+     * @return initialized service for project templates
+     */
+    @Bean
+    public ProjectTemplateService getProjectTemplateService() {
+        return projectTemplateService;
     }
 }
