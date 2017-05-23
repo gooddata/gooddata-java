@@ -5,11 +5,9 @@
  */
 package com.gooddata.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
-
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -19,8 +17,7 @@ public class MaqlDdlLinksTest {
     @SuppressWarnings("deprecation")
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/model/maqlDdlLinks.json");
-        final MaqlDdlLinks maqlDdlLinks = new ObjectMapper().readValue(stream, MaqlDdlLinks.class);
+        final MaqlDdlLinks maqlDdlLinks = readObjectFromResource("/model/maqlDdlLinks.json", MaqlDdlLinks.class);
 
         assertThat(maqlDdlLinks, is(notNullValue()));
         assertThat(maqlDdlLinks.getStatusLink(), is("/gdc/md/PROJECT_ID/tasks/123/status"));

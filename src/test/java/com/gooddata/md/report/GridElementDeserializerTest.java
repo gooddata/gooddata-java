@@ -5,12 +5,12 @@
  */
 package com.gooddata.md.report;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,8 +21,7 @@ public class GridElementDeserializerTest {
 
     @Test
     public void testDeserializer() throws Exception {
-        final GridElements elems = new ObjectMapper().readValue(
-                getClass().getResourceAsStream("/md/report/gridElements.json"), GridElements.class);
+        final GridElements elems = readObjectFromResource("/md/report/gridElements.json", GridElements.class);
 
         assertThat(elems, is(notNullValue()));
         assertThat(elems, hasSize(2));

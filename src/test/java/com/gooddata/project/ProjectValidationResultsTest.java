@@ -5,9 +5,9 @@
  */
 package com.gooddata.project;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -16,8 +16,7 @@ public class ProjectValidationResultsTest {
 
     @Test
     public void testDeserialize() throws Exception {
-        final ProjectValidationResults result = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/project/project-validationResults.json"), ProjectValidationResults.class);
+        final ProjectValidationResults result = readObjectFromResource("/project/project-validationResults.json", ProjectValidationResults.class);
 
         assertThat(result.isError(), is(true));
         assertThat(result.isFatalError(), is(true));

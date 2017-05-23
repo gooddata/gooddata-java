@@ -5,13 +5,12 @@
  */
 package com.gooddata.md.report;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
 import java.util.Collections;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,9 +19,8 @@ public class OneNumberReportDefinitionContentTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream is = getClass().getResourceAsStream("/md/report/oneNumberReportDefinitionContent.json");
-        final OneNumberReportDefinitionContent def = (OneNumberReportDefinitionContent) new ObjectMapper()
-                .readValue(is, ReportDefinitionContent.class);
+        final OneNumberReportDefinitionContent def = (OneNumberReportDefinitionContent)
+            readObjectFromResource("/md/report/oneNumberReportDefinitionContent.json", ReportDefinitionContent.class);
         assertThat(def, is(notNullValue()));
         assertThat(def.getFormat(), is("oneNumber"));
         assertThat(def.getGrid(), is(notNullValue()));

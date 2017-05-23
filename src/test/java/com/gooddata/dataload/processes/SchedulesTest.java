@@ -5,11 +5,9 @@
  */
 package com.gooddata.dataload.processes;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
-
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -20,8 +18,7 @@ public class SchedulesTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/dataload/processes/schedules.json");
-        final Schedules schedules = new ObjectMapper().readValue(stream, Schedules.class);
+        final Schedules schedules = readObjectFromResource("/dataload/processes/schedules.json", Schedules.class);
 
         assertThat(schedules, notNullValue());
         assertThat(schedules, hasSize(1));
@@ -32,8 +29,7 @@ public class SchedulesTest {
 
     @Test
     public void testDeserializationPaging() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/dataload/processes/schedules_page1.json");
-        final Schedules schedules = new ObjectMapper().readValue(stream, Schedules.class);
+        final Schedules schedules = readObjectFromResource("/dataload/processes/schedules_page1.json", Schedules.class);
 
         assertThat(schedules, notNullValue());
         assertThat(schedules, hasSize(1));

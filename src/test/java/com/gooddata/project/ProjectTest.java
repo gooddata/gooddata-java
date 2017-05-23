@@ -5,12 +5,15 @@
  */
 package com.gooddata.project;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
-import static org.hamcrest.CoreMatchers.*;
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.core.StringStartsWith.startsWith;
@@ -21,8 +24,7 @@ public class ProjectTest {
     @SuppressWarnings("deprecation")
     @Test
     public void testDeserialize() throws Exception {
-        final Project project = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/project/project.json"), Project.class);
+        final Project project = readObjectFromResource("/project/project.json", Project.class);
         assertThat(project, is(notNullValue()));
 
         assertThat(project.getAuthorizationToken(), is("AUTH_TOKEN"));
@@ -79,7 +81,7 @@ public class ProjectTest {
         final Project project = new Project("TITLE", "SUMMARY", "TOKEN");
         project.setProjectTemplate("/projectTemplates/TEMPLATE");
         project.setEnvironment(ProjectEnvironment.TESTING);
-        final String serializedProject = new ObjectMapper().writeValueAsString(project);
+        final String serializedProject = OBJECT_MAPPER.writeValueAsString(project);
 
         assertThat(serializedProject, startsWith("{\"project\""));
 
@@ -107,8 +109,7 @@ public class ProjectTest {
 
     @Test
     public void testDeserializeVerticaProject() throws Exception {
-        final Project project = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/project/project-vertica.json"), Project.class);
+        final Project project = readObjectFromResource("/project/project-vertica.json", Project.class);
         assertThat(project, is(notNullValue()));
 
         assertThat(project.getDriver(), is("vertica"));
@@ -121,7 +122,7 @@ public class ProjectTest {
         final Project project = new Project("TITLE", "SUMMARY", "TOKEN");
         project.setDriver(ProjectDriver.VERTICA);
         project.setProjectTemplate("/projectTemplates/TEMPLATE");
-        final String serializedProject = new ObjectMapper().writeValueAsString(project);
+        final String serializedProject = OBJECT_MAPPER.writeValueAsString(project);
 
         assertThat(serializedProject, startsWith("{\"project\""));
         assertThat(serializedProject, containsString("\"driver\":\"vertica\""));

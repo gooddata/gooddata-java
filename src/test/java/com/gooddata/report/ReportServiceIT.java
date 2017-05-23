@@ -16,7 +16,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
 import static net.jadler.Jadler.port;
 import static org.hamcrest.Matchers.is;
@@ -39,7 +41,7 @@ public class ReportServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
             .respond()
                 .withStatus(202)
-                .withBody(MAPPER.writeValueAsString(new UriResponse("http://localhost:" + port() + URI)));
+                .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse("http://localhost:" + port() + URI)));
         onRequest()
                 .havingPathEqualTo(URI)
                 .havingMethodEqualTo("GET")
@@ -53,7 +55,7 @@ public class ReportServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void shouldExportReportDefinition() throws Exception {
-        final ReportDefinition rd = MAPPER.readValue(readFromResource("/md/report/gridReportDefinition.json"), ReportDefinition.class);
+        final ReportDefinition rd = readObjectFromResource("/md/report/gridReportDefinition.json", ReportDefinition.class);
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         gd.getReportService().exportReport(rd, ReportExportFormat.CSV, output).get();
         assertThat(output.toString(StandardCharsets.US_ASCII.name()), is(RESPONSE));
@@ -61,7 +63,7 @@ public class ReportServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void shouldExportReport() throws Exception {
-        final Report rd = MAPPER.readValue(readFromResource("/md/report/report.json"), Report.class);
+        final Report rd = readObjectFromResource("/md/report/report.json", Report.class);
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         gd.getReportService().exportReport(rd, ReportExportFormat.CSV, output).get();
         assertThat(output.toString(StandardCharsets.US_ASCII.name()), is(RESPONSE));
@@ -75,7 +77,7 @@ public class ReportServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(400);
 
-        final Report rd = MAPPER.readValue(readFromResource("/md/report/report.json"), Report.class);
+        final Report rd = readObjectFromResource("/md/report/report.json", Report.class);
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         gd.getReportService().exportReport(rd, ReportExportFormat.CSV, output).get();
     }
@@ -88,7 +90,7 @@ public class ReportServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(204);
 
-        final Report rd = MAPPER.readValue(readFromResource("/md/report/report.json"), Report.class);
+        final Report rd = readObjectFromResource("/md/report/report.json", Report.class);
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         gd.getReportService().exportReport(rd, ReportExportFormat.CSV, output).get();
     }

@@ -10,21 +10,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
 
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class GDDateDeserializerTest {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
     @Test
     public void testDeserialize() throws Exception {
-        final String json = MAPPER.writeValueAsString(new GDDateClass(new LocalDate(2012, 3, 20)));
+        final String json = OBJECT_MAPPER.writeValueAsString(new GDDateClass(new LocalDate(2012, 3, 20)));
 
-        final JsonNode node = MAPPER.readTree(json);
+        final JsonNode node = OBJECT_MAPPER.readTree(json);
         assertThat(node.path("date").textValue(), is("2012-03-20"));
 
-        final GDDateClass date = MAPPER.readValue(json, GDDateClass.class);
+        final GDDateClass date = OBJECT_MAPPER.readValue(json, GDDateClass.class);
         assertThat(date.getDate(), is(new LocalDate(2012, 3, 20)));
     }
 

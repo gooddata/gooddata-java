@@ -5,17 +5,17 @@
  */
 package com.gooddata.md;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.text.MatchesPattern.matchesPattern;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooddata.JsonMatchers;
 import org.testng.annotations.Test;
 
-public class AttributeSortTest {
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+public class AttributeSortTest {
 
     @Test
     public void testSerializePlain() throws Exception {
@@ -25,7 +25,7 @@ public class AttributeSortTest {
 
     @Test
     public void testDeserializePlain() throws Exception {
-        final AttributeSort attributeSort = MAPPER.readValue("\"pk\"", AttributeSort.class);
+        final AttributeSort attributeSort = OBJECT_MAPPER.readValue("\"pk\"", AttributeSort.class);
         assertThat(attributeSort, is(notNullValue()));
         assertThat(attributeSort.getValue(), is("pk"));
     }
@@ -38,7 +38,7 @@ public class AttributeSortTest {
 
     @Test
     public void testDeserializeLink() throws Exception {
-        final AttributeSort attributeSort = MAPPER.readValue(getClass().getResourceAsStream("/md/attributeSort.json"), AttributeSort.class);
+        final AttributeSort attributeSort = readObjectFromResource("/md/attributeSort.json", AttributeSort.class);
         assertThat(attributeSort, is(notNullValue()));
         assertThat(attributeSort.getValue(), is("/gdc/md/PROJECT_ID/obj/1806"));
     }

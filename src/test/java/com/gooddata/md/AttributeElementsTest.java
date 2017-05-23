@@ -5,24 +5,22 @@
  */
 package com.gooddata.md;
 
+import org.testng.annotations.Test;
+
+import java.util.List;
+
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.testng.annotations.Test;
-
-import java.io.InputStream;
-import java.util.List;
+import static org.hamcrest.Matchers.hasSize;
 
 
 public class AttributeElementsTest {
 
     @Test
     public void shouldDeserialize() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/attributeElements.json");
-        final AttributeElements elements = new ObjectMapper().readValue(stream, AttributeElements.class);
+        final AttributeElements elements = readObjectFromResource("/md/attributeElements.json", AttributeElements.class);
         assertThat(elements, is(notNullValue()));
 
         final List<AttributeElement> elementsList = elements.getElements();

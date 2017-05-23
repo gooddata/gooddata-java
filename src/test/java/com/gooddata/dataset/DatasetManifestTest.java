@@ -5,26 +5,23 @@
  */
 package com.gooddata.dataset;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
-
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class DatasetManifestTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/dataset/datasetManifest.json");
-        final DatasetManifest manifest = new ObjectMapper().readValue(stream, DatasetManifest.class);
+        final DatasetManifest manifest = readObjectFromResource("/dataset/datasetManifest.json", DatasetManifest.class);
 
         assertThat(manifest.getDataSet(), is("dataset.person"));
         assertThat(manifest.getFile(), is("dataset.person.csv"));

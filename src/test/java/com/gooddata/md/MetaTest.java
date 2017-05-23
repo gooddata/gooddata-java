@@ -5,7 +5,6 @@
  */
 package com.gooddata.md;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
@@ -14,6 +13,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -40,7 +40,7 @@ public class MetaTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final Meta meta = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/meta.json"), Meta.class);
+        final Meta meta = readObjectFromResource("/md/meta.json", Meta.class);
         assertThat(meta, is(notNullValue()));
         assertThat(meta.getAuthor(), is(AUTHOR));
         assertThat(meta.getContributor(), is(CONTRIBUTOR));

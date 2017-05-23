@@ -5,9 +5,9 @@
  */
 package com.gooddata.md;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,7 +17,7 @@ public class QueryTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final Query query = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/query.json"), Query.class);
+        final Query query = readObjectFromResource("/md/query.json", Query.class);
         assertThat(query, is(notNullValue()));
         assertThat(query.getCategory(), is("MD::Query::Object"));
         assertThat(query.getTitle(), is("List of allTypes"));
@@ -26,7 +26,7 @@ public class QueryTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final Query query = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/query.json"), Query.class);
+        final Query query = readObjectFromResource("/md/query.json", Query.class);
 
         assertThat(query.toString(), matchesPattern(Query.class.getSimpleName() + "\\[.*\\]"));
     }

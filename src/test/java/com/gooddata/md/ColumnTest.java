@@ -5,22 +5,19 @@
  */
 package com.gooddata.md;
 
+import org.testng.annotations.Test;
+
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.testng.annotations.Test;
-
-import java.io.InputStream;
-
 public class ColumnTest {
 
     @Test
     public void shouldDeserialize() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/column.json");
-        final Column column = new ObjectMapper().readValue(stream, Column.class);
+        final Column column = readObjectFromResource("/md/column.json", Column.class);
         assertThat(column, is(notNullValue()));
 
         assertThat(column.getTableUri(), is("/gdc/md/PROJECT_ID/obj/9538"));
@@ -35,8 +32,7 @@ public class ColumnTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/column.json");
-        final Column column = new ObjectMapper().readValue(stream, Column.class);
+        final Column column = readObjectFromResource("/md/column.json", Column.class);
 
         assertThat(column.toString(), matchesPattern(Column.class.getSimpleName() + "\\[.*\\]"));
     }

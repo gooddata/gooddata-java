@@ -5,23 +5,20 @@
  */
 package com.gooddata.md;
 
+import org.testng.annotations.Test;
+
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.testng.annotations.Test;
-
-import java.io.InputStream;
-
 public class TableTest {
 
     @Test
     public void shouldDeserialize() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/table.json");
-        final Table table = new ObjectMapper().readValue(stream, Table.class);
+        final Table table = readObjectFromResource("/md/table.json", Table.class);
         assertThat(table, is(notNullValue()));
 
         assertThat(table.getDBName(), is("d_zendesktickets_vehicleview"));
@@ -33,8 +30,7 @@ public class TableTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/table.json");
-        final Table table = new ObjectMapper().readValue(stream, Table.class);
+        final Table table = readObjectFromResource("/md/table.json", Table.class);
 
         assertThat(table.toString(), matchesPattern(Table.class.getSimpleName() + "\\[.*\\]"));
     }

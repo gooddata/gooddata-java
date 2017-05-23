@@ -5,21 +5,20 @@
  */
 package com.gooddata.md;
 
+import org.testng.annotations.Test;
+
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.testng.annotations.Test;
-
 public class ProjectDashboardTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final ProjectDashboard dashboard = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/projectDashboard.json"), ProjectDashboard.class);
+        final ProjectDashboard dashboard = readObjectFromResource("/md/projectDashboard.json", ProjectDashboard.class);
 
         assertThat(dashboard.getUri(), is("/gdc/md/PROJECT_ID/obj/12345"));
 
@@ -35,7 +34,7 @@ public class ProjectDashboardTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final ProjectDashboard dashboard = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/projectDashboard.json"), ProjectDashboard.class);
+        final ProjectDashboard dashboard = readObjectFromResource("/md/projectDashboard.json", ProjectDashboard.class);
 
         assertThat(dashboard.toString(), matchesPattern(ProjectDashboard.class.getSimpleName() + "\\[.*\\]"));
     }

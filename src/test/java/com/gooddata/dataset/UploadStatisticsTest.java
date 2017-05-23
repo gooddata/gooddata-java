@@ -5,6 +5,7 @@
  */
 package com.gooddata.dataset;
 
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -19,8 +20,7 @@ public class UploadStatisticsTest {
 
     @Test
     public void shouldDeserialize() throws Exception {
-        final InputStream input = getClass().getResourceAsStream("/dataset/uploads/data-uploads-info.json");
-        final UploadStatistics uploadStatistics = new ObjectMapper().readValue(input, UploadStatistics.class);
+        final UploadStatistics uploadStatistics = readObjectFromResource("/dataset/uploads/data-uploads-info.json", UploadStatistics.class);
 
         assertThat(uploadStatistics, notNullValue());
 
@@ -32,8 +32,7 @@ public class UploadStatisticsTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final InputStream input = getClass().getResourceAsStream("/dataset/uploads/data-uploads-info.json");
-        final UploadStatistics uploadStatistics = new ObjectMapper().readValue(input, UploadStatistics.class);
+        final UploadStatistics uploadStatistics = readObjectFromResource("/dataset/uploads/data-uploads-info.json", UploadStatistics.class);
 
         assertThat(uploadStatistics.toString(), matchesPattern(UploadStatistics.class.getSimpleName() + "\\[.*\\]"));
     }

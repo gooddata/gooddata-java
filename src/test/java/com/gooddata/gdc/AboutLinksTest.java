@@ -5,12 +5,11 @@
  */
 package com.gooddata.gdc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
 import java.util.Collection;
 
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,8 +19,7 @@ public class AboutLinksTest {
 
     @Test
     public void deserialize() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/dataset/datasetLinks.json");
-        final AboutLinks aboutLinks = new ObjectMapper().readValue(stream, AboutLinks.class);
+        final AboutLinks aboutLinks = readObjectFromResource("/dataset/datasetLinks.json", AboutLinks.class);
         assertThat(aboutLinks, is(notNullValue()));
         assertThat(aboutLinks.getCategory(), is("singleloadinterface"));
         assertThat(aboutLinks.getInstance(), is("MD::LDM::SingleLoadInterface"));

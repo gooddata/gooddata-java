@@ -5,7 +5,13 @@
  */
 package com.gooddata.dataload;
 
+import com.gooddata.AbstractGoodDataIT;
+import com.gooddata.project.Project;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
 import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static com.gooddata.util.ResourceUtils.readStringFromResource;
 import static net.jadler.Jadler.onRequest;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
@@ -15,15 +21,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gooddata.AbstractGoodDataIT;
-
-import com.gooddata.project.Project;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
-
-import java.io.InputStream;
 
 public class OutputStageServiceIT extends AbstractGoodDataIT {
 
@@ -41,7 +38,7 @@ public class OutputStageServiceIT extends AbstractGoodDataIT {
 
     @BeforeClass
     public void setUp() throws Exception {
-        outputStage = MAPPER.readValue(readFromResource(OUTPUT_STAGE_ALL_FIELDS), OutputStage.class);
+        outputStage = readObjectFromResource(OUTPUT_STAGE_ALL_FIELDS, OutputStage.class);
         project = mock(Project.class);
         when(project.getId()).thenReturn(PROJECT_ID);
     }
@@ -78,8 +75,7 @@ public class OutputStageServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void shouldUpdateOutputStage() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream(OUTPUT_STAGE);
-        final OutputStage outputStage = new ObjectMapper().readValue(stream, OutputStage.class);
+        final OutputStage outputStage = readObjectFromResource(OUTPUT_STAGE, OutputStage.class);
 
         onRequest()
                 .havingMethodEqualTo("PUT")

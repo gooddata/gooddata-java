@@ -5,15 +5,13 @@
  */
 package com.gooddata.gdc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
-
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class LinkEntriesTest {
@@ -21,8 +19,7 @@ public class LinkEntriesTest {
     @SuppressWarnings("deprecation")
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/gdc/linkEntries.json");
-        final LinkEntries linkEntries = new ObjectMapper().readValue(stream, LinkEntries.class);
+        final LinkEntries linkEntries = readObjectFromResource("/gdc/linkEntries.json", LinkEntries.class);
 
         assertThat(linkEntries, is(notNullValue()));
         assertThat(linkEntries.getEntries(), hasSize(1));
@@ -34,8 +31,7 @@ public class LinkEntriesTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/gdc/linkEntries.json");
-        final LinkEntries linkEntries = new ObjectMapper().readValue(stream, LinkEntries.class);
+        final LinkEntries linkEntries = readObjectFromResource("/gdc/linkEntries.json", LinkEntries.class);
 
         assertThat(linkEntries.toString(), matchesPattern(LinkEntries.class.getSimpleName() + "\\[.*\\]"));
     }

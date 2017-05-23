@@ -5,12 +5,12 @@
  */
 package com.gooddata.connector;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
 import static com.gooddata.connector.ConnectorType.ZENDESK4;
 import static com.gooddata.connector.Zendesk4Settings.Zendesk4Type.plus;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,8 +26,7 @@ public class Zendesk4SettingsTest {
 
     @Test
     public void shouldDeserialize() throws Exception {
-        final Zendesk4Settings settings = new ObjectMapper()
-                .readValue(getClass().getResource("/connector/settings-zendesk4.json"), Zendesk4Settings.class);
+        final Zendesk4Settings settings = readObjectFromResource("/connector/settings-zendesk4.json", Zendesk4Settings.class);
 
         assertThat(settings, is(notNullValue()));
         assertThat(settings.getApiUrl(), is("https://foo.com"));

@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import java.io.InputStream;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,8 +21,7 @@ public class PagingTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/collections/paging.json");
-        final Paging paging = new ObjectMapper().readValue(stream, Paging.class);
+        final Paging paging = readObjectFromResource("/collections/paging.json", Paging.class);
 
         assertThat(paging.getOffset(), is("0"));
         assertThat(paging.getNext(), notNullValue());
@@ -30,8 +30,7 @@ public class PagingTest {
 
     @Test
     public void testDeserializationNullNext() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/collections/paging_no_next.json");
-        final Paging paging = new ObjectMapper().readValue(stream, Paging.class);
+        final Paging paging = readObjectFromResource("/collections/paging_no_next.json", Paging.class);
 
         assertThat(paging.getOffset(), is("0"));
         assertThat(paging.getNext(), nullValue());
@@ -39,8 +38,7 @@ public class PagingTest {
 
     @Test
     public void testDeserializationWithNextOnly() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/collections/paging_only_next.json");
-        final Paging paging = new ObjectMapper().readValue(stream, Paging.class);
+        final Paging paging = readObjectFromResource("/collections/paging_only_next.json", Paging.class);
 
         assertThat(paging.getOffset(), is(nullValue()));
         assertThat(paging.getNext(), notNullValue());

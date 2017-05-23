@@ -5,7 +5,6 @@
  */
 package com.gooddata.connector;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
@@ -16,6 +15,7 @@ import static com.gooddata.connector.Status.Code.ERROR;
 import static com.gooddata.connector.Status.Code.SYNCHRONIZED;
 import static com.gooddata.connector.Status.Code.UPLOADING;
 import static com.gooddata.connector.Status.Code.USER_ERROR;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -27,8 +27,7 @@ public class IntegrationProcessStatusTest {
 
     @Test
     public void testShouldDeserialize() throws Exception {
-        final IntegrationProcessStatus process = new ObjectMapper()
-                .readValue(getClass().getResource("/connector/process-status-embedded.json"), IntegrationProcessStatus.class);
+        final IntegrationProcessStatus process = readObjectFromResource("/connector/process-status-embedded.json", IntegrationProcessStatus.class);
 
         assertThat(process, is(notNullValue()));
         assertThat(process.getStarted(), is(new DateTime(2014, 5, 30, 7, 50, 15, DateTimeZone.UTC)));

@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 
 import static com.gooddata.featureflag.ProjectFeatureFlag.PROJECT_FEATURE_FLAG_TEMPLATE;
 import static com.gooddata.featureflag.ProjectFeatureFlags.PROJECT_FEATURE_FLAGS_TEMPLATE;
-import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static com.gooddata.util.ResourceUtils.readStringFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -35,7 +35,7 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
     @BeforeMethod
     public void setUp() throws Exception {
         service = gd.getFeatureFlagService();
-        project = MAPPER.readValue(readFromResource("/project/project.json"), Project.class);
+        project = readObjectFromResource("/project/project.json", Project.class);
     }
 
     @Test
@@ -126,8 +126,7 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
                 .withBody(readStringFromResource("/featureflag/projectFeatureFlag.json"))
                 .withStatus(200);
 
-        final ProjectFeatureFlag flag = MAPPER
-                .readValue(readFromResource("/featureflag/projectFeatureFlag.json"), ProjectFeatureFlag.class);
+        final ProjectFeatureFlag flag = readObjectFromResource("/featureflag/projectFeatureFlag.json", ProjectFeatureFlag.class);
         final ProjectFeatureFlag featureFlag = service.updateProjectFeatureFlag(flag);
 
         assertThat(featureFlag, is(notNullValue()));
@@ -143,8 +142,7 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(200);
 
-        final ProjectFeatureFlag flag = MAPPER
-                .readValue(readFromResource("/featureflag/projectFeatureFlag.json"), ProjectFeatureFlag.class);
+        final ProjectFeatureFlag flag = readObjectFromResource("/featureflag/projectFeatureFlag.json", ProjectFeatureFlag.class);
         service.deleteProjectFeatureFlag(flag);
     }
 

@@ -5,23 +5,20 @@
  */
 package com.gooddata.md;
 
+import org.testng.annotations.Test;
+
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.testng.annotations.Test;
-
-import java.io.InputStream;
-
 public class DataLoadingColumnTest {
 
     @Test
     public void shouldDeserialize() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/dataLoadingColumn.json");
-        final DataLoadingColumn column = new ObjectMapper().readValue(stream, DataLoadingColumn.class);
+        final DataLoadingColumn column = readObjectFromResource("/md/dataLoadingColumn.json", DataLoadingColumn.class);
         assertThat(column, is(notNullValue()));
 
         assertThat(column.getColumnUri(), is("/gdc/md/PROJECT_ID/obj/COLUMN_ID"));
@@ -43,8 +40,7 @@ public class DataLoadingColumnTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/dataLoadingColumn.json");
-        final DataLoadingColumn column = new ObjectMapper().readValue(stream, DataLoadingColumn.class);
+        final DataLoadingColumn column = readObjectFromResource("/md/dataLoadingColumn.json", DataLoadingColumn.class);
 
         assertThat(column.toString(), matchesPattern(DataLoadingColumn.class.getSimpleName() + "\\[.*\\]"));
     }

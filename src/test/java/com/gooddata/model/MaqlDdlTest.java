@@ -5,9 +5,9 @@
  */
 package com.gooddata.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -15,7 +15,7 @@ public class MaqlDdlTest {
 
     @Test
     public void testSerialization() throws Exception {
-        assertThat(new ObjectMapper().writeValueAsString(new MaqlDdl("maqlddl")),
+        assertThat(OBJECT_MAPPER.writeValueAsString(new MaqlDdl("maqlddl")),
                 is("{\"manage\":{\"maql\":\"maqlddl\"}}"));
 
     }

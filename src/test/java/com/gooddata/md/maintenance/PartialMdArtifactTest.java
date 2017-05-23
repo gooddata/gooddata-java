@@ -5,23 +5,20 @@
  */
 package com.gooddata.md.maintenance;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.text.MatchesPattern.matchesPattern;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooddata.gdc.UriResponse;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
+import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class PartialMdArtifactTest {
 
     @Test
     public void shouldDeserialize() throws Exception {
-        final InputStream input = getClass().getResourceAsStream("/md/maintenance/partialMDArtifact.json");
-        final PartialMdArtifact partialMdArtifact = new ObjectMapper().readValue(input, PartialMdArtifact.class);
+        final PartialMdArtifact partialMdArtifact = readObjectFromResource("/md/maintenance/partialMDArtifact.json", PartialMdArtifact.class);
 
         assertThat(partialMdArtifact.getStatusUri(), is("/gdc/md/projectId/tasks/taskId/status"));
         assertThat(partialMdArtifact.getToken(), is("TOKEN123"));

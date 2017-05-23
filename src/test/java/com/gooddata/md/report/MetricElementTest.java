@@ -5,13 +5,11 @@
  */
 package com.gooddata.md.report;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooddata.md.Metric;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
-
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,8 +26,7 @@ public class MetricElementTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream is = getClass().getResourceAsStream("/md/report/metricElement.json");
-        final MetricElement element = new ObjectMapper().readValue(is, MetricElement.class);
+        final MetricElement element = readObjectFromResource("/md/report/metricElement.json", MetricElement.class);
         assertThat(element, is(notNullValue()));
         assertThat(element.getUri(), is(URI));
         assertThat(element.getAlias(), is(ALIAS));

@@ -18,7 +18,9 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.Collections;
 
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
 import static net.jadler.Jadler.verifyThatRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -52,10 +54,10 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
 
     @BeforeClass
     public void setUp() throws Exception {
-        pollingTask = MAPPER.readValue(readFromResource(TASK_POLL), WarehouseTask.class);
-        finishedTask = MAPPER.readValue(readFromResource(TASK_DONE), WarehouseTask.class);
-        warehouse = MAPPER.readValue(readFromResource(WAREHOUSE), Warehouse.class);
-        warehouseSchema = MAPPER.readValue(readFromResource(WAREHOUSE_SCHEMA), WarehouseSchema.class);
+        pollingTask = readObjectFromResource(TASK_POLL, WarehouseTask.class);
+        finishedTask = readObjectFromResource(TASK_DONE, WarehouseTask.class);
+        warehouse = readObjectFromResource(WAREHOUSE, Warehouse.class);
+        warehouseSchema = readObjectFromResource(WAREHOUSE_SCHEMA, WarehouseSchema.class);
     }
 
     @Test
@@ -151,7 +153,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
 
         final String updatedTitle = "UPDATED_TITLE";
 
-        final Warehouse toUpdate = MAPPER.readValue(readFromResource(WAREHOUSE), Warehouse.class);
+        final Warehouse toUpdate = readObjectFromResource(WAREHOUSE, Warehouse.class);
         toUpdate.setTitle(updatedTitle);
 
         onRequest()
@@ -163,7 +165,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(warehouse.getUri())
                 .respond()
-                .withBody(MAPPER.writeValueAsString(toUpdate))
+                .withBody(OBJECT_MAPPER.writeValueAsString(toUpdate))
                 .withStatus(200);
 
         final Warehouse updated = gd.getWarehouseService().updateWarehouse(toUpdate);
@@ -177,7 +179,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                     @Override
                     public boolean matches(Object o) {
                         try {
-                            Warehouse instance = MAPPER.readValue((String) o, Warehouse.class);
+                            Warehouse instance = OBJECT_MAPPER.readValue((String) o, Warehouse.class);
                             return updatedTitle.equals(instance.getTitle());
                         } catch (IOException e) {
                             return false;

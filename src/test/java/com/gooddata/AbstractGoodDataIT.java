@@ -6,7 +6,6 @@
 package com.gooddata;
 
 import com.gooddata.authentication.LoginPasswordAuthentication;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -16,7 +15,6 @@ import static net.jadler.Jadler.port;
 
 public abstract class AbstractGoodDataIT {
 
-    protected static final ObjectMapper MAPPER = new ObjectMapper();
     protected GoodData gd;
 
     @BeforeMethod

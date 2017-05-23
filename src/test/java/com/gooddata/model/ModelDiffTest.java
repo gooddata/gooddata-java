@@ -5,13 +5,12 @@
  */
 package com.gooddata.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
 import java.util.Collections;
 
 import static com.gooddata.model.ModelDiff.UpdateScript;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -76,8 +75,7 @@ public class ModelDiffTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/model/modelDiff.json");
-        final ModelDiff diff = new ObjectMapper().readValue(stream, ModelDiff.class);
+        final ModelDiff diff = readObjectFromResource("/model/modelDiff.json", ModelDiff.class);
 
         assertThat(diff, is(notNullValue()));
         assertThat(diff.getUpdateScripts(), hasSize(2));

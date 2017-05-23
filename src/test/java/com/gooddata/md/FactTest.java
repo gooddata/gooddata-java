@@ -5,10 +5,10 @@
  */
 package com.gooddata.md;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -19,7 +19,7 @@ public class FactTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final Fact fact = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/fact.json"), Fact.class);
+        final Fact fact = readObjectFromResource("/md/fact.json", Fact.class);
         assertThat(fact, is(notNullValue()));
         assertThat(fact.getExpressions(), is(notNullValue()));
         assertThat(fact.getExpressions(), hasSize(1));

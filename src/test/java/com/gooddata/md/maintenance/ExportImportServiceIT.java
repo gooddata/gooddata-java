@@ -6,6 +6,7 @@
 package com.gooddata.md.maintenance;
 
 import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -23,7 +24,7 @@ public class ExportImportServiceIT extends AbstractGoodDataIT {
 
     @BeforeClass
     public void setUp() throws Exception {
-        project = MAPPER.readValue(readFromResource("/project/project.json"), Project.class);
+        project = readObjectFromResource("/project/project.json", Project.class);
     }
 
     @Test

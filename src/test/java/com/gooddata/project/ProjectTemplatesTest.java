@@ -5,9 +5,9 @@
  */
 package com.gooddata.project;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,8 +17,7 @@ public class ProjectTemplatesTest {
 
     @Test
     public void shouldDeserialize() throws Exception {
-        final ProjectTemplates templates = new ObjectMapper()
-                .readValue(getClass().getResource("/project/project-templates.json"), ProjectTemplates.class);
+        final ProjectTemplates templates = readObjectFromResource("/project/project-templates.json", ProjectTemplates.class);
 
         assertThat(templates, is(notNullValue()));
         assertThat(templates.getTemplatesInfo(), is(notNullValue()));

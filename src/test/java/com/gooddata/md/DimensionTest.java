@@ -5,25 +5,23 @@
  */
 package com.gooddata.md;
 
+import org.testng.annotations.Test;
+
+import java.util.Collection;
+
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.testng.annotations.Test;
-
-import java.io.InputStream;
-import java.util.Collection;
 
 public class DimensionTest {
 
     @Test
     public void shouldDeserialize() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/dimension.json");
-        final Dimension dimension = new ObjectMapper().readValue(stream, Dimension.class);
+        final Dimension dimension = readObjectFromResource("/md/dimension.json", Dimension.class);
         assertThat(dimension, is(notNullValue()));
 
         final Collection<NestedAttribute> attributes = dimension.getAttributes();

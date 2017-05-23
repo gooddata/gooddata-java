@@ -5,22 +5,19 @@
  */
 package com.gooddata.md;
 
+import org.testng.annotations.Test;
+
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.testng.annotations.Test;
-
-import java.io.InputStream;
-
 public class TableDataLoadTest {
 
     @Test
     public void shouldDeserialize() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/tableDataLoad.json");
-        final TableDataLoad load = new ObjectMapper().readValue(stream, TableDataLoad.class);
+        final TableDataLoad load = readObjectFromResource("/md/tableDataLoad.json", TableDataLoad.class);
         assertThat(load, is(notNullValue()));
 
         assertThat(load.getDataSourceLocation(), is("d_zendesktickets_vehicleview_aaavxfdfgqamowg"));
@@ -31,8 +28,7 @@ public class TableDataLoadTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/tableDataLoad.json");
-        final TableDataLoad load = new ObjectMapper().readValue(stream, TableDataLoad.class);
+        final TableDataLoad load = readObjectFromResource("/md/tableDataLoad.json", TableDataLoad.class);
 
         assertThat(load.toString(), matchesPattern(TableDataLoad.class.getSimpleName() + "\\[.*\\]"));
     }

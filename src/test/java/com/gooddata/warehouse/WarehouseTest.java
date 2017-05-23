@@ -6,6 +6,7 @@
 package com.gooddata.warehouse;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -68,8 +69,7 @@ public class WarehouseTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/warehouse/warehouse.json");
-        final Warehouse warehouse = new ObjectMapper().readValue(stream, Warehouse.class);
+        final Warehouse warehouse = readObjectFromResource("/warehouse/warehouse.json", Warehouse.class);
 
         assertThat(warehouse.getTitle(), is(TITLE));
         assertThat(warehouse.getDescription(), is(DESCRIPTION));
@@ -86,8 +86,7 @@ public class WarehouseTest {
 
     @Test
     public void testDeserializationWithLicense() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/warehouse/warehouse-withLicense.json");
-        final Warehouse warehouse = new ObjectMapper().readValue(stream, Warehouse.class);
+        final Warehouse warehouse = readObjectFromResource("/warehouse/warehouse-withLicense.json", Warehouse.class);
 
         assertThat(warehouse.getTitle(), is(TITLE));
         assertThat(warehouse.getDescription(), is(DESCRIPTION));
@@ -105,8 +104,7 @@ public class WarehouseTest {
 
     @Test
     public void testDeserializationWithNullToken() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/warehouse/warehouse-null-token.json");
-        final Warehouse warehouse = new ObjectMapper().readValue(stream, Warehouse.class);
+        final Warehouse warehouse = readObjectFromResource("/warehouse/warehouse-null-token.json", Warehouse.class);
 
         assertThat(warehouse.getTitle(), is(TITLE));
         assertThat(warehouse.getDescription(), is(DESCRIPTION));

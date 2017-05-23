@@ -5,11 +5,11 @@
  */
 package com.gooddata.dataload.processes;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
@@ -17,11 +17,9 @@ import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class ProcessExecutionDetailTest {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
     @Test
     public void testDeserialization() throws Exception {
-        final ProcessExecutionDetail executionDetail = MAPPER.readValue(getClass().getResourceAsStream("/dataload/processes/executionDetail.json"),
+        final ProcessExecutionDetail executionDetail = readObjectFromResource("/dataload/processes/executionDetail.json",
                 ProcessExecutionDetail.class);
         assertThat(executionDetail, notNullValue());
         assertThat(executionDetail.getStatus(), is("ERROR"));
@@ -40,7 +38,7 @@ public class ProcessExecutionDetailTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final ProcessExecutionDetail executionDetail = MAPPER.readValue(getClass().getResourceAsStream("/dataload/processes/executionDetail.json"),
+        final ProcessExecutionDetail executionDetail = readObjectFromResource("/dataload/processes/executionDetail.json",
                 ProcessExecutionDetail.class);
 
         assertThat(executionDetail.toString(), matchesPattern(ProcessExecutionDetail.class.getSimpleName() + "\\[.*\\]"));

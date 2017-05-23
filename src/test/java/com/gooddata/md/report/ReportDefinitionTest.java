@@ -5,13 +5,12 @@
  */
 package com.gooddata.md.report;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
 import java.util.Collections;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -24,8 +23,7 @@ public class ReportDefinitionTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream is = getClass().getResourceAsStream("/md/report/oneNumberReportDefinition.json");
-        final ReportDefinition def = new ObjectMapper().readValue(is, ReportDefinition.class);
+        final ReportDefinition def = readObjectFromResource("/md/report/oneNumberReportDefinition.json", ReportDefinition.class);
         assertThat(def, is(notNullValue()));
         assertThat(def.getFormat(), is(FORMAT));
         assertThat(def.getGrid(), is(notNullValue()));
@@ -44,8 +42,7 @@ public class ReportDefinitionTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final InputStream is = getClass().getResourceAsStream("/md/report/oneNumberReportDefinition.json");
-        final ReportDefinition def = new ObjectMapper().readValue(is, ReportDefinition.class);
+        final ReportDefinition def = readObjectFromResource("/md/report/oneNumberReportDefinition.json", ReportDefinition.class);
 
         assertThat(def.toString(), matchesPattern(ReportDefinition.class.getSimpleName() + "\\[.*\\]"));
     }

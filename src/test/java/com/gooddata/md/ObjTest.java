@@ -6,16 +6,15 @@
 package com.gooddata.md;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -39,8 +38,7 @@ public class ObjTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/objCommon.json");
-        final AbstractObj obj = new ObjectMapper().readValue(stream, ConcreteObj.class);
+        final AbstractObj obj = readObjectFromResource("/md/objCommon.json", ConcreteObj.class);
 
         assertThat(obj, is(notNullValue()));
         assertThat(obj.getAuthor(), is(AUTHOR));

@@ -5,7 +5,6 @@
  */
 package com.gooddata.dataload.processes;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Duration;
@@ -19,6 +18,7 @@ import org.testng.annotations.Test;
 import java.util.Collections;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -53,8 +53,7 @@ public class ScheduleTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final Schedule schedule = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/dataload/processes/schedule.json"), Schedule.class);
+        final Schedule schedule = readObjectFromResource("/dataload/processes/schedule.json", Schedule.class);
 
         assertThat(schedule, is(notNullValue()));
         assertThat(schedule.getId(), is("SCHEDULE_ID"));
@@ -74,8 +73,7 @@ public class ScheduleTest {
 
     @Test
     public void testTriggeredScheduleDeserialization() throws Exception {
-        final Schedule schedule = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/dataload/processes/schedule-triggered.json"), Schedule.class);
+        final Schedule schedule = readObjectFromResource("/dataload/processes/schedule-triggered.json", Schedule.class);
 
         assertThat(schedule, is(notNullValue()));
         assertThat(schedule.getId(), is("SCHEDULE_ID"));

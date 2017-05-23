@@ -5,11 +5,9 @@
  */
 package com.gooddata.project;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
-
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.notNullValue;
@@ -20,8 +18,7 @@ public class RolesTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/project/project-roles.json");
-        final Roles roles = new ObjectMapper().readValue(stream, Roles.class);
+        final Roles roles = readObjectFromResource("/project/project-roles.json", Roles.class);
 
         assertThat(roles, notNullValue());
         assertThat(roles.getRoles(), hasSize(2));
@@ -31,8 +28,7 @@ public class RolesTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/project/project-roles.json");
-        final Roles roles = new ObjectMapper().readValue(stream, Roles.class);
+        final Roles roles = readObjectFromResource("/project/project-roles.json", Roles.class);
 
         assertThat(roles.toString(), matchesPattern(Roles.class.getSimpleName() + "\\[.*\\]"));
     }

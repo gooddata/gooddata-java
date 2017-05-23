@@ -6,6 +6,7 @@
 package com.gooddata.notification;
 
 import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Collections.singletonMap;
 import static net.jadler.Jadler.onRequest;
 
@@ -23,7 +24,7 @@ public class NotificationServiceIT extends AbstractGoodDataIT {
 
     @BeforeClass
     public void setUp() throws Exception {
-        project = MAPPER.readValue(readFromResource("/project/project.json"), Project.class);
+        project = readObjectFromResource("/project/project.json", Project.class);
     }
 
     @Test

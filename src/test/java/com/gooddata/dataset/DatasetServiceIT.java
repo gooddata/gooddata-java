@@ -19,7 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -35,7 +37,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
 
     @BeforeClass
     public void setUpClass() throws Exception {
-        project = MAPPER.readValue(readFromResource("/project/project.json"), Project.class);
+        project = readObjectFromResource("/project/project.json", Project.class);
     }
 
     @BeforeMethod
@@ -74,7 +76,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
                 .withStatus(200)
                 .withBody(readFromResource("/dataset/pullTaskStatusOk.json"));
 
-        final DatasetManifest manifest = MAPPER.readValue(readFromResource("/dataset/datasetManifest.json"), DatasetManifest.class);
+        final DatasetManifest manifest = readObjectFromResource("/dataset/datasetManifest.json", DatasetManifest.class);
         gd.getDatasetService().loadDataset(project, manifest, new ByteArrayInputStream(new byte[]{})).get();
     }
 
@@ -89,7 +91,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
                 .withStatus(200)
                 .withBody(readFromResource("/dataset/pullTaskStatusOk.json"));
 
-        final DatasetManifest manifest = MAPPER.readValue(readFromResource("/dataset/datasetManifest.json"), DatasetManifest.class);
+        final DatasetManifest manifest = readObjectFromResource("/dataset/datasetManifest.json", DatasetManifest.class);
         final InputStream source = new ByteArrayInputStream(new byte[]{});
         manifest.setSource(source);
 
@@ -104,7 +106,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(400);
 
-        final DatasetManifest manifest = MAPPER.readValue(readFromResource("/dataset/datasetManifest.json"), DatasetManifest.class);
+        final DatasetManifest manifest = readObjectFromResource("/dataset/datasetManifest.json", DatasetManifest.class);
         gd.getDatasetService().loadDataset(project, manifest, new ByteArrayInputStream(new byte[]{})).get();
     }
 
@@ -115,7 +117,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
             .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/dataset/pullTaskStatusError.json"));
-        final DatasetManifest manifest = MAPPER.readValue(readFromResource("/dataset/datasetManifest.json"), DatasetManifest.class);
+        final DatasetManifest manifest = readObjectFromResource("/dataset/datasetManifest.json", DatasetManifest.class);
         try {
             gd.getDatasetService().loadDataset(project, manifest, new ByteArrayInputStream(new byte[]{})).get();
             fail("Exception should be thrown");
@@ -181,10 +183,10 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(STATUS_URI)
                 .respond()
                 .withStatus(202)
-                .withBody(MAPPER.writeValueAsString(new TaskStatus("RUNNING", STATUS_URI)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new TaskStatus("RUNNING", STATUS_URI)))
                 .thenRespond()
                 .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(new TaskStatus("OK", STATUS_URI)));
+                .withBody(OBJECT_MAPPER.writeValueAsString(new TaskStatus("OK", STATUS_URI)));
 
         gd.getDatasetService().optimizeSliHash(project).get();
     }
@@ -202,10 +204,10 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(STATUS_URI)
                 .respond()
                 .withStatus(202)
-                .withBody(MAPPER.writeValueAsString(new TaskStatus("RUNNING", STATUS_URI)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new TaskStatus("RUNNING", STATUS_URI)))
                 .thenRespond()
                 .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(new TaskStatus("ERROR", STATUS_URI)));
+                .withBody(OBJECT_MAPPER.writeValueAsString(new TaskStatus("ERROR", STATUS_URI)));
 
         gd.getDatasetService().optimizeSliHash(project).get();
     }
@@ -223,10 +225,10 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(STATUS_URI)
                 .respond()
                 .withStatus(200) // REST API returns HTTP 200 when task is in RUNNING state :(
-                .withBody(MAPPER.writeValueAsString(new TaskState("RUNNING", STATUS_URI)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new TaskState("RUNNING", STATUS_URI)))
                 .thenRespond()
                 .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(new TaskState("OK", STATUS_URI)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new TaskState("OK", STATUS_URI)))
         ;
 
         gd.getDatasetService().updateProjectData(project, DML_MAQL).get();
@@ -263,10 +265,10 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(STATUS_URI)
                 .respond()
                 .withStatus(202)
-                .withBody(MAPPER.writeValueAsString(new TaskState("RUNNING", STATUS_URI)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new TaskState("RUNNING", STATUS_URI)))
                 .thenRespond()
                 .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(new TaskState("ERROR", STATUS_URI)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new TaskState("ERROR", STATUS_URI)))
         ;
 
         gd.getDatasetService().updateProjectData(project, DML_MAQL).get();

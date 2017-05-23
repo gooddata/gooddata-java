@@ -11,12 +11,17 @@ import com.gooddata.collections.PageRequest;
 import com.gooddata.gdc.AsyncTask;
 import com.gooddata.gdc.TaskStatus;
 import com.gooddata.gdc.UriResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 import static com.gooddata.JsonMatchers.isJsonString;
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
@@ -24,13 +29,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
 public class ProjectServiceIT extends AbstractGoodDataIT {
-
-    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private static final String PROJECT_ID = "PROJECT_ID";
     private static final String PROJECT_URI = "/gdc/projects/" + PROJECT_ID;
@@ -41,9 +40,9 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
 
     @BeforeClass
     public void setUp() throws Exception {
-        loading = MAPPER.readValue(readFromResource("/project/project-loading.json"), Project.class);
-        enabled = MAPPER.readValue(readFromResource("/project/project.json"), Project.class);
-        deleted = MAPPER.readValue(readFromResource("/project/project-deleted.json"), Project.class);
+        loading = readObjectFromResource("/project/project-loading.json", Project.class);
+        enabled = readObjectFromResource("/project/project.json", Project.class);
+        deleted = readObjectFromResource("/project/project-deleted.json", Project.class);
     }
 
     @Test
@@ -52,17 +51,17 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(Projects.URI)
                 .respond()
-                .withBody(MAPPER.writeValueAsString(new UriResponse(PROJECT_URI)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse(PROJECT_URI)))
                 .withStatus(202)
         ;
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(PROJECT_URI)
             .respond()
-                .withBody(MAPPER.writeValueAsString(loading))
+                .withBody(OBJECT_MAPPER.writeValueAsString(loading))
                 .withStatus(202)
             .thenRespond()
-                .withBody(MAPPER.writeValueAsString(enabled))
+                .withBody(OBJECT_MAPPER.writeValueAsString(enabled))
                 .withStatus(200)
         ;
 
@@ -88,7 +87,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(Projects.URI)
             .respond()
-                .withBody(MAPPER.writeValueAsString(new UriResponse(PROJECT_URI)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse(PROJECT_URI)))
                 .withStatus(202)
         ;
         onRequest()
@@ -108,14 +107,14 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(Projects.URI)
             .respond()
-                .withBody(MAPPER.writeValueAsString(new UriResponse(PROJECT_URI)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse(PROJECT_URI)))
                 .withStatus(202)
         ;
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(PROJECT_URI)
             .respond()
-                .withBody(MAPPER.writeValueAsString(deleted))
+                .withBody(OBJECT_MAPPER.writeValueAsString(deleted))
                 .withStatus(200)
         ;
 
@@ -175,23 +174,23 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingBody(isJsonString("/project/project-validate.json"))
             .respond()
-                .withBody(MAPPER.writeValueAsString(new AsyncTask(task1Uri)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new AsyncTask(task1Uri)))
                 .withStatus(201);
 
         onRequest()
                 .havingPathEqualTo(task1Uri)
             .respond()
-                .withBody(MAPPER.writeValueAsString(new UriResponse(task2Uri)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse(task2Uri)))
                 .withHeader("Location", task2Uri)
                 .withStatus(303);
 
         onRequest()
                 .havingPathEqualTo(task2Uri)
             .respond()
-                .withBody(MAPPER.writeValueAsString(new AsyncTask(task2Uri)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new AsyncTask(task2Uri)))
                 .withStatus(202)
             .thenRespond()
-                .withBody(MAPPER.writeValueAsString(new UriResponse(resultUri)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse(resultUri)))
                 .withHeader("Location", resultUri)
                 .withStatus(303);
 
@@ -223,21 +222,21 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingBody(isJsonString("/project/project-validate.json"))
             .respond()
-                .withBody(MAPPER.writeValueAsString(new AsyncTask(task1Uri)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new AsyncTask(task1Uri)))
                 .withStatus(201);
 
         onRequest()
                 .havingPathEqualTo(task1Uri)
             .respond()
-                .withBody(MAPPER.writeValueAsString(new UriResponse(task2Uri)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse(task2Uri)))
                 .withHeader("Location", task1Uri)
                 .withStatus(303)
             .thenRespond()
-                .withBody(MAPPER.writeValueAsString(new TaskStatus("RUNNING", task2Uri)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new TaskStatus("RUNNING", task2Uri)))
                 .withHeader("Location", task1Uri)
                 .withStatus(202)
             .thenRespond()
-                .withBody(MAPPER.writeValueAsString(new UriResponse(resultUri)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse(resultUri)))
                 .withHeader("Location", resultUri)
                 .withStatus(303)
         ;

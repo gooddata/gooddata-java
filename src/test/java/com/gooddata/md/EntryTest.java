@@ -5,7 +5,6 @@
  */
 package com.gooddata.md;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
@@ -13,6 +12,7 @@ import org.testng.annotations.Test;
 import java.util.Set;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Collections.singleton;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -38,7 +38,7 @@ public class EntryTest {
     @SuppressWarnings("deprecation")
     @Test
     public void testDeserialize() throws Exception {
-        final Entry entry = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/entry.json"), Entry.class);
+        final Entry entry = readObjectFromResource("/md/entry.json", Entry.class);
         assertThat(entry, is(notNullValue()));
         assertThat(entry.getLink(), is(URI));
         assertThat(entry.getUri(), is(URI));

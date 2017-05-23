@@ -5,26 +5,25 @@
  */
 package com.gooddata.gdc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
 public class TaskStatusTest {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
     @Test
     public void testDeser() throws Exception {
-        final TaskStatus status = MAPPER.readValue(getClass().getResourceAsStream("/gdc/task-status.json"), TaskStatus.class);
+        final TaskStatus status = readObjectFromResource("/gdc/task-status.json", TaskStatus.class);
         assertThat(status.getStatus(), is("OK"));
         assertThat(status.getPollUri(), is("/gdc/md/PROJECT_ID/tasks/TASK_ID/status"));
     }
 
     @Test
     public void testDeserMessages() throws Exception {
-        final TaskStatus status = MAPPER.readValue(getClass().getResourceAsStream("/model/maql-ddl-task-status-fail.json"), TaskStatus.class);
+        final TaskStatus status = readObjectFromResource("/model/maql-ddl-task-status-fail.json", TaskStatus.class);
         assertThat(status.getStatus(), is("ERROR"));
         assertThat(status.getPollUri(), is("/gdc/md/PROJECT_ID/tasks/TASK_ID/status"));
         assertThat(status.getMessages(), hasSize(1));
@@ -34,8 +33,8 @@ public class TaskStatusTest {
 
     @Test
     public void testSerialize() throws Exception {
-        final String json = MAPPER.writeValueAsString(new TaskStatus("OK", "foo"));
-        final TaskStatus status = MAPPER.readValue(json, TaskStatus.class);
+        final String json = OBJECT_MAPPER.writeValueAsString(new TaskStatus("OK", "foo"));
+        final TaskStatus status = OBJECT_MAPPER.readValue(json, TaskStatus.class);
         assertThat(status.getStatus(), is("OK"));
         assertThat(status.getPollUri(), is("foo"));
     }
