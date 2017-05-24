@@ -9,7 +9,6 @@ import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.FutureResult;
 import com.gooddata.collections.PageableList;
 import com.gooddata.project.Project;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -18,6 +17,7 @@ import java.io.File;
 import java.util.Collection;
 
 import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
 import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,7 +30,6 @@ import static org.hamcrest.core.Is.is;
 
 public class ProcessServiceIT extends AbstractGoodDataIT {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final String PROCESSES_PATH = DataloadProcesses.TEMPLATE.expand("PROJECT_ID").toString();
     private static final String PROCESS_ID = "processId";
     private static final String PROCESS_PATH = DataloadProcess.TEMPLATE.expand("PROJECT_ID", PROCESS_ID).toString();
@@ -56,9 +55,9 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
 
     @BeforeClass
     public void setUp() throws Exception {
-        project = MAPPER.readValue(readFromResource("/project/project.json"), Project.class);
-        process = MAPPER.readValue(readFromResource("/dataload/processes/process.json"), DataloadProcess.class);
-        schedule = MAPPER.readValue(readFromResource("/dataload/processes/schedule.json"), Schedule.class);
+        project = readObjectFromResource("/project/project.json", Project.class);
+        process = readObjectFromResource("/dataload/processes/process.json", DataloadProcess.class);
+        schedule = readObjectFromResource("/dataload/processes/schedule.json", Schedule.class);
         file = File.createTempFile("test", ".groovy");
     }
 
@@ -169,7 +168,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .withStatus(200);
 
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        final ProcessExecutionDetail executionDetail = MAPPER.readValue(readFromResource("/dataload/processes/executionDetail.json"), ProcessExecutionDetail.class);
+        final ProcessExecutionDetail executionDetail = readObjectFromResource("/dataload/processes/executionDetail.json", ProcessExecutionDetail.class);
         gd.getProcessService().getExecutionLog(executionDetail, outputStream);
         assertThat(outputStream.toString(), is(log));
     }
@@ -200,7 +199,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         final FutureResult<ProcessExecutionDetail> result = gd.getProcessService().executeProcess(new ProcessExecution(process, "test.groovy"));
         final ProcessExecutionDetail executionDetail = result.get();
 
-        assertJsonEquals(MAPPER.readValue(readFromResource("/dataload/processes/executionDetail-success.json"), ProcessExecutionDetail.class), executionDetail);
+        assertJsonEquals(readObjectFromResource("/dataload/processes/executionDetail-success.json", ProcessExecutionDetail.class), executionDetail);
     }
 
     @Test(expectedExceptions = ProcessExecutionException.class)

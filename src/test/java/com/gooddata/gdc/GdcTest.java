@@ -5,11 +5,9 @@
  */
 package com.gooddata.gdc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
-
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -19,8 +17,7 @@ public class GdcTest {
     @SuppressWarnings("deprecation")
     @Test
     public void deserialize() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/gdc/gdc.json");
-        final Gdc gdc = new ObjectMapper().readValue(stream, Gdc.class);
+        final Gdc gdc = readObjectFromResource("/gdc/gdc.json", Gdc.class);
         assertThat(gdc, is(notNullValue()));
 
         assertThat(gdc.getHomeLink(), is("/gdc/"));

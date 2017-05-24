@@ -5,19 +5,18 @@
  */
 package com.gooddata.dataload.processes;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.MatcherAssert.*;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
+
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 public class ProcessExecutionTaskTest {
 
     @SuppressWarnings("deprecation")
     @Test
     public void testDeserialize() throws Exception {
-        final ProcessExecutionTask task = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/dataload/processes/executionTask.json"), ProcessExecutionTask.class);
+        final ProcessExecutionTask task = readObjectFromResource("/dataload/processes/executionTask.json", ProcessExecutionTask.class);
         assertThat(task.getPollLink(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId"));
         assertThat(task.getPollUri(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId"));
         assertThat(task.getDetailLink(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId/detail"));

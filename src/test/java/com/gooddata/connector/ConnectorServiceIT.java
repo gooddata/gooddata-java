@@ -28,7 +28,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        project = MAPPER.readValue(readFromResource("/project/project.json"), Project.class);
+        project = readObjectFromResource("/project/project.json", Project.class);
         connectors = gd.getConnectorService();
     }
 
@@ -109,7 +109,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes")
             .respond()
-                .withBody(MAPPER.writeValueAsString(new UriResponse("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")));
+                .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")));
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")
             .respond()
@@ -128,7 +128,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes")
             .respond()
-                .withBody(MAPPER.writeValueAsString(new UriResponse("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")));
+                .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")));
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")
             .respond()
@@ -143,7 +143,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes")
             .respond()
-                .withBody(MAPPER.writeValueAsString(new UriResponse("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")));
+                .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")));
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")
             .respond()

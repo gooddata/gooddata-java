@@ -5,11 +5,9 @@
  */
 package com.gooddata.gdc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
-
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,8 +16,7 @@ public class ErrorStructureTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream inputStream = getClass().getResourceAsStream("/gdc/errorStructure.json");
-        final ErrorStructure errStructure = new ObjectMapper().readValue(inputStream, ErrorStructure.class);
+        final ErrorStructure errStructure = readObjectFromResource("/gdc/errorStructure.json", ErrorStructure.class);
 
         assertThat(errStructure, is(notNullValue()));
         assertThat(errStructure.getErrorClass(), is("CLASS"));

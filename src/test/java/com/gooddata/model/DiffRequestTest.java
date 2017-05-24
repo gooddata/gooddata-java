@@ -5,19 +5,17 @@
  */
 package com.gooddata.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class DiffRequestTest {
 
-    private static final ObjectMapper mapper = new ObjectMapper();
-
     @Test
     public void testSerialization() throws Exception {
-        String valueAsString = mapper.writeValueAsString(new DiffRequest("{\"projectModel\":\"xxx\"}"));
+        String valueAsString = OBJECT_MAPPER.writeValueAsString(new DiffRequest("{\"projectModel\":\"xxx\"}"));
         assertThat(valueAsString, is("{\"diffRequest\":{\"targetModel\":{\"projectModel\":\"xxx\"}}}"));
     }
 }

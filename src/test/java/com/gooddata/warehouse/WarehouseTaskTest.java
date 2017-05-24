@@ -5,20 +5,18 @@
  */
 package com.gooddata.warehouse;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.MatcherAssert.*;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 public class WarehouseTaskTest {
 
     @SuppressWarnings("deprecation")
     @Test
     public void testDeserializePoll() throws Exception {
-        final WarehouseTask warehouseTask = deserialize("/warehouse/warehouseTask-poll.json");
+        final WarehouseTask warehouseTask = readObjectFromResource("/warehouse/warehouseTask-poll.json", WarehouseTask.class);
         assertThat(warehouseTask.getPollLink(), is("/gdc/datawarehouse/executions/executionId"));
         assertThat(warehouseTask.getPollUri(), is("/gdc/datawarehouse/executions/executionId"));
     }
@@ -26,13 +24,9 @@ public class WarehouseTaskTest {
     @SuppressWarnings("deprecation")
     @Test
     public void testDeserializeInstance() throws Exception {
-        final WarehouseTask warehouseTask = deserialize("/warehouse/warehouseTask-finished.json");
+        final WarehouseTask warehouseTask = readObjectFromResource("/warehouse/warehouseTask-finished.json", WarehouseTask.class);
         assertThat(warehouseTask.getWarehouseLink(), is("/gdc/datawarehouse/instances/instanceId"));
         assertThat(warehouseTask.getWarehouseUri(), is("/gdc/datawarehouse/instances/instanceId"));
     }
 
-    private WarehouseTask deserialize(String path) throws Exception {
-        final InputStream stream = getClass().getResourceAsStream(path);
-        return new ObjectMapper().readValue(stream, WarehouseTask.class);
-    }
 }

@@ -5,25 +5,22 @@
  */
 package com.gooddata.dataset;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.testng.annotations.Test;
+
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.testng.annotations.Test;
-
-import java.io.InputStream;
-
 public class UploadTest {
 
     @Test
     public void shouldDeserialize() throws Exception {
-        final InputStream input = getClass().getResourceAsStream("/dataset/uploads/upload.json");
-        final Upload upload = new ObjectMapper().readValue(input, Upload.class);
+        final Upload upload = readObjectFromResource("/dataset/uploads/upload.json", Upload.class);
 
         assertThat(upload, notNullValue());
         assertThat(upload.getMessage(), is("some upload message"));
@@ -38,8 +35,7 @@ public class UploadTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final InputStream input = getClass().getResourceAsStream("/dataset/uploads/upload.json");
-        final Upload upload = new ObjectMapper().readValue(input, Upload.class);
+        final Upload upload = readObjectFromResource("/dataset/uploads/upload.json", Upload.class);
 
         assertThat(upload.toString(), matchesPattern(Upload.class.getSimpleName() + "\\[.*\\]"));
     }

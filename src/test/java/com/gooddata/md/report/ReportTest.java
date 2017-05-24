@@ -5,14 +5,14 @@
  */
 package com.gooddata.md.report;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -24,7 +24,7 @@ public class ReportTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final Report report = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/report/report.json"), Report.class);
+        final Report report = readObjectFromResource("/md/report/report.json", Report.class);
         assertThat(report, is(notNullValue()));
         assertThat(report.getDefinitions(), is(notNullValue()));
         assertThat(report.getDefinitions(), hasSize(1));
@@ -46,7 +46,7 @@ public class ReportTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final Report report = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/report/report.json"), Report.class);
+        final Report report = readObjectFromResource("/md/report/report.json", Report.class);
 
         assertThat(report.toString(), matchesPattern(Report.class.getSimpleName() + "\\[.*\\]"));
     }

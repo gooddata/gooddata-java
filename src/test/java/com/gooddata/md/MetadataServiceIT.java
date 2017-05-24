@@ -16,6 +16,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.*;
 
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.util.ResourceUtils.readFromResource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static com.gooddata.util.ResourceUtils.readStringFromResource;
@@ -47,9 +48,9 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
 
     @BeforeClass
     public void setUp() throws Exception {
-        project = MAPPER.readValue(readFromResource("/project/project.json"), Project.class);
-        metricInput = MAPPER.readValue(readFromResource("/md/metric-input.json"), Metric.class);
-        scheduledMailInput = MAPPER.readValue(readFromResource("/md/scheduledMail.json"), ScheduledMail.class);
+        project = readObjectFromResource("/project/project.json", Project.class);
+        metricInput = readObjectFromResource("/md/metric-input.json", Metric.class);
+        scheduledMailInput = readObjectFromResource("/md/scheduledMail.json", ScheduledMail.class);
     }
 
     @Test
@@ -64,7 +65,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(USEDBY_URI)
                 .respond()
                 .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(useMany));
+                .withBody(OBJECT_MAPPER.writeValueAsString(useMany));
 
         final Collection<Entry> result = gd.getMetadataService().usedBy(project, OBJ_URI, false, ReportDefinition.class);
 
@@ -86,7 +87,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(USEDBY_URI)
                 .respond()
                 .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(useMany));
+                .withBody(OBJECT_MAPPER.writeValueAsString(useMany));
 
         final Collection<Usage> result = gd.getMetadataService().usedBy(project, new HashSet<>(asList(OBJ_URI, OBJ_URI2)), false, ReportDefinition.class);
 
@@ -156,11 +157,11 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
     public void shouldUpdateObj() throws Exception {
         onRequest()
                 .havingMethodEqualTo("PUT")
-                .havingBodyEqualTo(MAPPER.writeValueAsString(metricInput))
+                .havingBodyEqualTo(OBJECT_MAPPER.writeValueAsString(metricInput))
                 .havingPathEqualTo(SPECIFIC_OBJ_URI)
             .respond()
                 .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(new UriResponse(SPECIFIC_OBJ_URI)));
+                .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse(SPECIFIC_OBJ_URI)));
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(SPECIFIC_OBJ_URI)

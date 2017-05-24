@@ -5,13 +5,13 @@
  */
 package com.gooddata.warehouse;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
@@ -47,8 +47,7 @@ public class WarehouseUserTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final WarehouseUser user = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/warehouse/user.json"), WarehouseUser.class);
+        final WarehouseUser user = readObjectFromResource("/warehouse/user.json", WarehouseUser.class);
 
         assertThat(user.getRole(), is(ROLE));
         assertThat(user.getProfile(), is(PROFILE));
@@ -65,8 +64,7 @@ public class WarehouseUserTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final WarehouseUser user =  new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/warehouse/user.json"), WarehouseUser.class);
+        final WarehouseUser user =  readObjectFromResource("/warehouse/user.json", WarehouseUser.class);
 
         assertThat(user.toString(), matchesPattern(WarehouseUser.class.getSimpleName() + "\\[.*\\]"));
     }

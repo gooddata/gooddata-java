@@ -5,21 +5,20 @@
  */
 package com.gooddata.md.report;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooddata.md.Attribute;
 import com.gooddata.md.DisplayForm;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -32,8 +31,7 @@ public class AttributeInGridTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream is = getClass().getResourceAsStream("/md/report/attributeInGrid.json");
-        final AttributeInGrid attr = new ObjectMapper().readValue(is, AttributeInGrid.class);
+        final AttributeInGrid attr = readObjectFromResource("/md/report/attributeInGrid.json", AttributeInGrid.class);
 
         assertThat(attr, is(notNullValue()));
         assertThat(attr.getUri(), is(URI));
@@ -85,8 +83,7 @@ public class AttributeInGridTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final InputStream is = getClass().getResourceAsStream("/md/report/attributeInGrid.json");
-        final AttributeInGrid attr = new ObjectMapper().readValue(is, AttributeInGrid.class);
+        final AttributeInGrid attr = readObjectFromResource("/md/report/attributeInGrid.json", AttributeInGrid.class);
 
         assertThat(attr.toString(), matchesPattern(AttributeInGrid.class.getSimpleName() + "\\[.*\\]"));
     }

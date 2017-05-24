@@ -5,17 +5,16 @@
  */
 package com.gooddata.warehouse;
 
+import org.testng.annotations.Test;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.testng.annotations.Test;
-
-import java.io.InputStream;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class WarehouseSchemaTest {
 
@@ -32,8 +31,7 @@ public class WarehouseSchemaTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/warehouse/schema.json");
-        final WarehouseSchema warehouseSchema = new ObjectMapper().readValue(stream, WarehouseSchema.class);
+        final WarehouseSchema warehouseSchema = readObjectFromResource("/warehouse/schema.json", WarehouseSchema.class);
 
         assertThat(warehouseSchema.getName(), is(NAME));
         assertThat(warehouseSchema.getDescription(), is(DESCRIPTION));
@@ -42,8 +40,7 @@ public class WarehouseSchemaTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/warehouse/schema.json");
-        final WarehouseSchema warehouseSchema = new ObjectMapper().readValue(stream, WarehouseSchema.class);
+        final WarehouseSchema warehouseSchema = readObjectFromResource("/warehouse/schema.json", WarehouseSchema.class);
 
         assertThat(warehouseSchema.toString(), matchesPattern(WarehouseSchema.class.getSimpleName() + "\\[.*\\]"));
     }

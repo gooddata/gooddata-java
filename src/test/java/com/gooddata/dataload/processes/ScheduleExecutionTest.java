@@ -6,19 +6,18 @@
 package com.gooddata.dataload.processes;
 
 
-import static com.gooddata.JsonMatchers.serializesToJson;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.core.Is.is;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
 import java.util.HashMap;
+
+import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.core.Is.is;
 
 public class ScheduleExecutionTest {
 
@@ -31,8 +30,7 @@ public class ScheduleExecutionTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/dataload/processes/scheduleExecution.json");
-        final ScheduleExecution scheduleExecution = new ObjectMapper().readValue(stream, ScheduleExecution.class);
+        final ScheduleExecution scheduleExecution = readObjectFromResource("/dataload/processes/scheduleExecution.json", ScheduleExecution.class);
 
         assertThat(scheduleExecution, notNullValue());
         assertThat(scheduleExecution.getLinks(), is(equalTo(new HashMap<String, String>() {{

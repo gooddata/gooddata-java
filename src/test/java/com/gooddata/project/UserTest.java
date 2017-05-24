@@ -5,11 +5,9 @@
  */
 package com.gooddata.project;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
-
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
@@ -20,8 +18,7 @@ public class UserTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/project/project-user.json");
-        final User user = new ObjectMapper().readValue(stream, User.class);
+        final User user = readObjectFromResource("/project/project-user.json", User.class);
 
         assertThat(user, notNullValue());
         assertThat(user.getEmail(), is("ateam+ads-testing@gooddata.com"));
@@ -35,8 +32,7 @@ public class UserTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/project/project-user.json");
-        final User user = new ObjectMapper().readValue(stream, User.class);
+        final User user = readObjectFromResource("/project/project-user.json", User.class);
 
         assertThat(user.toString(), matchesPattern(User.class.getSimpleName() + "\\[.*\\]"));
     }

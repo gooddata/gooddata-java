@@ -5,9 +5,9 @@
  */
 package com.gooddata.project;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -17,8 +17,7 @@ public class ProjectValidationResultTest {
 
     @Test
     public void testDeserialize() throws Exception {
-        final ProjectValidationResult log = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/project/project-validationResultLog.json"), ProjectValidationResult.class);
+        final ProjectValidationResult log = readObjectFromResource("/project/project-validationResultLog.json", ProjectValidationResult.class);
 
         assertThat(log.getCategory(), is("TRANSITIVITY"));
         assertThat(log.getLevel(), is("WARN"));
@@ -29,8 +28,7 @@ public class ProjectValidationResultTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final ProjectValidationResult log = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/project/project-validationResultLog.json"), ProjectValidationResult.class);
+        final ProjectValidationResult log = readObjectFromResource("/project/project-validationResultLog.json", ProjectValidationResult.class);
 
         assertThat(log.toString(), matchesPattern(ProjectValidationResult.class.getSimpleName() + "\\[.*\\]"));
     }

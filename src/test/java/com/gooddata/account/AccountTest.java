@@ -5,10 +5,10 @@
  */
 package com.gooddata.account;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,8 +23,7 @@ public class AccountTest {
     @SuppressWarnings("deprecation")
     @Test
     public void testDeserialize() throws Exception {
-        final Account account = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/account/account.json"), Account.class);
+        final Account account = readObjectFromResource("/account/account.json", Account.class);
         assertThat(account, is(notNullValue()));
 
         assertThat(account.getFirstName(), is(FIRST_NAME));

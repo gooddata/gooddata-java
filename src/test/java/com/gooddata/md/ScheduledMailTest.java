@@ -7,14 +7,16 @@ package com.gooddata.md;
 
 import com.gooddata.JsonMatchers;
 import com.gooddata.report.ReportExportFormat;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.hamcrest.CoreMatchers.*;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
@@ -40,7 +42,7 @@ public class ScheduledMailTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final ScheduledMail scheduledMail = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/scheduledMail.json"), ScheduledMail.class);
+        final ScheduledMail scheduledMail = readObjectFromResource("/md/scheduledMail.json", ScheduledMail.class);
         assertThat(scheduledMail, is(notNullValue()));
         assertThat(scheduledMail.getToAddresses(), hasItems("email@example.com"));
         assertThat(scheduledMail.getBccAddresses(), hasItems("secret-email@example.com"));
@@ -67,7 +69,7 @@ public class ScheduledMailTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final ScheduledMail scheduledMail = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/scheduledMail.json"), ScheduledMail.class);
+        final ScheduledMail scheduledMail = readObjectFromResource("/md/scheduledMail.json", ScheduledMail.class);
 
         assertThat(scheduledMail.toString(), matchesPattern(ScheduledMail.class.getSimpleName() + "\\[.*\\]"));
     }

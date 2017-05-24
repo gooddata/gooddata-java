@@ -5,7 +5,6 @@
  */
 package com.gooddata.project;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
@@ -16,6 +15,7 @@ import static com.gooddata.project.ProjectValidationType.PDM_ELEM;
 import static com.gooddata.project.ProjectValidationType.PDM_PK_FK_CONSISTENCY;
 import static com.gooddata.project.ProjectValidationType.PDM_TRANSITIVITY;
 import static com.gooddata.project.ProjectValidationType.PDM_VS_DWH;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
@@ -32,8 +32,7 @@ public class ProjectValidationsTest {
 
     @Test
     public void testDeserialize() throws Exception {
-        final ProjectValidations validations = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/project/project-validationAvail.json"), ProjectValidations.class);
+        final ProjectValidations validations = readObjectFromResource("/project/project-validationAvail.json", ProjectValidations.class);
 
         assertThat(validations, is(notNullValue()));
         assertThat(validations.getValidations(), hasItems(PDM_VS_DWH, METRIC_FILTER, PDM_TRANSITIVITY, LDM,

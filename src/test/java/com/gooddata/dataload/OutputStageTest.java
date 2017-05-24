@@ -5,19 +5,18 @@
  */
 package com.gooddata.dataload;
 
+import org.testng.annotations.Test;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.testng.annotations.Test;
-
-import java.io.InputStream;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class OutputStageTest {
 
@@ -36,8 +35,7 @@ public class OutputStageTest {
 
     @Test
     public void testDeserializationAllFields() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/dataload/outputStageAllFields.json");
-        final OutputStage outputStage = new ObjectMapper().readValue(stream, OutputStage.class);
+        final OutputStage outputStage = readObjectFromResource("/dataload/outputStageAllFields.json", OutputStage.class);
 
         assertThat(outputStage.getSchemaUri(), is(equalTo(SCHEMA_URI)));
         assertThat(outputStage.getClientId(), is(equalTo(CLIENT_ID)));
@@ -53,8 +51,7 @@ public class OutputStageTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/dataload/outputStage.json");
-        final OutputStage outputStage = new ObjectMapper().readValue(stream, OutputStage.class);
+        final OutputStage outputStage = readObjectFromResource("/dataload/outputStage.json", OutputStage.class);
 
         assertThat(outputStage.getSchemaUri(), is(nullValue()));
         assertThat(outputStage.getClientId(), is(nullValue()));
@@ -69,8 +66,7 @@ public class OutputStageTest {
 
     @Test
     public void testSerializationAfterDeserialization() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/dataload/outputStage.json");
-        final OutputStage outputStage = new ObjectMapper().readValue(stream, OutputStage.class);
+        final OutputStage outputStage = readObjectFromResource("/dataload/outputStage.json", OutputStage.class);
 
         outputStage.setSchemaUri(SCHEMA_URI);
         outputStage.setClientId(CLIENT_ID);
@@ -80,8 +76,7 @@ public class OutputStageTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/dataload/outputStage.json");
-        final OutputStage outputStage = new ObjectMapper().readValue(stream, OutputStage.class);
+        final OutputStage outputStage = readObjectFromResource("/dataload/outputStage.json", OutputStage.class);
 
         assertThat(outputStage.toString(), matchesPattern(OutputStage.class.getSimpleName() + "\\[.*\\]"));
     }

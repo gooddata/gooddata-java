@@ -5,7 +5,6 @@
  */
 package com.gooddata.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooddata.GoodData;
 import com.gooddata.GoodDataRestException;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +17,7 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -27,8 +27,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ResponseErrorHandlerTest {
-
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private ResponseErrorHandler responseErrorHandler;
 

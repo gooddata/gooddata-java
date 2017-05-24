@@ -13,7 +13,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static com.gooddata.model.ModelDiff.UpdateScript;
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -30,7 +32,7 @@ public class ModelServiceIT extends AbstractGoodDataIT {
 
     @BeforeClass
     public void setUp() throws Exception {
-        project = MAPPER.readValue(readFromResource("/project/project.json"), Project.class);
+        project = readObjectFromResource("/project/project.json", Project.class);
     }
 
     @Test
@@ -40,13 +42,13 @@ public class ModelServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(DIFF_URI)
             .respond()
                 .withStatus(202)
-                .withBody(MAPPER.writeValueAsString(new AsyncTask(DIFF_POLL_URI)));
+                .withBody(OBJECT_MAPPER.writeValueAsString(new AsyncTask(DIFF_POLL_URI)));
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(DIFF_POLL_URI)
             .respond()
                 .withStatus(202)
-                .withBody(MAPPER.writeValueAsString(new AsyncTask(DIFF_POLL_URI)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new AsyncTask(DIFF_POLL_URI)))
             .thenRespond()
                 .withStatus(200)
                 .withBody(readFromResource("/model/modelDiff.json"))
@@ -65,7 +67,7 @@ public class ModelServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(DIFF_URI)
             .respond()
                 .withStatus(202)
-                .withBody(MAPPER.writeValueAsString(new AsyncTask(DIFF_POLL_URI)));
+                .withBody(OBJECT_MAPPER.writeValueAsString(new AsyncTask(DIFF_POLL_URI)));
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(DIFF_POLL_URI)
@@ -89,10 +91,10 @@ public class ModelServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(STATUS_URI)
             .respond()
                 .withStatus(202)
-                .withBody(MAPPER.writeValueAsString(new TaskStatus("RUNNING", STATUS_URI)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new TaskStatus("RUNNING", STATUS_URI)))
             .thenRespond()
                 .withStatus(200)
-                .withBody(MAPPER.writeValueAsString(new TaskStatus("OK", STATUS_URI)))
+                .withBody(OBJECT_MAPPER.writeValueAsString(new TaskStatus("OK", STATUS_URI)))
         ;
 
         final ModelDiff diff = new ModelDiff(new UpdateScript(true, false,

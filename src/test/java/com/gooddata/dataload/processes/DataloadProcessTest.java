@@ -5,15 +5,15 @@
  */
 package com.gooddata.dataload.processes;
 
+import org.testng.annotations.Test;
+
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.testng.annotations.Test;
 
 public class DataloadProcessTest {
 
@@ -21,8 +21,7 @@ public class DataloadProcessTest {
     @SuppressWarnings("deprecation")
     @Test
     public void testDeserialization() throws Exception {
-        final DataloadProcess process = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/dataload/processes/process.json"), DataloadProcess.class);
+        final DataloadProcess process = readObjectFromResource("/dataload/processes/process.json", DataloadProcess.class);
 
         assertThat(process, is(notNullValue()));
         assertThat(process.getName(), is("testProcess"));

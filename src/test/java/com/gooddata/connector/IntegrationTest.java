@@ -5,10 +5,10 @@
  */
 package com.gooddata.connector;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -19,8 +19,7 @@ public class IntegrationTest {
 
     @Test
     public void shouldDeserialize() throws Exception {
-        final Integration integration = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/connector/integration.json"), Integration.class);
+        final Integration integration = readObjectFromResource("/connector/integration.json", Integration.class);
 
         assertThat(integration, is(notNullValue()));
         assertThat(integration.isActive(), is(true));

@@ -5,9 +5,9 @@
  */
 package com.gooddata.dataload.processes;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,8 +18,7 @@ public class DataloadProcessesTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final DataloadProcesses processes = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/dataload/processes/processes.json"), DataloadProcesses.class);
+        final DataloadProcesses processes = readObjectFromResource("/dataload/processes/processes.json", DataloadProcesses.class);
 
         assertThat(processes, is(notNullValue()));
         assertThat(processes.getItems(), hasSize(1));
@@ -27,8 +26,7 @@ public class DataloadProcessesTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final DataloadProcesses processes = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/dataload/processes/processes.json"), DataloadProcesses.class);
+        final DataloadProcesses processes = readObjectFromResource("/dataload/processes/processes.json", DataloadProcesses.class);
 
         assertThat(processes.toString(), matchesPattern(DataloadProcesses.class.getSimpleName() + "\\[.*\\]"));
     }

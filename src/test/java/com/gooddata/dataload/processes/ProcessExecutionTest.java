@@ -5,15 +5,15 @@
  */
 package com.gooddata.dataload.processes;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.text.MatchesPattern.matchesPattern;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class ProcessExecutionTest {
 
@@ -26,7 +26,7 @@ public class ProcessExecutionTest {
         hidden.put("HIDDEN_PARAM1", "SENSITIVE_VALUE1");
         hidden.put("HIDDEN_PARAM2", "SENSITIVE_VALUE2");
 
-        final DataloadProcess process = new ObjectMapper().readValue(getClass().getResourceAsStream("/dataload/processes/process.json"), DataloadProcess.class);
+        final DataloadProcess process = readObjectFromResource("/dataload/processes/process.json", DataloadProcess.class);
 
         final ProcessExecution execution = new ProcessExecution(process, "test.groovy", params, hidden);
         assertThat(execution, serializesToJson("/dataload/processes/execution.json"));
@@ -34,7 +34,7 @@ public class ProcessExecutionTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final DataloadProcess process = new ObjectMapper().readValue(getClass().getResourceAsStream("/dataload/processes/process.json"), DataloadProcess.class);
+        final DataloadProcess process = readObjectFromResource("/dataload/processes/process.json", DataloadProcess.class);
         final ProcessExecution execution = new ProcessExecution(process, "test.groovy");
 
         assertThat(execution.toString(), matchesPattern(ProcessExecution.class.getSimpleName() + "\\[.*\\]"));

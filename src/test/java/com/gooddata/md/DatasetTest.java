@@ -5,7 +5,12 @@
  */
 package com.gooddata.md;
 
+import org.testng.annotations.Test;
+
+import java.util.List;
+
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -13,19 +18,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.testng.annotations.Test;
-
-import java.io.InputStream;
-import java.util.List;
-
 public class DatasetTest {
 
     @SuppressWarnings("deprecation")
     @Test
     public void shouldDeserialize() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/dataset.json");
-        final Dataset dataset = new ObjectMapper().readValue(stream, Dataset.class);
+        final Dataset dataset = readObjectFromResource("/md/dataset.json", Dataset.class);
 
         assertThat(dataset, is(notNullValue()));
 

@@ -5,24 +5,21 @@
  */
 package com.gooddata.dataset;
 
+import org.hamcrest.Matchers;
+import org.testng.annotations.Test;
+
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.Matchers;
-import org.testng.annotations.Test;
-
-import java.io.InputStream;
-
 public class UploadsTest {
 
     @Test
     public void shouldDeserialize() throws Exception {
-        final InputStream input = getClass().getResourceAsStream("/dataset/uploads/uploads.json");
-        final Uploads uploads = new ObjectMapper().readValue(input, Uploads.class);
+        final Uploads uploads = readObjectFromResource("/dataset/uploads/uploads.json", Uploads.class);
 
         assertThat(uploads, notNullValue());
         assertThat(uploads.items(), not(Matchers.empty()));
@@ -31,8 +28,7 @@ public class UploadsTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final InputStream input = getClass().getResourceAsStream("/dataset/uploads/uploads.json");
-        final Uploads uploads = new ObjectMapper().readValue(input, Uploads.class);
+        final Uploads uploads = readObjectFromResource("/dataset/uploads/uploads.json", Uploads.class);
 
         assertThat(uploads.toString(), matchesPattern(Uploads.class.getSimpleName() + "\\[.*\\]"));
     }

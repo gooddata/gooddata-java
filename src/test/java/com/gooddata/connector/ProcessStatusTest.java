@@ -5,10 +5,10 @@
  */
 package com.gooddata.connector;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import static com.gooddata.connector.Status.Code.ERROR;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -17,8 +17,7 @@ public class ProcessStatusTest {
 
     @Test
     public void shouldDeserialize() throws Exception {
-        final ProcessStatus process = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/connector/process-status-error.json"), ProcessStatus.class);
+        final ProcessStatus process = readObjectFromResource("/connector/process-status-error.json", ProcessStatus.class);
 
         assertThat(process, is(notNullValue()));
         assertThat(process.getFinished(), is(notNullValue()));

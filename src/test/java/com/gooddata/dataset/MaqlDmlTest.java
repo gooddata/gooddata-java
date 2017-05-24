@@ -9,6 +9,7 @@ import org.apache.commons.io.IOUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -17,7 +18,7 @@ public class MaqlDmlTest {
     @Test
     public void testSerialization() throws Exception {
         final String json = IOUtils.toString(getClass().getResourceAsStream("/dataset/maqlDml.json"), "UTF-8");
-        assertThat(new ObjectMapper().writeValueAsString(new MaqlDml("maqlddl")),
+        assertThat(OBJECT_MAPPER.writeValueAsString(new MaqlDml("maqlddl")),
                 is(json));
     }
 }

@@ -5,33 +5,33 @@
  */
 package com.gooddata.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 
 public class TagsDeserializerTest {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
     @Test
     public void shouldDeserializeOneToken() throws Exception {
-        final TagsTestClass tags = MAPPER.readValue("{\"tags\":\"TAG\"}", TagsTestClass.class);
+        final TagsTestClass tags = OBJECT_MAPPER.readValue("{\"tags\":\"TAG\"}", TagsTestClass.class);
         assertThat(tags.getTags(), hasSize(1));
         assertThat(tags.getTags().iterator().next(), is("TAG"));
     }
 
     @Test
     public void shouldDeserializeTwoTokens() throws Exception {
-        final TagsTestClass tags = MAPPER.readValue("{\"tags\":\"TAG TAG2\"}", TagsTestClass.class);
+        final TagsTestClass tags = OBJECT_MAPPER.readValue("{\"tags\":\"TAG TAG2\"}", TagsTestClass.class);
         assertThat(tags.getTags(), hasSize(2));
         assertThat(tags.getTags(), hasItems("TAG", "TAG2"));
     }
 
     @Test
     public void shouldDeserializeMultipleWhitespaceSeparatedTokens() throws Exception {
-        final TagsTestClass tags = MAPPER.readValue("{\"tags\":\"TAG     TAG2\"}", TagsTestClass.class);
+        final TagsTestClass tags = OBJECT_MAPPER.readValue("{\"tags\":\"TAG     TAG2\"}", TagsTestClass.class);
         assertThat(tags.getTags(), hasSize(2));
         assertThat(tags.getTags(), hasItems("TAG", "TAG2"));
     }

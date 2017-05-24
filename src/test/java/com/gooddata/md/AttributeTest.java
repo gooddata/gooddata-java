@@ -5,18 +5,17 @@
  */
 package com.gooddata.md;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
 import java.util.Collection;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 
 public class AttributeTest {
 
@@ -25,8 +24,7 @@ public class AttributeTest {
     @SuppressWarnings("deprecation")
     @Test
     public void shouldDeserialize() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/attribute.json");
-        final Attribute attribute = new ObjectMapper().readValue(stream, Attribute.class);
+        final Attribute attribute = readObjectFromResource("/md/attribute.json", Attribute.class);
         assertThat(attribute, is(notNullValue()));
 
         final Collection<DisplayForm> displayForms = attribute.getDisplayForms();
@@ -86,15 +84,13 @@ public class AttributeTest {
 
     @Test
     public void shouldSerializeSameAsDeserializationInput() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/attribute.json");
-        final Attribute attribute = new ObjectMapper().readValue(stream, Attribute.class);
+        final Attribute attribute = readObjectFromResource("/md/attribute.json", Attribute.class);
         assertThat(attribute, serializesToJson("/md/attribute-inputOrig.json"));
     }
 
     @Test
     public void shouldDeserializeAttributeWithSort() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/attribute-sortDf.json");
-        final Attribute attribute = new ObjectMapper().readValue(stream, Attribute.class);
+        final Attribute attribute = readObjectFromResource("/md/attribute-sortDf.json", Attribute.class);
 
         assertThat(attribute.getSort(), is("/gdc/md/PROJECT_ID/obj/1806"));
         assertThat(attribute.isSortedByLinkedDf(), is(true));

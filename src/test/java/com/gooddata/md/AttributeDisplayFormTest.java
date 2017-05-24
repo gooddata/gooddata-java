@@ -5,12 +5,10 @@
  */
 package com.gooddata.md;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
-
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,8 +27,7 @@ public class AttributeDisplayFormTest {
     @SuppressWarnings("deprecation")
     @Test
     public void shouldDeserialize() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/attributeDisplayForm.json");
-        final AttributeDisplayForm attrDF = new ObjectMapper().readValue(stream, AttributeDisplayForm.class);
+        final AttributeDisplayForm attrDF = readObjectFromResource("/md/attributeDisplayForm.json", AttributeDisplayForm.class);
         assertThat(attrDF, is(notNullValue()));
 
         assertThat(attrDF.getFormOf(), is(FORM_OF));
@@ -52,8 +49,7 @@ public class AttributeDisplayFormTest {
 
     @Test
     public void shouldSerializeSameAsDeserializationInput() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/attributeDisplayForm.json");
-        final AttributeDisplayForm attrDF = new ObjectMapper().readValue(stream, AttributeDisplayForm.class);
+        final AttributeDisplayForm attrDF = readObjectFromResource("/md/attributeDisplayForm.json", AttributeDisplayForm.class);
         assertThat(attrDF, serializesToJson("/md/attributeDisplayForm-inputOrig.json"));
     }
 

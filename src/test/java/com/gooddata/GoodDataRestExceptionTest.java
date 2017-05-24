@@ -6,14 +6,12 @@
 package com.gooddata;
 
 import com.gooddata.gdc.GdcError;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
-
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GoodDataRestExceptionTest {
     @Test
@@ -69,8 +67,7 @@ public class GoodDataRestExceptionTest {
 
     @Test
     public void shouldCreateInstanceWithGdcError() throws Exception {
-        final InputStream inputStream = getClass().getResourceAsStream("/gdc/gdcError.json");
-        final GdcError err = new ObjectMapper().readValue(inputStream, GdcError.class);
+        final GdcError err = readObjectFromResource("/gdc/gdcError.json", GdcError.class);
 
         final GoodDataRestException e = new GoodDataRestException(500, "a123", "message", err);
         assertThat(e.getMessage(), is("500: [requestId=REQ] MSG"));

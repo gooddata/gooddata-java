@@ -5,12 +5,11 @@
  */
 package com.gooddata.dataset;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.io.InputStream;
 
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
@@ -19,16 +18,14 @@ public class TaskStateTest {
 
     @Test
     public void testDeserialize() throws IOException {
-        final InputStream stream = getClass().getResourceAsStream("/dataset/taskStateOK.json");
-        TaskState taskState = new ObjectMapper().readValue(stream, TaskState.class);
+        TaskState taskState = readObjectFromResource("/dataset/taskStateOK.json", TaskState.class);
         assertThat(taskState.getStatus(), is("OK"));
         assertThat(taskState.getMessage(), is("ok message"));
     }
 
     @Test
     public void testToStringFormat() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/dataset/taskStateOK.json");
-        TaskState taskState = new ObjectMapper().readValue(stream, TaskState.class);
+        TaskState taskState = readObjectFromResource("/dataset/taskStateOK.json", TaskState.class);
 
         assertThat(taskState.toString(), matchesPattern(TaskState.class.getSimpleName() + "\\[.*\\]"));
     }

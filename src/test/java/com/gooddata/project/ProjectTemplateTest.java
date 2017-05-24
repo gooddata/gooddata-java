@@ -5,9 +5,9 @@
  */
 package com.gooddata.project;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,8 +17,7 @@ public class ProjectTemplateTest {
 
     @Test
     public void shouldDeserialize() throws Exception {
-        final ProjectTemplate template = new ObjectMapper()
-                .readValue(getClass().getResource("/project/project-template.json"), ProjectTemplate.class);
+        final ProjectTemplate template = readObjectFromResource("/project/project-template.json", ProjectTemplate.class);
 
         assertThat(template, is(notNullValue()));
         assertThat(template.getUrl(), is("/projectTemplates/ZendeskAnalytics/11"));
@@ -28,8 +27,7 @@ public class ProjectTemplateTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final ProjectTemplate template = new ObjectMapper()
-                .readValue(getClass().getResource("/project/project-template.json"), ProjectTemplate.class);
+        final ProjectTemplate template = readObjectFromResource("/project/project-template.json", ProjectTemplate.class);
 
         assertThat(template.toString(), matchesPattern(ProjectTemplate.class.getSimpleName() + "\\[.*\\]"));
     }

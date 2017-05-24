@@ -5,7 +5,6 @@
  */
 package com.gooddata.md.report;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
 import org.testng.annotations.Test;
 
@@ -16,19 +15,20 @@ import java.util.Map;
 
 import static com.gooddata.JsonMatchers.serializesToJson;
 import static com.gooddata.md.report.MetricGroup.METRIC_GROUP;
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class GridTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final Grid grid = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/md/report/grid.json"), Grid.class);
+        final Grid grid = readObjectFromResource("/md/report/grid.json", Grid.class);
         assertThat(grid, is(notNullValue()));
 
         assertThat(grid.getColumns(), is(notNullValue()));
@@ -63,15 +63,14 @@ public class GridTest {
                 asList(new AttributeInGrid("/gdc/md/PROJECT_ID/obj/ATTR_ID", "attr")),
                 asList(new MetricElement("/gdc/md/PROJECT_ID/obj/METR_ID", "metr")), sort, asList(colWidths));
 
-        new ObjectMapper().writeValueAsString(grid);
+        OBJECT_MAPPER.writeValueAsString(grid);
         assertThat(grid, serializesToJson("/md/report/grid-input.json"));
     }
 
 
     @Test
     public void testToStringFormat() throws Exception {
-        final Grid grid = new ObjectMapper()
-                .readValue(getClass().getResourceAsStream("/md/report/grid.json"), Grid.class);
+        final Grid grid = readObjectFromResource("/md/report/grid.json", Grid.class);
 
         assertThat(grid.toString(), matchesPattern(Grid.class.getSimpleName() + "\\[.*\\]"));
     }

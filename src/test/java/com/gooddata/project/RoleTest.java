@@ -5,12 +5,11 @@
  */
 package com.gooddata.project;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.io.InputStream;
 
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
@@ -44,7 +43,6 @@ public class RoleTest {
     }
 
     private Role readRole(final String suffix) throws java.io.IOException {
-        final InputStream stream = getClass().getResourceAsStream("/project/project-role" + suffix + ".json");
-        return new ObjectMapper().readValue(stream, Role.class);
+        return readObjectFromResource("/project/project-role" + suffix + ".json", Role.class);
     }
 }

@@ -5,24 +5,25 @@
  */
 package com.gooddata.md;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.text.MatchesPattern.matchesPattern;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
 import java.util.Collection;
+
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class NestedAttributeTest {
 
     @SuppressWarnings("deprecation")
     @Test
     public void testDeserialization() throws Exception {
-        final NestedAttribute attribute = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/dimensionAttribute.json"), NestedAttribute.class);
+        final NestedAttribute attribute = readObjectFromResource("/md/dimensionAttribute.json", NestedAttribute.class);
         assertThat(attribute, is(notNullValue()));
 
         final Collection<DisplayForm> displayForms = attribute.getDisplayForms();
@@ -60,7 +61,7 @@ public class NestedAttributeTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final NestedAttribute attribute = new ObjectMapper().readValue(getClass().getResourceAsStream("/md/dimensionAttribute.json"), NestedAttribute.class);
+        final NestedAttribute attribute = readObjectFromResource("/md/dimensionAttribute.json", NestedAttribute.class);
 
         assertThat(attribute.toString(), matchesPattern(NestedAttribute.class.getSimpleName() + "\\[.*\\]"));
     }

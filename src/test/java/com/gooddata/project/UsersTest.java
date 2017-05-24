@@ -5,11 +5,9 @@
  */
 package com.gooddata.project;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
-
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
@@ -21,8 +19,7 @@ public class UsersTest {
 
     @Test
     public void testDeserialization() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/project/project-users.json");
-        final Users users = new ObjectMapper().readValue(stream, Users.class);
+        final Users users = readObjectFromResource("/project/project-users.json", Users.class);
 
         assertThat(users, notNullValue());
         assertThat(users, hasSize(1));

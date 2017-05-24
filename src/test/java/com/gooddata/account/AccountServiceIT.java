@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 
 import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
@@ -33,8 +34,8 @@ public class AccountServiceIT extends AbstractGoodDataIT {
 
     @BeforeClass
     public void init() throws IOException {
-        account = MAPPER.readValue(readFromResource(ACCOUNT), Account.class);
-        createAccount = MAPPER.readValue(readFromResource(CREATE_ACCOUNT), Account.class);
+        account = readObjectFromResource(ACCOUNT, Account.class);
+        createAccount = readObjectFromResource(CREATE_ACCOUNT, Account.class);
     }
 
     @Test

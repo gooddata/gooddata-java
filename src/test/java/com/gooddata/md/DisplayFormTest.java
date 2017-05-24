@@ -5,12 +5,10 @@
  */
 package com.gooddata.md;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.annotations.Test;
 
-import java.io.InputStream;
-
 import static com.gooddata.JsonMatchers.serializesToJson;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -27,8 +25,7 @@ public class DisplayFormTest {
     @SuppressWarnings("deprecation")
     @Test
     public void shouldDeserialize() throws Exception {
-        final InputStream stream = getClass().getResourceAsStream("/md/displayForm.json");
-        final DisplayForm displayForm = new ObjectMapper().readValue(stream, DisplayForm.class);
+        final DisplayForm displayForm = readObjectFromResource("/md/displayForm.json", DisplayForm.class);
         assertThat(displayForm, is(notNullValue()));
 
         assertThat(displayForm.getFormOf(), is(FORM_OF));
