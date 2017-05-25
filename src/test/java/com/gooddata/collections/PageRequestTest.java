@@ -76,4 +76,16 @@ public class PageRequestTest {
         pageRequest.setLimit(-2);
         assertThat(pageRequest.getSanitizedLimit(), is(DEFAULT_LIMIT));
     }
+
+    @Test
+    public void shouldReturnDefaultForZero() throws Exception {
+        final PageRequest pageRequest = new PageRequest(0);
+        assertThat(pageRequest.getSanitizedLimit(), is(DEFAULT_LIMIT));
+    }
+
+    @Test
+    public void shouldReturnMaxForSanitizedLimit() throws Exception {
+        final PageRequest pageRequest = new PageRequest(100);
+        assertThat(pageRequest.getSanitizedLimit(10), is(10));
+    }
 }
