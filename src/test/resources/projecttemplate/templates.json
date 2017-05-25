@@ -1,0 +1,47 @@
+{
+  "projectTemplates": [
+    {
+      "projectTemplate" : {
+        "link" : "/projectTemplates/ZendeskAnalytics/20",
+        "urn" : "urn:gooddata:ZendeskAnalytics",
+        "version" : "20",
+        "content" : {
+          "MDDefinition" : "/projectTemplates/ZendeskAnalytics/20/ZendeskAnalytics.json",
+          "DWDefinition" : "/projectTemplates/ZendeskAnalytics/20/ZendeskAnalytics.sql",
+          "manifests" : [
+            "/projectTemplates/ZendeskAnalytics/20/dataset.zendesktickets.json",
+            "/projectTemplates/ZendeskAnalytics/20/dataset.zendesktags.json",
+            "/projectTemplates/ZendeskAnalytics/20/dataset.timeline.json",
+            "/projectTemplates/ZendeskAnalytics/20/dataset.organization.json",
+            "/projectTemplates/ZendeskAnalytics/20/dataset.requester.json",
+            "/projectTemplates/ZendeskAnalytics/20/dataset.organizationtags.json",
+            "/projectTemplates/ZendeskAnalytics/20/dataset.requestertags.json",
+            "/projectTemplates/ZendeskAnalytics/20/dataset.nps.json",
+            "/projectTemplates/ZendeskAnalytics/20/dataset.zendeskticketsbacklog.json",
+            "/projectTemplates/ZendeskAnalytics/20/dataset.eventhourofday.json",
+            "/projectTemplates/ZendeskAnalytics/20/dataset.ticketattributeshistory.json",
+            "/projectTemplates/ZendeskAnalytics/20/dataset.ticketfactshistory.json",
+            "/projectTemplates/ZendeskAnalytics/20/dataset.tickethistory.json",
+            "/projectTemplates/ZendeskAnalytics/20/dataset.ticketupdate.json",
+            "/projectTemplates/ZendeskAnalytics/20/dataset.userfilter.json",
+            "/projectTemplates/ZendeskAnalytics/20/dataset.satisfactionhistory.json",
+            "/projectTemplates/ZendeskAnalytics/20/dataset.ticketslas.json",
+            "/projectTemplates/ZendeskAnalytics/20/dataset.calls.json"
+          ],
+          "config" : "/projectTemplates/ZendeskAnalytics/20/config.json"
+        },
+        "hidden" : "1",
+        "meta" : {
+          "summary" : "Zendesk Analytics Template",
+          "apiVersion" : "1.1",
+          "title" : "Zendesk Analytics Template",
+          "category" : "projectTemplate",
+          "author" : {
+            "name" : "GoodData",
+            "uri" : "http://www.gooddata.com/"
+          }
+        }
+      }
+    }
+  ]
+}

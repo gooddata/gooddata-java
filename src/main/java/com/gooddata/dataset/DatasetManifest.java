@@ -1,5 +1,5 @@
-/**
- * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+/*
+ * Copyright (C) 2004-2017, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -143,7 +143,7 @@ public class DatasetManifest {
         private Map<String, String> constraints;
 
         @JsonCreator
-        Part(@JsonProperty("mode") String uploadMode,
+        public Part(@JsonProperty("mode") String uploadMode,
              @JsonProperty("columnName") String columnName,
              @JsonProperty("populates") List<String> populates,
              @JsonProperty("referenceKey") @JsonDeserialize(using = BooleanDeserializer.class) Boolean referenceKey,

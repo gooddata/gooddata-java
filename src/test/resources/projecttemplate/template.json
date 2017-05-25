@@ -1,0 +1,26 @@
+{
+  "projectTemplate" : {
+    "link" : "/projectTemplates/ZendeskAnalytics/20",
+    "urn" : "urn:gooddata:ZendeskAnalytics",
+    "version" : "20",
+    "content" : {
+      "MDDefinition" : "/projectTemplates/ZendeskAnalytics/20/ZendeskAnalytics.json",
+      "DWDefinition" : "/projectTemplates/ZendeskAnalytics/20/ZendeskAnalytics.sql",
+      "manifests" : [
+        "/projectTemplates/ZendeskAnalytics/20/dataset.zendesktickets.json"
+      ],
+      "config" : "/projectTemplates/ZendeskAnalytics/20/config.json"
+    },
+    "hidden" : "1",
+    "meta" : {
+      "summary" : "Zendesk Analytics Template",
+      "apiVersion" : "1.1",
+      "title" : "Zendesk Analytics Template",
+      "category" : "projectTemplate",
+      "author" : {
+        "name" : "GoodData",
+        "uri" : "http://www.gooddata.com/"
+      }
+    }
+  }
+}

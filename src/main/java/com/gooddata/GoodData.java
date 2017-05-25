@@ -1,5 +1,5 @@
-/**
- * Copyright (C) 2004-2016, GoodData(R) Corporation. All rights reserved.
+/*
+ * Copyright (C) 2004-2017, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -12,6 +12,7 @@ import com.gooddata.dataload.processes.ProcessService;
 import com.gooddata.featureflag.FeatureFlagService;
 import com.gooddata.md.maintenance.ExportImportService;
 import com.gooddata.notification.NotificationService;
+import com.gooddata.projecttemplate.ProjectTemplateService;
 import com.gooddata.util.ResponseErrorHandler;
 import com.gooddata.authentication.LoginPasswordAuthentication;
 import com.gooddata.warehouse.WarehouseService;
@@ -81,6 +82,7 @@ public class GoodData {
     private final ExportImportService exportImportService;
     private final FeatureFlagService featureFlagService;
     private final OutputStageService outputStageService;
+    private final ProjectTemplateService projectTemplateService;
 
     /**
      * Create instance configured to communicate with GoodData Platform under user with given credentials.
@@ -211,8 +213,9 @@ public class GoodData {
         connectorService = new ConnectorService(getRestTemplate(), projectService);
         notificationService = new NotificationService(getRestTemplate());
         exportImportService = new ExportImportService(getRestTemplate());
-        featureFlagService = new FeatureFlagService(restTemplate);
-        outputStageService = new OutputStageService(restTemplate);
+        featureFlagService = new FeatureFlagService(getRestTemplate());
+        outputStageService = new OutputStageService(getRestTemplate());
+        projectTemplateService = new ProjectTemplateService(getRestTemplate());
     }
 
     static RestTemplate createRestTemplate(GoodDataEndpoint endpoint, HttpClient httpClient) {
@@ -447,5 +450,15 @@ public class GoodData {
     @Bean
     public OutputStageService getOutputStageService() {
         return outputStageService;
+    }
+
+    /**
+     * Get initialized service for project templates
+     *
+     * @return initialized service for project templates
+     */
+    @Bean
+    public ProjectTemplateService getProjectTemplateService() {
+        return projectTemplateService;
     }
 }
