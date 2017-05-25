@@ -26,8 +26,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -40,7 +38,6 @@ import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 import static org.springframework.util.StringUtils.isEmpty;
 
 /**
@@ -142,17 +139,17 @@ public class DatasetService extends AbstractService {
         validateUploadManifests(datasets);
         final List<String> datasetsNames = new ArrayList<>(datasets.size());
         try {
-            final Path dirPath = Paths.get("/", project.getId() + "_" + RandomStringUtils.randomAlphabetic(3), "/");
+            final String dirPath = "/" + project.getId() + "_" + RandomStringUtils.randomAlphabetic(3) + "/";
             for (DatasetManifest datasetManifest : datasets) {
                 datasetsNames.add(datasetManifest.getDataSet());
-                dataStoreService.upload(dirPath.resolve(datasetManifest.getFile()).toString(), datasetManifest.getSource());
+                dataStoreService.upload(dirPath + datasetManifest.getFile(), datasetManifest.getSource());
             }
 
             final String manifestJson = mapper.writeValueAsString(new DatasetManifests(datasets));
             final ByteArrayInputStream inputStream = new ByteArrayInputStream(manifestJson.getBytes(UTF_8));
-            dataStoreService.upload(dirPath.resolve(MANIFEST_FILE_NAME).toString(), inputStream);
+            dataStoreService.upload(dirPath + MANIFEST_FILE_NAME, inputStream);
 
-            return pullLoad(project, dirPath.toString(), datasetsNames);
+            return pullLoad(project, dirPath, datasetsNames);
         } catch (IOException e) {
             throw new DatasetException("Unable to serialize manifest", datasetsNames, e);
         } catch (DataStoreException | GoodDataRestException | RestClientException e) {
