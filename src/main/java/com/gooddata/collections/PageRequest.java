@@ -70,8 +70,22 @@ public class PageRequest implements Page {
         return limit;
     }
 
+    /**
+     * Return the limit value or the {@link #DEFAULT_LIMIT} if the limit is lower than or equal to zero
+     * @return sanitized limit
+     */
     public int getSanitizedLimit() {
         return limit > 0 ? limit : DEFAULT_LIMIT;
+    }
+
+    /**
+     * Return the {@link #getSanitizedLimit()} if lower than the given maximum or the maximum value
+     * @param max maximum value
+     * @return sanitized limit
+     */
+    public int getSanitizedLimit(final int max) {
+        final int limit = getSanitizedLimit();
+        return limit < max ? limit : max;
     }
 
     public void setLimit(final int limit) {
