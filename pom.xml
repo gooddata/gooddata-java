@@ -177,6 +177,9 @@
                     <includes>
                         <include>src/**/*.java</include>
                     </includes>
+                    <mapping>
+                        <java>SLASHSTAR_STYLE</java>
+                    </mapping>
                 </configuration>
                 <executions>
                     <execution>
