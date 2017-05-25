@@ -128,7 +128,9 @@ public class DatasetServiceTest {
     public void testLoadDatasetWhenUploadFails() throws Exception {
         doThrow(DataStoreException.class).when(dataStoreService).upload(anyString(), eq(stream));
         when(manifest.getFile()).thenReturn("");
-        service.loadDataset(project, manifest, stream);
+        when(manifest.getSource()).thenReturn(stream);
+        when(manifest.getDataSet()).thenReturn(DATASET_ID);
+        service.loadDatasets(project, manifest);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)

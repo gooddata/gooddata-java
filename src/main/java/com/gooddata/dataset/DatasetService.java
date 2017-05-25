@@ -8,11 +8,14 @@ package com.gooddata.dataset;
 import com.gooddata.AbstractPollHandler;
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
-import com.gooddata.PollResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.gdc.*;
+import com.gooddata.PollResult;
 import com.gooddata.gdc.AboutLinks.Link;
+import com.gooddata.gdc.DataStoreException;
+import com.gooddata.gdc.DataStoreService;
+import com.gooddata.gdc.TaskStatus;
+import com.gooddata.gdc.UriResponse;
 import com.gooddata.project.Project;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.client.ClientHttpResponse;
@@ -23,9 +26,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.gooddata.util.Validate.notEmpty;
@@ -34,7 +38,6 @@ import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 import static org.springframework.util.StringUtils.isEmpty;
 
 /**
@@ -94,19 +97,9 @@ public class DatasetService extends AbstractService {
         notNull(project, "project");
         notNull(dataset, "dataset");
         notNull(manifest, "manifest");
-        final Path dirPath = Paths.get("/", project.getId() + "_" + RandomStringUtils.randomAlphabetic(3), "/");
-        try {
-            dataStoreService.upload(dirPath.resolve(manifest.getFile()).toString(), dataset);
-            final String manifestJson = mapper.writeValueAsString(manifest);
-            final ByteArrayInputStream inputStream = new ByteArrayInputStream(manifestJson.getBytes(UTF_8));
-            dataStoreService.upload(dirPath.resolve(MANIFEST_FILE_NAME).toString(), inputStream);
+        manifest.setSource(dataset);
 
-            return pullLoad(project, dirPath, manifest.getDataSet());
-        } catch (IOException e) {
-            throw new DatasetException("Unable to serialize manifest", manifest.getDataSet(), e);
-        } catch (DataStoreException | GoodDataRestException | RestClientException e) {
-            throw new DatasetException("Unable to load", manifest.getDataSet(), e);
-        }
+        return loadDatasets(project, manifest);
     }
 
     /**
@@ -146,15 +139,15 @@ public class DatasetService extends AbstractService {
         validateUploadManifests(datasets);
         final List<String> datasetsNames = new ArrayList<>(datasets.size());
         try {
-            final Path dirPath = Paths.get("/", project.getId() + "_" + RandomStringUtils.randomAlphabetic(3), "/");
+            final String dirPath = "/" + project.getId() + "_" + RandomStringUtils.randomAlphabetic(3) + "/";
             for (DatasetManifest datasetManifest : datasets) {
                 datasetsNames.add(datasetManifest.getDataSet());
-                dataStoreService.upload(dirPath.resolve(datasetManifest.getFile()).toString(), datasetManifest.getSource());
+                dataStoreService.upload(dirPath + datasetManifest.getFile(), datasetManifest.getSource());
             }
 
             final String manifestJson = mapper.writeValueAsString(new DatasetManifests(datasets));
             final ByteArrayInputStream inputStream = new ByteArrayInputStream(manifestJson.getBytes(UTF_8));
-            dataStoreService.upload(dirPath.resolve(MANIFEST_FILE_NAME).toString(), inputStream);
+            dataStoreService.upload(dirPath + MANIFEST_FILE_NAME, inputStream);
 
             return pullLoad(project, dirPath, datasetsNames);
         } catch (IOException e) {
@@ -179,13 +172,9 @@ public class DatasetService extends AbstractService {
         }
     }
 
-    private FutureResult<Void> pullLoad(Project project, final Path dirPath, final String dataset) {
-        return pullLoad(project, dirPath, singletonList(dataset));
-    }
-
-    private FutureResult<Void> pullLoad(Project project, final Path dirPath, final Collection<String> datasets) {
+    private FutureResult<Void> pullLoad(Project project, final String dirPath, final Collection<String> datasets) {
         final PullTask pullTask = restTemplate
-                .postForObject(Pull.URI, new Pull(dirPath.toString()), PullTask.class, project.getId());
+                .postForObject(Pull.URI, new Pull(dirPath), PullTask.class, project.getId());
 
         return new PollResult<>(this, new AbstractPollHandler<TaskStatus, Void>(pullTask.getPollUri(), TaskStatus.class, Void.class) {
             @Override
@@ -207,7 +196,7 @@ public class DatasetService extends AbstractService {
             @Override
             protected void onFinish() {
                 try {
-                    dataStoreService.delete(dirPath.toString());
+                    dataStoreService.delete(dirPath);
                 } catch (DataStoreException ignored) {
                     // todo log?
                 }
