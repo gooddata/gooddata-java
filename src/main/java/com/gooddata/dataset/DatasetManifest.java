@@ -143,7 +143,7 @@ public class DatasetManifest {
         private Map<String, String> constraints;
 
         @JsonCreator
-        Part(@JsonProperty("mode") String uploadMode,
+        public Part(@JsonProperty("mode") String uploadMode,
              @JsonProperty("columnName") String columnName,
              @JsonProperty("populates") List<String> populates,
              @JsonProperty("referenceKey") @JsonDeserialize(using = BooleanDeserializer.class) Boolean referenceKey,
