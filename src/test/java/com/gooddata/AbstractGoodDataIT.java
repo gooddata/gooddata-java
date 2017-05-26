@@ -23,8 +23,12 @@ public abstract class AbstractGoodDataIT {
         gd = new GoodData(
                 new GoodDataEndpoint("localhost", port(), "http"),
                 new LoginPasswordAuthentication("sdk@gooddata.com", "sdk"),
-                new GoodDataSettings()
+                createGoodDataSettings()
         );
+    }
+
+    protected GoodDataSettings createGoodDataSettings() {
+        return new GoodDataSettings();
     }
 
     @AfterMethod
