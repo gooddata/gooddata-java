@@ -224,7 +224,7 @@ public class ConnectorService extends AbstractService {
         return createProcessPollResult(process.getUri());
     }
 
-    private FutureResult<ProcessStatus> createProcessPollResult(final String uri) {
+    protected FutureResult<ProcessStatus> createProcessPollResult(final String uri) {
         final Map<String, String> match = IntegrationProcessStatus.TEMPLATE.match(uri);
         final String connectorType = match.get("connector");
         final String processId = match.get("process");
