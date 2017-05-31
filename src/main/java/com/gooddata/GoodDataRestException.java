@@ -6,6 +6,7 @@
 package com.gooddata;
 
 import com.gooddata.gdc.ErrorStructure;
+import com.gooddata.gdc.GdcError;
 
 /**
  * Signals client or server error during communication with GoodData REST API.
@@ -75,6 +76,19 @@ public class GoodDataRestException extends GoodDataException {
                 error != null ? error.getComponent() : null,
                 error != null ? error.getErrorClass() : null,
                 error != null ? error.getErrorCode() : null);
+    }
+
+    /**
+     * Construct a GoodDataRestException with specified details.
+     * Constructor is for binary compatibility with pre 2.4.1 version.
+     *
+     * @param statusCode the HTTP status code of the response
+     * @param requestId  the GoodData request ID (from header)
+     * @param statusText the HTTP status text of the response
+     * @param error      the GoodData REST API error structure
+     */
+    public GoodDataRestException(int statusCode, String requestId, String statusText, GdcError error) {
+        this(statusCode, requestId, statusText, (ErrorStructure)error);
     }
 
     /**
