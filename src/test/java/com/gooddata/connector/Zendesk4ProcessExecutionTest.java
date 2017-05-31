@@ -36,7 +36,7 @@ public class Zendesk4ProcessExecutionTest {
         execution.setIncremental(true);
         execution.setStartTime("tickets", new DateTime(0L));
         assertThat(execution, JsonMatchers.serializesToJson(
-                "/connector/process-execution-startDate.json"));
+                "/connector/process-execution-zendesk4-startDate.json"));
     }
 
     @Test
@@ -44,7 +44,7 @@ public class Zendesk4ProcessExecutionTest {
         final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
         execution.setDownloadParams(new DownloadParams(true, 5, 3600));
         assertThat(execution, JsonMatchers.serializesToJson(
-                "/connector/process-execution-download.json"));
+                "/connector/process-execution-zendesk4-download.json"));
     }
 
     @Test
