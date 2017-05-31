@@ -157,6 +157,15 @@ public class ConnectorService extends AbstractService {
     }
 
     /**
+     * Gets settings for pardot connector.
+     * @param project project
+     * @return settings for pardot connector
+     */
+    public PardotSettings getPardotSettings(Project project) {
+        return getSettings(project, ConnectorType.PARDOT, PardotSettings.class);
+    }
+
+    /**
      * Creates Coupa connector instance.
      *
      * @param project project

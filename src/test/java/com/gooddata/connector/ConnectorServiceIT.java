@@ -300,4 +300,16 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
 
         connectors.findCoupaInstances(project);
     }
+
+    @Test
+    public void shouldGetPardotSettings() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/pardot/integration/config/settings")
+             .respond()
+                .withBody(readFromResource("/connector/settings-pardot.json"));
+
+        final PardotSettings pardotSettings = connectors.getPardotSettings(project);
+        assertThat(pardotSettings, serializesToJson("/connector/settings-pardot.json"));
+    }
 }

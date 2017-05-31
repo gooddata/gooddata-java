@@ -11,7 +11,8 @@ package com.gooddata.connector;
 public enum ConnectorType {
 
     ZENDESK4(Zendesk4Settings.URL),
-    COUPA(CoupaSettings.URL);
+    COUPA(CoupaSettings.URL),
+    PARDOT(PardotSettings.URL);
 
     //URL of the settings endpoint (which is not equal for individual connector types)
     private final String settingsUrl;
