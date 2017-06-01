@@ -26,6 +26,7 @@ import java.util.Map;
 
 import static com.gooddata.util.Validate.notNull;
 import static java.lang.String.format;
+import static java.util.Collections.emptyList;
 
 /**
  * Service for connector integration creation, update of its settings or execution of its process.
@@ -147,6 +148,67 @@ public class ConnectorService extends AbstractService {
     }
 
     /**
+     * Gets settings for coupa connector.
+     * @param project project
+     * @return settings for coupa connector
+     */
+    public CoupaSettings getCoupaSettings(Project project) {
+        return getSettings(project, ConnectorType.COUPA, CoupaSettings.class);
+    }
+
+    /**
+     * Gets settings for pardot connector.
+     * @param project project
+     * @return settings for pardot connector
+     */
+    public PardotSettings getPardotSettings(Project project) {
+        return getSettings(project, ConnectorType.PARDOT, PardotSettings.class);
+    }
+
+    /**
+     * Creates Coupa connector instance.
+     *
+     * @param project project
+     * @param instance instance with it's API URL, API key and name
+     * @return created Coupa instance
+     */
+    public CoupaInstance createCoupaInstance(Project project, CoupaInstance instance) {
+        notNull(project, "project");
+        notNull(instance, "instance");
+
+        try {
+            return restTemplate.postForObject(CoupaInstances.URL, instance, CoupaInstance.class, project.getId());
+        } catch (GoodDataRestException | RestClientException e) {
+            throw new ConnectorException("Unable to create Coupa instance with API URL '" + instance.getApiUrl() +
+                    "'", e);
+        }
+    }
+
+    /**
+     * Returns collection of all existing Coupa instances
+     *
+     * @param project project
+     * @return collection of Coupa instances or empty collection if no Coupa instances are defined
+     */
+    public Collection<CoupaInstance> findCoupaInstances(Project project) {
+        try {
+            final CoupaInstances instances =
+                    restTemplate.getForObject(CoupaInstances.URL, CoupaInstances.class, project.getId());
+
+            if (instances == null) {
+                throw new ConnectorException("Empty response from API call.");
+            }
+            if (instances.getItems() == null) {
+                return emptyList();
+            }
+
+            return instances.getItems();
+        } catch (GoodDataRestException | RestClientException e) {
+            throw new ConnectorException("Unable to get Coupa instances.", e);
+        }
+    }
+
+    /**
      * Get settings for given connector of given class.
      *
      * @param project project
@@ -161,7 +223,7 @@ public class ConnectorService extends AbstractService {
         notNull(settingsClass, "settingsClass");
 
         try {
-            return restTemplate.getForObject(Settings.URL, settingsClass, project.getId(), connectorType.getName());
+            return restTemplate.getForObject(connectorType.getSettingsUrl(), settingsClass, project.getId());
         } catch (GoodDataRestException | RestClientException e) {
             throw new ConnectorException("Unable to get " + connectorType + " integration settings", e);
         }
@@ -179,7 +241,7 @@ public class ConnectorService extends AbstractService {
         notNull(project, "project");
 
         try {
-            restTemplate.put(Settings.URL, settings, project.getId(), settings.getConnectorType().getName());
+            restTemplate.put(settings.getConnectorType().getSettingsUrl(), settings, project.getId());
         } catch (GoodDataRestException | RestClientException e) {
             throw new ConnectorException("Unable to set " + settings.getConnectorType() + " settings", e);
         }

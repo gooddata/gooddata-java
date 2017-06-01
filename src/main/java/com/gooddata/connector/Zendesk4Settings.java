@@ -17,6 +17,8 @@ import static com.gooddata.connector.ConnectorType.ZENDESK4;
  */
 public class Zendesk4Settings implements Settings {
 
+    public static final String URL = "/gdc/projects/{project}/connectors/zendesk4/integration/settings";
+
     private String apiUrl;
     private final String type;
     private final String syncTime;

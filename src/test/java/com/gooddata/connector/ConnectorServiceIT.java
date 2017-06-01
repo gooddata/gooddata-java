@@ -9,6 +9,7 @@ import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.project.Project;
+import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -18,9 +19,13 @@ import static com.gooddata.connector.Status.Code.SYNCHRONIZED;
 import static com.gooddata.util.ResourceUtils.*;
 import static java.util.Collections.singletonMap;
 import static net.jadler.Jadler.onRequest;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyCollectionOf;
+
+import java.util.Collection;
 
 public class ConnectorServiceIT extends AbstractGoodDataIT {
     private Project project;
@@ -193,9 +198,10 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldGetSettings() throws Exception {
+    public void shouldGetZendesk4Settings() throws Exception {
         onRequest()
                 .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/settings")
             .respond()
                 .withBody(readFromResource("/connector/settings-zendesk4.json"));
 
@@ -210,6 +216,100 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
             .respond()
                 .withStatus(404);
 
-        connectors.getZendesk4Settings(project);
+        connectors.getSettings(project, ConnectorType.ZENDESK4, Zendesk4Settings.class);
+    }
+
+    @Test(expectedExceptions = ConnectorException.class)
+    public void shouldUpdateSettingsNotFound() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+             .respond()
+                .withStatus(404);
+
+        connectors.updateSettings(project, new CoupaSettings("UTC"));
+    }
+
+    @Test
+    public void shouldGetCoupaSettings() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings")
+             .respond()
+                .withBody(readFromResource("/connector/settings-coupa.json"));
+
+        final CoupaSettings coupaSettings = connectors.getCoupaSettings(project);
+        assertThat(coupaSettings, serializesToJson("/connector/settings-coupa.json"));
+    }
+
+    @Test
+    public void shouldCreateCoupaInstance() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances")
+             .respond()
+                .withBody(readFromResource("/connector/coupa_instance.json"));
+
+        final CoupaInstance instance = connectors.createCoupaInstance(project, new CoupaInstance("i1", "url", "key"));
+        assertThat(instance, notNullValue());
+    }
+
+    @Test(expectedExceptions = ConnectorException.class)
+    public void shouldFailCreatingCoupaInstance() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances")
+             .respond()
+                .withStatus(404);
+
+        connectors.createCoupaInstance(project, new CoupaInstance("i1", "url", "key"));
+    }
+
+    @Test
+    public void shouldGetCoupaInstances() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances")
+             .respond()
+                .withBody(readFromResource("/connector/coupa_instances.json"));
+
+        final Collection<CoupaInstance> instances = connectors.findCoupaInstances(project);
+
+        assertThat(instances, hasItem(new CoupaInstance("instance 1", "https://gooddata-demo01.coupacloud.com/api", null)));
+    }
+
+    @Test
+    public void shouldGetEmptyCollectionWhenNoCoupaInstances() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances")
+             .respond()
+                .withBody(readFromResource("/connector/coupa_instances-empty.json"));
+
+        final Collection<CoupaInstance> instances = connectors.findCoupaInstances(project);
+
+        assertThat(instances, is(emptyCollectionOf(CoupaInstance.class)));
+    }
+
+    @Test(expectedExceptions = ConnectorException.class)
+    public void shouldFailGettingCoupaInstances() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances")
+             .respond()
+                .withStatus(404);
+
+        connectors.findCoupaInstances(project);
+    }
+
+    @Test
+    public void shouldGetPardotSettings() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/pardot/integration/config/settings")
+             .respond()
+                .withBody(readFromResource("/connector/settings-pardot.json"));
+
+        final PardotSettings pardotSettings = connectors.getPardotSettings(project);
+        assertThat(pardotSettings, serializesToJson("/connector/settings-pardot.json"));
     }
 }

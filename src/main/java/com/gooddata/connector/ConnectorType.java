@@ -10,10 +10,22 @@ package com.gooddata.connector;
  */
 public enum ConnectorType {
 
-    ZENDESK4;
+    ZENDESK4(Zendesk4Settings.URL),
+    COUPA(CoupaSettings.URL),
+    PARDOT(PardotSettings.URL);
+
+    //URL of the settings endpoint (which is not equal for individual connector types)
+    private final String settingsUrl;
+
+    ConnectorType(String settingsUrl) {
+        this.settingsUrl = settingsUrl;
+    }
 
     public String getName() {
         return name().toLowerCase();
     }
 
+    public String getSettingsUrl() {
+        return settingsUrl;
+    }
 }
