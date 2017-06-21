@@ -20,8 +20,8 @@ import static org.testng.AssertJUnit.fail;
  */
 public class FeatureFlagServiceAT extends AbstractGoodDataAT {
 
-    private static final String PROJECT_FEATURE_FLAG = "testFeatureFlag";
-    private static final String SECOND_FEATURE_FLAG = "mostRecentFeatureFlag";
+    private static final String PROJECT_FEATURE_FLAG = "flag1";
+    private static final String SECOND_FEATURE_FLAG = "flag2";
 
     @Test(groups = "featureFlag", dependsOnGroups = "project")
     public void createProjectFeatureFlag() throws Exception {
@@ -81,7 +81,7 @@ public class FeatureFlagServiceAT extends AbstractGoodDataAT {
     public void deleteProjectFeatureFlag() throws Exception {
         final ProjectFeatureFlag featureFlag =
                 gd.getFeatureFlagService().createProjectFeatureFlag(project,
-                        new ProjectFeatureFlag("temporaryFeatureFlag"));
+                        new ProjectFeatureFlag("project_1"));
 
         gd.getFeatureFlagService().deleteProjectFeatureFlag(featureFlag);
 
