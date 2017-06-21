@@ -247,6 +247,13 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances")
              .respond()
+                .withStatus(201)
+                .withBody("{\"uri\":\"/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances/123\"}");
+
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances/123")
+             .respond()
                 .withBody(readFromResource("/connector/coupa_instance.json"));
 
         final CoupaInstance instance = connectors.createCoupaInstance(project, new CoupaInstance("i1", "url", "key"));
@@ -258,6 +265,25 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances")
+             .respond()
+                .withStatus(404);
+
+        connectors.createCoupaInstance(project, new CoupaInstance("i1", "url", "key"));
+    }
+
+    @Test(expectedExceptions = ConnectorException.class)
+    public void shouldFailGettingCreatedCoupaInstance() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances")
+             .respond()
+                .withStatus(201)
+                .withBody("{\"uri\":\"/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances/123\"}");
+
+        //method should throw exception for any error response status returned by GET request on created Coupa instance uri
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances/123")
              .respond()
                 .withStatus(404);
 

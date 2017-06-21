@@ -176,10 +176,20 @@ public class ConnectorService extends AbstractService {
         notNull(project, "project");
         notNull(instance, "instance");
 
+        //POST request for creating Coupa instance returns created instance URI as response
+        final UriResponse instanceUri;
         try {
-            return restTemplate.postForObject(CoupaInstances.URL, instance, CoupaInstance.class, project.getId());
+            instanceUri = restTemplate.postForObject(CoupaInstances.URL, instance, UriResponse.class,
+                    project.getId());
         } catch (GoodDataRestException | RestClientException e) {
             throw new ConnectorException("Unable to create Coupa instance with API URL '" + instance.getApiUrl() +
+                    "'", e);
+        }
+
+        try {
+            return restTemplate.getForObject(instanceUri.getUri(), CoupaInstance.class);
+        } catch (GoodDataRestException | RestClientException e) {
+            throw new ConnectorException("Unable to get created Coupa instance with URI '" + instanceUri.getUri() +
                     "'", e);
         }
     }
