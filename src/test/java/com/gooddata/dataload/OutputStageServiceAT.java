@@ -6,13 +6,17 @@
 package com.gooddata.dataload;
 
 import com.gooddata.AbstractGoodDataAT;
+import com.gooddata.dataload.processes.DataloadProcess;
+import com.gooddata.dataload.processes.Schedule;
 import com.gooddata.project.Environment;
 import com.gooddata.warehouse.Warehouse;
 import com.gooddata.warehouse.WarehouseSchema;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
+import static com.gooddata.dataload.processes.ProcessType.DATALOAD;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -57,6 +61,20 @@ public class OutputStageServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = "output_stage", dependsOnMethods = "shouldUpdateOutputStage")
+    public void scheduleDataloadProcess() {
+        final DataloadProcess dataloadProcess = gd.getProcessService()
+                .listProcesses(project)
+                .stream()
+                .filter(e -> e.getType().equals(DATALOAD.name()))
+                .findFirst()
+                .get();
+
+        Schedule schedule = gd.getProcessService().createSchedule(project, new Schedule(dataloadProcess, "0 0 * * *", true));
+
+        assertThat(schedule, is(notNullValue()));
+    }
+
+    @Test(groups = "output_stage", dependsOnMethods = "scheduleDataloadProcess")
     public void shouldUpdateOutputStageToNullValues() {
         final OutputStage outputStage = gd.getOutputStageService().getOutputStage(project);
         outputStage.setSchemaUri(null);

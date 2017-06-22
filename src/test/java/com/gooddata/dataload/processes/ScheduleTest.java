@@ -219,4 +219,18 @@ public class ScheduleTest {
 
         assertThat(schedule.toString(), matchesPattern(Schedule.class.getSimpleName() + "\\[.*\\]"));
     }
+
+    @Test
+    public void testSerializeSynchronizeAll() {
+        final Schedule schedule = new Schedule(process, "0 0 * * *", true);
+
+        assertThat(schedule, serializesToJson("/dataload/processes/scheduleSynchronizeAll.json"));
+    }
+
+    @Test
+    public void testDeserializeSynchronizeAll() {
+        final Schedule schedule = readObjectFromResource("/dataload/processes/scheduleSynchronizeAll.json", Schedule.class);
+
+        assertThat(schedule.isSynchronizeAll(), is(true));
+    }
 }
