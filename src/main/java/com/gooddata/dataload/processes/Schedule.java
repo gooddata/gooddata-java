@@ -46,6 +46,7 @@ public class Schedule {
     private static final String MSETL_TYPE = "MSETL";
     private static final String PROCESS_ID = "PROCESS_ID";
     private static final String EXECUTABLE = "EXECUTABLE";
+    private static final String GDC_DE_SYNCHRONIZE_ALL = "GDC_DE_SYNCHRONIZE_ALL";
 
     private final String type;
     private String state;
@@ -58,6 +59,18 @@ public class Schedule {
     private final int consecutiveFailedExecutionCount;
     private final Map<String, String> params;
     private final Map<String,String> links;
+
+    public Schedule(final DataloadProcess process, final String cron, final boolean synchronizeAll) {
+        this.type = MSETL_TYPE;
+        this.cron = notEmpty(cron, "cron");
+        this.state = ScheduleState.ENABLED.name();
+        this.nextExecutionTime = null;
+        this.consecutiveFailedExecutionCount = 0;
+        this.params = new HashMap<>();
+        this.params.put(PROCESS_ID, process.getId());
+        this.params.put(GDC_DE_SYNCHRONIZE_ALL, Boolean.toString(synchronizeAll));
+        this.links = Collections.emptyMap();
+    }
 
     public Schedule(final DataloadProcess process, final String executable, final String cron) {
         this(process, executable);
@@ -258,6 +271,16 @@ public class Schedule {
     @JsonIgnore
     public String getExecutionsUri() {
         return notNullState(links, "links").get(EXECUTIONS_LINK);
+    }
+
+    @JsonIgnore
+    public boolean isSynchronizeAll() {
+        return Boolean.valueOf(params.get(GDC_DE_SYNCHRONIZE_ALL));
+    }
+
+    @JsonIgnore
+    public void setSynchronizeAll(final boolean synchronizeAll) {
+        params.put(GDC_DE_SYNCHRONIZE_ALL, Boolean.toString(synchronizeAll));
     }
 
     @Override
