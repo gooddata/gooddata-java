@@ -81,7 +81,7 @@ public class FeatureFlagServiceAT extends AbstractGoodDataAT {
     public void deleteProjectFeatureFlag() throws Exception {
         final ProjectFeatureFlag featureFlag =
                 gd.getFeatureFlagService().createProjectFeatureFlag(project,
-                        new ProjectFeatureFlag("project_1"));
+                        new ProjectFeatureFlag("settingName1"));
 
         gd.getFeatureFlagService().deleteProjectFeatureFlag(featureFlag);
 
