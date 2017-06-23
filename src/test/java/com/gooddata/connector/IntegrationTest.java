@@ -7,7 +7,8 @@ package com.gooddata.connector;
 
 import org.testng.annotations.Test;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -32,7 +33,7 @@ public class IntegrationTest {
     @Test
     public void shouldSerialize() throws Exception {
         final Integration integration = new Integration("template");
-        assertThat(integration, serializesToJson("/connector/integration-in.json"));
+        assertThat(integration, jsonEquals(resource("connector/integration-in.json")));
     }
 
     @Test

@@ -9,8 +9,9 @@ import org.testng.annotations.Test;
 
 import java.util.Collections;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
@@ -39,11 +40,11 @@ public class WarehouseUsersTest {
 
     @Test
     public void testSerialization() throws Exception {
-        assertThat(users, serializesToJson("/warehouse/users.json"));
+        assertThat(users, jsonEquals(resource("warehouse/users.json")));
     }
 
     @Test
     public void shouldSerializeEmpty() throws Exception {
-        assertThat(empty, serializesToJson("/warehouse/users-empty.json"));
+        assertThat(empty, jsonEquals(resource("warehouse/users-empty.json")));
     }
 }

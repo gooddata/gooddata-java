@@ -10,7 +10,8 @@ import org.testng.annotations.Test;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -30,19 +31,19 @@ public class WarehouseUserTest {
     @Test
     public void testSerializationWithProfile() throws Exception {
         final WarehouseUser user = new WarehouseUser(ROLE, PROFILE, null);
-        assertThat(user, serializesToJson("/warehouse/user-createWithProfile.json"));
+        assertThat(user, jsonEquals(resource("warehouse/user-createWithProfile.json")));
     }
 
     @Test
     public void testSerializationWithLogin() throws Exception {
         final WarehouseUser user = new WarehouseUser(ROLE, null, LOGIN);
-        assertThat(user, serializesToJson("/warehouse/user-createWithLogin.json"));
+        assertThat(user, jsonEquals(resource("warehouse/user-createWithLogin.json")));
     }
 
     @Test
     public void testCompleteSerialization() throws Exception {
         final WarehouseUser user = new WarehouseUser(ROLE, PROFILE, LOGIN, LINKS);
-        assertThat(user, serializesToJson("/warehouse/user.json"));
+        assertThat(user, jsonEquals(resource("warehouse/user.json")));
     }
 
     @Test

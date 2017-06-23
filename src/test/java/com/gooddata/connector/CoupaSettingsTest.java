@@ -5,19 +5,20 @@
  */
 package com.gooddata.connector;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import org.testng.annotations.Test;
+
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import org.testng.annotations.Test;
 
 public class CoupaSettingsTest {
 
     @Test
     public void shouldSerialize() throws Exception {
         final CoupaSettings settings = new CoupaSettings("UTC");
-        assertThat(settings, serializesToJson("/connector/settings-coupa.json"));
+        assertThat(settings, jsonEquals(resource("connector/settings-coupa.json")));
     }
 
     @Test

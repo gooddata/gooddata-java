@@ -7,7 +7,8 @@ package com.gooddata.gdc;
 
 import org.testng.annotations.Test;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -25,6 +26,6 @@ public class UriResponseTest {
 
     @Test
     public void testSerialization() throws Exception {
-        assertThat(new UriResponse("URI"), serializesToJson("/gdc/uriResponse.json"));
+        assertThat(new UriResponse("URI"), jsonEquals(resource("gdc/uriResponse.json")));
     }
 }

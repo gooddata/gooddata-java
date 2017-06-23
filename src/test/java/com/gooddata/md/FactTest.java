@@ -7,7 +7,8 @@ package com.gooddata.md;
 
 import org.testng.annotations.Test;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -30,7 +31,7 @@ public class FactTest {
     @Test
     public void testSerialization() throws Exception {
         final Fact fact = new Fact("Person Shoe Size", "/gdc/md/PROJECT_ID/obj/COL_ID", "col", "/gdc/md/PROJECT_ID/obj/FOLDER_ID");
-        assertThat(fact, serializesToJson("/md/fact-input.json"));
+        assertThat(fact, jsonEquals(resource("md/fact-input.json")));
     }
 
     @Test

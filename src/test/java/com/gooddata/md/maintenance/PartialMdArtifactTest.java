@@ -8,7 +8,8 @@ package com.gooddata.md.maintenance;
 import com.gooddata.gdc.UriResponse;
 import org.testng.annotations.Test;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -28,7 +29,7 @@ public class PartialMdArtifactTest {
     public void shouldSerialize() throws Exception {
         final PartialMdArtifact partialMdArtifact = new PartialMdArtifact(new UriResponse("/gdc/md/projectId/tasks/taskId/status"), "TOKEN123");
 
-        assertThat(partialMdArtifact, serializesToJson("/md/maintenance/partialMDArtifact.json"));
+        assertThat(partialMdArtifact, jsonEquals(resource("md/maintenance/partialMDArtifact.json")));
     }
 
     @Test

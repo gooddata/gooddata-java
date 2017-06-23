@@ -7,7 +7,8 @@ package com.gooddata.dataload.processes;
 
 import org.testng.annotations.Test;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -37,10 +38,10 @@ public class DataloadProcessTest {
     @Test
     public void testSerialization() {
         final DataloadProcess process = new DataloadProcess("testProcess", "GROOVY");
-        assertThat(process, serializesToJson("/dataload/processes/process-input.json"));
+        assertThat(process, jsonEquals(resource("dataload/processes/process-input.json")));
 
         final DataloadProcess processWithPath = new DataloadProcess("testProcess", "GROOVY", "/uploads/process.zip");
-        assertThat(processWithPath, serializesToJson("/dataload/processes/process-input-withPath.json"));
+        assertThat(processWithPath, jsonEquals(resource("dataload/processes/process-input-withPath.json")));
     }
 
     @Test

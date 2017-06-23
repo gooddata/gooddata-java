@@ -9,7 +9,8 @@ import org.testng.annotations.Test;
 
 import java.util.Collection;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -32,7 +33,7 @@ public class DimensionTest {
     @Test
     public void shouldSerialize() throws Exception {
         final Dimension dimension = new Dimension("Dimension");
-        assertThat(dimension, serializesToJson("/md/dimension-input.json"));
+        assertThat(dimension, jsonEquals(resource("md/dimension-input.json")));
 
     }
 

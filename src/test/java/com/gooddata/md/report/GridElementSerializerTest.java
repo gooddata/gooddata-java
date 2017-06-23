@@ -10,8 +10,9 @@ import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
 import static com.gooddata.md.report.MetricGroup.METRIC_GROUP;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GridElementSerializerTest {
@@ -21,7 +22,7 @@ public class GridElementSerializerTest {
         final GridElements elems = new GridElements();
         elems.add(new AttributeInGrid("/uriValue", "aliasValue"));
         elems.add(METRIC_GROUP);
-        assertThat(elems, serializesToJson("/md/report/gridElements.json"));
+        assertThat(elems, jsonEquals(resource("md/report/gridElements.json")));
     }
 
     @JsonSerialize(contentUsing = GridElementSerializer.class)

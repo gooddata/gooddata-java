@@ -5,7 +5,8 @@
  */
 package com.gooddata.md.maintenance;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
@@ -18,7 +19,7 @@ public class PartialMdExportTest {
         final PartialMdExport partialMdExport =
                 new PartialMdExport(true, true, "/gdc/md/projectId/obj/123", "/gdc/md/projectId/obj/234");
 
-        assertThat(partialMdExport, serializesToJson("/md/maintenance/partialMDExport.json"));
+        assertThat(partialMdExport, jsonEquals(resource("md/maintenance/partialMDExport.json")));
     }
 
     @Test
@@ -26,7 +27,7 @@ public class PartialMdExportTest {
         final PartialMdExport partialMdExport =
                 new PartialMdExport(false, false, "/gdc/md/projectId/obj/123", "/gdc/md/projectId/obj/234");
 
-        assertThat(partialMdExport, serializesToJson("/md/maintenance/partialMDExport-defaultVals.json"));
+        assertThat(partialMdExport, jsonEquals(resource("md/maintenance/partialMDExport-defaultVals.json")));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)

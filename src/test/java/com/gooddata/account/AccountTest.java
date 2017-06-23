@@ -7,7 +7,8 @@ package com.gooddata.account;
 
 import org.testng.annotations.Test;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -37,13 +38,13 @@ public class AccountTest {
     @Test
     public void testSerialization() {
         final Account account = new Account(FIRST_NAME, LAST_NAME, null);
-        assertThat(account, serializesToJson("/account/account-input.json"));
+        assertThat(account, jsonEquals(resource("account/account-input.json")));
     }
 
     @Test
     public void testSerializationOfCreateAccount() {
         final Account account = new Account(MAIL, "password", FIRST_NAME, LAST_NAME);
-        assertThat(account, serializesToJson("/account/create-account.json"));
+        assertThat(account, jsonEquals(resource("account/create-account.json")));
     }
 
     @Test

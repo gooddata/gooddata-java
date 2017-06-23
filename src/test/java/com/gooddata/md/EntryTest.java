@@ -11,9 +11,10 @@ import org.testng.annotations.Test;
 
 import java.util.Set;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Collections.singleton;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -61,7 +62,7 @@ public class EntryTest {
         final Entry entry = new Entry(URI, TITLE, SUMMARY, CATEGORY, AUTHOR, CONTRIBUTOR, DEPRECATED, IDENTIFIER, TAGS,
                 CREATED, UPDATED, LOCKED, UNLISTED);
 
-        assertThat(entry, serializesToJson("/md/entry.json"));
+        assertThat(entry, jsonEquals(resource("md/entry.json")));
     }
 
     @Test

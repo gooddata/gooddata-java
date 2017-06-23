@@ -5,10 +5,11 @@
  */
 package com.gooddata.featureflag;
 
-import com.gooddata.JsonMatchers;
 import org.testng.annotations.Test;
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -35,7 +36,7 @@ public class FeatureFlagsTest {
         flags.addFlag("testFeature", true);
         flags.addFlag("testFeature2", false);
 
-        assertThat(flags, JsonMatchers.serializesToJson("/featureflag/featureFlags.json"));
+        assertThat(flags, jsonEquals(resource("featureflag/featureFlags.json")));
     }
 
     @Test

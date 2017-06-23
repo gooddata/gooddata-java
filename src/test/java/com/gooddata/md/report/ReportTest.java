@@ -7,7 +7,8 @@ package com.gooddata.md.report;
 
 import org.testng.annotations.Test;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -41,7 +42,7 @@ public class ReportTest {
         when(definition.getUri()).thenReturn(DEFINITION_URI);
 
         final Report report = new Report("Beers Consumed This Week", definition);
-        assertThat(report, serializesToJson("/md/report/report-input.json"));
+        assertThat(report, jsonEquals(resource("md/report/report-input.json")));
     }
 
     @Test

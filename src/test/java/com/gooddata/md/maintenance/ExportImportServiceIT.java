@@ -8,12 +8,14 @@ package com.gooddata.md.maintenance;
 import static com.gooddata.util.ResourceUtils.readFromResource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.gooddata.AbstractGoodDataIT;
-import com.gooddata.JsonMatchers;
 import com.gooddata.project.Project;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -32,7 +34,7 @@ public class ExportImportServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(PartialMdExport.TEMPLATE.expand(project.getId()).toString())
-                .havingBody(JsonMatchers.isJsonString("/md/maintenance/partialMDExport-defaultVals.json"))
+                .havingBody(jsonEquals(resource("md/maintenance/partialMDExport-defaultVals.json")).when(IGNORING_ARRAY_ORDER))
                 .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/maintenance/partialMDArtifact.json"));
@@ -95,7 +97,7 @@ public class ExportImportServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(PartialMdExportToken.TEMPLATE.expand(project.getId()).toString())
-                .havingBody(JsonMatchers.isJsonString("/md/maintenance/partialMDImport.json"))
+                .havingBody(jsonEquals(resource("md/maintenance/partialMDImport.json")).when(IGNORING_ARRAY_ORDER))
                 .respond()
                 .withStatus(200)
                 .withBody("{ \"uri\": \"/gdc/md/projectId/tasks/taskId/status\" }");

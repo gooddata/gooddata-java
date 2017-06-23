@@ -5,8 +5,9 @@
  */
 package com.gooddata.warehouse;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -31,12 +32,12 @@ public class WarehousesTest {
 
     @Test
     public void testSerialization() throws Exception {
-        assertThat(warehouses, serializesToJson("/warehouse/warehouses.json"));
+        assertThat(warehouses, jsonEquals(resource("warehouse/warehouses.json")));
     }
 
     @Test
     public void shouldSerializeEmpty() throws Exception {
-        assertThat(empty, serializesToJson("/warehouse/warehouses-empty.json"));
+        assertThat(empty, jsonEquals(resource("warehouse/warehouses-empty.json")));
     }
 
     @Test

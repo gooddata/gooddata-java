@@ -5,11 +5,12 @@
  */
 package com.gooddata.connector;
 
-import com.gooddata.JsonMatchers;
 import com.gooddata.connector.Zendesk4ProcessExecution.DownloadParams;
 import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
@@ -18,16 +19,14 @@ public class Zendesk4ProcessExecutionTest {
 
     @Test
     public void testShouldSerialize() throws Exception {
-        assertThat(new Zendesk4ProcessExecution(), JsonMatchers.serializesToJson(
-                "/connector/process-execution-empty.json"));
+        assertThat(new Zendesk4ProcessExecution(), jsonEquals(resource("connector/process-execution-empty.json")));
     }
 
     @Test
     public void testShouldSerializeIncremental() throws Exception {
         final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
         execution.setIncremental(true);
-        assertThat(execution, JsonMatchers.serializesToJson(
-                "/connector/process-execution-incremental.json"));
+        assertThat(execution, jsonEquals(resource("connector/process-execution-incremental.json")));
     }
 
     @Test
@@ -35,16 +34,14 @@ public class Zendesk4ProcessExecutionTest {
         final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
         execution.setIncremental(true);
         execution.setStartTime("tickets", new DateTime(0L));
-        assertThat(execution, JsonMatchers.serializesToJson(
-                "/connector/process-execution-zendesk4-startDate.json"));
+        assertThat(execution, jsonEquals(resource("connector/process-execution-zendesk4-startDate.json")));
     }
 
     @Test
     public void testShouldSerializeDownloadParams() throws Exception {
         final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
         execution.setDownloadParams(new DownloadParams(true, 5, 3600));
-        assertThat(execution, JsonMatchers.serializesToJson(
-                "/connector/process-execution-zendesk4-download.json"));
+        assertThat(execution, jsonEquals(resource("connector/process-execution-zendesk4-download.json")));
     }
 
     @Test

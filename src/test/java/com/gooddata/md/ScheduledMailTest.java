@@ -5,7 +5,6 @@
  */
 package com.gooddata.md;
 
-import com.gooddata.JsonMatchers;
 import com.gooddata.report.ReportExportFormat;
 import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
@@ -14,6 +13,8 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -64,7 +65,7 @@ public class ScheduledMailTest {
                                                 .setBody("Hey, I'm sending you new Reports and Dashboards!")
                                                 .setAttachments(Arrays.asList(rp1, da1, da2));
 
-        assertThat(scheduledMail, JsonMatchers.serializesToJson("/md/scheduledMail.json"));
+        assertThat(scheduledMail, jsonEquals(resource("md/scheduledMail.json")));
     }
 
     @Test

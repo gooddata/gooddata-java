@@ -5,7 +5,8 @@
  */
 package com.gooddata.connector;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.joda.time.LocalDate;
@@ -17,7 +18,7 @@ public class CoupaProcessExecutionTest {
     public void shouldSerialize() throws Exception {
         final CoupaProcessExecution execution = new CoupaProcessExecution();
 
-        assertThat(execution, serializesToJson("/connector/process-execution-empty.json"));
+        assertThat(execution, jsonEquals(resource("connector/process-execution-empty.json")));
     }
 
     @Test
@@ -25,7 +26,7 @@ public class CoupaProcessExecutionTest {
         final CoupaProcessExecution execution = new CoupaProcessExecution();
         execution.setIncremental(true);
 
-        assertThat(execution, serializesToJson("/connector/process-execution-incremental.json"));
+        assertThat(execution, jsonEquals(resource("connector/process-execution-incremental.json")));
     }
 
     @Test
@@ -33,6 +34,6 @@ public class CoupaProcessExecutionTest {
         final CoupaProcessExecution execution = new CoupaProcessExecution();
         execution.setDownloadDataFrom(new LocalDate(2018, 1, 25));
 
-        assertThat(execution, serializesToJson("/connector/process-execution-coupa-downloadDate.json"));
+        assertThat(execution, jsonEquals(resource("connector/process-execution-coupa-downloadDate.json")));
     }
 }

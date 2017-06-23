@@ -5,12 +5,13 @@
  */
 package com.gooddata.connector;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import org.testng.annotations.Test;
+
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import org.testng.annotations.Test;
 
 public class PardotSettingsTest {
 
@@ -18,7 +19,7 @@ public class PardotSettingsTest {
     public void shouldSerialize() throws Exception {
         final PardotSettings settings = new PardotSettings("someAccountId");
 
-        assertThat(settings, serializesToJson("/connector/settings-pardot.json"));
+        assertThat(settings, jsonEquals(resource("connector/settings-pardot.json")));
     }
 
     @Test

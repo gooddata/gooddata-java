@@ -10,7 +10,8 @@ import org.testng.annotations.Test;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.gooddata.JsonMatchers.serializesToJson;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -71,7 +72,7 @@ public class OutputStageTest {
         outputStage.setSchemaUri(SCHEMA_URI);
         outputStage.setClientId(CLIENT_ID);
         outputStage.setOutputStagePrefix(OUTPUT_STAGE_PREFIX);
-        assertThat(outputStage, serializesToJson("/dataload/outputStageNoProcess.json"));
+        assertThat(outputStage, jsonEquals(resource("dataload/outputStageNoProcess.json")));
     }
 
     @Test
