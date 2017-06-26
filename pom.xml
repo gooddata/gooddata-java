@@ -2,7 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.gooddata</groupId>
     <artifactId>gooddata-java</artifactId>
     <version>2.9.2-SNAPSHOT</version>
     <name>${project.artifactId}</name>
@@ -10,9 +9,9 @@
     <url>https://github.com/gooddata/gooddata-java</url>
 
     <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
+        <groupId>com.gooddata</groupId>
+        <artifactId>gooddata-parent</artifactId>
+        <version>1.0.0</version>
     </parent>
 
     <licenses>
@@ -39,58 +38,17 @@
     </developers>
 
     <properties>
-        <targetJdk>1.8</targetJdk>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <httpclient.version>4.3.3</httpclient.version>
         <jackson.version>2.8.4</jackson.version>
         <spring.version>4.3.1.RELEASE</spring.version>
         <jadler.version>1.1.1</jadler.version>
         <json-unit.version>1.23.0</json-unit.version>
-        <maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
-        <currentYear>${maven.build.timestamp}</currentYear>
     </properties>
 
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>${targetJdk}</source>
-                    <target>${targetJdk}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Name>com/gooddata</Name>
-                            <Specification-Title>${project.description}</Specification-Title>
-                            <Specification-Version>${project.version}</Specification-Version>
-                            <Specification-Vendor>GoodData</Specification-Vendor>
-                            <Implementation-Title>${project.description}</Implementation-Title>
-                            <Implementation-Version>${project.version}</Implementation-Version>
-                            <Implementation-Vendor>GoodData</Implementation-Vendor>
-                            <Implementation-Vendor-Id>com.gooddata</Implementation-Vendor-Id>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.17</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -133,64 +91,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.10</version>
-                <executions>
-                    <execution>
-                        <id>analyze</id>
-                        <goals>
-                            <goal>analyze-only</goal>
-                        </goals>
-                        <configuration>
-                            <failOnWarning>true</failOnWarning>
-                            <ignoreNonCompile>true</ignoreNonCompile>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.6</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>sonatype-nexus-staging</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.mycila</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>3.0 </version>
-                <configuration>
-                    <header>src/license_header.txt</header>
-                    <failIfMissing>true</failIfMissing>
-                    <failIfUnknown>true</failIfUnknown>
-                    <skipExistingHeaders>true</skipExistingHeaders>
-                    <properties>
-                        <inceptionYear>2004</inceptionYear>
-                        <currentYear>${currentYear}</currentYear>
-                    </properties>
-                    <includes>
-                        <include>src/**/*.java</include>
-                    </includes>
-                    <mapping>
-                        <java>SLASHSTAR_STYLE</java>
-                    </mapping>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <!-- add missing license: mvn com.mycila:license-maven-plugin:3.0:format -->
-            </plugin>
         </plugins>
     </build>
 
@@ -206,9 +106,7 @@
                         </configuration>
                     </plugin>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>2.17</version>
                         <executions>
                             <execution>
                                 <goals>
