@@ -5,16 +5,18 @@
  */
 package com.gooddata.warehouse;
 
+import com.gooddata.account.Account;
 import org.testng.annotations.Test;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class WarehouseUserTest {
@@ -27,6 +29,48 @@ public class WarehouseUserTest {
         put("self", SELF_LINK);
         put("parent", "/gdc/datawarehouse/instances/{instance-id}/users");
     }};
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testCreateWithProfileIdWithNullRole() throws Exception {
+        WarehouseUser.createWithProfileUri(PROFILE, null);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testCreateWithProfileWithNullRole() throws Exception {
+        final Account account = readObjectFromResource("/account/account.json", Account.class);
+        WarehouseUser.createWithProfile(account, null);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testCreateWithLoginWithNullRole() throws Exception {
+        WarehouseUser.createWithlogin(LOGIN, null);
+    }
+
+    @Test
+    public void testCreateWithProfileId() throws Exception {
+        final WarehouseUser user = WarehouseUser.createWithProfileUri(PROFILE, WarehouseUserRole.ADMIN);
+        assertThat(user.getRole(), is(WarehouseUserRole.ADMIN.getRoleName()));
+        assertThat(user.getProfile(), is(PROFILE));
+        assertThat(user.getLogin(), nullValue());
+    }
+
+    @Test
+    public void testCreateWithProfile() throws Exception {
+        final Account account = readObjectFromResource("/account/account.json", Account.class);
+
+        final WarehouseUser user = WarehouseUser.createWithProfile(account, WarehouseUserRole.ADMIN);
+        assertThat(user.getRole(), is(WarehouseUserRole.ADMIN.getRoleName()));
+        assertThat(user.getProfile(), is(account.getId()));
+        assertThat(user.getLogin(), nullValue());
+    }
+
+    @Test
+    public void testCreateWithLogin() throws Exception {
+        final WarehouseUser user = WarehouseUser.createWithlogin(LOGIN, WarehouseUserRole.ADMIN);
+        assertThat(user.getRole(), is(WarehouseUserRole.ADMIN.getRoleName()));
+        assertThat(user.getProfile(), nullValue());
+        assertThat(user.getLogin(), is(LOGIN));
+    }
 
     @Test
     public void testSerializationWithProfile() throws Exception {
@@ -65,7 +109,7 @@ public class WarehouseUserTest {
 
     @Test
     public void testToStringFormat() throws Exception {
-        final WarehouseUser user =  readObjectFromResource("/warehouse/user.json", WarehouseUser.class);
+        final WarehouseUser user = readObjectFromResource("/warehouse/user.json", WarehouseUser.class);
 
         assertThat(user.toString(), matchesPattern(WarehouseUser.class.getSimpleName() + "\\[.*\\]"));
     }
