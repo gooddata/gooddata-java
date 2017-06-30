@@ -13,13 +13,17 @@ import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
+
+import java.util.Arrays;
 
 public class AccountTest {
 
     private static final String MAIL = "fake@gooddata.com";
     private static final String FIRST_NAME = "Blah";
     private static final String LAST_NAME = "Muhehe";
+    private static final String IP = "1.2.3.4/32";
 
     @SuppressWarnings("deprecation")
     @Test
@@ -33,11 +37,13 @@ public class AccountTest {
         assertThat(account.getUri(), is("/gdc/account/profile/ID"));
         assertThat(account.getProjectsLink(), is("/gdc/account/profile/ID/projects"));
         assertThat(account.getProjectsUri(), is("/gdc/account/profile/ID/projects"));
+        assertThat(account.getIpWhitelist(), contains(IP));
     }
 
     @Test
     public void testSerialization() {
         final Account account = new Account(FIRST_NAME, LAST_NAME, null);
+        account.setIpWhitelist(Arrays.asList("1.2.3.4/32"));
         assertThat(account, jsonEquals(resource("account/account-input.json")));
     }
 

@@ -56,6 +56,18 @@ public class AccountServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = "isolated_domain", dependsOnMethods = "getAccount")
+    public void updateAccount() throws Exception {
+        final String newName = "Petra";
+        account.setFirstName(newName);
+
+        accountService.updateAccount(account);
+
+        Account accountByUri = accountService.getAccountByUri(account.getUri());
+
+        assertThat(accountByUri.getFirstName(), is(newName));
+    }
+
+    @Test(groups = "isolated_domain", dependsOnMethods = "updateAccount")
     public void removeAccount() {
         accountService.removeAccount(account);
         account = null;

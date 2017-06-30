@@ -1,0 +1,10 @@
+{
+  "accountSetting" : {
+    "email": "fake2@gooddata.com",
+    "password": "password2",
+    "verifyPassword": "password2",
+    "firstName" : "newFirstName2",
+    "lastName" : "Muhehe2",
+    "ipWhitelist" : ["1.2.3.4/32"]
+  }
+}

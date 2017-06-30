@@ -12,8 +12,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.gooddata.util.GoodDataToStringBuilder;
 import org.springframework.web.util.UriTemplate;
+
+import java.util.List;
 
 /**
  * Account setting
@@ -35,11 +38,25 @@ public class Account {
     public static final String CURRENT_ID = "current";
 
     private final String login;
-    private final String email;
-    private final String password;
-    private final String verifyPassword;
-    private final String firstName;
-    private final String lastName;
+
+    @JsonView(UpdateView.class)
+    private String email;
+
+    @JsonView(UpdateView.class)
+    private String password;
+
+    @JsonView(UpdateView.class)
+    private String verifyPassword;
+
+    @JsonView(UpdateView.class)
+    private String firstName;
+
+    @JsonView(UpdateView.class)
+    private String lastName;
+
+    @JsonView(UpdateView.class)
+    private List<String> ipWhitelist;
+
     @JsonIgnore
     private final Links links;
 
@@ -51,6 +68,7 @@ public class Account {
             @JsonProperty("verifyPassword") String verifyPassword,
             @JsonProperty("firstName") String firstName,
             @JsonProperty("lastName") String lastName,
+            @JsonProperty("ipWhitelist") List<String> ipWhitelist,
             @JsonProperty("links") Links links
     ) {
         this.login = login;
@@ -59,11 +77,12 @@ public class Account {
         this.verifyPassword = verifyPassword;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.ipWhitelist = ipWhitelist;
         this.links = links;
     }
 
-    public Account(String firstName,String lastName, Links links) {
-        this(null, null, null, null, firstName, lastName, links);
+    public Account(String firstName, String lastName, Links links) {
+        this(null, null, null, null, firstName, lastName, null, links);
     }
 
     /**
@@ -74,7 +93,7 @@ public class Account {
      * @param password password
      */
     public Account(String email, String password, String firstName, String lastName) {
-        this(email, email, password, password, firstName, lastName, null);
+        this(email, email, password, password, firstName, lastName, null, null);
     }
 
     public String getLogin() {
@@ -126,6 +145,34 @@ public class Account {
         return getId(getUri());
     }
 
+    public List<String> getIpWhitelist() {
+        return ipWhitelist;
+    }
+
+    public void setEmail(final String email) {
+        this.email = email;
+    }
+
+    public void setPassword(final String password) {
+        this.password = password;
+    }
+
+    public void setVerifyPassword(final String verifyPassword) {
+        this.verifyPassword = verifyPassword;
+    }
+
+    public void setFirstName(final String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(final String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setIpWhitelist(final List<String> ipWhitelist) {
+        this.ipWhitelist = ipWhitelist;
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class Links {
         private final String self;
@@ -153,5 +200,11 @@ public class Account {
     @Override
     public String toString() {
         return GoodDataToStringBuilder.defaultToString(this, "password", "verifyPassword");
+    }
+
+    /**
+     * Class representing update view of account
+     */
+    static class UpdateView {
     }
 }

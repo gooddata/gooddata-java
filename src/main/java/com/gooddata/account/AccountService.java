@@ -10,6 +10,7 @@ import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.gdc.UriResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -126,6 +127,29 @@ public class AccountService extends AbstractService {
      */
     public Account getAccountByUri(String uri) {
         return getAccountById(Account.getId(uri));
+    }
+
+    /**
+     * Updates account
+     * @param account to be updated
+     * @throws AccountNotFoundException when account for given uri can't be found
+     */
+    public void updateAccount(Account account) {
+        notNull(account, "account");
+
+        try {
+            final MappingJacksonValue jacksonValue = new MappingJacksonValue(account);
+            jacksonValue.setSerializationView(Account.UpdateView.class);
+            restTemplate.put(account.getUri(), jacksonValue);
+        } catch (GoodDataRestException e) {
+            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+                throw new AccountNotFoundException(account.getUri(), e);
+            } else {
+                throw e;
+            }
+        } catch (GoodDataException e) {
+            throw new GoodDataException("Unable to update account", e);
+        }
     }
 
 }
