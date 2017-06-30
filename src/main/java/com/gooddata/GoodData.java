@@ -229,7 +229,7 @@ public class GoodData {
 
         final UriPrefixingClientHttpRequestFactory factory = new UriPrefixingClientHttpRequestFactory(
                 new HttpComponentsClientHttpRequestFactory(httpClient),
-                endpoint
+                endpoint.toUri()
         );
         final RestTemplate restTemplate = new RestTemplate(factory);
         restTemplate.setInterceptors(Arrays.asList(
