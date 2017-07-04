@@ -8,6 +8,7 @@ package com.gooddata.dataload.processes;
 import com.gooddata.AbstractGoodDataAT;
 import com.gooddata.FutureResult;
 import com.gooddata.collections.PageableList;
+import com.gooddata.collections.PageableStreamer;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.Duration;
@@ -23,6 +24,7 @@ import java.util.Collection;
 import static com.gooddata.dataload.processes.ProcessIdMatcher.hasSameProcessIdAs;
 import static com.gooddata.dataload.processes.ScheduleIdMatcher.hasSameScheduleIdAs;
 import static java.nio.file.Files.createTempDirectory;
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
@@ -165,7 +167,8 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
     public void removeSchedule() {
         gd.getProcessService().removeSchedule(schedule);
         gd.getProcessService().removeSchedule(triggeredSchedule);
-        final Collection<Schedule> schedules = gd.getProcessService().listSchedules(project);
+        final Collection<Schedule> schedules = PageableStreamer.stream(page -> gd.getProcessService().listSchedules(project, page))
+                .collect(toList());
         assertThat(schedules, not(hasItems(hasSameScheduleIdAs(schedule), hasSameScheduleIdAs(triggeredSchedule))));
     }
 
