@@ -1,6 +1,7 @@
 {
     "accountSetting" : {
         "firstName" : "Blah",
-        "lastName" : "Muhehe"
+        "lastName" : "Muhehe",
+        "ipWhitelist" : ["1.2.3.4/32"]
     }
 }
