@@ -7,6 +7,7 @@ package com.gooddata.project;
 
 import com.gooddata.AbstractGoodDataAT;
 import com.gooddata.collections.PageRequest;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import static com.gooddata.project.ProjectEnvironment.TESTING;
 import static com.gooddata.project.ProjectIdMatcher.hasSameIdAs;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -84,6 +86,14 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
         final ProjectValidationResults results = gd.getProjectService().validateProject(project).get();
         assertThat(results, is(notNullValue()));
         assertThat(results.getResults(), is(notNullValue()));
+    }
+
+    @Test(groups = "project", dependsOnMethods = "createProject")
+    public void sendInvitations() throws Exception {
+        final Invitation invitation = new Invitation("qa+" + RandomStringUtils.randomAlphanumeric(10) + "@gooddata.com");
+        final CreatedInvitations invitations = gd.getProjectService().sendInvitations(project, invitation);
+        assertThat(invitations, is(notNullValue()));
+        assertThat(invitations.getInvitationUris(), hasSize(1));
     }
 
 }

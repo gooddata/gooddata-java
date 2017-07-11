@@ -27,6 +27,7 @@ import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -322,4 +323,17 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         assertThat(secondPage, empty());
     }
 
+    @Test
+    public void shouldSendInvitations() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(Invitations.TEMPLATE.expand("PROJECT_ID").toString())
+        .respond()
+                .withBody(readFromResource("/project/created-invitations.json"))
+                .withStatus(200);
+
+        final CreatedInvitations invitations = gd.getProjectService().sendInvitations(enabled, new Invitation("roman@gooddata.com"));
+        assertThat(invitations, is(notNullValue()));
+        assertThat(invitations.getInvitationUris(), contains("uri1", "uri2"));
+    }
 }
