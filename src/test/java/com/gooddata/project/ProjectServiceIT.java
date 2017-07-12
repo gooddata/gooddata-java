@@ -131,7 +131,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo(PROJECT_URI)
                 .respond()
-                .withStatus(202);
+                .withStatus(204);
 
         gd.getProjectService().removeProject(enabled);
     }
