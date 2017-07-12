@@ -24,12 +24,15 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import static com.gooddata.util.Validate.noNullElements;
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 import static java.util.Arrays.asList;
@@ -341,6 +344,25 @@ public class ProjectService extends AbstractService {
             }
         } catch (RestClientException e) {
             throw new GoodDataException("Unable to get role " + uri, e);
+        }
+    }
+
+    /**
+     * Send project invitations to users
+     * @param project target project
+     * @param invitations invitations
+     * @return created invitation
+     */
+    public CreatedInvitations sendInvitations(final Project project, final Invitation... invitations) {
+        notNull(project, "project");
+        notNull(project.getId(), "project.id");
+        noNullElements(invitations, "invitations");
+
+        try {
+            return restTemplate.postForObject(Invitations.URI, new Invitations(invitations), CreatedInvitations.class, project.getId());
+        } catch (RestClientException e) {
+            final String emails = Arrays.stream(invitations).map(Invitation::getEmail).collect(Collectors.joining(","));
+            throw new GoodDataException("Unable to invite " + emails + " to project " + project.getId(), e);
         }
     }
 }

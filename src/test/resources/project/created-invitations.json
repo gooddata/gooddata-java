@@ -1,0 +1,16 @@
+{
+  "createdInvitations": {
+    "uri": [
+      "uri1",
+      "uri2"
+    ],
+    "loginsDomainMismatch": [
+      "mis1",
+      "mis2"
+    ],
+    "loginsAlreadyInProject": [
+      "alr1",
+      "alr2"
+    ]
+  }
+}
