@@ -23,6 +23,7 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ProjectServiceTest {
@@ -110,5 +111,40 @@ public class ProjectServiceTest {
 
         final Project result = service.getProjectById(ID);
         assertThat(result, is(project));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testAddUserToProjectNullProject() {
+        service.addUserToProject(null, mock(Account.class));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testAddUserToProjectNullAccount() {
+        service.addUserToProject(mock(Project.class), null);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testAddUserToProjectNullAccountUri() {
+        service.addUserToProject(mock(Project.class), mock(Account.class));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testUpdateUserInProjectNullProject() {
+        service.updateUserInProject(null, mock(User.class));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testUpdateUserInProjectNullUser() {
+        service.updateUserInProject(mock(Project.class), null);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testGetUserInProjectNullProject() throws Exception {
+        service.getUser(null, mock(Account.class));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testGetUserInProjectNullAccount() throws Exception {
+        service.getUser(mock(Project.class), null);
     }
 }

@@ -12,6 +12,7 @@ import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.PollResult;
 import com.gooddata.SimplePollHandler;
+import com.gooddata.account.Account;
 import com.gooddata.account.AccountService;
 import com.gooddata.collections.MultiPageList;
 import com.gooddata.collections.Page;
@@ -309,6 +310,10 @@ public class ProjectService extends AbstractService {
         return page.getPageUri(fromUri(getUsersUri(project)));
     }
 
+    private static URI getUserUri(final Project project, final Account account) {
+        return User.TEMPLATE.expand(project.getId(), account.getId());
+    }
+
     /**
      * Get set of user role by given project.
      *
@@ -367,6 +372,83 @@ public class ProjectService extends AbstractService {
         } catch (RestClientException e) {
             final String emails = Arrays.stream(invitations).map(Invitation::getEmail).collect(Collectors.joining(","));
             throw new GoodDataException("Unable to invite " + emails + " to project " + project.getId(), e);
+        }
+    }
+
+    /**
+     * get user in project
+     *
+     * @param project where to find
+     * @param account which user to find
+     * @return User representation in project
+     * @throws UserInProjectNotFoundException when user is not in project
+     */
+    public User getUser(final Project project, final Account account) {
+        notNull(account, "account");
+        notEmpty(account.getUri(), "account.uri");
+        notNull(project, "project");
+
+        try {
+            return restTemplate.getForObject(getUserUri(project, account), User.class);
+        } catch (GoodDataRestException e) {
+            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+                throw new UserInProjectNotFoundException("User " + account.getId() + " is not in project", e);
+            } else {
+                throw e;
+            }
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to get user " + account.getId() + " in project", e);
+        }
+    }
+
+    /** Add user in to the project
+     *
+     * @param project where to add user
+     * @param account to be added
+     * @param userRoles list of user roles
+     * @return user added to the project
+     * @throws ProjectUsersUpdateException in case of failure
+     */
+    public User addUserToProject(final Project project, final Account account, final Role... userRoles) {
+        notNull(project, "project");
+        notNull(account, "account");
+        notEmpty(account.getUri(), "account.uri");
+        notNull(userRoles, "userRoles");
+        notEmpty(project.getId(), "project.id");
+
+        final User user = new User(account, userRoles);
+
+        doPostProjectUsersUpdate(project, user);
+
+        return getUser(project, account);
+    }
+
+    /**
+     * Update user in the project
+     *
+     * @param project in which to update user
+     * @param users to update
+     * @throws ProjectUsersUpdateException in case of failure
+     */
+    public void updateUserInProject(final Project project, final User... users) {
+        notNull(project, "project");
+        notNull(users, "users");
+        notEmpty(project.getId(), "project.id");
+
+        doPostProjectUsersUpdate(project, users);
+    }
+
+    private void doPostProjectUsersUpdate(final Project project, final User... users) {
+        final URI usersUri = getUsersUri(project);
+
+        try {
+            final ProjectUsersUpdateResult projectUsersUpdateResult = restTemplate.postForObject(usersUri, new Users(users), ProjectUsersUpdateResult.class);
+
+            if (!projectUsersUpdateResult.getFailed().isEmpty()) {
+                throw new ProjectUsersUpdateException("Unable to update users: " + projectUsersUpdateResult.getFailed());
+            }
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to update users in project", e);
         }
     }
 }

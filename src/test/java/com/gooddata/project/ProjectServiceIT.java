@@ -7,14 +7,15 @@ package com.gooddata.project;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
+import com.gooddata.account.Account;
 import com.gooddata.collections.PageRequest;
 import com.gooddata.gdc.AsyncTask;
 import com.gooddata.gdc.TaskStatus;
 import com.gooddata.gdc.UriResponse;
-import net.javacrumbs.jsonunit.core.Option;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -32,6 +33,8 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 public class ProjectServiceIT extends AbstractGoodDataIT {
 
@@ -42,11 +45,20 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     private Project enabled;
     private Project deleted;
 
+    private Account account;
+    private Role role;
+
     @BeforeClass
     public void setUp() throws Exception {
         loading = readObjectFromResource("/project/project-loading.json", Project.class);
         enabled = readObjectFromResource("/project/project.json", Project.class);
         deleted = readObjectFromResource("/project/project-deleted.json", Project.class);
+
+        account = readObjectFromResource("/account/account.json", Account.class);
+
+        role = mock(Role.class);
+
+        doReturn("/gdc/account/profile/1").when(role).getUri();
     }
 
     @Test
@@ -335,5 +347,76 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         final CreatedInvitations invitations = gd.getProjectService().sendInvitations(enabled, new Invitation("roman@gooddata.com"));
         assertThat(invitations, is(notNullValue()));
         assertThat(invitations.getInvitationUris(), contains("uri1", "uri2"));
+    }
+
+    @Test
+    public void addUserToProject() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(Users.TEMPLATE.expand("PROJECT_ID").toString())
+                .havingBody(jsonEquals(resource("project/addUserRequest.json")).when(IGNORING_ARRAY_ORDER))
+        .respond()
+                .withBody(readFromResource("/project/projectUsersUpdateResult.json"));
+
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(User.TEMPLATE.expand("PROJECT_ID", "ID").toString())
+        .respond()
+                .withBody(readFromResource("/project/project-user.json"));
+
+        final User user = gd.getProjectService().addUserToProject(enabled, account, role);
+
+        assertThat(user, notNullValue());
+    }
+
+    @Test(expectedExceptions = ProjectUsersUpdateException.class)
+    public void addUserToProjectFail() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(Users.TEMPLATE.expand("PROJECT_ID").toString())
+                .havingBody(jsonEquals(resource("project/addUserRequest.json")).when(IGNORING_ARRAY_ORDER))
+        .respond()
+                .withBody(readFromResource("/project/projectUsersUpdateResultFail.json"));
+
+        gd.getProjectService().addUserToProject(enabled, account, role);
+    }
+
+    @Test
+    public void disableUserInProject() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(Users.TEMPLATE.expand("PROJECT_ID").toString())
+                .havingBody(jsonEquals(resource("project/disableUserInProject.json")).when(IGNORING_ARRAY_ORDER))
+        .respond()
+                .withBody(readFromResource("/project/projectUsersUpdateResult.json"));
+
+        final User user = new User(account, role);
+        user.setStatus("DISABLED");
+
+        gd.getProjectService().updateUserInProject(enabled, user);
+    }
+
+    @Test
+    public void getUserInProject() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(User.TEMPLATE.expand("PROJECT_ID", "ID").toString())
+        .respond()
+                .withBody(readFromResource("/project/project-user.json"));
+
+        final User user = gd.getProjectService().getUser(enabled, account);
+
+        assertThat(user, notNullValue());
+    }
+
+    @Test(expectedExceptions = UserInProjectNotFoundException.class)
+    public void getUserInProjectNotFound() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(User.TEMPLATE.expand("PROJECT_ID", "ID").toString())
+                .respond()
+        .withStatus(404);
+
+        gd.getProjectService().getUser(enabled, account);
     }
 }
