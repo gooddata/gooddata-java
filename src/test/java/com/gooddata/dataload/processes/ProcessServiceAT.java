@@ -7,6 +7,7 @@ package com.gooddata.dataload.processes;
 
 import com.gooddata.AbstractGoodDataAT;
 import com.gooddata.FutureResult;
+import com.gooddata.collections.MultiPageList;
 import com.gooddata.collections.PageableList;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -165,8 +166,8 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
     public void removeSchedule() {
         gd.getProcessService().removeSchedule(schedule);
         gd.getProcessService().removeSchedule(triggeredSchedule);
-        final Collection<Schedule> schedules = gd.getProcessService().listSchedules(project);
-        assertThat(schedules, not(hasItems(hasSameScheduleIdAs(schedule), hasSameScheduleIdAs(triggeredSchedule))));
+        final MultiPageList<Schedule> schedules = (MultiPageList<Schedule>) gd.getProcessService().listSchedules(project);
+        assertThat(schedules.collectAll(), not(hasItems(hasSameScheduleIdAs(schedule), hasSameScheduleIdAs(triggeredSchedule))));
     }
 
 }

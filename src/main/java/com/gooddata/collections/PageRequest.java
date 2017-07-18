@@ -5,6 +5,7 @@
  */
 package com.gooddata.collections;
 
+import com.gooddata.util.GoodDataToStringBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -106,6 +107,11 @@ public class PageRequest implements Page {
         }
         uriBuilder.replaceQueryParam("limit", limit);
         return uriBuilder;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 
     @Override
