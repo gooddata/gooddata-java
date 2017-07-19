@@ -236,15 +236,15 @@ public class PageableList<E> implements List<E> {
         final PageableList<?> that = (PageableList<?>) o;
 
         if (!items.equals(that.items)) return false;
-        if (!getPaging().equals(that.getPaging())) return false;
-        return getLinks().equals(that.getLinks());
+        if (getPaging() != null ? !getPaging().equals(that.getPaging()) : that.getPaging() != null) return false;
+        return getLinks() != null ? getLinks().equals(that.getLinks()) : that.getLinks() == null;
     }
 
     @Override
     public int hashCode() {
         int result = items.hashCode();
-        result = 31 * result + getPaging().hashCode();
-        result = 31 * result + getLinks().hashCode();
+        result = 31 * result + (getPaging() != null ? getPaging().hashCode() : 0);
+        result = 31 * result + (getLinks() != null ? getLinks().hashCode() : 0);
         return result;
     }
 }
