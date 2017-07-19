@@ -52,7 +52,7 @@ public class WarehouseService extends AbstractService {
      *
      * @return created warehouse
      */
-    public FutureResult<Warehouse> createWarehouse(Warehouse warehouse) {
+    public FutureResult<Warehouse> createWarehouse(final Warehouse warehouse) {
         notNull(warehouse, "warehouse");
         final WarehouseTask task;
         try {
@@ -101,8 +101,9 @@ public class WarehouseService extends AbstractService {
      * Delete Warehouse.
      * @param warehouse to delete
      */
-    public void removeWarehouse(Warehouse warehouse) {
+    public void removeWarehouse(final Warehouse warehouse) {
         notNull(warehouse, "warehouse");
+        notNull(warehouse.getUri(), "warehouse.uri");
         try {
             restTemplate.delete(warehouse.getUri());
         } catch (GoodDataException | RestClientException e) {
@@ -116,7 +117,7 @@ public class WarehouseService extends AbstractService {
      * @return Warehouse
      * @throws com.gooddata.GoodDataException when Warehouse can't be accessed
      */
-    public Warehouse getWarehouseByUri(String uri) {
+    public Warehouse getWarehouseByUri(final String uri) {
         notEmpty(uri, "uri");
         try {
             return restTemplate.getForObject(uri, Warehouse.class);
@@ -294,6 +295,7 @@ public class WarehouseService extends AbstractService {
      */
     public FutureResult<Void> removeUserFromWarehouse(final WarehouseUser user) {
         notNull(user, "user");
+        notNull(user.getUri(), "user.uri");
 
         final WarehouseTask task;
         try {
@@ -339,8 +341,9 @@ public class WarehouseService extends AbstractService {
      * @return updated warehouse
      * @throws com.gooddata.GoodDataException when update fails
      */
-    public Warehouse updateWarehouse(Warehouse toUpdate) {
-        notNull(toUpdate, "warehouse to update");
+    public Warehouse updateWarehouse(final Warehouse toUpdate) {
+        notNull(toUpdate, "warehouse");
+        notNull(toUpdate.getUri(), "warehouse.uri");
         try {
             restTemplate.put(toUpdate.getUri(), toUpdate);
         } catch (GoodDataRestException | RestClientException e) {
@@ -374,10 +377,13 @@ public class WarehouseService extends AbstractService {
     }
 
     private URI getWarehouseSchemasUri(final Warehouse warehouse) {
+        notNull(warehouse, "warehouse");
+        notNull(warehouse.getId(), "warehouse.id");
         return WarehouseSchemas.TEMPLATE.expand(warehouse.getId());
     }
 
     private URI getWarehouseSchemasUri(final Warehouse warehouse, final Page page) {
+        notNull(page, "page");
         return page.getPageUri(UriComponentsBuilder.fromUri(getWarehouseSchemasUri(warehouse)));
     }
 
@@ -402,6 +408,7 @@ public class WarehouseService extends AbstractService {
      */
     public WarehouseSchema getWarehouseSchemaByName(final Warehouse warehouse, final String name) {
         notNull(warehouse, "warehouse");
+        notNull(warehouse.getId(), "warehouse.id");
         notEmpty(name, "name");
         final String uri = WarehouseSchema.TEMPLATE.expand(warehouse.getId(), name).toString();
         return getWarehouseSchemaByUri(uri);

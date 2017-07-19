@@ -50,6 +50,7 @@ public class ConnectorService extends AbstractService {
      */
     public Integration getIntegration(final Project project, final ConnectorType connectorType) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
         notNull(connectorType, "connector");
 
         try {
@@ -75,6 +76,7 @@ public class ConnectorService extends AbstractService {
      */
     public Integration createIntegration(final Project project, final Settings settings) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
         notNull(settings, "settings");
 
         final Collection<ProjectTemplate> projectTemplates = projectService.getProjectTemplates(project);
@@ -100,7 +102,8 @@ public class ConnectorService extends AbstractService {
     public Integration createIntegration(final Project project, final ConnectorType connectorType,
                                          final Integration integration) {
         notNull(project, "project");
-        notNull(connectorType, "connector");
+        notNull(project.getId(), "project.id");
+        notNull(connectorType, "connectorType");
         notNull(integration, "integration");
 
         try {
@@ -120,8 +123,9 @@ public class ConnectorService extends AbstractService {
      * @throws ConnectorException if integration can't be updated
      */
     public void updateIntegration(final Project project, final ConnectorType connectorType,
-                                         final Integration integration) {
+                                  final Integration integration) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
         notNull(connectorType, "connector");
         notNull(integration, "integration");
 
@@ -174,6 +178,7 @@ public class ConnectorService extends AbstractService {
      */
     public CoupaInstance createCoupaInstance(Project project, CoupaInstance instance) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
         notNull(instance, "instance");
 
         //POST request for creating Coupa instance returns created instance URI as response
@@ -200,7 +205,10 @@ public class ConnectorService extends AbstractService {
      * @param project project
      * @return collection of Coupa instances or empty collection if no Coupa instances are defined
      */
-    public Collection<CoupaInstance> findCoupaInstances(Project project) {
+    public Collection<CoupaInstance> findCoupaInstances(final Project project) {
+        notNull(project, "project");
+        notNull(project.getId(), "project.id");
+
         try {
             final CoupaInstances instances =
                     restTemplate.getForObject(CoupaInstances.URL, CoupaInstances.class, project.getId());
@@ -227,8 +235,10 @@ public class ConnectorService extends AbstractService {
      * @param <T> type of fetched settings
      * @return settings of connector
      */
-    public <T extends Settings> T getSettings(Project project, ConnectorType connectorType, Class<T> settingsClass) {
+    public <T extends Settings> T getSettings(final Project project, final ConnectorType connectorType,
+                                              final Class<T> settingsClass) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
         notNull(connectorType, "connectorType");
         notNull(settingsClass, "settingsClass");
 
@@ -248,6 +258,8 @@ public class ConnectorService extends AbstractService {
      */
     public void updateSettings(final Project project, final Settings settings) {
         notNull(settings, "settings");
+        notNull(settings.getConnectorType(), "settings.connectorType");
+        notNull(project.getId(), "project.id");
         notNull(project, "project");
 
         try {
@@ -267,6 +279,7 @@ public class ConnectorService extends AbstractService {
      */
     public FutureResult<ProcessStatus> executeProcess(final Project project, final ProcessExecution execution) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
         notNull(execution, "execution");
 
         final String connectorType = execution.getConnectorType().getName();

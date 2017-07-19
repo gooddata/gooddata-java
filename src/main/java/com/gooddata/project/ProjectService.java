@@ -87,7 +87,7 @@ public class ProjectService extends AbstractService {
      * @return created project (including very useful id)
      * @throws com.gooddata.GoodDataException when projects creation fails
      */
-    public FutureResult<Project> createProject(Project project) {
+    public FutureResult<Project> createProject(final Project project) {
         notNull(project, "project");
 
         final UriResponse uri;
@@ -164,15 +164,19 @@ public class ProjectService extends AbstractService {
      */
     public void removeProject(final Project project) {
         notNull(project, "project");
+        notNull(project.getUri(), "project.uri");
+
         try {
             restTemplate.delete(project.getUri());
         } catch (GoodDataRestException | RestClientException e) {
-            throw new GoodDataException("Unable to delete project " + project.getId(), e);
+            throw new GoodDataException("Unable to delete project " + project.getUri(), e);
         }
     }
 
-    public Collection<ProjectTemplate> getProjectTemplates(Project project) {
+    public Collection<ProjectTemplate> getProjectTemplates(final Project project) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
+
         try {
             final ProjectTemplates templates = restTemplate.getForObject(ProjectTemplate.URI, ProjectTemplates.class, project.getId());
             return templates != null && templates.getTemplatesInfo() != null ? templates.getTemplatesInfo() : Collections.emptyList();
@@ -187,8 +191,10 @@ public class ProjectService extends AbstractService {
      * @param project project to fetch validation types for
      * @return available validations
      */
-    public Set<ProjectValidationType> getAvailableProjectValidationTypes(Project project) {
+    public Set<ProjectValidationType> getAvailableProjectValidationTypes(final Project project) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
+
         try {
             return restTemplate.getForObject(ProjectValidations.URI, ProjectValidations.class, project.getId()).getValidations();
         } catch (GoodDataRestException | RestClientException e) {
@@ -226,6 +232,8 @@ public class ProjectService extends AbstractService {
      */
     public FutureResult<ProjectValidationResults> validateProject(final Project project, Set<ProjectValidationType> validations) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
+
         final AsyncTask task;
         try {
             task = restTemplate.postForObject(ProjectValidations.URI, new ProjectValidations(validations), AsyncTask.class, project.getId());
@@ -303,6 +311,7 @@ public class ProjectService extends AbstractService {
     }
 
     private static URI getUsersUri(final Project project) {
+        notNull(project.getId(), "project.id");
         return Users.TEMPLATE.expand(project.getId());
     }
 
@@ -311,6 +320,7 @@ public class ProjectService extends AbstractService {
     }
 
     private static URI getUserUri(final Project project, final Account account) {
+        notNull(account.getId(), "account.id");
         return User.TEMPLATE.expand(project.getId(), account.getId());
     }
 
@@ -324,6 +334,8 @@ public class ProjectService extends AbstractService {
      */
     public Set<Role> getRoles(final Project project) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
+
         final Roles roles = restTemplate.getForObject(Roles.URI, Roles.class, project.getId());
         final Set<Role> result = new HashSet<>();
         for (String roleUri : roles.getRoles()) {
@@ -385,7 +397,7 @@ public class ProjectService extends AbstractService {
      */
     public User getUser(final Project project, final Account account) {
         notNull(account, "account");
-        notEmpty(account.getUri(), "account.uri");
+        notEmpty(account.getId(), "account.id");
         notNull(project, "project");
 
         try {

@@ -38,6 +38,7 @@ public class ExportImportService extends AbstractService {
      */
     public FutureResult<PartialMdExportToken> partialExport(Project project, final PartialMdExport export) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
         notNull(export, "export");
 
         final PartialMdArtifact partialMdArtifact;
@@ -74,13 +75,14 @@ public class ExportImportService extends AbstractService {
      */
     public FutureResult<Void> partialImport(Project project, PartialMdExportToken mdExportToken) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
         notNull(mdExportToken, "mdExportToken");
 
         final UriResponse importResponse;
         try {
             importResponse = restTemplate.postForObject(PartialMdExportToken.URI, mdExportToken, UriResponse.class, project.getId());
         } catch (GoodDataRestException | RestClientException e) {
-            throw new ExportImportException("Unable to import partial metadata to project '" + project.getUri()
+            throw new ExportImportException("Unable to import partial metadata to project '" + project.getId()
                     + "' with token '" + mdExportToken.getToken() + "'.", e);
         }
 
