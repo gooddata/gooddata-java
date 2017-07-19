@@ -7,6 +7,7 @@ package com.gooddata.warehouse;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
+import com.gooddata.collections.MultiPageList;
 import com.gooddata.collections.PageRequest;
 import com.gooddata.collections.PageableList;
 import org.hamcrest.BaseMatcher;
@@ -200,8 +201,31 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/datawarehouse/instances/instanceId/users")
+                .havingParameterEqualTo("limit", "100")
+                .respond()
+                .withBody(readFromResource("/warehouse/users-with-next-page-link.json"));
+
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/datawarehouse/instances/instanceId/users")
+                .havingParameterEqualTo("offset", "profile-id-next")
+                .respond()
+                .withBody(readFromResource("/warehouse/users.json"));
+
+        final MultiPageList<WarehouseUser> users = (MultiPageList<WarehouseUser>) gd.getWarehouseService().listWarehouseUsers(warehouse);
+        assertThat(users.size(), is(2));
+        assertThat(users.totalSize(), is(4));
+        assertThat(users.collectAll().size(), is(4));
+    }
+
+
+    @Test
+    public void shouldPageUsersListWithStartPage() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/datawarehouse/instances/instanceId/users")
                 .havingParameterEqualTo("limit", "2")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/warehouse/users.json"));
 
         final PageableList<WarehouseUser> users = gd.getWarehouseService().listWarehouseUsers(warehouse, new PageRequest(2));

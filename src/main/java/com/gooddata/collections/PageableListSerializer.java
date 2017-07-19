@@ -39,7 +39,9 @@ public abstract class PageableListSerializer extends JsonSerializer<PageableList
 
         jgen.writeStartArray();
         final ObjectCodec codec = jgen.getCodec();
-        for (Object item: value) {
+
+        // only serialize current page items, do not iterate over other pages
+        for (final Object item: value.subList(0, value.size())) {
             codec.writeValue(jgen, item);
         }
         jgen.writeEndArray();

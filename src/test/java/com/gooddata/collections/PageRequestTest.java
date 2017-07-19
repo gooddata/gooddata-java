@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import java.net.URI;
 
 import static com.gooddata.collections.PageRequest.DEFAULT_LIMIT;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -87,5 +88,23 @@ public class PageRequestTest {
     public void shouldReturnMaxForSanitizedLimit() throws Exception {
         final PageRequest pageRequest = new PageRequest(100);
         assertThat(pageRequest.getSanitizedLimit(10), is(10));
+    }
+
+    @Test
+    public void equals() {
+        assertThat(new PageRequest(), is(not(new PageRequest(10))));
+
+        assertThat(new PageRequest(10), is(new PageRequest(10)));
+        assertThat(new PageRequest(10), is(not(new PageRequest(11))));
+
+        assertThat(new PageRequest(1, 2), is(new PageRequest(1, 2)));
+        assertThat(new PageRequest(1, 2), is(new PageRequest("1", 2)));
+        assertThat(new PageRequest(1, 2), is(not(new PageRequest("meh", 2))));
+        assertThat(new PageRequest(1, 2), is(not(new PageRequest("1", 3))));
+    }
+
+    @Test
+    public void testToString() {
+        assertThat(new PageRequest(1, 2).toString(), is("PageRequest[offset=1,limit=2]"));
     }
 }

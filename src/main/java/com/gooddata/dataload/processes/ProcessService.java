@@ -13,7 +13,9 @@ import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.SimplePollHandler;
 import com.gooddata.account.AccountService;
+import com.gooddata.collections.MultiPageList;
 import com.gooddata.collections.Page;
+import com.gooddata.collections.PageRequest;
 import com.gooddata.collections.PageableList;
 import com.gooddata.gdc.DataStoreService;
 import com.gooddata.project.Project;
@@ -436,24 +438,24 @@ public class ProcessService extends AbstractService {
      * Get first page of paged list of schedules by given project.
      *
      * @param project project of schedules
-     * @return list of found schedules or empty list
+     * @return MultiPageList list of found schedules or empty list
      */
-    public PageableList<Schedule> listSchedules(Project project) {
-        notNull(project, "project");
-        return listSchedules(getSchedulesUri(project));
+    public PageableList<Schedule> listSchedules(final Project project) {
+        return listSchedules(project, new PageRequest());
     }
 
     /**
      * Get defined page of paged list of schedules by given project.
      *
-     * @param project project of schedules
-     * @param page    page to be retrieved
-     * @return list of found schedules or empty list
+     * @param project   project of schedules
+     * @param startPage page to be retrieved
+     * @return MultiPageList list of found schedules or empty list
      */
-    public PageableList<Schedule> listSchedules(Project project, Page page) {
+    public PageableList<Schedule> listSchedules(final Project project,
+                                                final Page startPage) {
         notNull(project, "project");
-        notNull(page, "page");
-        return listSchedules(page.getPageUri(UriComponentsBuilder.fromUri(getSchedulesUri(project))));
+        notNull(startPage, "startPage");
+        return new MultiPageList<>(startPage, page -> listSchedules(getSchedulesUri(project, page)));
     }
 
     /**
@@ -520,8 +522,12 @@ public class ProcessService extends AbstractService {
         return Schedule.TEMPLATE.expand(project.getId(), id);
     }
 
-    private static URI getSchedulesUri(Project project) {
+    private static URI getSchedulesUri(final Project project) {
         return Schedules.TEMPLATE.expand(project.getId());
+    }
+
+    private static URI getSchedulesUri(final Project project, final Page page) {
+        return page.getPageUri(UriComponentsBuilder.fromUri(getSchedulesUri(project)));
     }
 
     private Schedule postSchedule(Schedule schedule, URI postUri) {

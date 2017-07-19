@@ -60,6 +60,13 @@ public class PageableList<E> implements List<E> {
     }
 
     /**
+     * @return all items as list
+     */
+    public List<E> collectAll() {
+        return items;
+    }
+
+    /**
      * Returns description of the next page.
      *
      * @return next page, might be <code>null</code>
@@ -94,6 +101,11 @@ public class PageableList<E> implements List<E> {
         return paging;
     }
 
+    /**
+     * Returns size of the items collection on a current page.
+     *
+     * @return size of the items collection on a current page
+     */
     @Override
     public int size() {
         return items.size();
@@ -104,6 +116,9 @@ public class PageableList<E> implements List<E> {
         return items.isEmpty();
     }
 
+    /**
+     * Whether current page items contain the specified object.
+     */
     @Override
     public boolean contains(final Object o) {
         return items.contains(o);
@@ -207,5 +222,29 @@ public class PageableList<E> implements List<E> {
     @Override
     public List<E> subList(final int fromIndex, final int toIndex) {
         return items.subList(fromIndex, toIndex);
+    }
+
+    Iterator<E> getItemsIterator() {
+        return items.iterator();
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final PageableList<?> that = (PageableList<?>) o;
+
+        if (!items.equals(that.items)) return false;
+        if (!getPaging().equals(that.getPaging())) return false;
+        return getLinks().equals(that.getLinks());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = items.hashCode();
+        result = 31 * result + getPaging().hashCode();
+        result = 31 * result + getLinks().hashCode();
+        return result;
     }
 }

@@ -7,8 +7,7 @@ package com.gooddata.collections;
 
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-
+import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,7 +27,7 @@ public class PageableListTest {
 
     @Test
     public void testCollection() {
-        final PageableList<Integer> collection = new PageableList<>(Arrays.asList(1, 2, 3), null);
+        final PageableList<Integer> collection = new PageableList<>(asList(1, 2, 3), null);
         assertThat(collection, notNullValue());
         assertThat(collection, hasSize(3));
         assertThat(collection.getNextPage(), nullValue());
@@ -36,11 +35,10 @@ public class PageableListTest {
 
     @Test
     public void testCollectionWithPaging() {
-        final PageableList<Integer> collection = new PageableList<>(Arrays.asList(1, 2, 3), new Paging("1", "next"));
+        final PageableList<Integer> collection = new PageableList<>(asList(1, 2, 3), new Paging("1", "next"));
         assertThat(collection, notNullValue());
         assertThat(collection, hasSize(3));
         assertThat(collection.getNextPage(), notNullValue());
         assertThat(collection.getNextPage().getPageUri(null).toString(), is("next"));
     }
-
 }

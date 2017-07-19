@@ -13,6 +13,7 @@ import com.gooddata.GoodDataRestException;
 import com.gooddata.PollResult;
 import com.gooddata.SimplePollHandler;
 import com.gooddata.account.AccountService;
+import com.gooddata.collections.MultiPageList;
 import com.gooddata.collections.Page;
 import com.gooddata.collections.PageableList;
 import com.gooddata.gdc.AsyncTask;
@@ -28,7 +29,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -269,27 +269,27 @@ public class ProjectService extends AbstractService {
      * Get first page of paged list of users by given project.
      *
      * @param project project of users
-     * @return list of found users or empty list
+     * @return MultiPageList list of found users or empty list
      */
-    public List<User> listUsers(Project project) {
+    public PageableList<User> listUsers(final Project project) {
         notNull(project, "project");
-        return listUsers(getUsersUri(project));
+        return new MultiPageList<>(page -> listUsers(getUsersUri(project, page)));
     }
 
     /**
      * Get defined page of paged list of users by given project.
      *
-     * @param project project of users
-     * @param page    page to be retrieved
-     * @return list of found users or empty list
+     * @param project   project of users
+     * @param startPage page to be retrieved first
+     * @return MultiPageList list of found users or empty list
      */
-    public List<User> listUsers(Project project, Page page) {
+    public PageableList<User> listUsers(final Project project, final Page startPage) {
         notNull(project, "project");
-        notNull(page, "page");
-        return listUsers(page.getPageUri(fromUri(getUsersUri(project))));
+        notNull(startPage, "startPage");
+        return new MultiPageList<>(startPage, page -> listUsers(getUsersUri(project, page)));
     }
 
-    private PageableList<User> listUsers(URI uri) {
+    private PageableList<User> listUsers(final URI uri) {
         try {
             final Users users = restTemplate.getForObject(uri, Users.class);
             if (users == null) {
@@ -301,8 +301,12 @@ public class ProjectService extends AbstractService {
         }
     }
 
-    private static URI getUsersUri(Project project) {
+    private static URI getUsersUri(final Project project) {
         return Users.TEMPLATE.expand(project.getId());
+    }
+
+    private static URI getUsersUri(final Project project, final Page page) {
+        return page.getPageUri(fromUri(getUsersUri(project)));
     }
 
     /**

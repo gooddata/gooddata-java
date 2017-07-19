@@ -5,6 +5,7 @@
  */
 package com.gooddata.collections;
 
+import org.hamcrest.core.Is;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.testng.annotations.Test;
@@ -14,6 +15,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.not;
 import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 
 public class UriPageTest {
@@ -68,5 +70,17 @@ public class UriPageTest {
     public void testEncoding() throws Exception {
         final UriPage uri = new UriPage("uri?test=foo%20bar");
         assertThat(uri.getPageUri(null).toString(), is("uri?test=foo%20bar"));
+    }
+
+    @Test
+    public void equals() {
+        assertThat(new UriPage("meh"), is(new UriPage("meh")));
+        assertThat(new UriPage("meh"), is(not(new UriPage("mah"))));
+    }
+
+
+    @Test
+    public void testToString() {
+        assertThat(new UriPage("abc").toString(), Is.is("UriPage[pageUri=abc]"));
     }
 }
