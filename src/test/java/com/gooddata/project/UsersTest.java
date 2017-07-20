@@ -5,15 +5,20 @@
  */
 package com.gooddata.project;
 
+import com.gooddata.account.Account;
 import org.testng.annotations.Test;
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 public class UsersTest {
 
@@ -34,5 +39,18 @@ public class UsersTest {
         assertThat(user.getStatus(), is("ENABLED"));
         assertThat(user.getLastName(), is("ads-testing"));
         assertThat(user.getLogin(), is("ateam+ads-testing@gooddata.com"));
+    }
+
+    @Test
+    public void testSerialize() throws Exception {
+        final Account account = mock(Account.class);
+        doReturn("/gdc/account/profile/USER_ID").when(account).getUri();
+
+        final Role role = mock(Role.class);
+        doReturn("/gdc/projects/PROJECT_ID/roles/ROLE1").when(role).getUri();
+
+        final Users users = new Users(new User(account, role));
+
+        assertThat(users, jsonEquals(resource("project/addUsersToProject.json")));
     }
 }

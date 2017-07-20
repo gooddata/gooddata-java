@@ -1,0 +1,17 @@
+{
+  "users": [
+    {
+      "user": {
+        "content": {
+          "userRoles": [
+            "/gdc/account/profile/1"
+          ],
+          "status": "ENABLED"
+        },
+        "links": {
+          "self": "/gdc/account/profile/ID"
+        }
+      }
+    }
+  ]
+}

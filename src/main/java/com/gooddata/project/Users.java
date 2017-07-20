@@ -5,6 +5,9 @@
  */
 package com.gooddata.project;
 
+import static java.util.Arrays.asList;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gooddata.collections.PageableList;
 import com.gooddata.collections.Paging;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -23,11 +26,18 @@ import java.util.List;
 @JsonTypeName("users")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(using = UsersDeserializer.class)
+@JsonSerialize(using = UsersSerializer.class)
 class Users extends PageableList<User> {
     public static final String URI = "/gdc/projects/{projectId}/users";
     public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
+    static final String ROOT_NODE = "users";
+
     Users(final List<User> items, final Paging paging) {
         super(items, paging);
+    }
+
+    Users(final User... users) {
+        this(asList(users), null);
     }
 }

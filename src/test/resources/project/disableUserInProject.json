@@ -1,0 +1,17 @@
+{
+  "users": [
+    {
+      "user": {
+        "content": {
+          "userRoles": [
+            "/gdc/account/profile/1"
+          ],
+          "status": "DISABLED"
+        },
+        "links": {
+          "self": "/gdc/account/profile/ID"
+        }
+      }
+    }
+  ]
+}
