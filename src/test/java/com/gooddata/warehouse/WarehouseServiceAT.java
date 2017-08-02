@@ -11,11 +11,11 @@ import com.gooddata.collections.Page;
 import com.gooddata.collections.PageRequest;
 import com.gooddata.collections.PageableList;
 import com.gooddata.project.Environment;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -39,6 +39,8 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
 
     private static final String LOGIN = "john.smith." + UUID.randomUUID() + "@gooddata.com";
     private static final String SCHEMA_NAME = "default";
+    private static final String S3_CREDENTIALS_REGION = "us-east";
+    private static final String S3_CREDENTIALS_ACCESS_KEY = "WarehouseServiceAt" + RandomStringUtils.randomAlphabetic(5);
 
     private final String warehouseToken;
     private final WarehouseService service;
@@ -148,6 +150,33 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
     public void getDefaultWarehouseSchema() {
         WarehouseSchema warehouseSchema = service.getDefaultWarehouseSchema(warehouse);
         assertThat(warehouseSchema, is(notNullValue()));
+    }
+
+    @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
+    public void addS3Credentials() {
+        final WarehouseS3Credentials warehouseS3Credentials = service.addS3CredentialsToWarehouse(warehouse,
+                new WarehouseS3Credentials(S3_CREDENTIALS_REGION, S3_CREDENTIALS_ACCESS_KEY, "secret"))
+                .get(1, TimeUnit.MINUTES);
+
+        assertThat(warehouseS3Credentials, notNullValue());
+    }
+
+    @Test(groups = "warehouse", dependsOnMethods = "addS3Credentials")
+    public void getS3SpecificCredentials() {
+        final WarehouseS3Credentials result = service.getWarehouseS3Credentials(warehouse, S3_CREDENTIALS_REGION,
+                S3_CREDENTIALS_ACCESS_KEY);
+
+        assertThat(result, notNullValue());
+        assertThat(result.getAccessKey(), is(S3_CREDENTIALS_ACCESS_KEY));
+    }
+
+    @Test(groups = "warehouse", dependsOnMethods = "addS3Credentials")
+    public void listS3Credentials() {
+        final PageableList<WarehouseS3Credentials> result = service.listWarehouseS3Credentials(warehouse);
+
+        assertThat(result, notNullValue());
+        assertThat(result.size(), is(1));
+        assertThat(result.getNextPage(), nullValue());
     }
 
     @Test(dependsOnGroups = "warehouse")
