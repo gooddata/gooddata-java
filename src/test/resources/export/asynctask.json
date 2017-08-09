@@ -1,0 +1,7 @@
+{
+  "asyncTask": {
+    "link": {
+      "poll": "/gdc/projects/PROJECT_ID/clientexport/TASK_ID"
+    }
+  }
+}

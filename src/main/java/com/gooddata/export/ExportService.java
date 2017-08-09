@@ -9,6 +9,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
+import com.gooddata.AbstractService;
+import com.gooddata.FutureResult;
+import com.gooddata.GoodDataEndpoint;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.PollResult;
@@ -18,6 +21,10 @@ import com.gooddata.md.report.Report;
 import com.gooddata.md.report.ReportDefinition;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import com.gooddata.gdc.AsyncTask;
+import com.gooddata.md.ProjectDashboard;
+import com.gooddata.md.ProjectDashboard.Tab;
+import com.gooddata.project.Project;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -29,17 +36,30 @@ import static com.gooddata.util.Validate.notNull;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
+import static com.gooddata.md.Obj.OBJ_TEMPLATE;
+import static com.gooddata.util.Validate.notNull;
+import static org.springframework.http.HttpMethod.GET;
+
 /**
  * Export project data
- *
  * @see com.gooddata.report.ReportService
  */
 public class ExportService extends AbstractService {
 
     public static final String EXPORTING_URI = "/gdc/exporter/executor";
 
-    public ExportService(final RestTemplate restTemplate) {
+    private static final String CLIENT_EXPORT_URI = "/gdc/projects/{projectId}/clientexport";
+
+    private final GoodDataEndpoint endpoint;
+
+    /**
+     * Service for data export
+     * @param restTemplate REST template
+     * @param endpoint GoodData Endpoint
+     */
+    public ExportService(final RestTemplate restTemplate, final GoodDataEndpoint endpoint) {
         super(restTemplate);
+        this.endpoint = notNull(endpoint, "endpoint");
     }
 
     /**
@@ -140,4 +160,67 @@ public class ExportService extends AbstractService {
             throw new ExportException("Unable to export report", e);
         }
     }
-}
+
+    /**
+     * Export the given dashboard tab in PDF format to the given output stream
+     * @param dashboard dashboard
+     * @param tab tab
+     * @param output output
+     * @return polling result
+     * @throws ExportException if export fails
+     */
+    public FutureResult<Void> exportPdf(final ProjectDashboard dashboard, final Tab tab, final OutputStream output) {
+        notNull(dashboard, "dashboard");
+        notNull(tab, "tab");
+        notNull(output, "output");
+
+        final String projectId = extractProjectId(dashboard);
+        final String projectUri = Project.TEMPLATE.expand(projectId).toString();
+        final String dashboardUri = dashboard.getUri();
+
+        final ClientExport export = new ClientExport(endpoint, projectUri, dashboardUri, tab.getIdentifier());
+        final AsyncTask task;
+        try {
+            task = restTemplate.postForObject(CLIENT_EXPORT_URI, export, AsyncTask.class, projectId);
+        } catch (RestClientException | GoodDataRestException e) {
+            throw new ExportException("Unable to export dashboard: " + dashboardUri, e);
+        }
+
+        return new PollResult<>(this, new SimplePollHandler<Void>(task.getUri(), Void.class) {
+            @Override
+            public boolean isFinished(ClientHttpResponse response) throws IOException {
+                switch (response.getStatusCode()) {
+                    case OK:
+                        return true;
+                    case ACCEPTED:
+                        return false;
+                    default:
+                        throw new ExportException("Unable to export dashboard: " + dashboardUri +
+                                ", unknown HTTP response code: " + response.getStatusCode());
+                }
+            }
+
+            @Override
+            protected void onFinish() {
+                try {
+                    restTemplate.execute(task.getUri(), GET, null, new OutputStreamResponseExtractor(output));
+                } catch (GoodDataException | RestClientException e) {
+                    throw new ExportException("Unable to export dashboard: " + dashboardUri, e);
+                }
+            }
+
+            @Override
+            public void handlePollException(final GoodDataRestException e) {
+                throw new ExportException("Unable to export dashboard: " + dashboardUri, e);
+            }
+        });
+    }
+
+    static String extractProjectId(final ProjectDashboard dashboard) {
+        notNull(dashboard, "dashboard");
+        notNull(dashboard.getUri(), "dashboard.uri");
+
+        final String projectId = OBJ_TEMPLATE.match(dashboard.getUri()).get("projectId");
+        notNull(projectId, "dashboard uri - project id");
+        return projectId;
+    }}

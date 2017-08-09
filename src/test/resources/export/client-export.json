@@ -1,0 +1,6 @@
+{
+  "clientExport": {
+    "url": "https://secure.gooddata.com:443/dashboard.html#project=/gdc/projects/PROJECT&dashboard=/gdc/md/PROJECT/obj/123&tab=abc&export=1",
+    "name": "export.pdf"
+  }
+}

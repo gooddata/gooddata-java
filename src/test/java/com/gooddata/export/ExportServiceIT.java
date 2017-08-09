@@ -6,10 +6,11 @@
 package com.gooddata.export;
 
 import com.gooddata.AbstractGoodDataIT;
+import com.gooddata.gdc.AsyncTask;
 import com.gooddata.gdc.UriResponse;
+import com.gooddata.md.ProjectDashboard;
 import com.gooddata.md.report.Report;
 import com.gooddata.md.report.ReportDefinition;
-import com.gooddata.report.ReportExportFormat;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -26,8 +27,17 @@ import static org.hamcrest.Matchers.is;
 
 public class ExportServiceIT extends AbstractGoodDataIT {
 
-    private static final String URI = ExportService.EXPORTING_URI + "/123";
+    private static final String EXPORT_POLL_URI = ExportService.EXPORTING_URI + "/123";
+
+    private static final String CLIENT_EXPORT = "/gdc/projects/PROJECT_ID/clientexport";
+    private static final String CLIENT_EXPORT_POLL = CLIENT_EXPORT + "/123";
+
     private static final String RESPONSE = "abc";
+
+    private static final ReportDefinition DEFINITION = readObjectFromResource("/md/report/gridReportDefinition.json", ReportDefinition.class);
+    private static final Report REPORT = readObjectFromResource("/md/report/report.json", Report.class);
+    private static final ProjectDashboard DASHBOARD = readObjectFromResource("/md/projectDashboard.json", ProjectDashboard.class);
+
     private ExportService service;
 
     @BeforeMethod
@@ -42,9 +52,9 @@ public class ExportServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
             .respond()
                 .withStatus(202)
-                .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse("http://localhost:" + port() + URI)));
+                .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse("http://localhost:" + port() + EXPORT_POLL_URI)));
         onRequest()
-                .havingPathEqualTo(URI)
+                .havingPathEqualTo(EXPORT_POLL_URI)
                 .havingMethodEqualTo("GET")
             .respond()
                 .withStatus(202)
@@ -52,48 +62,89 @@ public class ExportServiceIT extends AbstractGoodDataIT {
                 .withStatus(200)
                 .withBody(RESPONSE)
         ;
+        onRequest()
+                .havingPathEqualTo(CLIENT_EXPORT)
+                .havingMethodEqualTo("POST")
+            .respond()
+                .withBody(OBJECT_MAPPER.writeValueAsString(new AsyncTask("http://localhost:" + port() + CLIENT_EXPORT_POLL)));
+        onRequest()
+                .havingPathEqualTo(CLIENT_EXPORT_POLL)
+                .havingMethodEqualTo("GET")
+            .respond()
+                .withStatus(202)
+            .thenRespond()
+                .withStatus(200)
+                .withBody(RESPONSE)
+        ;
+
         service = gd.getExportService();
     }
 
     @Test
     public void shouldExportReportDefinition() throws Exception {
-        final ReportDefinition rd = readObjectFromResource("/md/report/gridReportDefinition.json", ReportDefinition.class);
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        service.export(rd, ExportFormat.CSV, output).get();
+        service.export(DEFINITION, ExportFormat.CSV, output).get();
         assertThat(output.toString(StandardCharsets.US_ASCII.name()), is(RESPONSE));
     }
 
     @Test
     public void shouldExportReport() throws Exception {
-        final Report rd = readObjectFromResource("/md/report/report.json", Report.class);
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        service.export(rd, ExportFormat.CSV, output).get();
+        service.export(REPORT, ExportFormat.CSV, output).get();
         assertThat(output.toString(StandardCharsets.US_ASCII.name()), is(RESPONSE));
     }
 
     @Test(expectedExceptions = ExportException.class, expectedExceptionsMessageRegExp = "Unable to export report")
     public void shouldFail() throws Exception {
         onRequest()
-                .havingPathEqualTo(URI)
+                .havingPathEqualTo(EXPORT_POLL_URI)
                 .havingMethodEqualTo("GET")
                 .respond()
                 .withStatus(400);
 
-        final Report rd = readObjectFromResource("/md/report/report.json", Report.class);
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        service.export(rd, ExportFormat.CSV, output).get();
+        service.export(REPORT, ExportFormat.CSV, output).get();
     }
 
     @Test(expectedExceptions = NoDataExportException.class, expectedExceptionsMessageRegExp = "Export contains no data")
     public void shouldFailNoData() throws Exception {
         onRequest()
-                .havingPathEqualTo(URI)
+                .havingPathEqualTo(EXPORT_POLL_URI)
                 .havingMethodEqualTo("GET")
                 .respond()
                 .withStatus(204);
 
-        final Report rd = readObjectFromResource("/md/report/report.json", Report.class);
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        service.export(rd, ExportFormat.CSV, output).get();
+        service.export(REPORT, ExportFormat.CSV, output).get();
     }
+
+    @Test
+    public void shouldExportDashboard() throws Exception {
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        service.exportPdf(DASHBOARD, DASHBOARD.getTabs().iterator().next(), output).get();
+        assertThat(output.toString(StandardCharsets.US_ASCII.name()), is(RESPONSE));
+    }
+
+    @Test(expectedExceptions = ExportException.class)
+    public void shouldFailOnDashboardPost() throws Exception {
+        onRequest()
+                .havingPathEqualTo(CLIENT_EXPORT)
+                .havingMethodEqualTo("POST")
+            .respond()
+                .withStatus(400);
+
+        service.exportPdf(DASHBOARD, DASHBOARD.getTabs().iterator().next(), new ByteArrayOutputStream()).get();
+    }
+
+    @Test(expectedExceptions = ExportException.class)
+    public void shouldFailOnDashboardPoll() throws Exception {
+        onRequest()
+                .havingPathEqualTo(CLIENT_EXPORT_POLL)
+                .havingMethodEqualTo("GET")
+            .respond()
+                .withStatus(400);
+
+        service.exportPdf(DASHBOARD, DASHBOARD.getTabs().iterator().next(), new ByteArrayOutputStream()).get();
+    }
+
 }

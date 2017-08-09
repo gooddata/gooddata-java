@@ -9,6 +9,12 @@ import com.gooddata.AbstractGoodDataAT;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.io.ByteArrayOutputStream;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 public class ExportServiceAT extends AbstractGoodDataAT {
 
     private ExportService service;
@@ -21,5 +27,12 @@ public class ExportServiceAT extends AbstractGoodDataAT {
     @Test(groups = "export", dependsOnGroups = "report")
     public void exportReportDefinition() throws Exception {
         service.export(reportDefinition, ExportFormat.CSV, System.out);
+    }
+
+    @Test
+    public void shouldExportDashboard() throws Exception {
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        service.exportPdf(dashboard, dashboard.getTabs().iterator().next(), output).get();
+        assertThat(output, is(notNullValue()));
     }
 }
