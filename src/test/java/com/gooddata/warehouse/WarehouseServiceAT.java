@@ -152,7 +152,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         assertThat(warehouseSchema, is(notNullValue()));
     }
 
-    @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
+    @Test(groups = { "warehouse", "isolated_domain" }, dependsOnMethods = "createWarehouse")
     public void addS3Credentials() {
         final WarehouseS3Credentials warehouseS3Credentials = service.addS3CredentialsToWarehouse(warehouse,
                 new WarehouseS3Credentials(S3_CREDENTIALS_REGION, S3_CREDENTIALS_ACCESS_KEY, "secret"))
@@ -161,7 +161,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         assertThat(warehouseS3Credentials, notNullValue());
     }
 
-    @Test(groups = "warehouse", dependsOnMethods = "addS3Credentials")
+    @Test(groups = { "warehouse", "isolated_domain" }, dependsOnMethods = "addS3Credentials")
     public void getS3SpecificCredentials() {
         final WarehouseS3Credentials result = service.getWarehouseS3Credentials(warehouse, S3_CREDENTIALS_REGION,
                 S3_CREDENTIALS_ACCESS_KEY);
@@ -170,7 +170,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         assertThat(result.getAccessKey(), is(S3_CREDENTIALS_ACCESS_KEY));
     }
 
-    @Test(groups = "warehouse", dependsOnMethods = "addS3Credentials")
+    @Test(groups = { "warehouse", "isolated_domain" }, dependsOnMethods = "addS3Credentials")
     public void listS3Credentials() {
         final PageableList<WarehouseS3Credentials> result = service.listWarehouseS3Credentials(warehouse);
 
