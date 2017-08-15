@@ -53,6 +53,7 @@ public class GridTest {
 
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testSerialization() throws Exception {
         final Map<String, Object> colWidths = new HashMap<>();
         final Map<String, List<String>> sort = new HashMap<>();
@@ -62,7 +63,10 @@ public class GridTest {
         final Grid grid = new Grid(
                 asList(METRIC_GROUP),
                 asList(new AttributeInGrid("/gdc/md/PROJECT_ID/obj/ATTR_ID", "attr")),
-                asList(new MetricElement("/gdc/md/PROJECT_ID/obj/METR_ID", "metr")), sort, asList(colWidths));
+                asList(new MetricElement("/gdc/md/PROJECT_ID/obj/METR_ID", "metr")),
+                sort,
+                asList(colWidths)
+        );
 
         OBJECT_MAPPER.writeValueAsString(grid);
         assertThat(grid, jsonEquals(resource("md/report/grid-input.json")));

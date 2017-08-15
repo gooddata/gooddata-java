@@ -123,7 +123,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
 
     @Test(groups = { "warehouse", "isolated_domain" }, dependsOnMethods = "shouldListUsers")
     public void shouldAddUserToWarehouse() {
-        warehouseUser = service.addUserToWarehouse(warehouse, new WarehouseUser(WarehouseUser.ADMIN_ROLE, null, LOGIN)).get(60, TimeUnit.SECONDS);
+        warehouseUser = service.addUserToWarehouse(warehouse, WarehouseUser.createWithlogin(LOGIN, WarehouseUserRole.ADMIN)).get(60, TimeUnit.SECONDS);
 
         assertThat(warehouseUser, is(notNullValue()));
     }
