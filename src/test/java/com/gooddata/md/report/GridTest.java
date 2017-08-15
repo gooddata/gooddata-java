@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.gooddata.md.report.MetricGroup.METRIC_GROUP;
-import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
@@ -68,7 +67,6 @@ public class GridTest {
                 asList(colWidths)
         );
 
-        OBJECT_MAPPER.writeValueAsString(grid);
         assertThat(grid, jsonEquals(resource("md/report/grid-input.json")));
     }
 
