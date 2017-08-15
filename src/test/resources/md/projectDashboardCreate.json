@@ -1,0 +1,16 @@
+{
+  "projectDashboard": {
+    "content": {
+      "tabs": [
+        {
+          "title": "my tab",
+          "items": []
+        }
+      ],
+      "filters": []
+    },
+    "meta": {
+      "title": "my dashboard"
+    }
+  }
+}

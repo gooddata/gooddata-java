@@ -15,6 +15,7 @@ import static org.hamcrest.Matchers.*;
 import static org.testng.AssertJUnit.assertTrue;
 
 import com.gooddata.AbstractGoodDataAT;
+import com.gooddata.md.ProjectDashboard.Tab;
 import com.gooddata.md.report.AttributeInGrid;
 import com.gooddata.md.report.Filter;
 import com.gooddata.md.report.GridReportDefinitionContent;
@@ -73,6 +74,16 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
                 asList(new Filter("(SELECT [" + metric.getUri() + "]) >= 0"))
         ));
         report = md.createObj(project, new Report(reportDefinition.getTitle(), reportDefinition));
+    }
+
+    @Test(groups = "md", dependsOnGroups = "model")
+    public void createDashboardEmpty() throws Exception {
+        dashboard = gd.getMetadataService().createObj(project, new ProjectDashboard("My Dashboard", new Tab("My Tab")));
+
+        assertThat(dashboard.getTitle(), is("My Dashboard"));
+        assertThat(dashboard.getTabs(), hasSize(1));
+        final Tab tab = dashboard.getTabs().iterator().next();
+        assertThat(tab.getTitle(), is("My Tab"));
     }
 
     @Test(groups = "md", dependsOnMethods = "createReport")
