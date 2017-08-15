@@ -68,8 +68,8 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         reportDefinition = md.createObj(project, GridReportDefinitionContent.create(
                 "Department avg shoe size",
                 asList(METRIC_GROUP),
-                asList(new AttributeInGrid(attr.getDefaultDisplayForm().getUri())),
-                asList(new MetricElement(metric.getUri(), "Avg shoe size")),
+                asList(new AttributeInGrid(attr.getDefaultDisplayForm())),
+                asList(new MetricElement(metric, "Avg shoe size")),
                 asList(new Filter("(SELECT [" + metric.getUri() + "]) >= 0"))
         ));
         report = md.createObj(project, new Report(reportDefinition.getTitle(), reportDefinition));
