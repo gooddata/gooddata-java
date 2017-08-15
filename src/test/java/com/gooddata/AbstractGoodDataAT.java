@@ -7,6 +7,7 @@ package com.gooddata;
 
 import com.gooddata.md.Attribute;
 import com.gooddata.md.Metric;
+import com.gooddata.md.ProjectDashboard;
 import com.gooddata.md.ScheduledMail;
 import com.gooddata.md.report.Report;
 import com.gooddata.md.report.ReportDefinition;
@@ -55,6 +56,7 @@ public abstract class AbstractGoodDataAT {
     protected static Report report;
     protected static ReportDefinition reportDefinition;
     protected static ScheduledMail scheduledMail;
+    protected static ProjectDashboard dashboard;
 
     public static String getProperty(String name) {
         final String value = System.getenv(name);

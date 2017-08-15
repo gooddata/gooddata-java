@@ -6,6 +6,7 @@
 package com.gooddata.md;
 
 import static com.gooddata.util.Validate.notNull;
+import static java.util.Arrays.asList;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 
 /**
@@ -35,6 +37,10 @@ public class ProjectDashboard extends AbstractObj implements Queryable {
     private ProjectDashboard(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
         super(meta);
         this.content = notNull(content, "content");
+    }
+
+    public ProjectDashboard(final String title, final Tab... tabs) {
+        this(new Meta(title), new Content(asList(tabs)));
     }
 
     @JsonIgnore
@@ -63,6 +69,10 @@ public class ProjectDashboard extends AbstractObj implements Queryable {
         return null;
     }
 
+    public Content getContent() {
+        return content;
+    }
+
     @Override
     public String toString() {
         return GoodDataToStringBuilder.defaultToString(this);
@@ -74,9 +84,16 @@ public class ProjectDashboard extends AbstractObj implements Queryable {
 
         private final Collection<Tab> tabs;
 
+        @JsonProperty("filters")
+        private final Collection<Object> filters = Collections.emptyList(); // dummy just to make input validation pass
+
         @JsonCreator
         private Content(@JsonProperty("tabs") Collection<Tab> tabs) {
             this.tabs = tabs;
+        }
+
+        public Collection<Tab> getTabs() {
+            return tabs;
         }
 
         @Override
@@ -92,10 +109,17 @@ public class ProjectDashboard extends AbstractObj implements Queryable {
         private final String identifier;
         private final String title;
 
+        @JsonProperty("items")
+        private final Collection<Object> items = Collections.emptyList(); // dummy just to make input validation pass
+
         @JsonCreator
         private Tab(@JsonProperty("identifier") String identifier, @JsonProperty("title") String title) {
             this.identifier = identifier;
             this.title = title;
+        }
+
+        public Tab(final String title) {
+            this(null, title);
         }
 
         public String getIdentifier() {
