@@ -40,6 +40,7 @@ public class ModelService extends AbstractService {
 
     private FutureResult<ModelDiff> getProjectModelDiff(Project project, DiffRequest diffRequest) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
         notNull(diffRequest, "diffRequest");
         try {
             final AsyncTask asyncTask = restTemplate
@@ -121,6 +122,7 @@ public class ModelService extends AbstractService {
      */
     public FutureResult<Void> updateProjectModel(final Project project, final Collection<String> maqlDdl) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
         noNullElements(maqlDdl, "maqlDdl");
         if (maqlDdl.isEmpty()) {
             throw new IllegalArgumentException("MAQL DDL string(s) should be given");

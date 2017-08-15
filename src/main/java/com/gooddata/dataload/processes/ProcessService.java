@@ -463,8 +463,10 @@ public class ProcessService extends AbstractService {
      *
      * @param schedule to delete
      */
-    public void removeSchedule(Schedule schedule) {
+    public void removeSchedule(final Schedule schedule) {
         notNull(schedule, "schedule");
+        notNull(schedule.getUri(), "schedule.uri");
+
         try {
             restTemplate.delete(schedule.getUri());
         } catch (GoodDataException | RestClientException e) {
@@ -480,6 +482,8 @@ public class ProcessService extends AbstractService {
      */
     public FutureResult<ScheduleExecution> executeSchedule(final Schedule schedule) {
         notNull(schedule, "schedule");
+        notNull(schedule.getExecutionsUri(), "schedule.executionsUri");
+
         ScheduleExecution scheduleExecution;
         try {
             scheduleExecution = restTemplate.postForObject(schedule.getExecutionsUri(), new ScheduleExecution(), ScheduleExecution.class);
@@ -519,10 +523,16 @@ public class ProcessService extends AbstractService {
     }
 
     private static URI getScheduleUri(Project project, String id) {
+        notNull(project, "project");
+        notNull(project.getId(), "project.id");
+        notEmpty(id, "id");
+
         return Schedule.TEMPLATE.expand(project.getId(), id);
     }
 
     private static URI getSchedulesUri(final Project project) {
+        notNull(project, "project");
+        notNull(project.getId(), "project.id");
         return Schedules.TEMPLATE.expand(project.getId());
     }
 
@@ -553,6 +563,10 @@ public class ProcessService extends AbstractService {
     }
 
     private static URI getProcessUri(Project project, String id) {
+        notNull(project, "project");
+        notNull(project.getId(), "project.id");
+        notEmpty(id, "id");
+
         return DataloadProcess.TEMPLATE.expand(project.getId(), id);
     }
 

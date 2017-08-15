@@ -9,12 +9,14 @@ import com.gooddata.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.dataset.DatasetManifest;
-import com.gooddata.util.Validate;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
+
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Service enabling access to project templates, under /projectTemplates/...
@@ -49,7 +51,7 @@ public class ProjectTemplateService extends AbstractService {
      * @return project template
      */
     public Template getTemplateByUri(String uri) {
-        Validate.notEmpty(uri, "template uri");
+        notEmpty(uri, "template uri");
         try {
             return restTemplate.getForObject(uri, Template.class);
         } catch (GoodDataRestException | RestClientException e) {
@@ -63,7 +65,8 @@ public class ProjectTemplateService extends AbstractService {
      * @return manifests linked from project template
      */
     public Collection<DatasetManifest> getManifests(Template template) {
-        Validate.notNull(template, "template");
+        notNull(template, "template");
+        notNull(template.getManifestsUris(), "template.manifestsUris");
         try {
             return template.getManifestsUris().stream()
                     .map(manifestUri -> restTemplate.getForObject(manifestUri, DatasetManifest.class))

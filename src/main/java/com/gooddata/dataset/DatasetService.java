@@ -66,6 +66,7 @@ public class DatasetService extends AbstractService {
      */
     public DatasetManifest getDatasetManifest(Project project, String datasetId) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
         notEmpty(datasetId, "datasetId");
         try {
             return restTemplate.getForObject(DatasetManifest.URI, DatasetManifest.class, project.getId(), datasetId);
@@ -173,6 +174,7 @@ public class DatasetService extends AbstractService {
     }
 
     private FutureResult<Void> pullLoad(Project project, final String dirPath, final Collection<String> datasets) {
+        notNull(project.getId(), "project.id");
         final PullTask pullTask = restTemplate
                 .postForObject(Pull.URI, new Pull(dirPath), PullTask.class, project.getId());
 
@@ -224,6 +226,7 @@ public class DatasetService extends AbstractService {
      */
     public Collection<Link> listDatasetLinks(final Project project) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
         try {
             final DatasetLinks result = restTemplate.getForObject(DatasetLinks.URI, DatasetLinks.class, project.getId());
             if (result == null) {
@@ -246,6 +249,7 @@ public class DatasetService extends AbstractService {
      */
     public FutureResult<Void> optimizeSliHash(final Project project) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
 
         final UriResponse uriResponse = restTemplate.postForObject(
                 EtlMode.URL, new EtlMode(EtlModeType.SLI, LookupMode.RECREATE), UriResponse.class, project.getId());
@@ -292,6 +296,7 @@ public class DatasetService extends AbstractService {
      */
     public FutureResult<Void> updateProjectData(final Project project, final String maqlDml) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
 
         final UriResponse uriResponse = restTemplate.postForObject(
                 MaqlDml.URI, new MaqlDml(maqlDml), UriResponse.class, project.getId());
@@ -386,6 +391,7 @@ public class DatasetService extends AbstractService {
      */
     public UploadStatistics getUploadStatistics(Project project) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
 
         try {
             return restTemplate.getForObject(UploadStatistics.URI, UploadStatistics.class, project.getId());
@@ -401,6 +407,7 @@ public class DatasetService extends AbstractService {
      */
     UploadsInfo.DataSet getDataSetInfo(Project project, String datasetId) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
         notEmpty(datasetId, "datasetId");
 
         final URI uploadsInfoUri = UploadsInfo.URI_TEMPLATE.expand(project.getId());

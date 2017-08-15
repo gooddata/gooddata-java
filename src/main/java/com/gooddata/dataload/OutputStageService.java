@@ -57,6 +57,8 @@ public class OutputStageService extends AbstractService {
      */
     public OutputStage getOutputStage(final Project project) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
+
         return getOutputStageByUri(OutputStage.TEMPLATE.expand(project.getId()).toString());
     }
 
@@ -68,6 +70,8 @@ public class OutputStageService extends AbstractService {
      */
     public OutputStage updateOutputStage(final OutputStage outputStage) {
         notNull(outputStage, "outputStage");
+        notNull(outputStage.getUri(), "outputStage.uri");
+
         try {
             HttpEntity<OutputStage> outputStageHttpEntity = new HttpEntity<>(outputStage);
             ResponseEntity<OutputStage> response = restTemplate.exchange(outputStage.getUri(), HttpMethod.PUT, outputStageHttpEntity, OutputStage.class);

@@ -47,6 +47,7 @@ public class MetadataService extends AbstractService {
     @SuppressWarnings("unchecked")
     public <T extends Obj> T createObj(Project project, T obj) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
         notNull(obj, "obj");
 
         final T response;
@@ -106,6 +107,7 @@ public class MetadataService extends AbstractService {
     @SuppressWarnings("unchecked")
     public <T extends Updatable> T updateObj(T obj) {
         notNull(obj, "obj");
+        notNull(obj.getUri(), "obj.uri");
         try {
             restTemplate.put(obj.getUri(), obj);
             return getObjByUri(obj.getUri(), (Class<T>) obj.getClass());
@@ -124,6 +126,7 @@ public class MetadataService extends AbstractService {
      */
     public void removeObj(Obj obj) {
         notNull(obj, "obj");
+        notNull(obj.getUri(), "obj.uri");
         try {
             restTemplate.delete(obj.getUri());
         } catch (GoodDataRestException e) {
@@ -174,6 +177,7 @@ public class MetadataService extends AbstractService {
      */
     public <T extends Obj> T getObjById(Project project, String id, Class<T> cls) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
         notNull(id, "id");
         notNull(cls, "cls");
         return getObjByUri(Obj.OBJ_TEMPLATE.expand(project.getId(), id).toString(), cls);
@@ -233,6 +237,7 @@ public class MetadataService extends AbstractService {
      */
     public <T extends Queryable> Collection<Entry> find(Project project, Class<T> cls, Restriction... restrictions) {
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
         notNull(cls, "cls");
 
         final String type = cls.getSimpleName().toLowerCase() +
@@ -340,6 +345,7 @@ public class MetadataService extends AbstractService {
     public Collection<Usage> usedBy(Project project, Collection<String> uris, boolean nearest, Class<? extends Obj>... types) {
         notNull(uris, "uris");
         notNull(project, "project");
+        notNull(project.getId(), "project.id");
 
         final UseMany response;
         try {

@@ -81,8 +81,9 @@ public class AccountService extends AbstractService {
      * @throws AccountNotFoundException when given account wasn't found
      * @throws GoodDataException when account can't be removed for other reason
      */
-    public void removeAccount(Account account) {
+    public void removeAccount(final Account account) {
         notNull(account, "account");
+        notNull(account.getUri(), "account.uri");
 
         try {
             restTemplate.delete(account.getUri());
@@ -104,7 +105,8 @@ public class AccountService extends AbstractService {
      * @throws AccountNotFoundException when account for given id can't be found
      * @throws GoodDataException when different error occurs
      */
-    public Account getAccountById(String id) {
+    public Account getAccountById(final String id) {
+        notNull(id, "id");
         try {
             return restTemplate.getForObject(Account.URI, Account.class, id);
         } catch (GoodDataRestException e) {
@@ -125,7 +127,8 @@ public class AccountService extends AbstractService {
      * @throws AccountNotFoundException when account for given uri can't be found
      * @throws GoodDataException when different error occurs
      */
-    public Account getAccountByUri(String uri) {
+    public Account getAccountByUri(final String uri) {
+        notEmpty(uri, "uri");
         return getAccountById(Account.getId(uri));
     }
 
@@ -134,8 +137,9 @@ public class AccountService extends AbstractService {
      * @param account to be updated
      * @throws AccountNotFoundException when account for given uri can't be found
      */
-    public void updateAccount(Account account) {
+    public void updateAccount(final Account account) {
         notNull(account, "account");
+        notNull(account.getUri(), "account.uri");
 
         try {
             final MappingJacksonValue jacksonValue = new MappingJacksonValue(account);
