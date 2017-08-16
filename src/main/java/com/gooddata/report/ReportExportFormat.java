@@ -5,9 +5,16 @@
  */
 package com.gooddata.report;
 
+import com.gooddata.export.ExportFormat;
+
+import static com.gooddata.util.Validate.notNull;
+
 /**
  * Format of exported report
+ *
+ * @deprecated use {@link com.gooddata.export.ExportFormat}
  */
+@Deprecated
 public enum ReportExportFormat {
 
     PDF, XLS, PNG, CSV, HTML, XLSX;
@@ -22,5 +29,10 @@ public enum ReportExportFormat {
             fs[i] = formats[i].getValue();
         }
         return fs;
+    }
+
+    public static ExportFormat toExportFormat(final ReportExportFormat format) {
+        notNull(format, "format");
+        return ExportFormat.valueOf(format.name());
     }
 }

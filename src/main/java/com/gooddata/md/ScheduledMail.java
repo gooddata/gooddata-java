@@ -6,6 +6,7 @@
 package com.gooddata.md;
 
 import com.fasterxml.jackson.annotation.*;
+import com.gooddata.export.ExportFormat;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.report.ReportExportFormat;
 import com.gooddata.util.GoodDataToStringBuilder;
@@ -246,8 +247,16 @@ public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
         return this;
     }
 
+    /**
+     * @deprecated use {@link #addReportAttachment(ReportDefinition, Map, ExportFormat...)}
+     */
+    @Deprecated
     public ScheduledMail addReportAttachment(ReportDefinition reportDefinition, Map<String, String> exportOptions, ReportExportFormat... formats) {
         return addReportAttachment(reportDefinition, exportOptions, ReportExportFormat.arrayToStringArray(formats));
+    }
+
+    public ScheduledMail addReportAttachment(ReportDefinition reportDefinition, Map<String, String> exportOptions, ExportFormat... formats) {
+        return addReportAttachment(reportDefinition, exportOptions, ExportFormat.arrayToStringArray(formats));
     }
 
     public ScheduledMail addDashboardAttachment(String uri, Integer allTabs, String executionContext, String... tabs) {

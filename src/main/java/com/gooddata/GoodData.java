@@ -9,6 +9,7 @@ import com.gooddata.account.AccountService;
 import com.gooddata.connector.ConnectorService;
 import com.gooddata.dataload.OutputStageService;
 import com.gooddata.dataload.processes.ProcessService;
+import com.gooddata.export.ExportService;
 import com.gooddata.featureflag.FeatureFlagService;
 import com.gooddata.md.maintenance.ExportImportService;
 import com.gooddata.notification.NotificationService;
@@ -74,6 +75,7 @@ public class GoodData {
     private final GdcService gdcService;
     private final DataStoreService dataStoreService;
     private final DatasetService datasetService;
+    @SuppressWarnings("deprecation")
     private final ReportService reportService;
     private final ConnectorService connectorService;
     private final ProcessService processService;
@@ -83,6 +85,7 @@ public class GoodData {
     private final FeatureFlagService featureFlagService;
     private final OutputStageService outputStageService;
     private final ProjectTemplateService projectTemplateService;
+    private final ExportService exportService;
 
     /**
      * Create instance configured to communicate with GoodData Platform under user with given credentials.
@@ -195,6 +198,7 @@ public class GoodData {
      * @param authentication authentication
      * @param settings additional settings
      */
+    @SuppressWarnings("deprecation")
     protected GoodData(GoodDataEndpoint endpoint, Authentication authentication, GoodDataSettings settings) {
         httpClient = authentication.createHttpClient(endpoint, createHttpClientBuilder(settings));
 
@@ -207,7 +211,8 @@ public class GoodData {
         gdcService = new GdcService(getRestTemplate());
         dataStoreService = new DataStoreService(getHttpClient(), getRestTemplate(), gdcService, endpoint.toUri());
         datasetService = new DatasetService(getRestTemplate(), dataStoreService);
-        reportService = new ReportService(getRestTemplate());
+        exportService = new ExportService(getRestTemplate());
+        reportService = new ReportService(exportService, getRestTemplate());
         processService = new ProcessService(getRestTemplate(), accountService, dataStoreService);
         warehouseService = new WarehouseService(getRestTemplate());
         connectorService = new ConnectorService(getRestTemplate(), projectService);
@@ -378,8 +383,19 @@ public class GoodData {
      * @return initialized service for report management
      */
     @Bean
+    @SuppressWarnings("deprecation")
     public ReportService getReportService() {
         return reportService;
+    }
+
+    /**
+     * Get initialized service for exports management (export report,...)
+     *
+     * @return initialized service for exports
+     */
+    @Bean
+    public ExportService getExportService() {
+        return exportService;
     }
 
     /**

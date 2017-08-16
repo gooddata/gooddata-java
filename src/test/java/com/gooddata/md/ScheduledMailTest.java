@@ -5,7 +5,7 @@
  */
 package com.gooddata.md;
 
-import com.gooddata.report.ReportExportFormat;
+import com.gooddata.export.ExportFormat;
 import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
 
@@ -27,7 +27,7 @@ public class ScheduledMailTest {
     private final ReportAttachment rp1 = new ReportAttachment(
             "/gdc/md/PROJ_ID/obj/OBJECT_ID1",
             Collections.singletonMap("pageOrientation", "landscape"),
-            ReportExportFormat.PDF, ReportExportFormat.XLS
+            ExportFormat.PDF, ExportFormat.XLS
     );
     private final DashboardAttachment da1 = new DashboardAttachment(
             "/gdc/md/PROJ_ID/obj/DASHBOARD_ID2",

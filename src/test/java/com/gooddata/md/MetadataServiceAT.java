@@ -5,10 +5,10 @@
  */
 package com.gooddata.md;
 
+import static com.gooddata.export.ExportFormat.PDF;
+import static com.gooddata.export.ExportFormat.XLS;
 import static com.gooddata.md.Restriction.identifier;
 import static com.gooddata.md.report.MetricGroup.METRIC_GROUP;
-import static com.gooddata.report.ReportExportFormat.PDF;
-import static com.gooddata.report.ReportExportFormat.XLS;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
