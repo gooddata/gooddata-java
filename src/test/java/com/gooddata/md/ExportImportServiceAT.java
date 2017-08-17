@@ -5,6 +5,7 @@
  */
 package com.gooddata.md;
 
+import static com.gooddata.md.Restriction.identifier;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -15,12 +16,12 @@ import com.gooddata.model.ModelDiff;
 import com.gooddata.model.ModelService;
 import com.gooddata.project.Environment;
 import com.gooddata.project.Project;
-import org.apache.commons.lang3.StringUtils;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.InputStreamReader;
+import java.util.Collection;
 
 /**
  * Metadata export/import acceptance tests.
@@ -60,9 +61,12 @@ public class ExportImportServiceAT extends AbstractGoodDataAT {
     @Test(groups = "exportimport", dependsOnMethods = "partialExportMetric")
     public void partialImportMetric() throws Exception {
         gd.getExportImportService().partialImport(importProject, partialMdExportToken).get();
-        final Metric importedMetric = gd.getMetadataService().getObjById(importProject,
-                StringUtils.substringAfterLast(metric.getUri(), "/"), Metric.class);
 
-        assertThat(importedMetric, notNullValue());
+        final Collection<Entry> collection = gd.getMetadataService()
+                .find(importProject, Metric.class, identifier(metric.getIdentifier()));
+
+        assertThat(collection, hasSize(1));
+        final Entry entry = collection.iterator().next();
+        assertThat(entry.getTitle(), is(metric.getTitle()));
     }
 }
