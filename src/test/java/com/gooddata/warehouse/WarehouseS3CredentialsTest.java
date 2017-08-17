@@ -12,6 +12,7 @@ import java.util.Map;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
+import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -92,10 +93,29 @@ public class WarehouseS3CredentialsTest {
     }
 
     @Test
+    public void withSecretKey() {
+        final WarehouseS3Credentials credentials = new WarehouseS3Credentials(REGION, ACCESS_KEY,
+                UPDATED_BY, UPDATED_AT);
+        assertThat(credentials.getSecretKey(), is(nullValue()));
+        assertThat(credentials.withSecretKey(SECRET_KEY).getSecretKey(), is(SECRET_KEY));
+    }
+
+    @Test
     public void withLinks() {
         final WarehouseS3Credentials credentials = new WarehouseS3Credentials(REGION, ACCESS_KEY,
                 UPDATED_BY, UPDATED_AT).withLinks(LINKS);
         assertThat(credentials.getLinks(), is(LINKS));
+    }
+
+    @Test
+    public void withLinksForWarehouse() {
+        final WarehouseS3Credentials credentials = new WarehouseS3Credentials(REGION, ACCESS_KEY,
+                "updaterId", UPDATED_AT).withLinks("instanceId");
+        assertThat(credentials.getInstanceUri(), endsWith("/instanceId"));
+        assertThat(credentials.getListUri(), endsWith("/instanceId/s3"));
+        assertThat(credentials.getUri(), is(WarehouseS3Credentials.TEMPLATE
+                .expand("instanceId", REGION, ACCESS_KEY).toString()));
+        assertThat(credentials.getUpdatedByUri(), endsWith("/updaterId"));
     }
 
     @Test

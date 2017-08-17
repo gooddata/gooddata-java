@@ -15,18 +15,21 @@ import com.gooddata.collections.MultiPageList;
 import com.gooddata.collections.Page;
 import com.gooddata.collections.PageRequest;
 import com.gooddata.collections.PageableList;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriTemplate;
 
 import java.io.IOException;
 import java.net.URI;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
+import static java.lang.String.format;
 
 /**
  * Provide access to warehouse API - create, update, list and delete warehouses.
@@ -450,20 +453,20 @@ public class WarehouseService extends AbstractService {
      *
      * @param warehouse warehouse to get S3 credentials for
      * @return PageableList with all S3 credentials belonging to the Warehouse (not null)
+     * @throws WarehouseS3CredentialsException in case of failure during the REST operation
      */
     public PageableList<WarehouseS3Credentials> listWarehouseS3Credentials(final Warehouse warehouse) {
         notNull(warehouse, "warehouse");
 
+        final String uri = getWarehouseS3CredentialsListUri(warehouse).toString();
         try {
-            final String uri = getWarehouseS3CredentialsListUri(warehouse).toString();
             final WarehouseS3CredentialsList result = restTemplate.getForObject(uri, WarehouseS3CredentialsList.class);
             if (result == null) {
                 return new PageableList<>();
             }
             return result;
         } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to list Warehouse S3 credentials for warehouse with uri: "
-                    + warehouse.getUri(), e);
+            throw new WarehouseS3CredentialsException(uri, "Unable to list Warehouse S3 credentials at " + uri, e);
         }
     }
 
@@ -473,6 +476,7 @@ public class WarehouseService extends AbstractService {
      * @param warehouse warehouse to get S3 credentials for
      * @return single S3 credentials record (not null)
      * @throws WarehouseS3CredentialsNotFoundException if no S3 credentials for the given parameters were found
+     * @throws WarehouseS3CredentialsException in case of failure during the REST operation
      */
     public WarehouseS3Credentials getWarehouseS3Credentials(final Warehouse warehouse,
                                                             final String region,
@@ -492,63 +496,116 @@ public class WarehouseService extends AbstractService {
                 throw e;
             }
         } catch (RestClientException e) {
-            throw new GoodDataException("Unable to get Warehouse S3 credentials " + uri, e);
+            throw new WarehouseS3CredentialsException(uri, "Unable to get Warehouse S3 credentials " + uri, e);
         }
     }
 
     /**
      * add new S3 credentials to the Warehouse
      *
-     * @param warehouse     warehouse to add credentials to
+     * @param warehouse     warehouse the S3 credentials should be added to
      * @param s3Credentials the credentials to store
      * @return added credentials (not null)
+     * @throws WarehouseS3CredentialsException in case of failure during the REST operation
      */
-    public FutureResult<WarehouseS3Credentials> addS3CredentialsToWarehouse(final Warehouse warehouse,
-                                                                            final WarehouseS3Credentials s3Credentials) {
+    public FutureResult<WarehouseS3Credentials> addS3Credentials(final Warehouse warehouse,
+                                                                 final WarehouseS3Credentials s3Credentials) {
         notNull(warehouse, "warehouse");
         notEmpty(warehouse.getId(), "warehouse.id");
         notNull(s3Credentials, "s3Credentials");
 
-        final WarehouseTask task;
+        final WarehouseTask task = createWarehouseTask(WarehouseS3CredentialsList.URI, s3Credentials, HttpMethod.POST, warehouse.getId());
+        final String newCredentialsUri = WarehouseS3Credentials.TEMPLATE.expand(warehouse.getId(),
+                s3Credentials.getRegion(), s3Credentials.getAccessKey()).toString();
+        return new PollResult<>(this, createS3PollHandler(newCredentialsUri, task, "add"));
+    }
+
+    /**
+     * update S3 credentials in the Warehouse
+     *
+     * @param s3Credentials the credentials to update
+     * @return updated credentials (not null)
+     * @throws WarehouseS3CredentialsException in case of failure during the REST operation
+     */
+    public FutureResult<WarehouseS3Credentials> updateS3Credentials(final WarehouseS3Credentials s3Credentials) {
+        notNull(s3Credentials, "s3Credentials");
+        notNull(s3Credentials.getUri(), "s3Credentials.links.self");
+
+        final WarehouseTask task = createWarehouseTask(s3Credentials.getUri(), s3Credentials, HttpMethod.PUT);
+        return new PollResult<>(this, createS3PollHandler(s3Credentials.getUri(), task, "update"));
+    }
+
+    /**
+     * delete S3 credentials in the Warehouse
+     *
+     * @param s3Credentials the credentials to delete
+     * @return nothing (Void)
+     * @throws WarehouseS3CredentialsException in case of failure during the REST operation
+     */
+    public FutureResult<Void> removeS3Credentials(final WarehouseS3Credentials s3Credentials) {
+        notNull(s3Credentials, "s3Credentials");
+        notNull(s3Credentials.getUri(), "s3Credentials.links.self");
+
+        final WarehouseTask task = createWarehouseTask(s3Credentials.getUri(), s3Credentials, HttpMethod.DELETE);
+        return new PollResult<>(this, createS3PollHandler(s3Credentials.getUri(), task, Void.class, "delete"));
+    }
+
+    private WarehouseTask createWarehouseTask(final String targetUri,
+                                              final WarehouseS3Credentials s3Credentials,
+                                              final HttpMethod httpMethod,
+                                              final Object... args) {
+        final HttpEntity<WarehouseTask> taskHttpEntity;
         try {
-            task = restTemplate.postForObject(WarehouseS3CredentialsList.URI, s3Credentials, WarehouseTask.class,
-                    warehouse.getId());
+            taskHttpEntity = restTemplate.exchange(targetUri, httpMethod, new HttpEntity<>(s3Credentials), WarehouseTask.class, args);
         } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable add S3 credentials to warehouse " + warehouse.getId(), e);
+            final String expandedTargetUri = new UriTemplate(targetUri).expand(args).toString();
+            throw new WarehouseS3CredentialsException(targetUri, format("Unable to %s S3 credentials %s with region: %s, access key: %s",
+                    httpMethod.name(), expandedTargetUri, s3Credentials.getRegion(), s3Credentials.getAccessKey()), e);
         }
-        if (task == null) {
-            throw new GoodDataException("Empty response when S3 credentials POSTed to API");
+        if (taskHttpEntity == null || taskHttpEntity.getBody() == null) {
+            throw new WarehouseS3CredentialsException(targetUri, format("Empty response when trying to %s S3 credentials via API", httpMethod.name()));
         }
 
-        return new PollResult<>(this,
-                new AbstractPollHandler<WarehouseTask, WarehouseS3Credentials>
-                        (task.getPollUri(), WarehouseTask.class, WarehouseS3Credentials.class) {
+        return taskHttpEntity.getBody();
+    }
 
-                    @Override
-                    public boolean isFinished(ClientHttpResponse response) throws IOException {
-                        return HttpStatus.CREATED.equals(response.getStatusCode());
-                    }
+    private AbstractPollHandler<WarehouseTask, WarehouseS3Credentials> createS3PollHandler(final String credentialsUri,
+                                                                                           final WarehouseTask task,
+                                                                                           final String action) {
+        return createS3PollHandler(credentialsUri, task, WarehouseS3Credentials.class, action);
+    }
 
-                    @Override
-                    public void handlePollResult(WarehouseTask pollResult) {
-                        try {
-                            final WarehouseS3Credentials created = restTemplate
-                                    .getForObject(pollResult.getWarehouseS3CredentialsUri(),
-                                            WarehouseS3Credentials.class);
-                            setResult(created);
-                        } catch (GoodDataException | RestClientException e) {
-                            throw new GoodDataException(
-                                    "S3 credentials added to warehouse, but can't get them back, uri: "
-                                            + pollResult.getWarehouseUserUri(), e);
-                        }
-                    }
+    private <R> AbstractPollHandler<WarehouseTask, R> createS3PollHandler(final String credentialsUri,
+                                                                          final WarehouseTask task,
+                                                                          final Class<R> resultClass,
+                                                                          final String action) {
+        return new AbstractPollHandler<WarehouseTask, R>(task.getPollUri(), WarehouseTask.class, resultClass) {
 
-                    @Override
-                    public void handlePollException(final GoodDataRestException e) {
-                        throw new GoodDataException("Unable to add S3 credentials to warehouse, uri: "
-                                + warehouse.getUri(), e);
-                    }
-                });
+            @Override
+            public boolean isFinished(ClientHttpResponse response) throws IOException {
+                final HttpStatus expectedStatus = "add".equals(action) ? HttpStatus.CREATED : HttpStatus.OK;
+                return response.getStatusCode() == expectedStatus;
+            }
+
+            @Override
+            public void handlePollResult(WarehouseTask pollResult) {
+                final String uri = pollResult.getWarehouseS3CredentialsUri();
+                try {
+                    final R result = restTemplate.getForObject(uri, resultClass);
+                    setResult(result);
+                } catch (GoodDataException | RestClientException e) {
+                    throw new WarehouseS3CredentialsException(uri,
+                            format("Attempt to %s S3 credentials in warehouse failed, can't get the result, uri: %s",
+                                    action, uri), e);
+                }
+            }
+
+            @Override
+            public void handlePollException(final GoodDataRestException e) {
+                throw new WarehouseS3CredentialsException(credentialsUri,
+                        format("Unable to %s S3 credentials in warehouse, uri: %s", action, credentialsUri), e);
+            }
+        };
     }
 
     private URI getWarehouseS3CredentialsListUri(final Warehouse warehouse) {
