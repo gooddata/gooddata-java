@@ -7,6 +7,8 @@ package com.gooddata;
 
 import org.springframework.http.client.ClientHttpResponse;
 
+import java.net.URI;
+
 import static com.gooddata.util.Validate.notNull;
 
 /**
@@ -21,7 +23,7 @@ import static com.gooddata.util.Validate.notNull;
  */
 public abstract class AbstractPollHandler<P,R> extends AbstractPollHandlerBase<P,R> {
 
-    private String pollingUri;
+    private URI pollingUri;
 
     /**
      * Creates a new instance of polling handler
@@ -31,15 +33,20 @@ public abstract class AbstractPollHandler<P,R> extends AbstractPollHandlerBase<P
      */
     public AbstractPollHandler(final String pollingUri, final Class<P> pollClass, Class<R> resultClass) {
         super(pollClass, resultClass);
-        this.pollingUri = notNull(pollingUri, "pollingUri");
+        setPollingUri(pollingUri);
     }
 
     @Override
     public final String getPollingUri() {
+        return pollingUri.toString();
+    }
+
+    @Override
+    public final URI getPolling() {
         return pollingUri;
     }
 
     protected void setPollingUri(final String pollingUri) {
-        this.pollingUri = pollingUri;
+        this.pollingUri = URI.create(notNull(pollingUri, "pollingUri"));
     }
 }
