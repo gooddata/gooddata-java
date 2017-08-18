@@ -253,7 +253,7 @@ public class ProcessServiceTest {
         when(restTemplate.postForObject(eq(SCHEDULE_EXECUTIONS_URI), any(ScheduleExecution.class), eq(ScheduleExecution.class)))
                 .thenReturn(execution);
 
-        when(restTemplate.execute(eq(SCHEDULE_EXECUTION_URI), eq(GET), any(), any()))
+        when(restTemplate.execute(eq(URI.create(SCHEDULE_EXECUTION_URI)), eq(GET), any(), any()))
                 .thenThrow(mock(GoodDataRestException.class));
 
         FutureResult<ScheduleExecution> futureResult = processService.executeSchedule(schedule);

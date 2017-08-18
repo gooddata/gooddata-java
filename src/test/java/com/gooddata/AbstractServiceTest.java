@@ -36,7 +36,7 @@ public class AbstractServiceTest {
         service = new AbstractService(restTemplate) {};
         final ClientHttpResponse response = mock(ClientHttpResponse.class);
         when(response.getStatusCode()).thenReturn(HttpStatus.OK);
-        when(restTemplate.execute(anyString(), any(HttpMethod.class), any(RequestCallback.class), any(ResponseExtractor.class)))
+        when(restTemplate.execute(any(), any(HttpMethod.class), any(RequestCallback.class), any(ResponseExtractor.class)))
                 .thenReturn(response);
     }
 

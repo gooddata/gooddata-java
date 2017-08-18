@@ -8,6 +8,7 @@ package com.gooddata;
 import org.springframework.http.client.ClientHttpResponse;
 
 import java.io.IOException;
+import java.net.URI;
 
 /**
  * For internal use by services employing polling.<p>
@@ -24,6 +25,15 @@ public interface PollHandler<P,R> {
      * @return URI string
      */
     String getPollingUri();
+
+    /**
+     * Get URI used for polling.
+     *
+     * @return URI string
+     */
+    default URI getPolling() {
+        return URI.create(getPollingUri());
+    }
 
     /**
      * Get class of result after polling.

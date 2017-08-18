@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -71,7 +72,7 @@ public abstract class AbstractService {
         notNull(handler, "handler");
         final ClientHttpResponse response;
         try {
-            response = restTemplate.execute(handler.getPollingUri(), GET, null, reusableResponseExtractor);
+            response = restTemplate.execute(handler.getPolling(), GET, null, reusableResponseExtractor);
         } catch (GoodDataRestException e) {
             handler.handlePollException(e);
             throw new GoodDataException("Handler " + handler.getClass().getName() + " didn't handle exception", e);
