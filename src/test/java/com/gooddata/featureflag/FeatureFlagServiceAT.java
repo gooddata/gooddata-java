@@ -84,15 +84,8 @@ public class FeatureFlagServiceAT extends AbstractGoodDataAT {
                         new ProjectFeatureFlag("settingName1"));
 
         gd.getFeatureFlagService().deleteProjectFeatureFlag(featureFlag);
-
-        try {
-            gd.getFeatureFlagService().getProjectFeatureFlag(project, featureFlag.getName());
-            fail("Feature flag has not been deleted properly. HTTP status NOT FOUND expected.");
-        } catch (GoodDataException e) {
-            assertThat(((GoodDataRestException)e.getCause()).getStatusCode(), is(HttpStatus.NOT_FOUND.value()));
-        }
+        // intentionally don't check the flag is really deleted because of eventual consistency of this API
     }
-
 
     private void checkProjectFeatureFlag(final ProjectFeatureFlag featureFlag, final String expectedName,
                                          final boolean expectedValue) {
