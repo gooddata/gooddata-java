@@ -32,6 +32,9 @@ public class ExportServiceIT extends AbstractGoodDataIT {
     private static final String CLIENT_EXPORT = "/gdc/projects/PROJECT_ID/clientexport";
     private static final String CLIENT_EXPORT_POLL = CLIENT_EXPORT + "/123";
 
+    private static final String RAW_EXPORT = "/gdc/projects/PROJECT_ID/execute/raw";
+    private static final String RAW_EXPORT_POLL = RAW_EXPORT + "/123";
+
     private static final String RESPONSE = "abc";
 
     private static final ReportDefinition DEFINITION = readObjectFromResource("/md/report/gridReportDefinition.json", ReportDefinition.class);
@@ -69,6 +72,20 @@ public class ExportServiceIT extends AbstractGoodDataIT {
                 .withBody(OBJECT_MAPPER.writeValueAsString(new AsyncTask("http://localhost:" + port() + CLIENT_EXPORT_POLL)));
         onRequest()
                 .havingPathEqualTo(CLIENT_EXPORT_POLL)
+                .havingMethodEqualTo("GET")
+            .respond()
+                .withStatus(202)
+            .thenRespond()
+                .withStatus(200)
+                .withBody(RESPONSE)
+        ;
+        onRequest()
+                .havingPathEqualTo(RAW_EXPORT)
+                .havingMethodEqualTo("POST")
+            .respond()
+                .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse("http://localhost:" + port() + RAW_EXPORT_POLL)));
+        onRequest()
+                .havingPathEqualTo(RAW_EXPORT_POLL)
                 .havingMethodEqualTo("GET")
             .respond()
                 .withStatus(202)
@@ -145,6 +162,46 @@ public class ExportServiceIT extends AbstractGoodDataIT {
                 .withStatus(400);
 
         service.exportPdf(DASHBOARD, DASHBOARD.getTabs().iterator().next(), new ByteArrayOutputStream()).get();
+    }
+
+    @Test
+    public void shouldExportRaw() throws Exception {
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        service.exportCsv(REPORT, output).get();
+        assertThat(output.toString(StandardCharsets.US_ASCII.name()), is(RESPONSE));
+    }
+
+    @Test(expectedExceptions = ExportException.class)
+    public void shouldFailOnRawPost() throws Exception {
+        onRequest()
+                .havingPathEqualTo(RAW_EXPORT)
+                .havingMethodEqualTo("POST")
+            .respond()
+                .withStatus(400);
+
+        service.exportCsv(REPORT, new ByteArrayOutputStream()).get();
+    }
+
+    @Test(expectedExceptions = NoDataExportException.class)
+    public void shouldFailOnRawPollNoData() throws Exception {
+        onRequest()
+                .havingPathEqualTo(RAW_EXPORT_POLL)
+                .havingMethodEqualTo("GET")
+            .respond()
+                .withStatus(204);
+
+        service.exportCsv(REPORT, new ByteArrayOutputStream()).get();
+    }
+
+    @Test(expectedExceptions = ExportException.class)
+    public void shouldFailOnRawPoll() throws Exception {
+        onRequest()
+                .havingPathEqualTo(RAW_EXPORT_POLL)
+                .havingMethodEqualTo("GET")
+            .respond()
+                .withStatus(400);
+
+        service.exportCsv(REPORT, new ByteArrayOutputStream()).get();
     }
 
 }

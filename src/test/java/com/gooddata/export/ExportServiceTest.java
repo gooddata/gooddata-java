@@ -8,6 +8,8 @@ package com.gooddata.export;
 import com.gooddata.GoodDataEndpoint;
 import com.gooddata.md.ProjectDashboard;
 import com.gooddata.md.ProjectDashboard.Tab;
+import com.gooddata.md.report.Report;
+import com.gooddata.md.report.ReportDefinition;
 import org.springframework.web.client.RestTemplate;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -26,10 +28,12 @@ public class ExportServiceTest {
     private final ExportService service = new ExportService(new RestTemplate(), new GoodDataEndpoint());
     private ProjectDashboard dashboard;
     private Tab tab;
+    private Report report;
 
     @BeforeMethod
     public void setUp() throws Exception {
         dashboard = readObjectFromResource("/md/projectDashboard.json", ProjectDashboard.class);
+        report = readObjectFromResource("/md/report/report.json", Report.class);
         tab = dashboard.getTabs().iterator().next();
     }
 
@@ -58,18 +62,33 @@ public class ExportServiceTest {
         service.exportPdf(dashboard, tab, null);
     }
 
+    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = ".*report.*")
+    public void shouldFailExportCsvOnNullReport() throws Exception {
+        service.exportCsv((Report)null, new ByteArrayOutputStream());
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = ".*reportDefinition.*")
+    public void shouldFailExportCsvOnNullReportDefinition() throws Exception {
+        service.exportCsv((ReportDefinition) null, new ByteArrayOutputStream());
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = ".*output.*")
+    public void shouldFailExportCsvOnNullStream() throws Exception {
+        service.exportCsv(report, null);
+    }
+
     @Test
     public void shouldExtractProjectId() throws Exception {
         assertThat(extractProjectId(dashboard), is("PROJECT_ID"));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = ".*dashboard.uri.*")
+    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = ".*obj.uri.*")
     public void shouldFailExtractProjectIdOnNullDashboardUri() throws Exception {
         final ProjectDashboard dashboard = mock(ProjectDashboard.class);
         extractProjectId(dashboard);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = ".*dashboard uri - project id.*")
+    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = ".*obj uri - project id.*")
     public void shouldFailExtractProjectIdOnInvalidDashboardUri() throws Exception {
         final ProjectDashboard dashboard = mock(ProjectDashboard.class);
         when(dashboard.getUri()).thenReturn("/foo");

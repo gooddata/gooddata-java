@@ -9,22 +9,21 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
-import com.gooddata.AbstractService;
-import com.gooddata.FutureResult;
 import com.gooddata.GoodDataEndpoint;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.PollResult;
 import com.gooddata.SimplePollHandler;
-import com.gooddata.gdc.UriResponse;
-import com.gooddata.md.report.Report;
-import com.gooddata.md.report.ReportDefinition;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
 import com.gooddata.gdc.AsyncTask;
+import com.gooddata.gdc.UriResponse;
+import com.gooddata.md.AbstractObj;
 import com.gooddata.md.ProjectDashboard;
 import com.gooddata.md.ProjectDashboard.Tab;
+import com.gooddata.md.report.Report;
+import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -32,16 +31,14 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import static com.gooddata.md.Obj.OBJ_TEMPLATE;
 import static com.gooddata.util.Validate.notNull;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
-import static com.gooddata.md.Obj.OBJ_TEMPLATE;
-import static com.gooddata.util.Validate.notNull;
-import static org.springframework.http.HttpMethod.GET;
-
 /**
  * Export project data
+ *
  * @see com.gooddata.report.ReportService
  */
 public class ExportService extends AbstractService {
@@ -49,6 +46,8 @@ public class ExportService extends AbstractService {
     public static final String EXPORTING_URI = "/gdc/exporter/executor";
 
     private static final String CLIENT_EXPORT_URI = "/gdc/projects/{projectId}/clientexport";
+
+    private static final String RAW_EXPORT_URI = "/gdc/projects/{projectId}/execute/raw";
 
     private final GoodDataEndpoint endpoint;
 
@@ -163,9 +162,10 @@ public class ExportService extends AbstractService {
 
     /**
      * Export the given dashboard tab in PDF format to the given output stream
+     *
      * @param dashboard dashboard
-     * @param tab tab
-     * @param output output
+     * @param tab       tab
+     * @param output    output
      * @return polling result
      * @throws ExportException if export fails
      */
@@ -216,11 +216,86 @@ public class ExportService extends AbstractService {
         });
     }
 
-    static String extractProjectId(final ProjectDashboard dashboard) {
-        notNull(dashboard, "dashboard");
-        notNull(dashboard.getUri(), "dashboard.uri");
+    /**
+     * Export the given Report using the raw export (without columns/rows limitations)
+     * @param report report
+     * @param output output
+     * @return polling result
+     * @throws ExportException in case export fails
+     */
+    public FutureResult<Void> exportCsv(final Report report, final OutputStream output) {
+        notNull(report, "report");
+        return exportCsv(report, new ExecuteReport(report), output);
+    }
 
-        final String projectId = OBJ_TEMPLATE.match(dashboard.getUri()).get("projectId");
-        notNull(projectId, "dashboard uri - project id");
+    /**
+     * Export the given Report Definition using the raw export (without columns/rows limitations)
+     * @param definition report definition
+     * @param output output
+     * @return polling result
+     * @throws ExportException in case export fails
+     */
+    public FutureResult<Void> exportCsv(final ReportDefinition definition, final OutputStream output) {
+        final ReportRequest request = new ExecuteReportDefinition(definition);
+        return exportCsv(definition, request, output);
+    }
+
+    private FutureResult<Void> exportCsv(final AbstractObj obj, final ReportRequest request, final OutputStream output) {
+        notNull(obj, "obj");
+        notNull(request, "request");
+        notNull(output, "output");
+
+        final String projectId = extractProjectId(obj);
+        final String uri = obj.getUri();
+
+        final UriResponse response;
+        try {
+            response = restTemplate.postForObject(RAW_EXPORT_URI, request, UriResponse.class, projectId);
+        } catch (RestClientException | GoodDataRestException e) {
+            throw new ExportException("Unable to export: " + uri);
+        }
+        if (response == null || response.getUri() == null) {
+            throw new ExportException("Empty response, unable to export: " + uri);
+        }
+
+        return new PollResult<>(this, new SimplePollHandler<Void>(response.getUri(), Void.class) {
+            @Override
+            public boolean isFinished(ClientHttpResponse response) throws IOException {
+                switch (response.getStatusCode()) {
+                    case OK:
+                        return true;
+                    case ACCEPTED:
+                        return false;
+                    case NO_CONTENT:
+                        throw new NoDataExportException();
+                    default:
+                        throw new ExportException("Unable to export: " + uri +
+                                ", unknown HTTP response code: " + response.getStatusCode());
+                }
+            }
+
+            @Override
+            protected void onFinish() {
+                try {
+                    restTemplate.execute(getPolling(), GET, null, new OutputStreamResponseExtractor(output));
+                } catch (GoodDataException | RestClientException e) {
+                    throw new ExportException("Unable to export: " + uri, e);
+                }
+            }
+
+            @Override
+            public void handlePollException(final GoodDataRestException e) {
+                throw new ExportException("Unable to export: " + uri, e);
+            }
+        });
+    }
+
+    static String extractProjectId(final AbstractObj obj) {
+        notNull(obj, "obj");
+        notNull(obj.getUri(), "obj.uri");
+
+        final String projectId = OBJ_TEMPLATE.match(obj.getUri()).get("projectId");
+        notNull(projectId, "obj uri - project id");
         return projectId;
-    }}
+    }
+}
