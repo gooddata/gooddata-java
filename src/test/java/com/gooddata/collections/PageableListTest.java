@@ -34,6 +34,8 @@ public class PageableListTest {
         assertThat(collection, notNullValue());
         assertThat(collection, hasSize(3));
         assertThat(collection.getNextPage(), nullValue());
+        assertThat(collection.getCurrentPageItems(), is(asList(1, 2, 3)));
+        assertThat(collection.collectAll(), is(asList(1, 2, 3)));
     }
 
     @Test

@@ -38,6 +38,12 @@ public class MultiPageListTest {
     }
 
     @Test
+    public void getCurrentPageItems() {
+        assertThat(singlePageList.getCurrentPageItems(), is(singletonList(11)));
+        assertThat(twoPageList.getCurrentPageItems(), is(singletonList(11)));
+    }
+
+    @Test
     public void collectAll() {
         assertThat(singlePageList.collectAll(), is(singletonList(11)));
         assertThat(twoPageList.collectAll(), is(asList(11, 12)));

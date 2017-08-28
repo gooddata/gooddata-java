@@ -129,6 +129,11 @@ public class PageableList<E> implements List<E> {
         return items.iterator();
     }
 
+    /**
+     * @return the list of current page items only
+     */
+    public List<E> getCurrentPageItems() { return items; }
+
     @Override
     public Object[] toArray() {
         return items.toArray();
