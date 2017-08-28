@@ -6,9 +6,6 @@ package com.gooddata.warehouse;
 import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
@@ -27,23 +24,21 @@ public class WarehouseS3CredentialsTest {
     private static final String SELF_LINK = "/gdc/datawarehouse/instances/{instance-id}/s3/region/accessKey";
     private static final String PARENT_LINK = "/gdc/datawarehouse/instances/{instance-id}/s3";
     private static final String INSTANCE_LINK = "/gdc/datawarehouse/instances/{instance-id}";
-    private static final Map<String, String> LINKS = new HashMap<String, String>() {{
-       put("self", SELF_LINK);
-       put("parent", PARENT_LINK);
-       put("instance", INSTANCE_LINK);
-    }};
+    private static final WarehouseS3Credentials.Links LINKS = new WarehouseS3Credentials.Links(
+            SELF_LINK, PARENT_LINK, INSTANCE_LINK, UPDATED_BY
+    );
 
     @Test
     public void serializeFull() {
         final WarehouseS3Credentials credentials = new WarehouseS3Credentials(REGION, ACCESS_KEY, SECRET_KEY,
-                UPDATED_BY, UPDATED_AT, LINKS);
+                UPDATED_AT, LINKS);
         assertThat(credentials, jsonEquals(resource("warehouse/s3Credentials-full.json")));
     }
 
     @Test
     public void serializeGet() {
-        final WarehouseS3Credentials credentials = new WarehouseS3Credentials(REGION, ACCESS_KEY, UPDATED_BY,
-                UPDATED_AT);
+        final WarehouseS3Credentials credentials = new WarehouseS3Credentials(REGION, ACCESS_KEY, null,
+                UPDATED_AT, null);
         assertThat(credentials, jsonEquals(resource("warehouse/s3Credentials-get.json")));
     }
 
@@ -60,7 +55,6 @@ public class WarehouseS3CredentialsTest {
 
         assertThat(credentials.getRegion(), is(REGION));
         assertThat(credentials.getAccessKey(), is(ACCESS_KEY));
-        assertThat(credentials.getUpdatedBy(), is(UPDATED_BY));
         assertThat(credentials.getSecretKey(), is(SECRET_KEY));
         assertThat(credentials.getUpdated().toString(), is(UPDATED_AT.toString()));
         assertThat(credentials.getLinks(), is(LINKS));
@@ -73,7 +67,6 @@ public class WarehouseS3CredentialsTest {
 
         assertThat(credentials.getRegion(), is(REGION));
         assertThat(credentials.getAccessKey(), is(ACCESS_KEY));
-        assertThat(credentials.getUpdatedBy(), is(UPDATED_BY));
         assertThat(credentials.getSecretKey(), is(nullValue()));
         assertThat(credentials.getUpdated().toString(), is(UPDATED_AT.toString()));
         assertThat(credentials.getLinks(), is(nullValue()));
@@ -87,41 +80,41 @@ public class WarehouseS3CredentialsTest {
         assertThat(credentials.getRegion(), is(REGION));
         assertThat(credentials.getAccessKey(), is(ACCESS_KEY));
         assertThat(credentials.getSecretKey(), is(SECRET_KEY));
-        assertThat(credentials.getUpdatedBy(), is(nullValue()));
         assertThat(credentials.getUpdated(), is(nullValue()));
         assertThat(credentials.getLinks(), is(nullValue()));
     }
 
     @Test
     public void withSecretKey() {
-        final WarehouseS3Credentials credentials = new WarehouseS3Credentials(REGION, ACCESS_KEY,
-                UPDATED_BY, UPDATED_AT);
+        final WarehouseS3Credentials credentials = new WarehouseS3Credentials(REGION, ACCESS_KEY, null,
+                UPDATED_AT, null);
         assertThat(credentials.getSecretKey(), is(nullValue()));
-        assertThat(credentials.withSecretKey(SECRET_KEY).getSecretKey(), is(SECRET_KEY));
+
+        credentials.setSecretKey(SECRET_KEY);
+        assertThat(credentials.getSecretKey(), is(SECRET_KEY));
     }
 
     @Test
     public void withLinks() {
         final WarehouseS3Credentials credentials = new WarehouseS3Credentials(REGION, ACCESS_KEY,
-                UPDATED_BY, UPDATED_AT).withLinks(LINKS);
+                SECRET_KEY, UPDATED_AT, LINKS);
         assertThat(credentials.getLinks(), is(LINKS));
     }
 
     @Test
     public void withLinksForWarehouse() {
         final WarehouseS3Credentials credentials = new WarehouseS3Credentials(REGION, ACCESS_KEY,
-                "updaterId", UPDATED_AT).withLinks("instanceId");
-        assertThat(credentials.getInstanceUri(), endsWith("/instanceId"));
-        assertThat(credentials.getListUri(), endsWith("/instanceId/s3"));
-        assertThat(credentials.getUri(), is(WarehouseS3Credentials.TEMPLATE
-                .expand("instanceId", REGION, ACCESS_KEY).toString()));
-        assertThat(credentials.getUpdatedByUri(), endsWith("/updaterId"));
+                "updaterId", UPDATED_AT, LINKS);
+        assertThat(credentials.getInstanceUri(), endsWith("/{instance-id}"));
+        assertThat(credentials.getListUri(), endsWith("/{instance-id}/s3"));
+        assertThat(credentials.getUri(), endsWith("/{instance-id}/s3/region/accessKey"));
+        assertThat(credentials.getUpdatedByUri(), endsWith("/users/{user-id}"));
     }
 
     @Test
     public void getUri() {
         final WarehouseS3Credentials credentials = new WarehouseS3Credentials(REGION, ACCESS_KEY,
-                UPDATED_BY, UPDATED_AT).withLinks(LINKS);
+                UPDATED_BY, UPDATED_AT, LINKS);
 
         assertThat(credentials.getUri(), is("/gdc/datawarehouse/instances/{instance-id}/s3/region/accessKey"));
     }
@@ -131,6 +124,6 @@ public class WarehouseS3CredentialsTest {
         final WarehouseS3Credentials credentials = readObjectFromResource("/warehouse/s3Credentials-create.json",
                 WarehouseS3Credentials.class);
 
-        assertThat(credentials.toString(), is("WarehouseS3Credentials[region=region,accessKey=accessKey,updated=<null>,updatedBy=<null>]"));
+        assertThat(credentials.toString(), is("WarehouseS3Credentials[region=region,accessKey=accessKey,updated=<null>]"));
     }
 }
