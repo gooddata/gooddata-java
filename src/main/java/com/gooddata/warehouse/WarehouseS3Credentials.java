@@ -12,15 +12,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.gooddata.account.Account;
 import com.gooddata.util.GoodDataToStringBuilder;
 import com.gooddata.util.ISODateTimeDeserializer;
 import com.gooddata.util.ISODateTimeSerializer;
 import org.joda.time.DateTime;
 import org.springframework.web.util.UriTemplate;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.gooddata.util.Validate.notNullState;
 
@@ -35,22 +31,15 @@ public class WarehouseS3Credentials {
     public static final String URI = WarehouseS3CredentialsList.URI + "/{region}/{accessKey}";
     public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
-    private static final String SELF_LINK = "self";
-    private static final String INSTANCE_LINK = "instance";
-    private static final String LIST_LINK = "parent";
-    private static final String UPDATED_BY_LINK = "updatedBy";
-
     private final String region;
 
     private final String accessKey;
 
     private final DateTime updated;
 
-    private final String updatedBy;
+    private String secretKey;
 
-    private final String secretKey;
-
-    private final Map<String, String> links;
+    private final Links links;
 
     /**
      * Used to add new S3 credentials
@@ -62,49 +51,29 @@ public class WarehouseS3Credentials {
     public WarehouseS3Credentials(final String region,
                                   final String accessKey,
                                   final String secretKey) {
-        this(region, accessKey, secretKey, null, null, null);
-    }
-
-    /**
-     * Used to list saved S3 credentials (not intended for the end user)
-     *
-     * @param region    S3 region
-     * @param accessKey S3 access key
-     * @param updatedBy URI of the user who updated the credentials last
-     * @param updated   last modification date
-     */
-    public WarehouseS3Credentials(final String region,
-                                  final String accessKey,
-                                  final String updatedBy,
-                                  final DateTime updated) {
-        this(region, accessKey, null, updatedBy, updated, null);
+        this(region, accessKey, secretKey, null, null);
     }
 
     @JsonCreator
-    WarehouseS3Credentials(@JsonProperty("region") final String region,
-                           @JsonProperty("accessKey") final String accessKey,
-                           @JsonProperty("secretKey") final String secretKey,
-                           @JsonProperty("updatedBy") final String updatedBy,
-                           @JsonProperty("updated") @JsonDeserialize(using = ISODateTimeDeserializer.class) final DateTime updated,
-                           @JsonProperty("links") final Map<String, String> links) {
+    protected WarehouseS3Credentials(@JsonProperty("region") final String region,
+                                     @JsonProperty("accessKey") final String accessKey,
+                                     @JsonProperty("secretKey") final String secretKey,
+                                     @JsonProperty("updated") @JsonDeserialize(using = ISODateTimeDeserializer.class)
+                                         final DateTime updated,
+                                     @JsonProperty("links") final Links links) {
         this.region = region;
         this.accessKey = accessKey;
         this.secretKey = secretKey;
-        this.updatedBy = updatedBy;
         this.updated = updated;
         this.links = links;
     }
 
+    /**
+     * @return the date and time of last modification
+     */
     @JsonSerialize(using = ISODateTimeSerializer.class)
     public DateTime getUpdated() {
         return updated;
-    }
-
-    /**
-     * @return URI of the user who updated the credentials last
-     */
-    public String getUpdatedBy() {
-        return updatedBy;
     }
 
     /**
@@ -115,6 +84,15 @@ public class WarehouseS3Credentials {
         return secretKey;
     }
 
+    /**
+     * Sets new secret key
+     *
+     * @param secretKey secret key to set
+     */
+    public void setSecretKey(final String secretKey) {
+        this.secretKey = secretKey;
+    }
+
     public String getAccessKey() {
         return accessKey;
     }
@@ -123,66 +101,90 @@ public class WarehouseS3Credentials {
         return region;
     }
 
-    public Map<String, String> getLinks() {
+    public Links getLinks() {
         return links;
     }
 
     /**
-     * Adds secret key
-     *
-     * @param secretKey secret key to add
-     * @return S3 credentials with secret key
+     * @return URI of this resource
      */
-    public WarehouseS3Credentials withSecretKey(final String secretKey) {
-        return new WarehouseS3Credentials(region, accessKey, secretKey, updatedBy, updated, links);
-    }
-
-    /**
-     * Adds links
-     *
-     * @param links links to add
-     * @return S3 credentials with links
-     */
-    WarehouseS3Credentials withLinks(final Map<String, String> links) {
-        return new WarehouseS3Credentials(region, accessKey, secretKey, updatedBy, updated, links);
-    }
-
-    /**
-     * Adds links using provided warehouse id
-     *
-     * @param warehouseId warehouse id to use in links
-     * @return S3 credentials with links based on specified warehouse
-     */
-    public WarehouseS3Credentials withLinks(final String warehouseId) {
-        final Map<String, String> links = new HashMap<>();
-        links.put(INSTANCE_LINK, Warehouse.TEMPLATE.expand(warehouseId).toString());
-        links.put(LIST_LINK, WarehouseS3CredentialsList.TEMPLATE.expand(warehouseId).toString());
-        links.put(SELF_LINK, TEMPLATE.expand(warehouseId, region, accessKey).toString());
-
-        if (updatedBy != null) {
-            links.put(UPDATED_BY_LINK, Account.TEMPLATE.expand(updatedBy).toString());
-        }
-        return withLinks(links);
-    }
-
     @JsonIgnore
     public String getUri() {
-        return notNullState(links, "links").get(SELF_LINK);
+        return notNullState(links, "links").getSelf();
     }
 
+    /**
+     * @return URI of the parent of warehouse S3 credentials
+     */
     @JsonIgnore
     public String getListUri() {
-        return notNullState(links, "links").get(LIST_LINK);
+        return notNullState(links, "links").getParent();
     }
 
+    /**
+     * @return URI of the warehouse
+     */
     @JsonIgnore
     public String getInstanceUri() {
-        return notNullState(links, "links").get(INSTANCE_LINK);
+        return notNullState(links, "links").getInstance();
     }
 
+    /**
+     * @return URI of the user profile, who was the last to modify this resource
+     */
     @JsonIgnore
     public String getUpdatedByUri() {
-        return notNullState(links, "links").get(UPDATED_BY_LINK);
+        return notNullState(links, "links").getUpdatedBy();
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Links {
+        private final String self;
+        private final String parent;
+        private final String instance;
+        private final String updatedBy;
+
+        @JsonCreator
+        public Links(@JsonProperty("self") String self,
+                     @JsonProperty("parent") String parent,
+                     @JsonProperty("instance") String instance,
+                     @JsonProperty("updatedBy") String updatedBy) {
+            this.self = self;
+            this.parent = parent;
+            this.instance = instance;
+            this.updatedBy = updatedBy;
+        }
+
+        public String getSelf() {
+            return self;
+        }
+
+        public String getParent() {
+            return parent;
+        }
+
+        public String getInstance() {
+            return instance;
+        }
+
+        public String getUpdatedBy() {
+            return updatedBy;
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Links)) return false;
+
+            final Links links = (Links) o;
+
+            return this.toString().equals(links.toString());
+        }
+
+        @Override
+        public String toString() {
+            return GoodDataToStringBuilder.defaultToString(this);
+        }
     }
 
     @Override

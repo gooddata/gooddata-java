@@ -167,7 +167,8 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
     @Test(groups = { "warehouse", "isolated_domain" }, dependsOnMethods = "addS3Credentials")
     public void updateS3Credentials() {
         final DateTime lastUpdated = s3Credentials.getUpdated();
-        s3Credentials = service.updateS3Credentials(s3Credentials.withSecretKey("newSecretKey"))
+        s3Credentials.setSecretKey("newSecretKey");
+        s3Credentials = service.updateS3Credentials(s3Credentials)
                 .get(1, TimeUnit.MINUTES);
 
         assertThat(s3Credentials, notNullValue());

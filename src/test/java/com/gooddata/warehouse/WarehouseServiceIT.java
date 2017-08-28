@@ -7,12 +7,14 @@ package com.gooddata.warehouse;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
+import com.gooddata.account.Account;
 import com.gooddata.collections.MultiPageList;
 import com.gooddata.collections.PageRequest;
 import com.gooddata.collections.PageableList;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matchers;
+import org.joda.time.DateTime;
 import org.springframework.web.client.RestClientException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -51,14 +53,19 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
     private static final String WAREHOUSE_S3_CREDENTIALS_LIST_URI = WarehouseS3CredentialsList.TEMPLATE.expand(WAREHOUSE_ID).toString();
     private static final String WAREHOUSE_S3_CREDENTIALS_URI = WarehouseS3Credentials.TEMPLATE.expand(WAREHOUSE_ID, REGION, ACCESS_KEY).toString();
     private static final String REMOVE_USER_TASK_DONE = "/warehouse/removeUserTask-finished.json";
+    private static final String UPDATED_BY_URI = Account.TEMPLATE.expand("updatedBy").toString();
 
     private static final String CONNECTION_URL = "CONNECTION_URL";
+    private static final WarehouseS3Credentials.Links LINKS = new WarehouseS3Credentials.Links(
+            WAREHOUSE_S3_CREDENTIALS_URI, WAREHOUSE_S3_CREDENTIALS_LIST_URI, WAREHOUSE_URI, UPDATED_BY_URI
+    );
 
     private WarehouseTask pollingTask;
     private WarehouseTask finishedTask;
     private Warehouse warehouse;
     private WarehouseSchema warehouseSchema;
     private WarehouseS3Credentials s3Credentials;
+    private WarehouseS3Credentials s3CredentialsWithLinks;
 
     @BeforeClass
     public void setUp() throws Exception {
@@ -67,6 +74,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         warehouse = readObjectFromResource(WAREHOUSE, Warehouse.class);
         warehouseSchema = readObjectFromResource(WAREHOUSE_SCHEMA, WarehouseSchema.class);
         s3Credentials = new WarehouseS3Credentials(REGION, ACCESS_KEY, "secretKey");
+        s3CredentialsWithLinks = new WarehouseS3Credentials(REGION, ACCESS_KEY, "secretKey", DateTime.now(), LINKS);
     }
 
     @Test
@@ -586,7 +594,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withStatus(200);
 
         final WarehouseS3Credentials updated = gd.getWarehouseService()
-                .updateS3Credentials(s3Credentials.withLinks(warehouse.getId())).get();
+                .updateS3Credentials(s3CredentialsWithLinks).get();
         assertThat(updated, notNullValue());
         assertThat(updated.getRegion(), is(REGION));
         assertThat(updated.getAccessKey(), is(ACCESS_KEY));
@@ -608,7 +616,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(409);
 
-        gd.getWarehouseService().updateS3Credentials(s3Credentials.withLinks(warehouse.getId())).get();
+        gd.getWarehouseService().updateS3Credentials(s3CredentialsWithLinks).get();
     }
 
     @Test(expectedExceptions = WarehouseS3CredentialsException.class,
@@ -620,7 +628,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(409);
 
-        gd.getWarehouseService().updateS3Credentials(s3Credentials.withLinks(warehouse.getId())).get();
+        gd.getWarehouseService().updateS3Credentials(s3CredentialsWithLinks).get();
     }
 
     @Test(expectedExceptions = WarehouseS3CredentialsException.class,
@@ -646,7 +654,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(409);
 
-        gd.getWarehouseService().updateS3Credentials(s3Credentials.withLinks(warehouse.getId())).get();
+        gd.getWarehouseService().updateS3Credentials(s3CredentialsWithLinks).get();
     }
 
     @Test
@@ -672,7 +680,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withBody(readFromResource("/warehouse/s3CredentialsList.json"))
                 .withStatus(200);
 
-        gd.getWarehouseService().removeS3Credentials(s3Credentials.withLinks(warehouse.getId())).get();
+        gd.getWarehouseService().removeS3Credentials(s3CredentialsWithLinks).get();
     }
 
     @Test(expectedExceptions = WarehouseS3CredentialsException.class,
@@ -690,7 +698,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(409);
 
-        gd.getWarehouseService().removeS3Credentials(s3Credentials.withLinks(warehouse.getId())).get();
+        gd.getWarehouseService().removeS3Credentials(s3CredentialsWithLinks).get();
     }
 
     @Test(expectedExceptions = WarehouseS3CredentialsException.class,
@@ -702,7 +710,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(409);
 
-        gd.getWarehouseService().removeS3Credentials(s3Credentials.withLinks(warehouse.getId())).get();
+        gd.getWarehouseService().removeS3Credentials(s3CredentialsWithLinks).get();
     }
 
     @Test(expectedExceptions = WarehouseS3CredentialsException.class,
@@ -728,6 +736,6 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(409);
 
-        gd.getWarehouseService().removeS3Credentials(s3Credentials.withLinks(warehouse.getId())).get();
+        gd.getWarehouseService().removeS3Credentials(s3CredentialsWithLinks).get();
     }
 }

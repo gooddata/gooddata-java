@@ -18,16 +18,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class WarehouseS3CredentialsListTest {
 
-    private final Map<String, String> credentials1Links = new HashMap<String, String>() {{
-        put("self", "/gdc/datawarehouse/instances/{instance-id}/s3/region/accessKey");
-        put("parent", "/gdc/datawarehouse/instances/{instance-id}/s3");
-        put("instance", "/gdc/datawarehouse/instances/{instance-id}");
-    }};
+    private static final String SELF_LINK = "/gdc/datawarehouse/instances/{instance-id}/s3/region/accessKey";
+    private static final String PARENT_LINK = "/gdc/datawarehouse/instances/{instance-id}/s3";
+    private static final String INSTANCE_LINK = "/gdc/datawarehouse/instances/{instance-id}";
+    private static final String UPDATED_BY_LINK = "/gdc/datawarehouse/instances/{instance-id}/users/{user-id}";
+
+    private final WarehouseS3Credentials.Links credentials1Links = new WarehouseS3Credentials.Links(
+            SELF_LINK, PARENT_LINK, INSTANCE_LINK, UPDATED_BY_LINK
+    );
     private final WarehouseS3Credentials credentials1 = new WarehouseS3Credentials("region", "accessKey",
-             "secretKey", "/gdc/datawarehouse/instances/{instance-id}/users/{user-id}",
+             "secretKey",
             DateTime.parse("2017-08-02T09:40:24.064Z"), credentials1Links);
     private final WarehouseS3Credentials credentials2 = new WarehouseS3Credentials( "region2", "accessKey2",
-            "secretKey2", null, null, null);
+            "secretKey2", null, null);
 
     private final Map<String, String> links = new HashMap<String, String>() {{
         put("self", "/gdc/datawarehouse/instances/{instance-id}/s3");
