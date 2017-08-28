@@ -16,9 +16,11 @@ import com.gooddata.collections.Page;
 import com.gooddata.collections.PageRequest;
 import com.gooddata.collections.PageableList;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -514,7 +516,8 @@ public class WarehouseService extends AbstractService {
         notEmpty(warehouse.getId(), "warehouse.id");
         notNull(s3Credentials, "s3Credentials");
 
-        final WarehouseTask task = createWarehouseTask(WarehouseS3CredentialsList.URI, s3Credentials, HttpMethod.POST, warehouse.getId());
+        final WarehouseTask task = createWarehouseTask(WarehouseS3CredentialsList.URI, HttpMethod.POST,
+                s3Credentials, createUpdateHttpEntity(s3Credentials), warehouse.getId());
         final String newCredentialsUri = WarehouseS3Credentials.TEMPLATE.expand(warehouse.getId(),
                 s3Credentials.getRegion(), s3Credentials.getAccessKey()).toString();
         return new PollResult<>(this, createS3PollHandler(newCredentialsUri, task, "add"));
@@ -531,7 +534,8 @@ public class WarehouseService extends AbstractService {
         notNull(s3Credentials, "s3Credentials");
         notNull(s3Credentials.getUri(), "s3Credentials.links.self");
 
-        final WarehouseTask task = createWarehouseTask(s3Credentials.getUri(), s3Credentials, HttpMethod.PUT);
+        final WarehouseTask task = createWarehouseTask(s3Credentials.getUri(), HttpMethod.PUT,
+                s3Credentials, createUpdateHttpEntity(s3Credentials));
         return new PollResult<>(this, createS3PollHandler(s3Credentials.getUri(), task, "update"));
     }
 
@@ -546,27 +550,37 @@ public class WarehouseService extends AbstractService {
         notNull(s3Credentials, "s3Credentials");
         notNull(s3Credentials.getUri(), "s3Credentials.links.self");
 
-        final WarehouseTask task = createWarehouseTask(s3Credentials.getUri(), s3Credentials, HttpMethod.DELETE);
+        final HttpEntity<MappingJacksonValue> emptyRequestEntity = new HttpEntity<>(new HttpHeaders());
+        final WarehouseTask task = createWarehouseTask(s3Credentials.getUri(), HttpMethod.DELETE,
+                s3Credentials, emptyRequestEntity);
         return new PollResult<>(this, createS3PollHandler(s3Credentials.getUri(), task, Void.class, "delete"));
     }
 
     private WarehouseTask createWarehouseTask(final String targetUri,
-                                              final WarehouseS3Credentials s3Credentials,
                                               final HttpMethod httpMethod,
+                                              final WarehouseS3Credentials s3Credentials,
+                                              final HttpEntity<MappingJacksonValue> requestEntity,
                                               final Object... args) {
-        final HttpEntity<WarehouseTask> taskHttpEntity;
         try {
-            taskHttpEntity = restTemplate.exchange(targetUri, httpMethod, new HttpEntity<>(s3Credentials), WarehouseTask.class, args);
+            final HttpEntity<WarehouseTask> taskHttpEntity = restTemplate.exchange(targetUri, httpMethod,
+                    requestEntity, WarehouseTask.class, args);
+
+            if (taskHttpEntity == null || taskHttpEntity.getBody() == null) {
+                throw new WarehouseS3CredentialsException(targetUri,
+                        format("Empty response when trying to %s S3 credentials via API", httpMethod.name()));
+            }
+            return taskHttpEntity.getBody();
         } catch (GoodDataException | RestClientException e) {
             final String expandedTargetUri = new UriTemplate(targetUri).expand(args).toString();
             throw new WarehouseS3CredentialsException(targetUri, format("Unable to %s S3 credentials %s with region: %s, access key: %s",
                     httpMethod.name(), expandedTargetUri, s3Credentials.getRegion(), s3Credentials.getAccessKey()), e);
         }
-        if (taskHttpEntity == null || taskHttpEntity.getBody() == null) {
-            throw new WarehouseS3CredentialsException(targetUri, format("Empty response when trying to %s S3 credentials via API", httpMethod.name()));
-        }
+    }
 
-        return taskHttpEntity.getBody();
+    private HttpEntity<MappingJacksonValue> createUpdateHttpEntity(final WarehouseS3Credentials s3Credentials) {
+        final MappingJacksonValue jacksonValue = new MappingJacksonValue(s3Credentials);
+        jacksonValue.setSerializationView(WarehouseS3Credentials.UpdateView.class);
+        return new HttpEntity<>(jacksonValue);
     }
 
     private AbstractPollHandler<WarehouseTask, WarehouseS3Credentials> createS3PollHandler(final String credentialsUri,

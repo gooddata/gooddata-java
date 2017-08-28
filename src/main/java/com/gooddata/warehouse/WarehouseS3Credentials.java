@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gooddata.util.GoodDataToStringBuilder;
@@ -31,12 +32,15 @@ public class WarehouseS3Credentials {
     public static final String URI = WarehouseS3CredentialsList.URI + "/{region}/{accessKey}";
     public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
+    @JsonView(UpdateView.class)
     private final String region;
 
+    @JsonView(UpdateView.class)
     private final String accessKey;
 
     private final DateTime updated;
 
+    @JsonView(UpdateView.class)
     private String secretKey;
 
     private final Links links;
@@ -190,5 +194,11 @@ public class WarehouseS3Credentials {
     @Override
     public String toString() {
         return GoodDataToStringBuilder.defaultToString(this, "secretKey");
+    }
+
+    /**
+     * Class representing update view of warehouse S3 credentials
+     */
+    static class UpdateView {
     }
 }
