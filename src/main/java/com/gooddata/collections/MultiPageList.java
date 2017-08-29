@@ -53,6 +53,16 @@ public class MultiPageList<T> extends PageableList<T> {
     }
 
     /**
+     * Do not iterate over pages, get the current page items only
+     *
+     * @return the list of current page items only
+     */
+    @Override
+    public List<T> getCurrentPageItems() {
+        return delegate.getCurrentPageItems();
+    }
+
+    /**
      * Iterate over multiple pages and collect the results to list
      *
      * @return list with all the results
