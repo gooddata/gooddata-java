@@ -25,8 +25,10 @@ import java.util.Collections;
 import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.util.ResourceUtils.readFromResource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.util.ResourceUtils.readStringFromResource;
 import static net.jadler.Jadler.onRequest;
 import static net.jadler.Jadler.verifyThatRequest;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -45,8 +47,12 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
     private static final String WAREHOUSE = "/warehouse/warehouse.json";
     private static final String WAREHOUSE_USER = "/warehouse/user.json";
     private static final String WAREHOUSE_SCHEMA = "/warehouse/schema.json";
+    private static final String S3_CREDENTIALS_CREATE = "/warehouse/s3Credentials-create.json";
+    private static final String S3_CREDENTIALS_UPDATE = "/warehouse/s3Credentials-update.json";
     private static final String REGION = "region";
     private static final String ACCESS_KEY = "accessKey";
+    private static final String SECRET_KEY = "secretKey";
+    private static final String NEW_SECRET_KEY = "newSecretKey";
 
     private static final String WAREHOUSE_URI = Warehouse.TEMPLATE.expand(WAREHOUSE_ID).toString();
     private static final String WAREHOUSE_USER_URI = WarehouseUsers.TEMPLATE.expand(WAREHOUSE_ID).toString();
@@ -73,8 +79,8 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         finishedTask = readObjectFromResource(TASK_DONE, WarehouseTask.class);
         warehouse = readObjectFromResource(WAREHOUSE, Warehouse.class);
         warehouseSchema = readObjectFromResource(WAREHOUSE_SCHEMA, WarehouseSchema.class);
-        s3Credentials = new WarehouseS3Credentials(REGION, ACCESS_KEY, "secretKey");
-        s3CredentialsWithLinks = new WarehouseS3Credentials(REGION, ACCESS_KEY, "secretKey", DateTime.now(), LINKS);
+        s3Credentials = new WarehouseS3Credentials(REGION, ACCESS_KEY, SECRET_KEY);
+        s3CredentialsWithLinks = new WarehouseS3Credentials(REGION, ACCESS_KEY, SECRET_KEY, DateTime.now(), LINKS);
     }
 
     @Test
@@ -450,7 +456,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(WarehouseS3Credentials.TEMPLATE.expand(WAREHOUSE_ID, REGION, ACCESS_KEY).toString())
                 .respond()
-                .withBody(readFromResource("/warehouse/s3Credentials-full.json"))
+                .withBody(readFromResource("/warehouse/s3Credentials-get.json"))
                 .withStatus(200);
 
         final WarehouseS3Credentials credentials = gd.getWarehouseService()
@@ -488,6 +494,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(WAREHOUSE_S3_CREDENTIALS_LIST_URI)
+                .havingBody(jsonEquals(readStringFromResource(S3_CREDENTIALS_CREATE)))
                 .respond()
                 .withBody(readFromResource(TASK_POLL))
                 .withStatus(202);
@@ -544,7 +551,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
     }
 
     @Test(expectedExceptions = WarehouseS3CredentialsException.class,
-            expectedExceptionsMessageRegExp = ".*Attempt to add S3 credentials in warehouse failed, can't get the result, uri: /gdc/datawarehouse/instances/instanceId/s3$")
+            expectedExceptionsMessageRegExp = ".*Attempt to add S3 credentials in warehouse failed, can't get the result, uri: /gdc/datawarehouse/instances/instanceId/s3/region/accessKey$")
     public void shouldFailToAddS3Credentials_failOnResult() {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -575,6 +582,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("PUT")
                 .havingPathEqualTo(WAREHOUSE_S3_CREDENTIALS_URI)
+                .havingBody(jsonEquals(readStringFromResource(S3_CREDENTIALS_UPDATE)))
                 .respond()
                 .withBody(readFromResource(TASK_POLL))
                 .withStatus(202);
@@ -593,8 +601,12 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withBody(readFromResource("/warehouse/s3Credentials-get.json"))
                 .withStatus(200);
 
+        final WarehouseS3Credentials credentials = gd.getWarehouseService()
+                .getWarehouseS3Credentials(warehouse, s3Credentials.getRegion(), s3Credentials.getAccessKey());
+        credentials.setSecretKey(NEW_SECRET_KEY);
+
         final WarehouseS3Credentials updated = gd.getWarehouseService()
-                .updateS3Credentials(s3CredentialsWithLinks).get();
+                .updateS3Credentials(credentials).get();
         assertThat(updated, notNullValue());
         assertThat(updated.getRegion(), is(REGION));
         assertThat(updated.getAccessKey(), is(ACCESS_KEY));
@@ -632,7 +644,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
     }
 
     @Test(expectedExceptions = WarehouseS3CredentialsException.class,
-            expectedExceptionsMessageRegExp = ".*Attempt to update S3 credentials in warehouse failed, can't get the result, uri: /gdc/datawarehouse/instances/instanceId/s3$")
+            expectedExceptionsMessageRegExp = ".*Attempt to update S3 credentials in warehouse failed, can't get the result, uri: /gdc/datawarehouse/instances/instanceId/s3/region/accessKey$")
     public void shouldFailToUpdateS3Credentials_failOnResult() {
         onRequest()
                 .havingMethodEqualTo("PUT")
@@ -662,6 +674,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo(WAREHOUSE_S3_CREDENTIALS_URI)
+                .havingBodyEqualTo("")
                 .respond()
                 .withBody(readFromResource(TASK_POLL))
                 .withStatus(202);
@@ -714,7 +727,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
     }
 
     @Test(expectedExceptions = WarehouseS3CredentialsException.class,
-            expectedExceptionsMessageRegExp = ".*Attempt to delete S3 credentials in warehouse failed, can't get the result, uri: /gdc/datawarehouse/instances/instanceId/s3$")
+            expectedExceptionsMessageRegExp = ".*Attempt to delete S3 credentials in warehouse failed, can't get the result, uri: /gdc/datawarehouse/instances/instanceId/s3/region/accessKey$")
     public void shouldFailToRemoveS3Credentials_failOnResult() {
         onRequest()
                 .havingMethodEqualTo("DELETE")

@@ -4,7 +4,7 @@
             "instance": "/gdc/datawarehouse/instances/instanceId",
             "user": "/gdc/datawarehouse/instances/instanceId/users/userId",
             "users": "/gdc/datawarehouse/instances/instanceId/users",
-            "s3Credentials": "/gdc/datawarehouse/instances/instanceId/s3"
+            "s3Credentials": "/gdc/datawarehouse/instances/instanceId/s3/region/accessKey"
         }
     }
 }
