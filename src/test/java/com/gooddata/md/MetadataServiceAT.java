@@ -59,7 +59,10 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
     @Test(groups = "md", dependsOnMethods = "getObjs")
     public void createMetric() throws Exception {
         final MetadataService md = gd.getMetadataService();
-        metric = md.createObj(project, new Metric("Avg shoe size", "SELECT AVG([" + fact + "])", "#,##0"));
+        final Metric create = new Metric("Avg shoe size", "SELECT AVG([" + fact + "])", "#,##0");
+        create.setIdentifier("metric.avgshoesize");
+        metric = md.createObj(project, create);
+        assertThat(metric.getIdentifier(), is("metric.avgshoesize"));
     }
 
     @Test(groups = "md", dependsOnMethods = "createMetric")
