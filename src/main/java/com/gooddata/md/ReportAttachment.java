@@ -5,9 +5,9 @@
  */
 package com.gooddata.md;
 
-import com.gooddata.report.ReportExportFormat;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.export.ExportFormat;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Arrays;
@@ -33,8 +33,8 @@ public class ReportAttachment extends Attachment {
         this.formats = Arrays.asList(formats);
     }
 
-    protected ReportAttachment(String uri, Map<String, String> exportOptions, ReportExportFormat... formats) {
-        this(uri, exportOptions, ReportExportFormat.arrayToStringArray(formats));
+    protected ReportAttachment(String uri, Map<String, String> exportOptions, ExportFormat... formats) {
+        this(uri, exportOptions, ExportFormat.arrayToStringArray(formats));
     }
 
     /**

@@ -6,8 +6,11 @@
 package com.gooddata.report;
 
 /**
- * Thrown when report export contains no data
+ * Thrown when export contains no data
+ * @deprecated use {@link com.gooddata.export.NoDataExportException}
  */
+@SuppressWarnings("deprecation")
+@Deprecated
 public class NoDataReportException extends ReportException {
 
     public NoDataReportException() {

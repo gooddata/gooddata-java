@@ -3,10 +3,11 @@
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
-package com.gooddata.report;
+package com.gooddata.export;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.md.report.Report;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import static com.gooddata.util.Validate.notNull;
@@ -15,8 +16,12 @@ class ExecuteReport extends ReportRequest {
 
     private final String reportUri;
 
-    public ExecuteReport(final String reportUri) {
+    ExecuteReport(final String reportUri) {
         this.reportUri = notNull(reportUri, "reportUri");
+    }
+
+    ExecuteReport(final Report report) {
+        this(notNull(report, "report").getUri());
     }
 
     @JsonProperty("report")

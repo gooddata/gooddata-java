@@ -9,7 +9,9 @@ import com.gooddata.GoodDataException;
 
 /**
  * Exception during report export
+ * @deprecated use {@link com.gooddata.export.ExportException}
  */
+@Deprecated
 public class ReportException extends GoodDataException {
     public ReportException(String message) {
         super(message);
