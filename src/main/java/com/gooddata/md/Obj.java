@@ -14,6 +14,7 @@ public interface Obj {
 
     String URI = "/gdc/md/{projectId}/obj";
     String CREATE_URI = URI + "?createAndGet=true";
+    String CREATE_WITH_ID_URI = CREATE_URI + "&setIdentifier=true";
     String OBJ_URI = URI + "/{objId}";
     UriTemplate OBJ_TEMPLATE = new UriTemplate(OBJ_URI);
 

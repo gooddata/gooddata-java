@@ -52,7 +52,7 @@ public class MetadataService extends AbstractService {
 
         final T response;
         try {
-            response = restTemplate.postForObject(Obj.CREATE_URI, obj, (Class<T>)obj.getClass(), project.getId());
+            response = restTemplate.postForObject(Obj.CREATE_WITH_ID_URI, obj, (Class<T>)obj.getClass(), project.getId());
         } catch (GoodDataRestException | RestClientException e) {
             throw new ObjCreateException(obj, e);
         }

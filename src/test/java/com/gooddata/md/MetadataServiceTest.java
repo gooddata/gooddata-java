@@ -85,7 +85,7 @@ public class MetadataServiceTest {
         final Obj obj = mock(Obj.class);
         final Obj resultObj = mock(Obj.class);
 
-        when(restTemplate.postForObject(eq(Obj.CREATE_URI), eq(obj), Matchers.<Class<Obj>>any(), eq(PROJECT_ID)))
+        when(restTemplate.postForObject(eq(Obj.CREATE_WITH_ID_URI), eq(obj), Matchers.<Class<Obj>>any(), eq(PROJECT_ID)))
                 .thenReturn(resultObj);
 
         final Obj result = service.createObj(project, obj);
