@@ -24,19 +24,19 @@ public class ExportServiceAT extends AbstractGoodDataAT {
         service = gd.getExportService();
     }
 
-    @Test(groups = "export", dependsOnGroups = "report")
+    @Test(groups = "export", dependsOnGroups = "dataset")
     public void exportReportDefinition() throws Exception {
         service.export(reportDefinition, ExportFormat.CSV, System.out);
     }
 
-    @Test(groups = "export", dependsOnGroups = "report")
+    @Test(groups = "export", dependsOnGroups = "dataset")
     public void shouldExportDashboard() throws Exception {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         service.exportPdf(dashboard, dashboard.getTabs().iterator().next(), output).get();
         assertThat(output, is(notNullValue()));
     }
 
-    @Test(groups = "export", dependsOnGroups = "report")
+    @Test(groups = "export", dependsOnGroups = "dataset")
     public void shouldReportDefinitionRaw() throws Exception {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         service.exportCsv(reportDefinition, output).get();
