@@ -170,7 +170,7 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         assertThat(attribute.getIdentifier(), is("attr.person.department"));
     }
 
-    @Test(dependsOnGroups = "report", dependsOnMethods = {"usedBy", "usedByBatch"})
+    @Test(dependsOnGroups = "export", dependsOnMethods = {"usedBy", "usedByBatch"})
     public void removeReport() throws Exception {
         final MetadataService metadataService = gd.getMetadataService();
         metadataService.removeObj(report);
