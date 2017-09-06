@@ -6,6 +6,7 @@
 package com.gooddata;
 
 import com.gooddata.account.AccountService;
+import com.gooddata.auditevent.AuditEventService;
 import com.gooddata.connector.ConnectorService;
 import com.gooddata.dataload.OutputStageService;
 import com.gooddata.dataload.processes.ProcessService;
@@ -86,6 +87,7 @@ public class GoodData {
     private final OutputStageService outputStageService;
     private final ProjectTemplateService projectTemplateService;
     private final ExportService exportService;
+    private final AuditEventService auditEventService;
 
     /**
      * Create instance configured to communicate with GoodData Platform under user with given credentials.
@@ -221,6 +223,7 @@ public class GoodData {
         featureFlagService = new FeatureFlagService(getRestTemplate());
         outputStageService = new OutputStageService(getRestTemplate());
         projectTemplateService = new ProjectTemplateService(getRestTemplate());
+        auditEventService = new AuditEventService(getRestTemplate(), accountService);
     }
 
     static RestTemplate createRestTemplate(GoodDataEndpoint endpoint, HttpClient httpClient) {
@@ -477,4 +480,14 @@ public class GoodData {
     public ProjectTemplateService getProjectTemplateService() {
         return projectTemplateService;
     }
+
+    /**
+     * Get initialized service for audit events
+     * @return initialized service for audit events
+     */
+    @Bean
+    public AuditEventService getAuditEventService() {
+        return auditEventService;
+    }
+
 }

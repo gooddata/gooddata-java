@@ -1,0 +1,11 @@
+{
+  "events": {
+    "items": [
+    ],
+    "paging": {
+    },
+    "links": {
+      "self": "/gdc/domains/default/auditEvents"
+    }
+  }
+}
