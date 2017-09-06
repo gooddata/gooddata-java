@@ -5,6 +5,7 @@
  */
 package com.gooddata.dataset;
 
+import static com.gooddata.util.ResourceUtils.readFromResource;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -29,7 +30,7 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
         final DatasetService datasetService = gd.getDatasetService();
 
         final DatasetManifest manifest = datasetService.getDatasetManifest(project, "dataset.person");
-        datasetService.loadDataset(project, manifest, getClass().getResourceAsStream("/person.csv")).get();
+        datasetService.loadDataset(project, manifest, readFromResource("/person.csv")).get();
     }
 
     @Test(groups = "dataset", dependsOnMethods = {"loadDataset"})
@@ -37,9 +38,9 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
         final DatasetService datasetService = gd.getDatasetService();
 
         final DatasetManifest personManifest = datasetService.getDatasetManifest(project, "dataset.person");
-        personManifest.setSource(getClass().getResourceAsStream("/person.csv"));
+        personManifest.setSource(readFromResource("/person.csv"));
         final DatasetManifest cityManifest = datasetService.getDatasetManifest(project, "dataset.city");
-        cityManifest.setSource(getClass().getResourceAsStream("/city.csv"));
+        cityManifest.setSource(readFromResource("/city.csv"));
 
         datasetService.loadDatasets(project, personManifest, cityManifest).get();
     }
@@ -55,7 +56,7 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
         final DatasetService datasetService = gd.getDatasetService();
         final DatasetManifest manifest = datasetService.getDatasetManifest(project, "dataset.person");
         try {
-            datasetService.loadDataset(project, manifest, getClass().getResourceAsStream("/corruptedPerson.csv")).get();
+            datasetService.loadDataset(project, manifest, readFromResource("/corruptedPerson.csv")).get();
             fail();
         } catch (DatasetException ex){
             assertThat(ex.getMessage(),is(equalTo("Load datasets [dataset.person] failed: [Number of columns doesn't corespond on line 3 in dataset.person.csv]")));
@@ -67,9 +68,9 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
         final DatasetService datasetService = gd.getDatasetService();
 
         final DatasetManifest personManifest = datasetService.getDatasetManifest(project, "dataset.person");
-        personManifest.setSource(getClass().getResourceAsStream("/corruptedPerson.csv"));
+        personManifest.setSource(readFromResource("/corruptedPerson.csv"));
         final DatasetManifest cityManifest = datasetService.getDatasetManifest(project, "dataset.city");
-        cityManifest.setSource(getClass().getResourceAsStream("/city.csv"));
+        cityManifest.setSource(readFromResource("/city.csv"));
 
         try {
             datasetService.loadDatasets(project, personManifest, cityManifest).get();
