@@ -10,6 +10,8 @@ import org.testng.annotations.Test;
 
 import java.io.InputStreamReader;
 
+import static com.gooddata.util.ResourceUtils.readFromResource;
+
 /**
  * Project model acceptance test
  */
@@ -20,7 +22,7 @@ public class ModelServiceAT extends AbstractGoodDataAT {
         final ModelService modelService = gd.getModelService();
 
         final ModelDiff projectModelDiff = modelService.getProjectModelDiff(project,
-                new InputStreamReader(getClass().getResourceAsStream("/person.json"))).get();
+                new InputStreamReader(readFromResource("/person.json"))).get();
         modelService.updateProjectModel(project, projectModelDiff).get();
     }
 

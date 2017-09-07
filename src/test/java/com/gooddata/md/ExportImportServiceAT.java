@@ -6,6 +6,7 @@
 package com.gooddata.md;
 
 import static com.gooddata.md.Restriction.identifier;
+import static com.gooddata.util.ResourceUtils.readFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -39,7 +40,7 @@ public class ExportImportServiceAT extends AbstractGoodDataAT {
 
         final ModelService modelService = gd.getModelService();
         final ModelDiff projectModelDiff = modelService.getProjectModelDiff(importProject,
-                new InputStreamReader(getClass().getResourceAsStream("/person.json"))).get();
+                new InputStreamReader(readFromResource("/person.json"))).get();
         modelService.updateProjectModel(importProject, projectModelDiff).get();
     }
 

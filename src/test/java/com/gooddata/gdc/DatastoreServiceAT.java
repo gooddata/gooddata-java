@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.UUID;
 
+import static com.gooddata.util.ResourceUtils.readFromResource;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -42,7 +43,7 @@ public class DatastoreServiceAT extends AbstractGoodDataAT {
         DataStoreService dataStoreService = gd.getDataStoreService();
 
         file = directory + "/file.csv";
-        dataStoreService.upload(file, getClass().getResourceAsStream("/person.csv"));
+        dataStoreService.upload(file, readFromResource("/person.csv"));
     }
 
     @Test(groups = "datastore", dependsOnMethods = "datastoreUpload")
@@ -77,7 +78,7 @@ public class DatastoreServiceAT extends AbstractGoodDataAT {
         DataStoreService dataStoreService = gd.getDataStoreService();
         directory = "/" + UUID.randomUUID().toString();
         for (int i = 0; i < ITER_MAX; i++) {
-            dataStoreService.upload(directory + "/file" + i + ".csv", getClass().getResourceAsStream("/person.csv"));
+            dataStoreService.upload(directory + "/file" + i + ".csv", readFromResource("/person.csv"));
         }
         assertThat(connManager.getTotalStats().getLeased(), is(equalTo(0)));
     }
@@ -88,7 +89,7 @@ public class DatastoreServiceAT extends AbstractGoodDataAT {
 
         directory = "/" + UUID.randomUUID().toString();
         file = directory + "/file.csv";
-        dataStoreService.upload(file, getClass().getResourceAsStream("/person.csv"));
+        dataStoreService.upload(file, readFromResource("/person.csv"));
         assertThat(connManager.getTotalStats().getLeased(), is(equalTo(0)));
     }
 
@@ -100,7 +101,7 @@ public class DatastoreServiceAT extends AbstractGoodDataAT {
 
         try {
             final String fileWithAuth = directory + "/fileWithAuth.csv";
-            dataStoreService.upload(fileWithAuth, getClass().getResourceAsStream("/person.csv"));
+            dataStoreService.upload(fileWithAuth, readFromResource("/person.csv"));
         } finally {
             datastoreGd.logout();
         }

@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.util.ResourceUtils.readFromResource;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,7 +23,7 @@ public class ProjectValidationResultParamTest {
     @Test
     public void testDeser() throws Exception {
         final List<ProjectValidationResultParam> result = OBJECT_MAPPER
-                .readValue(getClass().getResourceAsStream("/project/project-validationResultParam.json"),
+                .readValue(readFromResource("/project/project-validationResultParam.json"),
                         new TypeReference<List<ProjectValidationResultParam>>() { });
 
         assertThat(result, hasItem(sameBeanAs(new ProjectValidationResultStringParam("report"))));

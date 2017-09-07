@@ -18,6 +18,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 
 import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.util.ResourceUtils.readFromResource;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -88,7 +89,7 @@ public class ResponseErrorHandlerTest {
         headers.set(GoodData.GDC_REQUEST_ID_HEADER, "requestId");
         headers.setContentType(MediaType.APPLICATION_JSON);
         when(response.getHeaders()).thenReturn(headers);
-        when(response.getBody()).thenReturn(getClass().getResourceAsStream(resourcePath));
+        when(response.getBody()).thenReturn(readFromResource(resourcePath));
 
         return response;
     }
