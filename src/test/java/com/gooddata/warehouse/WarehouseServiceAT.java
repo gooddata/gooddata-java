@@ -156,7 +156,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         assertThat(warehouseSchema, is(notNullValue()));
     }
 
-    @Test(groups = { "warehouse", "isolated_domain" }, dependsOnMethods = "createWarehouse")
+    @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
     public void addS3Credentials() {
         s3Credentials = service.addS3Credentials(warehouse, s3Credentials)
                 .get(1, TimeUnit.MINUTES);
@@ -164,7 +164,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         assertThat(s3Credentials, notNullValue());
     }
 
-    @Test(groups = { "warehouse", "isolated_domain" }, dependsOnMethods = "addS3Credentials")
+    @Test(groups = "warehouse", dependsOnMethods = "addS3Credentials")
     public void updateS3Credentials() {
         final DateTime lastUpdated = s3Credentials.getUpdated();
         s3Credentials.setSecretKey("newSecretKey");
@@ -175,7 +175,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         assertThat(s3Credentials.getUpdated(), is(not(lastUpdated)));
     }
 
-    @Test(groups = { "warehouse", "isolated_domain" }, dependsOnMethods = "updateS3Credentials")
+    @Test(groups = "warehouse", dependsOnMethods = "updateS3Credentials")
     public void getS3SpecificCredentials() {
         final WarehouseS3Credentials result = service.getWarehouseS3Credentials(warehouse, S3_CREDENTIALS_REGION,
                 S3_CREDENTIALS_ACCESS_KEY);
@@ -184,7 +184,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         assertThat(result.getAccessKey(), is(S3_CREDENTIALS_ACCESS_KEY));
     }
 
-    @Test(groups = { "warehouse", "isolated_domain" }, dependsOnMethods = "updateS3Credentials")
+    @Test(groups = "warehouse", dependsOnMethods = "updateS3Credentials")
     public void listS3Credentials() {
         final PageableList<WarehouseS3Credentials> result = service.listWarehouseS3Credentials(warehouse);
 
@@ -193,7 +193,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         assertThat(result.getNextPage(), nullValue());
     }
 
-    @Test(groups = { "warehouse", "isolated_domain" }, dependsOnMethods = { "listS3Credentials", "getS3SpecificCredentials" })
+    @Test(groups = "warehouse", dependsOnMethods = { "listS3Credentials", "getS3SpecificCredentials" })
     public void removeS3Credentials() {
         service.removeS3Credentials(s3Credentials).get(1, TimeUnit.MINUTES);
     }
