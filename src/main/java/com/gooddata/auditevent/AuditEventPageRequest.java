@@ -17,7 +17,7 @@ import static org.apache.commons.lang3.Validate.notNull;
 /**
  * Class to encapsulate time filtering and paging parameters
  */
-public class AuditEventPageRequest extends PageRequest {
+public final class AuditEventPageRequest extends PageRequest {
 
     private DateTime from;
 
@@ -104,6 +104,34 @@ public class AuditEventPageRequest extends PageRequest {
         }
 
         return builderWithPaging;
+    }
+
+    @Override
+    protected boolean canEqual(final Object o) {
+        return o instanceof AuditEventPageRequest;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AuditEventPageRequest)) return false;
+        if (!super.equals(o)) return false;
+
+        final AuditEventPageRequest that = (AuditEventPageRequest) o;
+        if (!that.canEqual(this)) return false;
+
+        if (from != null ? !from.equals(that.from) : that.from != null) return false;
+        if (to != null ? !to.equals(that.to) : that.to != null) return false;
+        return type != null ? type.equals(that.type) : that.type == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (from != null ? from.hashCode() : 0);
+        result = 31 * result + (to != null ? to.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        return result;
     }
 
     @Override
