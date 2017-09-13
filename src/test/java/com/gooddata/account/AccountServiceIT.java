@@ -24,11 +24,11 @@ import static org.hamcrest.core.Is.is;
 public class AccountServiceIT extends AbstractGoodDataIT {
 
     private static final String CREATE_ACCOUNT = "/account/create-account.json";
-    private static final String ACCOUNT = "/account/account.json";
+    public static final String ACCOUNT = "/account/account.json";
     private static final String ACCOUNT_UPDATE = "/account/update-account.json";
     private static final String ACCOUNT_ID = "ID";
     private static final String ACCOUNT_URI = Account.TEMPLATE.expand(ACCOUNT_ID).toString();
-    private static final String CURRENT_ACCOUNT_URI = Account.TEMPLATE.expand(Account.CURRENT_ID).toString();
+    public static final String CURRENT_ACCOUNT_URI = Account.TEMPLATE.expand(Account.CURRENT_ID).toString();
     private static final String LOGOUT_CURRENT = Account.LOGIN_TEMPLATE.expand(ACCOUNT_ID).toString();
     private static final String DOMAIN = "default";
 

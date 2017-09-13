@@ -1,0 +1,23 @@
+{
+  "events": {
+    "items": [
+      {
+        "event": {
+          "id": "123",
+          "userLogin": "bear@gooddata.com",
+          "occurred": "1993-03-09T00:00:00.000Z",
+          "recorded": "1993-03-09T00:00:00.000Z",
+          "userIp": "127.0.0.1",
+          "success": true,
+          "type": "login"
+        }
+      }
+    ],
+    "paging": {
+      "next": "/gdc/account/profile/user123/auditEvents?offset=456&limit=1"
+    },
+    "links": {
+      "self": "/gdc/account/profile/user123/auditEvents"
+    }
+  }
+}
