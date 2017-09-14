@@ -12,7 +12,10 @@ import com.gooddata.util.GoodDataToStringBuilder;
 
 import static com.gooddata.util.Validate.notNull;
 
-class ExecuteReport extends ReportRequest {
+/**
+ * Report execution request
+ */
+public class ExecuteReport extends ReportRequest {
 
     private final String reportUri;
 
@@ -20,7 +23,12 @@ class ExecuteReport extends ReportRequest {
         this.reportUri = notNull(reportUri, "reportUri");
     }
 
-    ExecuteReport(final Report report) {
+    /**
+     * Create ExecuteReport based on {@link Report}
+     *
+     * @param report to create report execution request for
+     */
+    public ExecuteReport(final Report report) {
         this(notNull(report, "report").getUri());
     }
 
