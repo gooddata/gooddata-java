@@ -98,7 +98,7 @@ public class ExportService extends AbstractService {
     private FutureResult<Void> exportReport(final ReportRequest request, final ExportFormat format, final OutputStream output) {
         notNull(output, "output");
         notNull(format, "format");
-        final JsonNode execResult = executeReport(request);
+        final JsonNode execResult = executeReport(ReportRequest.URI, request);
         final String uri = exportReport(execResult, format);
         return new PollResult<>(this, new SimplePollHandler<Void>(uri, Void.class) {
             @Override
@@ -131,10 +131,10 @@ public class ExportService extends AbstractService {
         });
     }
 
-    private JsonNode executeReport(final ReportRequest request) {
+    protected JsonNode executeReport(final String executionUri, final ReportRequest request) {
         try {
             final ResponseEntity<String> entity = restTemplate
-                    .exchange(ReportRequest.URI, POST, new HttpEntity<>(request), String.class);
+                    .exchange(executionUri, POST, new HttpEntity<>(request), String.class);
             return mapper.readTree(entity.getBody());
         } catch (GoodDataException | RestClientException e) {
             throw new ExportException("Unable to execute report", e);
