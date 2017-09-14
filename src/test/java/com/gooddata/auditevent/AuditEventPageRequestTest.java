@@ -5,6 +5,8 @@
  */
 package com.gooddata.auditevent;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -96,5 +98,13 @@ public class AuditEventPageRequestTest {
 
         assertThat(result.build().toUriString(), is("?limit=" + DEFAULT_LIMIT +
                 "&from=" + FROM.toDateTime(DateTimeZone.UTC) + "&to=" + TO.toDateTime(DateTimeZone.UTC)));
+    }
+
+    @Test
+    public void shouldVerifyEquals() throws Exception {
+        EqualsVerifier.forClass(AuditEventPageRequest.class)
+                .withRedefinedSuperclass()
+                .suppress(Warning.NONFINAL_FIELDS)
+                .verify();
     }
 }
