@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("report_req")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-abstract class ReportRequest {
+public abstract class ReportRequest {
 
     public static final String URI = "/gdc/xtab2/executor3";
 
