@@ -31,7 +31,8 @@ public class MetaTest {
     public static final DateTime UPDATED = new DateTime(2014, 4, 11, 13, 45, 57, DateTimeZone.UTC);
     public static final String CATEGORY = "attributeDisplayForm";
     public static final Set<String> TAGS = new LinkedHashSet<>(asList("TAG1", "TAG2"));
-    public static final String URI = "/gdc/md/PROJECT_ID/obj/OBJ_ID";
+    public static final String OBJ_ID = "OBJ_ID";
+    public static final String URI = "/gdc/md/PROJECT_ID/obj/" + OBJ_ID;
     public static final boolean DEPRECATED = false;
     public static final String IDENTIFIER = "attr.person.id.name";
     public static final boolean LOCKED = false;
@@ -43,6 +44,7 @@ public class MetaTest {
     public void testDeserialization() throws Exception {
         final Meta meta = readObjectFromResource("/md/meta.json", Meta.class);
         assertThat(meta, is(notNullValue()));
+        assertThat(meta.getId(), is(OBJ_ID));
         assertThat(meta.getAuthor(), is(AUTHOR));
         assertThat(meta.getContributor(), is(CONTRIBUTOR));
         assertThat(meta.getCreated(), is(CREATED));

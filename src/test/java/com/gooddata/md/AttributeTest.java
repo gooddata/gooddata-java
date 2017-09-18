@@ -27,6 +27,7 @@ public class AttributeTest {
     public void shouldDeserialize() throws Exception {
         final Attribute attribute = readObjectFromResource("/md/attribute.json", Attribute.class);
         assertThat(attribute, is(notNullValue()));
+        assertThat(attribute.getId(), is("28"));
 
         final Collection<DisplayForm> displayForms = attribute.getDisplayForms();
         assertThat(displayForms, is(notNullValue()));

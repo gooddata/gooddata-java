@@ -22,7 +22,8 @@ import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class EntryTest {
 
-    public static final String URI = "/gdc/md/PROJECT_ID/obj/ENTRY_ID";
+    public static final String OBJ_ID = "ENTRY_ID";
+    public static final String URI = "/gdc/md/PROJECT_ID/obj/" + OBJ_ID;
     public static final String AUTHOR = "/gdc/account/profile/AUTHOR_USER_ID";
     public static final String CONTRIBUTOR = "/gdc/account/profile/CONTRIBUTOR_USER_ID";
     public static final DateTime CREATED = new DateTime(2014, 4, 11, 13, 45, 54, DateTimeZone.UTC);
@@ -41,6 +42,7 @@ public class EntryTest {
     public void testDeserialize() throws Exception {
         final Entry entry = readObjectFromResource("/md/entry.json", Entry.class);
         assertThat(entry, is(notNullValue()));
+        assertThat(entry.getId(), is(OBJ_ID));
         assertThat(entry.getLink(), is(URI));
         assertThat(entry.getUri(), is(URI));
         assertThat(entry.getTitle(), is(TITLE));

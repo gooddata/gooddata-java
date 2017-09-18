@@ -31,7 +31,8 @@ public class ObjTest {
     public static final DateTime UPDATED = new DateTime(2014, 4, 11, 13, 45, 57, DateTimeZone.UTC);
     public static final String CATEGORY = "attributeDisplayForm";
     public static final Set<String> TAGS = new LinkedHashSet<>(asList("TAG1", "TAG2"));
-    public static final String URI = "/gdc/md/PROJECT_ID/obj/OBJ_ID";
+    public static final String OBJ_ID = "OBJ_ID";
+    public static final String URI = "/gdc/md/PROJECT_ID/obj/" + OBJ_ID;
     public static final boolean DEPRECATED = false;
     public static final String IDENTIFIER = "attr.person.id.name";
     public static final boolean LOCKED = false;
@@ -42,6 +43,7 @@ public class ObjTest {
         final AbstractObj obj = readObjectFromResource("/md/objCommon.json", ConcreteObj.class);
 
         assertThat(obj, is(notNullValue()));
+        assertThat(obj.getId(), is(OBJ_ID));
         assertThat(obj.getAuthor(), is(AUTHOR));
         assertThat(obj.getContributor(), is(CONTRIBUTOR));
         assertThat(obj.getCreated(), is(CREATED));

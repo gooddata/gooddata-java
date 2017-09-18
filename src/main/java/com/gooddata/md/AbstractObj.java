@@ -26,6 +26,15 @@ public abstract class AbstractObj {
         this.meta = meta;
     }
 
+    /**
+     * Returns internally generated ID of the object (that's part of the object URI).
+     * @return internal ID of the object
+     */
+    @JsonIgnore
+    public String getId() {
+        return Obj.OBJ_TEMPLATE.match(getUri()).get("objId");
+    }
+
     @JsonIgnore
     public String getAuthor() {
         return meta.getAuthor();
@@ -96,6 +105,10 @@ public abstract class AbstractObj {
         meta.setDeprecated(deprecated);
     }
 
+    /**
+     * Returns user-specified identifier of the object.
+     * @return user-specified object identifier
+     */
     @JsonIgnore
     public String getIdentifier() {
         return meta.getIdentifier();

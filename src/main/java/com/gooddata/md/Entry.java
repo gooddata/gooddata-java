@@ -72,6 +72,15 @@ public class Entry {
         return getUri();
     }
 
+    /**
+     * Returns internally generated ID of the object (that's part of the object URI).
+     * @return internal ID of the object
+     */
+    @JsonIgnore
+    public String getId() {
+        return Obj.OBJ_TEMPLATE.match(getUri()).get("objId");
+    }
+
     @JsonIgnore
     public String getUri() {
         return uri;
@@ -110,6 +119,10 @@ public class Entry {
         return deprecated;
     }
 
+    /**
+     * Returns user-specified identifier of the object.
+     * @return user-specified object identifier
+     */
     public String getIdentifier() {
         return identifier;
     }
