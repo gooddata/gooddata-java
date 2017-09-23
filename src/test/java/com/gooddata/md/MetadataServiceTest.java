@@ -131,6 +131,45 @@ public class MetadataServiceTest {
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testGetObjsByUrisNullProject() throws Exception {
+        service.getObjsByUris(null, Collections.emptyList());
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testGetObjsByUrisNullUris() throws Exception {
+        service.getObjsByUris(project, null);
+    }
+
+    @Test
+    public void testGetObjsByUris() throws Exception {
+        final BulkGetUris request = new BulkGetUris(Collections.singletonList(URI));
+        final BulkGet response = new BulkGet(Collections.singletonList(mock(Obj.class)));
+        when(restTemplate.postForObject(BulkGet.URI, request, BulkGet.class, PROJECT_ID)).thenReturn(response);
+
+        final Collection<Obj> result = service.getObjsByUris(project, request.getItems());
+        assertThat(result, is(response.getItems()));
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void testGetObjsByUrisWithClientSideHTTPError() throws Exception {
+        final BulkGetUris request = new BulkGetUris(Collections.singletonList(""));
+        when(restTemplate.postForObject(BulkGet.URI, request, BulkGet.class, PROJECT_ID)).thenThrow(new RestClientException(""));
+        service.getObjsByUris(project, request.getItems());
+    }
+
+    @Test(expectedExceptions = GoodDataRestException.class)
+    public void testGetObjsByUrisWithServerSideHTTPError() throws Exception {
+        final BulkGetUris request = new BulkGetUris(Collections.singletonList(""));
+        when(restTemplate.postForObject(BulkGet.URI, request, BulkGet.class, PROJECT_ID)).thenThrow(new GoodDataRestException(500, "", "", "", ""));
+        service.getObjsByUris(project, request.getItems());
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void testGetObjsByUrisWithNoResponseFromAPI() throws Exception {
+        service.getObjsByUris(project, Collections.emptyList());
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testGetObjByUriNullUri() throws Exception {
         service.getObjByUri(null, Obj.class);
     }

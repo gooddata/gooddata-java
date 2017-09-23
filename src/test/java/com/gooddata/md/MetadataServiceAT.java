@@ -5,15 +5,6 @@
  */
 package com.gooddata.md;
 
-import static com.gooddata.export.ExportFormat.PDF;
-import static com.gooddata.export.ExportFormat.XLS;
-import static com.gooddata.md.Restriction.identifier;
-import static com.gooddata.md.report.MetricGroup.METRIC_GROUP;
-import static java.util.Arrays.asList;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.testng.AssertJUnit.assertTrue;
-
 import com.gooddata.AbstractGoodDataAT;
 import com.gooddata.md.ProjectDashboard.Tab;
 import com.gooddata.md.report.AttributeInGrid;
@@ -32,6 +23,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.gooddata.export.ExportFormat.PDF;
+import static com.gooddata.export.ExportFormat.XLS;
+import static com.gooddata.md.Restriction.identifier;
+import static com.gooddata.md.report.MetricGroup.METRIC_GROUP;
+import static java.util.Arrays.asList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.testng.AssertJUnit.assertTrue;
 
 /**
  * Metadata acceptance tests.
@@ -123,6 +127,21 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         final Usage usage2 = usageIterator.next();
         assertTrue(uris.containsValue(usage2.getUri()));
         assertThat(usage2.getUsedBy(), hasSize(5));
+    }
+
+    @Test(groups = "md", dependsOnGroups = "model")
+    public void getObjsByUris() throws Exception {
+        final MetadataService md = gd.getMetadataService();
+
+        final Map<String, String> uris =
+                md.identifiersToUris(project, asList(
+                        "attr.person.department",
+                        "attr.person.role",
+                        "fact.person.shoesize"
+                ));
+
+        final Collection<Obj> objects = md.getObjsByUris(project, uris.values());
+        assertThat(objects.stream().map(Obj::getUri).collect(Collectors.toSet()), is(new HashSet<>(uris.values())));
     }
 
     @Test(groups = "md", dependsOnMethods = "createReport")

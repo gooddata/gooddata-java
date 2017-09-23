@@ -1,0 +1,90 @@
+{
+  "objects": {
+    "items": [
+      {
+        "dataSet": {
+          "content": {
+            "ties": [
+              "/gdc/md/PROJECT_ID/obj/688400"
+            ],
+            "mode": "",
+            "facts": [
+              "/gdc/md/PROJECT_ID/obj/688401",
+              "/gdc/md/PROJECT_ID/obj/688402"
+            ],
+            "dataLoadingColumns": [],
+            "attributes": [
+              "/gdc/md/PROJECT_ID/obj/688399",
+              "/gdc/md/PROJECT_ID/obj/688411",
+              "/gdc/md/PROJECT_ID/obj/688425"
+            ]
+          },
+          "links": {
+            "dataUploads": "/gdc/md/PROJECT_ID/data/uploads/688536"
+          },
+          "meta": {
+            "author": "/gdc/account/profile/PROFILE_ID",
+            "uri": "/gdc/md/PROJECT_ID/obj/DATASET_ID",
+            "tags": "",
+            "created": "2015-01-28 17:35:47",
+            "identifier": "DATASET_ID.dataset.dt",
+            "deprecated": "0",
+            "summary": "DataSet Date",
+            "title": "Date (Org minDate-first deal)",
+            "category": "dataSet",
+            "updated": "2015-01-28 17:35:47",
+            "contributor": "/gdc/account/profile/PROFILE_ID"
+          }
+        }
+      }, {
+        "fact" : {
+          "content" : {
+            "expr" : [
+              {
+                "data" : "/gdc/md/PROJECT_ID/obj/COL_ID",
+                "type" : "col"
+              }
+            ],
+            "folders" : [
+              "/gdc/md/PROJECT_ID/obj/FOLDER_ID",
+              "/gdc/md/PROJECT_ID/obj/FOLDER_ID2"
+            ]
+          },
+          "meta" : {
+            "author" : "/gdc/account/profile/AUTHOR_ID",
+            "uri" : "/gdc/md/PROJECT_ID/obj/FACT_ID",
+            "tags" : "",
+            "created" : "2014-04-11 13:45:53",
+            "identifier" : "fact.person.shoesize",
+            "deprecated" : "0",
+            "summary" : "",
+            "title" : "Person Shoe Size",
+            "category" : "fact",
+            "updated" : "2014-04-11 13:46:52",
+            "contributor" : "/gdc/account/profile/CONTRIBUTOR_ID"
+          }
+        }
+      }, {
+        "metric" : {
+          "content" : {
+            "expression" : "[/gdc/md/PROJECT_ID/obj/EXPR_ID]",
+            "format" : "FORMAT"
+          },
+          "meta" : {
+            "author" : "/gdc/account/profile/USER_ID",
+            "uri" : "/gdc/md/PROJECT_ID/obj/METRIC_ID",
+            "tags" : "",
+            "created" : "2014-04-11 13:45:56",
+            "identifier" : "attr.person.id.name",
+            "deprecated" : "0",
+            "summary" : "",
+            "title" : "Person Name",
+            "category" : "attributeDisplayForm",
+            "updated" : "2014-04-11 13:45:56",
+            "contributor" : "/gdc/account/profile/USER_ID"
+          }
+        }
+      }
+    ]
+  }
+}
