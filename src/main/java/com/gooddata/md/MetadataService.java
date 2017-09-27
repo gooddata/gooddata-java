@@ -15,7 +15,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.gooddata.util.Validate.noNullElements;
@@ -58,7 +62,7 @@ public class MetadataService extends AbstractService {
         }
 
         if (response == null) {
-            throw new ObjCreateException("empty response from API call", obj);
+            throw new ObjCreateException("Received empty response from API call.", obj);
         }
         return response;
     }
@@ -83,7 +87,7 @@ public class MetadataService extends AbstractService {
             if (result != null) {
                 return result;
             } else {
-                throw new GoodDataException("empty response from API call");
+                throw new GoodDataException("Received empty response from API call.");
             }
         } catch (GoodDataRestException e) {
             if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
@@ -93,6 +97,31 @@ public class MetadataService extends AbstractService {
             }
         } catch (RestClientException e) {
             throw new GoodDataException("Unable to get " + cls.getSimpleName().toLowerCase() + " " + uri, e);
+        }
+    }
+
+    /**
+     * Retrieves a collection of objects corresponding to the supplied collection of URIs.
+     *
+     * @param project project that contains the objects to be retrieved
+     * @param uris collection of URIs
+     * @return collection of metadata objects corresponding to the supplied URIs
+     */
+    public Collection<Obj> getObjsByUris(Project project, Collection<String> uris) {
+        notNull(project, "project");
+        notNull(project.getId(), "project.id");
+        notNull(uris, "uris");
+
+        try {
+            final BulkGet result = restTemplate.postForObject(BulkGet.URI, new BulkGetUris(uris), BulkGet.class, project.getId());
+
+            if (result != null) {
+                return result.getItems();
+            } else {
+                throw new GoodDataException("Received empty response from API call.");
+            }
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to get objects. Some of the supplied URIs may be malformed.", e);
         }
     }
 
@@ -248,7 +277,7 @@ public class MetadataService extends AbstractService {
             if (queryResult != null && queryResult.getEntries() != null) {
                 return filterEntries(queryResult.getEntries(), restrictions);
             } else {
-                throw new GoodDataException("empty response from API call");
+                throw new GoodDataException("Received empty response from API call.");
             }
         } catch (RestClientException e) {
             throw new GoodDataException("Unable to query metadata: " + type, e);

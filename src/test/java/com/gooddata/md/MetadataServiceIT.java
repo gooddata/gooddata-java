@@ -28,7 +28,9 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 
 public class MetadataServiceIT extends AbstractGoodDataIT {
@@ -38,9 +40,13 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
     private static final String OBJ_URI = "/gdc/md/PROJECT_ID/obj";
     private static final String OBJ_URI2 = "/gdc/md/PROJECT_ID/obj2";
     private static final String SPECIFIC_OBJ_URI = "/gdc/md/PROJECT_ID/obj/ID";
+    private static final String BULK_GET_URI = "/gdc/md/PROJECT_ID/objects/get";
     private static final String ID = "ID";
     private static final String TITLE = "TITLE";
     private static final String TITLE2 = "TITLE2";
+    private static final String METRIC_URL = "/gdc/md/PROJECT_ID/obj/METRIC_ID";
+    private static final String FACT_URL = "/gdc/md/PROJECT_ID/obj/FACT_ID";
+    private static final String DATASET_URL = "/gdc/md/PROJECT_ID/obj/DATASET_ID";
 
     private Project project;
     private Metric metricInput;
@@ -71,6 +77,48 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
 
         assertThat(result, hasSize(1));
         assertThat(result.iterator().next().getTitle(), is(TITLE));
+    }
+
+    @Test
+    public void testGetObjsByUris() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(BULK_GET_URI)
+                .havingBody(allOf(containsString(DATASET_URL), containsString(FACT_URL), containsString(METRIC_URL)))
+                .respond()
+                .withStatus(200)
+                .withBody(readFromResource("/md/bulk-get.json"));
+
+        final Collection<Obj> result = gd.getMetadataService().getObjsByUris(project, Arrays.asList(
+                DATASET_URL,
+                FACT_URL,
+                METRIC_URL
+        ));
+
+        Dataset dataset = null;
+        Fact fact = null;
+        Metric metric = null;
+
+        for (Obj obj : result) {
+            if (obj instanceof Dataset) {
+                dataset = (Dataset) obj;
+            } else if (obj instanceof Fact) {
+                fact = (Fact) obj;
+            } else if (obj instanceof Metric) {
+                metric = (Metric) obj;
+            }
+        }
+
+        assertThat(result, hasSize(3));
+        assertThat(dataset, is(notNullValue()));
+        //noinspection ConstantConditions
+        assertThat(dataset.getTitle(), is("Date (Org minDate-first deal)"));
+        assertThat(fact, is(notNullValue()));
+        //noinspection ConstantConditions
+        assertThat(fact.getTitle(), is("Person Shoe Size"));
+        assertThat(metric, is(notNullValue()));
+        //noinspection ConstantConditions
+        assertThat(metric.getTitle(), is("Person Name"));
     }
 
     @Test
