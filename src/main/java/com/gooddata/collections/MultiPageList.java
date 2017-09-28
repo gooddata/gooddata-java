@@ -241,6 +241,16 @@ public class MultiPageList<T> extends PageableList<T> {
         return delegate.subList(fromIndex, toIndex);
     }
 
+    @Override
+    public boolean equals(final Object o) {
+        return delegate.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return delegate.hashCode();
+    }
+
     private static final class PageIterator<T> implements Iterator<T> {
 
         private PageableList<T> currentPage;
