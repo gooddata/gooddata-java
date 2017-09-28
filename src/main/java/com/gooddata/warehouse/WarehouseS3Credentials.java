@@ -178,16 +178,6 @@ public class WarehouseS3Credentials {
         }
 
         @Override
-        public boolean equals(final Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Links)) return false;
-
-            final Links links = (Links) o;
-
-            return this.toString().equals(links.toString());
-        }
-
-        @Override
         public String toString() {
             return GoodDataToStringBuilder.defaultToString(this);
         }
