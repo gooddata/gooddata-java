@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.util.Arrays;
+
 /**
  * MAQL AST representation
  */
@@ -43,11 +45,11 @@ public class MaqlAst {
     }
 
     public MaqlAst[] getContent() {
-        return content;
+        return content == null ? null : Arrays.copyOf(content, content.length);
     }
 
     public void setContent(final MaqlAst[] content) {
-        this.content = content;
+        this.content = content == null ? null : Arrays.copyOf(content, content.length);
     }
 
     public String getValue() {
