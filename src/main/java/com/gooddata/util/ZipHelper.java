@@ -85,8 +85,9 @@ public abstract class ZipHelper {
     }
 
     private static boolean isZipped(File file) {
-        try (final InputStream stream = Files.newInputStream(file.toPath())) {
-            return new ZipInputStream(stream).getNextEntry() != null;
+        try (final InputStream stream = Files.newInputStream(file.toPath());
+             final ZipInputStream zipStream = new ZipInputStream(stream)) {
+            return zipStream.getNextEntry() != null;
         } catch (IOException e) {
             return false;
         }
