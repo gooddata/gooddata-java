@@ -5,6 +5,7 @@
  */
 package com.gooddata.warehouse;
 
+import com.gooddata.GoodDataSettings;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpEntity;
@@ -33,7 +34,7 @@ public class WarehouseServiceTest {
     @BeforeMethod
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        service = new WarehouseService(restTemplate);
+        service = new WarehouseService(restTemplate, new GoodDataSettings());
         when(warehouse.getId()).thenReturn("instanceId");
 
         final WarehouseTask warehouseTask = mock(WarehouseTask.class);

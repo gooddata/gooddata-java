@@ -206,24 +206,24 @@ public class GoodData {
 
         restTemplate = createRestTemplate(endpoint, httpClient);
 
-        accountService = new AccountService(getRestTemplate());
-        projectService = new ProjectService(getRestTemplate(), accountService);
-        metadataService = new MetadataService(getRestTemplate());
-        modelService = new ModelService(getRestTemplate());
-        gdcService = new GdcService(getRestTemplate());
+        accountService = new AccountService(getRestTemplate(), settings);
+        projectService = new ProjectService(getRestTemplate(), accountService, settings);
+        metadataService = new MetadataService(getRestTemplate(), settings);
+        modelService = new ModelService(getRestTemplate(), settings);
+        gdcService = new GdcService(getRestTemplate(), settings);
         dataStoreService = new DataStoreService(getHttpClient(), getRestTemplate(), gdcService, endpoint.toUri());
-        datasetService = new DatasetService(getRestTemplate(), dataStoreService);
-        exportService = new ExportService(getRestTemplate(), endpoint);
-        reportService = new ReportService(exportService, getRestTemplate());
-        processService = new ProcessService(getRestTemplate(), accountService, dataStoreService);
-        warehouseService = new WarehouseService(getRestTemplate());
-        connectorService = new ConnectorService(getRestTemplate(), projectService);
-        notificationService = new NotificationService(getRestTemplate());
-        exportImportService = new ExportImportService(getRestTemplate());
-        featureFlagService = new FeatureFlagService(getRestTemplate());
-        outputStageService = new OutputStageService(getRestTemplate());
-        projectTemplateService = new ProjectTemplateService(getRestTemplate());
-        auditEventService = new AuditEventService(getRestTemplate(), accountService);
+        datasetService = new DatasetService(getRestTemplate(), dataStoreService, settings);
+        exportService = new ExportService(getRestTemplate(), endpoint, settings);
+        reportService = new ReportService(exportService, getRestTemplate(), settings);
+        processService = new ProcessService(getRestTemplate(), accountService, dataStoreService, settings);
+        warehouseService = new WarehouseService(getRestTemplate(), settings);
+        connectorService = new ConnectorService(getRestTemplate(), projectService, settings);
+        notificationService = new NotificationService(getRestTemplate(), settings);
+        exportImportService = new ExportImportService(getRestTemplate(), settings);
+        featureFlagService = new FeatureFlagService(getRestTemplate(), settings);
+        outputStageService = new OutputStageService(getRestTemplate(), settings);
+        projectTemplateService = new ProjectTemplateService(getRestTemplate(), settings);
+        auditEventService = new AuditEventService(getRestTemplate(), accountService, settings);
     }
 
     static RestTemplate createRestTemplate(GoodDataEndpoint endpoint, HttpClient httpClient) {

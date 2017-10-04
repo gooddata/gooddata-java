@@ -7,6 +7,7 @@ package com.gooddata.model;
 
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.PollResult;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.AbstractPollHandlerBase;
@@ -34,8 +35,8 @@ import static java.util.Arrays.asList;
  */
 public class ModelService extends AbstractService {
 
-    public ModelService(RestTemplate restTemplate) {
-        super(restTemplate);
+    public ModelService(final RestTemplate restTemplate, final GoodDataSettings settings) {
+        super(restTemplate, settings);
     }
 
     private FutureResult<ModelDiff> getProjectModelDiff(Project project, DiffRequest diffRequest) {

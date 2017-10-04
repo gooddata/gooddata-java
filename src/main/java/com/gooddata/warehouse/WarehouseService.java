@@ -10,6 +10,7 @@ import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.PollResult;
 import com.gooddata.collections.MultiPageList;
 import com.gooddata.collections.Page;
@@ -45,9 +46,10 @@ public class WarehouseService extends AbstractService {
      * this abstract one.
      *
      * @param restTemplate RESTful HTTP Spring template
+     * @param settings settings
      */
-    public WarehouseService(RestTemplate restTemplate) {
-        super(restTemplate);
+    public WarehouseService(final RestTemplate restTemplate, final GoodDataSettings settings) {
+        super(restTemplate, settings);
     }
 
     /**

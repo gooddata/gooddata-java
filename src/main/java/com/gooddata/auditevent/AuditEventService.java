@@ -6,6 +6,7 @@ package com.gooddata.auditevent;
 import com.gooddata.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.account.Account;
 import com.gooddata.account.AccountService;
 import com.gooddata.collections.MultiPageList;
@@ -30,9 +31,10 @@ public class AuditEventService extends AbstractService {
      * Service for audit events
      * @param restTemplate rest template
      * @param accountService account service
+     * @param settings settings
      */
-    public AuditEventService(final RestTemplate restTemplate, final AccountService accountService) {
-        super(restTemplate);
+    public AuditEventService(final RestTemplate restTemplate, final AccountService accountService, final GoodDataSettings settings) {
+        super(restTemplate, settings);
         this.accountService = notNull(accountService, "account service");
     }
 

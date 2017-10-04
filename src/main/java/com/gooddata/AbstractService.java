@@ -22,7 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -30,23 +29,36 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class AbstractService {
 
-    public static final Integer WAIT_BEFORE_RETRY_IN_MILLIS = 5 * 1000;
-
     protected final RestTemplate restTemplate;
+
+    private final GoodDataSettings settings;
 
     protected final ObjectMapper mapper = new ObjectMapper();
 
     private final ResponseExtractor<ClientHttpResponse> reusableResponseExtractor = ReusableClientHttpResponse::new;
-
 
     /**
      * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
      * this abstract one.
      *
      * @param restTemplate RESTful HTTP Spring template
+     * @param settings settings
      */
-    public AbstractService(RestTemplate restTemplate) {
+    public AbstractService(final RestTemplate restTemplate, final GoodDataSettings settings) {
         this.restTemplate = notNull(restTemplate, "restTemplate");
+        this.settings = notNull(settings, "settings");
+    }
+
+    /**
+     * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
+     * this abstract one.
+     *
+     * @param restTemplate RESTful HTTP Spring template
+     * @deprecated use {@link #AbstractService(RestTemplate, GoodDataSettings)}
+     */
+    @Deprecated
+    public AbstractService(RestTemplate restTemplate) {
+        this(restTemplate, new GoodDataSettings());
     }
 
     final <R> R poll(final PollHandler<?,R> handler, long timeout, final TimeUnit unit) {
@@ -61,7 +73,7 @@ public abstract class AbstractService {
             }
 
             try {
-                Thread.sleep(WAIT_BEFORE_RETRY_IN_MILLIS);
+                Thread.sleep(settings.getPollSleep());
             } catch (InterruptedException e) {
                 throw new GoodDataException("interrupted");
             }

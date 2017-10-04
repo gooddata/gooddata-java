@@ -8,6 +8,7 @@ package com.gooddata.notification;
 import static java.util.Collections.singletonMap;
 import static org.mockito.Mockito.*;
 
+import com.gooddata.GoodDataSettings;
 import com.gooddata.project.Project;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -30,7 +31,7 @@ public class NotificationServiceTest {
     @BeforeMethod
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        notificationService = new NotificationService(restTemplate);
+        notificationService = new NotificationService(restTemplate, new GoodDataSettings());
         when(project.getId()).thenReturn(PROJECT_ID);
     }
 

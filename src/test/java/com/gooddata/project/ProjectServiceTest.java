@@ -7,6 +7,7 @@ package com.gooddata.project;
 
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.account.Account;
 import com.gooddata.account.AccountService;
 import org.mockito.Mock;
@@ -46,7 +47,7 @@ public class ProjectServiceTest {
     @BeforeMethod
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        service = new ProjectService(restTemplate, accountService);
+        service = new ProjectService(restTemplate, accountService, new GoodDataSettings());
         when(accountService.getCurrent()).thenReturn(account);
         when(account.getId()).thenReturn(ACCOUNT_ID);
         when(project.getId()).thenReturn(ID);

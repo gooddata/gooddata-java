@@ -8,6 +8,7 @@ package com.gooddata.dataload.processes;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.account.Account;
 import com.gooddata.account.AccountService;
 import com.gooddata.gdc.DataStoreService;
@@ -80,7 +81,7 @@ public class ProcessServiceTest {
     @BeforeMethod
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        processService = new ProcessService(restTemplate, accountService, dataStoreService);
+        processService = new ProcessService(restTemplate, accountService, dataStoreService, new GoodDataSettings());
         when(process.getId()).thenReturn(PROCESS_ID);
         when(process.getUri()).thenReturn(DataloadProcess.TEMPLATE.expand(PROJECT_ID, PROCESS_ID).toString());
         when(project.getId()).thenReturn(PROJECT_ID);

@@ -8,6 +8,7 @@ package com.gooddata.md;
 import com.gooddata.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
 import org.springframework.http.HttpStatus;
@@ -31,8 +32,8 @@ import static java.util.Arrays.asList;
  */
 public class MetadataService extends AbstractService {
 
-    public MetadataService(RestTemplate restTemplate) {
-        super(restTemplate);
+    public MetadataService(final RestTemplate restTemplate, final GoodDataSettings settings) {
+        super(restTemplate, settings);
     }
 
     /**

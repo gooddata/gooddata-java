@@ -8,6 +8,7 @@ package com.gooddata.projecttemplate;
 import com.gooddata.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.dataset.DatasetManifest;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -28,9 +29,10 @@ public class ProjectTemplateService extends AbstractService {
      * this abstract one.
      *
      * @param restTemplate RESTful HTTP Spring template
+     * @param settings settings
      */
-    public ProjectTemplateService(RestTemplate restTemplate) {
-        super(restTemplate);
+    public ProjectTemplateService(final RestTemplate restTemplate, final GoodDataSettings settings) {
+        super(restTemplate, settings);
     }
 
     /**

@@ -5,6 +5,7 @@
  */
 package com.gooddata.projecttemplate;
 
+import com.gooddata.GoodDataSettings;
 import com.gooddata.dataset.DatasetManifest;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -38,7 +39,7 @@ public class ProjectTemplateServiceTest {
     @BeforeMethod
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        service = new ProjectTemplateService(restTemplate);
+        service = new ProjectTemplateService(restTemplate, new GoodDataSettings());
         when(templates.getTemplates()).thenReturn(singletonList(template));
     }
 

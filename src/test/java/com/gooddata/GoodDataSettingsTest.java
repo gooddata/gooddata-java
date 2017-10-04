@@ -5,6 +5,8 @@
  */
 package com.gooddata;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -29,6 +31,7 @@ public class GoodDataSettingsTest {
         assertTrue(settings.getConnectionTimeout() >= 0);
         assertTrue(settings.getConnectionRequestTimeout() >= 0);
         assertTrue(settings.getSocketTimeout() >= 0);
+        assertTrue(settings.getPollSleep() >= 0);
         assertThat(settings.getUserAgent(), is(nullValue()));
     }
 
@@ -37,10 +40,12 @@ public class GoodDataSettingsTest {
         settings.setConnectionTimeoutSeconds(53);
         settings.setConnectionRequestTimeoutSeconds(69);
         settings.setSocketTimeoutSeconds(71);
+        settings.setPollSleepSeconds(81);
 
         assertEquals(53000, settings.getConnectionTimeout());
         assertEquals(69000, settings.getConnectionRequestTimeout());
         assertEquals(71000, settings.getSocketTimeout());
+        assertEquals(81000, settings.getPollSleep());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -59,6 +64,11 @@ public class GoodDataSettingsTest {
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
+    public void setNegativePollSleepFails() throws Exception {
+        settings.setPollSleep(-5);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void setZeroMaxConnectionsFails() throws Exception {
         settings.setMaxConnections(0);
     }
@@ -68,5 +78,13 @@ public class GoodDataSettingsTest {
         GoodDataSettings goodDataSettings = new GoodDataSettings();
         goodDataSettings.setUserAgent("customAgent/X.Y");
         assertThat(goodDataSettings.getUserAgent(), is("customAgent/X.Y"));
+    }
+
+    @Test
+    public void shouldVerifyEquals() throws Exception {
+        EqualsVerifier.forClass(GoodDataSettings.class)
+                .usingGetClass()
+                .suppress(Warning.NONFINAL_FIELDS)
+                .verify();
     }
 }

@@ -33,7 +33,7 @@ public class AbstractServiceTest {
     @BeforeMethod
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        service = new AbstractService(restTemplate) {};
+        service = new AbstractService(restTemplate, new GoodDataSettings()) {};
         final ClientHttpResponse response = mock(ClientHttpResponse.class);
         when(response.getStatusCode()).thenReturn(HttpStatus.OK);
         when(restTemplate.execute(any(), any(HttpMethod.class), any(RequestCallback.class), any(ResponseExtractor.class)))

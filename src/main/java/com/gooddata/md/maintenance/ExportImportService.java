@@ -11,6 +11,7 @@ import com.gooddata.AbstractPollHandler;
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.PollResult;
 import com.gooddata.gdc.TaskStatus;
 import com.gooddata.gdc.UriResponse;
@@ -23,8 +24,8 @@ import org.springframework.web.client.RestTemplate;
  */
 public class ExportImportService extends AbstractService {
 
-    public ExportImportService(RestTemplate restTemplate) {
-        super(restTemplate);
+    public ExportImportService(final RestTemplate restTemplate, final GoodDataSettings settings) {
+        super(restTemplate, settings);
     }
 
 

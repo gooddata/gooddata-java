@@ -10,6 +10,7 @@ import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.PollResult;
 import com.gooddata.gdc.AboutLinks.Link;
 import com.gooddata.gdc.DataStoreException;
@@ -50,8 +51,9 @@ public class DatasetService extends AbstractService {
 
     private final DataStoreService dataStoreService;
 
-    public DatasetService(RestTemplate restTemplate, DataStoreService dataStoreService) {
-        super(restTemplate);
+    public DatasetService(final RestTemplate restTemplate, final DataStoreService dataStoreService,
+                          final GoodDataSettings settings) {
+        super(restTemplate, settings);
         this.dataStoreService = notNull(dataStoreService, "dataStoreService");
     }
 

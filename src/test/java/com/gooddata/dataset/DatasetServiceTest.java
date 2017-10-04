@@ -7,6 +7,7 @@ package com.gooddata.dataset;
 
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.gdc.AboutLinks.Link;
 import com.gooddata.gdc.DataStoreException;
 import com.gooddata.gdc.DataStoreService;
@@ -59,7 +60,7 @@ public class DatasetServiceTest {
     @BeforeMethod
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        service = new DatasetService(restTemplate, dataStoreService);
+        service = new DatasetService(restTemplate, dataStoreService, new GoodDataSettings());
         when(project.getId()).thenReturn(PROJECT_ID);
     }
 
