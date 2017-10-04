@@ -28,7 +28,7 @@ public class ReportServiceTest {
     @BeforeMethod
     public void setUp() throws Exception {
         exportService = mock(ExportService.class);
-        reportService = new ReportService(exportService, mock(RestTemplate.class), new GoodDataSettings());
+        reportService = new ReportService(exportService, new RestTemplate(), new GoodDataSettings());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)

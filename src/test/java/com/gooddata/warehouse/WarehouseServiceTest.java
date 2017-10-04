@@ -36,19 +36,6 @@ public class WarehouseServiceTest {
         MockitoAnnotations.initMocks(this);
         service = new WarehouseService(restTemplate, new GoodDataSettings());
         when(warehouse.getId()).thenReturn("instanceId");
-
-        final WarehouseTask warehouseTask = mock(WarehouseTask.class);
-        when(warehouseTask.getPollUri()).thenReturn("/poll/uri");
-
-        final ResponseEntity response = mock(ResponseEntity.class);
-        when(response.getBody()).thenReturn(warehouseTask);
-        when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), any(Class.class), anyCollection()))
-                .thenReturn(response);
-    }
-
-    @Test
-    public void addS3Credentials() {
-        service.addS3Credentials(warehouse, s3Credentials);
     }
 
     @Test(expectedExceptions = WarehouseS3CredentialsException.class, expectedExceptionsMessageRegExp = ".*Unable to POST S3 credentials.*")

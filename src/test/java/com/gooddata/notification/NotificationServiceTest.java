@@ -5,9 +5,6 @@
  */
 package com.gooddata.notification;
 
-import static java.util.Collections.singletonMap;
-import static org.mockito.Mockito.*;
-
 import com.gooddata.GoodDataSettings;
 import com.gooddata.project.Project;
 import org.mockito.Mock;
@@ -16,6 +13,9 @@ import org.springframework.web.client.RestTemplate;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public class NotificationServiceTest {
 
     private static final String PROJECT_ID = "TEST_PROJ_ID";
@@ -23,23 +23,13 @@ public class NotificationServiceTest {
     @Mock
     private Project project;
 
-    @Mock
-    private RestTemplate restTemplate;
-
     private NotificationService notificationService;
 
     @BeforeMethod
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        notificationService = new NotificationService(restTemplate, new GoodDataSettings());
+        notificationService = new NotificationService(new RestTemplate(), new GoodDataSettings());
         when(project.getId()).thenReturn(PROJECT_ID);
-    }
-
-    @Test
-    public void testTriggerEvent() throws Exception {
-        final ProjectEvent projectEvent = new ProjectEvent("type", singletonMap("key", "value"));
-        notificationService.triggerEvent(project, projectEvent);
-        verify(restTemplate).postForEntity(eq(ProjectEvent.URI), eq(projectEvent), eq(Void.class), eq(PROJECT_ID));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)

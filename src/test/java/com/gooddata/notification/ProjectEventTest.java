@@ -10,6 +10,7 @@ import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.testng.annotations.Test;
 
 public class ProjectEventTest {
@@ -27,4 +28,12 @@ public class ProjectEventTest {
 
         assertThat(projectEvent.toString(), matchesPattern(ProjectEvent.class.getSimpleName() + "\\[.*\\]"));
     }
+
+    @Test
+    public void shouldVerifyEquals() throws Exception {
+        EqualsVerifier.forClass(ProjectEvent.class)
+                .usingGetClass()
+                .verify();
+    }
+
 }

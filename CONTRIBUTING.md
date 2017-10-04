@@ -65,7 +65,7 @@ is specific enough.
 
 ## Best practices
 * **Test class naming**:
-  * `*Test` unit tests
+  * `*Test` unit tests, but avoid service tests using mocked `RestTemplate` - use integration test
   * `*IT` integration tests (see [`AbstractGoodDataIT`](src/test/java/com/gooddata/AbstractGoodDataIT.java))
   * `*AT` acceptance tests
 * Everything public should be **documented** using _javadoc_.

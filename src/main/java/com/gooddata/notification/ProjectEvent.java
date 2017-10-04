@@ -66,18 +66,14 @@ public class ProjectEvent {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (!(o instanceof ProjectEvent))
-            return false;
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        ProjectEvent that = (ProjectEvent) o;
+        final ProjectEvent that = (ProjectEvent) o;
 
-        if (type != null ? !type.equals(that.type) : that.type != null)
-            return false;
-        return !(parameters != null ? !parameters.equals(that.parameters) : that.parameters != null);
-
+        if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        return parameters != null ? parameters.equals(that.parameters) : that.parameters == null;
     }
 
     @Override

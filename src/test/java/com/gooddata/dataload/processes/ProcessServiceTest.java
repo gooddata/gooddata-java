@@ -90,7 +90,7 @@ public class ProcessServiceTest {
     }
 
     @Test
-    public void testCreateProcess() throws Exception {
+    public void shouldDeploySmallProcessUsingAPI() throws Exception {
 
         final DataloadProcess process = new DataloadProcess("test", ProcessType.GRAPH);
 
@@ -109,7 +109,7 @@ public class ProcessServiceTest {
     }
 
     @Test
-    public void testCreateProcessLargerThan1MB() throws Exception {
+    public void shouldDeployLargeProcessUsingWebDAV() throws Exception {
 
         final DataloadProcess process = new DataloadProcess("test", ProcessType.GRAPH);
 
@@ -121,8 +121,6 @@ public class ProcessServiceTest {
 
         verify(dataStoreService).upload(anyString(), notNull(InputStream.class));
     }
-
-
 
     private static File createProcessOfSize(int size) throws Exception {
         final Random r = new Random();
