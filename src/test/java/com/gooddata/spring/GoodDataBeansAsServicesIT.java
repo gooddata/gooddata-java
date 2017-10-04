@@ -25,7 +25,7 @@ import java.util.Arrays;
 
 import static org.testng.Assert.*;
 
-public class GoodDataBeansAsServicesTest {
+public class GoodDataBeansAsServicesIT {
 
     @Test
     public void servicesRegisteredFromXmlUsingAnnotationConfig() throws Exception {
