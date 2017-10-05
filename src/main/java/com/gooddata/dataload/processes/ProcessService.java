@@ -670,6 +670,8 @@ public class ProcessService extends AbstractService {
 
     private void deleteTempFile(File file) {
         notNull(file, "file");
-        file.delete();
+        if (!file.delete()) {
+            // ignored
+        }
     }
 }

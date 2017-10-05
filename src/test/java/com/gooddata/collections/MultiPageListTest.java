@@ -20,6 +20,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.testng.Assert.fail;
 
 public class MultiPageListTest {
@@ -119,7 +120,8 @@ public class MultiPageListTest {
         assertThat(list.stream().max(Integer::compareTo).orElse(0), is(3));
     }
 
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test(expectedExceptions = IllegalStateException.class,
+            expectedExceptionsMessageRegExp = ".*page provider does not iterate properly, returns the same page.*")
     public void infiniteLoopShouldBePrevented() {
         final PageableList<Integer> pageableList = new PageableList<>(asList(1, 2), new Paging("next"));
         final PageableList<Integer> list = new MultiPageList<>(
@@ -127,7 +129,22 @@ public class MultiPageListTest {
                 page -> pageableList
         );
 
-        list.stream().anyMatch(it -> it == 5);
+        list.forEach((i) -> {});
+    }
+
+    @Test(expectedExceptions = IllegalStateException.class,
+    expectedExceptionsMessageRegExp = ".*page has no results, yet claims there is next page.*")
+    public void shouldFailOnMisbehavingNextPage() throws Exception {
+        final PageableList<Integer> pageableList = new PageableList<>(asList(1, 2), new Paging("next"));
+        final PageableList<Integer> misbehaving = mock(PageableList.class);
+        when(misbehaving.isEmpty()).thenReturn(true);
+        when(misbehaving.getNextPage()).thenReturn(new PageRequest());
+
+        final PageableList<Integer> list = new MultiPageList<>(
+                pageableList,
+                page -> misbehaving
+        );
+        list.forEach((i) -> {});
     }
 
     @Test

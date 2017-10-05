@@ -12,10 +12,12 @@ import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -69,7 +71,8 @@ public class WarehouseS3CredentialsTest {
         assertThat(credentials.getAccessKey(), is(ACCESS_KEY));
         assertThat(credentials.getSecretKey(), is(nullValue()));
         assertThat(credentials.getUpdated().toString(), is(UPDATED_AT.toString()));
-        assertThat(credentials.getLinks(), is(LINKS));
+        assertThat(credentials.getLinks(), is(sameBeanAs(LINKS)));
+        assertThat(credentials.getLinks().toString(), is(notNullValue()));
     }
 
     @Test
