@@ -42,7 +42,7 @@ public class ResponseErrorHandlerTest {
 
         final GoodDataRestException exc = assertException(response);
 
-        assertThat("GoodDataRestException should have been thrown!", exc, is(notNullValue()));
+        assertThat(exc.getMessage(), is("500: [requestId=REQ] MSG"));
         assertThat(exc.getStatusCode(), is(500));
         assertThat(exc.getRequestId(), is("REQ"));
         assertThat(exc.getComponent(), is("COMPONENT"));
@@ -57,7 +57,7 @@ public class ResponseErrorHandlerTest {
 
         final GoodDataRestException exc = assertException(response);
 
-        assertThat("GoodDataRestException should have been thrown!", exc, is(notNullValue()));
+        assertThat(exc.getMessage(), is("500: [requestId=REQ] MSG PARAM1 PARAM2 3"));
         assertThat(exc.getStatusCode(), is(500));
         assertThat(exc.getRequestId(), is("REQ"));
         assertThat(exc.getComponent(), is("COMPONENT"));
@@ -72,7 +72,7 @@ public class ResponseErrorHandlerTest {
 
         final GoodDataRestException exc = assertException(response);
 
-        assertThat("GoodDataRestException should have been thrown!", exc, is(notNullValue()));
+        assertThat(exc.getMessage(), is("500: [requestId=requestId] Unknown error"));
         assertThat(exc.getStatusCode(), is(500));
         assertThat(exc.getRequestId(), is("requestId"));
         assertThat(exc.getComponent(), is(nullValue()));
@@ -81,16 +81,39 @@ public class ResponseErrorHandlerTest {
         assertThat(exc.getText(), is(nullValue()));
     }
 
+    @Test
+    public void shouldName() throws Exception {
+        final ClientHttpResponse response = prepareResponse();
+        final HttpHeaders headers = new HttpHeaders();
+        when(response.getHeaders()).thenReturn(headers);
+        when(response.getStatusText()).thenThrow(IOException.class);
+        when(response.getRawStatusCode()).thenThrow(IOException.class);
+
+        final GoodDataRestException exc = assertException(response);
+
+        assertThat(exc.getMessage(), is("0: Unknown error"));
+        assertThat(exc.getStatusCode(), is(0));
+        assertThat(exc.getRequestId(), is(nullValue()));
+        assertThat(exc.getComponent(), is(nullValue()));
+        assertThat(exc.getErrorClass(), is(nullValue()));
+        assertThat(exc.getErrorCode(), is(nullValue()));
+        assertThat(exc.getText(), is(nullValue()));
+    }
+
     private ClientHttpResponse prepareResponse(String resourcePath) throws IOException {
+        final ClientHttpResponse response = prepareResponse();
+        final HttpHeaders headers = new HttpHeaders();
+        when(response.getHeaders()).thenReturn(headers);
+        headers.set(GoodData.GDC_REQUEST_ID_HEADER, "requestId");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        when(response.getBody()).thenReturn(readFromResource(resourcePath));
+        return response;
+    }
+
+    private ClientHttpResponse prepareResponse() throws IOException {
         final ClientHttpResponse response = mock(ClientHttpResponse.class);
         when(response.getStatusCode()).thenReturn(HttpStatus.INTERNAL_SERVER_ERROR);
         when(response.getRawStatusCode()).thenReturn(500);
-        final HttpHeaders headers = new HttpHeaders();
-        headers.set(GoodData.GDC_REQUEST_ID_HEADER, "requestId");
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        when(response.getHeaders()).thenReturn(headers);
-        when(response.getBody()).thenReturn(readFromResource(resourcePath));
-
         return response;
     }
 
