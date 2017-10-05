@@ -7,6 +7,7 @@ package com.gooddata.featureflag;
 
 import com.gooddata.AbstractService;
 import com.gooddata.GoodDataException;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.project.Project;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -29,9 +30,10 @@ public class FeatureFlagService extends AbstractService {
      * Constructs service for GoodData feature flags management.
      *
      * @param restTemplate RESTful HTTP Spring template
+     * @param settings settings
      */
-    public FeatureFlagService(final RestTemplate restTemplate) {
-        super(restTemplate);
+    public FeatureFlagService(final RestTemplate restTemplate, final GoodDataSettings settings) {
+        super(restTemplate, settings);
     }
 
     /**

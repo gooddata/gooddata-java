@@ -3,6 +3,7 @@
  */
 package com.gooddata.auditevent;
 
+import com.gooddata.GoodDataSettings;
 import com.gooddata.account.Account;
 import com.gooddata.account.AccountService;
 import com.gooddata.collections.PageRequest;
@@ -19,7 +20,7 @@ public class AuditEventServiceTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        service = new AuditEventService(new RestTemplate(), mock(AccountService.class));
+        service = new AuditEventService(new RestTemplate(), mock(AccountService.class), new GoodDataSettings());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = ".*account.*")

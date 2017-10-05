@@ -5,6 +5,7 @@
  */
 package com.gooddata.report;
 
+import com.gooddata.GoodDataSettings;
 import com.gooddata.export.ExportFormat;
 import com.gooddata.export.ExportService;
 import com.gooddata.md.report.Report;
@@ -27,12 +28,12 @@ public class ReportServiceTest {
     @BeforeMethod
     public void setUp() throws Exception {
         exportService = mock(ExportService.class);
-        reportService = new ReportService(exportService, mock(RestTemplate.class));
+        reportService = new ReportService(exportService, mock(RestTemplate.class), new GoodDataSettings());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void shouldFailOnNullArgument() throws Exception {
-        new ReportService(null, mock(RestTemplate.class));
+        new ReportService(null, mock(RestTemplate.class), new GoodDataSettings());
     }
 
     @Test

@@ -7,6 +7,7 @@ package com.gooddata.md;
 
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
 import com.gooddata.project.Project;
@@ -53,7 +54,7 @@ public class MetadataServiceTest {
     @BeforeMethod
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        service = new MetadataService(restTemplate);
+        service = new MetadataService(restTemplate, new GoodDataSettings());
         when(project.getId()).thenReturn(PROJECT_ID);
     }
 

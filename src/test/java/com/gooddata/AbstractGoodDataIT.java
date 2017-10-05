@@ -28,7 +28,9 @@ public abstract class AbstractGoodDataIT {
     }
 
     protected GoodDataSettings createGoodDataSettings() {
-        return new GoodDataSettings();
+        final GoodDataSettings settings = new GoodDataSettings();
+        settings.setPollSleep(0);
+        return settings;
     }
 
     @AfterMethod

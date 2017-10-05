@@ -10,6 +10,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 import com.gooddata.GoodDataRestException;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.project.Project;
 import org.mockito.Mock;
@@ -32,7 +33,7 @@ public class ExportImportServiceTest {
     @BeforeMethod
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        service = new ExportImportService(restTemplate);
+        service = new ExportImportService(restTemplate, new GoodDataSettings());
         when(project.getId()).thenReturn(PROJECT_ID);
     }
 

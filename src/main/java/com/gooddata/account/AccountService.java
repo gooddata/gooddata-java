@@ -8,6 +8,7 @@ package com.gooddata.account;
 import com.gooddata.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.gdc.UriResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -26,9 +27,10 @@ public class AccountService extends AbstractService {
      * Constructs service for GoodData account management.
      *
      * @param restTemplate RESTful HTTP Spring template
+     * @param settings settings
      */
-    public AccountService(RestTemplate restTemplate) {
-        super(restTemplate);
+    public AccountService(final RestTemplate restTemplate, final GoodDataSettings settings) {
+        super(restTemplate, settings);
     }
 
     /**

@@ -5,7 +5,7 @@
  */
 package com.gooddata;
 
-import org.apache.commons.lang.StringUtils;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.concurrent.TimeUnit;
 
@@ -24,6 +24,7 @@ public class GoodDataSettings {
     private int connectionTimeout = secondsToMillis(10);
     private int connectionRequestTimeout = secondsToMillis(10);
     private int socketTimeout = secondsToMillis(60);
+    private int pollSleep = secondsToMillis(5);
     private String userAgent;
 
 
@@ -159,6 +160,36 @@ public class GoodDataSettings {
     }
 
     /**
+     * Get sleep time in milliseconds between poll retries
+     *
+     * @see AbstractService#poll(PollHandler, long, TimeUnit)
+     */
+    public int getPollSleep() {
+        return pollSleep;
+    }
+
+    /**
+     * Set sleep time between poll retries
+     *
+     * @param pollSleep sleep milliseconds
+     * @see AbstractService#poll(PollHandler, long, TimeUnit)
+     */
+    public void setPollSleep(final int pollSleep) {
+        isTrue(pollSleep >= 0, "pollSleep must be not negative");
+        this.pollSleep = pollSleep;
+    }
+
+    /**
+     * Set sleep time between poll retries
+     *
+     * @param pollSleep sleep seconds
+     * @see AbstractService#poll(PollHandler, long, TimeUnit)
+     */
+    public void setPollSleepSeconds(final int pollSleep) {
+        setPollSleep(secondsToMillis(pollSleep));
+    }
+
+    /**
      * User agent
      * @return user agent string
      */
@@ -184,8 +215,9 @@ public class GoodDataSettings {
         if (maxConnections != that.maxConnections) return false;
         if (connectionTimeout != that.connectionTimeout) return false;
         if (connectionRequestTimeout != that.connectionRequestTimeout) return false;
-        return socketTimeout == that.socketTimeout;
-
+        if (socketTimeout != that.socketTimeout) return false;
+        if (pollSleep != that.pollSleep) return false;
+        return userAgent != null ? userAgent.equals(that.userAgent) : that.userAgent == null;
     }
 
     @Override
@@ -194,17 +226,14 @@ public class GoodDataSettings {
         result = 31 * result + connectionTimeout;
         result = 31 * result + connectionRequestTimeout;
         result = 31 * result + socketTimeout;
+        result = 31 * result + pollSleep;
+        result = 31 * result + (userAgent != null ? userAgent.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "GoodDataSettings{" +
-                "connectionRequestTimeout=" + connectionRequestTimeout +
-                ", maxConnections=" + maxConnections +
-                ", connectionTimeout=" + connectionTimeout +
-                ", socketTimeout=" + socketTimeout +
-                '}';
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 
     private static int secondsToMillis(int seconds) {

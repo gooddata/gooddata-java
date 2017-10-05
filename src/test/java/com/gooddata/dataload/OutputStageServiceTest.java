@@ -5,6 +5,7 @@
  */
 package com.gooddata.dataload;
 
+import com.gooddata.GoodDataSettings;
 import com.gooddata.project.Project;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -41,7 +42,7 @@ public class OutputStageServiceTest {
     @BeforeMethod
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        outputStageService = new OutputStageService(restTemplate);
+        outputStageService = new OutputStageService(restTemplate, new GoodDataSettings());
         outputStage = readObjectFromResource(OUTPUT_STAGE, OutputStage.class);
     }
 

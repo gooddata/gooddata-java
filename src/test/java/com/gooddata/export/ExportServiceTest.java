@@ -6,6 +6,7 @@
 package com.gooddata.export;
 
 import com.gooddata.GoodDataEndpoint;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.md.ProjectDashboard;
 import com.gooddata.md.ProjectDashboard.Tab;
 import com.gooddata.md.report.Report;
@@ -25,7 +26,7 @@ import static org.mockito.Mockito.when;
 
 public class ExportServiceTest {
 
-    private final ExportService service = new ExportService(new RestTemplate(), new GoodDataEndpoint());
+    private final ExportService service = new ExportService(new RestTemplate(), new GoodDataEndpoint(), new GoodDataSettings());
     private ProjectDashboard dashboard;
     private Tab tab;
     private Report report;
@@ -39,12 +40,12 @@ public class ExportServiceTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void shouldFailOnNullArgument() throws Exception {
-        new ExportService(null, new GoodDataEndpoint());
+        new ExportService(null, new GoodDataEndpoint(), new GoodDataSettings());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = ".*endpoint.*")
     public void shouldFailOnNullEndpoint() throws Exception {
-        new ExportService(new RestTemplate(), null);
+        new ExportService(new RestTemplate(), null, new GoodDataSettings());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = ".*dashboard.*")

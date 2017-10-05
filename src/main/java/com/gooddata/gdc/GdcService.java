@@ -7,6 +7,7 @@ package com.gooddata.gdc;
 
 import com.gooddata.AbstractService;
 import com.gooddata.GoodDataException;
+import com.gooddata.GoodDataSettings;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,8 +16,8 @@ import org.springframework.web.client.RestTemplate;
  */
 public class GdcService extends AbstractService {
 
-    public GdcService(RestTemplate restTemplate) {
-        super(restTemplate);
+    public GdcService(final RestTemplate restTemplate, final GoodDataSettings settings) {
+        super(restTemplate, settings);
     }
 
     /**

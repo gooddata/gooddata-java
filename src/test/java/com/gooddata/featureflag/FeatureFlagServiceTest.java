@@ -6,6 +6,7 @@
 package com.gooddata.featureflag;
 
 import com.gooddata.GoodDataException;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.project.Project;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -48,7 +49,7 @@ public class FeatureFlagServiceTest {
     @BeforeMethod
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        service = new FeatureFlagService(restTemplate);
+        service = new FeatureFlagService(restTemplate, new GoodDataSettings());
         when(project.getId()).thenReturn(PROJECT_ID);
     }
 

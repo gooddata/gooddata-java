@@ -7,6 +7,7 @@ package com.gooddata.report;
 
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.export.ExportService;
 import com.gooddata.md.report.Report;
 import com.gooddata.md.report.ReportDefinition;
@@ -32,8 +33,8 @@ public class ReportService extends AbstractService {
 
     private final ExportService service;
 
-    public ReportService(final ExportService service, final RestTemplate restTemplate) {
-        super(restTemplate);
+    public ReportService(final ExportService service, final RestTemplate restTemplate, final GoodDataSettings settings) {
+        super(restTemplate, settings);
         this.service = notNull(service, "service");
     }
 

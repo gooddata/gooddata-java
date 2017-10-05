@@ -12,6 +12,7 @@ import static com.gooddata.util.Validate.notNull;
 import com.gooddata.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.project.Project;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -28,9 +29,10 @@ public class OutputStageService extends AbstractService {
      * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
      * this abstract one.
      * @param restTemplate RESTful HTTP Spring template
+     * @param settings settings
      */
-    public OutputStageService(final RestTemplate restTemplate) {
-        super(restTemplate);
+    public OutputStageService(final RestTemplate restTemplate, final GoodDataSettings settings) {
+        super(restTemplate, settings);
     }
 
     /**

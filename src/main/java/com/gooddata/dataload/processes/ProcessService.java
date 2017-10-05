@@ -8,6 +8,7 @@ package com.gooddata.dataload.processes;
 import com.gooddata.AbstractPollHandler;
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.PollResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
@@ -64,9 +65,11 @@ public class ProcessService extends AbstractService {
      * @param restTemplate RESTful HTTP Spring template
      * @param accountService service to access accounts
      * @param dataStoreService service for upload process data
+     * @param settings settings
      */
-    public ProcessService(RestTemplate restTemplate, AccountService accountService, DataStoreService dataStoreService) {
-        super(restTemplate);
+    public ProcessService(final RestTemplate restTemplate, final AccountService accountService,
+                          final DataStoreService dataStoreService, final GoodDataSettings settings) {
+        super(restTemplate, settings);
         this.dataStoreService = dataStoreService;
         this.accountService = notNull(accountService, "accountService");
     }

@@ -10,6 +10,7 @@ import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.PollResult;
 import com.gooddata.SimplePollHandler;
 import com.gooddata.account.Account;
@@ -55,12 +56,13 @@ public class ProjectService extends AbstractService {
 
     /**
      * Constructs service for GoodData project management (list projects, create a project, ...).
-     *
      * @param restTemplate   RESTful HTTP Spring template
      * @param accountService GoodData account service
+     * @param settings settings
      */
-    public ProjectService(RestTemplate restTemplate, AccountService accountService) {
-        super(restTemplate);
+    public ProjectService(final RestTemplate restTemplate, final AccountService accountService,
+                          final GoodDataSettings settings) {
+        super(restTemplate, settings);
         this.accountService = notNull(accountService, "accountService");
     }
 

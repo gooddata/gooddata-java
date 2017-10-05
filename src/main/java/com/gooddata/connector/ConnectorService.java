@@ -7,6 +7,7 @@ package com.gooddata.connector;
 
 import com.gooddata.AbstractService;
 import com.gooddata.FutureResult;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.PollResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
@@ -35,8 +36,8 @@ public class ConnectorService extends AbstractService {
 
     private final ProjectService projectService;
 
-    public ConnectorService(final RestTemplate restTemplate, final ProjectService projectService) {
-        super(restTemplate);
+    public ConnectorService(final RestTemplate restTemplate, final ProjectService projectService, final GoodDataSettings settings) {
+        super(restTemplate, settings);
         this.projectService = notNull(projectService, "projectService");
     }
 

@@ -12,6 +12,7 @@ import com.gooddata.FutureResult;
 import com.gooddata.GoodDataEndpoint;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.GoodDataSettings;
 import com.gooddata.PollResult;
 import com.gooddata.SimplePollHandler;
 import com.gooddata.gdc.AsyncTask;
@@ -55,9 +56,10 @@ public class ExportService extends AbstractService {
      * Service for data export
      * @param restTemplate REST template
      * @param endpoint GoodData Endpoint
+     * @param settings settings
      */
-    public ExportService(final RestTemplate restTemplate, final GoodDataEndpoint endpoint) {
-        super(restTemplate);
+    public ExportService(final RestTemplate restTemplate, final GoodDataEndpoint endpoint, final GoodDataSettings settings) {
+        super(restTemplate, settings);
         this.endpoint = notNull(endpoint, "endpoint");
     }
 
