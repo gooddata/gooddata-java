@@ -8,3 +8,6 @@ branches:
      - master
      - /\d\.0\.0-RC/
 sudo: false
+cache:
+  directories:
+    - '$HOME/.m2/repository'
