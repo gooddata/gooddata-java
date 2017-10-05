@@ -5,6 +5,8 @@
  */
 package com.gooddata.project;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import org.testng.annotations.Test;
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
@@ -23,7 +25,6 @@ public class ProjectValidationResultTest {
         assertThat(log.getLevel(), is("WARN"));
         assertThat(log.getMessage(), is("There are inconsistent values between %s->%s->%s and %s->%s for %s value '%s'."));
         assertThat(log.getParams(), hasSize(7));
-
     }
 
     @Test
@@ -31,5 +32,13 @@ public class ProjectValidationResultTest {
         final ProjectValidationResult log = readObjectFromResource("/project/project-validationResultLog.json", ProjectValidationResult.class);
 
         assertThat(log.toString(), matchesPattern(ProjectValidationResult.class.getSimpleName() + "\\[.*\\]"));
+    }
+
+    @Test
+    public void shouldVerifyEquals() throws Exception {
+        EqualsVerifier.forClass(ProjectValidationResult.class)
+                .usingGetClass()
+                .suppress(Warning.NONFINAL_FIELDS)
+                .verify();
     }
 }

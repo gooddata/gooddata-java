@@ -36,18 +36,14 @@ public class AttributeElement {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (!(o instanceof AttributeElement))
-            return false;
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        AttributeElement that = (AttributeElement) o;
+        final AttributeElement that = (AttributeElement) o;
 
-        if (uri != null ? !uri.equals(that.uri) : that.uri != null)
-            return false;
-        return !(title != null ? !title.equals(that.title) : that.title != null);
-
+        if (uri != null ? !uri.equals(that.uri) : that.uri != null) return false;
+        return title != null ? title.equals(that.title) : that.title == null;
     }
 
     @Override

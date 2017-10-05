@@ -5,6 +5,7 @@
  */
 package com.gooddata.projecttemplate;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.testng.annotations.Test;
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
@@ -39,6 +40,14 @@ public class TemplateTest {
         assertThat(author, is(notNullValue()));
         assertThat(author.getName(), is("GoodData"));
         assertThat(author.getUri(), is("http://www.gooddata.com/"));
+    }
+
+    @Test
+    public void shouldVerifyEquals() throws Exception {
+        EqualsVerifier.forClass(Template.class)
+                .usingGetClass()
+                .withOnlyTheseFields("uri")
+                .verify();
     }
 
 }

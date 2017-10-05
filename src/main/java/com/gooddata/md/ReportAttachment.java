@@ -111,6 +111,7 @@ public class ReportAttachment extends Attachment {
         ReportAttachment that = (ReportAttachment) o;
 
         if (formats != null ? !formats.equals(that.formats) : that.formats != null) return false;
+        if (getUri() != null ? !getUri().equals(that.getUri()) : that.getUri() != null) return false;
         return !(exportOptions != null ? !exportOptions.equals(that.exportOptions) : that.exportOptions != null);
 
     }
@@ -119,6 +120,7 @@ public class ReportAttachment extends Attachment {
     public int hashCode() {
         int result = formats != null ? formats.hashCode() : 0;
         result = 31 * result + (exportOptions != null ? exportOptions.hashCode() : 0);
+        result = 31 * result + (getUri() != null ? getUri().hashCode() : 0);
         return result;
     }
 

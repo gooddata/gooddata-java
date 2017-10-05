@@ -11,6 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
@@ -46,5 +47,12 @@ public class ProjectValidationResultSliElParamTest {
         expectedMap.put("3", "9012");
 
         assertThat(param.asMap(), is(expectedMap));
+    }
+
+    @Test
+    public void shouldVerifyEquals() throws Exception {
+        EqualsVerifier.forClass(ProjectValidationResultSliElParam.class)
+                .usingGetClass()
+                .verify();
     }
 }

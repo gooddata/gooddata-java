@@ -41,22 +41,20 @@ public class ProjectValidationResultObjectParam extends ProjectValidationResultP
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProjectValidationResultObjectParam that = (ProjectValidationResultObjectParam) o;
+        final ProjectValidationResultObjectParam that = (ProjectValidationResultObjectParam) o;
 
-        if (!name.equals(that.name)) return false;
-        if (!uri.equals(that.uri)) return false;
-
-        return true;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        return uri != null ? uri.equals(that.uri) : that.uri == null;
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + uri.hashCode();
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (uri != null ? uri.hashCode() : 0);
         return result;
     }
 }
