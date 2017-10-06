@@ -5,6 +5,8 @@
  */
 package com.gooddata.featureflag;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -40,5 +42,14 @@ public class ProjectFeatureFlagTest {
         final ProjectFeatureFlag flag = new ProjectFeatureFlag("test", false);
 
         assertThat(flag.toString(), matchesPattern(ProjectFeatureFlag.class.getSimpleName() + "\\[.*\\]"));
+    }
+
+    @Test
+    public void shouldVerifyEquals() throws Exception {
+        EqualsVerifier.forClass(ProjectFeatureFlag.class)
+                .usingGetClass()
+                .suppress(Warning.NONFINAL_FIELDS)
+                .withIgnoredFields("links")
+                .verify();
     }
 }

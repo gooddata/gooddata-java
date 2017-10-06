@@ -71,17 +71,6 @@ public class FeatureFlagServiceTest {
         service.listFeatureFlags(project);
     }
 
-    @Test
-    public void testGetFeatureFlags() throws Exception {
-        final FeatureFlag flag1 = new FeatureFlag(FLAG_NAME, true);
-        when(restTemplate.getForObject(new URI(FEATURE_FLAGS_URI), FeatureFlags.class)).thenReturn(featureFlags);
-        when(featureFlags.iterator()).thenReturn(singleton(flag1).iterator());
-
-        final FeatureFlags flags = service.listFeatureFlags(project);
-
-        assertThat(flags, contains(flag1));
-    }
-
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void whenNullArgThenGetProjectFeatureFlagsShouldThrow() throws Exception {
         service.listProjectFeatureFlags(null);
@@ -98,18 +87,6 @@ public class FeatureFlagServiceTest {
         when(restTemplate.getForObject(new URI(PROJECT_FEATURE_FLAGS_URI), ProjectFeatureFlags.class))
                 .thenThrow(new RestClientException(""));
         service.listProjectFeatureFlags(project);
-    }
-
-    @Test
-    public void testGetProjectFeatureFlags() throws Exception {
-        final ProjectFeatureFlag flag1 = new ProjectFeatureFlag(FLAG_NAME, true);
-        when(restTemplate.getForObject(new URI(PROJECT_FEATURE_FLAGS_URI), ProjectFeatureFlags.class))
-                .thenReturn(projectFeatureFlags);
-        when(projectFeatureFlags.iterator()).thenReturn(singleton(flag1).iterator());
-
-        final ProjectFeatureFlags flags = service.listProjectFeatureFlags(project);
-
-        assertThat(flags, contains(flag1));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -135,18 +112,6 @@ public class FeatureFlagServiceTest {
         service.createProjectFeatureFlag(project, projectFeatureFlag);
     }
 
-    @Test
-    public void testCreateProjectFeatureFlag() throws Exception {
-        final ProjectFeatureFlag flag = new ProjectFeatureFlag(FLAG_NAME, true);
-        when(restTemplate.postForLocation(PROJECT_FEATURE_FLAGS_URI, flag))
-                .thenReturn(new URI(PROJECT_FEATURE_FLAG_URI));
-        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class)).thenReturn(flag);
-
-        final ProjectFeatureFlag result = service.createProjectFeatureFlag(project, flag);
-
-        assertThat(result, is(flag));
-    }
-
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void whenNullKeyThenGetProjectFeatureFlagShouldThrow() throws Exception {
         service.getProjectFeatureFlag(project, null);
@@ -170,16 +135,6 @@ public class FeatureFlagServiceTest {
         service.getProjectFeatureFlag(project, FLAG_NAME);
     }
 
-    @Test
-    public void testGetProjectFeatureFlag() throws Exception {
-        final ProjectFeatureFlag flag = new ProjectFeatureFlag(FLAG_NAME, true);
-        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class)).thenReturn(flag);
-
-        final ProjectFeatureFlag result = service.getProjectFeatureFlag(project, FLAG_NAME);
-
-        assertThat(result, is(flag));
-    }
-
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void whenNullFlagThenUpdateProjectFeatureFlagShouldThrow() throws Exception {
         service.updateProjectFeatureFlag(null);
@@ -200,19 +155,6 @@ public class FeatureFlagServiceTest {
         service.updateProjectFeatureFlag(projectFeatureFlag);
     }
 
-    @Test
-    public void testUpdateProjectFeatureFlag() throws Exception {
-        final ProjectFeatureFlag newFlag = new ProjectFeatureFlag(FLAG_NAME, true);
-        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
-        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class))
-                .thenReturn(newFlag);
-
-        final ProjectFeatureFlag result = service.updateProjectFeatureFlag(projectFeatureFlag);
-
-        verify(restTemplate).put(PROJECT_FEATURE_FLAG_URI, projectFeatureFlag);
-        assertThat(result, is(newFlag));
-    }
-
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void whenNullFlagThenDeleteProjectFeatureFlagShouldThrow() throws Exception {
         service.deleteProjectFeatureFlag(null);
@@ -223,13 +165,6 @@ public class FeatureFlagServiceTest {
         when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
         doThrow(new RestClientException("")).when(restTemplate).delete(PROJECT_FEATURE_FLAG_URI);
         service.deleteProjectFeatureFlag(projectFeatureFlag);
-    }
-
-    @Test
-    public void testDeleteProjectFeatureFlag() throws Exception {
-        when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
-        service.deleteProjectFeatureFlag(projectFeatureFlag);
-        verify(restTemplate).delete(PROJECT_FEATURE_FLAG_URI);
     }
 
 }

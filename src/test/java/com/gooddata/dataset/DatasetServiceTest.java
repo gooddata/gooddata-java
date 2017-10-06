@@ -79,15 +79,6 @@ public class DatasetServiceTest {
         service.getDatasetManifest(project, "");
     }
 
-    @Test
-    public void testGetDatasetManifest() throws Exception {
-        when(restTemplate.getForObject(DatasetManifest.URI, DatasetManifest.class, PROJECT_ID, DATASET_ID))
-                .thenReturn(manifest);
-        final DatasetManifest result = service.getDatasetManifest(project, DATASET_ID);
-
-        assertThat(result, is(manifest));
-    }
-
     @Test(expectedExceptions = DatasetNotFoundException.class)
     public void testGetDatasetManifestWhenNotFound() throws Exception {
         when(restTemplate.getForObject(DatasetManifest.URI, DatasetManifest.class, PROJECT_ID, DATASET_ID))
@@ -205,17 +196,6 @@ public class DatasetServiceTest {
     public void testListDatasetLinksWithRestClientError() throws Exception {
         when(restTemplate.getForObject(DatasetLinks.URI, Link.class, PROJECT_ID)).thenThrow(new RestClientException(""));
         service.listDatasetLinks(project);
-    }
-
-    @Test
-    public void testListDatasetLinksWithEmptyResponse() throws Exception {
-        final DatasetLinks datasets = mock(DatasetLinks.class);
-        when(restTemplate.getForObject(DatasetLinks.URI, DatasetLinks.class, PROJECT_ID)).thenReturn(datasets);
-        when(datasets.getLinks()).thenReturn(singletonList(datasetLink));
-
-        final Collection<Link> result = service.listDatasetLinks(project);
-        assertThat(result, hasSize(1));
-        assertThat(result, contains(datasetLink));
     }
 
     @Test(expectedExceptions = GoodDataException.class)
