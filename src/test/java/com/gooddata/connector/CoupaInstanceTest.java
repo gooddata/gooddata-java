@@ -5,13 +5,14 @@
  */
 package com.gooddata.connector;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import org.testng.annotations.Test;
+
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import org.testng.annotations.Test;
 
 public class CoupaInstanceTest {
 
@@ -30,5 +31,12 @@ public class CoupaInstanceTest {
         assertThat(instance.getName(), is("instance 01"));
         assertThat(instance.getApiUrl(), is("https://gooddata-demo.coupacloud.com/api"));
         assertThat(instance.getApiKey(), is("apikey123"));
+    }
+
+    @Test
+    public void shouldVerifyEquals() throws Exception {
+        EqualsVerifier.forClass(CoupaInstance.class)
+                .usingGetClass()
+                .verify();
     }
 }

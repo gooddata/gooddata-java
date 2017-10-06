@@ -5,6 +5,7 @@
  */
 package com.gooddata.md;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -14,7 +15,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-
 
 public class AttributeElementsTest {
 
@@ -26,6 +26,13 @@ public class AttributeElementsTest {
         final List<AttributeElement> elementsList = elements.getElements();
         assertThat(elementsList, is(notNullValue()));
         assertThat(elementsList, hasSize(3));
+    }
+
+    @Test
+    public void shouldVerifyEquals() throws Exception {
+        EqualsVerifier.forClass(AttributeElements.class)
+                .usingGetClass()
+                .verify();
     }
 
 }

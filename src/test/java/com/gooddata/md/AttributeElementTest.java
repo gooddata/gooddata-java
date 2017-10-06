@@ -5,6 +5,7 @@
  */
 package com.gooddata.md;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.testng.annotations.Test;
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
@@ -32,5 +33,12 @@ public class AttributeElementTest {
         final AttributeElement element = readObjectFromResource("/md/attributeElement.json", AttributeElement.class);
 
         assertThat(element.toString(), matchesPattern(AttributeElement.class.getSimpleName() + "\\[.*\\]"));
+    }
+
+    @Test
+    public void shouldVerifyEquals() throws Exception {
+        EqualsVerifier.forClass(AttributeElement.class)
+                .usingGetClass()
+                .verify();
     }
 }

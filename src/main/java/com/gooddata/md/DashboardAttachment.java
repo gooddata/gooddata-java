@@ -41,27 +41,28 @@ public class DashboardAttachment extends Attachment {
     public String getExecutionContext() { return executionContext; }
 
     @Override
-    public boolean equals(Object o) {
-        if (!super.equals(o)) return false;
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
-        DashboardAttachment that = (DashboardAttachment) o;
+        final DashboardAttachment that = (DashboardAttachment) o;
 
+        if (getUri() != null ? !getUri().equals(that.getUri()) : that.getUri() != null) return false;
         if (allTabs != null ? !allTabs.equals(that.allTabs) : that.allTabs != null) return false;
         if (tabs != null ? !tabs.equals(that.tabs) : that.tabs != null) return false;
-        return !(executionContext != null ? !executionContext.equals(that.executionContext) : that.executionContext != null);
-
+        return executionContext != null ? executionContext.equals(that.executionContext) : that.executionContext == null;
     }
 
     @Override
     public int hashCode() {
-        int result = allTabs != null ? allTabs.hashCode() : 0;
+        int result = super.hashCode();
+        result = 31 * result + (getUri() != null ? getUri().hashCode() : 0);
+        result = 31 * result + (allTabs != null ? allTabs.hashCode() : 0);
         result = 31 * result + (tabs != null ? tabs.hashCode() : 0);
         result = 31 * result + (executionContext != null ? executionContext.hashCode() : 0);
         return result;
     }
-
 
     @Override
     public String toString() {

@@ -91,14 +91,12 @@ public class ProjectValidationResultSliElParam extends ProjectValidationResultPa
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
-        if (!(o instanceof ProjectValidationResultSliElParam)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        ProjectValidationResultSliElParam that = (ProjectValidationResultSliElParam) o;
+        final ProjectValidationResultSliElParam that = (ProjectValidationResultSliElParam) o;
 
-        if (getIds() != null ? !getIds().equals(that.getIds()) : that.getIds() != null) return false;
-        if (getVals() != null ? !getVals().equals(that.getVals()) : that.getVals() != null) return false;
-
-        return true;
+        if (ids != null ? !ids.equals(that.ids) : that.ids != null) return false;
+        return vals != null ? vals.equals(that.vals) : that.vals == null;
     }
 
     @Override

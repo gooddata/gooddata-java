@@ -35,20 +35,18 @@ public class ProjectValidationType {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProjectValidationType that = (ProjectValidationType) o;
+        final ProjectValidationType that = (ProjectValidationType) o;
 
-        if (!value.equals(that.value)) return false;
-
-        return true;
+        return value != null ? value.equals(that.value) : that.value == null;
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return value != null ? value.hashCode() : 0;
     }
 
     @Override

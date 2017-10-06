@@ -65,23 +65,21 @@ class InUseMany {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        InUseMany inUseMany = (InUseMany) o;
+        final InUseMany inUseMany = (InUseMany) o;
 
         if (nearest != inUseMany.nearest) return false;
-        if (!types.equals(inUseMany.types)) return false;
-        if (!uris.equals(inUseMany.uris)) return false;
-
-        return true;
+        if (uris != null ? !uris.equals(inUseMany.uris) : inUseMany.uris != null) return false;
+        return types != null ? types.equals(inUseMany.types) : inUseMany.types == null;
     }
 
     @Override
     public int hashCode() {
-        int result = uris.hashCode();
-        result = 31 * result + types.hashCode();
+        int result = uris != null ? uris.hashCode() : 0;
+        result = 31 * result + (types != null ? types.hashCode() : 0);
         result = 31 * result + (nearest ? 1 : 0);
         return result;
     }

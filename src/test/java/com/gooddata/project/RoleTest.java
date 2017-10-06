@@ -5,6 +5,7 @@
  */
 package com.gooddata.project;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -44,5 +45,14 @@ public class RoleTest {
 
     private Role readRole(final String suffix) throws java.io.IOException {
         return readObjectFromResource("/project/project-role" + suffix + ".json", Role.class);
+    }
+
+    @Test
+    public void shouldVerifyEquals() throws Exception {
+        EqualsVerifier.forClass(Role.class)
+                .usingGetClass()
+                .withNonnullFields("permissions", "meta", "links")
+                .withIgnoredFields("links")
+                .verify();
     }
 }

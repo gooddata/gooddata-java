@@ -43,18 +43,18 @@ public class ProjectValidationResultGdcTimeElParam extends ProjectValidationResu
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (!(o instanceof ProjectValidationResultGdcTimeElParam))
-            return false;
-        ProjectValidationResultGdcTimeElParam that = (ProjectValidationResultGdcTimeElParam) o;
-        return Objects.equals(ids, that.ids);
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final ProjectValidationResultGdcTimeElParam that = (ProjectValidationResultGdcTimeElParam) o;
+
+        return ids != null ? ids.equals(that.ids) : that.ids == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ids);
+        return ids != null ? ids.hashCode() : 0;
     }
 
     @Override

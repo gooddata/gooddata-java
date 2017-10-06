@@ -42,7 +42,6 @@ public class Attachment {
         Attachment that = (Attachment) o;
 
         return !(uri != null ? !uri.equals(that.uri) : that.uri != null);
-
     }
 
     @Override

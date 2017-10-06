@@ -5,6 +5,7 @@
  */
 package com.gooddata.project;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.testng.annotations.Test;
 
 import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
@@ -25,5 +26,12 @@ public class ProjectValidationTypeTest {
         final ProjectValidationType myValidationType = OBJECT_MAPPER.readValue("\"myValidationType\"", ProjectValidationType.class);
         assertThat(myValidationType, notNullValue());
         assertThat(myValidationType.getValue(), is("myValidationType"));
+    }
+
+    @Test
+    public void shouldVerifyEquals() throws Exception {
+        EqualsVerifier.forClass(ProjectValidationType.class)
+                .usingGetClass()
+                .verify();
     }
 }

@@ -58,20 +58,23 @@ public class CoupaInstance {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (!(o instanceof CoupaInstance))
-            return false;
-        CoupaInstance that = (CoupaInstance) o;
-        return Objects.equals(name, that.name) &&
-                Objects.equals(apiUrl, that.apiUrl) &&
-                Objects.equals(apiKey, that.apiKey);
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final CoupaInstance that = (CoupaInstance) o;
+
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (apiUrl != null ? !apiUrl.equals(that.apiUrl) : that.apiUrl != null) return false;
+        return apiKey != null ? apiKey.equals(that.apiKey) : that.apiKey == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, apiUrl, apiKey);
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (apiUrl != null ? apiUrl.hashCode() : 0);
+        result = 31 * result + (apiKey != null ? apiKey.hashCode() : 0);
+        return result;
     }
 
     @Override
