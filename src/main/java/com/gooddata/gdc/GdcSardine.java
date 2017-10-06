@@ -28,8 +28,8 @@ class GdcSardine extends SardineImpl {
      */
     @Override
     protected <T> T execute(HttpRequestBase request, ResponseHandler<T> responseHandler) throws IOException {
+        notNull(request,"request");
         try {
-            notNull(request,"request");
             return super.execute(request, responseHandler);
         } finally {
             request.releaseConnection();
