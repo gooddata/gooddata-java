@@ -1,0 +1,15 @@
+{
+  "attributeHeader": {
+    "name": "Name",
+    "localIdentifier": "a1",
+    "uri": "/gdc/md/project_id/obj/123",
+    "identifier": "attr.dataset.name",
+    "totalItems": [
+      {
+        "totalHeaderItem": {
+          "name": "sum"
+        }
+      }
+    ]
+  }
+}

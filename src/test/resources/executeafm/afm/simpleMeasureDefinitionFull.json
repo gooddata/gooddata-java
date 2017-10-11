@@ -1,0 +1,21 @@
+{
+  "measure": {
+    "item": {
+      "uri": "/gdc/md/projectId/obj/1"
+    },
+    "aggregation": "avg",
+    "computeRatio": true,
+    "filters": [
+      {
+        "positiveAttributeFilter": {
+          "displayForm": {
+            "uri": "/gdc/md/projectId/obj/1"
+          },
+          "in": [
+            "foo"
+          ]
+        }
+      }
+    ]
+  }
+}

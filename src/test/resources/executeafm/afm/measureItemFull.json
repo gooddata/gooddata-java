@@ -1,0 +1,12 @@
+{
+  "definition": {
+    "measure": {
+      "item": {
+        "uri": "/gdc/md/projectId/obj/1"
+      }
+    }
+  },
+  "localIdentifier": "lId",
+  "alias": "alias",
+  "format": "format"
+}

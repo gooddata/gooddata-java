@@ -1,0 +1,85 @@
+{
+  "execution": {
+    "afm": {
+      "attributes": [
+        {
+          "displayForm": {
+            "uri": "/gdc/md/projectId/obj/1"
+          },
+          "localIdentifier": "a1"
+        }
+      ],
+      "filters": [
+        {
+          "expression": {
+            "value": "some expression"
+          }
+        }
+      ],
+      "measures": [
+        {
+          "definition": {
+            "measure": {
+              "item": {
+                "uri": "/gdc/md/projectId/obj/1"
+              }
+            }
+          },
+          "localIdentifier": "m1"
+        }
+      ],
+      "nativeTotals": [
+        {
+          "measureIdentifier": "mId",
+          "attributeIdentifiers": [
+            "a1",
+            "a2"
+          ]
+        }
+      ]
+    },
+    "resultSpec": {
+      "dimensions": [
+        {
+          "name": "dName",
+          "itemIdentifiers": [
+            "i1"
+          ],
+          "totals": [
+            {
+              "measureIdentifier": "mId",
+              "type": "avg",
+              "attributeIdentifier": "a1"
+            }
+          ]
+        }
+      ],
+      "sorts": [
+        {
+          "attributeSortItem": {
+            "attributeIdentifier": "aId",
+            "direction": "asc"
+          }
+        },
+        {
+          "measureSortItem": {
+            "direction": "asc",
+            "locators": [
+              {
+                "measureLocatorItem": {
+                  "measureIdentifier": "mId"
+                }
+              },
+              {
+                "attributeLocatorItem": {
+                  "attributeIdentifier": "aId",
+                  "element": "a1"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
