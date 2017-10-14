@@ -75,6 +75,22 @@ public class ProcessService extends AbstractService {
     }
 
     /**
+     * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
+     * this abstract one.
+     * @param restTemplate RESTful HTTP Spring template
+     * @param accountService service to access accounts
+     * @param dataStoreService service for upload process data
+     * @deprecated use ProcessService(RestTemplate, AccountService, DataStoreService, GoodDataSettings) instead
+     */
+    @Deprecated
+    public ProcessService(final RestTemplate restTemplate, final AccountService accountService,
+                          final DataStoreService dataStoreService) {
+        super(restTemplate);
+        this.dataStoreService = dataStoreService;
+        this.accountService = notNull(accountService, "accountService");
+    }
+
+    /**
      * Create new process with given data by given project.
      * Process must have null path to prevent clashes with deploying from appstore.
      *

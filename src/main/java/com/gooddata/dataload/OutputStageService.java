@@ -36,6 +36,17 @@ public class OutputStageService extends AbstractService {
     }
 
     /**
+     * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
+     * this abstract one.
+     * @param restTemplate RESTful HTTP Spring template
+     * @deprecated use OutputStageService(RestTemplate, GoodDataSettings) constructor instead
+     */
+    @Deprecated
+    public OutputStageService(final RestTemplate restTemplate) {
+        super(restTemplate);
+    }
+
+    /**
      * Get output stage by given URI.
      * @param uri output stage uri
      * @return output stage object

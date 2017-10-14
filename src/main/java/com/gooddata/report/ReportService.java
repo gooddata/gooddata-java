@@ -39,6 +39,15 @@ public class ReportService extends AbstractService {
     }
 
     /**
+     * @deprecated use ReportService(ExportService, RestTemplate, GoodDataSettings) constructor instead
+     */
+    @Deprecated
+    public ReportService(final ExportService service, final RestTemplate restTemplate) {
+        super(restTemplate);
+        this.service = notNull(service, "service");
+    }
+
+    /**
      * Export the given report definition in the given format to the given output stream
      * @param reportDefinition report definition
      * @param format export format

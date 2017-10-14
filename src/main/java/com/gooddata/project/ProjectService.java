@@ -67,6 +67,18 @@ public class ProjectService extends AbstractService {
     }
 
     /**
+     * Constructs service for GoodData project management (list projects, create a project, ...).
+     * @param restTemplate   RESTful HTTP Spring template
+     * @param accountService GoodData account service
+     * @deprecated use ProjectService(RestTemplate, AccountService) constructor instead
+     */
+    @Deprecated
+    public ProjectService(final RestTemplate restTemplate, final AccountService accountService) {
+        super(restTemplate);
+        this.accountService = notNull(accountService, "accountService");
+    }
+
+    /**
      * Get all projects current user has access to.
      *
      * @return collection of all projects current user has access to

@@ -37,6 +37,14 @@ public class MetadataService extends AbstractService {
     }
 
     /**
+     * @deprecated use MetadataService(RestTemplate, GoodDataSettings) constructor instead
+     */
+    @Deprecated
+    public MetadataService(final RestTemplate restTemplate) {
+        super(restTemplate);
+    }
+
+    /**
      * Create metadata object in given project
      *
      * @param project project
