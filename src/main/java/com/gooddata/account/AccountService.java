@@ -34,6 +34,17 @@ public class AccountService extends AbstractService {
     }
 
     /**
+     * Constructs service for GoodData account management.
+     *
+     * @param restTemplate RESTful HTTP Spring template
+     * @deprecated use AccountService(RestTemplate, GoodDataSettings) constructor instead
+     */
+    @Deprecated
+    public AccountService(final RestTemplate restTemplate) {
+        super(restTemplate);
+    }
+
+    /**
      * Gets current account of logged user.
      *
      * @return current account

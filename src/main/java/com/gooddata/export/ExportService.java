@@ -64,6 +64,18 @@ public class ExportService extends AbstractService {
     }
 
     /**
+     * Service for data export
+     * @param restTemplate REST template
+     * @param endpoint GoodData Endpoint
+     * @deprecated use ExportService(RestTemplate, GoodDataEndpoint, GoodDataSettings) constructor instead
+     */
+    @Deprecated
+    public ExportService(final RestTemplate restTemplate, final GoodDataEndpoint endpoint) {
+        super(restTemplate);
+        this.endpoint = notNull(endpoint, "endpoint");
+    }
+
+    /**
      * Export the given report definition in the given format to the given output stream
      *
      * @param reportDefinition report definition

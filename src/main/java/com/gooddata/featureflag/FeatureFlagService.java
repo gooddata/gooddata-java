@@ -37,6 +37,17 @@ public class FeatureFlagService extends AbstractService {
     }
 
     /**
+     * Constructs service for GoodData feature flags management.
+     *
+     * @param restTemplate RESTful HTTP Spring template
+     * @deprecated use FeatureFlagService(RestTemplate, GoodDataSettings) constructor instead
+     */
+    @Deprecated
+    public FeatureFlagService(final RestTemplate restTemplate) {
+        super(restTemplate);
+    }
+
+    /**
      * Returns aggregated feature flags for given project and current user (aggregates global, project group, project
      * and user feature flags).
      * It doesn't matter whether feature flag is enabled or not, it'll be included in both cases.

@@ -58,6 +58,15 @@ public class DatasetService extends AbstractService {
     }
 
     /**
+     * @deprecated use DatasetService(RestTemplate, DataStoreService, GoodDataSettings) constructor instead
+     */
+    @Deprecated
+    public DatasetService(final RestTemplate restTemplate, final DataStoreService dataStoreService) {
+        super(restTemplate);
+        this.dataStoreService = notNull(dataStoreService, "dataStoreService");
+    }
+
+    /**
      * Obtains manifest from given project by given datasetId
      *
      * @param project   project to which manifest belongs

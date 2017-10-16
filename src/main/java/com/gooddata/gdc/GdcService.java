@@ -21,6 +21,14 @@ public class GdcService extends AbstractService {
     }
 
     /**
+     * @deprecated use GdcService(RestTemplate, GoodDataSettings) constructor instead
+     */
+    @Deprecated
+    public GdcService(final RestTemplate restTemplate) {
+        super(restTemplate);
+    }
+
+    /**
      * Obtains GoodData API root links.
      *
      * @return GoodData API root links
