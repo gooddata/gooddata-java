@@ -22,7 +22,7 @@ public class ScheduledMailWhen {
 
     /**
      * Cron like recurrency pattern. Example: "0:0:0:1*12:0:0".
-     * For details, please see <a href="http://search.cpan.org/~sbeck/Date-Manip-6.49/lib/Date/Manip/Recur.pod">this comprehensive documentation</a>.
+     * For details, please see <a href="http://search.cpan.org/~sbeck/Date-Manip-6.60/lib/Date/Manip/Recur.pod">this comprehensive documentation</a>.
      */
     private String recurrency;
     private LocalDate startDate;
