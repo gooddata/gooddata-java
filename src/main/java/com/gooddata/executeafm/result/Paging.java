@@ -19,7 +19,7 @@ import static org.apache.commons.lang3.ArrayUtils.toObject;
  * Paging of {@link ExecutionResult}. Represents paging in multiple dimensions.
  */
 public class Paging {
-    private List<Integer> size;
+    private List<Integer> count;
     private List<Integer> offset;
     private List<Integer> total;
 
@@ -31,24 +31,24 @@ public class Paging {
 
     /**
      * Creates new paging
-     * @param size multiple dimensions size
+     * @param count multiple dimensions count
      * @param offset multiple dimensions offset
      * @param total multiple dimensions total
      */
     @JsonCreator
-    public Paging(@JsonProperty("size") final List<Integer> size,
+    public Paging(@JsonProperty("count") final List<Integer> count,
                   @JsonProperty("offset") final List<Integer> offset,
                   @JsonProperty("total") final List<Integer> total) {
-        this.size = notEmpty(size, "size");
+        this.count = notEmpty(count, "count");
         this.offset = notEmpty(offset, "offset");
         this.total = notEmpty(total, "total");
     }
 
     /**
-     * @return multiple dimensions size
+     * @return multiple dimensions count
      */
-    public List<Integer> getSize() {
-        return size;
+    public List<Integer> getCount() {
+        return count;
     }
 
     /**
@@ -66,12 +66,12 @@ public class Paging {
     }
 
     /**
-     * Sets size compound of given elements, each element per dimension
-     * @param size size elements
+     * Sets count compound of given elements, each element per dimension
+     * @param count count elements
      * @return this
      */
-    public Paging size(final int... size) {
-        this.size = asList(toObject(size));
+    public Paging count(final int... count) {
+        this.count = asList(toObject(count));
         return this;
     }
 
