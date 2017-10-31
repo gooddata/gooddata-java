@@ -1,0 +1,46 @@
+{
+  "executionResult": {
+    "data": [
+      "-12958511.8099999",
+      "25315434.8199999",
+      "-2748323.76",
+      "-7252542.67"
+    ],
+    "paging" : {
+      "size": [
+        4
+      ],
+      "offset": [
+        0
+      ],
+      "total": [
+        4
+      ]
+    },
+    "attributeHeaderItems": [
+      [
+        [
+          {
+            "attributeHeaderItem": {
+              "uri": "/gdc/md/FoodMartDemo/obj/124/elements?id=3200",
+              "name": "Cost of Goods Sold"
+            }
+          },
+          {
+            "attributeHeaderItem": {
+              "uri": "/gdc/md/FoodMartDemo/obj/124/elements?id=6000",
+              "name": "Salaries"
+            }
+          }
+        ]
+      ]
+    ],
+    "totals": [
+      [
+        [
+          "25"
+        ]
+      ]
+    ]
+  }
+}

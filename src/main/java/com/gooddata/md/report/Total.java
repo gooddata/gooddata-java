@@ -5,6 +5,8 @@
  */
 package com.gooddata.md.report;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import org.springframework.util.StringUtils;
 
 import static com.gooddata.util.Validate.notNull;
@@ -21,11 +23,13 @@ public enum Total {
     NAT,
     MED;
 
+    @JsonValue
     @Override
     public String toString() {
         return name().toLowerCase();
     }
 
+    @JsonCreator
     public static Total of(String total) {
         notNull(total, "total");
         try {

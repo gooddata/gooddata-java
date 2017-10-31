@@ -1,0 +1,26 @@
+{
+  "name": "dName",
+  "headers": [
+    {
+      "attributeHeader": {
+        "name": "Name",
+        "localIdentifier": "a1",
+        "uri": "/gdc/md/project_id/obj/123",
+        "identifier": "attr.dataset.name"
+      }
+    },
+    {
+      "measureGroupHeader": {
+        "items": [
+          {
+            "measureHeaderItem": {
+              "name": "Name",
+              "format": "#,##0.00",
+              "localIdentifier": "m1"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

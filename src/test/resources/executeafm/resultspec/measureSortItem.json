@@ -1,0 +1,18 @@
+{
+  "measureSortItem": {
+    "direction": "asc",
+    "locators": [
+      {
+        "measureLocatorItem": {
+          "measureIdentifier": "mId"
+        }
+      },
+      {
+        "attributeLocatorItem": {
+          "attributeIdentifier": "aId",
+          "element": "a1"
+        }
+      }
+    ]
+  }
+}
