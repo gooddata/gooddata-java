@@ -31,7 +31,7 @@ class ExecutionResultTest extends Specification {
         ExecutionResult result = readObjectFromResource("/$EXECUTION_RESULT_JSON", ExecutionResult)
 
         then:
-        result.paging.size == [4]
+        result.paging.count == [4]
         result.paging.offset == [0]
         result.paging.total == [4]
     }
@@ -52,7 +52,7 @@ class ExecutionResultTest extends Specification {
         ExecutionResult result = readObjectFromResource("/$EXECUTION_RESULT_FULL_JSON", ExecutionResult)
 
         then:
-        result.paging.size == [4]
+        result.paging.count == [4]
         result.paging.offset == [0]
         result.paging.total == [4]
 

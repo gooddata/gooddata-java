@@ -28,7 +28,7 @@ class PagingTest extends Specification {
         Paging paging = readObjectFromResource("/$PAGING_JSON", Paging)
 
         then:
-        paging.size == [4]
+        paging.count == [4]
         paging.offset == [0]
         paging.total == [4]
     }
@@ -37,12 +37,12 @@ class PagingTest extends Specification {
         when:
         Paging paging = new Paging()
         paging.offset(1, 2)
-        paging.size(3, 4)
+        paging.count(3, 4)
         paging.total(5, 6)
 
         then:
         paging.offset == [1, 2]
-        paging.size == [3, 4]
+        paging.count == [3, 4]
         paging.total == [5, 6]
     }
 }
