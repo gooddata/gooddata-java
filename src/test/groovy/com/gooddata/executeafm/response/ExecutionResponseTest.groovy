@@ -36,8 +36,8 @@ class ExecutionResponseTest extends Specification {
         ExecutionResponse response = readObjectFromResource("/$EXECUTION_RESPONSE_JSON", ExecutionResponse)
 
         then:
-        response.links['dataResult'] == 'poll'
-        response.dataResultUri == 'poll'
+        response.links['executionResult'] == 'poll'
+        response.executionResultUri == 'poll'
 
         response.dimensions.size() == 1
         response.dimensions[0].name == 'x'

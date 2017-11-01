@@ -1,7 +1,7 @@
 {
   "executionResponse": {
     "links": {
-      "dataResult": "poll"
+      "executionResult": "poll"
     },
     "dimensions": [
       {
