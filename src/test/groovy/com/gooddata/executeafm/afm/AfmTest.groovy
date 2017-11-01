@@ -15,16 +15,16 @@ import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource
 import static spock.util.matcher.HamcrestSupport.that
 
-class ObjectAfmTest extends Specification {
+class AfmTest extends Specification {
 
-    private static final String OBJECT_AFM_JSON = 'executeafm/afm/objectAfm.json'
+    private static final String OBJECT_AFM_JSON = 'executeafm/afm/afm.json'
     private static final String EMPTY_JSON = 'executeafm/empty.json'
 
     private static final UriObjQualifier QUALIFIER = new UriObjQualifier('/gdc/md/projectId/obj/1')
 
     def "should serialize full"() {
         expect:
-        that new ObjectAfm(
+        that new Afm(
                 [new AttributeItem(QUALIFIER, 'a1')],
                 [new ExpressionFilter('some expression')],
                 [new MeasureItem(new SimpleMeasureDefinition(QUALIFIER), 'mId')],
@@ -35,37 +35,37 @@ class ObjectAfmTest extends Specification {
 
     def "should serialize"() {
         expect:
-        that new ObjectAfm(),
+        that new Afm(),
                 jsonEquals(resource(EMPTY_JSON))
     }
 
     def "should deserialize"() {
         when:
-        ObjectAfm objectAfm = readObjectFromResource("/$EMPTY_JSON", ObjectAfm)
+        Afm afm = readObjectFromResource("/$EMPTY_JSON", Afm)
 
         then:
-        objectAfm.measures == null
-        objectAfm.filters == null
-        objectAfm.attributes == null
-        objectAfm.nativeTotals == null
+        afm.measures == null
+        afm.filters == null
+        afm.attributes == null
+        afm.nativeTotals == null
     }
 
     def "should deserialize full"() {
         when:
-        ObjectAfm objectAfm = readObjectFromResource("/$OBJECT_AFM_JSON", ObjectAfm)
+        Afm afm = readObjectFromResource("/$OBJECT_AFM_JSON", Afm)
 
         then:
-        objectAfm.measures.size() == 1
-        objectAfm.filters.size() == 1
-        objectAfm.attributes.size() == 1
-        objectAfm.nativeTotals.size() == 1
+        afm.measures.size() == 1
+        afm.filters.size() == 1
+        afm.attributes.size() == 1
+        afm.nativeTotals.size() == 1
     }
 
     def "should get attribute and measure"() {
         given:
         def attribute = new AttributeItem(QUALIFIER, 'localIdA')
         def measure = new MeasureItem(new SimpleMeasureDefinition(QUALIFIER), 'localIdM')
-        def afm = new ObjectAfm([attribute], null, [measure], null)
+        def afm = new Afm([attribute], null, [measure], null)
 
         expect:
         afm.getAttribute('localIdA') == attribute
@@ -75,7 +75,7 @@ class ObjectAfmTest extends Specification {
     @Unroll
     def "should throw when get for nonexistent #item"() {
         when:
-        new ObjectAfm()."get$item"()
+        new Afm()."get$item"()
 
         then:
         thrown(IllegalArgumentException)
@@ -86,7 +86,7 @@ class ObjectAfmTest extends Specification {
 
     def "should add properties"() {
         when:
-        def afm = new ObjectAfm()
+        def afm = new Afm()
         afm.addFilter(Spy(CompatibilityFilter))
         afm.addAttribute(new AttributeItem(new IdentifierObjQualifier('id'), 'localIdA'))
         afm.addMeasure(new MeasureItem(Spy(MeasureDefinition), 'mId'))

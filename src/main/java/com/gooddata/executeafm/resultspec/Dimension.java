@@ -8,6 +8,7 @@ package com.gooddata.executeafm.resultspec;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.executeafm.afm.Afm;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collections;
@@ -39,7 +40,7 @@ public class Dimension {
     /**
      * Creates new instance
      * @param name dimension name
-     * @param itemIdentifiers identifiers referencing attributes from {@link com.gooddata.executeafm.afm.ObjectAfm} or {@link Dimension#MEASURE_GROUP}
+     * @param itemIdentifiers identifiers referencing attributes from {@link Afm} or {@link Dimension#MEASURE_GROUP}
      * @param totals set of totals
      */
     @JsonCreator
@@ -55,7 +56,7 @@ public class Dimension {
     /**
      * Creates new instance
      * @param name dimension name
-     * @param itemIdentifiers identifiers referencing attributes from {@link com.gooddata.executeafm.afm.ObjectAfm} or {@link Dimension#MEASURE_GROUP}
+     * @param itemIdentifiers identifiers referencing attributes from {@link Afm} or {@link Dimension#MEASURE_GROUP}
      */
     public Dimension(final String name, final String... itemIdentifiers) {
         this(name, asList(itemIdentifiers), null);

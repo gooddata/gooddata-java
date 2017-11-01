@@ -8,7 +8,7 @@ package com.gooddata.executeafm.resultspec;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.executeafm.afm.ObjectAfm;
+import com.gooddata.executeafm.afm.Afm;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.List;
 import static com.gooddata.util.Validate.notNull;
 
 /**
- * Represents the result specification of executed {@link ObjectAfm}
+ * Represents the result specification of executed {@link Afm}
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResultSpec {

@@ -24,7 +24,7 @@ class ExecutionTest extends Specification {
     def "should serialize"() {
         expect:
         that new Execution(
-                new ObjectAfm(
+                new Afm(
                         [new AttributeItem(QUALIFIER, 'a1')],
                         [new ExpressionFilter('some expression')],
                         [new MeasureItem(new SimpleMeasureDefinition(QUALIFIER), 'm1')],
@@ -37,7 +37,7 @@ class ExecutionTest extends Specification {
     def "should serialize full"() {
         expect:
         that new Execution(
-                new ObjectAfm(
+                new Afm(
                         [new AttributeItem(QUALIFIER, 'a1')],
                         [new ExpressionFilter('some expression')],
                         [new MeasureItem(new SimpleMeasureDefinition(QUALIFIER), 'm1')],
@@ -78,7 +78,7 @@ class ExecutionTest extends Specification {
 
     def "should change resultSpec"() {
         given:
-        Execution computation = new Execution(new ObjectAfm())
+        Execution computation = new Execution(new Afm())
         ResultSpec spec = new ResultSpec()
 
         when:

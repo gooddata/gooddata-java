@@ -23,7 +23,7 @@ import static java.lang.String.format;
  * Attributes Filters and Measures in so called object form (could have MAQL form in future)
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ObjectAfm {
+public class Afm {
 
     private List<AttributeItem> attributes;
     private List<CompatibilityFilter> filters;
@@ -31,17 +31,17 @@ public class ObjectAfm {
     private List<NativeTotalItem> nativeTotals;
 
     @JsonCreator
-    public ObjectAfm(@JsonProperty("attributes") final List<AttributeItem> attributes,
-                     @JsonProperty("filters") final List<CompatibilityFilter> filters,
-                     @JsonProperty("measures") final List<MeasureItem> measures,
-                     @JsonProperty("nativeTotals") final List<NativeTotalItem> nativeTotals) {
+    public Afm(@JsonProperty("attributes") final List<AttributeItem> attributes,
+               @JsonProperty("filters") final List<CompatibilityFilter> filters,
+               @JsonProperty("measures") final List<MeasureItem> measures,
+               @JsonProperty("nativeTotals") final List<NativeTotalItem> nativeTotals) {
         this.attributes = attributes;
         this.filters = filters;
         this.measures = measures;
         this.nativeTotals = nativeTotals;
     }
 
-    public ObjectAfm() {
+    public Afm() {
     }
 
     /**
@@ -72,7 +72,7 @@ public class ObjectAfm {
         this.attributes = attributes;
     }
 
-    public ObjectAfm addAttribute(final AttributeItem attribute) {
+    public Afm addAttribute(final AttributeItem attribute) {
         if (attributes == null) {
             setAttributes(new ArrayList<>());
         }
@@ -88,7 +88,7 @@ public class ObjectAfm {
         this.filters = filters;
     }
 
-    public ObjectAfm addFilter(final CompatibilityFilter filter) {
+    public Afm addFilter(final CompatibilityFilter filter) {
         if (filters == null) {
             setFilters(new ArrayList<>());
         }
@@ -104,7 +104,7 @@ public class ObjectAfm {
         this.measures = measures;
     }
 
-    public ObjectAfm addMeasure(final MeasureItem measure) {
+    public Afm addMeasure(final MeasureItem measure) {
         if (measures == null) {
             setMeasures(new ArrayList<>());
         }
@@ -120,7 +120,7 @@ public class ObjectAfm {
         this.nativeTotals = nativeTotals;
     }
 
-    public ObjectAfm addNativeTotal(final NativeTotalItem total) {
+    public Afm addNativeTotal(final NativeTotalItem total) {
         if (nativeTotals == null) {
             setNativeTotals(new ArrayList<>());
         }

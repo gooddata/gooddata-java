@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gooddata.executeafm.afm.ObjectAfm;
+import com.gooddata.executeafm.afm.Afm;
 import com.gooddata.executeafm.resultspec.ResultSpec;
 import com.gooddata.util.GoodDataToStringBuilder;
 
@@ -22,21 +22,21 @@ import com.gooddata.util.GoodDataToStringBuilder;
 @JsonTypeName("execution")
 public class Execution {
 
-    private final ObjectAfm afm;
+    private final Afm afm;
     private ResultSpec resultSpec;
 
     @JsonCreator
-    public Execution(@JsonProperty("afm") final ObjectAfm afm,
+    public Execution(@JsonProperty("afm") final Afm afm,
                      @JsonProperty("resultSpec") final ResultSpec resultSpec) {
         this.afm = afm;
         this.resultSpec = resultSpec;
     }
 
-    public Execution(final ObjectAfm afm) {
+    public Execution(final Afm afm) {
         this.afm = afm;
     }
 
-    public ObjectAfm getAfm() {
+    public Afm getAfm() {
         return afm;
     }
 
