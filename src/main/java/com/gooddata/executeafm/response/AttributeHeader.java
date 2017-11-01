@@ -8,6 +8,7 @@ package com.gooddata.executeafm.response;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.gooddata.executeafm.afm.Afm;
 import com.gooddata.executeafm.afm.LocallyIdentifiable;
 
 import java.util.List;
@@ -72,7 +73,7 @@ public class AttributeHeader extends Header implements LocallyIdentifiable {
 
     /**
      * Local identifier referencing header's {@link com.gooddata.executeafm.afm.AttributeItem}
-     *  within {@link com.gooddata.executeafm.afm.ObjectAfm}
+     *  within {@link Afm}
      * @return attribute's local identifier
      */
     @Override

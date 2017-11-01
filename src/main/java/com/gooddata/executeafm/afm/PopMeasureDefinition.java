@@ -26,7 +26,7 @@ public class PopMeasureDefinition implements MeasureDefinition {
     private final ObjQualifier popAttribute;
 
     /**
-     * Creates new definition from given measure identifier referencing another measure in {@link ObjectAfm} and given
+     * Creates new definition from given measure identifier referencing another measure in {@link Afm} and given
      * attribute qualifier (should qualify date attribute)
      * @param measureIdentifier measure identifier
      * @param popAttribute "period over period" date attribute

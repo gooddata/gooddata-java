@@ -12,7 +12,7 @@ import com.gooddata.executeafm.ObjQualifier;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 /**
- * Represents attribute within {@link ObjectAfm}
+ * Represents attribute within {@link Afm}
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AttributeItem implements LocallyIdentifiable {
@@ -24,7 +24,7 @@ public class AttributeItem implements LocallyIdentifiable {
     /**
      * Creates new instance
      * @param displayForm qualifier of {@link com.gooddata.md.AttributeDisplayForm} representing the attribute
-     * @param localIdentifier local identifier, unique within {@link ObjectAfm}
+     * @param localIdentifier local identifier, unique within {@link Afm}
      * @param alias attribute alias
      */
     @JsonCreator
@@ -39,7 +39,7 @@ public class AttributeItem implements LocallyIdentifiable {
     /**
      * Creates new instance
      * @param displayForm qualifier of {@link com.gooddata.md.AttributeDisplayForm} representing the attribute
-     * @param localIdentifier local identifier, unique within {@link ObjectAfm}
+     * @param localIdentifier local identifier, unique within {@link Afm}
      */
     public AttributeItem(final ObjQualifier displayForm, final String localIdentifier) {
         this.displayForm = displayForm;

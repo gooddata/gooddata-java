@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.executeafm.afm.Afm;
 import com.gooddata.executeafm.afm.LocallyIdentifiable;
 import com.gooddata.util.GoodDataToStringBuilder;
 
@@ -65,7 +66,7 @@ public class MeasureHeaderItem implements LocallyIdentifiable {
 
     /**
      * Local identifier, referencing the {@link com.gooddata.executeafm.afm.MeasureItem}
-     * in {@link com.gooddata.executeafm.afm.ObjectAfm}
+     * in {@link Afm}
      * @return local identifier
      */
     @Override

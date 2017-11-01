@@ -10,7 +10,7 @@ package com.gooddata.executeafm.afm;
  */
 public interface LocallyIdentifiable {
     /**
-     * @return value of local identifier, unique within {@link ObjectAfm}
+     * @return value of local identifier, unique within {@link Afm}
      */
     String getLocalIdentifier();
 }

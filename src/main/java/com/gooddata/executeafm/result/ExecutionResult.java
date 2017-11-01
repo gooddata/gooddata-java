@@ -6,18 +6,15 @@
 package com.gooddata.executeafm.result;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gooddata.executeafm.afm.ObjectAfm;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.gooddata.util.Validate.notNull;
 import static java.util.Arrays.asList;
