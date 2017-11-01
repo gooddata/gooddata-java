@@ -32,19 +32,19 @@ import static org.apache.commons.lang3.ArrayUtils.toObject;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ExecutionResponse {
 
-    private static final String DATA_RESULT_LINK = "dataResult";
+    private static final String EXECUTION_RESULT_LINK = "executionResult";
 
     private final List<ResultDimension> dimensions;
     private final Map<String, String> links;
 
     /**
-     * Creates new instance of given dimensions and data result uri.
+     * Creates new instance of given dimensions and execution result uri.
      * @param dimensions dimensions
-     * @param dataResultUri data result uri
+     * @param executionResultUri execution result uri
      */
-    public ExecutionResponse(final List<ResultDimension> dimensions, final String dataResultUri) {
+    public ExecutionResponse(final List<ResultDimension> dimensions, final String executionResultUri) {
         this(dimensions, new LinkedHashMap<>());
-        links.put(DATA_RESULT_LINK, notEmpty(dataResultUri, "dataResultUri"));
+        links.put(EXECUTION_RESULT_LINK, notEmpty(executionResultUri, "executionResultUri"));
     }
 
     @JsonCreator
@@ -72,11 +72,11 @@ public class ExecutionResponse {
 
     /**
      * Uri referencing the data result location.
-     * @return data result uri
+     * @return execution result uri
      */
     @JsonIgnore
-    public String getDataResultUri() {
-        return notNullState(links, "links").get(DATA_RESULT_LINK);
+    public String getExecutionResultUri() {
+        return notNullState(links, "links").get(EXECUTION_RESULT_LINK);
     }
 
     @Override
