@@ -28,10 +28,11 @@ public class TagsDeserializer extends JsonDeserializer<Set<String>> {
         final JsonNode root = jp.readValueAsTree();
         notNull(root, "jsonNode");
         if (root.isTextual()) {
-            final Scanner scanner = new Scanner(root.textValue());
             final HashSet<String> tags = new HashSet<>();
-            while (scanner.hasNext()) {
-                tags.add(scanner.next());
+            try (final Scanner scanner = new Scanner(root.textValue())) {
+                while (scanner.hasNext()) {
+                    tags.add(scanner.next());
+                }
             }
             return tags;
         } else {
