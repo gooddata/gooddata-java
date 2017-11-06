@@ -41,7 +41,6 @@
     "resultSpec": {
       "dimensions": [
         {
-          "name": "dName",
           "itemIdentifiers": [
             "i1"
           ],

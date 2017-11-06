@@ -18,7 +18,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 import static java.util.Arrays.asList;
 
@@ -33,37 +32,36 @@ public class Dimension {
      */
     public static final String MEASURE_GROUP = "measureGroup";
 
-    private final String name;
     private final List<String> itemIdentifiers;
     private Set<TotalItem> totals;
 
     /**
      * Creates new instance
-     * @param name dimension name
      * @param itemIdentifiers identifiers referencing attributes from {@link Afm} or {@link Dimension#MEASURE_GROUP}
      * @param totals set of totals
      */
     @JsonCreator
     public Dimension(
-            @JsonProperty("name") final String name,
             @JsonProperty("itemIdentifiers") final List<String> itemIdentifiers,
             @JsonProperty("totals") final Set<TotalItem> totals) {
-        this.name = notEmpty(name, "name");
         this.itemIdentifiers = itemIdentifiers;
         this.totals = totals;
     }
 
     /**
      * Creates new instance
-     * @param name dimension name
      * @param itemIdentifiers identifiers referencing attributes from {@link Afm} or {@link Dimension#MEASURE_GROUP}
      */
-    public Dimension(final String name, final String... itemIdentifiers) {
-        this(name, asList(itemIdentifiers), null);
+    public Dimension(final List<String> itemIdentifiers) {
+        this.itemIdentifiers = itemIdentifiers;
     }
 
-    public String getName() {
-        return name;
+    /**
+     * Creates new instance
+     * @param itemIdentifiers identifiers referencing attributes from {@link Afm} or {@link Dimension#MEASURE_GROUP}
+     */
+    public Dimension(final String... itemIdentifiers) {
+        this(asList(itemIdentifiers));
     }
 
     public List<String> getItemIdentifiers() {

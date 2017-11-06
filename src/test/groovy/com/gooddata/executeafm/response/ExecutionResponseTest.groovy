@@ -20,7 +20,7 @@ class ExecutionResponseTest extends Specification {
         expect:
         that new ExecutionResponse(
                 [
-                        new ResultDimension('x',
+                        new ResultDimension(
                                 new AttributeHeader('Account', 'account', '/gdc/md/FoodMartDemo/obj/124', 'attr.account'),
                                 new AttributeHeader('Account Type', 'accountType', '/gdc/md/FoodMartDemo/obj/113', 'attr.accountType'),
                                 new MeasureGroupHeader([
@@ -40,7 +40,6 @@ class ExecutionResponseTest extends Specification {
         response.executionResultUri == 'poll'
 
         response.dimensions.size() == 1
-        response.dimensions[0].name == 'x'
         response.dimensions[0].headers.size() == 3
 
         AttributeHeader account = response.dimensions[0].headers[0] as AttributeHeader
