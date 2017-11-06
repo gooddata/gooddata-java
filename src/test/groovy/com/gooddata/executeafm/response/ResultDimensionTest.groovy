@@ -19,7 +19,7 @@ class ResultDimensionTest extends Specification {
 
     def "should serialize"() {
         expect:
-        that new ResultDimension('dName',
+        that new ResultDimension(
                 new AttributeHeader('Name', 'a1', '/gdc/md/project_id/obj/123', 'attr.dataset.name'),
                 new MeasureGroupHeader([new MeasureHeaderItem('Name', '#,##0.00', 'm1')])),
                 jsonEquals(resource(RESULT_DIMENSION_JSON))
@@ -30,7 +30,6 @@ class ResultDimensionTest extends Specification {
         ResultDimension dimension = readObjectFromResource("/$RESULT_DIMENSION_JSON", ResultDimension)
 
         then:
-        dimension.name == 'dName'
         dimension.headers.size() == 2
         dimension.headers[0].localIdentifier == 'a1'
         dimension.headers[1].items.first().localIdentifier == 'm1'

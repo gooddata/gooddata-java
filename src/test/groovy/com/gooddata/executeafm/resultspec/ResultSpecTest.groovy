@@ -20,7 +20,7 @@ class ResultSpecTest extends Specification {
     def "should serialize full"() {
         expect:
         that new ResultSpec(
-                [new Dimension('dName', 'i1')],
+                [new Dimension('i1')],
                 [
                         new AttributeSortItem(Direction.ASC, 'aId'),
                         new MeasureSortItem(Direction.ASC,
@@ -53,7 +53,6 @@ class ResultSpecTest extends Specification {
 
         then:
         with(resultSpec) {
-            dimensions[0].name == 'dName'
             dimensions[0].itemIdentifiers == ['i1']
         }
 
@@ -77,12 +76,11 @@ class ResultSpecTest extends Specification {
     def "should add items"() {
         when:
         def resultSpec = new ResultSpec()
-            .addDimension(new Dimension('dName'))
+            .addDimension(new Dimension([]))
             .addSort(new MeasureSortItem(Direction.ASC))
 
         then:
         with(resultSpec) {
-            dimensions.first().name == 'dName'
             sorts.size() == 1
         }
     }
