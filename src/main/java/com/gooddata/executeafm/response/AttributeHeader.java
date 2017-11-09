@@ -10,16 +10,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.executeafm.afm.Afm;
 import com.gooddata.executeafm.afm.LocallyIdentifiable;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.List;
 
 import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Header of an attribute.
  */
 @JsonRootName(AttributeHeader.NAME)
-public class AttributeHeader extends Header implements LocallyIdentifiable {
+public class AttributeHeader implements Header, LocallyIdentifiable {
 
     static final String NAME = "attributeHeader";
 
@@ -27,6 +29,8 @@ public class AttributeHeader extends Header implements LocallyIdentifiable {
     private final String localIdentifier;
     private final String uri;
     private final String identifier;
+
+    private List<TotalHeaderItem> totalItems;
 
     /**
      * Creates new header
@@ -56,11 +60,11 @@ public class AttributeHeader extends Header implements LocallyIdentifiable {
                            @JsonProperty("uri") final String uri,
                            @JsonProperty("identifier") final String identifier,
                            @JsonProperty("totalItems") final List<TotalHeaderItem> totalHeaderItems) {
-        super(totalHeaderItems);
         this.name = notEmpty(name, "name");
         this.localIdentifier = notEmpty(localIdentifier, "localIdentifier");
         this.uri = notEmpty(uri, "uri");
         this.identifier = notEmpty(identifier, "identifier");
+        this.totalItems = totalHeaderItems;
     }
 
     /**
@@ -96,4 +100,18 @@ public class AttributeHeader extends Header implements LocallyIdentifiable {
     public String getIdentifier() {
         return identifier;
     }
+
+    /**
+     * Totals' headers belonging to the same level as this header.
+     * @return lists of totals' header
+     */
+    public List<TotalHeaderItem> getTotalItems() {
+        return totalItems;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
+    }
+
 }

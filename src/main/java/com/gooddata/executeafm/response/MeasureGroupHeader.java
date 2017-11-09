@@ -8,6 +8,7 @@ package com.gooddata.executeafm.response;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * Header of a measure group.
  */
 @JsonRootName(MeasureGroupHeader.NAME)
-public class MeasureGroupHeader extends Header {
+public class MeasureGroupHeader implements Header {
 
     static final String NAME = "measureGroupHeader";
 
@@ -25,19 +26,8 @@ public class MeasureGroupHeader extends Header {
      * Creates new header
      * @param items header items
      */
-    public MeasureGroupHeader(final List<MeasureHeaderItem> items) {
-        this.items = items;
-    }
-
-    /**
-     * Creates new header
-     * @param items header items
-     * @param totalHeaderItems total header items
-     */
     @JsonCreator
-    public MeasureGroupHeader(@JsonProperty("items") final List<MeasureHeaderItem> items,
-                              @JsonProperty("totalItems") final List<TotalHeaderItem> totalHeaderItems) {
-        super(totalHeaderItems);
+    public MeasureGroupHeader(@JsonProperty("items") final List<MeasureHeaderItem> items) {
         this.items = items;
     }
 
@@ -47,5 +37,10 @@ public class MeasureGroupHeader extends Header {
      */
     public List<MeasureHeaderItem> getItems() {
         return items;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 }
