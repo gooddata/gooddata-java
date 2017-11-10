@@ -13,14 +13,16 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import static com.gooddata.executeafm.result.AttributeHeaderItem.NAME;
+
 /**
  * Header item for attribute
  */
-@JsonTypeName("attributeHeaderItem")
-@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-public class AttributeHeaderItem {
+@JsonRootName(NAME)
+public class AttributeHeaderItem extends ResultHeaderItem {
 
-    private final String name;
+    static final String NAME = "attributeHeaderItem";
+
     private final String uri;
 
     /**
@@ -30,15 +32,8 @@ public class AttributeHeaderItem {
      */
     @JsonCreator
     public AttributeHeaderItem(@JsonProperty("name") final String name, @JsonProperty("uri") final String uri) {
-        this.name = name;
+        super(name);
         this.uri = uri;
-    }
-
-    /**
-     * @return item name
-     */
-    public String getName() {
-        return name;
     }
 
     /**

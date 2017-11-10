@@ -56,7 +56,7 @@ class ExecutionResultTest extends Specification {
         result.paging.offset == [0]
         result.paging.total == [4]
 
-        def accountHeaderItems = result.attributeHeaderItems
+        def accountHeaderItems = result.headerItems
         accountHeaderItems[0][0][0].uri == '/gdc/md/FoodMartDemo/obj/124/elements?id=3200'
         accountHeaderItems[0][0][0].name == 'Cost of Goods Sold'
         accountHeaderItems[0][0][1].uri == '/gdc/md/FoodMartDemo/obj/124/elements?id=6000'
@@ -71,12 +71,12 @@ class ExecutionResultTest extends Specification {
     def "should set properties"() {
         when:
         ExecutionResult result = new ExecutionResult([1] as String[], new Paging())
-        result.addAttributeHeaderItems([[new AttributeHeaderItem("n", "u")]])
+        result.addHeaderItems([[new AttributeHeaderItem("n", "u")]])
         result.setTotals([[[1]]])
 
         then:
-        result.getAttributeHeaderItems()[0][0][0].name == "n"
-        result.getAttributeHeaderItems()[0][0][0].uri == "u"
+        result.getHeaderItems()[0][0][0].name == "n"
+        result.getHeaderItems()[0][0][0].uri == "u"
 
         result.getTotals() == [[[1]]]
     }

@@ -34,7 +34,7 @@ public class ExecutionResult {
 
     @JsonProperty("data")
     private List data;
-    private List<List<List<AttributeHeaderItem>>> attributeHeaderItems;
+    private List<List<List<ResultHeaderItem>>> headerItems;
     private List<List<List<String>>> totals;
 
     /**
@@ -61,17 +61,17 @@ public class ExecutionResult {
      * Creates new result
      * @param data result data
      * @param paging result paging
-     * @param attributeHeaderItems items for attribute headers, for each attribute in each dimension, there is a list of headers
+     * @param headerItems items for headers, for each header in each dimension, there is a list of header items
      * @param totals data of totals, for each total in each dimension, there is a list of total's values
      */
     @JsonCreator
     ExecutionResult(@JsonProperty("data") final List data,
                            @JsonProperty("paging") final Paging paging,
-                           @JsonProperty("attributeHeaderItems") final List<List<List<AttributeHeaderItem>>> attributeHeaderItems,
+                           @JsonProperty("headerItems") final List<List<List<ResultHeaderItem>>> headerItems,
                            @JsonProperty("totals") final List<List<List<String>>> totals) {
         this.data = data;
         this.paging = paging;
-        this.attributeHeaderItems = attributeHeaderItems;
+        this.headerItems = headerItems;
         this.totals = totals;
     }
 
@@ -83,29 +83,29 @@ public class ExecutionResult {
     }
 
     /**
-     * @return attribute header items, for each attribute in each dimension, there is a list of headers
+     * @return header items, for each header in each dimension, there is a list of header items
      */
-    public List<List<List<AttributeHeaderItem>>> getAttributeHeaderItems() {
-        return attributeHeaderItems;
+    public List<List<List<ResultHeaderItem>>> getHeaderItems() {
+        return headerItems;
     }
 
     /**
-     * Sets attribute header items, for each attribute in each dimension, there is a list of headers
-     * @param attributeHeaderItems header items
+     * Sets header items, for each header in each dimension, there is a list of header items
+     * @param headerItems header items
      */
-    public void setAttributeHeaderItems(final List<List<List<AttributeHeaderItem>>> attributeHeaderItems) {
-        this.attributeHeaderItems = attributeHeaderItems;
+    public void setHeaderItems(final List<List<List<ResultHeaderItem>>> headerItems) {
+        this.headerItems = headerItems;
     }
 
     /**
-     * Add attribute header items for next dimension (this method will add dimension in attribute header items)
+     * Add header items for next dimension (this method will add dimension in header items)
      * @param items header items for one dimension
      */
-    public void addAttributeHeaderItems(final List<List<AttributeHeaderItem>> items) {
-        if (attributeHeaderItems == null) {
-            setAttributeHeaderItems(new ArrayList<>());
+    public void addHeaderItems(final List<List<ResultHeaderItem>> items) {
+        if (headerItems == null) {
+            setHeaderItems(new ArrayList<>());
         }
-        attributeHeaderItems.add(items);
+        headerItems.add(items);
     }
 
     /**
