@@ -15,13 +15,6 @@ import static spock.util.matcher.HamcrestSupport.that
 class MeasureGroupHeaderTest extends Specification {
 
     private static final String MEASURE_GROUP_HEADER_JSON = 'executeafm/response/measureGroupHeader.json'
-    private static final String MEASURE_GROUP_HEADER_FULL_JSON = 'executeafm/response/measureGroupHeaderFull.json'
-
-    def "should serialize full"() {
-        expect:
-        that new MeasureGroupHeader([new MeasureHeaderItem('Name', '#,##0.00', 'm1')], [new TotalHeaderItem('sum')]),
-                jsonEquals(resource(MEASURE_GROUP_HEADER_FULL_JSON))
-    }
 
     def "should serialize"() {
         expect:
@@ -36,17 +29,5 @@ class MeasureGroupHeaderTest extends Specification {
         then:
         header.items?.size() == 1
         header.items.first().localIdentifier == 'm1'
-    }
-
-    def "should deserialize full"() {
-        when:
-        MeasureGroupHeader header = readObjectFromResource("/$MEASURE_GROUP_HEADER_FULL_JSON", MeasureGroupHeader)
-
-        then:
-        header.items?.size() == 1
-        header.items.first().localIdentifier == 'm1'
-        header.totalItems.size() == 1
-        header.totalItems.first().name == 'sum'
-        header.toString()
     }
 }

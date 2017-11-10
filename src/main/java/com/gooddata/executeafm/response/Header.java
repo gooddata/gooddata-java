@@ -21,34 +21,5 @@ import java.util.List;
         @JsonSubTypes.Type(value = MeasureGroupHeader.class, name = MeasureGroupHeader.NAME),
         @JsonSubTypes.Type(value = AttributeHeader.class, name = AttributeHeader.NAME)
 })
-public abstract class Header {
-    private List<TotalHeaderItem> totalItems;
-
-    /**
-     * Creates new header
-     */
-    protected Header() {
-    }
-
-    /**
-     * Creates new header of given total items
-     * @param totalItems total header items
-     */
-    protected Header(final List<TotalHeaderItem> totalItems) {
-        this.totalItems = totalItems;
-    }
-
-    /**
-     * Totals' headers belonging to the same level as this header.
-     * @return lists of totals' header
-     */
-    public List<TotalHeaderItem> getTotalItems() {
-        return totalItems;
-    }
-
-    @Override
-    public String toString() {
-        return GoodDataToStringBuilder.defaultToString(this);
-    }
-
+public interface Header {
 }
