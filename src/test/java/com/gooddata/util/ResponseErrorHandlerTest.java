@@ -5,8 +5,8 @@
  */
 package com.gooddata.util;
 
-import com.gooddata.GoodData;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.gdc.Header;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -104,7 +104,7 @@ public class ResponseErrorHandlerTest {
         final ClientHttpResponse response = prepareResponse();
         final HttpHeaders headers = new HttpHeaders();
         when(response.getHeaders()).thenReturn(headers);
-        headers.set(GoodData.GDC_REQUEST_ID_HEADER, "requestId");
+        headers.set(Header.GDC_REQUEST_ID, "requestId");
         headers.setContentType(MediaType.APPLICATION_JSON);
         when(response.getBody()).thenReturn(readFromResource(resourcePath));
         return response;
