@@ -12,6 +12,7 @@ import com.gooddata.dataload.OutputStageService;
 import com.gooddata.dataload.processes.ProcessService;
 import com.gooddata.export.ExportService;
 import com.gooddata.featureflag.FeatureFlagService;
+import com.gooddata.gdc.Header;
 import com.gooddata.md.maintenance.ExportImportService;
 import com.gooddata.notification.NotificationService;
 import com.gooddata.projecttemplate.ProjectTemplateService;
@@ -58,7 +59,11 @@ import static org.apache.http.util.VersionInfo.loadVersionInfo;
  */
 public class GoodData {
 
-    public static final String GDC_REQUEST_ID_HEADER = "X-GDC-REQUEST";
+    /**
+     * @deprecated use {@link Header#GDC_REQUEST_ID} instead.
+     */
+    @Deprecated
+    public static final String GDC_REQUEST_ID_HEADER = Header.GDC_REQUEST_ID;
 
     protected static final String PROTOCOL = GoodDataEndpoint.PROTOCOL;
     protected static final int PORT = GoodDataEndpoint.PORT;

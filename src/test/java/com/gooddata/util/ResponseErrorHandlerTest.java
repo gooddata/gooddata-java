@@ -5,8 +5,8 @@
  */
 package com.gooddata.util;
 
-import com.gooddata.GoodData;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.gdc.Header;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,7 +42,7 @@ public class ResponseErrorHandlerTest {
 
         final GoodDataRestException exc = assertException(response);
 
-        assertThat(exc.getMessage(), is("500: [requestId=REQ] MSG"));
+        assertThat(exc.getMessage(), is("500: [request_id=REQ] MSG"));
         assertThat(exc.getStatusCode(), is(500));
         assertThat(exc.getRequestId(), is("REQ"));
         assertThat(exc.getComponent(), is("COMPONENT"));
@@ -57,7 +57,7 @@ public class ResponseErrorHandlerTest {
 
         final GoodDataRestException exc = assertException(response);
 
-        assertThat(exc.getMessage(), is("500: [requestId=REQ] MSG PARAM1 PARAM2 3"));
+        assertThat(exc.getMessage(), is("500: [request_id=REQ] MSG PARAM1 PARAM2 3"));
         assertThat(exc.getStatusCode(), is(500));
         assertThat(exc.getRequestId(), is("REQ"));
         assertThat(exc.getComponent(), is("COMPONENT"));
@@ -72,7 +72,7 @@ public class ResponseErrorHandlerTest {
 
         final GoodDataRestException exc = assertException(response);
 
-        assertThat(exc.getMessage(), is("500: [requestId=requestId] Unknown error"));
+        assertThat(exc.getMessage(), is("500: [request_id=requestId] Unknown error"));
         assertThat(exc.getStatusCode(), is(500));
         assertThat(exc.getRequestId(), is("requestId"));
         assertThat(exc.getComponent(), is(nullValue()));
@@ -104,7 +104,7 @@ public class ResponseErrorHandlerTest {
         final ClientHttpResponse response = prepareResponse();
         final HttpHeaders headers = new HttpHeaders();
         when(response.getHeaders()).thenReturn(headers);
-        headers.set(GoodData.GDC_REQUEST_ID_HEADER, "requestId");
+        headers.set(Header.GDC_REQUEST_ID, "requestId");
         headers.setContentType(MediaType.APPLICATION_JSON);
         when(response.getBody()).thenReturn(readFromResource(resourcePath));
         return response;
