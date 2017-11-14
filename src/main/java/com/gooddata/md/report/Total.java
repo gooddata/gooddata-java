@@ -9,6 +9,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.gooddata.util.Validate.notNull;
 import static java.lang.String.format;
 
@@ -40,5 +43,14 @@ public enum Total {
                             total, StringUtils.arrayToCommaDelimitedString(Total.values())),
                     e);
         }
+    }
+
+    /**
+     * Ordered list of totals
+     *
+     * @return ordered list of totals which refers to order of totals data returned by the executor in executionResult
+     */
+    public static List<Total> orderedValues() {
+        return Arrays.asList(SUM, MAX, MIN, AVG, MED, NAT);
     }
 }
