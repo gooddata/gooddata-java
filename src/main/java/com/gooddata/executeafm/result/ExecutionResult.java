@@ -30,10 +30,9 @@ import static org.apache.commons.lang3.ArrayUtils.toObject;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ExecutionResult {
 
+    private final DataList data;
     private final Paging paging;
 
-    @JsonProperty("data")
-    private List data;
     private List<List<List<ResultHeaderItem>>> headerItems;
     private List<List<List<String>>> totals;
 
@@ -43,7 +42,7 @@ public class ExecutionResult {
      * @param paging result paging
      */
     public ExecutionResult(final String[] data, final Paging paging) {
-        this.data = asList(notNull(data, "data"));
+        this.data = new DataList(notNull(data, "data"));
         this.paging = notNull(paging, "paging");
     }
 
@@ -53,7 +52,7 @@ public class ExecutionResult {
      * @param paging result paging
      */
     public ExecutionResult(final String[][] data, final Paging paging) {
-        this.data = stream(notNull(data, "data")).map(Arrays::asList).collect(toList());
+        this.data = new DataList(notNull(data, "data"));
         this.paging = notNull(paging, "paging");
     }
 
@@ -65,7 +64,7 @@ public class ExecutionResult {
      * @param totals data of totals, for each total in each dimension, there is a list of total's values
      */
     @JsonCreator
-    ExecutionResult(@JsonProperty("data") final List data,
+    ExecutionResult(@JsonProperty("data") final DataList data,
                            @JsonProperty("paging") final Paging paging,
                            @JsonProperty("headerItems") final List<List<List<ResultHeaderItem>>> headerItems,
                            @JsonProperty("totals") final List<List<List<String>>> totals) {
@@ -73,6 +72,13 @@ public class ExecutionResult {
         this.paging = paging;
         this.headerItems = headerItems;
         this.totals = totals;
+    }
+
+    /**
+     * @return result data
+     */
+    public DataList getData() {
+        return data;
     }
 
     /**

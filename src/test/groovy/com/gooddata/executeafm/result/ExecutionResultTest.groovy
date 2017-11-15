@@ -38,7 +38,7 @@ class ExecutionResultTest extends Specification {
 
     def "should serialize full"() {
         expect:
-        that new ExecutionResult(DATA as List,
+        that new ExecutionResult(new DataList(DATA.collect{new DataValue(it)}),
                 new Paging([4], [0], [4]),
                 [[[
                   new AttributeHeaderItem('Cost of Goods Sold', '/gdc/md/FoodMartDemo/obj/124/elements?id=3200'),
