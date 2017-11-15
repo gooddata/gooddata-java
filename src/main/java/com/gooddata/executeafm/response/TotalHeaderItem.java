@@ -9,7 +9,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.md.report.Total;
 import com.gooddata.util.GoodDataToStringBuilder;
+
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Header of total
@@ -27,6 +30,14 @@ public class TotalHeaderItem {
     @JsonCreator
     public TotalHeaderItem(@JsonProperty("name") final String name) {
         this.name = name;
+    }
+
+    /**
+     * Creates new header
+     * @param total total value
+     */
+    public TotalHeaderItem(final Total total) {
+        this(notNull(total, "total").toString());
     }
 
     /**

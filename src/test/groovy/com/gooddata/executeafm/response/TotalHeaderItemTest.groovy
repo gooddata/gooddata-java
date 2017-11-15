@@ -5,6 +5,7 @@
  */
 package com.gooddata.executeafm.response
 
+import com.gooddata.md.report.Total
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -18,7 +19,7 @@ class TotalHeaderItemTest extends Specification {
 
     def "should serialize"() {
         expect:
-        that new TotalHeaderItem('avg'),
+        that new TotalHeaderItem(Total.AVG),
                 jsonEquals(resource(TOTAL_HEADER_ITEM_JSON))
     }
 
