@@ -17,10 +17,12 @@ class ResultDimensionTest extends Specification {
 
     private static final String RESULT_DIMENSION_JSON = 'executeafm/response/resultDimension.json'
 
+    private static final AttributeInHeader FORM_OF = new AttributeInHeader('Some attr', '/gdc/md/project_id/obj/567', 'attr.some.id')
+
     def "should serialize"() {
         expect:
         that new ResultDimension(
-                new AttributeHeader('Name', 'a1', '/gdc/md/project_id/obj/123', 'attr.dataset.name'),
+                new AttributeHeader('Name', 'a1', '/gdc/md/project_id/obj/123', 'attr.dataset.name', FORM_OF),
                 new MeasureGroupHeader([new MeasureHeaderItem('Name', '#,##0.00', 'm1')])),
                 jsonEquals(resource(RESULT_DIMENSION_JSON))
     }
