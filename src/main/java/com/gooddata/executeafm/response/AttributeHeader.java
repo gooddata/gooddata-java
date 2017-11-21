@@ -29,21 +29,26 @@ public class AttributeHeader implements Header, LocallyIdentifiable {
     private final String localIdentifier;
     private final String uri;
     private final String identifier;
+    private final AttributeInHeader formOf;
 
     private List<TotalHeaderItem> totalItems;
 
     /**
      * Creates new header
+     * @deprecated use the constructor with {@link AttributeInHeader}
+     *
      * @param name name
      * @param localIdentifier local identifier
      * @param uri uri
      * @param identifier identifier
      */
+    @Deprecated
     public AttributeHeader(final String name, final String localIdentifier, final String uri, final String identifier) {
-        this.name = name;
-        this.localIdentifier = localIdentifier;
-        this.uri = uri;
-        this.identifier = identifier;
+        this.name = notEmpty(name, "name");
+        this.localIdentifier = notEmpty(localIdentifier, "localIdentifier");
+        this.uri = notEmpty(uri, "uri");
+        this.identifier = notEmpty(identifier, "identifier");
+        this.formOf = null;
     }
 
     /**
@@ -52,6 +57,19 @@ public class AttributeHeader implements Header, LocallyIdentifiable {
      * @param localIdentifier local identifier
      * @param uri uri
      * @param identifier identifier
+     * @param formOf info about attribute which this header's display form is form of
+     */
+    public AttributeHeader(final String name, final String localIdentifier, final String uri, final String identifier, final AttributeInHeader formOf) {
+        this(name, localIdentifier, uri, identifier, formOf, null);
+    }
+
+    /**
+     * Creates new header
+     * @param name name
+     * @param localIdentifier local identifier
+     * @param uri uri
+     * @param identifier identifier
+     * @param formOf info about attribute which this header's display form is form of
      * @param totalHeaderItems total header items
      */
     @JsonCreator
@@ -59,11 +77,13 @@ public class AttributeHeader implements Header, LocallyIdentifiable {
                            @JsonProperty("localIdentifier") final String localIdentifier,
                            @JsonProperty("uri") final String uri,
                            @JsonProperty("identifier") final String identifier,
+                           @JsonProperty("formOf") final AttributeInHeader formOf,
                            @JsonProperty("totalItems") final List<TotalHeaderItem> totalHeaderItems) {
         this.name = notEmpty(name, "name");
         this.localIdentifier = notEmpty(localIdentifier, "localIdentifier");
         this.uri = notEmpty(uri, "uri");
         this.identifier = notEmpty(identifier, "identifier");
+        this.formOf = notNull(formOf, "formOf");
         this.totalItems = totalHeaderItems;
     }
 
@@ -99,6 +119,10 @@ public class AttributeHeader implements Header, LocallyIdentifiable {
      */
     public String getIdentifier() {
         return identifier;
+    }
+
+    public AttributeInHeader getFormOf() {
+        return formOf;
     }
 
     /**

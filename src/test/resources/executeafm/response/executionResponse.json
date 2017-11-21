@@ -11,7 +11,12 @@
               "uri": "/gdc/md/FoodMartDemo/obj/124",
               "identifier": "attr.account",
               "name": "Account",
-              "localIdentifier": "account"
+              "localIdentifier": "account",
+              "formOf": {
+                "name": "Some attr",
+                "uri": "/gdc/md/project_id/obj/567",
+                "identifier": "attr.some.id"
+              }
             }
           },
           {
@@ -19,7 +24,12 @@
               "uri": "/gdc/md/FoodMartDemo/obj/113",
               "identifier": "attr.accountType",
               "name": "Account Type",
-              "localIdentifier": "accountType"
+              "localIdentifier": "accountType",
+              "formOf": {
+                "name": "Some attr",
+                "uri": "/gdc/md/project_id/obj/567",
+                "identifier": "attr.some.id"
+              }
             }
           },
           {

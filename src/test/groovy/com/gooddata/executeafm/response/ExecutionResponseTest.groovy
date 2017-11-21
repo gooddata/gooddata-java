@@ -16,13 +16,15 @@ class ExecutionResponseTest extends Specification {
 
     private static final String EXECUTION_RESPONSE_JSON = 'executeafm/response/executionResponse.json'
 
+    private static final AttributeInHeader FORM_OF = new AttributeInHeader('Some attr', '/gdc/md/project_id/obj/567', 'attr.some.id')
+
     def "should serialize"() {
         expect:
         that new ExecutionResponse(
                 [
                         new ResultDimension(
-                                new AttributeHeader('Account', 'account', '/gdc/md/FoodMartDemo/obj/124', 'attr.account'),
-                                new AttributeHeader('Account Type', 'accountType', '/gdc/md/FoodMartDemo/obj/113', 'attr.accountType'),
+                                new AttributeHeader('Account', 'account', '/gdc/md/FoodMartDemo/obj/124', 'attr.account', FORM_OF),
+                                new AttributeHeader('Account Type', 'accountType', '/gdc/md/FoodMartDemo/obj/113', 'attr.accountType', FORM_OF),
                                 new MeasureGroupHeader([
                                         new MeasureHeaderItem('Accounting Amount [Sum]', 'format1', 'sum', '/gdc/md/FoodMartDemo/obj/114', 'metric.sum'),
                                         new MeasureHeaderItem('Accounting Amount [Avg]', 'format2', 'avg', '/gdc/md/FoodMartDemo/obj/115', 'metric.avg')
