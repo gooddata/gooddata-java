@@ -1,0 +1,5 @@
+{
+  "warningCode": "gdc123",
+  "message": "Some msg %s %s %s",
+  "parameters": ["bum", 1, null]
+}
