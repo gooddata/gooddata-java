@@ -13,14 +13,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.gooddata.util.Validate.notNull;
-import static java.util.Arrays.asList;
-import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.ArrayUtils.toObject;
 
 /**
  * Data result of the {@link com.gooddata.executeafm.Execution}.
@@ -35,6 +30,7 @@ public class ExecutionResult {
 
     private List<List<List<ResultHeaderItem>>> headerItems;
     private List<List<List<String>>> totals;
+    private List<Warning> warnings;
 
     /**
      * Creates new result
@@ -65,13 +61,15 @@ public class ExecutionResult {
      */
     @JsonCreator
     ExecutionResult(@JsonProperty("data") final DataList data,
-                           @JsonProperty("paging") final Paging paging,
-                           @JsonProperty("headerItems") final List<List<List<ResultHeaderItem>>> headerItems,
-                           @JsonProperty("totals") final List<List<List<String>>> totals) {
+                    @JsonProperty("paging") final Paging paging,
+                    @JsonProperty("headerItems") final List<List<List<ResultHeaderItem>>> headerItems,
+                    @JsonProperty("totals") final List<List<List<String>>> totals,
+                    @JsonProperty("warnings") final List<Warning> warnings) {
         this.data = data;
         this.paging = paging;
         this.headerItems = headerItems;
         this.totals = totals;
+        this.warnings = warnings;
     }
 
     /**
@@ -127,6 +125,21 @@ public class ExecutionResult {
      */
     public void setTotals(final List<List<List<String>>> totals) {
         this.totals = totals;
+    }
+
+    /**
+     * @return result's warnings
+     */
+    public List<Warning> getWarnings() {
+        return warnings;
+    }
+
+    /**
+     * Sets warnings for this result
+     * @param warnings result's warning
+     */
+    public void setWarnings(final List<Warning> warnings) {
+        this.warnings = warnings;
     }
 
     @Override

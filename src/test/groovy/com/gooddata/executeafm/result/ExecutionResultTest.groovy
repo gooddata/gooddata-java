@@ -43,7 +43,8 @@ class ExecutionResultTest extends Specification {
                 [[[
                   new AttributeHeaderItem('Cost of Goods Sold', '/gdc/md/FoodMartDemo/obj/124/elements?id=3200'),
                   new AttributeHeaderItem('Salaries', '/gdc/md/FoodMartDemo/obj/124/elements?id=6000')]]],
-                [[['25']]]),
+                [[['25']]],
+                [new Warning('gdc123', 'Some msg %s %s %s', ['bum', 1, null])]),
                 jsonEquals(resource(EXECUTION_RESULT_FULL_JSON))
     }
 
@@ -65,6 +66,9 @@ class ExecutionResultTest extends Specification {
         def totals = result.totals
         totals[0][0][0] == '25'
 
+        def warnings = result.warnings
+        warnings == [new Warning('gdc123', 'Some msg %s %s %s', ['bum', 1, null])]
+
         result.toString()
     }
 
@@ -73,11 +77,14 @@ class ExecutionResultTest extends Specification {
         ExecutionResult result = new ExecutionResult([1] as String[], new Paging())
         result.addHeaderItems([[new AttributeHeaderItem("n", "u")]])
         result.setTotals([[[1]]])
+        result.setWarnings([new Warning('gdc123', 'Some msg %s %s %s', ['bum', 1, null])])
 
         then:
         result.getHeaderItems()[0][0][0].name == "n"
         result.getHeaderItems()[0][0][0].uri == "u"
 
         result.getTotals() == [[[1]]]
+
+        result.getWarnings() == [new Warning('gdc123', 'Some msg %s %s %s', ['bum', 1, null])]
     }
 }
