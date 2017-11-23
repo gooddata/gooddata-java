@@ -32,4 +32,16 @@ class ResultTotalHeaderItemTest extends Specification {
         item.name == 'Some total'
         item.type == 'avg'
     }
+
+    def "should create from type only"() {
+        expect:
+        with(new ResultTotalHeaderItem('avg')) {
+            name == 'avg'
+            type == 'avg'
+        }
+        with(new ResultTotalHeaderItem(Total.SUM)) {
+            name == 'sum'
+            type == 'sum'
+        }
+    }
 }

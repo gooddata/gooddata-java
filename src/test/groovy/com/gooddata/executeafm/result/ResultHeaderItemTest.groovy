@@ -25,4 +25,17 @@ class ResultHeaderItemTest extends Specification {
         typeClass << [AttributeHeaderItem, ResultMeasureHeaderItem, ResultTotalHeaderItem]
         type = typeClass.simpleName.uncapitalize()
     }
+
+    def "should allow empty name"() {
+        expect:
+        new ResultHeaderItem('') {}.name == ''
+    }
+
+    def "should not allow null name"() {
+        when:
+        new ResultHeaderItem(null) {}
+
+        then:
+        thrown(IllegalArgumentException)
+    }
 }
