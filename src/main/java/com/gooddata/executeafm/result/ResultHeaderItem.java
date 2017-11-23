@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gooddata.util.GoodDataToStringBuilder;
 
-import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Represent header items available in {@link ExecutionResult}
@@ -25,7 +25,7 @@ public abstract class ResultHeaderItem {
     private final String name;
 
     protected ResultHeaderItem(final String name) {
-        this.name = notEmpty(name, "name");
+        this.name = notNull(name, "name");
     }
 
     /**
