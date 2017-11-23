@@ -40,9 +40,9 @@ public class SimpleMeasureDefinition implements MeasureDefinition {
 
     /**
      * Creates new definition
-     * @param item item which is measured
+     * @param item item which is measured, can be attribute, fact or another measure
      * @param aggregation additional aggregation applied
-     * @param computeRatio whether should be shown in percent
+     * @param computeRatio whether should be shown as ratio
      * @param filters additional filters applied
      */
     @JsonCreator
@@ -56,11 +56,25 @@ public class SimpleMeasureDefinition implements MeasureDefinition {
         this.filters = filters;
     }
 
+    /**
+     * Creates new definition
+     * @param item item which is measured, can be attribute, fact or another measure
+     * @param aggregation additional aggregation applied
+     * @param computeRatio whether should be shown as ratio
+     * @param filters additional filters applied
+     */
     public SimpleMeasureDefinition(final ObjQualifier item, final Aggregation aggregation, final Boolean computeRatio,
                                    final List<FilterItem> filters) {
         this(item, notNull(aggregation, "aggregation").toString(), computeRatio, filters);
     }
 
+    /**
+     * Creates new definition
+     * @param item item which is measured, can be attribute, fact or another measure
+     * @param aggregation additional aggregation applied
+     * @param computeRatio whether should be shown as ratio
+     * @param filters additional filters applied
+     */
     public SimpleMeasureDefinition(final ObjQualifier item, final Aggregation aggregation, final Boolean computeRatio,
                                    final FilterItem... filters) {
         this(item, aggregation, computeRatio, asList(filters));
@@ -81,43 +95,75 @@ public class SimpleMeasureDefinition implements MeasureDefinition {
         return getItem().getUri();
     }
 
-    public ObjQualifier getItem() {
-        return item;
-    }
-
     @Override
     public ObjQualifier getObjQualifier() {
         return getItem();
     }
 
+    /**
+     * @return measured item, can be attribute, fact or another measure
+     */
+    public ObjQualifier getItem() {
+        return item;
+    }
+
+    /**
+     * @return additional aggregation applied
+     */
     public String getAggregation() {
         return aggregation;
     }
 
+    /**
+     * Set additional aggregation applied
+     * @param aggregation additional aggregation applied
+     */
     public void setAggregation(final String aggregation) {
         this.aggregation = aggregation;
     }
 
+    /**
+     * Set additional aggregation applied
+     * @param aggregation additional aggregation applied
+     */
     public void setAggregation(final Aggregation aggregation) {
         setAggregation(notNull(aggregation, "aggregation").toString());
     }
 
+    /**
+     * @return true when should be shown as ratio, false otherwise
+     */
     public Boolean getComputeRatio() {
         return computeRatio;
     }
 
+    /**
+     * Set whether should be shown as ratio
+     * @param computeRatio whether should be shown as ratio
+     */
     public void setComputeRatio(final Boolean computeRatio) {
         this.computeRatio = computeRatio;
     }
 
+    /**
+     * @return additional filters applied
+     */
     public List<FilterItem> getFilters() {
         return filters;
     }
 
+    /**
+     * Set additional filters applied
+     * @param filters additional filters applied
+     */
     public void setFilters(final List<FilterItem> filters) {
         this.filters = filters;
     }
 
+    /**
+     * Apply additional filter
+     * @param filter filter to be applied
+     */
     public void addFilter(final FilterItem filter) {
         if (filters == null) {
             filters = new ArrayList<>();
@@ -125,14 +171,23 @@ public class SimpleMeasureDefinition implements MeasureDefinition {
         filters.add(notNull(filter, "filter"));
     }
 
+    /**
+     * @return true when filters are set, false otherwise
+     */
     public boolean hasFilters() {
         return filters != null && !filters.isEmpty();
     }
 
+    /**
+     * @return true when computeRatio is set, false otherwise
+     */
     public boolean hasComputeRatio() {
         return computeRatio != null && computeRatio;
     }
 
+    /**
+     * @return true when additional aggregation is set, false otherwise
+     */
     public boolean hasAggregation() {
         return aggregation != null;
     }
