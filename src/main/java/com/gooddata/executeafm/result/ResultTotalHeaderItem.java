@@ -25,6 +25,22 @@ public class ResultTotalHeaderItem extends ResultHeaderItem {
     private final String type;
 
     /**
+     * Creates new instance of given total type, type is used for the name as well
+     * @param type total type
+     */
+    public ResultTotalHeaderItem(final String type) {
+        this(type, type);
+    }
+
+    /**
+     * Creates new instance of given total type, type is used for the name as well
+     * @param type total type
+     */
+    public ResultTotalHeaderItem(final Total type) {
+        this(notNull(type, "type").toString());
+    }
+
+    /**
      * Creates new instance of given header name and total type
      * @param name header name
      * @param type total type
