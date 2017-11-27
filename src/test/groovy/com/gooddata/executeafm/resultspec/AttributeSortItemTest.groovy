@@ -15,6 +15,8 @@ import static spock.util.matcher.HamcrestSupport.that
 class AttributeSortItemTest extends Specification {
 
     private static final String ATTRIBUTE_SORT_ITEM_JSON = 'executeafm/resultspec/attributeSortItem.json'
+    private static final String ATTRIBUTE_SORT_ITEM_WITH_AGGREGATION_JSON = 'executeafm/resultspec/attributeSortItemWithAggregation.json'
+
 
     def "should serialize values"() {
         expect:
@@ -22,13 +24,20 @@ class AttributeSortItemTest extends Specification {
                 jsonEquals(resource(ATTRIBUTE_SORT_ITEM_JSON))
     }
 
+    def "should serialize values with aggregation"() {
+        expect:
+        that new AttributeSortItem(Direction.ASC, 'aId', AttributeSortAggregation.SUM),
+                jsonEquals(resource(ATTRIBUTE_SORT_ITEM_WITH_AGGREGATION_JSON))
+    }
+
     def "should deserialize values"() {
         when:
-        AttributeSortItem item = readObjectFromResource("/$ATTRIBUTE_SORT_ITEM_JSON", AttributeSortItem)
+        AttributeSortItem item = readObjectFromResource("/$ATTRIBUTE_SORT_ITEM_WITH_AGGREGATION_JSON", AttributeSortItem)
 
         then:
         item.attributeIdentifier == 'aId'
         item.direction == 'asc'
+        item.aggregation == 'sum'
         item.toString()
     }
 }
