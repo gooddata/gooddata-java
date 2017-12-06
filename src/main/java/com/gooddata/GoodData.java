@@ -10,6 +10,7 @@ import com.gooddata.auditevent.AuditEventService;
 import com.gooddata.connector.ConnectorService;
 import com.gooddata.dataload.OutputStageService;
 import com.gooddata.dataload.processes.ProcessService;
+import com.gooddata.executeafm.ExecuteAfmService;
 import com.gooddata.export.ExportService;
 import com.gooddata.featureflag.FeatureFlagService;
 import com.gooddata.gdc.Header;
@@ -93,6 +94,7 @@ public class GoodData {
     private final ProjectTemplateService projectTemplateService;
     private final ExportService exportService;
     private final AuditEventService auditEventService;
+    private final ExecuteAfmService executeAfmService;
 
     /**
      * Create instance configured to communicate with GoodData Platform under user with given credentials.
@@ -229,6 +231,7 @@ public class GoodData {
         outputStageService = new OutputStageService(getRestTemplate(), settings);
         projectTemplateService = new ProjectTemplateService(getRestTemplate(), settings);
         auditEventService = new AuditEventService(getRestTemplate(), accountService, settings);
+        executeAfmService = new ExecuteAfmService(getRestTemplate(), settings);
     }
 
     static RestTemplate createRestTemplate(GoodDataEndpoint endpoint, HttpClient httpClient) {
@@ -493,6 +496,15 @@ public class GoodData {
     @Bean
     public AuditEventService getAuditEventService() {
         return auditEventService;
+    }
+
+    /**
+     * Get initialized service for afm execution
+     * @return initialized service for afm execution
+     */
+    @Bean
+    public ExecuteAfmService getExecuteAfmService() {
+        return executeAfmService;
     }
 
 

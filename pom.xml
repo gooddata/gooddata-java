@@ -45,12 +45,30 @@
         <jadler.version>1.1.1</jadler.version>
         <json-unit.version>1.23.0</json-unit.version>
         <surefire.version>2.20.1</surefire.version>
+        <failsafe.version>2.20.1</failsafe.version>
     </properties>
 
     <build>
         <plugins>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${failsafe.version}</version>
+                <!-- config and dependencies below needed to make running both Spock and TestNG tests -->
+                <configuration>
+                    <threadCount>1</threadCount>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>${surefire.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-testng</artifactId>
+                        <version>${surefire.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
