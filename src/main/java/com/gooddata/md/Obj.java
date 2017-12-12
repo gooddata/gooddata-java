@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gooddata.md.report.Report;
 import com.gooddata.md.report.ReportDefinition;
+import com.gooddata.md.visualization.VisualizationClass;
+import com.gooddata.md.visualization.VisualizationObject;
 import org.springframework.web.util.UriTemplate;
 
 /**
@@ -30,6 +32,8 @@ import org.springframework.web.util.UriTemplate;
         @JsonSubTypes.Type(ScheduledMail.class),
         @JsonSubTypes.Type(Table.class),
         @JsonSubTypes.Type(TableDataLoad.class),
+        @JsonSubTypes.Type(VisualizationObject.class),
+        @JsonSubTypes.Type(VisualizationClass.class),
 })
 public interface Obj {
 

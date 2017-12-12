@@ -1,0 +1,22 @@
+{
+  "localIdentifier": "measureBucket",
+  "items": [
+    {
+      "measure": {
+        "localIdentifier": "measure",
+        "title": "Measure",
+        "alias": "Measure alias",
+        "definition": {
+          "measureDefinition": {
+            "item": {
+              "uri": "/uri/to/measure"
+            },
+            "aggregation": "sum",
+            "computeRatio": "false",
+            "filters": []
+          }
+        }
+      }
+    }
+  ]
+}

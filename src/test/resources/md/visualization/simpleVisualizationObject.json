@@ -1,0 +1,13 @@
+{
+  "visualizationObject": {
+    "meta": {
+      "title": "simple"
+    },
+    "content": {
+      "visualizationClass": {
+        "uri": "visClass"
+      },
+      "buckets": []
+    }
+  }
+}

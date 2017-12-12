@@ -11,12 +11,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 /**
  * Represents measure within {@link Afm}
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MeasureItem implements LocallyIdentifiable {
+public class MeasureItem implements LocallyIdentifiable, Serializable {
 
+    private static final long serialVersionUID = -8641866340075567437L;
     private final MeasureDefinition definition;
     private final String localIdentifier;
     private String alias;
@@ -91,5 +95,19 @@ public class MeasureItem implements LocallyIdentifiable {
     @JsonIgnore
     public boolean isAdHoc() {
         return definition.isAdHoc();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MeasureItem that = (MeasureItem) o;
+        return Objects.equals(definition, that.definition) &&
+               Objects.equals(localIdentifier, that.localIdentifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(definition, localIdentifier);
     }
 }

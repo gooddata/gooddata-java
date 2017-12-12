@@ -6,6 +6,7 @@
 package com.gooddata.executeafm
 
 import nl.jqno.equalsverifier.EqualsVerifier
+import org.apache.commons.lang3.SerializationUtils
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -33,5 +34,13 @@ class UriObjQualifierTest extends Specification {
     def "should verify equals"() {
         expect:
         EqualsVerifier.forClass(UriObjQualifier).verify()
+    }
+
+    def "test serializable"() {
+        UriObjQualifier uriObjQualifier = readObjectFromResource("/$QUALIFIER_JSON", UriObjQualifier)
+        UriObjQualifier deserialized = SerializationUtils.roundtrip(uriObjQualifier)
+
+        expect:
+        that deserialized, jsonEquals(uriObjQualifier)
     }
 }

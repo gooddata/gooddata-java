@@ -12,15 +12,20 @@ import com.gooddata.executeafm.ObjQualifier;
 import com.gooddata.executeafm.UriObjQualifier;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.util.Objects;
+
 import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
+
 
 /**
  * Represents {@link DateFilter} specifying relative range of given granularity.
  */
 @JsonRootName(RelativeDateFilter.NAME)
 public class RelativeDateFilter extends DateFilter {
+
+    private static final long serialVersionUID = 7257627800833737063L;
     static final String NAME = "relativeDateFilter";
+
     private final String granularity;
     private final Integer from;
     private final Integer to;
@@ -38,8 +43,8 @@ public class RelativeDateFilter extends DateFilter {
                               @JsonProperty("from") final Integer from, @JsonProperty("to") final Integer to) {
         super(dataSet);
         this.granularity = notEmpty(granularity, "granularity");
-        this.from = notNull(from, "from");
-        this.to = notNull(to, "to");
+        this.from = from;
+        this.to = to;
     }
 
     public String getGranularity() {
@@ -57,6 +62,21 @@ public class RelativeDateFilter extends DateFilter {
     @Override
     public FilterItem withObjUriQualifier(final UriObjQualifier qualifier) {
         return new RelativeDateFilter(qualifier, granularity, from, to);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RelativeDateFilter that = (RelativeDateFilter) o;
+        return super.equals(that) && Objects.equals(granularity, that.granularity) &&
+                Objects.equals(from, that.from) &&
+                Objects.equals(to, that.to);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(granularity, from, to, super.hashCode());
     }
 
     @Override

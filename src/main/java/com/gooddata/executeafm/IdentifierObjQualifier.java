@@ -7,13 +7,16 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Qualifies metadata {@link com.gooddata.md.Obj} using an identifier
  */
 @JsonRootName("identifier")
-public final class IdentifierObjQualifier implements ObjQualifier {
+public final class IdentifierObjQualifier implements ObjQualifier, Serializable {
+
+    private static final long serialVersionUID = 4398691769334257408L;
     private final String identifier;
 
     public IdentifierObjQualifier(final String identifier) {

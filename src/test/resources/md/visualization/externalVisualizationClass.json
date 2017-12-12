@@ -1,0 +1,14 @@
+{
+  "visualizationClass": {
+    "content": {
+      "url": "https://some.vis",
+      "icon": "icon",
+      "iconSelected": "iconSelected",
+      "checksum": "external",
+      "orderIndex": 0
+    },
+    "meta": {
+      "title": "external"
+    }
+  }
+}

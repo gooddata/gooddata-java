@@ -13,8 +13,10 @@ import com.gooddata.executeafm.ObjQualifier;
 import com.gooddata.executeafm.UriObjQualifier;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.gooddata.executeafm.afm.SimpleMeasureDefinition.NAME;
 import static com.gooddata.util.Validate.notNull;
@@ -25,8 +27,9 @@ import static java.util.Arrays.asList;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonRootName(NAME)
-public class SimpleMeasureDefinition implements MeasureDefinition {
+public class SimpleMeasureDefinition implements MeasureDefinition, Serializable {
 
+    private static final long serialVersionUID = -385490772711914776L;
     static final String NAME = "measure";
 
     private final ObjQualifier item;

@@ -1,0 +1,22 @@
+{
+  "localIdentifier": "multipleAttributesBucket",
+  "items": [
+    {
+      "visualizationAttribute": {
+        "localIdentifier": "attribute1",
+        "displayForm": {
+          "uri": "/uri/to/displayForm/1"
+        },
+        "alias": "attribute1Alias"
+      }
+    }, {
+      "visualizationAttribute": {
+        "localIdentifier": "attribute2",
+        "displayForm": {
+          "uri": "/uri/to/displayForm/2"
+        },
+        "alias": "attribute2Alias"
+      }
+    }
+  ]
+}
