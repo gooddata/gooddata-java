@@ -1,0 +1,52 @@
+{
+  "visualizationObject": {
+    "meta": {
+      "title": "Attributes"
+    },
+    "content": {
+      "visualizationClass": {
+        "uri": "visClass"
+      },
+      "buckets": [
+        {
+          "localIdentifier": "multipleAttributesBucket",
+          "items": [
+            {
+              "visualizationAttribute": {
+                "localIdentifier": "attribute1",
+                "displayForm": {
+                  "uri": "/uri/to/displayForm/1"
+                },
+                "alias": "attribute1Alias"
+              }
+            }, {
+              "visualizationAttribute": {
+                "localIdentifier": "attribute2",
+                "displayForm": {
+                  "uri": "/uri/to/displayForm/2"
+                },
+                "alias": "attribute2Alias"
+              }
+            }
+          ]
+        }, {
+          "localIdentifier": "attributeBucket",
+          "items": [
+            {
+              "visualizationAttribute": {
+                "localIdentifier": "attribute",
+                "displayForm": {
+                  "uri": "/uri/to/displayForm"
+                },
+                "alias": "Attribute Alias"
+              }
+            }
+          ]
+        }
+      ],
+      "filters": [],
+      "properties": "{\"key\":\"value\"}",
+      "references": { "key": "value" }
+    }
+  }
+}

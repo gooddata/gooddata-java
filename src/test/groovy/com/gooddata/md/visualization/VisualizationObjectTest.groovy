@@ -3,17 +3,14 @@
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
-
 package com.gooddata.md.visualization
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.gooddata.executeafm.UriObjQualifier
 import com.gooddata.executeafm.afm.AbsoluteDateFilter
 import com.gooddata.executeafm.afm.NegativeAttributeFilter
 import com.gooddata.executeafm.afm.PositiveAttributeFilter
 import com.gooddata.executeafm.afm.RelativeDateFilter
 import com.gooddata.md.Meta
-import nl.jqno.equalsverifier.EqualsVerifier
 import org.apache.commons.lang3.SerializationUtils
 import org.joda.time.LocalDate
 import spock.lang.Shared

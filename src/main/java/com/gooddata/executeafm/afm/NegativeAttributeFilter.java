@@ -6,6 +6,7 @@
 package com.gooddata.executeafm.afm;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.executeafm.ObjQualifier;
@@ -49,6 +50,14 @@ public class NegativeAttributeFilter extends AttributeFilter {
      */
     public List<String> getNotIn() {
         return notIn;
+    }
+
+    /**
+     * @return true if filter contains no elements, false otherwise
+     */
+    @JsonIgnore
+    public boolean isAllSelected() {
+        return notIn.isEmpty();
     }
 
     @Override

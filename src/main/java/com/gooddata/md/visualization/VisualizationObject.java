@@ -20,15 +20,17 @@ import static org.apache.commons.lang3.Validate.notNull;
 
 import com.gooddata.executeafm.UriObjQualifier;
 import com.gooddata.executeafm.afm.FilterItem;
+import com.gooddata.executeafm.Execution;
 import com.gooddata.md.AbstractObj;
 import com.gooddata.md.Meta;
 import com.gooddata.md.Queryable;
 import com.gooddata.md.Updatable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * Stores complete information about new visualization object that can be stored as MD to md server
@@ -56,6 +58,18 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
     }
 
     /**
+     * Get measure by local identifier or null if not found
+     * @param localIdentifier of measure
+     * @return measure or null
+     */
+    public Measure getMeasure(final String localIdentifier) {
+        return getMeasures().stream()
+                .filter(measure -> measure.getLocalIdentifier().equals(localIdentifier))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
      * @return all measures from all buckets whose measure definition is instance of {@link VOSimpleMeasureDefinition}
      */
     @JsonIgnore
@@ -73,6 +87,13 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
         return getContent().getAttributes();
     }
 
+    public VisualizationAttribute getAttribute(final String localIdentifier) {
+        return getAttributes().stream()
+                .filter(attribute -> attribute.getLocalIdentifier().equals(localIdentifier))
+                .findFirst()
+                .orElse(null);
+    }
+
     /**
      * Returns attribute from collection bucket, if and only if bucket contains exactly one item of type
      * {@link VisualizationAttribute}, null otherwise
@@ -86,6 +107,11 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
                 .findFirst()
                 .map(Bucket::getOnlyAttribute)
                 .orElse(null);
+    }
+
+    @JsonIgnore
+    public boolean hasMeasures() {
+        return !getMeasures().isEmpty();
     }
 
     /**
@@ -229,6 +255,11 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
         content.setVisualizationClass(uri);
     }
 
+    @JsonIgnore
+    public Execution convertToExecution(Function<String, VisualizationClass> visualizationClassgetter) {
+        return VisualizationConverter.convertToExecution(this, visualizationClassgetter);
+    }
+
     private Content getContent() {
         return content;
     }
@@ -306,6 +337,10 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
         }
 
         public List<FilterItem> getFilters() {
+            if (filters == null) {
+                return new ArrayList<>();
+            }
+
             return filters;
         }
 

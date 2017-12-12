@@ -7,14 +7,12 @@ package com.gooddata.md.visualization
 
 import com.gooddata.executeafm.UriObjQualifier
 import nl.jqno.equalsverifier.EqualsVerifier
-import nl.jqno.equalsverifier.Warning
 import org.apache.commons.lang3.SerializationUtils
 import spock.lang.Shared
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
-import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource
 import static spock.util.matcher.HamcrestSupport.that
 
 class BucketTest extends Specification {

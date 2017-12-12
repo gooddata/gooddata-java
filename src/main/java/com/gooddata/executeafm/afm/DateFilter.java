@@ -42,6 +42,11 @@ public abstract class DateFilter implements FilterItem, Serializable {
         return getDataSet();
     }
 
+    /**
+     * @return true if no time period is specified, false otherwise
+     */
+    public abstract boolean isAllTimeSelected();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

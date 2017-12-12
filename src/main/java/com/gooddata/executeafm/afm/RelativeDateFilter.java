@@ -6,6 +6,7 @@
 package com.gooddata.executeafm.afm;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.executeafm.ObjQualifier;
@@ -62,6 +63,12 @@ public class RelativeDateFilter extends DateFilter {
     @Override
     public FilterItem withObjUriQualifier(final UriObjQualifier qualifier) {
         return new RelativeDateFilter(qualifier, granularity, from, to);
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAllTimeSelected() {
+        return getFrom() == null || getTo() == null;
     }
 
     @Override

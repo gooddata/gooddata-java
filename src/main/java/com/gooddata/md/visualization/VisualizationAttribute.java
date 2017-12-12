@@ -13,8 +13,6 @@ import com.gooddata.executeafm.afm.AttributeItem;
 
 import java.util.Objects;
 
-import static org.apache.commons.lang3.Validate.notNull;
-
 /**
  * Represents attribute item withing {@link Bucket}
  */
