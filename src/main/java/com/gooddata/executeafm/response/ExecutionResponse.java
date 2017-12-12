@@ -72,11 +72,11 @@ public class ExecutionResponse {
 
     /**
      * Uri referencing the data result location.
-     * @return execution result uri
+     * @return execution result uri or throws exception in case the link doesn't exist
      */
     @JsonIgnore
     public String getExecutionResultUri() {
-        return notNullState(links, "links").get(EXECUTION_RESULT_LINK);
+        return notNullState(notNullState(links, "links").get(EXECUTION_RESULT_LINK), EXECUTION_RESULT_LINK);
     }
 
     @Override
