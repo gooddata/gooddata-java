@@ -5,6 +5,7 @@
  */
 package com.gooddata.md;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
 import java.util.Collection;
@@ -42,5 +43,13 @@ public class DimensionTest {
         final Dimension dimension = new Dimension("Dimension");
 
         assertThat(dimension.toString(), matchesPattern(Dimension.class.getSimpleName() + "\\[.*\\]"));
+    }
+
+    @Test
+    public void testSerializable() throws Exception {
+        final Dimension dimension = new Dimension("Dimension");
+        final Dimension deserialized = SerializationUtils.roundtrip(dimension);
+
+        assertThat(deserialized, jsonEquals(dimension));
     }
 }

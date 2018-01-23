@@ -12,6 +12,7 @@ import com.gooddata.report.ReportExportFormat;
 import com.gooddata.util.GoodDataToStringBuilder;
 import org.joda.time.LocalDate;
 
+import java.io.Serializable;
 import java.util.*;
 
 import static com.gooddata.util.Validate.notNull;
@@ -24,6 +25,8 @@ import static com.gooddata.util.Validate.notNull;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
+
+    private static final long serialVersionUID = -4433891105896592638L;
 
     @JsonProperty("content")
     private final Content content;
@@ -83,7 +86,9 @@ public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
     /**
      * Mail schedule MD object payload.
      */
-    private static class Content {
+    private static class Content implements Serializable {
+
+        private static final long serialVersionUID = -6676890634279968527L;
 
         @JsonProperty("when")
         private ScheduledMailWhen scheduledMailWhen;

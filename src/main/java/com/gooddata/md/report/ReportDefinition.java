@@ -29,7 +29,9 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReportDefinition extends AbstractObj implements Queryable, Updatable {
 
+    private static final long serialVersionUID = 9069611345896541468L;
     private static final String EXPLAIN_LINK = "explain2";
+
     @JsonProperty("content")
     private final ReportDefinitionContent content;
 

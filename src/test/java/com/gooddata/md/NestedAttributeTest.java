@@ -5,12 +5,14 @@
  */
 package com.gooddata.md;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
 import java.util.Collection;
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -65,4 +67,13 @@ public class NestedAttributeTest {
 
         assertThat(attribute.toString(), matchesPattern(NestedAttribute.class.getSimpleName() + "\\[.*\\]"));
     }
+
+    @Test
+    public void testSerializable() throws Exception {
+        final NestedAttribute attribute = readObjectFromResource("/md/dimensionAttribute.json", NestedAttribute.class);
+        final NestedAttribute deserialized = SerializationUtils.roundtrip(attribute);
+
+        assertThat(deserialized, jsonEquals(attribute));
+    }
+
 }

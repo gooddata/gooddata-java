@@ -10,6 +10,7 @@ import com.gooddata.md.Meta;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OneNumberReportDefinitionContent extends ReportDefinitionContent {
 
+    private static final long serialVersionUID = 5479509323034916986L;
     public static final String FORMAT = "oneNumber";
 
     private final OneNumberVisualization oneNumber;
@@ -47,8 +49,9 @@ public class OneNumberReportDefinitionContent extends ReportDefinitionContent {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private static class OneNumberVisualization {
+    private static class OneNumberVisualization implements Serializable {
 
+        private static final long serialVersionUID = 1105233720917978784L;
         private final OneNumberLabels labels;
 
         @JsonCreator
@@ -62,8 +65,9 @@ public class OneNumberReportDefinitionContent extends ReportDefinitionContent {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private static class OneNumberLabels {
+    private static class OneNumberLabels implements Serializable {
 
+        private static final long serialVersionUID = 6464599509495095669L;
         private final String description;
 
         @JsonCreator

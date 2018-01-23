@@ -5,9 +5,11 @@
  */
 package com.gooddata.md;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
 import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -38,5 +40,13 @@ public class ExpressionTest {
         final Expression expression = new Expression(DATA, TYPE);
 
         assertThat(expression.toString(), matchesPattern(Expression.class.getSimpleName() + "\\[.*\\]"));
+    }
+
+    @Test
+    public void testSerializable() throws Exception {
+        final Expression expression = new Expression(DATA, TYPE);
+        final Expression deserialized = SerializationUtils.roundtrip(expression);
+
+        assertThat(deserialized, jsonEquals(expression));
     }
 }

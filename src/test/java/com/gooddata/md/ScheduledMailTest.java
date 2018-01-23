@@ -6,6 +6,7 @@
 package com.gooddata.md;
 
 import com.gooddata.export.ExportFormat;
+import org.apache.commons.lang3.SerializationUtils;
 import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
 
@@ -73,6 +74,14 @@ public class ScheduledMailTest {
         final ScheduledMail scheduledMail = readObjectFromResource("/md/scheduledMail.json", ScheduledMail.class);
 
         assertThat(scheduledMail.toString(), matchesPattern(ScheduledMail.class.getSimpleName() + "\\[.*\\]"));
+    }
+
+    @Test
+    public void testSerializable() throws Exception {
+        final ScheduledMail scheduledMail = readObjectFromResource("/md/scheduledMail.json", ScheduledMail.class);
+        final ScheduledMail deserialized = SerializationUtils.roundtrip(scheduledMail);
+
+        assertThat(deserialized, jsonEquals(scheduledMail));
     }
 
 }

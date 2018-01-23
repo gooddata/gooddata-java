@@ -5,6 +5,7 @@
  */
 package com.gooddata.md.report;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
 import java.util.Collections;
@@ -44,4 +45,13 @@ public class ReportDefinitionContentTest {
         assertThat(def.toString(), matchesPattern(GridReportDefinitionContent.class.getSimpleName() + "\\[.*\\]"));
     }
 
+    @Test
+    public void testSerializable() throws Exception {
+        final ReportDefinitionContent def = new GridReportDefinitionContent(
+                new Grid(Collections.emptyList(), Collections.emptyList(),
+                        Collections.emptyList()));
+        final ReportDefinitionContent deserialized = SerializationUtils.roundtrip(def);
+
+        assertThat(deserialized, jsonEquals(def));
+    }
 }

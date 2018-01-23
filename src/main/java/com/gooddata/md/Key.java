@@ -11,13 +11,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
+
 /**
  * Key (primary/foreign) of attribute
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Key {
+public class Key implements Serializable {
 
+    private static final long serialVersionUID = -2014349746875945306L;
     private final String data;
     private final String type;
 

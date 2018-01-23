@@ -12,12 +12,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
+
 /**
  * Display form
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DisplayForm extends AbstractObj {
+
+    private static final long serialVersionUID = 8719802319193893780L;
 
     @JsonProperty("content")
     protected final Content content;
@@ -75,8 +79,9 @@ public class DisplayForm extends AbstractObj {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    protected static class Content {
+    protected static class Content implements Serializable {
 
+        private static final long serialVersionUID = 6865880678569437635L;
         private final String formOf;
         private final String expression;
         private final String ldmExpression;
@@ -115,7 +120,9 @@ public class DisplayForm extends AbstractObj {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    protected static class Links {
+    protected static class Links implements Serializable {
+
+        private static final long serialVersionUID = 1704085675250093860L;
         private final String elements;
 
         @JsonCreator

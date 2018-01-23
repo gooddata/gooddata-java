@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
+
 /**
  * Represents physical data model column. Doesn't implement all fields right now.
  * Deserialization only.
@@ -20,6 +22,7 @@ import com.gooddata.util.GoodDataToStringBuilder;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 public class Column extends AbstractObj implements Queryable {
 
+    private static final long serialVersionUID = 8235010456787885263L;
     public static final String TYPE_PK = "pk";
     public static final String TYPE_INPUT_PK = "inputpk";
     public static final String TYPE_FK = "fk";
@@ -95,7 +98,9 @@ public class Column extends AbstractObj implements Queryable {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class Content {
+    private static class Content implements Serializable {
+
+        private static final long serialVersionUID = -8830741484051984963L;
         private final String table;
         private final String columnDBName;
         private final String columnType;

@@ -20,14 +20,16 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Internal representation of attribute sort field. Which can be either plain text value or structure pointing to display form.
  */
 @JsonDeserialize(using = AttributeSort.Deserializer.class)
 @JsonSerialize(using = AttributeSort.Serializer.class)
-class AttributeSort {
+class AttributeSort implements Serializable {
 
+    private static final long serialVersionUID = -7415504020870223701L;
     static final String PK = "pk";
     static final String BY_USED_DF = "byUsedDF";
 

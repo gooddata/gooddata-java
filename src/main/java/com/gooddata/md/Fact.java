@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import static java.util.Collections.singletonList;
@@ -24,6 +25,8 @@ import static java.util.Collections.singletonList;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Fact extends AbstractObj implements Queryable, Updatable {
+
+    private static final long serialVersionUID = 1394960609414171940L;
 
     @JsonProperty("content")
     private final Content content;
@@ -60,7 +63,9 @@ public class Fact extends AbstractObj implements Queryable, Updatable {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private static class Content {
+    private static class Content implements Serializable {
+
+        private static final long serialVersionUID = 2141254685536566363L;
 
         @JsonProperty("expr")
         private final Collection<Expression> expression;

@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
+
 /**
  * Common ancestor to {@link ScheduledMail} attachments.
  */
@@ -23,8 +25,9 @@ import com.gooddata.util.GoodDataToStringBuilder;
         @JsonSubTypes.Type(name = "reportAttachment", value = ReportAttachment.class),
 })
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Attachment {
+public class Attachment implements Serializable {
 
+    private static final long serialVersionUID = -3210630720136793710L;
     private final String uri;
 
     @JsonCreator

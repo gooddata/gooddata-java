@@ -5,6 +5,7 @@
  */
 package com.gooddata.md.report;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
 import java.util.Collections;
@@ -35,4 +36,12 @@ public class GridReportDefinitionContentTest {
         assertThat(def, jsonEquals(resource("md/report/gridReportDefinitionContent-input.json")));
     }
 
+    @Test
+    public void testSerializable() throws Exception {
+        final GridReportDefinitionContent def = (GridReportDefinitionContent)
+                readObjectFromResource("/md/report/gridReportDefinitionContent.json", ReportDefinitionContent.class);
+        final GridReportDefinitionContent deserialized = SerializationUtils.roundtrip(def);
+
+        assertThat(deserialized, jsonEquals(def));
+    }
 }

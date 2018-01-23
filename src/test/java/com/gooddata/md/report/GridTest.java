@@ -5,6 +5,7 @@
  */
 package com.gooddata.md.report;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.hamcrest.CoreMatchers;
 import org.testng.annotations.Test;
 
@@ -76,6 +77,14 @@ public class GridTest {
         final Grid grid = readObjectFromResource("/md/report/grid.json", Grid.class);
 
         assertThat(grid.toString(), matchesPattern(Grid.class.getSimpleName() + "\\[.*\\]"));
+    }
+
+    @Test
+    public void testSerializable() throws Exception {
+        final Grid grid = readObjectFromResource("/md/report/grid.json", Grid.class);
+        final Grid deserialized = SerializationUtils.roundtrip(grid);
+
+        assertThat(deserialized, jsonEquals(grid));
     }
 
 }

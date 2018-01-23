@@ -5,6 +5,7 @@
  */
 package com.gooddata.md;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
@@ -60,6 +61,15 @@ public class AttributeDisplayFormTest {
                 LDM_EXPRESSION, TYPE, ELEMENTS_LINK);
 
         assertThat(attrDF.toString(), matchesPattern(AttributeDisplayForm.class.getSimpleName() + "\\[.*\\]"));
+    }
+
+    @Test
+    public void testSerializable() throws Exception {
+        final DisplayForm attrDF = new AttributeDisplayForm("Person Name", FORM_OF, EXPRESSION, DEFAULT,
+                LDM_EXPRESSION, TYPE, ELEMENTS_LINK);
+        final DisplayForm deserialized = SerializationUtils.roundtrip(attrDF);
+
+        assertThat(deserialized, jsonEquals(attrDF));
     }
 
 }

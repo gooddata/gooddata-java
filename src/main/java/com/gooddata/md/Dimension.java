@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -23,6 +24,8 @@ import java.util.Collections;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Dimension extends AbstractObj implements Queryable, Updatable {
+
+    private static final long serialVersionUID = -6667238416764957848L;
 
     @JsonProperty("content")
     private final Content content;
@@ -48,7 +51,9 @@ public class Dimension extends AbstractObj implements Queryable, Updatable {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 
-    private static class Content {
+    private static class Content implements Serializable {
+
+        private static final long serialVersionUID = -6382409825359596163L;
 
         @JsonProperty("attributes")
         private final Collection<NestedAttribute> attributes;

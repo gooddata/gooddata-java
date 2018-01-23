@@ -8,6 +8,7 @@ package com.gooddata.md;
 import com.fasterxml.jackson.annotation.*;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -17,6 +18,8 @@ import java.util.Collection;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class NestedAttribute extends AbstractObj {
+
+    private static final long serialVersionUID = -5733300152707435624L;
 
     @JsonProperty("content")
     private final Content content;
@@ -176,7 +179,9 @@ public class NestedAttribute extends AbstractObj {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    protected static class Content {
+    protected static class Content implements Serializable {
+
+        private static final long serialVersionUID = -6828025725075482356L;
         private final Collection<Key> pk;
         private final Collection<Key> fk;
         private final Collection<DisplayForm> displayForms;

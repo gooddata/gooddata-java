@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
@@ -32,6 +33,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProjectDashboard extends AbstractObj implements Queryable {
 
+    private static final long serialVersionUID = 6791559547484536326L;
     private final Content content;
 
     private ProjectDashboard(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
@@ -80,8 +82,9 @@ public class ProjectDashboard extends AbstractObj implements Queryable {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private static class Content {
+    private static class Content implements Serializable {
 
+        private static final long serialVersionUID = -3540410868419025134L;
         private final Collection<Tab> tabs;
 
         @JsonProperty("filters")
@@ -104,8 +107,9 @@ public class ProjectDashboard extends AbstractObj implements Queryable {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class Tab {
+    public static class Tab implements Serializable {
 
+        private static final long serialVersionUID = 4755791353382871571L;
         private final String identifier;
         private final String title;
 

@@ -7,6 +7,7 @@ package com.gooddata.md.report;
 
 import com.gooddata.md.Attribute;
 import com.gooddata.md.DisplayForm;
+import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
 import java.util.Iterator;
@@ -87,5 +88,13 @@ public class AttributeInGridTest {
         final AttributeInGrid attr = readObjectFromResource("/md/report/attributeInGrid.json", AttributeInGrid.class);
 
         assertThat(attr.toString(), matchesPattern(AttributeInGrid.class.getSimpleName() + "\\[.*\\]"));
+    }
+
+    @Test
+    public void testSerializable() throws Exception {
+        final AttributeInGrid attr = readObjectFromResource("/md/report/attributeInGrid.json", AttributeInGrid.class);
+        final AttributeInGrid deserialized = SerializationUtils.roundtrip(attr);
+
+        assertThat(deserialized, jsonEquals(attr));
     }
 }

@@ -5,6 +5,7 @@
  */
 package com.gooddata.md;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -64,6 +65,14 @@ public class DatasetTest {
         final Dataset dataset = new Dataset("Dataset");
 
         assertThat(dataset.toString(), matchesPattern(Dataset.class.getSimpleName() + "\\[.*\\]"));
+    }
+
+    @Test
+    public void testSerializable() throws Exception {
+        final Dataset dataset = new Dataset("Dataset");
+        final Dataset deserialized = SerializationUtils.roundtrip(dataset);
+
+        assertThat(deserialized, jsonEquals(dataset));
     }
 
 }
