@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import static java.util.Arrays.asList;
@@ -29,6 +30,8 @@ import static java.util.Collections.emptyList;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Report extends AbstractObj implements Queryable, Updatable {
+
+    private static final long serialVersionUID = 189440633045112981L;
 
     @JsonProperty("content")
     private final Content content;
@@ -64,7 +67,9 @@ public class Report extends AbstractObj implements Queryable, Updatable {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 
-    private static class Content {
+    private static class Content implements Serializable {
+
+        private static final long serialVersionUID = 3437452191500594445L;
         private final Collection<String> definitions;
         private final Collection<String> domains;
 

@@ -6,6 +6,7 @@
 package com.gooddata.md.report;
 
 import com.gooddata.md.Metric;
+import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
@@ -57,5 +58,13 @@ public class MetricElementTest {
         final MetricElement element = new MetricElement(URI, ALIAS, FORMAT, DRILL_URI);
 
         assertThat(element.toString(), matchesPattern(MetricElement.class.getSimpleName() + "\\[.*\\]"));
+    }
+
+    @Test
+    public void testSerializable() throws Exception {
+        final MetricElement element = new MetricElement(URI, ALIAS, FORMAT, DRILL_URI);
+        final MetricElement deserialized = SerializationUtils.roundtrip(element);
+
+        assertThat(deserialized, jsonEquals(element));
     }
 }

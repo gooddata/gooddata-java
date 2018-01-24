@@ -5,9 +5,11 @@
  */
 package com.gooddata.md;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -45,5 +47,11 @@ public class DataLoadingColumnTest {
         assertThat(column.toString(), matchesPattern(DataLoadingColumn.class.getSimpleName() + "\\[.*\\]"));
     }
 
+    @Test
+    public void testSerializable() throws Exception {
+        final DataLoadingColumn column = readObjectFromResource("/md/dataLoadingColumn.json", DataLoadingColumn.class);
+        final DataLoadingColumn deserialized = SerializationUtils.roundtrip(column);
 
+        assertThat(deserialized, jsonEquals(column));
+    }
 }

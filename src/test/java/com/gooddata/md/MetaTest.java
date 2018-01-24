@@ -5,6 +5,7 @@
  */
 package com.gooddata.md;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
@@ -78,4 +79,12 @@ public class MetaTest {
         assertThat(meta.toString(), matchesPattern(Meta.class.getSimpleName() + "\\[.*\\]"));
     }
 
+    @Test
+    public void testSerializable() throws Exception {
+        final Meta meta = new Meta(AUTHOR, CONTRIBUTOR, CREATED, UPDATED, SUMMARY, TITLE, CATEGORY, TAGS, URI, IDENTIFIER,
+                DEPRECATED, PRODUCTION, LOCKED, UNLISTED, SHARED_WITH_SOMEONE);
+        final Meta deserialized = SerializationUtils.roundtrip(meta);
+
+        assertThat(deserialized, jsonEquals(meta));
+    }
 }

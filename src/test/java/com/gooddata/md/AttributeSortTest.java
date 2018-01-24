@@ -10,6 +10,7 @@ import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
 import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
@@ -51,4 +52,13 @@ public class AttributeSortTest {
 
         assertThat(attributeSort.toString(), matchesPattern(AttributeSort.class.getSimpleName() + "\\[.*\\]"));
     }
+
+    @Test
+    public void testSerializable() throws Exception {
+        final AttributeSort attributeSort = new AttributeSort("/gdc/md/PROJECT_ID/obj/1806", true);
+        final AttributeSort deserialized = SerializationUtils.roundtrip(attributeSort);
+
+        assertThat(deserialized, jsonEquals(attributeSort));
+    }
+
 }

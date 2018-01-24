@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
+
 /**
  * Represents data load of physical table.
  * Deserialization only.
@@ -20,6 +22,7 @@ import com.gooddata.util.GoodDataToStringBuilder;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 public class TableDataLoad extends AbstractObj implements Queryable {
 
+    private static final long serialVersionUID = -5209417147612785042L;
     public static final String TYPE_FULL = "full";
     public static final String TYPE_INCREMENTAL = "incremental";
 
@@ -65,8 +68,9 @@ public class TableDataLoad extends AbstractObj implements Queryable {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class Content {
+    private static class Content implements Serializable {
 
+        private static final long serialVersionUID = 3566067131546271394L;
         private final String dataSourceLocation;
         private final String typeOfLoad;
 

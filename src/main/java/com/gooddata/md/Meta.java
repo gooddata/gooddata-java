@@ -27,6 +27,7 @@ import static org.apache.commons.lang3.StringUtils.substring;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Meta implements Serializable {
 
+    private static final long serialVersionUID = -8102041850487115166L;
     private static final int SUMMARY_MAX_LENGTH = 2048;
     private static final int TITLE_MAX_LENGTH = 255;
 

@@ -5,12 +5,15 @@
  */
 package com.gooddata.md.report;
 
+import java.io.Serializable;
+
 /**
  * Marker element marking the placement of metrics in Grid report.
  * Can be contained either in rows or columns of {@link Grid}.
  */
-public final class MetricGroup implements GridElement {
+public final class MetricGroup implements GridElement, Serializable {
 
+    private static final long serialVersionUID = -2971228185501817988L;
     private static final String JSON_VALUE = "metricGroup";
 
     private final String value;

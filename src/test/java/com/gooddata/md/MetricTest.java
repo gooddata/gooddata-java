@@ -5,6 +5,7 @@
  */
 package com.gooddata.md;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
@@ -69,5 +70,13 @@ public class MetricTest {
         final Metric metric = readObjectFromResource("/md/metric-out.json", Metric.class);
 
         assertThat(metric.toString(), matchesPattern(Metric.class.getSimpleName() + "\\[.*\\]"));
+    }
+
+    @Test
+    public void testSerializable() throws Exception {
+        final Metric metric = readObjectFromResource("/md/metric-out.json", Metric.class);
+        final Metric deserialized = SerializationUtils.roundtrip(metric);
+
+        assertThat(deserialized, jsonEquals(metric));
     }
 }

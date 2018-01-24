@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Dataset extends AbstractObj implements Queryable, Updatable {
 
+    private static final long serialVersionUID = -6510493111358411706L;
     private static final String DATA_UPLOADS_LINK = "dataUploads";
     private static final String UPLOAD_CONFIGURATION_LINK = "uploadConfiguration";
 
@@ -120,7 +122,9 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private static class Content {
+    private static class Content implements Serializable {
+
+        private static final long serialVersionUID = -8819963869909114313L;
         private final List<String> ties;
         private final String mode;
         private final List<String> facts;

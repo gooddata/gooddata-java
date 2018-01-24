@@ -15,6 +15,8 @@ import com.gooddata.gdc.UriResponse;
 import com.gooddata.util.BooleanDeserializer;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
+
 /**
  * Represents datasets' loading column.
  * Deserialization only.
@@ -24,6 +26,7 @@ import com.gooddata.util.GoodDataToStringBuilder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DataLoadingColumn extends AbstractObj implements Queryable {
 
+    private static final long serialVersionUID = -1280718594585386535L;
     private static final String INT = "INT";
     private static final String VARCHAR = "VARCHAR";
 
@@ -94,8 +97,9 @@ public class DataLoadingColumn extends AbstractObj implements Queryable {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 
-    private static class Content {
+    private static class Content implements Serializable {
 
+        private static final long serialVersionUID = 3821238884831793602L;
         private final UriResponse columnUri;
         private final String columnName;
         private final String columnType;
@@ -158,7 +162,7 @@ public class DataLoadingColumn extends AbstractObj implements Queryable {
         }
     }
 
-    private static class ColumnSynchronize {
+    private static class ColumnSynchronize implements Serializable {
         private final String type;
         private final Integer length;
         private final Integer precision;

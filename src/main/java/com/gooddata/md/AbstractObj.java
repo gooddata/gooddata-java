@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.util.GoodDataToStringBuilder;
 import org.joda.time.DateTime;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import static com.gooddata.util.Validate.noNullElements;
@@ -17,7 +18,9 @@ import static com.gooddata.util.Validate.noNullElements;
 /**
  * Metadata object (common part)
  */
-public abstract class AbstractObj {
+public abstract class AbstractObj implements Serializable {
+
+    private static final long serialVersionUID = 2910760851810495274L;
 
     @JsonProperty("meta")
     protected final Meta meta;

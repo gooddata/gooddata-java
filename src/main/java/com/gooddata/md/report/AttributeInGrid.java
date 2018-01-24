@@ -16,6 +16,7 @@ import com.gooddata.md.Attribute;
 import com.gooddata.md.DisplayForm;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,8 +30,9 @@ import static com.gooddata.util.Validate.notNull;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AttributeInGrid implements GridElement {
+public class AttributeInGrid implements GridElement, Serializable {
 
+    private static final long serialVersionUID = 9061580138440068825L;
     private final String uri;
     private final String alias;
     private final List<List<String>> totals;

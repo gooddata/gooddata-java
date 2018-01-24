@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.md.Metric;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
+
 import static com.gooddata.util.Validate.notNull;
 
 /**
@@ -19,8 +21,9 @@ import static com.gooddata.util.Validate.notNull;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MetricElement {
+public class MetricElement implements Serializable {
 
+    private static final long serialVersionUID = 6199743301553304055L;
     private final String uri;
     private final String alias;
     private final String format;

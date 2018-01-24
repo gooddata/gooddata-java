@@ -10,14 +10,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
  * MAQL AST representation
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MaqlAst {
+public class MaqlAst implements Serializable {
 
+    private static final long serialVersionUID = 7392437285242701220L;
     private final String type;
     private final MaqlAstPosition position;
 
@@ -65,7 +67,7 @@ public class MaqlAst {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 
-    public static class MaqlAstPosition {
+    public static class MaqlAstPosition implements Serializable {
 
         private final int line;
         private final int column;

@@ -15,10 +15,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gooddata.util.GoodDataToStringBuilder;
 import org.joda.time.LocalDate;
 
+import java.io.Serializable;
+
 /**
  * Represents the start date and cron-like expression for {@link com.gooddata.md.ScheduledMail} mail schedule.
  */
-public class ScheduledMailWhen {
+public class ScheduledMailWhen implements Serializable {
+
+    private static final long serialVersionUID = 1203170008606357967L;
 
     /**
      * Cron like recurrency pattern. Example: "0:0:0:1*12:0:0".

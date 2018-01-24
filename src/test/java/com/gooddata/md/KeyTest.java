@@ -5,9 +5,11 @@
  */
 package com.gooddata.md;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
 import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -39,5 +41,13 @@ public class KeyTest {
         final Key key = new Key(DATA, TYPE);
 
         assertThat(key.toString(), matchesPattern(Key.class.getSimpleName() + "\\[.*\\]"));
+    }
+
+    @Test
+    public void testSerializable() throws Exception {
+        final Key key = new Key(DATA, TYPE);
+        final Key deserialized = SerializationUtils.roundtrip(key);
+
+        assertThat(deserialized, jsonEquals(key));
     }
 }

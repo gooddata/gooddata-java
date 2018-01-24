@@ -20,6 +20,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GridReportDefinitionContent extends ReportDefinitionContent {
 
+    private static final long serialVersionUID = 1296467241365069724L;
     public static final String FORMAT = "grid";
 
     @JsonCreator

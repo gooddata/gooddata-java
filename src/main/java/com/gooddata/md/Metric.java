@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -24,6 +25,8 @@ import java.util.Collection;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties("links")
 public class Metric extends AbstractObj implements Queryable, Updatable {
+
+    private static final long serialVersionUID = -1666713447809179661L;
 
     @JsonProperty("content")
     private final Content content;
@@ -68,8 +71,9 @@ public class Metric extends AbstractObj implements Queryable, Updatable {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private static class Content {
+    private static class Content implements Serializable {
 
+        private static final long serialVersionUID = 7959588028233637749L;
         private final String expression;
 
         @JsonProperty("format")

@@ -5,6 +5,7 @@
  */
 package com.gooddata.md.report;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
@@ -52,4 +53,11 @@ public class ReportTest {
         assertThat(report.toString(), matchesPattern(Report.class.getSimpleName() + "\\[.*\\]"));
     }
 
+    @Test
+    public void testSerializable() throws Exception {
+        final Report report = readObjectFromResource("/md/report/report.json", Report.class);
+        final Report deserialized = SerializationUtils.roundtrip(report);
+
+        assertThat(deserialized, jsonEquals(report));
+    }
 }

@@ -5,6 +5,7 @@
  */
 package com.gooddata.md.report;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
 import java.util.Collections;
@@ -36,4 +37,13 @@ public class OneNumberReportDefinitionContentTest {
         assertThat(def, jsonEquals(resource("md/report/oneNumberReportDefinitionContent-input.json")));
     }
 
+
+    @Test
+    public void testSerializable() throws Exception {
+        final OneNumberReportDefinitionContent def = (OneNumberReportDefinitionContent)
+                readObjectFromResource("/md/report/oneNumberReportDefinitionContent.json", ReportDefinitionContent.class);
+        final OneNumberReportDefinitionContent deserialized = SerializationUtils.roundtrip(def);
+
+        assertThat(deserialized, jsonEquals(def));
+    }
 }

@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -24,8 +25,9 @@ import java.util.Collection;
         //TODO chart
 })
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public abstract class ReportDefinitionContent {
+public abstract class ReportDefinitionContent implements Serializable {
 
+    private static final long serialVersionUID = -9027442077911353550L;
     private final String format;
     private final Grid grid;
     private final Collection<Filter> filters;

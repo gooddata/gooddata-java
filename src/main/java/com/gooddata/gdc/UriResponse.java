@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
+
 /**
  * Response containing URI string.
  * <p>
@@ -18,8 +20,9 @@ import com.gooddata.util.GoodDataToStringBuilder;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UriResponse {
+public class UriResponse implements Serializable {
 
+    private static final long serialVersionUID = 7622971178590505890L;
     private final String uri;
 
     @JsonCreator

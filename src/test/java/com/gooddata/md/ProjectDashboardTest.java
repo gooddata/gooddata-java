@@ -6,6 +6,7 @@
 package com.gooddata.md;
 
 import com.gooddata.md.ProjectDashboard.Tab;
+import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
@@ -46,5 +47,13 @@ public class ProjectDashboardTest {
         final ProjectDashboard dashboard = readObjectFromResource("/md/projectDashboard.json", ProjectDashboard.class);
 
         assertThat(dashboard.toString(), matchesPattern(ProjectDashboard.class.getSimpleName() + "\\[.*\\]"));
+    }
+
+    @Test
+    public void testSerializable() throws Exception {
+        final ProjectDashboard dashboard = readObjectFromResource("/md/projectDashboard.json", ProjectDashboard.class);
+        final ProjectDashboard deserialized = SerializationUtils.roundtrip(dashboard);
+
+        assertThat(deserialized, jsonEquals(dashboard));
     }
 }

@@ -25,6 +25,8 @@ import com.gooddata.util.GoodDataToStringBuilder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AttributeDisplayForm extends DisplayForm implements Updatable {
 
+    private static final long serialVersionUID = -7903851496647992573L;
+
     @JsonProperty("content")
     protected final Content content;
 
@@ -53,6 +55,7 @@ public class AttributeDisplayForm extends DisplayForm implements Updatable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private static class Content extends DisplayForm.Content {
 
+        private static final long serialVersionUID = -8502672468934478137L;
         private final boolean isDefault;
 
         private Content(@JsonProperty("formOf") String formOf, @JsonProperty("expression") String expression,

@@ -5,6 +5,7 @@
  */
 package com.gooddata.md;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
@@ -41,4 +42,11 @@ public class FactTest {
         assertThat(fact.toString(), matchesPattern(Fact.class.getSimpleName() + "\\[.*\\]"));
     }
 
+    @Test
+    public void testSerializable() throws Exception {
+        final Fact fact = new Fact("Person Shoe Size", "/gdc/md/PROJECT_ID/obj/COL_ID", "col", "/gdc/md/PROJECT_ID/obj/FOLDER_ID");
+        final Fact deserialized = SerializationUtils.roundtrip(fact);
+
+        assertThat(deserialized, jsonEquals(fact));
+    }
 }

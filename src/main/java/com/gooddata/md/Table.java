@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -22,6 +23,7 @@ import java.util.Collection;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 public class Table extends AbstractObj implements Queryable {
 
+    private static final long serialVersionUID = 8188850708608710066L;
     private final Content content;
 
     @JsonCreator
@@ -64,8 +66,9 @@ public class Table extends AbstractObj implements Queryable {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class Content {
+    private static class Content implements Serializable {
 
+        private static final long serialVersionUID = -3487498890189149368L;
         private final String tableDBName;
         private final String activeDataLoad;
         private final Collection<String> tableDataLoads;
