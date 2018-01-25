@@ -59,7 +59,7 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
             datasetService.loadDataset(project, manifest, readFromResource("/corruptedPerson.csv")).get();
             fail();
         } catch (DatasetException ex){
-            assertThat(ex.getMessage(), matchesPattern(FAILED_LOAD_PATTERN));
+            assertThat(ex.getMessage(), matchesPattern("Load datasets \\[dataset.person\\] failed: \\[" + FAILED_LOAD_PATTERN + "\\]"));
         }
     }
 
@@ -76,7 +76,7 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
             datasetService.loadDatasets(project, personManifest, cityManifest).get();
             fail();
         } catch (DatasetException ex){
-            assertThat(ex.getMessage(), matchesPattern("Load datasets [dataset.person, dataset.city] failed: [" + FAILED_LOAD_PATTERN + "]"));
+            assertThat(ex.getMessage(), matchesPattern("Load datasets \\[dataset.person, dataset.city\\] failed: \\[" + FAILED_LOAD_PATTERN + "\\]"));
         }
     }
 
