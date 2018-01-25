@@ -5,25 +5,25 @@
  */
 package com.gooddata.dataset;
 
-import static com.gooddata.util.ResourceUtils.readFromResource;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.fail;
-
 import com.gooddata.AbstractGoodDataAT;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.testng.annotations.Test;
 
 import java.util.Collection;
+
+import static com.gooddata.util.ResourceUtils.readFromResource;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.fail;
 
 /**
  * Dataset acceptance tests.
  */
 public class DatasetServiceAT extends AbstractGoodDataAT {
+
+    private static final String FAILED_LOAD_PATTERN = "Number of columns does(n't| not) co[r]{1,2}espond (in dataset.person.csv at line 3|on line 3 in dataset.person.csv)";
 
     @Test(groups = "dataset", dependsOnGroups = {"md", "datastore"})
     public void loadDataset() throws Exception {
@@ -59,7 +59,7 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
             datasetService.loadDataset(project, manifest, readFromResource("/corruptedPerson.csv")).get();
             fail();
         } catch (DatasetException ex){
-            assertThat(ex.getMessage(),is(equalTo("Load datasets [dataset.person] failed: [Number of columns doesn't correspond in dataset.person.csv at line 3]")));
+            assertThat(ex.getMessage(), matchesPattern(FAILED_LOAD_PATTERN));
         }
     }
 
@@ -76,7 +76,7 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
             datasetService.loadDatasets(project, personManifest, cityManifest).get();
             fail();
         } catch (DatasetException ex){
-            assertThat(ex.getMessage(),is(equalTo("Load datasets [dataset.person, dataset.city] failed: [Number of columns doesn't correspond in dataset.person.csv at line 3]")));
+            assertThat(ex.getMessage(), matchesPattern("Load datasets [dataset.person, dataset.city] failed: [" + FAILED_LOAD_PATTERN + "]"));
         }
     }
 
