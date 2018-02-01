@@ -17,14 +17,17 @@ import com.gooddata.util.GDDateSerializer;
 import com.gooddata.util.GoodDataToStringBuilder;
 import org.joda.time.LocalDate;
 
-import static com.gooddata.util.Validate.notNull;
+import java.util.Objects;
 
 /**
  * Represents {@link DateFilter} specifying exact from and to dates.
  */
 @JsonRootName(AbsoluteDateFilter.NAME)
 public class AbsoluteDateFilter extends DateFilter {
+
+    private static final long serialVersionUID = -1857726227400504182L;
     static final String NAME = "absoluteDateFilter";
+    
     private final LocalDate from;
     private final LocalDate to;
 
@@ -39,8 +42,8 @@ public class AbsoluteDateFilter extends DateFilter {
                               @JsonProperty("from") @JsonDeserialize(using = GDDateDeserializer.class) final LocalDate from,
                               @JsonProperty("to") @JsonDeserialize(using = GDDateDeserializer.class) final LocalDate to) {
         super(dataSet);
-        this.from = notNull(from, "from");
-        this.to = notNull(to, "to");
+        this.from = from;
+        this.to = to;
     }
 
     /**
@@ -62,6 +65,19 @@ public class AbsoluteDateFilter extends DateFilter {
     @Override
     public FilterItem withObjUriQualifier(final UriObjQualifier qualifier) {
         return new AbsoluteDateFilter(qualifier, from, to);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbsoluteDateFilter that = (AbsoluteDateFilter) o;
+        return super.equals(that) && Objects.equals(from, that.from) && Objects.equals(to, that.to);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(from, to, super.hashCode());
     }
 
     @Override

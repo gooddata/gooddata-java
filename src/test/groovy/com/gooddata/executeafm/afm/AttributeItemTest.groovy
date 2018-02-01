@@ -7,6 +7,7 @@ package com.gooddata.executeafm.afm
 
 import com.gooddata.executeafm.IdentifierObjQualifier
 import com.gooddata.executeafm.UriObjQualifier
+import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -59,5 +60,12 @@ class AttributeItemTest extends Specification {
 
         then:
         item.alias == "alias"
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(AttributeItem).usingGetClass()
+                .withIgnoredFields("alias")
+                .verify()
     }
 }

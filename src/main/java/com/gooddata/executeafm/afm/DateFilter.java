@@ -8,12 +8,17 @@ package com.gooddata.executeafm.afm;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.executeafm.ObjQualifier;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 import static com.gooddata.util.Validate.notNull;
 
 /**
  * Represents filter by date.
  */
-public abstract class DateFilter implements FilterItem {
+public abstract class DateFilter implements FilterItem, Serializable {
+
+    private static final long serialVersionUID = -804172518160419510L;
     private final ObjQualifier dataSet;
 
     /**
@@ -35,5 +40,18 @@ public abstract class DateFilter implements FilterItem {
     @Override
     public ObjQualifier getObjQualifier() {
         return getDataSet();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DateFilter that = (DateFilter) o;
+        return Objects.equals(dataSet, that.dataSet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dataSet);
     }
 }

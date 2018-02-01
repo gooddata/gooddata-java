@@ -8,6 +8,8 @@ package com.gooddata.executeafm.afm
 import com.gooddata.executeafm.IdentifierObjQualifier
 import com.gooddata.executeafm.ObjQualifier
 import com.gooddata.executeafm.UriObjQualifier
+import nl.jqno.equalsverifier.EqualsVerifier
+import org.apache.commons.lang3.SerializationUtils
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -46,5 +48,18 @@ class NegativeAttributeFilterTest extends Specification {
 
         then:
         copy.getObjQualifier().getUri() == "uri"
+    }
+
+    def "test serializable"() {
+        NegativeAttributeFilter attributeFilter = readObjectFromResource("/$NEGATIVE_ATTRIBUTE_FILTER_JSON", NegativeAttributeFilter)
+        NegativeAttributeFilter deserialized = SerializationUtils.roundtrip(attributeFilter)
+
+        expect:
+        that deserialized, jsonEquals(attributeFilter)
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(NegativeAttributeFilter).usingGetClass().verify()
     }
 }

@@ -7,12 +7,17 @@ package com.gooddata.executeafm.afm;
 
 import com.gooddata.executeafm.ObjQualifier;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 import static com.gooddata.util.Validate.notNull;
 
 /**
  * Represents filter by attribute.
  */
-public abstract class AttributeFilter implements FilterItem {
+public abstract class AttributeFilter implements FilterItem, Serializable {
+
+    private static final long serialVersionUID = 1125099080537899747L;
     private final ObjQualifier displayForm;
 
     /**
@@ -34,4 +39,18 @@ public abstract class AttributeFilter implements FilterItem {
     public ObjQualifier getObjQualifier() {
         return getDisplayForm();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AttributeFilter that = (AttributeFilter) o;
+        return Objects.equals(displayForm, that.displayForm);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(displayForm);
+    }
+
 }

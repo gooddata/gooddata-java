@@ -11,14 +11,18 @@ import com.gooddata.executeafm.ObjQualifier;
 import com.gooddata.executeafm.UriObjQualifier;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 import static com.gooddata.executeafm.afm.PopMeasureDefinition.NAME;
 
 /**
  * Definition of so called "period over period" measure
  */
 @JsonRootName(NAME)
-public class PopMeasureDefinition implements MeasureDefinition {
+public class PopMeasureDefinition implements MeasureDefinition, Serializable {
 
+    private static final long serialVersionUID = 1430640153994197345L;
     static final String NAME = "popMeasure";
 
     private final String measureIdentifier;

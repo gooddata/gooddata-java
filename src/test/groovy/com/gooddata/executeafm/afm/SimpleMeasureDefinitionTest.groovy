@@ -7,6 +7,7 @@ package com.gooddata.executeafm.afm
 
 import com.gooddata.executeafm.IdentifierObjQualifier
 import com.gooddata.executeafm.UriObjQualifier
+import org.apache.commons.lang3.SerializationUtils
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -101,5 +102,13 @@ class SimpleMeasureDefinitionTest extends Specification {
         then:
         copy.getUri() == 'uri'
         copy.getObjQualifier().getUri() == 'uri'
+    }
+
+    def "test serializable"() {
+        SimpleMeasureDefinition measureDefinition = readObjectFromResource("/$SIMPLE_MEASURE_DEFINITION_FULL_JSON", SimpleMeasureDefinition)
+        SimpleMeasureDefinition deserialized = SerializationUtils.roundtrip(measureDefinition)
+
+        expect:
+        that deserialized, jsonEquals(measureDefinition)
     }
 }

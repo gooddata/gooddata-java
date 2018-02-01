@@ -7,6 +7,7 @@ package com.gooddata.executeafm.afm
 
 import com.gooddata.executeafm.IdentifierObjQualifier
 import com.gooddata.executeafm.UriObjQualifier
+import org.apache.commons.lang3.SerializationUtils
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -42,5 +43,13 @@ class PopMeasureDefinitionTest extends Specification {
 
         then:
         copy.objQualifier.uri == 'uri'
+    }
+
+    def "test serializable"() {
+        PopMeasureDefinition measureDefinition = readObjectFromResource("/$POP_MEASURE_DEFINITION_JSON", PopMeasureDefinition)
+        PopMeasureDefinition deserialized = SerializationUtils.roundtrip(measureDefinition)
+
+        expect:
+        that deserialized, jsonEquals(measureDefinition)
     }
 }

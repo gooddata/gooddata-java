@@ -7,6 +7,8 @@ package com.gooddata.executeafm.afm
 
 import com.gooddata.executeafm.IdentifierObjQualifier
 import com.gooddata.executeafm.UriObjQualifier
+import nl.jqno.equalsverifier.EqualsVerifier
+import org.apache.commons.lang3.SerializationUtils
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -46,5 +48,18 @@ class RelativeDateFilterTest extends Specification {
 
         then:
         copy.getObjQualifier().getUri() == "uri"
+    }
+
+    def "test serializable"() {
+        RelativeDateFilter dateFilter = readObjectFromResource("/$RELATIVE_DATE_FILTER_JSON", RelativeDateFilter)
+        RelativeDateFilter deserialized = SerializationUtils.roundtrip(dateFilter)
+
+        expect:
+        that deserialized, jsonEquals(dateFilter)
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(RelativeDateFilter).usingGetClass().verify()
     }
 }

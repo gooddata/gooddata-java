@@ -13,6 +13,7 @@ import com.gooddata.executeafm.UriObjQualifier;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.Arrays.asList;
 
@@ -21,7 +22,10 @@ import static java.util.Arrays.asList;
  */
 @JsonRootName(NegativeAttributeFilter.NAME)
 public class NegativeAttributeFilter extends AttributeFilter {
+
+    private static final long serialVersionUID = -6202625318104289333L;
     static final String NAME = "negativeAttributeFilter";
+    
     private final List<String> notIn;
 
     /**
@@ -56,4 +60,18 @@ public class NegativeAttributeFilter extends AttributeFilter {
     public String toString() {
         return GoodDataToStringBuilder.defaultToString(this);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NegativeAttributeFilter that = (NegativeAttributeFilter) o;
+        return super.equals(that) && Objects.equals(notIn, that.notIn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(notIn, super.hashCode());
+    }
+
 }

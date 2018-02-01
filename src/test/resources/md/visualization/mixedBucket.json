@@ -1,0 +1,30 @@
+{
+  "localIdentifier": "attributeBucket",
+  "items": [
+    {
+      "visualizationAttribute": {
+        "localIdentifier": "attribute",
+        "displayForm": {
+          "uri": "/uri/to/displayForm"
+        },
+        "alias": "Attribute Alias"
+      }
+    }, {
+      "measure": {
+        "localIdentifier": "measure",
+        "title": "Measure",
+        "alias": "Measure Alias",
+        "definition": {
+          "measureDefinition": {
+            "item": {
+              "uri": "/uri/to/measure"
+            },
+            "aggregation": "sum",
+            "computeRatio": false,
+            "filters": []
+          }
+        }
+      }
+    }
+  ]
+}

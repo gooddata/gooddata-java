@@ -1,0 +1,52 @@
+{
+  "localIdentifier": "measures",
+  "items": [
+    {
+      "measure": {
+        "localIdentifier": "measure1",
+        "title": "Measure 1",
+        "alias": "Measure 1 alias",
+        "definition": {
+          "measureDefinition": {
+            "item": {
+              "uri": "/uri/to/measure/1"
+            },
+            "aggregation": "avg",
+            "computeRatio": true,
+            "filters": []
+          }
+        }
+      }
+    },{
+      "measure": {
+        "localIdentifier": "measure2",
+        "title": "Measure 2",
+        "alias": "Measure 2 alias",
+        "definition": {
+          "measureDefinition": {
+            "item": {
+              "uri": "/uri/to/measure/2"
+            },
+            "aggregation": "sum",
+            "computeRatio": false,
+            "filters": []
+          }
+        }
+      }
+    }, {
+      "measure": {
+        "localIdentifier": "pop measure",
+        "title": "Pop Measure",
+        "alias": "Pop Measure Alias",
+        "definition": {
+          "popMeasureDefinition": {
+            "measureIdentifier": "measure1",
+            "popAttribute": {
+              "uri": "/uri/to/attribute"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
