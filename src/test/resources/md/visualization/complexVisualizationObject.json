@@ -42,10 +42,7 @@
                           "displayForm": {
                             "uri": "/uri/to/displayForm/3"
                           },
-                          "in": [
-                            "ab",
-                            "cd"
-                          ]
+                          "in": []
                         }
                       }, {
                         "negativeAttributeFilter": {
@@ -61,9 +58,7 @@
                         "absoluteDateFilter": {
                           "dataSet": {
                             "uri": "/uri/to/dataSet/1"
-                          },
-                          "from": "2000-08-30",
-                          "to": "2017-08-07"
+                          }
                         }
                       }, {
                         "relativeDateFilter": {
@@ -99,10 +94,7 @@
             "displayForm": {
               "uri": "/uri/to/displayForm/3"
             },
-            "notIn": [
-              "ab",
-              "cd"
-            ]
+            "notIn": []
           }
         }, {
           "absoluteDateFilter": {
@@ -117,9 +109,7 @@
             "dataSet": {
               "uri": "/uri/to/dataSet/2"
             },
-            "granularity": "month",
-            "from": 0,
-            "to": -11
+            "granularity": "month"
           }
         }
       ],
