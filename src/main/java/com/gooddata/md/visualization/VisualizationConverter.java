@@ -214,6 +214,7 @@ public abstract class VisualizationConverter {
         if (filters == null) {
             return new ArrayList<>();
         }
+
         List<FilterItem> validFilters = removeIrrelevantFilters(filters);
         return getCompatibilityFilters(validFilters);
     }
@@ -249,7 +250,14 @@ public abstract class VisualizationConverter {
     private static MeasureItem convertMeasureFilters(final MeasureItem measure) {
         if (measure.getDefinition() instanceof SimpleMeasureDefinition) {
             List<FilterItem> filters = ((SimpleMeasureDefinition) measure.getDefinition()).getFilters();
-            List<FilterItem> validFilters = removeIrrelevantFilters(filters);
+
+            List<FilterItem> validFilters;
+            if (filters == null) {
+                validFilters = new ArrayList<>();
+            } else {
+                validFilters = removeIrrelevantFilters(filters);
+            }
+
             ((SimpleMeasureDefinition) measure.getDefinition()).setFilters(validFilters);
         }
 

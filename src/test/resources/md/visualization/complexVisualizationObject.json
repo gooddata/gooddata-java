@@ -26,6 +26,18 @@
           "items": [
             {
               "measure": {
+                "localIdentifier": "measure0",
+                "alias": "Measure 0 alias",
+                "definition": {
+                  "measureDefinition": {
+                    "item": {
+                      "uri": "/uri/to/measure/0"
+                    }
+                  }
+                }
+              }
+            }, {
+              "measure": {
                 "localIdentifier": "measure1",
                 "title": "Measure 1",
                 "alias": "Measure 1 alias",
