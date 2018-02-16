@@ -2,6 +2,7 @@
 
 usage(){
 	echo "Usage: $0 -v <desired version> -g <gpg password>"
+	echo "Or if you want to be asked fro GPG password without printing to console: $0 -v <desired version>"
 	exit 1
 }
 
@@ -49,9 +50,14 @@ fi
 
 if [ -z "${gpg_pass}" ]
 then
-   echo "No gpg password given!"
-   usage
-   exit 1
+   echo "Enter gpg password: "
+   read -s gpg_pass
+   if [ -z "${gpg_pass}" ]
+   then
+      echo "No gpg password given!"
+      usage
+      exit 1
+   fi
 fi
 
 mvn --batch-mode release:prepare release:perform -DreleaseVersion=${version} -Darguments="-Dgpg.passphrase=${gpg_pass}" 
