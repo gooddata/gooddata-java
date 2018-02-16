@@ -48,14 +48,18 @@ class VisualizationObjectConverterTest extends Specification {
                         new PositiveAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), ["ab", "cd"]),
                         new AbsoluteDateFilter(new UriObjQualifier("/uri/to/dataSet/1"), new LocalDate("2000-08-30"), new LocalDate("2017-08-07"))
                 ],
-                [new MeasureItem(new VOSimpleMeasureDefinition(new UriObjQualifier("/uri/to/measure/1"), "sum", false,
-                        [
-                                new PositiveAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), []),
-                                new NegativeAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), ["ab", "cd"]),
-                                new RelativeDateFilter(new UriObjQualifier("/uri/to/dataSet/2"), "month", 0, -11)
-                        ]
-                ),
-                        "measure1", "Measure 1 alias", null)],
+                [
+                        new MeasureItem(new VOSimpleMeasureDefinition(new UriObjQualifier("/uri/to/measure/0"), null, null, []),
+                                "measure0", "Measure 0 alias", null),
+                        new MeasureItem(new VOSimpleMeasureDefinition(new UriObjQualifier("/uri/to/measure/1"), "sum", false,
+                                [
+                                        new PositiveAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), []),
+                                        new NegativeAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), ["ab", "cd"]),
+                                        new RelativeDateFilter(new UriObjQualifier("/uri/to/dataSet/2"), "month", 0, -11)
+                                ]
+                        ),
+                                "measure1", "Measure 1 alias", null)
+                ],
                 null
         )
         VisualizationObject visualizationObject = readObjectFromResource("/$COMPLEX_VISUALIZATION", VisualizationObject)

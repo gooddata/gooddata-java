@@ -60,6 +60,13 @@ class VisualizationObjectTest extends Specification {
                                 new Bucket("bucket1", [attribute1]),
                                 new Bucket("bucket2", [
                                         new Measure(
+                                                new VOSimpleMeasureDefinition(new UriObjQualifier("/uri/to/measure/0"), null, null, null),
+                                                "measure0",
+                                                "Measure 0 alias",
+                                                null,
+                                                null
+                                        ),
+                                        new Measure(
                                                 measureDefinition,
                                                 "measure1",
                                                 "Measure 1 alias",

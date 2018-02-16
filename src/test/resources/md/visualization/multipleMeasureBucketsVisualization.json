@@ -22,8 +22,7 @@
                       "uri": "/uri/to/measure/1"
                     },
                     "aggregation": "sum",
-                    "computeRatio": false,
-                    "filters": []
+                    "computeRatio": false
                   }
                 }
               }
