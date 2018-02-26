@@ -93,11 +93,11 @@ class VisualizationObjectConverterTest extends Specification {
         name         | resource                   | expected
         "measures"   | MULTIPLE_MEASURE_BUCKETS   | new ResultSpec(
                 [new Dimension([]), new Dimension("measureGroup")],
-                [new MeasureSortItem("desc", [new MeasureLocatorItem("measure1")])]
+                null
         )
         "attributes" | MULTIPLE_ATTRIBUTE_BUCKETS | new ResultSpec(
                 [new Dimension(["attribute1", "attribute2", "attribute"], null)],
-                [new AttributeSortItem("asc", "attribute1")]
+                null
         )
     }
 
@@ -114,15 +114,15 @@ class VisualizationObjectConverterTest extends Specification {
         type   | resource             | expected
         "pie"  | STACKED_COLUMN_CHART | new ResultSpec(
                 [new Dimension("measureGroup"), new Dimension("1")],
-                [new AttributeSortItem("asc", "1")]
+                null
         )
         "bar"  | STACKED_COLUMN_CHART | new ResultSpec(
                 [new Dimension("2"), new Dimension(["1", "measureGroup"], null)],
-                [new AttributeSortItem("asc", "1")]
+                null
         )
         "line" | LINE_CHART           | new ResultSpec(
                 [new Dimension("measureGroup"), new Dimension("1")],
-                [new AttributeSortItem("asc", "1")]
+                null
         )
     }
 
