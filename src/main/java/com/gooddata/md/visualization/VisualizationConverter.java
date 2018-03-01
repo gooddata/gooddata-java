@@ -86,7 +86,8 @@ public abstract class VisualizationConverter {
                  return sorts;
              }
         } catch (Exception ignored) {}
-        return generateDefaultSorting(visualizationObject);
+
+        return null;
     }
 
     static List<SortItem> parseSorting(final String properties) throws Exception {
@@ -94,21 +95,6 @@ public abstract class VisualizationConverter {
         JsonNode nodeSortItems = jsonProperties.get("sortItems");
         TypeReference<List<SortItem>> mapType = new TypeReference<List<SortItem>>() {};
         return MAPPER.convertValue(nodeSortItems, mapType);
-    }
-
-    private static List<SortItem> generateDefaultSorting(final VisualizationObject visualizationObject) {
-        List<VisualizationAttribute> attributes = visualizationObject.getAttributes();
-        if(!attributes.isEmpty()) {
-            return Collections.singletonList(new AttributeSortItem(Direction.ASC, attributes.get(0).getLocalIdentifier()));
-        }
-
-        List<Measure> measures = visualizationObject.getMeasures();
-        if(!measures.isEmpty()) {
-            MeasureLocatorItem locator = new MeasureLocatorItem(measures.get(0).getLocalIdentifier());
-            return Collections.singletonList(new MeasureSortItem(Direction.DESC, Collections.singletonList(locator)));
-        }
-
-        return null;
     }
 
     private static List<Dimension> getDimensions(final VisualizationObject visualizationObject,
