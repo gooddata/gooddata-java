@@ -14,6 +14,7 @@ import com.gooddata.executeafm.ExecuteAfmService;
 import com.gooddata.export.ExportService;
 import com.gooddata.featureflag.FeatureFlagService;
 import com.gooddata.gdc.Header;
+import com.gooddata.lcm.LcmService;
 import com.gooddata.md.maintenance.ExportImportService;
 import com.gooddata.notification.NotificationService;
 import com.gooddata.projecttemplate.ProjectTemplateService;
@@ -95,6 +96,7 @@ public class GoodData {
     private final ExportService exportService;
     private final AuditEventService auditEventService;
     private final ExecuteAfmService executeAfmService;
+    private final LcmService lcmService;
 
     /**
      * Create instance configured to communicate with GoodData Platform under user with given credentials.
@@ -232,6 +234,7 @@ public class GoodData {
         projectTemplateService = new ProjectTemplateService(getRestTemplate(), settings);
         auditEventService = new AuditEventService(getRestTemplate(), accountService, settings);
         executeAfmService = new ExecuteAfmService(getRestTemplate(), settings);
+        lcmService = new LcmService(getRestTemplate(), settings);
     }
 
     static RestTemplate createRestTemplate(GoodDataEndpoint endpoint, HttpClient httpClient) {
@@ -505,6 +508,15 @@ public class GoodData {
     @Bean
     public ExecuteAfmService getExecuteAfmService() {
         return executeAfmService;
+    }
+
+    /**
+     * Get initialized service for Life Cycle Management
+     * @return initialized service for Life Cycle Management
+     */
+    @Bean
+    public LcmService getLcmService() {
+        return lcmService;
     }
 
 

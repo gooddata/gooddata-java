@@ -1,0 +1,13 @@
+{
+  "projectId": "PROJECT_ID",
+  "projectTitle": "PROJECT_TITLE",
+  "clientId": "CLIENT",
+  "segmentId": "SEGMENT",
+  "dataProductId": "DATA_PRODUCT",
+  "links": {
+    "project": "/gdc/projects/PROJECT_ID",
+    "client": "/gdc/domains/default/dataproducts/DATA_PRODUCT/clients/CLIENT",
+    "segment": "/gdc/domains/default/dataproducts/DATA_PRODUCT/segments/SEGMENT",
+    "dataProduct": "/gdc/domains/default/dataproducts/DATA_PRODUCT"
+  }
+}
