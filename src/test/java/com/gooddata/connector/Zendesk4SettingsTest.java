@@ -14,6 +14,7 @@ import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
@@ -21,8 +22,16 @@ public class Zendesk4SettingsTest {
 
     @Test
     public void shouldSerialize() throws Exception {
-        final Zendesk4Settings settings = new Zendesk4Settings("https://foo.com", plus.name(), "12am", "America/Los_Angeles");
+        final Zendesk4Settings settings = new Zendesk4Settings("https://foo.com", "zopim.com", "testAccount",
+                plus.name(), "12am", "America/Los_Angeles");
         assertThat(settings, jsonEquals(resource("connector/settings-zendesk4.json")));
+    }
+
+    @Test
+    public void shouldSerialize_beforeTemplate26() throws Exception {
+        final Zendesk4Settings settings = new Zendesk4Settings("https://foo.com", null, null,
+                plus.name(), "12am", "America/Los_Angeles");
+        assertThat(settings, jsonEquals(resource("connector/settings-zendesk4-before-template26.json")));
     }
 
     @Test
@@ -31,6 +40,21 @@ public class Zendesk4SettingsTest {
 
         assertThat(settings, is(notNullValue()));
         assertThat(settings.getApiUrl(), is("https://foo.com"));
+        assertThat(settings.getZopimUrl(), is("zopim.com"));
+        assertThat(settings.getAccount(), is("testAccount"));
+        assertThat(settings.getType(), is(plus.name()));
+        assertThat(settings.getSyncTime(), is("12am"));
+        assertThat(settings.getSyncTimeZone(), is("America/Los_Angeles"));
+    }
+
+    @Test
+    public void shouldDeserialize_beforeTemplate26() throws Exception {
+        final Zendesk4Settings settings = readObjectFromResource("/connector/settings-zendesk4-before-template26.json", Zendesk4Settings.class);
+
+        assertThat(settings, is(notNullValue()));
+        assertThat(settings.getApiUrl(), is("https://foo.com"));
+        assertThat(settings.getZopimUrl(), is(nullValue()));
+        assertThat(settings.getAccount(), is(nullValue()));
         assertThat(settings.getType(), is(plus.name()));
         assertThat(settings.getSyncTime(), is("12am"));
         assertThat(settings.getSyncTimeZone(), is("America/Los_Angeles"));
@@ -58,6 +82,20 @@ public class Zendesk4SettingsTest {
         final Zendesk4Settings settings = new Zendesk4Settings("old url");
         settings.setApiUrl("new url");
         assertThat(settings.getApiUrl(), is("new url"));
+    }
+
+    @Test
+    public void testSetZopimUrl() throws Exception {
+        final Zendesk4Settings settings = new Zendesk4Settings("api url");
+        settings.setZopimUrl("zopim url");
+        assertThat(settings.getZopimUrl(), is("zopim url"));
+    }
+
+    @Test
+    public void testSetAccount() throws Exception {
+        final Zendesk4Settings settings = new Zendesk4Settings("api url");
+        settings.setAccount("test account");
+        assertThat(settings.getAccount(), is("test account"));
     }
 
     @Test

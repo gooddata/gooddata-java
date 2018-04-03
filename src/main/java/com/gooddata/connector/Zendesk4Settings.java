@@ -20,19 +20,26 @@ public class Zendesk4Settings implements Settings {
     public static final String URL = "/gdc/projects/{project}/connectors/zendesk4/integration/settings";
 
     private String apiUrl;
+    private String zopimUrl;
+    private String account;
     private final String type;
     private final String syncTime;
     private final String syncTimeZone;
 
     public Zendesk4Settings(final String apiUrl) {
-        this(apiUrl, null, null, null);
+        this(apiUrl, null, null, null, null, null);
     }
 
     @JsonCreator
-    public Zendesk4Settings(@JsonProperty("apiUrl") String apiUrl, @JsonProperty("type") String type,
+    public Zendesk4Settings(@JsonProperty("apiUrl") String apiUrl,
+                            @JsonProperty("zopimUrl") String zopimUrl,
+                            @JsonProperty("account") String account,
+                            @JsonProperty("type") String type,
                             @JsonProperty("syncTime") String syncTime,
                             @JsonProperty("syncTimeZone") String syncTimeZone) {
         this.apiUrl = notEmpty(apiUrl, "apiUrl");
+        this.zopimUrl = zopimUrl;
+        this.account = account;
         this.type = type;
         this.syncTime = syncTime;
         this.syncTimeZone = syncTimeZone;
@@ -44,6 +51,22 @@ public class Zendesk4Settings implements Settings {
 
     public void setApiUrl(final String apiUrl) {
         this.apiUrl = notEmpty(apiUrl, "apiUrl");
+    }
+
+    public String getZopimUrl() {
+        return zopimUrl;
+    }
+
+    public void setZopimUrl(final String zopimUrl) {
+        this.zopimUrl = zopimUrl;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(final String account) {
+        this.account = account;
     }
 
     public String getType() {
