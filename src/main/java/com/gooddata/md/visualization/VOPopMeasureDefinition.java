@@ -15,6 +15,7 @@ import static com.gooddata.md.visualization.VOPopMeasureDefinition.NAME;
 
 /**
  * Period over Period measure definition to be used within {@link Measure}
+ *
  * @deprecated identical with {@link com.gooddata.executeafm.afm.PopMeasureDefinition}, see https://github.com/gooddata/gooddata-java/issues/581
  */
 @Deprecated
@@ -27,12 +28,32 @@ public class VOPopMeasureDefinition extends com.gooddata.executeafm.afm.PopMeasu
 
     /**
      * Creates instance of Period over Period measure definition to be used in {@link VisualizationObject}
-     * @param measureIdentifier reference to local identifier of {@link VOSimpleMeasureDefinition} over which is PoP calculated
-     * @param popAttribute uri to attribute used for PoP
+     *
+     * @param measureIdentifier
+     *         reference to local identifier of {@link VOSimpleMeasureDefinition} over which is PoP calculated
+     * @param popAttribute
+     *         uri to attribute used for PoP
+     * @param offset
+     *         the number of periods defined via the {@code popAttribute} time interval to the past (when value is negative) or to the future (when
+     *         value is positive)
      */
     @JsonCreator
     public VOPopMeasureDefinition(@JsonProperty("measureIdentifier") final String measureIdentifier,
-                                  @JsonProperty("popAttribute") final ObjQualifier popAttribute) {
+                                  @JsonProperty("popAttribute") final ObjQualifier popAttribute,
+                                  @JsonProperty("offset") final Integer offset) {
+        super(measureIdentifier, popAttribute, offset);
+    }
+
+    /**
+     * Creates instance of Period over Period measure definition to be used in {@link VisualizationObject}
+     *
+     * @param measureIdentifier
+     *         reference to local identifier of {@link VOSimpleMeasureDefinition} over which is PoP calculated
+     * @param popAttribute
+     *         uri to attribute used for PoP
+     */
+    public VOPopMeasureDefinition(final String measureIdentifier,
+                                  final ObjQualifier popAttribute) {
         super(measureIdentifier, popAttribute);
     }
 }
