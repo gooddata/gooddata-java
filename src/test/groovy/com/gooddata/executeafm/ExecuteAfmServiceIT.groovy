@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2017, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2007-2018, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -42,9 +42,12 @@ class ExecuteAfmServiceIT extends GoodDataITBase<ExecuteAfmService> {
     Project project = readObjectFromResource('/project/project.json', Project)
 
     @Shared
-    Execution execution = new Execution(new Afm()
+    Execution afmExecution = new Execution(new Afm()
                     .addAttribute(new AttributeItem(ATTR_QUALIFIER, 'a1'))
                     .addMeasure(new MeasureItem(new SimpleMeasureDefinition(MEASURE_QUALIFIER), 'm1')))
+
+    @Shared
+    VisualizationExecution visualizationExecution = new VisualizationExecution('/gdc/md/PROJECT_ID/obj/4')
 
     @Shared
     ExecutionResponse response = new ExecutionResponse([
@@ -57,30 +60,30 @@ class ExecuteAfmServiceIT extends GoodDataITBase<ExecuteAfmService> {
         onRequest()
                 .havingMethodEqualTo('POST')
                 .havingPathEqualTo('/gdc/app/projects/PROJECT_ID/executeAfm')
-                .havingBody(jsonEquals(execution))
-                .respond()
+                .havingBody(jsonEquals(afmExecution))
+        .respond()
                 .withBody(OBJECT_MAPPER.writeValueAsString(response))
                 .withStatus(200)
 
         when:
-        ExecutionResponse executed = service.execute(project, execution)
+        ExecutionResponse executed = service.executeAfm(project, afmExecution)
 
         then:
         executed?.dimensions?.size() == 2
         executed?.executionResultUri == RESULT_URI
     }
 
-    def "should handle failed execution request"() {
+    def "should handle failed AFM execution request"() {
         given:
         onRequest()
                 .havingMethodEqualTo('POST')
                 .havingPathEqualTo('/gdc/app/projects/PROJECT_ID/executeAfm')
-                .havingBody(jsonEquals(execution))
-                .respond()
+                .havingBody(jsonEquals(afmExecution))
+        .respond()
                 .withStatus(400)
 
         when:
-        service.execute(project, execution)
+        service.executeAfm(project, afmExecution)
 
         then:
         def ex = thrown(GoodDataException)
@@ -88,14 +91,14 @@ class ExecuteAfmServiceIT extends GoodDataITBase<ExecuteAfmService> {
     }
 
     @Unroll
-    def "should get result #order page"() {
+    "should get execution result #order page"() {
         given:
         ExecutionResult result = new ExecutionResult(new String[0], new Paging([0], [0], [0]))
 
         onRequest()
                 .respond()
                 .withStatus(202)
-                .thenRespond()
+         .thenRespond()
                 .withBody(OBJECT_MAPPER.writeValueAsString(result))
                 .withStatus(200)
 
@@ -116,13 +119,13 @@ class ExecuteAfmServiceIT extends GoodDataITBase<ExecuteAfmService> {
     }
 
     @Unroll
-    def "should handle failed result with status #statusCode"() {
+    "should handle failed result with status #statusCode"() {
         given:
         onRequest()
             .havingMethodEqualTo('GET')
             .havingPathEqualTo(RESULT_PATH)
             .havingQueryStringEqualTo(RESULT_QUERY)
-            .respond()
+        .respond()
             .withStatus(statusCode)
 
         when:
@@ -139,6 +142,41 @@ class ExecuteAfmServiceIT extends GoodDataITBase<ExecuteAfmService> {
         413        | /.*result is too large.*/
         500        | /.*failed.*unknown.*reason.*/
 
+    }
+
+    def "should execute visualization object"() {
+        given:
+        onRequest()
+                .havingMethodEqualTo('POST')
+                .havingPathEqualTo('/gdc/app/projects/PROJECT_ID/executeVisualization')
+                .havingBody(jsonEquals(visualizationExecution))
+        .respond()
+                .withBody(OBJECT_MAPPER.writeValueAsString(response))
+                .withStatus(200)
+
+        when:
+        ExecutionResponse executed = service.executeVisualization(project, visualizationExecution)
+
+        then:
+        executed?.dimensions?.size() == 2
+        executed?.executionResultUri == RESULT_URI
+    }
+
+    def "should handle failed visualization execution request"() {
+        given:
+        onRequest()
+                .havingMethodEqualTo('POST')
+                .havingPathEqualTo('/gdc/app/projects/PROJECT_ID/executeVisualization')
+                .havingBody(jsonEquals(visualizationExecution))
+        .respond()
+                .withStatus(400)
+
+        when:
+        service.executeVisualization(project, visualizationExecution)
+
+        then:
+        def ex = thrown(GoodDataException)
+        ex.message == 'Unable to execute visualization'
     }
 
     @Override

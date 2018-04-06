@@ -44,7 +44,7 @@ public class ExecuteAfmServiceAT extends AbstractGoodDataAT {
                 .addMeasure(new MeasureItem(new SimpleMeasureDefinition(new UriObjQualifier(metric.getUri())), "m1"))
         );
 
-        response = gd.getExecuteAfmService().execute(project, execution);
+        response = gd.getExecuteAfmService().executeAfm(project, execution);
 
         assertThat(response, notNullValue());
         assertThat("should have 2 dimensions", response.getDimensions(), hasSize(2));

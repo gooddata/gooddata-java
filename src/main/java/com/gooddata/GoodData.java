@@ -518,6 +518,4 @@ public class GoodData {
     public LcmService getLcmService() {
         return lcmService;
     }
-
-
 }

@@ -22,16 +22,22 @@ import org.springframework.web.util.UriComponentsBuilder;
 import static com.gooddata.util.Validate.notNull;
 
 /**
- * Service for executeAfm resource
+ * Service for executing reports with new visualization structures like AFM or Visualization Object.
+ * This includes GD API endpoints:
+ * <ul>
+ *     <li>{@code /executeAfm}</li>
+ *     <li>{@code /executeVisualization}</li>
+ * </ul>
  */
 public class ExecuteAfmService extends AbstractService {
 
-    private static final String EXECUTION_URI = "/gdc/app/projects/{projectId}/executeAfm";
+    private static final String AFM_EXECUTION_URI = "/gdc/app/projects/{projectId}/executeAfm";
+    private static final String VISUALIZATION_EXECUTION_URI = "/gdc/app/projects/{projectId}/executeVisualization";
     private static final String RESULT_OFFSET = "offset";
     private static final String RESULT_LIMIT = "limit";
 
     /**
-     * Service for executeAfm resource
+     * Constructor.
      *
      * @param restTemplate rest template
      * @param settings     settings
@@ -41,22 +47,56 @@ public class ExecuteAfmService extends AbstractService {
     }
 
     /**
-     * Executes the given execution returning the execution response
+     * @deprecated use {@link ExecuteAfmService#executeAfm(Project, Execution)}
+     */
+    @Deprecated
+    public ExecutionResponse execute(final Project project, final Execution execution) {
+        return executeAfm(project, execution);
+    }
+
+    /**
+     * Executes the given AFM execution returning the execution response
      * @param project project of the execution
      * @param execution execution
      * @return response of the submitted execution
      */
-    public ExecutionResponse execute(final Project project, final Execution execution) {
+    public ExecutionResponse executeAfm(final Project project, final Execution execution) {
         final String projectId = notNull(notNull(project, "project").getId(), "projectId");
         final ExecutionResponse response;
         try {
             response = restTemplate.postForObject(
-                    EXECUTION_URI,
+                    AFM_EXECUTION_URI,
                     notNull(execution, "execution"),
                     ExecutionResponse.class,
                     projectId);
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to execute AFM", e);
+        }
+
+        if (response == null) {
+            throw new GoodDataException("Empty response when execution posted to API");
+        }
+
+        return response;
+    }
+
+    /**
+     * Executes the given execution returning the execution response
+     * @param project project of the execution
+     * @param execution execution
+     * @return response of the submitted execution
+     */
+    public ExecutionResponse executeVisualization(final Project project, final VisualizationExecution execution) {
+        final String projectId = notNull(notNull(project, "project").getId(), "projectId");
+        final ExecutionResponse response;
+        try {
+            response = restTemplate.postForObject(
+                    VISUALIZATION_EXECUTION_URI,
+                    notNull(execution, "execution"),
+                    ExecutionResponse.class,
+                    projectId);
+        } catch (GoodDataException | RestClientException e) {
+            throw new GoodDataException("Unable to execute visualization", e);
         }
 
         if (response == null) {
