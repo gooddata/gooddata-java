@@ -19,8 +19,10 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.Validate.notNull;
 
 import com.gooddata.executeafm.UriObjQualifier;
+import com.gooddata.executeafm.afm.Afm;
 import com.gooddata.executeafm.afm.FilterItem;
 import com.gooddata.executeafm.Execution;
+import com.gooddata.executeafm.resultspec.ResultSpec;
 import com.gooddata.md.AbstractObj;
 import com.gooddata.md.Meta;
 import com.gooddata.md.Queryable;
@@ -255,9 +257,28 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
         content.setVisualizationClass(uri);
     }
 
+    /**
+     * @see VisualizationConverter#convertToExecution(VisualizationObject, Function)
+     */
     @JsonIgnore
     public Execution convertToExecution(Function<String, VisualizationClass> visualizationClassgetter) {
         return VisualizationConverter.convertToExecution(this, visualizationClassgetter);
+    }
+
+    /**
+     * @see VisualizationConverter#convertToAfm(VisualizationObject)
+     */
+    @JsonIgnore
+    public Afm convertToAfm() {
+        return VisualizationConverter.convertToAfm(this);
+    }
+
+    /**
+     * @see VisualizationConverter#convertToResultSpec(VisualizationObject, Function)
+     */
+    @JsonIgnore
+    public ResultSpec convertToResultSpec(Function<String, VisualizationClass> visualizationClassgetter) {
+        return VisualizationConverter.convertToResultSpec(this, visualizationClassgetter);
     }
 
     private Content getContent() {

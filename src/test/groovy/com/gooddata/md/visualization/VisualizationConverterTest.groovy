@@ -24,6 +24,8 @@ import com.gooddata.executeafm.resultspec.ResultSpec
 import com.gooddata.executeafm.resultspec.SortItem
 import spock.lang.Unroll
 
+import java.util.function.Function
+
 import static VisualizationConverter.convertToAfm
 import static VisualizationConverter.convertToResultSpec
 import static VisualizationConverter.parseSorting
@@ -31,7 +33,7 @@ import static com.gooddata.util.ResourceUtils.readObjectFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static spock.util.matcher.HamcrestSupport.that
 
-class VisualizationObjectConverterTest extends Specification {
+class VisualizationConverterTest extends Specification {
     private static final String COMPLEX_VISUALIZATION = "md/visualization/complexVisualizationObject.json"
     private static final String SIMPLE_VISUALIZATION = "md/visualization/simpleVisualizationObject.json"
 
@@ -83,8 +85,9 @@ class VisualizationObjectConverterTest extends Specification {
     @Unroll
     def "should generate result spec for table with default sorting from #name"() {
         given:
+        Function getter = { vizObject -> Stub(VisualizationClass) { getVisualizationType() >> VisualizationType.TABLE } }
         VisualizationObject vo = readObjectFromResource("/$resource", VisualizationObject)
-        ResultSpec converted = convertToResultSpec(vo, VisualizationType.TABLE)
+        ResultSpec converted = convertToResultSpec(vo, getter)
 
         expect:
         that converted, jsonEquals(expected)
@@ -104,8 +107,9 @@ class VisualizationObjectConverterTest extends Specification {
     @Unroll
     def "should generate result spec for #type"() {
         given:
+        Function getter = { vizObject -> Stub(VisualizationClass) { getVisualizationType() >> VisualizationType.of(type) } }
         VisualizationObject vo = readObjectFromResource("/$resource", VisualizationObject)
-        ResultSpec converted = convertToResultSpec(vo, VisualizationType.of(type))
+        ResultSpec converted = convertToResultSpec(vo, getter)
 
         expect:
         that converted, jsonEquals(expected)

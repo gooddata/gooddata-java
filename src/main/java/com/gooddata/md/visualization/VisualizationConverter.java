@@ -18,16 +18,11 @@ import com.gooddata.executeafm.afm.MeasureItem;
 import com.gooddata.executeafm.afm.NegativeAttributeFilter;
 import com.gooddata.executeafm.afm.PositiveAttributeFilter;
 import com.gooddata.executeafm.afm.SimpleMeasureDefinition;
-import com.gooddata.executeafm.resultspec.AttributeSortItem;
 import com.gooddata.executeafm.resultspec.Dimension;
-import com.gooddata.executeafm.resultspec.Direction;
-import com.gooddata.executeafm.resultspec.MeasureLocatorItem;
-import com.gooddata.executeafm.resultspec.MeasureSortItem;
 import com.gooddata.executeafm.resultspec.ResultSpec;
 import com.gooddata.executeafm.resultspec.SortItem;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -47,22 +42,28 @@ public abstract class VisualizationConverter {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     /**
-     * Generate Execution from Visualization object. Currently {@link ResultSpec}'s {@link Dimension}s can be generated
-     * for table and four types of chart: bar, column, line and pie.
+     * Generate Execution from Visualization object.
      *
      * @param visualizationObject which will be converted to {@link Execution}
      * @param visualizationClassGetter {@link Function} for fetching VisualizationClass, which is necessary for correct generation of {@link ResultSpec}
      * @return {@link Execution} object
+     *
+     * @see #convertToAfm(VisualizationObject)
+     * @see #convertToResultSpec(VisualizationObject, Function)
      */
     public static Execution convertToExecution(final VisualizationObject visualizationObject, final Function<String, VisualizationClass> visualizationClassGetter) {
-        VisualizationClass visualizationClass = notNull(visualizationClassGetter).apply(notNull(visualizationObject).getVisualizationClassUri());
-
-        ResultSpec resultSpec = convertToResultSpec(visualizationObject, visualizationClass.getVisualizationType());
+        ResultSpec resultSpec = convertToResultSpec(visualizationObject, visualizationClassGetter);
         Afm afm = convertToAfm(visualizationObject);
         return new Execution(afm, resultSpec);
     }
 
-    static Afm convertToAfm(final VisualizationObject visualizationObject) {
+    /**
+     * Generate Afm from Visualization object.
+     *
+     * @param visualizationObject which will be converted to {@link Execution}
+     * @return {@link Afm} object
+     */
+    public static Afm convertToAfm(final VisualizationObject visualizationObject) {
         final List<AttributeItem> attributes = convertAttributes(visualizationObject.getAttributes());
         final List<CompatibilityFilter> filters = convertFilters(visualizationObject.getFilters());
         final List<MeasureItem> measures = convertMeasures(visualizationObject.getMeasures());
@@ -70,12 +71,20 @@ public abstract class VisualizationConverter {
         return new Afm(attributes, filters, measures, null);
     }
 
-    static ResultSpec convertToResultSpec(final VisualizationObject visualizationObject,
-                                          final VisualizationType visualizationType) {
-        notNull(visualizationObject);
-        notNull(visualizationType);
+    /**
+     * Generate ResultSpec from Visualization object. Currently {@link ResultSpec}'s {@link Dimension}s can be generated
+     * for table and four types of chart: bar, column, line and pie.
+     *
+     * @param visualizationObject which will be converted to {@link Execution}
+     * @param visualizationClassGetter {@link Function} for fetching VisualizationClass, which is necessary for correct generation of {@link ResultSpec}
+     * @return {@link Execution} object
+     */
+    public static ResultSpec convertToResultSpec(final VisualizationObject visualizationObject,
+                                          final Function<String, VisualizationClass> visualizationClassGetter) {
+        VisualizationClass visualizationClass = notNull(visualizationClassGetter).apply(notNull(visualizationObject).getVisualizationClassUri());
+
         List<SortItem> sorts = getSorting(visualizationObject);
-        List<Dimension> dimensions = getDimensions(visualizationObject, visualizationType);
+        List<Dimension> dimensions = getDimensions(visualizationObject, visualizationClass.getVisualizationType());
         return new ResultSpec(dimensions, sorts);
     }
 
@@ -206,12 +215,11 @@ public abstract class VisualizationConverter {
     }
 
     private static List<MeasureItem> convertMeasures(final List<Measure> measures) {
-        List<MeasureItem> measuresForAfm = measures.stream()
+        return measures.stream()
                 .map(VisualizationConverter::removeFormat)
                 .map(VisualizationConverter::getAfmMeasure)
                 .map(VisualizationConverter::convertMeasureFilters)
                 .collect(toList());
-        return measuresForAfm;
     }
 
     private static Measure removeFormat(final Measure measure) {
