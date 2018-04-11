@@ -5,6 +5,7 @@
  */
 package com.gooddata.executeafm.afm;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.executeafm.ObjQualifier;
 
@@ -16,6 +17,7 @@ import static com.gooddata.util.Validate.notNull;
 /**
  * Represents filter by date.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class DateFilter implements FilterItem, Serializable {
 
     private static final long serialVersionUID = -804172518160419510L;

@@ -1,0 +1,9 @@
+{
+  "visualizationAttribute": {
+    "displayForm": {
+      "uri": "/some/uri"
+    },
+    "localIdentifier": "li1",
+    "alias": "Some alias"
+  }
+}

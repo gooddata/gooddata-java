@@ -25,7 +25,7 @@ class SimpleMeasureDefinitionTest extends Specification {
     def "should serialize full"() {
         expect:
         that new SimpleMeasureDefinition(QUALIFIER, Aggregation.AVG,
-                true, new PositiveAttributeFilter(QUALIFIER,'foo')),
+                true, new PositiveAttributeFilter(QUALIFIER,'foo'), new NegativeAttributeFilter(QUALIFIER, 'foo')),
                 jsonEquals(resource(SIMPLE_MEASURE_DEFINITION_FULL_JSON))
     }
 
@@ -50,14 +50,18 @@ class SimpleMeasureDefinitionTest extends Specification {
         SimpleMeasureDefinition definition = readObjectFromResource("/$SIMPLE_MEASURE_DEFINITION_FULL_JSON", SimpleMeasureDefinition)
 
         then:
-        with(definition.item as UriObjQualifier) {
+        with(definition?.item as UriObjQualifier) {
             uri == QUALIFIER.uri
         }
-        definition.aggregation == 'avg'
-        definition.computeRatio
-        with(definition.filters[0] as PositiveAttributeFilter) {
-            (it.displayForm as UriObjQualifier).uri == QUALIFIER.uri
+        definition?.aggregation == 'avg'
+        definition?.computeRatio
+        with(definition?.filters?.find { it.class == PositiveAttributeFilter }) {
+            it.displayForm?.uri == QUALIFIER.uri
             it.in == ['foo']
+        }
+        with(definition?.filters?.find { it.class == NegativeAttributeFilter }) {
+            it.displayForm?.uri == QUALIFIER.uri
+            it.notIn == ['foo']
         }
     }
 

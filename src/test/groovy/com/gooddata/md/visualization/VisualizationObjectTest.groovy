@@ -10,7 +10,6 @@ import com.gooddata.executeafm.afm.AbsoluteDateFilter
 import com.gooddata.executeafm.afm.NegativeAttributeFilter
 import com.gooddata.executeafm.afm.PositiveAttributeFilter
 import com.gooddata.executeafm.afm.RelativeDateFilter
-import com.gooddata.md.Meta
 import org.apache.commons.lang3.SerializationUtils
 import org.joda.time.LocalDate
 import spock.lang.Shared
@@ -19,6 +18,7 @@ import spock.lang.Unroll
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource
 import static spock.util.matcher.HamcrestSupport.that
 
 class VisualizationObjectTest extends Specification {
@@ -41,70 +41,77 @@ class VisualizationObjectTest extends Specification {
     @Shared
     VisualizationObject multipleMeasuresVisualization = readObjectFromResource("/$MULTIPLE_MEASURE_BUCKETS", VisualizationObject)
 
+    def "should deserialize full"() {
+        expect:
+        complexVisualization?.title == 'complex'
+        complexVisualization?.visualizationClassUri == 'visClass'
+        complexVisualization?.buckets?.size() == 2
+        complexVisualization?.buckets?.find { it.localIdentifier == 'bucket1' }?.items?.every { it.class == VisualizationAttribute }
+        complexVisualization?.buckets?.find { it.localIdentifier == 'bucket2' }?.items?.every { it.class == Measure }
+        complexVisualization?.filters?.size() == 4
+        complexVisualization?.filters?.find { it.class == PositiveAttributeFilter }
+        complexVisualization?.filters?.find { it.class == NegativeAttributeFilter }
+        complexVisualization?.filters?.find { it.class == AbsoluteDateFilter }
+        complexVisualization?.filters?.find { it.class == RelativeDateFilter }
+        complexVisualization?.properties == '{"key":"value"}'
+        complexVisualization?.referenceItems?.size() == 2
+    }
+
     def "should serialize full"() {
-        VisualizationAttribute attribute1 = new VisualizationAttribute(new UriObjQualifier("/uri/to/displayForm/1"), "attribute1", "attributeAlias")
-        PositiveAttributeFilter positiveAttributeFilter = new PositiveAttributeFilter( new UriObjQualifier("/uri/to/displayForm/3"), ["ab", "cd"])
-        NegativeAttributeFilter negativeAttributeFilter = new NegativeAttributeFilter( new UriObjQualifier("/uri/to/displayForm/3"), ["ab", "cd"])
-        AbsoluteDateFilter absoluteDateFilter = new AbsoluteDateFilter( new UriObjQualifier("/uri/to/dataSet/1"), new LocalDate("2000-08-30"), new LocalDate("2017-08-07"))
-        RelativeDateFilter relativeDateFilter = new RelativeDateFilter( new UriObjQualifier("/uri/to/dataSet/2"), "month", 0, -11)
-        VOSimpleMeasureDefinition measureDefinition = new VOSimpleMeasureDefinition(new UriObjQualifier("/uri/to/measure/1"), "sum", false, [positiveAttributeFilter, negativeAttributeFilter, absoluteDateFilter, relativeDateFilter ])
+        given:
+        VOSimpleMeasureDefinition measureDefinition = new VOSimpleMeasureDefinition(new UriObjQualifier("/uri/to/measure/1"), 'sum', false,
+                [new PositiveAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3")),
+                 new NegativeAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), ["ab", "cd"]),
+                 new AbsoluteDateFilter(new UriObjQualifier("/uri/to/dataSet/1"), null, null),
+                 new RelativeDateFilter(new UriObjQualifier("/uri/to/dataSet/2"), "month", 0, -11)])
+
         Map<String, String> references = new HashMap<>()
         references.put("key", "value")
         references.put("foo", "bar")
 
+        VisualizationObject vizObject = new VisualizationObject('complex', 'visClass')
+        vizObject.buckets = [
+                new Bucket('bucket1', [new VisualizationAttribute(new UriObjQualifier("/uri/to/displayForm/1"), "attribute1", "attributeAlias")]),
+                new Bucket('bucket2', [
+                            new Measure(
+                                    new VOSimpleMeasureDefinition(new UriObjQualifier('/uri/to/measure/0')),
+                                    'measure0',
+                                    'Measure 0 alias',
+                                    null,
+                                    null
+                            ),
+                            new Measure(
+                                    measureDefinition,
+                                    'measure1',
+                                    'Measure 1 alias',
+                                    'Measure 1',
+                                    null
+                            )
+                    ])
+            ]
+        vizObject.filters = [
+                new PositiveAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), ["ab", "cd"]),
+                new NegativeAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), []),
+                new AbsoluteDateFilter(new UriObjQualifier("/uri/to/dataSet/1"), new LocalDate("2000-08-30"), new LocalDate("2017-08-07")),
+                new RelativeDateFilter(new UriObjQualifier("/uri/to/dataSet/2"), "month", null, null)
+            ]
+        vizObject.properties = '{"key":"value"}'
+        vizObject.referenceItems = references
+
         expect:
-        that new VisualizationObject(
-                new VisualizationObject.Content(
-                        new UriObjQualifier("visClass"),
-                        [
-                                new Bucket("bucket1", [attribute1]),
-                                new Bucket("bucket2", [
-                                        new Measure(
-                                                new VOSimpleMeasureDefinition(new UriObjQualifier("/uri/to/measure/0"), null, null, null),
-                                                "measure0",
-                                                "Measure 0 alias",
-                                                null,
-                                                null
-                                        ),
-                                        new Measure(
-                                                measureDefinition,
-                                                "measure1",
-                                                "Measure 1 alias",
-                                                "Measure 1",
-                                                null
-                                        )
-                                ])
-                        ],
-                        [
-                                positiveAttributeFilter,
-                                negativeAttributeFilter,
-                                absoluteDateFilter,
-                                relativeDateFilter
-                        ],
-                        "{\"key\":\"value\"}",
-                        references
-                ),
-                new Meta("complex")
-        ), jsonEquals(complexVisualization)
+        that vizObject, jsonEquals(resource(COMPLEX_VISUALIZATION))
     }
 
-    def "should serialize"() {
+    def "should serialize simple"() {
+        given:
         VisualizationObject simpleVisualization = readObjectFromResource("/$SIMPLE_VISUALIZATION", VisualizationObject)
 
         expect:
-        that new VisualizationObject(
-                new VisualizationObject.Content(
-                        new UriObjQualifier("visClass"),
-                        [],
-                        null,
-                        null,
-                        null
-                ),
-                new Meta("simple")
-        ), jsonEquals(simpleVisualization)
+        that new VisualizationObject('simple', 'visClass'), jsonEquals(simpleVisualization)
     }
 
     def "should return null when invalid collection requested"() {
+        given:
         VisualizationObject customChart = readObjectFromResource("/$CUSTOM_CHART", VisualizationObject)
 
         when:
@@ -117,18 +124,16 @@ class VisualizationObjectTest extends Specification {
     }
 
     @Unroll
-    def "return item in #name collection"() {
-        VisualizationAttribute attribute = getter()
-
+    "return item in #name collection"() {
         expect:
-        attribute == expected
+        getter() == expected
 
         where:
         name      | getter                         | expected
-        "view"    | stackedColumnChart.&getView    | stackedColumnChart.getBuckets().get(0).getItems().get(0)
-        "stack"   | stackedColumnChart.&getStack   | stackedColumnChart.getBuckets().get(1).getItems().get(0)
-        "trend"   | segmentedLineChart.&getTrend   | segmentedLineChart.getBuckets().get(0).getItems().get(0)
-        "segment" | segmentedLineChart.&getSegment | segmentedLineChart.getBuckets().get(1).getItems().get(0)
+        "view"    | stackedColumnChart.&getView    | stackedColumnChart.buckets[0].items[0]
+        "stack"   | stackedColumnChart.&getStack   | stackedColumnChart.buckets[1].items[0]
+        "trend"   | segmentedLineChart.&getTrend   | segmentedLineChart.buckets[0].items[0]
+        "segment" | segmentedLineChart.&getSegment | segmentedLineChart.buckets[1].items[0]
     }
 
     def "should return null when non-existing key requested"() {
@@ -145,9 +150,9 @@ class VisualizationObjectTest extends Specification {
 
         where:
         measures                                    | expected
-        multipleMeasuresVisualization.getMeasures() | [ multipleMeasuresVisualization.content.buckets.get(0).getItems().get(0),
-                                                        multipleMeasuresVisualization.content.buckets.get(1).getItems().get(0),
-                                                        multipleMeasuresVisualization.content.buckets.get(1).getItems().get(1) ]
+        multipleMeasuresVisualization.getMeasures() | [ multipleMeasuresVisualization.buckets[0].items[0],
+                                                        multipleMeasuresVisualization.buckets[1].items[0],
+                                                        multipleMeasuresVisualization.buckets[1].items[1] ]
         emptyBucketsVisualization.getMeasures()       | []
     }
 
@@ -157,8 +162,8 @@ class VisualizationObjectTest extends Specification {
 
         where:
         measures                                          | expected
-        multipleMeasuresVisualization.getSimpleMeasures() | [ multipleMeasuresVisualization.content.buckets.get(0).getItems().get(0),
-                                                              multipleMeasuresVisualization.content.buckets.get(1).getItems().get(0) ]
+        multipleMeasuresVisualization.getSimpleMeasures() | [ multipleMeasuresVisualization.buckets[0].items[0],
+                                                              multipleMeasuresVisualization.buckets[1].items[0] ]
         emptyBucketsVisualization.getSimpleMeasures()     | []
     }
 
@@ -168,12 +173,13 @@ class VisualizationObjectTest extends Specification {
 
         where:
         attributes                                | expected
-        segmentedLineChart.getAttributes()        | [ segmentedLineChart.content.buckets.get(0).getItems().get(0),
-                                                      segmentedLineChart.content.buckets.get(1).getItems().get(0) ]
+        segmentedLineChart.getAttributes()        | [ segmentedLineChart.buckets[0].items[0],
+                                                      segmentedLineChart.buckets[1].items[0] ]
         emptyBucketsVisualization.getAttributes() | []
     }
 
     def "should check if visualization object has derived measures"() {
+        given:
         VisualizationObject visualizationWithPop = multipleMeasuresVisualization
         VisualizationObject visualizationWithoutPop = segmentedLineChart
         VisualizationObject noMeasuresVisualization = emptyBucketsVisualization
@@ -187,7 +193,8 @@ class VisualizationObjectTest extends Specification {
     }
 
     @Unroll
-    def "should set #property"() {
+    "should set #property"() {
+        given:
         VisualizationObject empty = readObjectFromResource("/$EMPTY_BUCKETS", VisualizationObject)
 
         when:
@@ -201,9 +208,10 @@ class VisualizationObjectTest extends Specification {
     }
 
     def "test serializable"() {
+        when:
         VisualizationObject deserialized = SerializationUtils.roundtrip(complexVisualization)
 
-        expect:
+        then:
         that deserialized, jsonEquals(complexVisualization)
     }
 }

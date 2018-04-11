@@ -15,6 +15,16 @@
             "foo"
           ]
         }
+      },
+      {
+        "negativeAttributeFilter": {
+          "displayForm": {
+            "uri": "/gdc/md/projectId/obj/1"
+          },
+          "notIn": [
+            "foo"
+          ]
+        }
       }
     ]
   }
