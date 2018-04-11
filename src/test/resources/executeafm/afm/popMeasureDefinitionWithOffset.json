@@ -3,6 +3,7 @@
     "measureIdentifier": "mId",
     "popAttribute": {
       "uri": "/gdc/md/projectId/obj/1"
-    }
+    },
+    "offset": -2
   }
 }
