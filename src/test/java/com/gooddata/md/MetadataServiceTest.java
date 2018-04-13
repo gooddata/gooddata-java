@@ -10,6 +10,7 @@ import com.gooddata.GoodDataRestException;
 import com.gooddata.GoodDataSettings;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.md.report.ReportDefinition;
+import com.gooddata.md.visualization.VisualizationClass;
 import com.gooddata.project.Project;
 import org.mockito.Matchers;
 import org.mockito.Mock;
@@ -32,6 +33,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -276,7 +279,7 @@ public class MetadataServiceTest {
         final Entry resultEntry = mock(Entry.class);
         final String uri = "myURI";
         final String title = "myTitle";
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryable")).thenReturn(queryResult);
+        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
         when(queryResult.getEntries()).thenReturn(asList(resultEntry));
         when(resultEntry.getTitle()).thenReturn(title);
         when(resultEntry.getUri()).thenReturn(uri);
@@ -290,7 +293,7 @@ public class MetadataServiceTest {
         final Query queryResult = mock(Query.class);
         final Entry resultEntry1 = mock(Entry.class);
         final Entry resultEntry2 = mock(Entry.class);
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryable")).thenReturn(queryResult);
+        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
         when(queryResult.getEntries()).thenReturn(asList(resultEntry1, resultEntry2));
 
         service.getObjUri(project, Queryable.class);
@@ -301,7 +304,7 @@ public class MetadataServiceTest {
         final Query queryResult = mock(Query.class);
         final Entry resultEntry = mock(Entry.class);
         final String title = "myTitle";
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryable")).thenReturn(queryResult);
+        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
         when(queryResult.getEntries()).thenReturn(asList(resultEntry));
 
         service.getObjUri(project, Queryable.class, Restriction.title(title));
@@ -314,7 +317,7 @@ public class MetadataServiceTest {
         final Entry resultEntry = mock(Entry.class);
         final String uri = "myURI";
         final String id = "myId";
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryable")).thenReturn(queryResult);
+        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
         when(queryResult.getEntries()).thenReturn(asList(resultEntry));
         when(resultEntry.getIdentifier()).thenReturn(id);
         when(resultEntry.getUri()).thenReturn(uri);
@@ -329,7 +332,7 @@ public class MetadataServiceTest {
         final Query queryResult = mock(Query.class);
         final Entry resultEntry1 = mock(Entry.class);
         final Entry resultEntry2 = mock(Entry.class);
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryable")).thenReturn(queryResult);
+        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
         when(queryResult.getEntries()).thenReturn(asList(resultEntry1, resultEntry2));
 
         service.getObj(project, Queryable.class);
@@ -340,7 +343,7 @@ public class MetadataServiceTest {
         final Query queryResult = mock(Query.class);
         final Entry resultEntry = mock(Entry.class);
         final String title = "myTitle";
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryable")).thenReturn(queryResult);
+        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
         when(queryResult.getEntries()).thenReturn(asList(resultEntry));
 
         service.getObj(project, Queryable.class, Restriction.title(title));
@@ -351,16 +354,27 @@ public class MetadataServiceTest {
         final Query queryResult = mock(Query.class);
         final Entry resultEntry1 = mock(Entry.class);
         final Entry resultEntry2 = mock(Entry.class);
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryable")).thenReturn(queryResult);
+        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
         when(queryResult.getEntries()).thenReturn(asList(resultEntry1, resultEntry2));
 
         final Collection<Entry> results = service.find(project, Queryable.class);
         assertThat(results, allOf(hasItem(resultEntry1), hasItem(resultEntry2)));
     }
 
+    @Test
+    public void testFindIrregularQueryTypeNames() {
+        when(restTemplate.getForObject(anyString(), any(), anyString(), anyString())).thenReturn(mock(Query.class));
+
+        service.find(project, ReportDefinition.class);
+        verify(restTemplate).getForObject(Query.URI, Query.class, project.getId(), "reportdefinition");
+
+        service.find(project, VisualizationClass.class);
+        verify(restTemplate).getForObject(Query.URI, Query.class, project.getId(), "visualizationclasses");
+    }
+
     @Test(expectedExceptions = GoodDataException.class)
     public void testFindWithWithClientSideHTTPError() throws Exception {
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryable")).thenThrow(new RestClientException(""));
+        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenThrow(new RestClientException(""));
         service.find(project, Queryable.class);
     }
 
@@ -372,7 +386,7 @@ public class MetadataServiceTest {
         final String summary = "mySummary";
         final String uri1 = "uri1";
         final String uri2 = "uri2";
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryable")).thenReturn(queryResult);
+        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
         when(queryResult.getEntries()).thenReturn(asList(resultEntry1, resultEntry2));
         when(resultEntry1.getSummary()).thenReturn(summary);
         when(resultEntry2.getSummary()).thenReturn(summary);
