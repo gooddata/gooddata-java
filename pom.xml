@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>gooddata-java</artifactId>
-    <version>2.23.1-SNAPSHOT</version>
+    <version>2.24.0</version>
     <name>${project.artifactId}</name>
     <description>GoodData Java SDK</description>
     <url>https://github.com/gooddata/gooddata-java</url>
@@ -24,7 +24,7 @@
         <url>git@github.com:gooddata/gooddata-java.git</url>
         <connection>scm:git:git@github.com:gooddata/gooddata-java.git</connection>
         <developerConnection>scm:git:${basedir}</developerConnection>
-      <tag>HEAD</tag>
+      <tag>gooddata-java-2.24.0</tag>
   </scm>
     <developers>
         <developer>
