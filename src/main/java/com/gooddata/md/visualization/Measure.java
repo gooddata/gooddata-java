@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.executeafm.afm.MeasureDefinition;
 import com.gooddata.executeafm.afm.MeasureItem;
-import com.gooddata.executeafm.afm.PopMeasureDefinition;
 
 import java.util.Objects;
 
@@ -25,6 +24,15 @@ public class Measure extends MeasureItem implements BucketItem {
     static final String NAME = "measure";
 
     private String title;
+
+    /**
+     * Creates new instance of measure for use in {@link VisualizationObject}
+     * @param definition measure definition
+     * @param localIdentifier local identifier
+     */
+    public Measure(final MeasureDefinition definition, final String localIdentifier) {
+        super(definition, localIdentifier);
+    }
 
     /**
      * Creates new instance of measure for use in {@link VisualizationObject}

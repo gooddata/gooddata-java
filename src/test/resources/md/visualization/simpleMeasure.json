@@ -1,0 +1,12 @@
+{
+  "measure": {
+    "localIdentifier": "loc1",
+    "definition": {
+      "measureDefinition": {
+        "item": {
+          "uri": "uri"
+        }
+      }
+    }
+  }
+}

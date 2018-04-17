@@ -8,7 +8,7 @@ package com.gooddata.md.visualization;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.executeafm.ObjQualifier;
+import com.gooddata.executeafm.UriObjQualifier;
 import com.gooddata.executeafm.afm.AttributeItem;
 
 import java.util.Objects;
@@ -27,10 +27,20 @@ public class VisualizationAttribute extends AttributeItem implements BucketItem 
      *
      * @param displayForm display form of attribute
      * @param localIdentifier local identifier of attribute
+     */
+    public VisualizationAttribute(final UriObjQualifier displayForm, final String localIdentifier) {
+        super(displayForm, localIdentifier);
+    }
+
+    /**
+     * Creates new instance of visualization attribute for use in {@link Bucket}
+     *
+     * @param displayForm display form of attribute
+     * @param localIdentifier local identifier of attribute
      * @param alias alias of attribute
      */
     @JsonCreator
-    public VisualizationAttribute(@JsonProperty("displayForm") final ObjQualifier displayForm,
+    public VisualizationAttribute(@JsonProperty("displayForm") final UriObjQualifier displayForm,
                                   @JsonProperty("localIdentifier") final String localIdentifier,
                                   @JsonProperty("alias") final String alias) {
         super(displayForm, localIdentifier, alias);

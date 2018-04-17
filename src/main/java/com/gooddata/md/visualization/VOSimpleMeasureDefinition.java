@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.executeafm.ObjQualifier;
+import com.gooddata.executeafm.afm.Aggregation;
 import com.gooddata.executeafm.afm.FilterItem;
 
 import java.util.List;
@@ -30,6 +31,15 @@ public class VOSimpleMeasureDefinition extends com.gooddata.executeafm.afm.Simpl
 
     /**
      * Creates instance of simple measure definition to be used in {@link VisualizationObject}
+     *
+     * @see com.gooddata.executeafm.afm.SimpleMeasureDefinition#SimpleMeasureDefinition(ObjQualifier)
+     */
+    public VOSimpleMeasureDefinition(ObjQualifier item) {
+        super(item);
+    }
+
+    /**
+     * Creates instance of simple measure definition to be used in {@link VisualizationObject}
      * @param item uri to measure
      * @param aggregation used aggregation function
      * @param computeRatio indicates if result should be calculated in percents
@@ -40,6 +50,24 @@ public class VOSimpleMeasureDefinition extends com.gooddata.executeafm.afm.Simpl
                                      @JsonProperty("aggregation") final String aggregation,
                                      @JsonProperty("computeRatio") final Boolean computeRatio,
                                      @JsonProperty("filters") final List<FilterItem> filters) {
+        super(item, aggregation, computeRatio, filters);
+    }
+
+    /**
+     * Creates instance of simple measure definition to be used in {@link VisualizationObject}
+     *
+     * @see com.gooddata.executeafm.afm.SimpleMeasureDefinition#SimpleMeasureDefinition(ObjQualifier, Aggregation, Boolean, List)
+     */
+    public VOSimpleMeasureDefinition(ObjQualifier item, Aggregation aggregation, Boolean computeRatio, List<FilterItem> filters) {
+        super(item, aggregation, computeRatio, filters);
+    }
+
+    /**
+     * Creates instance of simple measure definition to be used in {@link VisualizationObject}
+     *
+     * @see com.gooddata.executeafm.afm.SimpleMeasureDefinition#SimpleMeasureDefinition(ObjQualifier, Aggregation, Boolean, FilterItem...)
+     */
+    public VOSimpleMeasureDefinition(ObjQualifier item, Aggregation aggregation, Boolean computeRatio, FilterItem... filters) {
         super(item, aggregation, computeRatio, filters);
     }
 }

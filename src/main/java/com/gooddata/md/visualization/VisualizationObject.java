@@ -15,7 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.WRAPPER_OBJECT;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 import static com.gooddata.md.visualization.CollectionType.*;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.Validate.notEmpty;
 import static org.apache.commons.lang3.Validate.notNull;
 
 import com.gooddata.executeafm.UriObjQualifier;
@@ -35,7 +37,11 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * Stores complete information about new visualization object that can be stored as MD to md server
+ * Complete information about new visualization object that can be stored as MD object (see {@link com.gooddata.md.Obj})
+ * to md server.
+ * <p/>
+ * The visualization object is part of new GD UI visualizations situated in AD and KPI dashboards.
+ * This object is a persistent form of AFM (Attribute, Measures, Filters) report executions.
  */
 @JsonTypeName(VisualizationObject.NAME)
 @JsonTypeInfo(include = WRAPPER_OBJECT, use = NAME)
@@ -43,7 +49,19 @@ import java.util.function.Function;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class VisualizationObject extends AbstractObj implements Queryable, Updatable {
     static final String NAME = "visualizationObject";
-    private Content content;
+
+    @JsonProperty("content")
+    private final Content content;
+
+    /**
+     * Constructor.
+     *
+     * @param title title of visualization object
+     * @param visualizationClassUri uri to the {@link VisualizationClass}
+     */
+    public VisualizationObject(final String title, final String visualizationClassUri) {
+        this(new Content(notEmpty(visualizationClassUri), emptyList()), new Meta(notEmpty(title)));
+    }
 
     @JsonCreator
     private VisualizationObject(@JsonProperty("content") final Content content, @JsonProperty("meta") final Meta meta) {
@@ -56,7 +74,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
      */
     @JsonIgnore
     public List<Measure> getMeasures() {
-        return getContent().getMeasures();
+        return content.getMeasures();
     }
 
     /**
@@ -64,6 +82,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
      * @param localIdentifier of measure
      * @return measure or null
      */
+    @JsonIgnore
     public Measure getMeasure(final String localIdentifier) {
         return getMeasures().stream()
                 .filter(measure -> measure.getLocalIdentifier().equals(localIdentifier))
@@ -86,9 +105,10 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
      */
     @JsonIgnore
     public List<VisualizationAttribute> getAttributes() {
-        return getContent().getAttributes();
+        return content.getAttributes();
     }
 
+    @JsonIgnore
     public VisualizationAttribute getAttribute(final String localIdentifier) {
         return getAttributes().stream()
                 .filter(attribute -> attribute.getLocalIdentifier().equals(localIdentifier))
@@ -104,7 +124,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
      */
     @JsonIgnore
     public VisualizationAttribute getAttributeFromCollection(final CollectionType type) {
-        return getContent().getBuckets().stream()
+        return content.getBuckets().stream()
                 .filter(bucket -> type.isValueOf(bucket.getLocalIdentifier()))
                 .findFirst()
                 .map(Bucket::getOnlyAttribute)
@@ -172,11 +192,11 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
     }
 
     /**
-     * @return uri to visualization class
+     * @return uri to the {@link VisualizationClass}
      */
     @JsonIgnore
     public String getVisualizationClassUri() {
-        return getContent().getVisualizationClassUri();
+        return content.getVisualizationClassUri();
     }
 
     /**
@@ -184,7 +204,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
      */
     @JsonIgnore
     public List<Bucket> getBuckets() {
-        return getContent().getBuckets();
+        return content.getBuckets();
     }
 
     /**
@@ -200,7 +220,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
      */
     @JsonIgnore
     public List<FilterItem> getFilters() {
-        return getContent().getFilters();
+        return content.getFilters();
     }
 
     /**
@@ -216,7 +236,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
      */
     @JsonIgnore
     public String getProperties() {
-        return getContent().getProperties();
+        return content.getProperties();
     }
 
     /**
@@ -232,7 +252,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
      */
     @JsonIgnore
     public Map<String, String> getReferenceItems() {
-        return getContent().getReferenceItems();
+        return content.getReferenceItems();
     }
 
     /**
@@ -246,6 +266,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
     /**
      * @return uri to visualizaton class wrapped as {@link UriObjQualifier}
      */
+    @JsonIgnore
     public UriObjQualifier getVisualizationClass() {
         return content.getVisualizationClass();
     }
@@ -253,6 +274,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
     /**
      * @param uri to replace previous visualization class's uri, wrapped as {@link UriObjQualifier}
      */
+    @JsonIgnore
     public void setVisualizationClass(UriObjQualifier uri) {
         content.setVisualizationClass(uri);
     }
@@ -281,10 +303,6 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
         return VisualizationConverter.convertToResultSpec(this, visualizationClassgetter);
     }
 
-    private Content getContent() {
-        return content;
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private static class Content implements Serializable {
@@ -295,6 +313,10 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
         private List<FilterItem> filters;
         private String properties;
         private Map<String, String> referenceItems;
+
+        private Content(final String visualizationClassUri, final List<Bucket> buckets) {
+            this(new UriObjQualifier(visualizationClassUri), buckets, null, null, null);
+        }
 
         @JsonCreator
         private Content(@JsonProperty("visualizationClass") final UriObjQualifier visualizationClass,
@@ -373,6 +395,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
             return visualizationClass;
         }
 
+        @JsonProperty("references")
         public Map<String, String> getReferenceItems() {
             return referenceItems;
         }
