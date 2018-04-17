@@ -91,7 +91,7 @@ public class DatasetManifest {
     public void setUploadMode(final UploadMode uploadMode) {
         notNull(uploadMode, "uploadMode");
         for (Part part : parts) {
-            part.setUploadMode(uploadMode.name());
+            part.setUploadMode(uploadMode.toString());
         }
     }
 
