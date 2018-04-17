@@ -62,6 +62,18 @@ public class DatasetManifestTest {
     }
 
     @Test
+    public void shouldSetUploadModeDeleteForAllParts() throws Exception {
+        final DatasetManifest manifest = new DatasetManifest("dataset", "file.csv", asList(
+                new DatasetManifest.Part("FULL", "col1", asList("attr1"), true, null),
+                new DatasetManifest.Part("FULL", "col2", asList("attr2"), true, null)
+        ));
+        manifest.setUploadMode(UploadMode.DELETE_CENTER);
+
+        assertThat(manifest.getParts().get(0).getUploadMode(), is("DELETE-CENTER"));
+        assertThat(manifest.getParts().get(1).getUploadMode(), is("DELETE-CENTER"));
+    }
+
+    @Test
     public void shouldSetMapping() throws Exception {
         final DatasetManifest manifest = new DatasetManifest("dataset", "file.csv", asList(
                 new DatasetManifest.Part("FULL", "col1", asList("attr1"), true, null),
