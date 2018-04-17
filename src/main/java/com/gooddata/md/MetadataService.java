@@ -19,8 +19,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.gooddata.util.Validate.noNullElements;
@@ -31,6 +33,8 @@ import static java.util.Arrays.asList;
  * Query, create and update project metadata - attributes, facts, metrics, reports,...
  */
 public class MetadataService extends AbstractService {
+
+    private static final Set<String> IRREGULAR_PLURAL_WORD_SUFFIXES = new HashSet<>(asList("s", "ch", "sh", "x", "o"));
 
     public MetadataService(final RestTemplate restTemplate, final GoodDataSettings settings) {
         super(restTemplate, settings);
@@ -278,8 +282,7 @@ public class MetadataService extends AbstractService {
         notNull(project.getId(), "project.id");
         notNull(cls, "cls");
 
-        final String type = cls.getSimpleName().toLowerCase() +
-                (cls.isAssignableFrom(ReportDefinition.class) ? "" : "s");
+        final String type = getQueryType(cls);
         try {
             final Query queryResult = restTemplate.getForObject(Query.URI, Query.class, project.getId(), type);
 
@@ -291,29 +294,6 @@ public class MetadataService extends AbstractService {
         } catch (RestClientException e) {
             throw new GoodDataException("Unable to query metadata: " + type, e);
         }
-    }
-
-    private Collection<Entry> filterEntries(Collection<Entry> entries, Restriction... restrictions) {
-        if (restrictions == null || restrictions.length == 0) {
-            return entries;
-        }
-        final Collection<Entry> result = new ArrayList<>(entries.size());
-        for (Entry entry : entries) {
-            for (Restriction restriction : restrictions) {
-                switch (restriction.getType()) {
-                    case IDENTIFIER:
-                        if (restriction.getValue().equals(entry.getIdentifier())) result.add(entry);
-                        break;
-                    case TITLE:
-                        if (restriction.getValue().equals(entry.getTitle())) result.add(entry);
-                        break;
-                    case SUMMARY:
-                        if (restriction.getValue().equals(entry.getSummary())) result.add(entry);
-                        break;
-                }
-            }
-        }
-        return result;
     }
 
     /**
@@ -470,6 +450,29 @@ public class MetadataService extends AbstractService {
         }
     }
 
+    private Collection<Entry> filterEntries(Collection<Entry> entries, Restriction... restrictions) {
+        if (restrictions == null || restrictions.length == 0) {
+            return entries;
+        }
+        final Collection<Entry> result = new ArrayList<>(entries.size());
+        for (Entry entry : entries) {
+            for (Restriction restriction : restrictions) {
+                switch (restriction.getType()) {
+                    case IDENTIFIER:
+                        if (restriction.getValue().equals(entry.getIdentifier())) result.add(entry);
+                        break;
+                    case TITLE:
+                        if (restriction.getValue().equals(entry.getTitle())) result.add(entry);
+                        break;
+                    case SUMMARY:
+                        if (restriction.getValue().equals(entry.getSummary())) result.add(entry);
+                        break;
+                }
+            }
+        }
+        return result;
+    }
+
     private IdentifiersAndUris getUrisForIdentifiers(final Project project, final Collection<String> identifiers) {
         final IdentifiersAndUris response;
         try {
@@ -478,5 +481,19 @@ public class MetadataService extends AbstractService {
             throw new GoodDataException("Unable to get URIs from identifiers.", e);
         }
         return response;
+    }
+
+    private <T extends Queryable> String getQueryType(final Class<T> cls) {
+        final String typeBase = cls.getSimpleName().toLowerCase();
+
+        if (ReportDefinition.class.equals(cls)) {
+            return typeBase;
+        }
+
+        if (IRREGULAR_PLURAL_WORD_SUFFIXES.stream().anyMatch(typeBase::endsWith)) {
+            return typeBase + "es";
+        }
+
+        return typeBase + "s";
     }
 }
