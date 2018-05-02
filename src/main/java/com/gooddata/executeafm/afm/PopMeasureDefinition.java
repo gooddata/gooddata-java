@@ -31,8 +31,6 @@ public class PopMeasureDefinition implements MeasureDefinition, Serializable {
 
     private final ObjQualifier popAttribute;
 
-    private final Integer offset;
-
     /**
      * Creates new definition from given measure identifier referencing another measure in {@link Afm} and given attribute qualifier (should qualify date
      * attribute)
@@ -41,36 +39,17 @@ public class PopMeasureDefinition implements MeasureDefinition, Serializable {
      *         measure identifier
      * @param popAttribute
      *         "period over period" date attribute
-     * @param offset
-     *         the number of periods the time window defined by {@code popAttribute} is offset about to the past (when value is negative) or future (when
-     *         value is positive)
      */
     @JsonCreator
     public PopMeasureDefinition(@JsonProperty("measureIdentifier") final String measureIdentifier,
-                                @JsonProperty("popAttribute") final ObjQualifier popAttribute,
-                                @JsonProperty("offset") final Integer offset) {
+                                @JsonProperty("popAttribute") final ObjQualifier popAttribute) {
         this.measureIdentifier = measureIdentifier;
         this.popAttribute = popAttribute;
-        this.offset = offset;
-    }
-
-    /**
-     * Creates new definition from given measure identifier referencing another measure in {@link Afm} and given attribute qualifier (should qualify date
-     * attribute)
-     *
-     * @param measureIdentifier
-     *         measure identifier
-     * @param popAttribute
-     *         "period over period" date attribute
-     */
-    public PopMeasureDefinition(final String measureIdentifier,
-                                final ObjQualifier popAttribute) {
-        this(measureIdentifier, popAttribute, null);
     }
 
     @Override
     public MeasureDefinition withObjUriQualifier(final UriObjQualifier qualifier) {
-        return new PopMeasureDefinition(measureIdentifier, qualifier, offset);
+        return new PopMeasureDefinition(measureIdentifier, qualifier);
     }
 
     /**
@@ -87,15 +66,6 @@ public class PopMeasureDefinition implements MeasureDefinition, Serializable {
 
     public ObjQualifier getPopAttribute() {
         return popAttribute;
-    }
-
-    /**
-     * Returns number of periods defined via {@link #popAttribute} time interval.
-     *
-     * @return positive or negative number of periods or {@code null} when offset was not defined
-     */
-    public Integer getOffset() {
-        return offset;
     }
 
     @Override
