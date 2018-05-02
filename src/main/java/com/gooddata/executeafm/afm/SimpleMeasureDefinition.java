@@ -15,8 +15,11 @@ import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.gooddata.executeafm.afm.SimpleMeasureDefinition.NAME;
 import static com.gooddata.util.Validate.notNull;
@@ -43,10 +46,15 @@ public class SimpleMeasureDefinition implements MeasureDefinition, Serializable 
 
     /**
      * Creates new definition
-     * @param item item which is measured, can be attribute, fact or another measure
-     * @param aggregation additional aggregation applied
-     * @param computeRatio whether should be shown as ratio
-     * @param filters additional filters applied
+     *
+     * @param item
+     *         item which is measured, can be attribute, fact or another measure
+     * @param aggregation
+     *         additional aggregation applied
+     * @param computeRatio
+     *         whether should be shown as ratio
+     * @param filters
+     *         additional filters applied
      */
     @JsonCreator
     public SimpleMeasureDefinition(@JsonProperty("item") final ObjQualifier item,
@@ -61,10 +69,15 @@ public class SimpleMeasureDefinition implements MeasureDefinition, Serializable 
 
     /**
      * Creates new definition
-     * @param item item which is measured, can be attribute, fact or another measure
-     * @param aggregation additional aggregation applied
-     * @param computeRatio whether should be shown as ratio
-     * @param filters additional filters applied
+     *
+     * @param item
+     *         item which is measured, can be attribute, fact or another measure
+     * @param aggregation
+     *         additional aggregation applied
+     * @param computeRatio
+     *         whether should be shown as ratio
+     * @param filters
+     *         additional filters applied
      */
     public SimpleMeasureDefinition(final ObjQualifier item, final Aggregation aggregation, final Boolean computeRatio,
                                    final List<FilterItem> filters) {
@@ -73,19 +86,28 @@ public class SimpleMeasureDefinition implements MeasureDefinition, Serializable 
 
     /**
      * Creates new definition
-     * @param item item which is measured, can be attribute, fact or another measure
-     * @param aggregation additional aggregation applied
-     * @param computeRatio whether should be shown as ratio
-     * @param filters additional filters applied
+     *
+     * @param item
+     *         item which is measured, can be attribute, fact or another measure
+     * @param aggregation
+     *         additional aggregation applied
+     * @param computeRatio
+     *         whether should be shown as ratio
+     * @param filters
+     *         additional filters applied
      */
-    public SimpleMeasureDefinition(final ObjQualifier item, final Aggregation aggregation, final Boolean computeRatio,
-                                   final FilterItem... filters) {
+    public SimpleMeasureDefinition(final ObjQualifier item, final Aggregation aggregation, final Boolean computeRatio, final FilterItem... filters) {
         this(item, aggregation, computeRatio, asList(filters));
     }
 
     @Override
-    public MeasureDefinition withObjUriQualifier(final UriObjQualifier qualifier) {
-        return new SimpleMeasureDefinition(qualifier, aggregation, computeRatio, filters);
+    public MeasureDefinition withObjUriQualifiers(final ObjQualifierConverter objQualifierConverter) {
+        return ObjIdentifierUtilities.copyIfNecessary(
+                this,
+                item,
+                uriObjQualifier -> new SimpleMeasureDefinition(uriObjQualifier, aggregation, computeRatio, filters),
+                objQualifierConverter
+        );
     }
 
     @Override
@@ -98,9 +120,42 @@ public class SimpleMeasureDefinition implements MeasureDefinition, Serializable 
         return getItem().getUri();
     }
 
+    /**
+     * Returns the qualifier used by the {@link com.gooddata.md.Metric}.
+     *
+     * @return qualifier used by the metric, which is its {@link #item}. The null is returned in case when {@link #item} was not set.
+     *
+     * @deprecated Use {@link #getObjQualifiers()} instead.
+     */
     @Override
+    @Deprecated
     public ObjQualifier getObjQualifier() {
-        return getItem();
+        return getObjQualifiers().stream()
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public Collection<ObjQualifier> getObjQualifiers() {
+        return item == null
+                ? Collections.emptySet()
+                : Collections.singleton(item);
+    }
+
+    /**
+     * Copy itself using given URI qualifier.
+     *
+     * @param uriQualifier
+     *         The qualifier to use by the new object instead of the currently used one.
+     *
+     * @return self copy with given qualifier
+     *
+     * @deprecated Use {@link #withObjUriQualifiers(ObjQualifierConverter)} instead.
+     */
+    @Override
+    @Deprecated
+    public MeasureDefinition withObjUriQualifier(final UriObjQualifier uriQualifier) {
+        return withObjUriQualifiers((identifierObjQualifier) -> Optional.of(uriQualifier));
     }
 
     /**
@@ -119,7 +174,9 @@ public class SimpleMeasureDefinition implements MeasureDefinition, Serializable 
 
     /**
      * Set additional aggregation applied
-     * @param aggregation additional aggregation applied
+     *
+     * @param aggregation
+     *         additional aggregation applied
      */
     public void setAggregation(final String aggregation) {
         this.aggregation = aggregation;
@@ -127,7 +184,9 @@ public class SimpleMeasureDefinition implements MeasureDefinition, Serializable 
 
     /**
      * Set additional aggregation applied
-     * @param aggregation additional aggregation applied
+     *
+     * @param aggregation
+     *         additional aggregation applied
      */
     public void setAggregation(final Aggregation aggregation) {
         setAggregation(notNull(aggregation, "aggregation").toString());
@@ -142,7 +201,9 @@ public class SimpleMeasureDefinition implements MeasureDefinition, Serializable 
 
     /**
      * Set whether should be shown as ratio
-     * @param computeRatio whether should be shown as ratio
+     *
+     * @param computeRatio
+     *         whether should be shown as ratio
      */
     public void setComputeRatio(final Boolean computeRatio) {
         this.computeRatio = computeRatio;
@@ -157,7 +218,9 @@ public class SimpleMeasureDefinition implements MeasureDefinition, Serializable 
 
     /**
      * Set additional filters applied
-     * @param filters additional filters applied
+     *
+     * @param filters
+     *         additional filters applied
      */
     public void setFilters(final List<FilterItem> filters) {
         this.filters = filters;
@@ -165,7 +228,9 @@ public class SimpleMeasureDefinition implements MeasureDefinition, Serializable 
 
     /**
      * Apply additional filter
-     * @param filter filter to be applied
+     *
+     * @param filter
+     *         filter to be applied
      */
     public void addFilter(final FilterItem filter) {
         if (filters == null) {
@@ -193,6 +258,22 @@ public class SimpleMeasureDefinition implements MeasureDefinition, Serializable 
      */
     public boolean hasAggregation() {
         return aggregation != null;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final SimpleMeasureDefinition that = (SimpleMeasureDefinition) o;
+        return Objects.equals(item, that.item) &&
+                Objects.equals(aggregation, that.aggregation) &&
+                Objects.equals(computeRatio, that.computeRatio) &&
+                Objects.equals(filters, that.filters);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(item, aggregation, computeRatio, filters);
     }
 
     @Override

@@ -14,12 +14,20 @@ import com.gooddata.executeafm.UriObjQualifier;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Optional;
 
 import static com.gooddata.executeafm.afm.PopMeasureDefinition.NAME;
 
 /**
- * Definition of so called "period over period" measure
+ * Definition of so called "period over period" measure.
+ * <p>
+ * The definition is deprecated. Use {@link OverPeriodMeasureDefinition} with {@link OverPeriodDateAttribute#getPeriodsAgo()} set to {@code
+ * 1} instead.
  */
+@Deprecated
 @JsonRootName(NAME)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PopMeasureDefinition implements MeasureDefinition, Serializable {
@@ -28,7 +36,6 @@ public class PopMeasureDefinition implements MeasureDefinition, Serializable {
     static final String NAME = "popMeasure";
 
     private final String measureIdentifier;
-
     private final ObjQualifier popAttribute;
 
     /**
@@ -48,11 +55,18 @@ public class PopMeasureDefinition implements MeasureDefinition, Serializable {
     }
 
     @Override
-    public MeasureDefinition withObjUriQualifier(final UriObjQualifier qualifier) {
-        return new PopMeasureDefinition(measureIdentifier, qualifier);
+    public MeasureDefinition withObjUriQualifiers(final ObjQualifierConverter objQualifierConverter) {
+        return ObjIdentifierUtilities.copyIfNecessary(
+                this,
+                popAttribute,
+                uriObjQualifier -> new PopMeasureDefinition(measureIdentifier, uriObjQualifier),
+                objQualifierConverter
+        );
     }
 
     /**
+     * Determine if measure is ad-hoc
+     *
      * @return always true (PopMeasure is always ad-hoc)
      */
     @Override
@@ -68,9 +82,56 @@ public class PopMeasureDefinition implements MeasureDefinition, Serializable {
         return popAttribute;
     }
 
+    /**
+     * Returns the qualifier used by the {@link com.gooddata.md.Metric}.
+     *
+     * @return qualifier used by the metric, which is its {@link #popAttribute}. The null is returned in case when {@link #popAttribute} was not set.
+     *
+     * @deprecated Use {@link #getObjQualifiers()} instead.
+     */
     @Override
+    @Deprecated
     public ObjQualifier getObjQualifier() {
-        return getPopAttribute();
+        return getObjQualifiers().stream()
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public Collection<ObjQualifier> getObjQualifiers() {
+        return popAttribute == null
+                ? Collections.emptySet()
+                : Collections.singleton(popAttribute);
+    }
+
+    /**
+     * Copy itself using given URI qualifier.
+     *
+     * @param uriQualifier
+     *         The qualifier to use by the new object instead of the currently used one.
+     *
+     * @return self copy with given qualifier
+     *
+     * @deprecated Use {@link #withObjUriQualifiers(ObjQualifierConverter)} instead.
+     */
+    @Override
+    @Deprecated
+    public MeasureDefinition withObjUriQualifier(final UriObjQualifier uriQualifier) {
+        return withObjUriQualifiers((identifierObjQualifier) -> Optional.of(uriQualifier));
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final PopMeasureDefinition that = (PopMeasureDefinition) o;
+        return Objects.equals(measureIdentifier, that.measureIdentifier) &&
+                Objects.equals(popAttribute, that.popAttribute);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(measureIdentifier, popAttribute);
     }
 
     @Override

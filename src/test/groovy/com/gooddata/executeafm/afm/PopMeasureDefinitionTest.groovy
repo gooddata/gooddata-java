@@ -7,6 +7,8 @@ package com.gooddata.executeafm.afm
 
 import com.gooddata.executeafm.IdentifierObjQualifier
 import com.gooddata.executeafm.UriObjQualifier
+import nl.jqno.equalsverifier.EqualsVerifier
+import nl.jqno.equalsverifier.Warning
 import org.apache.commons.lang3.SerializationUtils
 import spock.lang.Specification
 
@@ -31,12 +33,13 @@ class PopMeasureDefinitionTest extends Specification {
 
         then:
         measure.measureIdentifier == 'mId'
-        (measure.popAttribute as UriObjQualifier).uri == '/gdc/md/projectId/obj/1'
+        measure.popAttribute.uri == '/gdc/md/projectId/obj/1'
+        measure.objQualifier.uri == '/gdc/md/projectId/obj/1'
         measure.isAdHoc()
         measure.toString()
     }
 
-    def "should copy"() {
+    def "should copy with uri"() {
         when:
         def measure = new PopMeasureDefinition("mid", new IdentifierObjQualifier("id"))
         def copy = measure.withObjUriQualifier(new UriObjQualifier("uri"))
@@ -45,7 +48,41 @@ class PopMeasureDefinitionTest extends Specification {
         copy.objQualifier.uri == 'uri'
     }
 
+    def "should copy with uri converter"() {
+        when:
+        def measure = new PopMeasureDefinition("mid", new IdentifierObjQualifier("id"))
+        def qualifiersConversionMap = [(new IdentifierObjQualifier("id")): new UriObjQualifier("uri")]
+        def copy = measure.withObjUriQualifiers({ identifierQualifier ->
+            return Optional.ofNullable(qualifiersConversionMap.get(identifierQualifier))
+        })
+
+        then:
+        copy.popAttribute.uri == 'uri'
+    }
+
+    def "should return the same object when copying with uri converter and uri is already used"() {
+        when:
+        def definition = new PopMeasureDefinition("mid", new UriObjQualifier("uri"))
+        def copy = definition.withObjUriQualifiers({ identifierQualifier -> Optional.empty() })
+
+        then:
+        definition == copy
+    }
+
+    def "should fail when qualifier converter is not provided or cannot convert object's identifier qualifiers"() {
+        when:
+        def measure = new PopMeasureDefinition("mid", new IdentifierObjQualifier("id"))
+        measure.withObjUriQualifiers(invalidObjQualifierConverter)
+
+        then:
+        thrown(IllegalArgumentException)
+
+        where:
+        invalidObjQualifierConverter << [null, { identifierQualifier -> Optional.empty() }]
+    }
+
     def "test serializable"() {
+        given:
         PopMeasureDefinition measureDefinition = readObjectFromResource("/$POP_MEASURE_DEFINITION_JSON", PopMeasureDefinition)
         PopMeasureDefinition deserialized = SerializationUtils.roundtrip(measureDefinition)
 
@@ -53,4 +90,28 @@ class PopMeasureDefinitionTest extends Specification {
         that deserialized, jsonEquals(measureDefinition)
     }
 
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(PopMeasureDefinition)
+                .usingGetClass()
+                .verify()
+    }
+
+    def "should return null when qualifier is requested but was not set"() {
+        when:
+        def definition = new PopMeasureDefinition("mid", null)
+        def qualifier = definition.getObjQualifier()
+
+        then:
+        qualifier == null
+    }
+
+    def "should return empty collection when qualifiers are requested but none was set"() {
+        when:
+        def definition = new PopMeasureDefinition("mid", null)
+        def qualifiers = definition.getObjQualifiers()
+
+        then:
+        qualifiers.size() == 0
+    }
 }

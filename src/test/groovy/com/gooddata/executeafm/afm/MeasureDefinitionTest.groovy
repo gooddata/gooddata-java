@@ -21,9 +21,11 @@ class MeasureDefinitionTest extends Specification {
         typeClass.isInstance(instance)
 
         where:
-        type                      | typeClass
-        'popMeasureDefinition'    | PopMeasureDefinition
-        'simpleMeasureDefinition' | SimpleMeasureDefinition
+        type                              | typeClass
+        'popMeasureDefinition'            | PopMeasureDefinition
+        'simpleMeasureDefinition'         | SimpleMeasureDefinition
+        'overPeriodMeasureDefinition'     | OverPeriodMeasureDefinition
+        'previousPeriodMeasureDefinition' | PreviousPeriodMeasureDefinition
     }
 
     def "getUri() should throw exception"() {
