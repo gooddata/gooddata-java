@@ -18,11 +18,18 @@ import com.gooddata.executeafm.result.DataList;
 import com.gooddata.executeafm.result.DataValue;
 import com.gooddata.executeafm.result.ExecutionResult;
 import com.gooddata.executeafm.result.ResultHeaderItem;
+import com.gooddata.md.visualization.Bucket;
+import com.gooddata.md.visualization.Measure;
+import com.gooddata.md.visualization.VOSimpleMeasureDefinition;
+import com.gooddata.md.visualization.VisualizationAttribute;
+import com.gooddata.md.visualization.VisualizationClass;
+import com.gooddata.md.visualization.VisualizationObject;
 import org.testng.annotations.Test;
 
 import java.util.Collection;
 import java.util.List;
 
+import static com.gooddata.md.Restriction.identifier;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
@@ -35,17 +42,64 @@ import static org.hamcrest.Matchers.hasSize;
 
 public class ExecuteAfmServiceAT extends AbstractGoodDataAT {
 
-    private ExecutionResponse response;
+    private static final String GDC_TABLE_VISUALIZATION_CLASS_ID = "gdc.visualization.table";
+    private static final String ATTRIBUTE_LOCAL_IDENTIFIER = "a1";
+    private static final String MEASURE_LOCAL_IDENTIFIER = "m1";
 
-    @Test(dependsOnGroups = {"model", "md", "dataset"})
+    private ExecutionResponse afmResponse;
+    private ExecutionResponse visResponse;
+
+    @Test(groups = "executeAfm", dependsOnGroups = {"model", "md", "dataset"})
     public void testExecuteAfm() {
         final Execution execution = new Execution(new Afm()
-                .addAttribute(new AttributeItem(new IdentifierObjQualifier(attr.getDefaultDisplayForm().getIdentifier()), "a1"))
-                .addMeasure(new MeasureItem(new SimpleMeasureDefinition(new UriObjQualifier(metric.getUri())), "m1"))
+                .addAttribute(new AttributeItem(new IdentifierObjQualifier(attr.getDefaultDisplayForm().getIdentifier()),
+                        ATTRIBUTE_LOCAL_IDENTIFIER))
+                .addMeasure(new MeasureItem(new SimpleMeasureDefinition(new UriObjQualifier(metric.getUri())),
+                        MEASURE_LOCAL_IDENTIFIER))
         );
 
-        response = gd.getExecuteAfmService().executeAfm(project, execution);
+        afmResponse = gd.getExecuteAfmService().executeAfm(project, execution);
 
+        checkExecutionResponse(afmResponse);
+    }
+
+    @Test(groups = "executeAfm", dependsOnGroups = {"model", "md", "dataset"})
+    public void testExecuteVisualization() {
+        final VisualizationObject vizObject = createVisualizationObject();
+        final VisualizationExecution execution = new VisualizationExecution(vizObject.getUri());
+
+        visResponse = gd.getExecuteAfmService().executeVisualization(project, execution);
+
+        checkExecutionResponse(visResponse);
+    }
+
+    @Test(groups = "executeAfm", dependsOnMethods = "testExecuteAfm")
+    public void testGetAfmExecutionResult() {
+        final ExecutionResult afmResult = gd.getExecuteAfmService().getResult(afmResponse).get();
+        checkExecutionResult(afmResult);
+    }
+
+    @Test(groups = "executeAfm", dependsOnMethods = "testExecuteVisualization")
+    public void testGetVisualizationExecutionResult() {
+        final ExecutionResult visResult = gd.getExecuteAfmService().getResult(visResponse).get();
+        checkExecutionResult(visResult);
+    }
+
+    private VisualizationObject createVisualizationObject() {
+        final String vizClassUri = gd.getMetadataService().getObjUri(project, VisualizationClass.class,
+                identifier(GDC_TABLE_VISUALIZATION_CLASS_ID));
+
+        final VisualizationObject vizObject = new VisualizationObject("some title", vizClassUri);
+        vizObject.setBuckets(asList(
+                new Bucket("vizObjBucket1", singletonList(new VisualizationAttribute(
+                        new UriObjQualifier(attr.getDefaultDisplayForm().getUri()), ATTRIBUTE_LOCAL_IDENTIFIER))),
+                new Bucket("vizObjBucket2", singletonList(new Measure(
+                        new VOSimpleMeasureDefinition(new UriObjQualifier(metric.getUri())), MEASURE_LOCAL_IDENTIFIER)))
+        ));
+        return gd.getMetadataService().createObj(project, vizObject);
+    }
+
+    private static void checkExecutionResponse(final ExecutionResponse response) {
         assertThat(response, notNullValue());
         assertThat("should have 2 dimensions", response.getDimensions(), hasSize(2));
 
@@ -63,10 +117,7 @@ public class ExecuteAfmServiceAT extends AbstractGoodDataAT {
         assertThat("the only measureHeader should point to given metric", measureGroupHeader.getItems().get(0).getUri(), is(metric.getUri()));
     }
 
-    @Test(dependsOnMethods = "testExecuteAfm")
-    public void testGetResult() {
-        final ExecutionResult result = gd.getExecuteAfmService().getResult(response).get();
-
+    private static void checkExecutionResult(final ExecutionResult result) {
         assertThat(result, notNullValue());
 
         final List<ResultHeaderItem> firstDimHeaders = result.getHeaderItems().get(0).get(0);
