@@ -7,6 +7,8 @@ package com.gooddata.executeafm.afm
 
 import com.gooddata.executeafm.IdentifierObjQualifier
 import com.gooddata.executeafm.UriObjQualifier
+import nl.jqno.equalsverifier.EqualsVerifier
+import nl.jqno.equalsverifier.Warning
 import org.apache.commons.lang3.SerializationUtils
 import spock.lang.Specification
 
@@ -25,7 +27,7 @@ class SimpleMeasureDefinitionTest extends Specification {
     def "should serialize full"() {
         expect:
         that new SimpleMeasureDefinition(QUALIFIER, Aggregation.AVG,
-                true, new PositiveAttributeFilter(QUALIFIER,'foo'), new NegativeAttributeFilter(QUALIFIER, 'foo')),
+                true, new PositiveAttributeFilter(QUALIFIER, 'foo'), new NegativeAttributeFilter(QUALIFIER, 'foo')),
                 jsonEquals(resource(SIMPLE_MEASURE_DEFINITION_FULL_JSON))
     }
 
@@ -51,6 +53,9 @@ class SimpleMeasureDefinitionTest extends Specification {
 
         then:
         with(definition?.item as UriObjQualifier) {
+            uri == QUALIFIER.uri
+        }
+        with(definition?.objQualifier as UriObjQualifier) {
             uri == QUALIFIER.uri
         }
         definition?.aggregation == 'avg'
@@ -108,11 +113,72 @@ class SimpleMeasureDefinitionTest extends Specification {
         copy.getObjQualifier().getUri() == 'uri'
     }
 
+    def "should copy with uri converter"() {
+        when:
+        def definition = new SimpleMeasureDefinition(new IdentifierObjQualifier("id"))
+        def qualifiersConversionMap = [(new IdentifierObjQualifier("id")): new UriObjQualifier("uri")]
+        def copy = definition.withObjUriQualifiers({ identifierQualifier ->
+            return Optional.ofNullable(qualifiersConversionMap.get(identifierQualifier))
+        })
+
+        then:
+        copy.getUri() == 'uri'
+        copy.getItem().getUri() == 'uri'
+    }
+
+    def "should return the same object when copying with uri converter and uri is already used"() {
+        when:
+        def definition = new SimpleMeasureDefinition(new UriObjQualifier('uri'))
+        def copy = definition.withObjUriQualifiers({ identifierQualifier -> Optional.empty() })
+
+        then:
+        definition == copy
+    }
+
+    def "should fail when qualifier converter is not provided or cannot convert object's identifier qualifiers"() {
+        when:
+        def definition = new SimpleMeasureDefinition(new IdentifierObjQualifier("id"))
+        definition.withObjUriQualifiers(invalidObjQualifierConverter)
+
+        then:
+        thrown(IllegalArgumentException)
+
+        where:
+        invalidObjQualifierConverter << [null, { identifierQualifier -> Optional.empty() }]
+    }
+
     def "test serializable"() {
+        given:
         SimpleMeasureDefinition measureDefinition = readObjectFromResource("/$SIMPLE_MEASURE_DEFINITION_FULL_JSON", SimpleMeasureDefinition)
         SimpleMeasureDefinition deserialized = SerializationUtils.roundtrip(measureDefinition)
 
         expect:
         that deserialized, jsonEquals(measureDefinition)
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(SimpleMeasureDefinition)
+                .suppress(Warning.NONFINAL_FIELDS)
+                .usingGetClass()
+                .verify()
+    }
+
+    def "should return null when qualifier is requested but was not set"() {
+        when:
+        def definition = new SimpleMeasureDefinition(null)
+        def qualifier = definition.getObjQualifier()
+
+        then:
+        qualifier == null
+    }
+
+    def "should return empty collection when qualifiers are requested but none was set"() {
+        when:
+        def definition = new SimpleMeasureDefinition(null)
+        def qualifiers = definition.getObjQualifiers()
+
+        then:
+        qualifiers.size() == 0
     }
 }

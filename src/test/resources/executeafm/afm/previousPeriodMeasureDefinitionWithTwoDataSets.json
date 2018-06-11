@@ -1,0 +1,19 @@
+{
+  "previousPeriodMeasure": {
+    "measureIdentifier": "mId",
+    "dateDataSets": [
+      {
+        "dataSet": {
+          "uri": "/gdc/md/projectId/obj/1"
+        },
+        "periodsAgo": 2
+      },
+      {
+        "dataSet": {
+          "uri": "/gdc/md/projectId/obj/2"
+        },
+        "periodsAgo": 1
+      }
+    ]
+  }
+}
