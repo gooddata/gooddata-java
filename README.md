@@ -28,7 +28,7 @@ and [Extensibility How-To](https://github.com/gooddata/gooddata-java/wiki/Extend
 
 The *GoodData Java SDK* uses:
 * the [GoodData HTTP client](https://github.com/gooddata/gooddata-http-client) version 0.9.3 or later
-* the *Apache HTTP Client* version 4.3 or later (for white-labeled domains at least version 4.3.2 is required)
+* the *Apache HTTP Client* version 4.5 or later (for white-labeled domains at least version 4.3.2 is required)
 * the *Spring Framework* version 4.3.*
 * the *Jackson JSON Processor* version 2.8.*
 * the *Java Development Kit (JDK)* version 8 or later
