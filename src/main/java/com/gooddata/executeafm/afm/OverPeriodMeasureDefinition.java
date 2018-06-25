@@ -26,13 +26,12 @@ import static com.gooddata.util.Validate.notNull;
  * Definition of the period over period measure that is used for the Same period last year and Same period 2 years back comparisons.
  */
 @JsonRootName(NAME)
-public class OverPeriodMeasureDefinition implements MeasureDefinition, Serializable {
+public class OverPeriodMeasureDefinition extends DerivedMeasureDefinition implements Serializable {
 
     private static final long serialVersionUID = -8904516814279504098L;
 
     static final String NAME = "overPeriodMeasure";
 
-    private final String measureIdentifier;
     private final List<OverPeriodDateAttribute> dateAttributes;
 
     /**
@@ -50,7 +49,7 @@ public class OverPeriodMeasureDefinition implements MeasureDefinition, Serializa
     public OverPeriodMeasureDefinition(
             @JsonProperty("measureIdentifier") final String measureIdentifier,
             @JsonProperty("dateAttributes") final List<OverPeriodDateAttribute> dateAttributes) {
-        this.measureIdentifier = notNull(measureIdentifier, "measureIdentifier");
+        super(measureIdentifier);
         this.dateAttributes = notEmpty(dateAttributes, "dateAttributes");
     }
 
@@ -131,28 +130,19 @@ public class OverPeriodMeasureDefinition implements MeasureDefinition, Serializa
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         final OverPeriodMeasureDefinition that = (OverPeriodMeasureDefinition) o;
-        return Objects.equals(measureIdentifier, that.measureIdentifier) &&
-                Objects.equals(dateAttributes, that.dateAttributes);
+        return Objects.equals(dateAttributes, that.dateAttributes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(measureIdentifier, dateAttributes);
+        return Objects.hash(super.hashCode(), dateAttributes);
     }
 
     @Override
     public String toString() {
         return GoodDataToStringBuilder.defaultToString(this);
-    }
-
-    /**
-     * The local identifier of the measure this PoP measure refers to.
-     *
-     * @return The local identifier of the master measure.
-     */
-    public String getMeasureIdentifier() {
-        return measureIdentifier;
     }
 
     /**
