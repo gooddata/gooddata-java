@@ -26,13 +26,12 @@ import static com.gooddata.util.Validate.notNull;
  * Definition of the period over period measure that is used for the Previous period comparison.
  */
 @JsonRootName(NAME)
-public class PreviousPeriodMeasureDefinition implements MeasureDefinition, Serializable {
+public class PreviousPeriodMeasureDefinition extends DerivedMeasureDefinition implements Serializable {
 
     private static final long serialVersionUID = -4741355657671354062L;
 
     static final String NAME = "previousPeriodMeasure";
 
-    private final String measureIdentifier;
     private final List<PreviousPeriodDateDataSet> dateDataSets;
 
     /**
@@ -50,7 +49,7 @@ public class PreviousPeriodMeasureDefinition implements MeasureDefinition, Seria
     public PreviousPeriodMeasureDefinition(
             @JsonProperty("measureIdentifier") final String measureIdentifier,
             @JsonProperty("dateDataSets") final List<PreviousPeriodDateDataSet> dateDataSets) {
-        this.measureIdentifier = notNull(measureIdentifier, "measureIdentifier");
+        super(measureIdentifier);
         this.dateDataSets = notEmpty(dateDataSets, "dateDataSets");
     }
 
@@ -131,28 +130,19 @@ public class PreviousPeriodMeasureDefinition implements MeasureDefinition, Seria
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         final PreviousPeriodMeasureDefinition that = (PreviousPeriodMeasureDefinition) o;
-        return Objects.equals(measureIdentifier, that.measureIdentifier) &&
-                Objects.equals(dateDataSets, that.dateDataSets);
+        return Objects.equals(dateDataSets, that.dateDataSets);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(measureIdentifier, dateDataSets);
+        return Objects.hash(super.hashCode(), dateDataSets);
     }
 
     @Override
     public String toString() {
         return GoodDataToStringBuilder.defaultToString(this);
-    }
-
-    /**
-     * The local identifier of the measure this PoP measure refers to.
-     *
-     * @return The local identifier of the master measure.
-     */
-    public String getMeasureIdentifier() {
-        return measureIdentifier;
     }
 
     /**

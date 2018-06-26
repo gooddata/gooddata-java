@@ -30,12 +30,12 @@ import static com.gooddata.executeafm.afm.PopMeasureDefinition.NAME;
 @Deprecated
 @JsonRootName(NAME)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PopMeasureDefinition implements MeasureDefinition, Serializable {
+public class PopMeasureDefinition extends DerivedMeasureDefinition implements Serializable {
 
     private static final long serialVersionUID = 1430640153994197345L;
+
     static final String NAME = "popMeasure";
 
-    private final String measureIdentifier;
     private final ObjQualifier popAttribute;
 
     /**
@@ -50,7 +50,7 @@ public class PopMeasureDefinition implements MeasureDefinition, Serializable {
     @JsonCreator
     public PopMeasureDefinition(@JsonProperty("measureIdentifier") final String measureIdentifier,
                                 @JsonProperty("popAttribute") final ObjQualifier popAttribute) {
-        this.measureIdentifier = measureIdentifier;
+        super(measureIdentifier);
         this.popAttribute = popAttribute;
     }
 
@@ -72,10 +72,6 @@ public class PopMeasureDefinition implements MeasureDefinition, Serializable {
     @Override
     public boolean isAdHoc() {
         return true;
-    }
-
-    public String getMeasureIdentifier() {
-        return measureIdentifier;
     }
 
     public ObjQualifier getPopAttribute() {
@@ -124,14 +120,14 @@ public class PopMeasureDefinition implements MeasureDefinition, Serializable {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         final PopMeasureDefinition that = (PopMeasureDefinition) o;
-        return Objects.equals(measureIdentifier, that.measureIdentifier) &&
-                Objects.equals(popAttribute, that.popAttribute);
+        return Objects.equals(popAttribute, that.popAttribute);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(measureIdentifier, popAttribute);
+        return Objects.hash(super.hashCode(), popAttribute);
     }
 
     @Override
