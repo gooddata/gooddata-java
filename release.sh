@@ -61,6 +61,6 @@ then
 fi
 
 mvn --batch-mode release:prepare release:perform -DreleaseVersion=${version} -Darguments="-Dgpg.passphrase=${gpg_pass}" 
-sed -i '' "s/\(<version>\)[0-9]*\.[0-9]*\.[0-9]*\(<\/version>\)/\1${version}\2/" README.md
+sed -i.bak "s/\(<version>\)[0-9]*\.[0-9]*\.[0-9]*\(<\/version>\)/\1${version}\2/" README.md && rm -f README.md.bak
 git commit -a -m "bump version"
 git push origin --tags HEAD
