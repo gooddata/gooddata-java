@@ -15,7 +15,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = AttributeLocatorItem.class, name = "attributeLocatorItem"),
-        @JsonSubTypes.Type(value = MeasureLocatorItem.class, name = "measureLocatorItem")
+        @JsonSubTypes.Type(value = MeasureLocatorItem.class, name = "measureLocatorItem"),
+        @JsonSubTypes.Type(value = TotalLocatorItem.class, name = "totalLocatorItem")
 })
 public interface LocatorItem {
 }
