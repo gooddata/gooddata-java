@@ -24,6 +24,7 @@ import java.util.Collection;
         @JsonSubTypes.Type(value = VOPopMeasureDefinition.class, name = VOPopMeasureDefinition.NAME),
         @JsonSubTypes.Type(value = OverPeriodMeasureDefinition.class, name = OverPeriodMeasureDefinition.NAME),
         @JsonSubTypes.Type(value = PreviousPeriodMeasureDefinition.class, name = PreviousPeriodMeasureDefinition.NAME),
+        @JsonSubTypes.Type(value = ArithmeticMeasureDefinition.class, name = ArithmeticMeasureDefinition.NAME)
 })
 public interface MeasureDefinition {
 
