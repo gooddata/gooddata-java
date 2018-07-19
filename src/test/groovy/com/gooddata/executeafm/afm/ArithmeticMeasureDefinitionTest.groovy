@@ -28,7 +28,7 @@ class ArithmeticMeasureDefinitionTest extends Specification {
 
         then:
         measure.getOperator() == "sum"
-        measure.getMeasures() == ["localIdentifier1", "localIdentifier2"]
+        measure.getMeasureIdentifiers() == ["localIdentifier1", "localIdentifier2"]
     }
 
     def "should throw when getting used object qualifier"() {

@@ -26,19 +26,19 @@ public class ArithmeticMeasureDefinition implements MeasureDefinition {
 
     static final String NAME = "arithmeticMeasure";
 
-    private final List<String> measures;
+    private final List<String> measureIdentifiers;
     private final String operator;
 
     /**
      * Constructor of {@link ArithmeticMeasureDefinition}
-     * @param measures local identifiers of measures
+     * @param measureIdentifiers local identifiers of measures
      * @param operator operator used for aggregation, for example sum, difference, multiplication, ratio, growth
      */
     @JsonCreator
     public ArithmeticMeasureDefinition(
-            @JsonProperty("measures") final List<String> measures,
+            @JsonProperty("measureIdentifiers") final List<String> measureIdentifiers,
             @JsonProperty("operator") final String operator) {
-        this.measures = measures;
+        this.measureIdentifiers = measureIdentifiers;
         this.operator = operator;
     }
 
@@ -81,8 +81,8 @@ public class ArithmeticMeasureDefinition implements MeasureDefinition {
      * get local identifiers of used measures
      * @return local identifiers of measure
      */
-    public List<String> getMeasures() {
-        return measures;
+    public List<String> getMeasureIdentifiers() {
+        return measureIdentifiers;
     }
 
     /**

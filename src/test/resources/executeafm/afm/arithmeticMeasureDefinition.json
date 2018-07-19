@@ -1,6 +1,6 @@
 {
   "arithmeticMeasure" : {
-    "measures" : ["localIdentifier1","localIdentifier2"],
+    "measureIdentifiers" : ["localIdentifier1","localIdentifier2"],
     "operator" : "sum"
   }
 }
