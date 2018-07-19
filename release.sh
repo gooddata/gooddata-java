@@ -60,13 +60,16 @@ then
    fi
 fi
 
+sed -i.bak "s/\(<version>\)[0-9]*\.[0-9]*\.[0-9]*\(<\/version>\)/\1${version}\2/" README.md && rm -f README.md.bak
+git commit -a -m "bump version"
+
 mvn --batch-mode release:prepare release:perform -DreleaseVersion=${version} -Darguments="-Dgpg.passphrase=${gpg_pass}" 
 mvnRetVal=$?
 if [ $mvnRetVal -ne 0 ]; then
     echo "Mvn build failed - please fix it and try to release again"
+    echo "Removing last commit '$(git log -1 --pretty="%h %s")'"
+    git reset --hard HEAD~1
     exit $mvnRetVal
 fi
 
-sed -i.bak "s/\(<version>\)[0-9]*\.[0-9]*\.[0-9]*\(<\/version>\)/\1${version}\2/" README.md && rm -f README.md.bak
-git commit -a -m "bump version"
 git push origin --tags HEAD
