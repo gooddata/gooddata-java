@@ -30,6 +30,7 @@ public class ExecutionResult {
 
     private List<List<List<ResultHeaderItem>>> headerItems;
     private List<List<List<String>>> totals;
+    private List<List<List<String>>> totalTotals;
     private List<Warning> warnings;
 
     /**
@@ -64,11 +65,13 @@ public class ExecutionResult {
                     @JsonProperty("paging") final Paging paging,
                     @JsonProperty("headerItems") final List<List<List<ResultHeaderItem>>> headerItems,
                     @JsonProperty("totals") final List<List<List<String>>> totals,
+                    @JsonProperty("totalTotals") final List<List<List<String>>> totalTotals,
                     @JsonProperty("warnings") final List<Warning> warnings) {
         this.data = data;
         this.paging = paging;
         this.headerItems = headerItems;
         this.totals = totals;
+        this.totalTotals = totalTotals;
         this.warnings = warnings;
     }
 
@@ -125,6 +128,29 @@ public class ExecutionResult {
      */
     public void setTotals(final List<List<List<String>>> totals) {
         this.totals = totals;
+    }
+
+    /**
+     * Gets totals of totals data.
+     * The totals of totals represent intersection between totals in multiple dimensions.
+     * For each dimension and total combination, there is a list of totals of totals values.
+     *
+     * @return 3-dimensional matrix of totals of totals data
+     */
+    public List<List<List<String>>> getTotalTotals() {
+        return totalTotals;
+    }
+
+    /**
+     * Sets totals of totals data.
+     * The totals of totals represent intersection between totals in multiple dimensions.
+     * For each dimension and total combination, there is a list of totals of totals values.
+     *
+     * @param totalTotals 3-dimensional matrix of totals of totals data
+     */
+    public ExecutionResult setTotalTotals(List<List<List<String>>> totalTotals) {
+        this.totalTotals = totalTotals;
+        return this;
     }
 
     /**
