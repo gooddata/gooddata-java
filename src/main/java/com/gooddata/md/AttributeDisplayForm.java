@@ -5,16 +5,11 @@
  */
 package com.gooddata.md;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.gooddata.util.BooleanDeserializer;
-import com.gooddata.util.BooleanIntegerSerializer;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gooddata.util.BooleanDeserializer;
+import com.gooddata.util.BooleanIntegerSerializer;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 /**
@@ -27,24 +22,29 @@ public class AttributeDisplayForm extends DisplayForm implements Updatable {
 
     private static final long serialVersionUID = -7903851496647992573L;
 
+    /** @deprecated use {@link #attributeContent} instead */
+    @Deprecated
+    protected final AttributeContent content;
+
     @JsonProperty("content")
-    protected final Content content;
+    protected final AttributeContent attributeContent;
 
     @JsonCreator
-    private AttributeDisplayForm(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content,
+    private AttributeDisplayForm(@JsonProperty("meta") Meta meta, @JsonProperty("content") AttributeContent content,
             @JsonProperty("links") Links links) {
         super(meta, content, links);
         this.content = content;
+        this.attributeContent = content;
     }
 
     /* Just for serialization test */
     AttributeDisplayForm(String title, String formOf, String expression, boolean isDefault, String ldmExpression, String type, String elements) {
-        this(new Meta(title), new Content(formOf, expression, isDefault, ldmExpression, type), new Links(elements));
+        this(new Meta(title), new AttributeContent(formOf, expression, isDefault, ldmExpression, type), new Links(elements));
     }
 
     @JsonIgnore
     public boolean isDefault() {
-        return Boolean.TRUE.equals(content.isDefault());
+        return Boolean.TRUE.equals(attributeContent.isDefault());
     }
 
     @Override
@@ -53,15 +53,15 @@ public class AttributeDisplayForm extends DisplayForm implements Updatable {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private static class Content extends DisplayForm.Content {
+    private static class AttributeContent extends DisplayForm.Content {
 
         private static final long serialVersionUID = -8502672468934478137L;
         private final boolean isDefault;
 
-        private Content(@JsonProperty("formOf") String formOf, @JsonProperty("expression") String expression,
-                @JsonProperty("default") @JsonDeserialize(using = BooleanDeserializer.class) Boolean isDefault,
-                @JsonProperty("ldmexpression") String ldmExpression,
-                @JsonProperty("type") String type) {
+        private AttributeContent(@JsonProperty("formOf") String formOf, @JsonProperty("expression") String expression,
+                                 @JsonProperty("default") @JsonDeserialize(using = BooleanDeserializer.class) Boolean isDefault,
+                                 @JsonProperty("ldmexpression") String ldmExpression,
+                                 @JsonProperty("type") String type) {
             super(formOf, expression, ldmExpression, type);
             this.isDefault = isDefault;
         }
