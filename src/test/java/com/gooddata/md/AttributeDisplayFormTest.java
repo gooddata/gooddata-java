@@ -18,13 +18,14 @@ import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class AttributeDisplayFormTest {
 
-    public static final String FORM_OF = "/gdc/md/PROJECT_ID/obj/DF_FORM_OF_ID";
-    public static final String EXPRESSION = "[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]";
-    public static final boolean DEFAULT = false;
-    public static final boolean DEFAULT_TRUE = true;
-    public static final String LDM_EXPRESSION = "";
+    private static final String FORM_OF = "/gdc/md/PROJECT_ID/obj/DF_FORM_OF_ID";
+    private static final String EXPRESSION = "[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]";
+    private static final boolean DEFAULT = false;
+    private static final boolean DEFAULT_TRUE = true;
+    private static final String LDM_EXPRESSION = "";
     private static final String TYPE = "TYPE";
     private static final String ELEMENTS_LINK = "/gdc/md/PROJECT_ID/obj/DF_ID/elements";
+    private static final String TITLE = "Person Name";
 
     @SuppressWarnings("deprecation")
     @Test
@@ -43,21 +44,21 @@ public class AttributeDisplayFormTest {
 
     @Test
     public void testSerialization() throws Exception {
-        final DisplayForm attrDF = new AttributeDisplayForm("Person Name", FORM_OF, EXPRESSION, DEFAULT,
+        final DisplayForm attrDF = new AttributeDisplayForm(TITLE, FORM_OF, EXPRESSION, DEFAULT,
                 LDM_EXPRESSION, TYPE, ELEMENTS_LINK);
 
         assertThat(attrDF, jsonEquals(resource("md/attributeDisplayForm-input.json")));
     }
 
     @Test
-    public void shouldSerializeSameAsDeserializationInput() throws Exception {
+    public void shouldSerializeSameAsDeserializationInput() {
         final AttributeDisplayForm attrDF = readObjectFromResource("/md/attributeDisplayForm.json", AttributeDisplayForm.class);
         assertThat(attrDF, jsonEquals(resource("md/attributeDisplayForm-inputOrig.json")));
     }
 
     @Test
     public void testToStringFormat() {
-        final DisplayForm attrDF = new AttributeDisplayForm("Person Name", FORM_OF, EXPRESSION, DEFAULT,
+        final DisplayForm attrDF = new AttributeDisplayForm(TITLE, FORM_OF, EXPRESSION, DEFAULT,
                 LDM_EXPRESSION, TYPE, ELEMENTS_LINK);
 
         assertThat(attrDF.toString(), matchesPattern(AttributeDisplayForm.class.getSimpleName() + "\\[.*\\]"));
@@ -65,11 +66,26 @@ public class AttributeDisplayFormTest {
 
     @Test
     public void testSerializable() throws Exception {
-        final DisplayForm attrDF = new AttributeDisplayForm("Person Name", FORM_OF, EXPRESSION, DEFAULT,
+        final DisplayForm attrDF = new AttributeDisplayForm(TITLE, FORM_OF, EXPRESSION, DEFAULT,
                 LDM_EXPRESSION, TYPE, ELEMENTS_LINK);
         final DisplayForm deserialized = SerializationUtils.roundtrip(attrDF);
 
         assertThat(deserialized, jsonEquals(attrDF));
     }
 
+    @Test
+    public void testSubclass() {
+        class Subclass extends AttributeDisplayForm {
+            private Subclass(final String title, final String formOf, final String expression, final boolean isDefault,
+                             final String ldmExpression,
+                             final String type, final String elements) {
+                super(title, formOf, expression, isDefault, ldmExpression, type, elements);
+            }
+        }
+        final Subclass subclass = new Subclass(TITLE, FORM_OF, EXPRESSION, DEFAULT, LDM_EXPRESSION, TYPE,
+                ELEMENTS_LINK);
+
+        //noinspection deprecation
+        assertThat(subclass.content, is(subclass.attributeContent));
+    }
 }
