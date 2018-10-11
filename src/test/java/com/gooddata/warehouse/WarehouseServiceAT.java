@@ -11,8 +11,6 @@ import com.gooddata.collections.Page;
 import com.gooddata.collections.PageRequest;
 import com.gooddata.collections.PageableList;
 import com.gooddata.project.Environment;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.joda.time.DateTime;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -28,7 +26,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
@@ -41,8 +38,6 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
 
     private static final String LOGIN = "john.smith." + UUID.randomUUID() + "@gooddata.com";
     private static final String SCHEMA_NAME = "default";
-    private static final String S3_CREDENTIALS_REGION = "us-east-1";
-    private static final String S3_CREDENTIALS_ACCESS_KEY = "WarehouseServiceAt" + RandomStringUtils.randomAlphanumeric(5);
 
     private final String warehouseToken;
     private final WarehouseService service;
@@ -52,7 +47,6 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
 
     private Account account;
     private WarehouseUser warehouseUser;
-    private WarehouseS3Credentials s3Credentials;
 
     public WarehouseServiceAT() {
         warehouseToken = getProperty("warehouseToken");
@@ -62,15 +56,6 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
     @BeforeClass(groups = "isolated_domain")
     public void initIsolatedDomainGroup() {
         account = gd.getAccountService().createAccount(new Account(LOGIN, "nnPvcGXU7f", "FirstName", "LastName"), getProperty("domain"));
-    }
-
-    @Test(groups = "warehouse", dependsOnGroups = "account")
-    public void createWarehouse() throws Exception {
-        final Warehouse wh = new Warehouse(title, warehouseToken);
-        wh.setEnvironment(Environment.TESTING);
-        warehouse = service.createWarehouse(wh).get(60, TimeUnit.MINUTES);
-        s3Credentials = new WarehouseS3Credentials(S3_CREDENTIALS_REGION, S3_CREDENTIALS_ACCESS_KEY, "secret");
-        String jdbc = warehouse.getConnectionUrl();
     }
 
     @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
@@ -154,48 +139,6 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
     public void getDefaultWarehouseSchema() {
         WarehouseSchema warehouseSchema = service.getDefaultWarehouseSchema(warehouse);
         assertThat(warehouseSchema, is(notNullValue()));
-    }
-
-    @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
-    public void addS3Credentials() {
-        s3Credentials = service.addS3Credentials(warehouse, s3Credentials)
-                .get(1, TimeUnit.MINUTES);
-
-        assertThat(s3Credentials, notNullValue());
-    }
-
-    @Test(groups = "warehouse", dependsOnMethods = "addS3Credentials")
-    public void updateS3Credentials() {
-        final DateTime lastUpdated = s3Credentials.getUpdated();
-        s3Credentials.setSecretKey("newSecretKey");
-        s3Credentials = service.updateS3Credentials(s3Credentials)
-                .get(1, TimeUnit.MINUTES);
-
-        assertThat(s3Credentials, notNullValue());
-        assertThat(s3Credentials.getUpdated(), is(not(lastUpdated)));
-    }
-
-    @Test(groups = "warehouse", dependsOnMethods = "updateS3Credentials")
-    public void getS3SpecificCredentials() {
-        final WarehouseS3Credentials result = service.getWarehouseS3Credentials(warehouse, S3_CREDENTIALS_REGION,
-                S3_CREDENTIALS_ACCESS_KEY);
-
-        assertThat(result, notNullValue());
-        assertThat(result.getAccessKey(), is(S3_CREDENTIALS_ACCESS_KEY));
-    }
-
-    @Test(groups = "warehouse", dependsOnMethods = "updateS3Credentials")
-    public void listS3Credentials() {
-        final PageableList<WarehouseS3Credentials> result = service.listWarehouseS3Credentials(warehouse);
-
-        assertThat(result, notNullValue());
-        assertThat(result.size(), is(1));
-        assertThat(result.getNextPage(), nullValue());
-    }
-
-    @Test(groups = "warehouse", dependsOnMethods = { "listS3Credentials", "getS3SpecificCredentials" })
-    public void removeS3Credentials() {
-        service.removeS3Credentials(s3Credentials).get(1, TimeUnit.MINUTES);
     }
 
     @Test(dependsOnGroups = "warehouse")
