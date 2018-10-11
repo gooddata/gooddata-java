@@ -24,7 +24,6 @@ class WarehouseTask {
     private static final String POLL_LINK = "poll";
     private static final String WAREHOUSE_LINK = "instance";
     private static final String WAREHOUSE_USER_LINK = "user";
-    private static final String WAREHOUSE_S3_CREDENTIALS_LINK = "s3Credentials";
 
     private final Map<String,String> links;
 
@@ -60,7 +59,4 @@ class WarehouseTask {
         return links.get(WAREHOUSE_USER_LINK);
     }
 
-    String getWarehouseS3CredentialsUri() {
-        return links.get(WAREHOUSE_S3_CREDENTIALS_LINK);
-    }
 }
