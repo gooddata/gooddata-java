@@ -27,7 +27,6 @@ public class WarehouseTaskTest {
         final WarehouseTask warehouseTask = readObjectFromResource("/warehouse/warehouseTask-finished.json", WarehouseTask.class);
         assertThat(warehouseTask.getWarehouseLink(), is("/gdc/datawarehouse/instances/instanceId"));
         assertThat(warehouseTask.getWarehouseUri(), is("/gdc/datawarehouse/instances/instanceId"));
-        assertThat(warehouseTask.getWarehouseS3CredentialsUri(), is("/gdc/datawarehouse/instances/instanceId/s3/region/accessKey"));
     }
 
 }
