@@ -430,7 +430,7 @@
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib-nodep</artifactId>
-            <version>3.2.5</version>
+            <version>3.2.8</version>
             <scope>test</scope>
         </dependency>
 
