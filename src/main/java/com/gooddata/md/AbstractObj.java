@@ -31,6 +31,7 @@ public abstract class AbstractObj implements Serializable {
 
     /**
      * Returns internally generated ID of the object (that's part of the object URI).
+     *
      * @return internal ID of the object
      */
     @JsonIgnore
@@ -110,6 +111,7 @@ public abstract class AbstractObj implements Serializable {
 
     /**
      * Returns user-specified identifier of the object.
+     *
      * @return user-specified object identifier
      */
     @JsonIgnore
@@ -157,17 +159,27 @@ public abstract class AbstractObj implements Serializable {
         meta.setSharedWithSomeone(sharedWithSomeone);
     }
 
+    @JsonIgnore
+    public Set<String> getFlags() {
+        return meta.getFlags();
+    }
+
+    public void setFlags(final Set<String> flags) {
+        meta.setFlags(flags);
+    }
+
     /**
      * Get list of URIs of the given {@link Obj}s
+     *
      * @param objs metadata objects
-     * @param <T> Obj type
+     * @param <T>  Obj type
      * @return list of URIs
      */
     @SafeVarargs
     protected static <T extends Obj> String[] uris(T... objs) {
         noNullElements(objs, "objs");
         final String[] uris = new String[objs.length];
-        for (int i=0; i<objs.length; i++) {
+        for (int i = 0; i < objs.length; i++) {
             uris[i] = objs[i].getUri();
         }
         return uris;
