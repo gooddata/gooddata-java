@@ -663,9 +663,10 @@ public class Project {
                             @JsonProperty("isProduction") @JsonDeserialize(using = BooleanDeserializer.class) Boolean production,
                             @JsonProperty("locked") @JsonDeserialize(using = BooleanDeserializer.class) Boolean locked,
                             @JsonProperty("unlisted") @JsonDeserialize(using = BooleanDeserializer.class) Boolean unlisted,
-                            @JsonProperty("sharedWithSomeone") @JsonDeserialize(using = BooleanDeserializer.class) Boolean sharedWithSomeone) {
+                            @JsonProperty("sharedWithSomeone") @JsonDeserialize(using = BooleanDeserializer.class) Boolean sharedWithSomeone,
+                            @JsonProperty("flags") Set<String> flags) {
             super(author, contributor, created, updated, summary, title, category, tags, uri, identifier,
-                    deprecated, production, locked, unlisted, sharedWithSomeone);
+                    deprecated, production, locked, unlisted, sharedWithSomeone, flags);
 
         }
 

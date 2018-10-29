@@ -41,7 +41,7 @@ public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
                           LocalDate startDate, String timeZone, Collection<String> toAddresses,
                           Collection<String> bccAddresses, String subject, String body, List<Attachment> attachments) {
         super(new Meta(null, null, null, null, summary, title, null, tags, null, null, deprecated, null, false, false,
-                null));
+                null, null));
         notNull(toAddresses, "toAddresses");
         notNull(subject, "subject");
         notNull(body, "body");
@@ -58,7 +58,7 @@ public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
      */
     public ScheduledMail(String title, String summary) {
         super(new Meta(null, null, null, null, summary, title, null, Collections.emptySet(), null, null, false,
-                null, false, false, null));
+                null, false, false, null, null));
         this.content = new Content();
     }
 
