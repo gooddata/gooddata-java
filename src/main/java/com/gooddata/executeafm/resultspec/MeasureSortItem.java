@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.gooddata.util.Validate.notNull;
 import static java.util.Arrays.asList;
@@ -48,6 +49,20 @@ public class MeasureSortItem implements SortItem {
 
     public List<LocatorItem> getLocators() {
         return locators;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final MeasureSortItem that = (MeasureSortItem) o;
+        return Objects.equals(direction, that.direction) &&
+                Objects.equals(locators, that.locators);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(direction, locators);
     }
 
     @Override

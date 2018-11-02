@@ -7,6 +7,8 @@ package com.gooddata.executeafm.afm
 
 import com.gooddata.executeafm.IdentifierObjQualifier
 import com.gooddata.executeafm.UriObjQualifier
+import nl.jqno.equalsverifier.EqualsVerifier
+import nl.jqno.equalsverifier.Warning
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -97,5 +99,13 @@ class AfmTest extends Specification {
         !afm.getAttributes().isEmpty()
         !afm.getMeasures().isEmpty()
         !afm.getNativeTotals().isEmpty()
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(Afm)
+                .usingGetClass()
+                .suppress(Warning.NONFINAL_FIELDS)
+                .verify()
     }
 }

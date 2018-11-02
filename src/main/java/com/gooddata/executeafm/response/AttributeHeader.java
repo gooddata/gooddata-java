@@ -13,6 +13,7 @@ import com.gooddata.executeafm.afm.LocallyIdentifiable;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
@@ -155,6 +156,24 @@ public class AttributeHeader implements Header, LocallyIdentifiable {
      */
     public List<TotalHeaderItem> getTotalItems() {
         return totalItems;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final AttributeHeader that = (AttributeHeader) o;
+        return Objects.equals(name, that.name) &&
+                Objects.equals(localIdentifier, that.localIdentifier) &&
+                Objects.equals(uri, that.uri) &&
+                Objects.equals(identifier, that.identifier) &&
+                Objects.equals(formOf, that.formOf) &&
+                Objects.equals(totalItems, that.totalItems);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, localIdentifier, uri, identifier, formOf, totalItems);
     }
 
     @Override

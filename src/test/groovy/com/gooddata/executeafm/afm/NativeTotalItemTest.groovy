@@ -5,6 +5,7 @@
  */
 package com.gooddata.executeafm.afm
 
+import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -30,5 +31,10 @@ class NativeTotalItemTest extends Specification {
         total.measureIdentifier == 'mId'
         total.attributeIdentifiers == ['a1', 'a2']
         total.toString()
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(NativeTotalItem).usingGetClass().verify()
     }
 }

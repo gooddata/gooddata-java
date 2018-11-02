@@ -5,6 +5,7 @@
  */
 package com.gooddata.executeafm.response
 
+import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -29,5 +30,12 @@ class MeasureGroupHeaderTest extends Specification {
         then:
         header.items?.size() == 1
         header.items.first().localIdentifier == 'm1'
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(MeasureGroupHeader)
+                .usingGetClass()
+                .verify()
     }
 }

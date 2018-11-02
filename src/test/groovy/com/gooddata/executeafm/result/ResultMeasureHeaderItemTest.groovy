@@ -5,6 +5,7 @@
  */
 package com.gooddata.executeafm.result
 
+import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -29,5 +30,12 @@ class ResultMeasureHeaderItemTest extends Specification {
         then:
         item.name == 'Measure Name'
         item.order == 1
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(ResultMeasureHeaderItem)
+                .usingGetClass()
+                .verify()
     }
 }

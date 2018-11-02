@@ -14,6 +14,7 @@ import com.gooddata.util.GoodDataToStringBuilder;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -92,6 +93,20 @@ public class Dimension {
         } else {
             return totals.stream().filter(filter).collect(Collectors.toSet());
         }
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Dimension dimension = (Dimension) o;
+        return Objects.equals(itemIdentifiers, dimension.itemIdentifiers) &&
+                Objects.equals(totals, dimension.totals);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(itemIdentifiers, totals);
     }
 
     @Override

@@ -14,6 +14,7 @@ import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.gooddata.util.Validate.notNull;
 
@@ -166,6 +167,24 @@ public class ExecutionResult {
      */
     public void setWarnings(final List<Warning> warnings) {
         this.warnings = warnings;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final ExecutionResult that = (ExecutionResult) o;
+        return Objects.equals(data, that.data) &&
+                Objects.equals(paging, that.paging) &&
+                Objects.equals(headerItems, that.headerItems) &&
+                Objects.equals(totals, that.totals) &&
+                Objects.equals(totalTotals, that.totalTotals) &&
+                Objects.equals(warnings, that.warnings);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(data, paging, headerItems, totals, totalTotals, warnings);
     }
 
     @Override

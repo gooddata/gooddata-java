@@ -7,6 +7,7 @@ package com.gooddata.executeafm.afm
 
 import com.gooddata.executeafm.UriObjQualifier
 import net.javacrumbs.jsonunit.JsonMatchers
+import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -64,6 +65,12 @@ class ArithmeticMeasureDefinitionTest extends Specification {
 
         expect:
         measure.withObjUriQualifiers(Mock(ObjQualifierConverter)) == measure
+    }
 
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(ArithmeticMeasureDefinition)
+                .usingGetClass()
+                .verify()
     }
 }

@@ -6,6 +6,8 @@
 package com.gooddata.executeafm.resultspec
 
 import com.gooddata.md.report.Total
+import nl.jqno.equalsverifier.EqualsVerifier
+import nl.jqno.equalsverifier.Warning
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -30,7 +32,7 @@ class DimensionTest extends Specification {
         expect:
         that new Dimension('i1', 'i2')
                 .addTotal(TOTAL),
-                    jsonEquals(resource(DIMENSION_FULL_JSON))
+                jsonEquals(resource(DIMENSION_FULL_JSON))
     }
 
     def "should deserialize"() {
@@ -59,7 +61,7 @@ class DimensionTest extends Specification {
 
         when:
         dimension.addTotal(TOTAL)
-            .addTotal(new TotalItem('m1', Total.AVG, 'i2'))
+                .addTotal(new TotalItem('m1', Total.AVG, 'i2'))
 
         then:
         dimension.totals.size() == 2
@@ -73,4 +75,11 @@ class DimensionTest extends Specification {
         dimension.findTotals('i1')?.empty
     }
 
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(Dimension)
+                .usingGetClass()
+                .suppress(Warning.NONFINAL_FIELDS)
+                .verify()
+    }
 }

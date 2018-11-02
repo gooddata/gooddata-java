@@ -16,11 +16,11 @@ import com.gooddata.util.GoodDataToStringBuilder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
 import static com.gooddata.util.Validate.notNullState;
-import static org.apache.commons.lang3.ArrayUtils.toObject;
 
 /**
  * Represents response on {@link com.gooddata.executeafm.Execution} request.
@@ -77,6 +77,20 @@ public class ExecutionResponse {
     @JsonIgnore
     public String getExecutionResultUri() {
         return notNullState(notNullState(links, "links").get(EXECUTION_RESULT_LINK), EXECUTION_RESULT_LINK);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final ExecutionResponse that = (ExecutionResponse) o;
+        return Objects.equals(dimensions, that.dimensions) &&
+                Objects.equals(links, that.links);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dimensions, links);
     }
 
     @Override

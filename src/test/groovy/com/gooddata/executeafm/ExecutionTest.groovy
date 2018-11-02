@@ -5,9 +5,11 @@
  */
 package com.gooddata.executeafm
 
-import com.gooddata.md.report.Total
 import com.gooddata.executeafm.afm.*
 import com.gooddata.executeafm.resultspec.*
+import com.gooddata.md.report.Total
+import nl.jqno.equalsverifier.EqualsVerifier
+import nl.jqno.equalsverifier.Warning
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -86,5 +88,13 @@ class ExecutionTest extends Specification {
 
         then:
         computation.resultSpec == spec
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(Execution)
+                .usingGetClass()
+                .suppress(Warning.NONFINAL_FIELDS)
+                .verify()
     }
 }

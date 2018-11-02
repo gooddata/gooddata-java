@@ -5,13 +5,13 @@
  */
 package com.gooddata.executeafm.result
 
+import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource
 import static spock.util.matcher.HamcrestSupport.that
-
 
 class PagingTest extends Specification {
 
@@ -44,5 +44,13 @@ class PagingTest extends Specification {
         paging.offset == [1, 2]
         paging.count == [3, 4]
         paging.total == [5, 6]
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(Paging)
+                .usingGetClass()
+                .suppress(nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS)
+                .verify()
     }
 }

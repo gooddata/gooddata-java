@@ -5,6 +5,7 @@
  */
 package com.gooddata.executeafm.resultspec
 
+import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -30,5 +31,12 @@ class AttributeLocatorItemTest extends Specification {
         item.attributeIdentifier == 'aId'
         item.element == "a1"
         item.toString()
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(AttributeLocatorItem)
+                .usingGetClass()
+                .verify()
     }
 }

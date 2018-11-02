@@ -13,10 +13,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.executeafm.afm.CompatibilityFilter;
 import com.gooddata.executeafm.resultspec.ResultSpec;
+import com.gooddata.util.GoodDataToStringBuilder;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents structure for triggering execution with reference to visualization object.
@@ -48,8 +48,8 @@ public class VisualizationExecution {
      */
     @JsonCreator
     VisualizationExecution(@JsonProperty("reference") final String reference,
-            @JsonProperty("filters") final List<CompatibilityFilter> filters,
-            @JsonProperty("resultSpec") final ResultSpec resultSpec) {
+                           @JsonProperty("filters") final List<CompatibilityFilter> filters,
+                           @JsonProperty("resultSpec") final ResultSpec resultSpec) {
         this.reference = reference;
         this.resultSpec = resultSpec;
         this.filters = filters;
@@ -93,5 +93,25 @@ public class VisualizationExecution {
     public VisualizationExecution setFilters(final List<CompatibilityFilter> filters) {
         this.filters = filters;
         return this;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final VisualizationExecution that = (VisualizationExecution) o;
+        return Objects.equals(reference, that.reference) &&
+                Objects.equals(filters, that.filters) &&
+                Objects.equals(resultSpec, that.resultSpec);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(reference, filters, resultSpec);
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 }

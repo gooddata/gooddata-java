@@ -11,6 +11,7 @@ import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static java.util.Arrays.asList;
@@ -58,6 +59,20 @@ public class NativeTotalItem {
      */
     public List<String> getAttributeIdentifiers() {
         return attributeIdentifiers;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final NativeTotalItem that = (NativeTotalItem) o;
+        return Objects.equals(measureIdentifier, that.measureIdentifier) &&
+                Objects.equals(attributeIdentifiers, that.attributeIdentifiers);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(measureIdentifier, attributeIdentifiers);
     }
 
     @Override

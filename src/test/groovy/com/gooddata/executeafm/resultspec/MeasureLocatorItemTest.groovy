@@ -5,6 +5,7 @@
  */
 package com.gooddata.executeafm.resultspec
 
+import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -29,5 +30,12 @@ class MeasureLocatorItemTest extends Specification {
         then:
         item.measureIdentifier == 'mId'
         item.toString()
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(MeasureLocatorItem)
+                .usingGetClass()
+                .verify()
     }
 }

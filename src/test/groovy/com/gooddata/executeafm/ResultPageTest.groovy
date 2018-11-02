@@ -5,9 +5,9 @@
  */
 package com.gooddata.executeafm
 
+import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 import spock.lang.Unroll
-
 
 class ResultPageTest extends Specification {
 
@@ -35,5 +35,12 @@ class ResultPageTest extends Specification {
         then:
         page.offsetsQueryParam == '1%2C2'
         page.limitsQueryParam == '7%2C8'
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(ResultPage)
+                .usingGetClass()
+                .verify()
     }
 }

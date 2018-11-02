@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.util.Objects;
+
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
@@ -38,6 +40,20 @@ public class AttributeLocatorItem implements LocatorItem {
 
     public String getElement() {
         return element;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final AttributeLocatorItem that = (AttributeLocatorItem) o;
+        return Objects.equals(attributeIdentifier, that.attributeIdentifier) &&
+                Objects.equals(element, that.element);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(attributeIdentifier, element);
     }
 
     @Override

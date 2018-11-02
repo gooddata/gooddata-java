@@ -14,6 +14,8 @@ import com.gooddata.executeafm.afm.Afm;
 import com.gooddata.executeafm.resultspec.ResultSpec;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.util.Objects;
+
 /**
  * Represents structure for triggering execution of contained AFM (Attributes Filters Metrics).
  */
@@ -46,6 +48,20 @@ public class Execution {
 
     public void setResultSpec(final ResultSpec resultSpec) {
         this.resultSpec = resultSpec;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Execution execution = (Execution) o;
+        return Objects.equals(afm, execution.afm) &&
+                Objects.equals(resultSpec, execution.resultSpec);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(afm, resultSpec);
     }
 
     @Override

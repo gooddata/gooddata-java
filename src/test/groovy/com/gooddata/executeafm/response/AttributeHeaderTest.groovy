@@ -5,6 +5,8 @@
  */
 package com.gooddata.executeafm.response
 
+import nl.jqno.equalsverifier.EqualsVerifier
+import nl.jqno.equalsverifier.Warning
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -56,5 +58,14 @@ class AttributeHeaderTest extends Specification {
         header.totalItems.size() == 1
         header.totalItems.first().name == 'sum'
         header.toString()
+    }
+
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(AttributeHeader)
+                .usingGetClass()
+                .suppress(Warning.NONFINAL_FIELDS)
+                .verify()
     }
 }

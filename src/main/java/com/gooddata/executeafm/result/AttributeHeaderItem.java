@@ -6,12 +6,11 @@
 package com.gooddata.executeafm.result;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
+
+import java.util.Objects;
 
 import static com.gooddata.executeafm.result.AttributeHeaderItem.NAME;
 
@@ -41,6 +40,20 @@ public class AttributeHeaderItem extends ResultHeaderItem {
      */
     public String getUri() {
         return uri;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        final AttributeHeaderItem that = (AttributeHeaderItem) o;
+        return Objects.equals(uri, that.uri);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), uri);
     }
 
     @Override

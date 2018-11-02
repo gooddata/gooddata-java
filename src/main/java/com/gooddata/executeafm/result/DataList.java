@@ -19,6 +19,8 @@ import static java.util.stream.Collectors.toList;
  */
 public class DataList extends ArrayList<Data> implements Data {
 
+    private static final long serialVersionUID = 2564473357639232925L;
+
     /**
      * Creates new instance of given list of data
      * @param values list to use as values, can't be null
@@ -71,5 +73,4 @@ public class DataList extends ArrayList<Data> implements Data {
     public String toString() {
         return GoodDataToStringBuilder.defaultToString(this);
     }
-
 }

@@ -15,7 +15,7 @@ class MeasureDefinitionTest extends Specification {
     @Unroll
     def "should deserialize as #typeClass"() {
         when:
-        MeasureDefinition instance = readObjectFromResource("/executeafm/afm/${type}.json", MeasureDefinition)
+        def instance = readObjectFromResource("/executeafm/afm/${type}.json", MeasureDefinition)
 
         then:
         typeClass.isInstance(instance)
@@ -26,6 +26,7 @@ class MeasureDefinitionTest extends Specification {
         'simpleMeasureDefinition'         | SimpleMeasureDefinition
         'overPeriodMeasureDefinition'     | OverPeriodMeasureDefinition
         'previousPeriodMeasureDefinition' | PreviousPeriodMeasureDefinition
+        'arithmeticMeasureDefinition'     | ArithmeticMeasureDefinition
     }
 
     def "getUri() should throw exception"() {

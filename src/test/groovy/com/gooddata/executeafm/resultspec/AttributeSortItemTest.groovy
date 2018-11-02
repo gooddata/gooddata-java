@@ -5,6 +5,7 @@
  */
 package com.gooddata.executeafm.resultspec
 
+import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -39,5 +40,12 @@ class AttributeSortItemTest extends Specification {
         item.direction == 'asc'
         item.aggregation == 'sum'
         item.toString()
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(AttributeSortItem)
+                .usingGetClass()
+                .verify()
     }
 }

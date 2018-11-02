@@ -6,13 +6,13 @@
 package com.gooddata.executeafm.result
 
 import com.gooddata.md.report.Total
+import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource
 import static spock.util.matcher.HamcrestSupport.that
-
 
 class ResultTotalHeaderItemTest extends Specification {
 
@@ -43,5 +43,12 @@ class ResultTotalHeaderItemTest extends Specification {
             name == 'sum'
             type == 'sum'
         }
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(ResultTotalHeaderItem)
+                .usingGetClass()
+                .verify()
     }
 }

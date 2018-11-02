@@ -14,6 +14,8 @@ import com.gooddata.executeafm.afm.Afm;
 import com.gooddata.executeafm.afm.LocallyIdentifiable;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.util.Objects;
+
 import static com.gooddata.util.Validate.notEmpty;
 
 /**
@@ -102,6 +104,23 @@ public class MeasureHeaderItem implements LocallyIdentifiable {
      */
     public void setIdentifier(final String identifier) {
         this.identifier = identifier;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final MeasureHeaderItem that = (MeasureHeaderItem) o;
+        return Objects.equals(name, that.name) &&
+                Objects.equals(format, that.format) &&
+                Objects.equals(localIdentifier, that.localIdentifier) &&
+                Objects.equals(uri, that.uri) &&
+                Objects.equals(identifier, that.identifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, format, localIdentifier, uri, identifier);
     }
 
     @Override

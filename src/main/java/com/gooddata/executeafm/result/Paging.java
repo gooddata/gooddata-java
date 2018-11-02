@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static java.util.Arrays.asList;
@@ -93,6 +94,21 @@ public class Paging {
     public Paging offset(final int... offset) {
         this.offset = asList(toObject(offset));
         return this;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Paging paging = (Paging) o;
+        return Objects.equals(count, paging.count) &&
+                Objects.equals(offset, paging.offset) &&
+                Objects.equals(total, paging.total);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(count, offset, total);
     }
 
     @Override

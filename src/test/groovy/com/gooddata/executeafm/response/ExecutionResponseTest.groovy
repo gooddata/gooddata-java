@@ -5,6 +5,7 @@
  */
 package com.gooddata.executeafm.response
 
+import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -73,4 +74,10 @@ class ExecutionResponseTest extends Specification {
         response.toString()
     }
 
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(ExecutionResponse)
+                .usingGetClass()
+                .verify()
+    }
 }

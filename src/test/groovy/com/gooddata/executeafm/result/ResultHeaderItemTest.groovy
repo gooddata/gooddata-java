@@ -5,6 +5,7 @@
  */
 package com.gooddata.executeafm.result
 
+import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -37,5 +38,12 @@ class ResultHeaderItemTest extends Specification {
 
         then:
         thrown(IllegalArgumentException)
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(ResultHeaderItem)
+                .usingGetClass()
+                .verify()
     }
 }

@@ -15,6 +15,7 @@ import com.gooddata.util.GoodDataToStringBuilder;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static com.gooddata.executeafm.afm.PreviousPeriodMeasureDefinition.NAME;
 
@@ -54,7 +55,7 @@ public class ArithmeticMeasureDefinition implements MeasureDefinition {
      */
     @Override
     public Collection<ObjQualifier> getObjQualifiers() {
-        return Collections.EMPTY_SET; //has no qualifiers
+        return Collections.emptySet(); //has no qualifiers
     }
 
     @Deprecated
@@ -91,6 +92,20 @@ public class ArithmeticMeasureDefinition implements MeasureDefinition {
      */
     public String getOperator() {
         return operator;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final ArithmeticMeasureDefinition that = (ArithmeticMeasureDefinition) o;
+        return Objects.equals(measureIdentifiers, that.measureIdentifiers) &&
+                Objects.equals(operator, that.operator);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(measureIdentifiers, operator);
     }
 
     @Override

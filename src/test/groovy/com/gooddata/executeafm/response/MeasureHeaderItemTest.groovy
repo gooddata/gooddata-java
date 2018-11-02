@@ -5,6 +5,8 @@
  */
 package com.gooddata.executeafm.response
 
+import nl.jqno.equalsverifier.EqualsVerifier
+import nl.jqno.equalsverifier.Warning
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -25,7 +27,7 @@ class MeasureHeaderItemTest extends Specification {
 
     def "should serialize"() {
         expect:
-        that  new MeasureHeaderItem('Name', '#,##0.00', 'm1'),
+        that new MeasureHeaderItem('Name', '#,##0.00', 'm1'),
                 jsonEquals(resource(MEASURE_HEADER_ITEM_JSON))
     }
 
@@ -61,5 +63,13 @@ class MeasureHeaderItemTest extends Specification {
         then:
         item.uri == "uri"
         item.identifier == "identifier"
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(MeasureHeaderItem)
+                .usingGetClass()
+                .suppress(Warning.NONFINAL_FIELDS)
+                .verify()
     }
 }

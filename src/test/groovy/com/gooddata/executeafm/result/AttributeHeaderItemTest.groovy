@@ -5,13 +5,13 @@
  */
 package com.gooddata.executeafm.result
 
+import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource
 import static spock.util.matcher.HamcrestSupport.that
-
 
 class AttributeHeaderItemTest extends Specification {
 
@@ -30,5 +30,12 @@ class AttributeHeaderItemTest extends Specification {
         then:
         item.name == 'Cost of Goods Sold'
         item.uri == '/gdc/md/FoodMartDemo/obj/124/elements?id=3200'
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(AttributeHeaderItem)
+                .usingGetClass()
+                .verify()
     }
 }

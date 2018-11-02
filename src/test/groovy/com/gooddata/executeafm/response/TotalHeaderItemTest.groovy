@@ -6,6 +6,7 @@
 package com.gooddata.executeafm.response
 
 import com.gooddata.md.report.Total
+import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -30,5 +31,12 @@ class TotalHeaderItemTest extends Specification {
         then:
         item.name == 'avg'
         item.toString()
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(TotalHeaderItem)
+                .usingGetClass()
+                .verify()
     }
 }

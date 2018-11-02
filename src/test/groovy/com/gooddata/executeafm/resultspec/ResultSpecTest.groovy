@@ -5,6 +5,8 @@
  */
 package com.gooddata.executeafm.resultspec
 
+import nl.jqno.equalsverifier.EqualsVerifier
+import nl.jqno.equalsverifier.Warning
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
@@ -76,12 +78,20 @@ class ResultSpecTest extends Specification {
     def "should add items"() {
         when:
         def resultSpec = new ResultSpec()
-            .addDimension(new Dimension([]))
-            .addSort(new MeasureSortItem(Direction.ASC))
+                .addDimension(new Dimension([]))
+                .addSort(new MeasureSortItem(Direction.ASC))
 
         then:
         with(resultSpec) {
             sorts.size() == 1
         }
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(ResultSpec)
+                .usingGetClass()
+                .suppress(Warning.NONFINAL_FIELDS)
+                .verify()
     }
 }

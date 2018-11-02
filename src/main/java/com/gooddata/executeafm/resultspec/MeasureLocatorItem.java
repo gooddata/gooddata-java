@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import java.util.Objects;
+
 /**
  * Holds metric position
  */
@@ -28,6 +30,19 @@ public class MeasureLocatorItem implements LocatorItem {
 
     public String getMeasureIdentifier() {
         return measureIdentifier;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final MeasureLocatorItem that = (MeasureLocatorItem) o;
+        return Objects.equals(measureIdentifier, that.measureIdentifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(measureIdentifier);
     }
 
     @Override

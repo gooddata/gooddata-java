@@ -6,13 +6,13 @@
 
 package com.gooddata.executeafm.resultspec
 
+import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource
 import static spock.util.matcher.HamcrestSupport.that
-
 
 class TotalLocatorItemTest extends Specification {
 
@@ -32,5 +32,12 @@ class TotalLocatorItemTest extends Specification {
         item.attributeIdentifier == 'aId'
         item.totalType == 'avg'
         item.toString()
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(TotalLocatorItem)
+                .usingGetClass()
+                .verify()
     }
 }

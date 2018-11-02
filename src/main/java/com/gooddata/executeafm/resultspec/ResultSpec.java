@@ -13,6 +13,7 @@ import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.gooddata.util.Validate.notNull;
 
@@ -68,8 +69,21 @@ public class ResultSpec {
     }
 
     @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final ResultSpec that = (ResultSpec) o;
+        return Objects.equals(dimensions, that.dimensions) &&
+                Objects.equals(sorts, that.sorts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dimensions, sorts);
+    }
+
+    @Override
     public String toString() {
         return GoodDataToStringBuilder.defaultToString(this);
     }
-
 }

@@ -78,7 +78,7 @@ public class MeasureItem implements LocallyIdentifiable, Serializable {
 
     /**
      * Sets measure format (used to format measure values in result)
-     * @param format
+     * @param format format
      */
     public void setFormat(final String format) {
         this.format = format;

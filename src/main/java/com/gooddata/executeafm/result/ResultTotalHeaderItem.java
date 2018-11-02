@@ -9,6 +9,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.md.report.Total;
+import com.gooddata.util.GoodDataToStringBuilder;
+
+import java.util.Objects;
 
 import static com.gooddata.executeafm.result.ResultTotalHeaderItem.NAME;
 import static com.gooddata.util.Validate.notEmpty;
@@ -66,5 +69,24 @@ public class ResultTotalHeaderItem extends ResultHeaderItem {
      */
     public String getType() {
         return type;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        final ResultTotalHeaderItem that = (ResultTotalHeaderItem) o;
+        return Objects.equals(type, that.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), type);
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 }

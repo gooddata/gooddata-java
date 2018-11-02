@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.util.Objects;
+
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import static com.gooddata.util.Validate.notNull;
@@ -90,6 +92,21 @@ public class AttributeSortItem implements SortItem {
 
     public String getAggregation() {
         return aggregation;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final AttributeSortItem that = (AttributeSortItem) o;
+        return Objects.equals(direction, that.direction) &&
+                Objects.equals(attributeIdentifier, that.attributeIdentifier) &&
+                Objects.equals(aggregation, that.aggregation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(direction, attributeIdentifier, aggregation);
     }
 
     @Override

@@ -129,6 +129,22 @@ public class Afm {
     }
 
     @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Afm afm = (Afm) o;
+        return Objects.equals(attributes, afm.attributes) &&
+                Objects.equals(filters, afm.filters) &&
+                Objects.equals(measures, afm.measures) &&
+                Objects.equals(nativeTotals, afm.nativeTotals);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(attributes, filters, measures, nativeTotals);
+    }
+
+    @Override
     public String toString() {
         return GoodDataToStringBuilder.defaultToString(this);
     }

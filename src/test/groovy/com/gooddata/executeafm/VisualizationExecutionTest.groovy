@@ -12,13 +12,14 @@ import com.gooddata.executeafm.resultspec.Dimension
 import com.gooddata.executeafm.resultspec.ResultSpec
 import com.gooddata.executeafm.resultspec.TotalItem
 import com.gooddata.md.report.Total
+import nl.jqno.equalsverifier.EqualsVerifier
+import nl.jqno.equalsverifier.Warning
 import spock.lang.Specification
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource
 import static spock.util.matcher.HamcrestSupport.that
-
 
 class VisualizationExecutionTest extends Specification {
 
@@ -53,6 +54,16 @@ class VisualizationExecutionTest extends Specification {
         execution?.reference == '/gdc/md/PROJECT/vizObjUri'
         execution?.filters?.every { it.class == ExpressionFilter && it.value == 'some expression' }
         execution?.resultSpec?.sorts?.every { it instanceof AttributeSortItem && it.attributeIdentifier == 'aId' }
-        execution?.resultSpec?.dimensions?.every { it.itemIdentifiers == ['i1'] && it.totals*.measureIdentifier == ['mId'] }
+        execution?.resultSpec?.dimensions?.every {
+            it.itemIdentifiers == ['i1'] && it.totals*.measureIdentifier == ['mId']
+        }
+    }
+
+    def "should verify equals"() {
+        expect:
+        EqualsVerifier.forClass(VisualizationExecution)
+                .usingGetClass()
+                .suppress(Warning.NONFINAL_FIELDS)
+                .verify()
     }
 }
