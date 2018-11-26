@@ -85,8 +85,13 @@ class VisualizationConverterTest extends Specification {
     @Unroll
     def "should generate result spec for table with default sorting from #name"() {
         given:
-        Function getter = { vizObject -> Stub(VisualizationClass) { getVisualizationType() >> VisualizationType.TABLE } }
         VisualizationObject vo = readObjectFromResource("/$resource", VisualizationObject)
+        Function getter = { vizObject ->
+            Stub(VisualizationClass) {
+                getVisualizationType() >> VisualizationType.TABLE
+                getUri() >> vo.getVisualizationClassUri()
+            }
+        }
         ResultSpec converted = convertToResultSpec(vo, getter)
 
         expect:
@@ -107,8 +112,13 @@ class VisualizationConverterTest extends Specification {
     @Unroll
     def "should generate result spec for #type"() {
         given:
-        Function getter = { vizObject -> Stub(VisualizationClass) { getVisualizationType() >> VisualizationType.of(type) } }
         VisualizationObject vo = readObjectFromResource("/$resource", VisualizationObject)
+        Function getter = { vizObject ->
+            Stub(VisualizationClass) {
+                getVisualizationType() >> VisualizationType.of(type)
+                getUri() >> vo.getVisualizationClassUri()
+            }
+        }
         ResultSpec converted = convertToResultSpec(vo, getter)
 
         expect:
@@ -159,5 +169,16 @@ class VisualizationConverterTest extends Specification {
 
         where:
         properties << ['abcd', '{"sortItems":[{"someinvalidstring"}]}']
+    }
+
+    def "should fail when incorrect visualization class is provided"() {
+        when:
+        convertToResultSpec(
+                Stub(VisualizationObject) { getVisualizationClassUri() >> 'visClassUri'},
+                Stub(VisualizationClass) { getUri() >> 'nonMatchingVisClassUri'}
+        )
+
+        then:
+        thrown(IllegalArgumentException)
     }
 }

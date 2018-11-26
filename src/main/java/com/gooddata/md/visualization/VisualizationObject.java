@@ -288,6 +288,14 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
     }
 
     /**
+     * @see VisualizationConverter#convertToExecution(VisualizationObject, VisualizationClass)
+     */
+    @JsonIgnore
+    public Execution convertToExecution(VisualizationClass visualizationClass) {
+        return VisualizationConverter.convertToExecution(this, visualizationClass);
+    }
+
+    /**
      * @see VisualizationConverter#convertToAfm(VisualizationObject)
      */
     @JsonIgnore
@@ -301,6 +309,14 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
     @JsonIgnore
     public ResultSpec convertToResultSpec(Function<String, VisualizationClass> visualizationClassgetter) {
         return VisualizationConverter.convertToResultSpec(this, visualizationClassgetter);
+    }
+
+    /**
+     * @see VisualizationConverter#convertToResultSpec(VisualizationObject, VisualizationClass)
+     */
+    @JsonIgnore
+    public ResultSpec convertToResultSpec(VisualizationClass visualizationClass) {
+        return VisualizationConverter.convertToResultSpec(this, visualizationClass);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
