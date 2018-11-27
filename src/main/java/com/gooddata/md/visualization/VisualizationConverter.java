@@ -5,6 +5,16 @@
  */
 package com.gooddata.md.visualization;
 
+import static com.gooddata.executeafm.resultspec.Dimension.MEASURE_GROUP;
+import static com.gooddata.md.visualization.CollectionType.SEGMENT;
+import static com.gooddata.md.visualization.CollectionType.STACK;
+import static com.gooddata.md.visualization.CollectionType.TREND;
+import static com.gooddata.md.visualization.CollectionType.VIEW;
+import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.util.Validate.isTrue;
+import static java.util.stream.Collectors.toList;
+
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,19 +31,10 @@ import com.gooddata.executeafm.afm.SimpleMeasureDefinition;
 import com.gooddata.executeafm.resultspec.Dimension;
 import com.gooddata.executeafm.resultspec.ResultSpec;
 import com.gooddata.executeafm.resultspec.SortItem;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import static com.gooddata.executeafm.resultspec.Dimension.MEASURE_GROUP;
-import static com.gooddata.md.visualization.CollectionType.SEGMENT;
-import static com.gooddata.md.visualization.CollectionType.STACK;
-import static com.gooddata.md.visualization.CollectionType.TREND;
-import static com.gooddata.md.visualization.CollectionType.VIEW;
-import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Helper class for converting {@link VisualizationObject} into {@link Execution}
@@ -47,12 +48,30 @@ public abstract class VisualizationConverter {
      * @param visualizationObject which will be converted to {@link Execution}
      * @param visualizationClassGetter {@link Function} for fetching VisualizationClass, which is necessary for correct generation of {@link ResultSpec}
      * @return {@link Execution} object
-     *
-     * @see #convertToAfm(VisualizationObject)
-     * @see #convertToResultSpec(VisualizationObject, Function)
+     * @see #convertToExecution(VisualizationObject, VisualizationClass)
      */
-    public static Execution convertToExecution(final VisualizationObject visualizationObject, final Function<String, VisualizationClass> visualizationClassGetter) {
-        ResultSpec resultSpec = convertToResultSpec(visualizationObject, visualizationClassGetter);
+    public static Execution convertToExecution(final VisualizationObject visualizationObject,
+            final Function<String, VisualizationClass> visualizationClassGetter) {
+        notNull(visualizationObject, "visualizationObject");
+        notNull(visualizationClassGetter, "visualizationClassGetter");
+        return convertToExecution(visualizationObject,
+                visualizationClassGetter.apply(visualizationObject.getVisualizationClassUri()));
+    }
+
+    /**
+     * Generate Execution from Visualization object.
+     *
+     * @param visualizationObject which will be converted to {@link Execution}
+     * @param visualizationClass visualizationClass, which is necessary for correct generation of {@link ResultSpec}
+     * @return {@link Execution} object
+     * @see #convertToAfm(VisualizationObject)
+     * @see #convertToResultSpec(VisualizationObject, VisualizationClass)
+     */
+    public static Execution convertToExecution(final VisualizationObject visualizationObject,
+            final VisualizationClass visualizationClass) {
+        notNull(visualizationObject, "visualizationObject");
+        notNull(visualizationClass, "visualizationClass");
+        ResultSpec resultSpec = convertToResultSpec(visualizationObject, visualizationClass);
         Afm afm = convertToAfm(visualizationObject);
         return new Execution(afm, resultSpec);
     }
@@ -64,6 +83,7 @@ public abstract class VisualizationConverter {
      * @return {@link Afm} object
      */
     public static Afm convertToAfm(final VisualizationObject visualizationObject) {
+        notNull(visualizationObject, "visualizationObject");
         final List<AttributeItem> attributes = convertAttributes(visualizationObject.getAttributes());
         final List<CompatibilityFilter> filters = convertFilters(visualizationObject.getFilters());
         final List<MeasureItem> measures = convertMeasures(visualizationObject.getMeasures());
@@ -80,9 +100,28 @@ public abstract class VisualizationConverter {
      * @return {@link Execution} object
      */
     public static ResultSpec convertToResultSpec(final VisualizationObject visualizationObject,
-                                          final Function<String, VisualizationClass> visualizationClassGetter) {
-        VisualizationClass visualizationClass = notNull(visualizationClassGetter).apply(notNull(visualizationObject).getVisualizationClassUri());
+            final Function<String, VisualizationClass> visualizationClassGetter) {
+        notNull(visualizationObject, "visualizationObject");
+        notNull(visualizationClassGetter, "visualizationClassGetter");
+        return convertToResultSpec(visualizationObject,
+                visualizationClassGetter.apply(visualizationObject.getVisualizationClassUri()));
+    }
 
+    /**
+     * Generate ResultSpec from Visualization object. Currently {@link ResultSpec}'s {@link Dimension}s can be generated
+     * for table and four types of chart: bar, column, line and pie.
+     *
+     * @param visualizationObject which will be converted to {@link Execution}
+     * @param visualizationClass VisualizationClass, which is necessary for correct generation of {@link ResultSpec}
+     * @return {@link Execution} object
+     */
+    public static ResultSpec convertToResultSpec(final VisualizationObject visualizationObject,
+            final VisualizationClass visualizationClass) {
+        notNull(visualizationObject, "visualizationObject");
+        notNull(visualizationClass, "visualizationClass");
+        isTrue(visualizationObject.getVisualizationClassUri().equals(visualizationClass.getUri()),
+                "visualizationClass URI does not match the URI within visualizationObject, "
+                        + "you're trying to create ResultSpec for incompatible objects");
         List<SortItem> sorts = getSorting(visualizationObject);
         List<Dimension> dimensions = getDimensions(visualizationObject, visualizationClass.getVisualizationType());
         return new ResultSpec(dimensions, sorts);
