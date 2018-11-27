@@ -10,8 +10,10 @@ import static com.gooddata.md.visualization.CollectionType.SEGMENT;
 import static com.gooddata.md.visualization.CollectionType.STACK;
 import static com.gooddata.md.visualization.CollectionType.TREND;
 import static com.gooddata.md.visualization.CollectionType.VIEW;
+import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.util.Validate.isTrue;
 import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.Validate.notNull;
+
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -29,7 +31,6 @@ import com.gooddata.executeafm.afm.SimpleMeasureDefinition;
 import com.gooddata.executeafm.resultspec.Dimension;
 import com.gooddata.executeafm.resultspec.ResultSpec;
 import com.gooddata.executeafm.resultspec.SortItem;
-import com.gooddata.util.Validate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -51,8 +52,10 @@ public abstract class VisualizationConverter {
      */
     public static Execution convertToExecution(final VisualizationObject visualizationObject,
             final Function<String, VisualizationClass> visualizationClassGetter) {
+        notNull(visualizationObject, "visualizationObject");
+        notNull(visualizationClassGetter, "visualizationClassGetter");
         return convertToExecution(visualizationObject,
-                notNull(visualizationClassGetter).apply(notNull(visualizationObject).getVisualizationClassUri()));
+                visualizationClassGetter.apply(visualizationObject.getVisualizationClassUri()));
     }
 
     /**
@@ -66,6 +69,8 @@ public abstract class VisualizationConverter {
      */
     public static Execution convertToExecution(final VisualizationObject visualizationObject,
             final VisualizationClass visualizationClass) {
+        notNull(visualizationObject, "visualizationObject");
+        notNull(visualizationClass, "visualizationClass");
         ResultSpec resultSpec = convertToResultSpec(visualizationObject, visualizationClass);
         Afm afm = convertToAfm(visualizationObject);
         return new Execution(afm, resultSpec);
@@ -78,6 +83,7 @@ public abstract class VisualizationConverter {
      * @return {@link Afm} object
      */
     public static Afm convertToAfm(final VisualizationObject visualizationObject) {
+        notNull(visualizationObject, "visualizationObject");
         final List<AttributeItem> attributes = convertAttributes(visualizationObject.getAttributes());
         final List<CompatibilityFilter> filters = convertFilters(visualizationObject.getFilters());
         final List<MeasureItem> measures = convertMeasures(visualizationObject.getMeasures());
@@ -95,8 +101,10 @@ public abstract class VisualizationConverter {
      */
     public static ResultSpec convertToResultSpec(final VisualizationObject visualizationObject,
             final Function<String, VisualizationClass> visualizationClassGetter) {
+        notNull(visualizationObject, "visualizationObject");
+        notNull(visualizationClassGetter, "visualizationClassGetter");
         return convertToResultSpec(visualizationObject,
-                notNull(visualizationClassGetter).apply(notNull(visualizationObject).getVisualizationClassUri()));
+                visualizationClassGetter.apply(visualizationObject.getVisualizationClassUri()));
     }
 
     /**
@@ -109,7 +117,9 @@ public abstract class VisualizationConverter {
      */
     public static ResultSpec convertToResultSpec(final VisualizationObject visualizationObject,
             final VisualizationClass visualizationClass) {
-        Validate.isTrue(visualizationObject.getVisualizationClassUri().equals(visualizationClass.getUri()),
+        notNull(visualizationObject, "visualizationObject");
+        notNull(visualizationClass, "visualizationClass");
+        isTrue(visualizationObject.getVisualizationClassUri().equals(visualizationClass.getUri()),
                 "visualizationClass URI does not match the URI within visualizationObject, "
                         + "you're trying to create ResultSpec for incompatible objects");
         List<SortItem> sorts = getSorting(visualizationObject);

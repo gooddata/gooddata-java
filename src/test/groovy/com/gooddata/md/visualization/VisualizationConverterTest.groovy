@@ -29,6 +29,7 @@ import java.util.function.Function
 import static VisualizationConverter.convertToAfm
 import static VisualizationConverter.convertToResultSpec
 import static VisualizationConverter.parseSorting
+import static com.gooddata.md.visualization.VisualizationConverter.convertToExecution
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static spock.util.matcher.HamcrestSupport.that
@@ -180,5 +181,57 @@ class VisualizationConverterTest extends Specification {
 
         then:
         thrown(IllegalArgumentException)
+    }
+
+    @Unroll
+    def "should fail if any argument is null in convertToResultSpec(VisualizationObject, VisualizationClass)"() {
+        when:
+        convertToResultSpec(vo, vc)
+
+        then:
+        thrown(IllegalArgumentException)
+
+        where:
+        vo << [null, Stub(VisualizationObject), null]
+        vc << [null, null, Stub(VisualizationClass)]
+    }
+
+    @Unroll
+    def "should fail if any argument is null in convertToResultSpec(VisualizationObject, Function)"() {
+        when:
+        convertToResultSpec(vo, vcg)
+
+        then:
+        thrown(IllegalArgumentException)
+
+        where:
+        vo << [null, Stub(VisualizationObject), null]
+        vcg << [null, null, Stub(Function)]
+    }
+
+    @Unroll
+    def "should fail if any argument is null in convertToExecution(VisualizationObject, VisualizationClass)"() {
+        when:
+        convertToExecution(vo, vc)
+
+        then:
+        thrown(IllegalArgumentException)
+
+        where:
+        vo << [null, Stub(VisualizationObject), null]
+        vc << [null, null, Stub(VisualizationClass)]
+    }
+
+    @Unroll
+    def "should fail if any argument is null in convertToExecution(VisualizationObject, Function)"() {
+        when:
+        convertToExecution(vo, vcg)
+
+        then:
+        thrown(IllegalArgumentException)
+
+        where:
+        vo << [null, Stub(VisualizationObject), null]
+        vcg << [null, null, Stub(Function)]
     }
 }
