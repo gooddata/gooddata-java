@@ -47,6 +47,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.gooddata.util.Validate.notNull;
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.apache.http.util.VersionInfo.loadVersionInfo;
 
@@ -253,7 +254,9 @@ public class GoodData {
         presetHeaders.put(Header.GDC_VERSION, readApiVersion());
 
         final RestTemplate restTemplate = new RestTemplate(factory);
-        restTemplate.setInterceptors(singletonList(new HeaderSettingRequestInterceptor(presetHeaders)));
+        restTemplate.setInterceptors(asList(
+                new HeaderSettingRequestInterceptor(presetHeaders),
+                new DeprecationWarningRequestInterceptor()));
 
         restTemplate.setErrorHandler(new ResponseErrorHandler(restTemplate.getMessageConverters()));
 

@@ -34,7 +34,21 @@ The *GoodData Java SDK* uses:
 * the *Apache HTTP Client* version 4.5 or later (for white-labeled domains at least version 4.3.2 is required)
 * the *Spring Framework* version 4.3.*
 * the *Jackson JSON Processor* version 2.8.*
+* the *Slf4j API* version 1.7.*
 * the *Java Development Kit (JDK)* version 8 or later
+
+### Logging
+
+The *GoodData Java SDK* logs using `slf4j-api`. Please adjust your logging configuration for 
+`com.gooddata.sdk.*` loggers or alternatively turn the logging off using following dependency:
+
+```xml
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-nop</artifactId>
+    <version>1.7.25</version>
+</dependency>
+```
 
 ## Development
 
