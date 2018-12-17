@@ -25,18 +25,7 @@ public class GoodDataIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void rootLinksShouldUseProperVersionHeader() throws Exception {
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingHeaderEqualTo("Accept", "application/json;version=1")
-            .respond()
-                .withStatus(200);
-
-        gd.getGdcService().getRootLinks();
-    }
-
-    @Test
-    public void shouldSentCustomUserAgentHeader() throws Exception {
+    public void shouldSentCustomUserAgentHeader() {
         onRequest()
                 .havingMethodEqualTo("GET")
             .respond()

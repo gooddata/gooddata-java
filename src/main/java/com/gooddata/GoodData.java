@@ -40,9 +40,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-
 import static com.gooddata.util.Validate.notNull;
+import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 import static org.apache.http.util.VersionInfo.loadVersionInfo;
 
@@ -71,8 +70,6 @@ public class GoodData {
     protected static final int PORT = GoodDataEndpoint.PORT;
     protected static final String HOSTNAME = GoodDataEndpoint.HOSTNAME;
     private static final String UNKNOWN_VERSION = "UNKNOWN";
-
-    private static final int RESTAPI_VERSION = 1;
 
     private final RestTemplate restTemplate;
     private final HttpClient httpClient;
@@ -246,8 +243,8 @@ public class GoodData {
                 endpoint.toUri()
         );
         final RestTemplate restTemplate = new RestTemplate(factory);
-        restTemplate.setInterceptors(Arrays.asList(
-                new HeaderSettingRequestInterceptor(singletonMap("Accept", getAcceptHeaderValue()))));
+        restTemplate.setInterceptors(singletonList(
+                new HeaderSettingRequestInterceptor(singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE))));
 
         restTemplate.setErrorHandler(new ResponseErrorHandler(restTemplate.getMessageConverters()));
 
@@ -272,14 +269,6 @@ public class GoodData {
                 .setUserAgent(StringUtils.isNotBlank(settings.getUserAgent()) ? String.format("%s %s", settings.getUserAgent(), getUserAgent()) : getUserAgent())
                 .setConnectionManager(connectionManager)
                 .setDefaultRequestConfig(requestConfig.build());
-    }
-
-    /*
-     * Set accept header (application/json by default) and append rest api versioning information which is mandatory
-     * for some resources.
-     */
-    private static String getAcceptHeaderValue(){
-        return MediaType.APPLICATION_JSON_VALUE + ";version=" + RESTAPI_VERSION;
     }
 
     private String getUserAgent() {
