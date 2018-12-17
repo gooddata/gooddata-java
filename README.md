@@ -24,6 +24,9 @@ or [Wiki](https://github.com/gooddata/gooddata-java/wiki) for
 [Code Examples](https://github.com/gooddata/gooddata-java/wiki/Code-Examples)
 and [Extensibility How-To](https://github.com/gooddata/gooddata-java/wiki/Extending).
 
+### API version
+Since *GoodData Java SDK* version *2.32.0* API versioning is supported. The API version, GoodData Java is compatible with, is marked in artifact version using `+api<NUMBER>` suffix (i.e. `2.32.0+api1` is compatible with API version `1`).
+
 ### Dependencies
 
 The *GoodData Java SDK* uses:

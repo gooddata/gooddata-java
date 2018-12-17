@@ -38,11 +38,16 @@ import org.apache.http.util.VersionInfo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.gooddata.util.Validate.notNull;
 import static java.util.Collections.singletonList;
-import static java.util.Collections.singletonMap;
 import static org.apache.http.util.VersionInfo.loadVersionInfo;
 
 /**
@@ -242,9 +247,13 @@ public class GoodData {
                 new HttpComponentsClientHttpRequestFactory(httpClient),
                 endpoint.toUri()
         );
+
+        final Map<String, String> presetHeaders = new HashMap<>(2);
+        presetHeaders.put("Accept", MediaType.APPLICATION_JSON_VALUE);
+        presetHeaders.put(Header.GDC_VERSION, readApiVersion());
+
         final RestTemplate restTemplate = new RestTemplate(factory);
-        restTemplate.setInterceptors(singletonList(
-                new HeaderSettingRequestInterceptor(singletonMap("Accept", MediaType.APPLICATION_JSON_VALUE))));
+        restTemplate.setInterceptors(singletonList(new HeaderSettingRequestInterceptor(presetHeaders)));
 
         restTemplate.setErrorHandler(new ResponseErrorHandler(restTemplate.getMessageConverters()));
 
@@ -282,6 +291,14 @@ public class GoodData {
         return String.format("%s/%s (%s; %s) %s/%s", "GoodData-Java-SDK", clientVersion,
                 System.getProperty("os.name"), System.getProperty("java.specification.version"),
                 "Apache-HttpClient", apacheVersion);
+    }
+
+    private static String readApiVersion() {
+        try {
+            return StreamUtils.copyToString(GoodData.class.getResourceAsStream("/GoodDataApiVersion"), Charset.defaultCharset());
+        } catch (IOException e) {
+            throw new IllegalStateException("Cannot read GoodDataApiVersion from classpath", e);
+        }
     }
 
     /**
