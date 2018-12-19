@@ -1,0 +1,10 @@
+[
+  {
+    "attribute": {
+      "uri": "/uriValue",
+      "alias": "aliasValue",
+      "totals" : []
+    }
+  },
+  "metricGroup"
+]

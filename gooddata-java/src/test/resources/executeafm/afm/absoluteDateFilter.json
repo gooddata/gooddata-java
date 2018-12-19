@@ -1,0 +1,9 @@
+{
+  "absoluteDateFilter": {
+    "dataSet": {
+      "identifier": "date.attr"
+    },
+    "from" : "2017-09-25",
+    "to" : "2017-09-30"
+  }
+}

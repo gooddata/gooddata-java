@@ -1,0 +1,66 @@
+{
+  "visualizationObject": {
+    "meta": {
+      "title": "New insight"
+    },
+    "content": {
+      "visualizationClass": {
+        "uri": "visClass"
+      },
+      "buckets": [
+        {
+          "localIdentifier": "view",
+          "items": [
+            {
+              "visualizationAttribute": {
+                "localIdentifier": "1",
+                "displayForm": {
+                  "uri": "/uri/to/displayForm/1"
+                },
+                "alias": "attributeAlias"
+              }
+            }
+          ]
+        }, {
+          "localIdentifier": "stack",
+          "items": [
+            {
+              "visualizationAttribute": {
+                "localIdentifier": "2",
+                "displayForm": {
+                  "uri": "/uri/to/displayForm/1"
+                },
+                "alias": "attributeAlias"
+              }
+            }
+          ]
+        },
+        {
+          "localIdentifier": "measure",
+          "items": [
+            {
+              "measure": {
+                "localIdentifier": "measure1",
+                "title": "Measure 1",
+                "alias": "Measure 1 alias",
+                "definition": {
+                  "measureDefinition": {
+                    "item": {
+                      "uri": "/uri/to/measure/1"
+                    },
+                    "aggregation": "sum",
+                    "computeRatio": false,
+                    "filters": []
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "filters": [],
+      "properties": "{\"key\":\"value\"}",
+      "references": { "key": "value" }
+    }
+  }
+}

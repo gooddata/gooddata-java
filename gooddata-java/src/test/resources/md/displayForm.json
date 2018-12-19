@@ -1,0 +1,23 @@
+{
+  "content" : {
+     "formOf" : "/gdc/md/PROJECT_ID/obj/DF_FORM_OF_ID",
+     "expression" : "[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]",
+     "ldmexpression" : ""
+  },
+  "links" : {
+     "elements" : "/gdc/md/PROJECT_ID/obj/DF_ID/elements"
+  },
+  "meta" : {
+     "author" : "/gdc/account/profile/USER_ID",
+     "uri" : "/gdc/md/PROJECT_ID/obj/DF_ID",
+     "tags" : "",
+     "created" : "2014-04-11 13:45:56",
+     "identifier" : "attr.person.id.name",
+     "deprecated" : "0",
+     "summary" : "",
+     "title" : "Person Name",
+     "category" : "attributeDisplayForm",
+     "updated" : "2014-04-11 13:45:56",
+     "contributor" : "/gdc/account/profile/USER_ID"
+  }
+}

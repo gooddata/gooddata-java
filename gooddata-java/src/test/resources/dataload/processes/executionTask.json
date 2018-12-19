@@ -1,0 +1,8 @@
+{
+    "executionTask" : {
+        "links" : {
+            "poll" : "/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId",
+            "detail" : "/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId/detail"
+        }
+    }
+}

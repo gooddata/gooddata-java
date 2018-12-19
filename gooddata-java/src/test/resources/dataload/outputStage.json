@@ -1,0 +1,8 @@
+{
+  "outputStage" : {
+    "links" : {
+      "self" : "/gdc/dataload/projects/projectId/outputStage",
+      "outputStageDiff" : "/gdc/dataload/projects/projectId/outputStage/sqlDiff"
+    }
+  }
+}

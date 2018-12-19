@@ -1,0 +1,20 @@
+{
+    "executionDetail": {
+        "status": "ERROR",
+        "created": "2014-02-24T19:00:35.999Z",
+        "started": "2014-02-24T19:00:39.155Z",
+        "updated": "2014-02-24T19:26:13.197Z",
+        "finished": "2014-02-24T19:26:13.060Z",
+        "error" : {
+            "errorCode" : "executor.error",
+            "message" : "Error message with some placeholders for parameters - like %s.",
+            "parameters" : [ "this one" ]
+        },
+        "links": {
+            "poll": "/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId",
+            "self": "/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId/detail",
+            "log": "/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId/log",
+            "data": "/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId/data"
+        }
+    }
+}

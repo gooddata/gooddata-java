@@ -1,0 +1,11 @@
+{
+  "validateProject": [
+    "pdm::pdm_vs_dwh",
+    "metric_filter",
+    "pdm::transitivity",
+    "ldm",
+    "invalid_objects",
+    "pdm::elem_validation",
+    "pdm::pk_fk_consistency"
+  ]
+}

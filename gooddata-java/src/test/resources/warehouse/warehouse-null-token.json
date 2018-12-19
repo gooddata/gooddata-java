@@ -1,0 +1,19 @@
+{
+    "instance" : {
+        "title" : "Test",
+        "description" : "Storage",
+        "status" : "ENABLED",
+        "created" : "2014-05-05T08:27:33.000Z",
+        "updated" : "2014-05-05T08:27:34.000Z",
+        "createdBy" : "/gdc/account/profile/createdBy",
+        "updatedBy" : "/gdc/account/profile/updatedBy",
+        "environment" : "TESTING",
+        "connectionUrl" : "CONNECTION_URL",
+        "links" : {
+            "self" : "/gdc/datawarehouse/instances/instanceId",
+            "parent" : "/gdc/datawarehouse/instances",
+            "users" : "/gdc/datawarehouse/instances/instanceId/users",
+            "jdbc" : "/gdc/datawarehouse/instances/instanceId/jdbc"
+        }
+    }
+}

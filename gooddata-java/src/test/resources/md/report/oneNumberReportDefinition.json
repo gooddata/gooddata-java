@@ -1,0 +1,44 @@
+{
+    "reportDefinition" : {
+        "content" : {
+            "grid" : {
+                "sort" : {
+                    "columns" : [],
+                    "rows" : []
+                },
+                "columnWidths" : [],
+                "columns" : [
+                    "metricGroup"
+                ],
+                "metrics" : [
+                    {
+                        "alias" : "Beers Bought",
+                        "uri" : "/gdc/md/PROJECT_ID/obj/1504"
+                    }
+                ],
+                "rows" : []
+            },
+            "oneNumber" : {
+                "labels" : {}
+            },
+            "format" : "oneNumber",
+            "filters" : []
+        },
+        "links" : {
+            "explain2" : "/gdc/md/PROJECT_ID/obj/2274/explain2"
+        },
+        "meta" : {
+            "author" : "/gdc/account/profile/USER_ID",
+            "uri" : "/gdc/md/PROJECT_ID/obj/2274",
+            "tags" : "",
+            "created" : "2012-08-07 17:56:33",
+            "identifier" : "meh",
+            "deprecated" : "0",
+            "summary" : "",
+            "title" : "Untitled",
+            "category" : "reportDefinition",
+            "updated" : "2012-08-07 17:56:33",
+            "contributor" : "/gdc/account/profile/USER_ID"
+        }
+    }
+}

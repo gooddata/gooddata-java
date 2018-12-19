@@ -1,0 +1,26 @@
+{
+  "table": {
+    "content": {
+      "tableDataLoad": [
+        "/gdc/md/PROJECT_ID/obj/625283",
+        "/gdc/md/PROJECT_ID/obj/625412"
+      ],
+      "activeDataLoad": "/gdc/md/PROJECT_ID/obj/625412",
+      "tableDBName": "d_zendesktickets_vehicleview"
+    },
+    "meta": {
+      "author": "/gdc/account/profile/PROFILE_ID",
+      "uri": "/gdc/md/PROJECT_ID/obj/9538",
+      "tags": "",
+      "created": "2012-08-10 13:06:43",
+      "identifier": "tab.d_zendesktickets_vehicleview",
+      "deprecated": "0",
+      "summary": "",
+      "isProduction": 1,
+      "title": "tab.d_zendesktickets_vehicleview",
+      "category": "table",
+      "updated": "2016-03-10 10:02:08",
+      "contributor": "/gdc/account/profile/PROFILE_ID"
+    }
+  }
+}

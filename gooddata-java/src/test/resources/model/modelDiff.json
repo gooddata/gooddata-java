@@ -1,0 +1,31 @@
+{
+    "projectModelDiff": {
+        "updateOperations": [
+            {
+                "updateOperation": {
+                    "type": "create.fact",
+                    "dataset": "dataset.employee",
+                    "destructive": false,
+                    "description": "Create Fact '%s'",
+                    "paramaters": ["Employee Age"]
+                }
+            }
+        ],
+        "updateScripts": [
+            {
+                "updateScript": {
+                    "maqlDdlChunks": [ "CREATE FOLDER {ffld.employee} VISUAL(TITLE \"Employee\") TYPE FACT;\nCREATE FACT {fact.employee.age} VISUAL(TITLE \"Employee Age\", FOLDER {ffld.employee}) AS {f_employee.f_age};\nALTER DATASET {dataset.employee} ADD {fact.employee.age};\nSYNCHRONIZE {dataset.employee} PRESERVE DATA;" ],
+                    "preserveData": true,
+                    "cascadeDrops": false
+                }
+            },
+            {
+                "updateScript": {
+                    "maqlDdlChunks": [ "CREATE FOLDER {ffld.employee} VISUAL(TITLE \"Employee\") TYPE FACT;\nCREATE FACT {fact.employee.age} VISUAL(TITLE \"Employee Age\", FOLDER {ffld.employee}) AS {f_employee.f_age};\nALTER DATASET {dataset.employee} ADD {fact.employee.age};\nSYNCHRONIZE {dataset.employee};" ],
+                    "preserveData": false,
+                    "cascadeDrops": false
+                }
+            }
+        ]
+    }
+}

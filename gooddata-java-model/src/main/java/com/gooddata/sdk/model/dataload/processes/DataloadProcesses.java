@@ -1,0 +1,48 @@
+/*
+ * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+package com.gooddata.sdk.model.dataload.processes;
+
+import com.gooddata.sdk.model.account.Account;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.util.GoodDataToStringBuilder;
+import org.springframework.web.util.UriTemplate;
+
+import java.util.Collection;
+import java.util.List;
+
+/**
+ * List of dataload processes. Deserialization only.
+ */
+@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
+@JsonTypeName("processes")
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class DataloadProcesses {
+    public static final String URI = "/gdc/projects/{projectId}/dataload/processes";
+    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
+
+    public static final String USER_PROCESSES_URI = Account.URI + "/dataload/processes";
+    public static final UriTemplate USER_PROCESSES_TEMPLATE = new UriTemplate(USER_PROCESSES_URI);
+
+    private final List<DataloadProcess> items;
+
+    @JsonCreator
+    DataloadProcesses(@JsonProperty("items") List<DataloadProcess> items) {
+        this.items = items;
+    }
+
+    public Collection<DataloadProcess> getItems() {
+        return items;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
+    }
+}

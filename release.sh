@@ -60,7 +60,7 @@ then
    fi
 fi
 
-API_VERSION=$(cat src/main/resources/GoodDataApiVersion)
+API_VERSION=$(cat gooddata-java-model/src/main/resources/GoodDataApiVersion)
 FULL_VERSION=$VERSION+api$API_VERSION
 DEV_VERSION=$(echo $VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')-SNAPSHOT
 

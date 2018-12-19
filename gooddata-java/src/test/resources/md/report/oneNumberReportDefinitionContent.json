@@ -1,0 +1,53 @@
+{
+    "grid": {
+        "sort": {
+            "columns": [],
+            "rows": []
+        },
+        "columnWidths": [],
+        "columns": [
+            "metricGroup"
+        ],
+        "metrics": [
+            {
+                "alias": "Beers Bought",
+                "uri": "/gdc/md/PROJECT_ID/obj/1504"
+            }
+        ],
+        "rows": []
+    },
+    "oneNumber": {
+        "labels": {}
+    },
+    "format": "oneNumber",
+    "filters": [
+        {
+            "tree": {
+                "content": [
+                    {
+                        "value": "/gdc/md/PROJECT_ID/obj/980",
+                        "position": {
+                            "column": 1,
+                            "line": 2
+                        },
+                        "type": "attribute object"
+                    },
+                    {
+                        "value": "ThisWeek",
+                        "position": {
+                            "column": 30,
+                            "line": 2
+                        },
+                        "type": "identifier"
+                    }
+                ],
+                "position": {
+                    "column": 28,
+                    "line": 2
+                },
+                "type": "="
+            },
+            "expression": "[/gdc/md/PROJECT_ID/obj/980] = {ThisWeek}"
+        }
+    ]
+}

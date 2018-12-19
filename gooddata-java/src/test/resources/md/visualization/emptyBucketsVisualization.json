@@ -1,0 +1,16 @@
+{
+  "visualizationObject": {
+    "meta": {
+      "title": "Empty buckets"
+    },
+    "content": {
+      "visualizationClass": {
+        "uri": "https://empty"
+      },
+      "buckets": [],
+      "filters": [],
+      "properties": "{\"nokey\":\"novalue\"}",
+      "references": { "key": "novalue" }
+    }
+  }
+}

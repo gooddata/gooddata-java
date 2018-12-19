@@ -1,0 +1,11 @@
+{
+  "execution" : {
+    "createdTime" : "2017-05-09T21:54:50.924Z",
+    "status" : "OK",
+    "trigger" : "MANUAL",
+    "processLastDeployedBy" : "bear@gooddata.com",
+    "links" : {
+      "self" : "/gdc/projects/PROJECT_ID/schedules/SCHEDULE_ID/executions/EXECUTION_ID"
+    }
+  }
+}

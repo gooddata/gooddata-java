@@ -1,0 +1,12 @@
+{
+  "channelConfiguration": {
+    "configuration": {
+      "emailConfiguration": {
+        "to": "fake@gooddata.com"
+      }
+    },
+    "meta": {
+      "title": "test channel"
+    }
+  }
+}

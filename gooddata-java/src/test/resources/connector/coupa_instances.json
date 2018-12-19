@@ -1,0 +1,15 @@
+{
+  "coupaInstances" : {
+    "items" : [ {
+      "coupaInstance" : {
+        "name" : "instance 1",
+        "apiUrl" : "https://gooddata-demo01.coupacloud.com/api"
+      }
+    }, {
+      "coupaInstance" : {
+        "name" : "instance 2",
+        "apiUrl" : "https://gooddata-demo02.coupacloud.com/api"
+      }
+    } ]
+  }
+}
