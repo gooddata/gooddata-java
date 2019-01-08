@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 import static com.gooddata.util.Validate.notNull;
@@ -23,7 +22,7 @@ import static com.gooddata.util.Validate.notNull;
         @JsonSubTypes.Type(value = OverPeriodMeasureDefinition.class, name = OverPeriodMeasureDefinition.NAME),
         @JsonSubTypes.Type(value = PreviousPeriodMeasureDefinition.class, name = PreviousPeriodMeasureDefinition.NAME)
 })
-public abstract class DerivedMeasureDefinition implements MeasureDefinition, Serializable {
+public abstract class DerivedMeasureDefinition implements MeasureDefinition {
 
     private static final long serialVersionUID = -1203802872091017113L;
 

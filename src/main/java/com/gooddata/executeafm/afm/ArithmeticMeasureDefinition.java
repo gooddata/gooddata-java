@@ -24,6 +24,8 @@ import static com.gooddata.executeafm.afm.PreviousPeriodMeasureDefinition.NAME;
 @JsonRootName(NAME)
 public class ArithmeticMeasureDefinition implements MeasureDefinition {
 
+    private static final long serialVersionUID = -2597112924341600780L;
+
     static final String NAME = "arithmeticMeasure";
 
     private final List<String> measureIdentifiers;
