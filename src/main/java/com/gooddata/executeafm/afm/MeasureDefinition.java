@@ -14,6 +14,7 @@ import com.gooddata.executeafm.UriObjQualifier;
 import com.gooddata.md.visualization.VOPopMeasureDefinition;
 import com.gooddata.md.visualization.VOSimpleMeasureDefinition;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
@@ -26,7 +27,7 @@ import java.util.Collection;
         @JsonSubTypes.Type(value = PreviousPeriodMeasureDefinition.class, name = PreviousPeriodMeasureDefinition.NAME),
         @JsonSubTypes.Type(value = ArithmeticMeasureDefinition.class, name = ArithmeticMeasureDefinition.NAME)
 })
-public interface MeasureDefinition {
+public interface MeasureDefinition extends Serializable {
 
     /**
      * Returns the definition in the form of uri of {@link com.gooddata.md.Metric}.
