@@ -19,7 +19,7 @@ public abstract class AbstractGoodDataIT {
 
     @BeforeMethod
     public void commonSetUp() {
-        initJadler().that().respondsWithDefaultContentType("application/json");
+        initJadler().withDefaultResponseContentType("application/json");
         gd = new GoodData(
                 new GoodDataEndpoint("localhost", port(), "http"),
                 new LoginPasswordAuthentication("sdk@gooddata.com", "sdk"),

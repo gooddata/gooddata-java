@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2017, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2018, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -28,6 +28,8 @@ public class Zendesk4ProcessExecution implements ProcessExecution {
 
     private Boolean incremental;
 
+    private Boolean reload;
+
     private Map<String, DateTime> startTimes;
 
     private DownloadParams downloadParams;
@@ -43,6 +45,17 @@ public class Zendesk4ProcessExecution implements ProcessExecution {
 
     public void setIncremental(final Boolean incremental) {
         this.incremental = incremental;
+    }
+
+    public Boolean getReload() {
+        return reload;
+    }
+
+    /**
+     * set by scheduler, when the process is actually a reload of a project
+     */
+    public void setReload(final Boolean reload) {
+        this.reload = reload;
     }
 
     @JsonAnyGetter

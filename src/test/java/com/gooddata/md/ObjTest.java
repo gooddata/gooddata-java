@@ -19,6 +19,7 @@ import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ObjTest {
@@ -57,14 +58,16 @@ public class ObjTest {
         assertThat(obj.getIdentifier(), is(IDENTIFIER));
         assertThat(obj.isLocked(), is(LOCKED));
         assertThat(obj.isUnlisted(), is(UNLISTED));
+        assertThat(obj.getFlags(), nullValue());
     }
 
     @Test
     public void testSerialization() throws Exception {
         final ConcreteObj obj = new ConcreteObj(
                 new Meta(AUTHOR, CONTRIBUTOR, CREATED, UPDATED, SUMMARY, TITLE, CATEGORY, TAGS, URI, IDENTIFIER,
-                        DEPRECATED, null, LOCKED, UNLISTED, null)
+                        DEPRECATED, null, LOCKED, UNLISTED, null, null)
         );
+
 
         assertThat(obj, jsonEquals(resource("md/objCommon.json")));
     }

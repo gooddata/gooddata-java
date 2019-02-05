@@ -58,6 +58,13 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         account = gd.getAccountService().createAccount(new Account(LOGIN, "nnPvcGXU7f", "FirstName", "LastName"), getProperty("domain"));
     }
 
+    @Test(groups = "warehouse", dependsOnGroups = "account")
+    public void createWarehouse() throws Exception {
+        final Warehouse wh = new Warehouse(title, warehouseToken);
+        wh.setEnvironment(Environment.TESTING);
+        warehouse = service.createWarehouse(wh).get(60, TimeUnit.MINUTES);
+    }
+
     @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
     public void getWarehouse() throws Exception {
         final Warehouse warehouse = service.getWarehouseById(this.warehouse.getId());

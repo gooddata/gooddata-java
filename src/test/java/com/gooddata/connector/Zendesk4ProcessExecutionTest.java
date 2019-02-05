@@ -18,19 +18,19 @@ import static org.hamcrest.text.MatchesPattern.matchesPattern;
 public class Zendesk4ProcessExecutionTest {
 
     @Test
-    public void testShouldSerialize() throws Exception {
+    public void testShouldSerialize() {
         assertThat(new Zendesk4ProcessExecution(), jsonEquals(resource("connector/process-execution-empty.json")));
     }
 
     @Test
-    public void testShouldSerializeIncremental() throws Exception {
+    public void testShouldSerializeIncremental() {
         final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
         execution.setIncremental(true);
         assertThat(execution, jsonEquals(resource("connector/process-execution-incremental.json")));
     }
 
     @Test
-    public void testShouldSerializeStartTimes() throws Exception {
+    public void testShouldSerializeStartTimes() {
         final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
         execution.setIncremental(true);
         execution.setStartTime("tickets", new DateTime(0L));
@@ -38,14 +38,21 @@ public class Zendesk4ProcessExecutionTest {
     }
 
     @Test
-    public void testShouldSerializeDownloadParams() throws Exception {
+    public void testShouldSerializeDownloadParams() {
         final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
         execution.setDownloadParams(new DownloadParams(true, 5, 3600));
         assertThat(execution, jsonEquals(resource("connector/process-execution-zendesk4-download.json")));
     }
 
     @Test
-    public void testGetDownloadParams() throws Exception {
+    public void testShouldSerializeReload() {
+        final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
+        execution.setReload(true);
+        assertThat(execution, jsonEquals(resource("connector/process-execution-reload.json")));
+    }
+
+    @Test
+    public void testGetDownloadParams() {
         final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
         final DownloadParams downloadParams = execution.getDownloadParams();
         assertThat(downloadParams, notNullValue());
