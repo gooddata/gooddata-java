@@ -62,11 +62,11 @@ class SimpleMeasureDefinitionTest extends Specification {
         definition?.computeRatio
         with(definition?.filters?.find { it.class == PositiveAttributeFilter }) {
             it.displayForm?.uri == QUALIFIER.uri
-            it.in == ['foo']
+            it.in.elements == ['foo']
         }
         with(definition?.filters?.find { it.class == NegativeAttributeFilter }) {
             it.displayForm?.uri == QUALIFIER.uri
-            it.notIn == ['foo']
+            it.notIn.elements == ['foo']
         }
     }
 

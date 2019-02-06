@@ -27,28 +27,40 @@ public class NegativeAttributeFilter extends AttributeFilter {
     private static final long serialVersionUID = -6202625318104289333L;
     static final String NAME = "negativeAttributeFilter";
 
-    private final List<String> notIn;
+    private final AttributeFilterElements notIn;
 
     /**
      * Creates new instance of given display form and not in list
      * @param displayForm display form
      * @param notIn list of not in elements
      */
-    @JsonCreator
+    @Deprecated
     public NegativeAttributeFilter(@JsonProperty("displayForm") final ObjQualifier displayForm,
                                    @JsonProperty("notIn") final List<String> notIn) {
+        this(displayForm, new SimpleAttributeFilterElements(notIn));
+    }
+
+    /**
+     * Creates new instance of given display form and not in list
+     * @param displayForm display form
+     * @param notIn not in elements (uris or values)
+     */
+    @JsonCreator
+    public NegativeAttributeFilter(@JsonProperty("displayForm") final ObjQualifier displayForm,
+                                   @JsonProperty("notIn") final AttributeFilterElements notIn) {
         super(displayForm);
         this.notIn = notIn;
     }
 
+    @Deprecated
     public NegativeAttributeFilter(final ObjQualifier displayForm, final String... notIn) {
         this(displayForm, asList(notIn));
     }
 
     /**
-     * @return list of not in elements
+     * @return not in elements
      */
-    public List<String> getNotIn() {
+    public AttributeFilterElements getNotIn() {
         return notIn;
     }
 
@@ -57,7 +69,7 @@ public class NegativeAttributeFilter extends AttributeFilter {
      */
     @JsonIgnore
     public boolean isAllSelected() {
-        return notIn.isEmpty();
+        return notIn.getElements().isEmpty();
     }
 
     @Override

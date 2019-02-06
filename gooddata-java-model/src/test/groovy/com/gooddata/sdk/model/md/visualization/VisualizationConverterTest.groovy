@@ -7,6 +7,7 @@ package com.gooddata.sdk.model.md.visualization
 
 import com.fasterxml.jackson.core.JsonParseException
 import com.gooddata.sdk.model.executeafm.UriObjQualifier
+import com.gooddata.sdk.model.executeafm.afm.UriAttributeFilterElements
 import org.joda.time.LocalDate
 import spock.lang.Specification
 import com.gooddata.sdk.model.executeafm.afm.AbsoluteDateFilter
@@ -48,7 +49,7 @@ class VisualizationConverterTest extends Specification {
         Afm expected = new Afm(
                 [new AttributeItem(new UriObjQualifier("/uri/to/displayForm/1"), "attribute1", "attributeAlias")],
                 [
-                        new PositiveAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), ["ab", "cd"]),
+                        new PositiveAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), new UriAttributeFilterElements(["ab", "cd"])),
                         new AbsoluteDateFilter(new UriObjQualifier("/uri/to/dataSet/1"), new LocalDate("2000-08-30"), new LocalDate("2017-08-07"))
                 ],
                 [
@@ -56,8 +57,8 @@ class VisualizationConverterTest extends Specification {
                                 "measure0", "Measure 0 alias", null),
                         new MeasureItem(new VOSimpleMeasureDefinition(new UriObjQualifier("/uri/to/measure/1"), "sum", false,
                                 [
-                                        new PositiveAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), []),
-                                        new NegativeAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), ["ab", "cd"]),
+                                        new PositiveAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), new UriAttributeFilterElements([])),
+                                        new NegativeAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), new UriAttributeFilterElements(["ab", "cd"])),
                                         new RelativeDateFilter(new UriObjQualifier("/uri/to/dataSet/2"), "month", 0, -11)
                                 ]
                         ),

@@ -19,26 +19,41 @@ import static spock.util.matcher.HamcrestSupport.that
 
 class NegativeAttributeFilterTest extends Specification {
 
-    private static final String NEGATIVE_ATTRIBUTE_FILTER_JSON = 'executeafm/afm/negativeAttributeFilter.json'
+    private static final String NEGATIVE_ATTRIBUTE_FILTER_SIMPLE_JSON = 'executeafm/afm/negativeAttributeFilter.json'
+    private static final String NEGATIVE_ATTRIBUTE_FILTER_URIS_JSON = 'executeafm/afm/negativeAttributeFilterUris.json'
+    private static final String NEGATIVE_ATTRIBUTE_FILTER_VALUES_JSON = 'executeafm/afm/negativeAttributeFilterValues.json'
 
     private static final ObjQualifier QUALIFIER = new IdentifierObjQualifier('df.bum.bac')
 
     def "should serialize"() {
         expect:
-        that new NegativeAttributeFilter(QUALIFIER, 'a', 'b'),
-                jsonEquals(resource(NEGATIVE_ATTRIBUTE_FILTER_JSON))
+        that new NegativeAttributeFilter(QUALIFIER, elements),
+                jsonEquals(resource(jsonPath))
+
+        where:
+        elements                                     | jsonPath
+        ['a', 'b']                                   | NEGATIVE_ATTRIBUTE_FILTER_SIMPLE_JSON
+        new UriAttributeFilterElements(['a', 'b'])   | NEGATIVE_ATTRIBUTE_FILTER_URIS_JSON
+        new ValueAttributeFilterElements(['a', 'b']) | NEGATIVE_ATTRIBUTE_FILTER_VALUES_JSON
     }
 
     def "should deserialize"() {
         when:
-        NegativeAttributeFilter filter = readObjectFromResource("/$NEGATIVE_ATTRIBUTE_FILTER_JSON", NegativeAttributeFilter)
+        NegativeAttributeFilter filter = readObjectFromResource("/$jsonPath", NegativeAttributeFilter)
 
         then:
         with(filter) {
             displayForm == QUALIFIER
-            notIn == ['a', 'b']
+            notIn.class == clazz
+            notIn.elements == ['a', 'b']
         }
         filter.toString()
+
+        where:
+        jsonPath                              | clazz
+        NEGATIVE_ATTRIBUTE_FILTER_SIMPLE_JSON | UriAttributeFilterElements
+        NEGATIVE_ATTRIBUTE_FILTER_URIS_JSON   | UriAttributeFilterElements
+        NEGATIVE_ATTRIBUTE_FILTER_VALUES_JSON | ValueAttributeFilterElements
     }
 
     def "should copy"() {
@@ -51,11 +66,18 @@ class NegativeAttributeFilterTest extends Specification {
     }
 
     def "test serializable"() {
-        NegativeAttributeFilter attributeFilter = readObjectFromResource("/$NEGATIVE_ATTRIBUTE_FILTER_JSON", NegativeAttributeFilter)
+        NegativeAttributeFilter attributeFilter = readObjectFromResource("/$jsonPath", NegativeAttributeFilter)
         NegativeAttributeFilter deserialized = SerializationUtils.roundtrip(attributeFilter)
 
         expect:
         that deserialized, jsonEquals(attributeFilter)
+
+        where:
+        jsonPath << [
+                NEGATIVE_ATTRIBUTE_FILTER_SIMPLE_JSON,
+                NEGATIVE_ATTRIBUTE_FILTER_URIS_JSON,
+                NEGATIVE_ATTRIBUTE_FILTER_VALUES_JSON
+        ]
     }
 
     def "should verify equals"() {
