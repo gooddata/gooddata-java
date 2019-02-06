@@ -1,0 +1,110 @@
+{
+  "projectDashboard": {
+    "content": {
+      "tabs": [
+        {
+          "identifier": "tab1abc",
+          "title": "Tab 1",
+          "items": [
+            {
+              "iframeItem": {
+                "positionX": 481,
+                "sizeY": 400,
+                "sizeX": 440,
+                "url": "iFrameUrl",
+                "positionY": 1813
+              }
+            },
+            {
+              "reportItem": {
+                "obj": "/gdc/md/PROJECT_ID/obj/375872",
+                "sizeY": 60,
+                "sizeX": 250,
+                "style": {
+                  "displayTitle": 1,
+                  "background": {
+                    "opacity": 0
+                  }
+                },
+                "visualization": {
+                  "grid": {
+                    "columnWidths": []
+                  },
+                  "oneNumber": {
+                    "labels": {
+                      "description": ""
+                    }
+                  }
+                },
+                "positionY": 265,
+                "filters": [
+                  "reportFilterItem"
+                ],
+                "positionX": 29
+              }
+            },
+            {
+              "textItem": {
+                "positionX": 817,
+                "sizeY": 30,
+                "sizeX": 110,
+                "text": "Some text",
+                "style": {
+                  "displayTitle": 1,
+                  "background": {
+                    "opacity": 0
+                  }
+                },
+                "positionY": 20,
+                "textSize": "big"
+              }
+            },
+            {
+              "filterItem": {
+                "positionX": 20,
+                "parentFilters": [],
+                "sizeY": 40,
+                "sizeX": 170,
+                "positionY": 80,
+                "id": "filterInTab123",
+                "contentId": "somefiltercontentid"
+              }
+            }
+          ]
+        },
+        {
+          "identifier": "tab2def",
+          "title": "Tab 2"
+        }
+      ],
+      "filters": [
+        {
+          "filterItemContent": {
+            "obj": "/gdc/md/PROJECT_ID/obj/1304",
+            "multiple": 1,
+            "type": "list",
+            "label": null,
+            "id": "filterId1"
+          }
+        }
+      ],
+      "rememberFilters": 1
+    },
+    "meta": {
+      "locked": 1,
+      "author": "/gdc/account/profile/USER_ID",
+      "uri": "/gdc/md/PROJECT_ID/obj/12345",
+      "tags": "",
+      "created": "2016-03-07 21:56:33",
+      "identifier": "dashboard123abc",
+      "deprecated": "0",
+      "summary": "",
+      "sharedWithSomeone": 0,
+      "isProduction": 1,
+      "title": "Some Project Dashboard",
+      "category": "projectDashboard",
+      "updated": "2016-03-07 21:56:33",
+      "contributor": "/gdc/account/profile/USER_ID"
+    }
+  }
+}

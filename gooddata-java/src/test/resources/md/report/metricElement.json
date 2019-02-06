@@ -1,0 +1,6 @@
+{
+    "uri": "/ELEM_URI",
+    "alias": "ELEM_ALIAS",
+    "format": "FORMAT",
+    "drillAcrossStepAttributeDF": "/DRILL_URI"
+}

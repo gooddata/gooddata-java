@@ -1,0 +1,13 @@
+{
+  "measureGroupHeader": {
+    "items": [
+      {
+        "measureHeaderItem": {
+          "name": "Name",
+          "format": "#,##0.00",
+          "localIdentifier": "m1"
+        }
+      }
+    ]
+  }
+}

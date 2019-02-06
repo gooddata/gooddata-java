@@ -1,0 +1,19 @@
+{
+    "dataSetSLIManifest": {
+        "parts": [
+            {
+                "columnName": "COLUMN",
+                "populates": [
+                    "POPULATES"
+                ],
+                "mode": "MODE",
+                "constraints": {
+                    "date": "CONSTRAINT"
+                },
+                "referenceKey": 1
+            }
+        ],
+        "file": "FILE",
+        "dataSet": "DATASET"
+    }
+}

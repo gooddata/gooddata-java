@@ -1,0 +1,17 @@
+{
+  "channelConfiguration": {
+    "configuration": {
+      "emailConfiguration": {
+        "to": "fake@gooddata.com"
+      }
+    },
+    "meta": {
+      "title": "test channel",
+      "author": "/gdc/account/profile/876ec68f5630b38de65852ed5d6236ff",
+      "category": "channelConfiguration",
+      "updated": "2017-10-10 12:51:26",
+      "created": "2017-10-10 12:51:26",
+      "uri": "/gdc/account/profile/876ec68f5630b38de65852ed5d6236ff/channelConfigurations/59dca62e60b2c601f3c72e18"
+    }
+  }
+}

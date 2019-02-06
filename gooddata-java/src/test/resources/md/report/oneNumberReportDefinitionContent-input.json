@@ -1,0 +1,19 @@
+{
+    "grid": {
+        "sort": {
+            "columns": [],
+            "rows": []
+        },
+        "columnWidths": [],
+        "columns": [],
+        "metrics": [],
+        "rows": []
+    },
+    "oneNumber": {
+        "labels": {
+            "description" : "desc"
+        }
+    },
+    "format": "oneNumber",
+    "filters": []
+}

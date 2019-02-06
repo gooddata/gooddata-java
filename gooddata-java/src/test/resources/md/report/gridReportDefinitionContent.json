@@ -1,0 +1,31 @@
+{
+    "grid": {
+        "sort": {
+            "columns": [],
+            "rows": []
+        },
+        "columnWidths": [],
+        "columns": [
+            "metricGroup"
+        ],
+        "metrics": [
+            {
+                "alias": "",
+                "uri": "/gdc/md/PROJECT_ID/obj/1493"
+            }
+        ],
+        "rows": [
+            {
+                "attribute": {
+                    "alias": "",
+                    "totals": [
+                        []
+                    ],
+                    "uri": "/gdc/md/PROJECT_ID/obj/11786"
+                }
+            }
+        ]
+    },
+    "format": "grid",
+    "filters": []
+}

@@ -1,0 +1,20 @@
+{
+  "schemas" : {
+    "items" : [ {
+      "schema" : {
+        "name" : "default",
+        "description" : "Default schema for new ADS instance",
+        "links" : {
+          "self" : "/gdc/datawarehouse/instances/instanceId/schemas/default",
+          "parent" : "/gdc/datawarehouse/instances/instanceId/schemas",
+          "instance" : "/gdc/datawarehouse/instances/instanceId"
+        }
+      }
+    } ],
+    "paging" : { },
+    "links" : {
+      "self" : "/gdc/datawarehouse/instances/instanceId/schemas",
+      "parent" : "/gdc/datawarehouse/instances/instanceId"
+    }
+  }
+}

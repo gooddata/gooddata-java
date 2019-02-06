@@ -1,0 +1,86 @@
+{
+    "about" : {
+        "summary" : "Use links to navigate the services.",
+        "category" : "GoodData API root",
+        "links" : [
+            {
+                "link" : "/gdc/",
+                "summary" : "",
+                "title" : "home",
+                "category" : "home"
+            },
+            {
+                "link" : "/gdc/account/token",
+                "summary" : "Temporary token generator.",
+                "title" : "token",
+                "category" : "token"
+            },
+            {
+                "link" : "/gdc/account/login",
+                "summary" : "Authentication service.",
+                "title" : "login",
+                "category" : "login"
+            },
+            {
+                "link" : "/gdc/md",
+                "summary" : "Metadata resources.",
+                "title" : "metadata",
+                "category" : "md"
+            },
+            {
+                "link" : "/gdc/xtab2",
+                "summary" : "Report execution resource.",
+                "title" : "xtab",
+                "category" : "xtab"
+            },
+            {
+                "link" : "/gdc/availableelements",
+                "summary" : "Resource used to determine valid attribute values in the context of a report.",
+                "title" : "AvailableElements",
+                "category" : "availablelements"
+            },
+            {
+                "link" : "/gdc/exporter",
+                "summary" : "Report exporting resource.",
+                "title" : "exporter",
+                "category" : "report-exporter"
+            },
+            {
+                "link" : "/gdc/account",
+                "summary" : "Resource for logged in account manipulation.",
+                "title" : "account",
+                "category" : "account"
+            },
+            {
+                "link" : "/gdc/projects",
+                "summary" : "Resource for user and project management.",
+                "title" : "projects",
+                "category" : "projects"
+            },
+            {
+                "link" : "/gdc/tool",
+                "summary" : "Miscellaneous resources.",
+                "title" : "tool",
+                "category" : "tool"
+            },
+            {
+                "link" : "/gdc/templates",
+                "summary" : "Template resource - for internal use only.",
+                "title" : "templates",
+                "category" : "templates"
+            },
+            {
+                "link" : "/gdc/releaseInfo",
+                "summary" : "Release information.",
+                "title" : "releaseInfo",
+                "category" : "releaseInfo"
+            },
+            {
+                "link" : "/uploads",
+                "summary" : "User data staging area.",
+                "title" : "user-uploads",
+                "category" : "uploads"
+            }
+        ]
+    }
+}

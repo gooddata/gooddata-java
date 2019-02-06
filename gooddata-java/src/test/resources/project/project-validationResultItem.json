@@ -1,0 +1,164 @@
+{
+  "body": {
+    "error": 0,
+    "log": [
+      {
+        "ecat": "TRANSITIVITY",
+        "level": "WARN",
+        "msg": "There are inconsistent values between %s->%s->%s and %s->%s for %s value '%s'.",
+        "pars": [
+          {
+            "object": {
+              "id": "86",
+              "name": "Warehouse ZIP",
+              "uri": "/gdc/md/FoodMartDemo/obj/86"
+            }
+          },
+          {
+            "object": {
+              "id": "56",
+              "name": "Warehouse City",
+              "uri": "/gdc/md/FoodMartDemo/obj/56"
+            }
+          },
+          {
+            "object": {
+              "id": "35",
+              "name": "Warehouse County",
+              "uri": "/gdc/md/FoodMartDemo/obj/35"
+            }
+          },
+          {
+            "object": {
+              "id": "86",
+              "name": "Warehouse ZIP",
+              "uri": "/gdc/md/FoodMartDemo/obj/86"
+            }
+          },
+          {
+            "object": {
+              "id": "35",
+              "name": "Warehouse County",
+              "uri": "/gdc/md/FoodMartDemo/obj/35"
+            }
+          },
+          {
+            "object": {
+              "id": "86",
+              "name": "Warehouse ZIP",
+              "uri": "/gdc/md/FoodMartDemo/obj/86"
+            }
+          },
+          {
+            "common": "00968"
+          }
+        ]
+      },
+      {
+        "ecat": "TRANSITIVITY",
+        "level": "WARN",
+        "msg": "There are inconsistent values between %s->%s->%s and %s->%s for %s value '%s'.",
+        "pars": [
+          {
+            "object": {
+              "id": "82",
+              "name": "Store ZIP",
+              "uri": "/gdc/md/FoodMartDemo/obj/82"
+            }
+          },
+          {
+            "object": {
+              "id": "42",
+              "name": "Store City",
+              "uri": "/gdc/md/FoodMartDemo/obj/42"
+            }
+          },
+          {
+            "object": {
+              "id": "61",
+              "name": "Store County",
+              "uri": "/gdc/md/FoodMartDemo/obj/61"
+            }
+          },
+          {
+            "object": {
+              "id": "82",
+              "name": "Store ZIP",
+              "uri": "/gdc/md/FoodMartDemo/obj/82"
+            }
+          },
+          {
+            "object": {
+              "id": "61",
+              "name": "Store County",
+              "uri": "/gdc/md/FoodMartDemo/obj/61"
+            }
+          },
+          {
+            "object": {
+              "id": "82",
+              "name": "Store ZIP",
+              "uri": "/gdc/md/FoodMartDemo/obj/82"
+            }
+          },
+          {
+            "common": "00968"
+          }
+        ]
+      },
+      {
+        "ecat": "TRANSITIVITY",
+        "level": "WARN",
+        "msg": "There are inconsistent values between %s->%s->%s and %s->%s for %s value '%s'.",
+        "pars": [
+          {
+            "object": {
+              "id": "47",
+              "name": "Customer ZIP",
+              "uri": "/gdc/md/FoodMartDemo/obj/47"
+            }
+          },
+          {
+            "object": {
+              "id": "68",
+              "name": "Customer City",
+              "uri": "/gdc/md/FoodMartDemo/obj/68"
+            }
+          },
+          {
+            "object": {
+              "id": "53",
+              "name": "Customer County",
+              "uri": "/gdc/md/FoodMartDemo/obj/53"
+            }
+          },
+          {
+            "object": {
+              "id": "47",
+              "name": "Customer ZIP",
+              "uri": "/gdc/md/FoodMartDemo/obj/47"
+            }
+          },
+          {
+            "object": {
+              "id": "53",
+              "name": "Customer County",
+              "uri": "/gdc/md/FoodMartDemo/obj/53"
+            }
+          },
+          {
+            "object": {
+              "id": "47",
+              "name": "Customer ZIP",
+              "uri": "/gdc/md/FoodMartDemo/obj/47"
+            }
+          },
+          {
+            "common": "00968"
+          }
+        ]
+      }
+    ]
+  },
+  "from": "pdm::transitivity"
+}

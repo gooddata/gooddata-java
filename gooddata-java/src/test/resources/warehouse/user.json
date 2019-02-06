@@ -1,0 +1,11 @@
+{
+    "user" : {
+        "role" : "admin",
+        "profile" : "/gdc/account/profile/{profile-id}",
+        "login" : "foo@bar.com",
+        "links" : {
+            "self" : "/gdc/datawarehouse/instances/{instance-id}/users/{profile-id}",
+            "parent" : "/gdc/datawarehouse/instances/{instance-id}/users"
+        }
+    }
+}

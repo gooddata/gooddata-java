@@ -1,0 +1,10 @@
+{
+  "relativeDateFilter": {
+    "dataSet": {
+      "identifier": "date.attr"
+    },
+    "granularity": "week",
+    "from": 1,
+    "to": 2
+  }
+}

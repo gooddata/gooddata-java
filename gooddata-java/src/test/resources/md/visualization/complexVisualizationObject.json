@@ -1,0 +1,132 @@
+{
+  "visualizationObject": {
+    "meta": {
+      "title": "complex"
+    },
+    "content": {
+      "visualizationClass": {
+        "uri": "visClass"
+      },
+      "buckets": [
+        {
+          "localIdentifier": "bucket1",
+          "items": [
+            {
+              "visualizationAttribute": {
+                "localIdentifier": "attribute1",
+                "displayForm": {
+                  "uri": "/uri/to/displayForm/1"
+                },
+                "alias": "attributeAlias"
+              }
+            }
+          ]
+        }, {
+          "localIdentifier": "bucket2",
+          "items": [
+            {
+              "measure": {
+                "localIdentifier": "measure0",
+                "alias": "Measure 0 alias",
+                "definition": {
+                  "measureDefinition": {
+                    "item": {
+                      "uri": "/uri/to/measure/0"
+                    }
+                  }
+                }
+              }
+            }, {
+              "measure": {
+                "localIdentifier": "measure1",
+                "title": "Measure 1",
+                "alias": "Measure 1 alias",
+                "definition": {
+                  "measureDefinition": {
+                    "item": {
+                      "uri": "/uri/to/measure/1"
+                    },
+                    "aggregation": "sum",
+                    "computeRatio": false,
+                    "filters": [
+                      {
+                        "positiveAttributeFilter": {
+                          "displayForm": {
+                            "uri": "/uri/to/displayForm/3"
+                          },
+                          "in": []
+                        }
+                      }, {
+                        "negativeAttributeFilter": {
+                          "displayForm": {
+                            "uri": "/uri/to/displayForm/3"
+                          },
+                          "notIn": [
+                            "ab",
+                            "cd"
+                          ]
+                        }
+                      }, {
+                        "absoluteDateFilter": {
+                          "dataSet": {
+                            "uri": "/uri/to/dataSet/1"
+                          }
+                        }
+                      }, {
+                        "relativeDateFilter": {
+                          "dataSet": {
+                            "uri": "/uri/to/dataSet/2"
+                          },
+                          "granularity": "month",
+                          "from": 0,
+                          "to": -11
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "filters": [
+        {
+          "positiveAttributeFilter": {
+            "displayForm": {
+              "uri": "/uri/to/displayForm/3"
+            },
+            "in": [
+              "ab",
+              "cd"
+            ]
+          }
+        }, {
+          "negativeAttributeFilter": {
+            "displayForm": {
+              "uri": "/uri/to/displayForm/3"
+            },
+            "notIn": []
+          }
+        }, {
+          "absoluteDateFilter": {
+            "dataSet": {
+              "uri": "/uri/to/dataSet/1"
+            },
+            "from": "2000-08-30",
+            "to": "2017-08-07"
+          }
+        }, {
+          "relativeDateFilter": {
+            "dataSet": {
+              "uri": "/uri/to/dataSet/2"
+            },
+            "granularity": "month"
+          }
+        }
+      ],
+      "properties": "{\"key\":\"value\"}",
+      "references": { "key": "value", "foo": "bar" }
+    }
+  }
+}

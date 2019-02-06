@@ -1,0 +1,7 @@
+{
+    "process" : {
+        "type" : "GROOVY",
+        "name" : "testProcess",
+        "path" : "/uploads/process.zip"
+    }
+}
