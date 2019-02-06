@@ -29,6 +29,7 @@ import java.util.function.Function
 import static VisualizationConverter.convertToAfm
 import static VisualizationConverter.convertToResultSpec
 import static VisualizationConverter.parseSorting
+import static com.gooddata.md.visualization.VisualizationConverter.convertToExecution
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static spock.util.matcher.HamcrestSupport.that
@@ -85,8 +86,13 @@ class VisualizationConverterTest extends Specification {
     @Unroll
     def "should generate result spec for table with default sorting from #name"() {
         given:
-        Function getter = { vizObject -> Stub(VisualizationClass) { getVisualizationType() >> VisualizationType.TABLE } }
         VisualizationObject vo = readObjectFromResource("/$resource", VisualizationObject)
+        Function getter = { vizObject ->
+            Stub(VisualizationClass) {
+                getVisualizationType() >> VisualizationType.TABLE
+                getUri() >> vo.getVisualizationClassUri()
+            }
+        }
         ResultSpec converted = convertToResultSpec(vo, getter)
 
         expect:
@@ -107,8 +113,13 @@ class VisualizationConverterTest extends Specification {
     @Unroll
     def "should generate result spec for #type"() {
         given:
-        Function getter = { vizObject -> Stub(VisualizationClass) { getVisualizationType() >> VisualizationType.of(type) } }
         VisualizationObject vo = readObjectFromResource("/$resource", VisualizationObject)
+        Function getter = { vizObject ->
+            Stub(VisualizationClass) {
+                getVisualizationType() >> VisualizationType.of(type)
+                getUri() >> vo.getVisualizationClassUri()
+            }
+        }
         ResultSpec converted = convertToResultSpec(vo, getter)
 
         expect:
@@ -159,5 +170,68 @@ class VisualizationConverterTest extends Specification {
 
         where:
         properties << ['abcd', '{"sortItems":[{"someinvalidstring"}]}']
+    }
+
+    def "should fail when incorrect visualization class is provided"() {
+        when:
+        convertToResultSpec(
+                Stub(VisualizationObject) { getVisualizationClassUri() >> 'visClassUri'},
+                Stub(VisualizationClass) { getUri() >> 'nonMatchingVisClassUri'}
+        )
+
+        then:
+        thrown(IllegalArgumentException)
+    }
+
+    @Unroll
+    def "should fail if any argument is null in convertToResultSpec(VisualizationObject, VisualizationClass)"() {
+        when:
+        convertToResultSpec(vo, vc)
+
+        then:
+        thrown(IllegalArgumentException)
+
+        where:
+        vo << [null, Stub(VisualizationObject), null]
+        vc << [null, null, Stub(VisualizationClass)]
+    }
+
+    @Unroll
+    def "should fail if any argument is null in convertToResultSpec(VisualizationObject, Function)"() {
+        when:
+        convertToResultSpec(vo, vcg)
+
+        then:
+        thrown(IllegalArgumentException)
+
+        where:
+        vo << [null, Stub(VisualizationObject), null]
+        vcg << [null, null, Stub(Function)]
+    }
+
+    @Unroll
+    def "should fail if any argument is null in convertToExecution(VisualizationObject, VisualizationClass)"() {
+        when:
+        convertToExecution(vo, vc)
+
+        then:
+        thrown(IllegalArgumentException)
+
+        where:
+        vo << [null, Stub(VisualizationObject), null]
+        vc << [null, null, Stub(VisualizationClass)]
+    }
+
+    @Unroll
+    def "should fail if any argument is null in convertToExecution(VisualizationObject, Function)"() {
+        when:
+        convertToExecution(vo, vcg)
+
+        then:
+        thrown(IllegalArgumentException)
+
+        where:
+        vo << [null, Stub(VisualizationObject), null]
+        vcg << [null, null, Stub(Function)]
     }
 }

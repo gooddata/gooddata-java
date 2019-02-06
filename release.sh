@@ -10,10 +10,10 @@ while getopts ":hv:g:" opt
 do
    case ${opt} in
        v)
-           version=${OPTARG}
+           VERSION=${OPTARG}
            ;;
        g)
-           gpg_pass=${OPTARG}
+           GPG_PASS=${OPTARG}
            ;;
        h)
            usage
@@ -41,18 +41,18 @@ then
    exit 1
 fi
 
-if [ -z "${version}" ]
+if [ -z "${VERSION}" ]
 then
    echo "No version given!"
    usage
    exit 1
 fi
 
-if [ -z "${gpg_pass}" ]
+if [ -z "${GPG_PASS}" ]
 then
    echo "Enter gpg password: "
-   read -s gpg_pass
-   if [ -z "${gpg_pass}" ]
+   read -s GPG_PASS
+   if [ -z "${GPG_PASS}" ]
    then
       echo "No gpg password given!"
       usage
@@ -60,16 +60,20 @@ then
    fi
 fi
 
-sed -i.bak "s/\(<version>\)[0-9]*\.[0-9]*\.[0-9]*\(<\/version>\)/\1${version}\2/" README.md && rm -f README.md.bak
+API_VERSION=$(cat src/main/resources/GoodDataApiVersion)
+FULL_VERSION=$VERSION+api$API_VERSION
+DEV_VERSION=$(echo $VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')-SNAPSHOT
+
+sed -i.bak "s/\(<version>\)[0-9]*\.[0-9]*\.[0-9]*[^<]*\(<\/version>\)/\1${FULL_VERSION}\2/" README.md && rm -f README.md.bak
 git commit -a -m "bump version"
 
-mvn --batch-mode release:prepare release:perform -DreleaseVersion=${version} -Darguments="-Dgpg.passphrase=${gpg_pass}" 
-mvnRetVal=$?
-if [ $mvnRetVal -ne 0 ]; then
+mvn --batch-mode release:prepare release:perform -DreleaseVersion=${FULL_VERSION} -DdevelopmentVersion=${DEV_VERSION} -Darguments="-Dgpg.passphrase=${GPG_PASS}"
+MVN_RET_VAL=$?
+if [ $MVN_RET_VAL -ne 0 ]; then
     echo "Mvn build failed - please fix it and try to release again"
     echo "Removing last commit '$(git log -1 --pretty="%h %s")'"
     git reset --hard HEAD~1
-    exit $mvnRetVal
+    exit $MVN_RET_VAL
 fi
 
 git push origin --tags HEAD

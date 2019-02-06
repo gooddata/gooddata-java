@@ -13,7 +13,6 @@ import com.gooddata.executeafm.ObjQualifier;
 import com.gooddata.executeafm.UriObjQualifier;
 import com.gooddata.util.GoodDataToStringBuilder;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
@@ -30,7 +29,7 @@ import static com.gooddata.executeafm.afm.PopMeasureDefinition.NAME;
 @Deprecated
 @JsonRootName(NAME)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PopMeasureDefinition extends DerivedMeasureDefinition implements Serializable {
+public class PopMeasureDefinition extends DerivedMeasureDefinition {
 
     private static final long serialVersionUID = 1430640153994197345L;
 

@@ -5,14 +5,21 @@
  */
 package com.gooddata.md;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.gooddata.util.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gooddata.util.BooleanDeserializer;
+import com.gooddata.util.BooleanIntegerSerializer;
+import com.gooddata.util.BooleanStringSerializer;
+import com.gooddata.util.GDDateTimeDeserializer;
+import com.gooddata.util.GDDateTimeSerializer;
+import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.util.TagsDeserializer;
+import com.gooddata.util.TagsSerializer;
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
@@ -46,6 +53,7 @@ public class Meta implements Serializable {
     private Boolean locked;
     private Boolean unlisted;
     private Boolean sharedWithSomeone;
+    private Set<String> flags;
 
     @JsonCreator
     protected Meta(@JsonProperty("author") String author,
@@ -57,7 +65,8 @@ public class Meta implements Serializable {
                    @JsonProperty("category") String category,
                    @JsonProperty("tags") @JsonDeserialize(using = TagsDeserializer.class) Set<String> tags,
                    @JsonProperty("uri") String uri,
-                   @JsonProperty("identifier") String identifier) {
+                   @JsonProperty("identifier") String identifier,
+                   @JsonProperty("flags") Set<String> flags) {
         super();
         this.author = author;
         this.uri = uri;
@@ -69,11 +78,61 @@ public class Meta implements Serializable {
         this.category = category;
         this.identifier = identifier;
         this.contributor = contributor;
+        this.flags = flags;
     }
 
+    /**
+     * @param author
+     * @param contributor
+     * @param created
+     * @param updated
+     * @param summary
+     * @param title
+     * @param category
+     * @param tags
+     * @param uri
+     * @param identifier
+     * @param deprecated
+     * @param production
+     * @param locked
+     * @param unlisted
+     * @param sharedWithSomeone
+     * @deprecated use {@link #Meta(String, String, DateTime, DateTime, String, String, String, Set,
+     * String, String, Boolean, Boolean, Boolean, Boolean, Boolean, Set)} instead
+     */
+    @Deprecated
     public Meta(String author, String contributor, DateTime created, DateTime updated, String summary,
-            String title, String category, Set<String> tags, String uri, String identifier,
-            Boolean deprecated, Boolean production, Boolean locked, Boolean unlisted, Boolean sharedWithSomeone) {
+                String title, String category, Set<String> tags, String uri, String identifier,
+                Boolean deprecated, Boolean production, Boolean locked, Boolean unlisted,
+                Boolean sharedWithSomeone) {
+        this(author, contributor, created, updated, summary, title, category, tags, uri, identifier,
+                deprecated, production, locked, unlisted, sharedWithSomeone, null);
+    }
+
+    /**
+     * Constructor with "extra" flags argument
+     *
+     * @param author
+     * @param contributor
+     * @param created
+     * @param updated
+     * @param summary
+     * @param title
+     * @param category
+     * @param tags
+     * @param uri
+     * @param identifier
+     * @param deprecated
+     * @param production
+     * @param locked
+     * @param unlisted
+     * @param sharedWithSomeone
+     * @param flags
+     */
+    public Meta(String author, String contributor, DateTime created, DateTime updated, String summary,
+                String title, String category, Set<String> tags, String uri, String identifier,
+                Boolean deprecated, Boolean production, Boolean locked, Boolean unlisted,
+                Boolean sharedWithSomeone, Set<String> flags) {
         this.author = author;
         this.contributor = contributor;
         this.created = created;
@@ -89,6 +148,7 @@ public class Meta implements Serializable {
         this.locked = locked;
         this.unlisted = unlisted;
         this.sharedWithSomeone = sharedWithSomeone;
+        this.flags = flags;
     }
 
     public Meta(String title) {
@@ -102,6 +162,7 @@ public class Meta implements Serializable {
 
     /**
      * Returns internally generated ID of the object (that's part of the object URI).
+     *
      * @return internal ID of the object
      */
     @JsonIgnore
@@ -166,6 +227,7 @@ public class Meta implements Serializable {
 
     /**
      * Default is false/not-deprecated.
+     *
      * @return true when the linked object is deprecated, null if not set
      */
     @JsonProperty("deprecated")
@@ -182,6 +244,7 @@ public class Meta implements Serializable {
 
     /**
      * Returns user-specified identifier of the object.
+     *
      * @return user-specified object identifier
      */
     public String getIdentifier() {
@@ -194,6 +257,7 @@ public class Meta implements Serializable {
 
     /**
      * Is the object production or not? Defaults to true.
+     *
      * @return true when the linked object is production, null if not set
      */
     @JsonProperty("isProduction")
@@ -210,6 +274,7 @@ public class Meta implements Serializable {
 
     /**
      * Flag that MD object is locked; default is false/unlocked.
+     *
      * @return true when the linked object is locked, null if not set
      */
     @JsonProperty("locked")
@@ -226,6 +291,7 @@ public class Meta implements Serializable {
 
     /**
      * Default is false/listed.
+     *
      * @return true when the linked object is unlisted, null if not set
      */
     @JsonProperty("unlisted")
@@ -242,6 +308,7 @@ public class Meta implements Serializable {
 
     /**
      * Is the linked object shared with someone via ACLs?
+     *
      * @return true when the linked object is shared, null if not set
      */
     @JsonProperty("sharedWithSomeone")
@@ -254,6 +321,14 @@ public class Meta implements Serializable {
     @JsonDeserialize(using = BooleanDeserializer.class)
     public void setSharedWithSomeone(final Boolean sharedWithSomeone) {
         this.sharedWithSomeone = sharedWithSomeone;
+    }
+
+    public Set<String> getFlags() {
+        return flags;
+    }
+
+    public void setFlags(final Set<String> flags) {
+        this.flags = flags;
     }
 
     @Override

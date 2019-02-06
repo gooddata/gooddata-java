@@ -12,7 +12,6 @@ import com.gooddata.executeafm.ObjQualifier;
 import com.gooddata.executeafm.UriObjQualifier;
 import com.gooddata.util.GoodDataToStringBuilder;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +25,7 @@ import static com.gooddata.util.Validate.notNull;
  * Definition of the period over period measure that is used for the Previous period comparison.
  */
 @JsonRootName(NAME)
-public class PreviousPeriodMeasureDefinition extends DerivedMeasureDefinition implements Serializable {
+public class PreviousPeriodMeasureDefinition extends DerivedMeasureDefinition {
 
     private static final long serialVersionUID = -4741355657671354062L;
 

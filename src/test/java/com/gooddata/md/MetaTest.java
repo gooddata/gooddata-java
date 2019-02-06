@@ -19,6 +19,7 @@ import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
@@ -40,6 +41,7 @@ public class MetaTest {
     public static final boolean UNLISTED = true;
     public static final boolean PRODUCTION = true;
     public static final boolean SHARED_WITH_SOMEONE = false;
+    public static final Set<String> FLAGS = new LinkedHashSet<>(asList("preloaded", "strictAccessControl"));
 
     @Test
     public void testDeserialization() throws Exception {
@@ -61,6 +63,7 @@ public class MetaTest {
         assertThat(meta.isUnlisted(), is(UNLISTED));
         assertThat(meta.isProduction(), is(PRODUCTION));
         assertThat(meta.isSharedWithSomeone(), is(SHARED_WITH_SOMEONE));
+        assertThat(meta.getFlags(), nullValue());
     }
 
     @Test
@@ -72,9 +75,24 @@ public class MetaTest {
     }
 
     @Test
+    public void testDeserializationWithFlags() throws Exception {
+        final Meta meta = readObjectFromResource("/md/meta-withFlags.json", Meta.class);
+        assertThat(meta, is(notNullValue()));
+        assertThat(meta.getFlags(), is(FLAGS));
+    }
+
+    @Test
+    public void testSerializationWithFlags() throws Exception {
+        final Meta meta = new Meta(AUTHOR, CONTRIBUTOR, CREATED, UPDATED, SUMMARY, TITLE, CATEGORY, TAGS, URI, IDENTIFIER,
+                DEPRECATED, PRODUCTION, LOCKED, UNLISTED, SHARED_WITH_SOMEONE, FLAGS);
+
+        assertThat(meta, jsonEquals(resource("md/meta-withFlags.json")));
+    }
+
+    @Test
     public void testToStringFormat() {
         final Meta meta = new Meta(AUTHOR, CONTRIBUTOR, CREATED, UPDATED, SUMMARY, TITLE, CATEGORY, TAGS, URI, IDENTIFIER,
-                DEPRECATED, PRODUCTION, LOCKED, UNLISTED, SHARED_WITH_SOMEONE);
+                DEPRECATED, PRODUCTION, LOCKED, UNLISTED, SHARED_WITH_SOMEONE, FLAGS);
 
         assertThat(meta.toString(), matchesPattern(Meta.class.getSimpleName() + "\\[.*\\]"));
     }
