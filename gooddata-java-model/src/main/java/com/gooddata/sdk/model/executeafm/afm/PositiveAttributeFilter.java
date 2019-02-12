@@ -8,6 +8,7 @@ package com.gooddata.sdk.model.executeafm.afm;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.model.executeafm.UriObjQualifier;
 import com.gooddata.util.GoodDataToStringBuilder;
@@ -26,28 +27,39 @@ public class PositiveAttributeFilter extends AttributeFilter {
     private static final long serialVersionUID = 1934771670274345290L;
     static final String NAME = "positiveAttributeFilter";
 
-    private final List<String> in;
+    private final AttributeFilterElements in;
 
     /**
      * Creates new instance of given display form and in list
      * @param displayForm display form
      * @param in list of in elements
      */
+    @Deprecated
+    public PositiveAttributeFilter(final ObjQualifier displayForm, final List<String> in) {
+        this(displayForm, new SimpleAttributeFilterElements(in));
+    }
+
+    /**
+     * Creates new instance of given display form and in list
+     * @param displayForm display form
+     * @param in in elements (uris or values)
+     */
     @JsonCreator
     public PositiveAttributeFilter(@JsonProperty("displayForm") final ObjQualifier displayForm,
-                                   @JsonProperty("in") final List<String> in) {
+                                   @JsonProperty("in") final AttributeFilterElements in) {
         super(displayForm);
         this.in = in;
     }
 
+    @Deprecated
     public PositiveAttributeFilter(final ObjQualifier displayForm, final String... in) {
         this(displayForm, asList(in));
     }
 
     /**
-     * @return list of in elements
+     * @return in elements
      */
-    public List<String> getIn() {
+    public AttributeFilterElements getIn() {
         return in;
     }
 
