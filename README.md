@@ -12,7 +12,7 @@ The *GoodData Java SDK* is available in Maven Central Repository, to use it from
 <dependency>
     <groupId>com.gooddata</groupId>
     <artifactId>gooddata-java</artifactId>
-    <version>2.32.0+api1</version>
+    <version>3.0.0-RC.1+api1</version>
 </dependency>
 ```
 See [releases page](https://github.com/gooddata/gooddata-java/releases) for information about versions and notable changes,
@@ -46,7 +46,7 @@ The *GoodData Java SDK* logs using `slf4j-api`. Please adjust your logging confi
 <dependency>
     <groupId>org.slf4j</groupId>
     <artifactId>slf4j-nop</artifactId>
-    <version>2.32.0+api1</version>
+    <version>3.0.0-RC.1+api1</version>
 </dependency>
 ```
 
