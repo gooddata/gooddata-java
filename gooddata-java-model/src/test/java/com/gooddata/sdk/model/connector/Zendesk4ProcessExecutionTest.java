@@ -52,6 +52,20 @@ public class Zendesk4ProcessExecutionTest {
     }
 
     @Test
+    public void testShouldSerializeRecoverable() {
+        final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
+        execution.setRecoverable(true);
+        assertThat(execution, jsonEquals(resource("connector/process-execution-recoverable.json")));
+    }
+
+    @Test
+    public void testShouldSerializeRecoveryInProgress() {
+        final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
+        execution.setRecoveryInProgress(true);
+        assertThat(execution, jsonEquals(resource("connector/process-execution-recoveryInProgress.json")));
+    }
+
+    @Test
     public void testGetDownloadParams() {
         final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
         final DownloadParams downloadParams = execution.getDownloadParams();

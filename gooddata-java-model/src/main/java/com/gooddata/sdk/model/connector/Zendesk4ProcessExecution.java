@@ -30,6 +30,10 @@ public class Zendesk4ProcessExecution implements ProcessExecution {
 
     private Boolean reload;
 
+    private Boolean recoverable;
+
+    private Boolean recoveryInProgress;
+
     private Map<String, DateTime> startTimes;
 
     private DownloadParams downloadParams;
@@ -56,6 +60,30 @@ public class Zendesk4ProcessExecution implements ProcessExecution {
      */
     public void setReload(final Boolean reload) {
         this.reload = reload;
+    }
+
+    public Boolean getRecoverable() {
+        return recoverable;
+    }
+
+    /**
+     * Tells if the newly started process should use recoverable feature.
+     * Usable from R176.
+     */
+    public void setRecoverable(final Boolean recoverable) {
+        this.recoverable = recoverable;
+    }
+
+    public Boolean getRecoveryInProgress() {
+        return recoveryInProgress;
+    }
+
+    /**
+     * Tells if there is some recoverable process in progress for given project
+     * Usable from R176.
+     */
+    public void setRecoveryInProgress(final Boolean recoveryInProgress) {
+        this.recoveryInProgress = recoveryInProgress;
     }
 
     @JsonAnyGetter
