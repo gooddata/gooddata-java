@@ -5,6 +5,7 @@
  */
 package com.gooddata.sdk.service.lcm;
 
+import com.gooddata.sdk.model.lcm.LcmEntityFilter;
 import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.sdk.service.GoodDataSettings;
