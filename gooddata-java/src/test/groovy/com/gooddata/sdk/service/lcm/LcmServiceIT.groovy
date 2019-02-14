@@ -7,6 +7,7 @@ package com.gooddata.sdk.service.lcm
 
 
 import com.gooddata.sdk.model.account.Account
+import com.gooddata.sdk.model.lcm.LcmEntityFilter
 import com.gooddata.sdk.service.GoodDataITBase
 import spock.lang.Shared
 import spock.lang.Unroll
