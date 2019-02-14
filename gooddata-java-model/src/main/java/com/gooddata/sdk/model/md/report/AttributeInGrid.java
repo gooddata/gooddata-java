@@ -46,16 +46,6 @@ public class AttributeInGrid implements GridElement, Serializable {
     }
 
     /**
-     * Creates new instance from given uri with empty alias
-     * @param uri uri of displayForm of attribute to be in grid
-     * @deprecated because empty alias does not make much sense
-     */
-    @Deprecated
-    public AttributeInGrid(String uri) {
-        this(uri, "");
-    }
-
-    /**
      * Creates new instance.
      * @param uri uri of displayForm of attribute to be in grid
      * @param alias alias used to label the attribute

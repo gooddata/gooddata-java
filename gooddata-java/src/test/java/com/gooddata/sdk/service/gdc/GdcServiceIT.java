@@ -6,7 +6,6 @@
 package com.gooddata.sdk.service.gdc;
 
 import com.gooddata.sdk.service.AbstractGoodDataIT;
-import com.gooddata.sdk.model.gdc.Gdc;
 import com.gooddata.sdk.model.gdc.RootLinks;
 import org.testng.annotations.Test;
 
@@ -17,21 +16,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class GdcServiceIT extends AbstractGoodDataIT {
-
-    @SuppressWarnings("deprecation")
-    @Test
-    public void shouldReturnGdc() throws Exception {
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo("/gdc")
-            .respond()
-                .withBody(readFromResource("/gdc/gdc.json"))
-                .withStatus(200);
-
-        final Gdc gdc = gd.getGdcService().getGdc();
-        assertThat(gdc, is(notNullValue()));
-        assertThat(gdc.getUserStagingUri(), is("/uploads"));
-    }
 
     @Test
     public void shouldReturnRootLinks() throws Exception {

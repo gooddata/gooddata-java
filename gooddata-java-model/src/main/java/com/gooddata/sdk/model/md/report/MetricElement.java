@@ -31,9 +31,9 @@ public class MetricElement implements Serializable {
 
     @JsonCreator
     MetricElement(@JsonProperty("uri") final String uri,
-                         @JsonProperty("alias") final String alias,
-                         @JsonProperty("format") final String format,
-                         @JsonProperty("drillAcrossStepAttributeDF") String drillAcrossStepAttributeDisplayFormUri) {
+                  @JsonProperty("alias") final String alias,
+                  @JsonProperty("format") final String format,
+                  @JsonProperty("drillAcrossStepAttributeDF") String drillAcrossStepAttributeDisplayFormUri) {
         this.uri = uri;
         this.alias = alias;
         this.format = format;
@@ -41,21 +41,10 @@ public class MetricElement implements Serializable {
     }
 
     /**
-     * Creates a new metric element
-     * @param uri metric uri
-     * @param alias metric alias
-     * @deprecated for compatibility with 1.x only,
-     * use {@link #MetricElement(Metric, String)} or {@link #MetricElement(Metric)}
-     */
-    @Deprecated
-    public MetricElement(String uri, String alias) {
-        this(uri, alias, null, null);
-    }
-
-    /**
      * Creates new instance using uri of given metric and alias.
+     *
      * @param metric metric to create element from
-     * @param alias metric alias
+     * @param alias  metric alias
      */
     public MetricElement(final Metric metric, final String alias) {
         this(notNull(notNull(metric, "metric").getUri(), "uri"), notNull(alias, "alias"), null, null);
@@ -63,6 +52,7 @@ public class MetricElement implements Serializable {
 
     /**
      * Creates new instance using uri of given metric and it's title as alias.
+     *
      * @param metric metric to create element from
      */
     public MetricElement(final Metric metric) {

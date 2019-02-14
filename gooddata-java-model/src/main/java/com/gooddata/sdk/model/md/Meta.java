@@ -82,34 +82,6 @@ public class Meta implements Serializable {
     }
 
     /**
-     * @param author
-     * @param contributor
-     * @param created
-     * @param updated
-     * @param summary
-     * @param title
-     * @param category
-     * @param tags
-     * @param uri
-     * @param identifier
-     * @param deprecated
-     * @param production
-     * @param locked
-     * @param unlisted
-     * @param sharedWithSomeone
-     * @deprecated use {@link #Meta(String, String, DateTime, DateTime, String, String, String, Set,
-     * String, String, Boolean, Boolean, Boolean, Boolean, Boolean, Set)} instead
-     */
-    @Deprecated
-    public Meta(String author, String contributor, DateTime created, DateTime updated, String summary,
-                String title, String category, Set<String> tags, String uri, String identifier,
-                Boolean deprecated, Boolean production, Boolean locked, Boolean unlisted,
-                Boolean sharedWithSomeone) {
-        this(author, contributor, created, updated, summary, title, category, tags, uri, identifier,
-                deprecated, production, locked, unlisted, sharedWithSomeone, null);
-    }
-
-    /**
      * Constructor with "extra" flags argument
      *
      * @param author

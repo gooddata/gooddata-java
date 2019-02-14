@@ -22,7 +22,6 @@ import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class DatasetTest {
 
-    @SuppressWarnings("deprecation")
     @Test
     public void shouldDeserialize() throws Exception {
         final Dataset dataset = readObjectFromResource("/md/dataset.json", Dataset.class);
@@ -47,10 +46,8 @@ public class DatasetTest {
         assertThat(attributes, is(notNullValue()));
         assertThat(attributes, hasSize(3));
 
-        assertThat(dataset.getDataUploadsLink(), is("/gdc/md/PROJECT_ID/data/uploads/688536"));
         assertThat(dataset.getDataUploadsUri(), is("/gdc/md/PROJECT_ID/data/uploads/688536"));
         assertThat(dataset.hasUploadConfiguration(), is(false));
-        assertThat(dataset.getUploadConfigurationLink(), is(nullValue()));
         assertThat(dataset.getUploadConfigurationUri(), is(nullValue()));
     }
 

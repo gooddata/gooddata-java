@@ -57,16 +57,6 @@ public class DisplayForm extends AbstractObj {
         return content.getType();
     }
 
-    /**
-     * @return elements URI string
-     * @deprecated use {@link #getElementsUri()} instead
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getElementsLink() {
-        return getElementsUri();
-    }
-
     @JsonIgnore
     public String getElementsUri() {
         return links.getElements();

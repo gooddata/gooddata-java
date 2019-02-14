@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
-import com.gooddata.sdk.model.executeafm.UriObjQualifier;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
@@ -52,46 +51,11 @@ public class OverPeriodMeasureDefinition extends DerivedMeasureDefinition {
         this.dateAttributes = notEmpty(dateAttributes, "dateAttributes");
     }
 
-    /**
-     * The method is not supported by the object.
-     * Use {@link #getObjQualifiers()} instead.
-     *
-     * @return throws {@link UnsupportedOperationException}
-     *
-     * @throws UnsupportedOperationException
-     *         The exception is thrown every time the method is called.
-     * @deprecated Use {@link #getObjQualifiers()} instead.
-     */
-    @Override
-    @Deprecated
-    public ObjQualifier getObjQualifier() {
-        throw new UnsupportedOperationException("The method is not supported by the object!");
-    }
-
     @Override
     public Collection<ObjQualifier> getObjQualifiers() {
         return this.dateAttributes.stream()
                 .map(OverPeriodDateAttribute::getAttribute)
                 .collect(Collectors.toSet());
-    }
-
-    /**
-     * The method is not supported by the object.
-     * Use {@link #withObjUriQualifiers(ObjQualifierConverter)} instead.
-     *
-     * @param uriQualifier
-     *         The URI object qualifier.
-     *
-     * @return throws {@link UnsupportedOperationException}
-     *
-     * @throws UnsupportedOperationException
-     *         The exception is thrown every time the method is called.
-     * @deprecated Use {@link #withObjUriQualifiers(ObjQualifierConverter)} instead.
-     */
-    @Override
-    @Deprecated
-    public MeasureDefinition withObjUriQualifier(final UriObjQualifier uriQualifier) {
-        throw new UnsupportedOperationException("The method is not supported by the object!");
     }
 
     @Override

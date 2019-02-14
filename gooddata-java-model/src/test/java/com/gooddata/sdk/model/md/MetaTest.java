@@ -63,13 +63,13 @@ public class MetaTest {
         assertThat(meta.isUnlisted(), is(UNLISTED));
         assertThat(meta.isProduction(), is(PRODUCTION));
         assertThat(meta.isSharedWithSomeone(), is(SHARED_WITH_SOMEONE));
-        assertThat(meta.getFlags(), nullValue());
+        assertThat(meta.getFlags(), is(FLAGS));
     }
 
     @Test
     public void testSerialization() throws Exception {
         final Meta meta = new Meta(AUTHOR, CONTRIBUTOR, CREATED, UPDATED, SUMMARY, TITLE, CATEGORY, TAGS, URI, IDENTIFIER,
-                DEPRECATED, PRODUCTION, LOCKED, UNLISTED, SHARED_WITH_SOMEONE);
+                DEPRECATED, PRODUCTION, LOCKED, UNLISTED, SHARED_WITH_SOMEONE, FLAGS);
 
         assertThat(meta, jsonEquals(resource("md/meta.json")));
     }
@@ -100,7 +100,7 @@ public class MetaTest {
     @Test
     public void testSerializable() throws Exception {
         final Meta meta = new Meta(AUTHOR, CONTRIBUTOR, CREATED, UPDATED, SUMMARY, TITLE, CATEGORY, TAGS, URI, IDENTIFIER,
-                DEPRECATED, PRODUCTION, LOCKED, UNLISTED, SHARED_WITH_SOMEONE);
+                DEPRECATED, PRODUCTION, LOCKED, UNLISTED, SHARED_WITH_SOMEONE, FLAGS);
         final Meta deserialized = SerializationUtils.roundtrip(meta);
 
         assertThat(deserialized, jsonEquals(meta));

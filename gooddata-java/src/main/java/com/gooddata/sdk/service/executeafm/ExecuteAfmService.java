@@ -50,14 +50,6 @@ public class ExecuteAfmService extends AbstractService {
     }
 
     /**
-     * @deprecated use {@link ExecuteAfmService#executeAfm(Project, Execution)}
-     */
-    @Deprecated
-    public ExecutionResponse execute(final Project project, final Execution execution) {
-        return executeAfm(project, execution);
-    }
-
-    /**
      * Executes the given AFM execution returning the execution response
      * @param project project of the execution
      * @param execution execution

@@ -5,13 +5,13 @@
  */
 package com.gooddata.sdk.service.export;
 
-import com.gooddata.sdk.service.report.ReportException;
+import com.gooddata.GoodDataException;
 
 /**
  * Exception during export
  */
 @SuppressWarnings("deprecation")
-public class ExportException extends ReportException {
+public class ExportException extends GoodDataException {
 
     public ExportException(String message) {
         super(message);

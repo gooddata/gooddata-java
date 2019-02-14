@@ -42,19 +42,6 @@ public interface MeasureDefinition extends Serializable {
     }
 
     /**
-     * Returns the qualifier, qualifying the {@link Metric}.
-     *
-     * @return qualifier of measure
-     *
-     * @throws UnsupportedOperationException
-     *         The exception is thrown when the method is not supported by the implementation.
-     * @deprecated Use {@link #withObjUriQualifiers(ObjQualifierConverter)} instead as this method is not supported by all the existing implementations.
-     */
-    @JsonIgnore
-    @Deprecated
-    ObjQualifier getObjQualifier();
-
-    /**
      * Returns all the qualifiers used by the measure definition and its encapsulated objects.
      * <p>
      * This information comes handy if it is necessary, for example, to convert the measure definition to use just the URI object qualifiers instead of the
@@ -64,21 +51,6 @@ public interface MeasureDefinition extends Serializable {
      */
     @JsonIgnore
     Collection<ObjQualifier> getObjQualifiers();
-
-    /**
-     * Copy itself using given URI qualifier.
-     *
-     * @param qualifier
-     *         The qualifier to use by the new object.
-     *
-     * @return self copy with given qualifier
-     *
-     * @throws UnsupportedOperationException
-     *         The exception is thrown when the method is not supported by the implementation.
-     * @deprecated Use {@link #withObjUriQualifiers(ObjQualifierConverter)} instead as this method is not supported by all the existing implementations.
-     */
-    @Deprecated
-    MeasureDefinition withObjUriQualifier(UriObjQualifier qualifier);
 
     /**
      * Copy itself using the given object qualifier converter in case when {@link IdentifierObjQualifier} instances are used in the object otherwise the

@@ -33,18 +33,9 @@ class PopMeasureDefinitionTest extends Specification {
         then:
         measure.measureIdentifier == 'mId'
         measure.popAttribute.uri == '/gdc/md/projectId/obj/1'
-        measure.objQualifier.uri == '/gdc/md/projectId/obj/1'
+        measure.objQualifiers.first().uri == '/gdc/md/projectId/obj/1'
         measure.isAdHoc()
         measure.toString()
-    }
-
-    def "should copy with uri"() {
-        when:
-        def measure = new PopMeasureDefinition("mid", new IdentifierObjQualifier("id"))
-        def copy = measure.withObjUriQualifier(new UriObjQualifier("uri"))
-
-        then:
-        copy.objQualifier.uri == 'uri'
     }
 
     def "should copy with uri converter"() {
@@ -94,15 +85,6 @@ class PopMeasureDefinitionTest extends Specification {
         EqualsVerifier.forClass(PopMeasureDefinition)
                 .usingGetClass()
                 .verify()
-    }
-
-    def "should return null when qualifier is requested but was not set"() {
-        when:
-        def definition = new PopMeasureDefinition("mid", null)
-        def qualifier = definition.getObjQualifier()
-
-        then:
-        qualifier == null
     }
 
     def "should return empty collection when qualifiers are requested but none was set"() {

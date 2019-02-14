@@ -38,18 +38,6 @@ public class ProjectTemplateService extends AbstractService {
     }
 
     /**
-     * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
-     * this abstract one.
-     *
-     * @param restTemplate RESTful HTTP Spring template
-     * @deprecated use ProjectTemplateService(RestTemplate) constructor instead
-     */
-    @Deprecated
-    public ProjectTemplateService(final RestTemplate restTemplate) {
-        super(restTemplate);
-    }
-
-    /**
      * List of all projects' templates
      * @return list of templates
      */

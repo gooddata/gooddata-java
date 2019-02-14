@@ -14,7 +14,7 @@
     "metrics": [
         {
             "alias": "metr",
-            "uri": "/gdc/md/PROJECT_ID/obj/METR_ID"
+            "uri": "/gdc/md/PROJECT_ID/obj/47"
         }
     ],
     "rows": [

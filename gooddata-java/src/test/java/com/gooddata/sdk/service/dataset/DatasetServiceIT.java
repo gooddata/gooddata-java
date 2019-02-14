@@ -140,22 +140,6 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
         assertThat(manifest, is(notNullValue()));
     }
 
-    @SuppressWarnings("deprecation")
-    @Test
-    public void shouldListDatasets() throws Exception {
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo("/gdc/md/PROJECT_ID/ldm/singleloadinterface")
-            .respond()
-                .withBody(readFromResource("/dataset/datasetLinks.json"))
-        ;
-
-        final Collection<Dataset> datasets = gd.getDatasetService().listDatasets(project);
-        assertThat(datasets, hasSize(1));
-        assertThat(datasets.iterator().next().getUri(),
-                is("/gdc/md/PROJECT_ID/ldm/singleloadinterface/dataset.person"));
-    }
-
     @Test
     public void shouldListDatasetLinks() throws Exception {
         onRequest()

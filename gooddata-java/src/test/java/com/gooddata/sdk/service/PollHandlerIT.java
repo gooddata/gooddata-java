@@ -41,8 +41,8 @@ public class PollHandlerIT extends AbstractGoodDataIT {
 
     private static class PollingService extends AbstractService {
 
-        PollingService(final RestTemplate restTemplate) {
-            super(restTemplate);
+        private PollingService(final RestTemplate restTemplate) {
+            super(restTemplate, new GoodDataSettings());
         }
 
         FutureResult<Void> test(final String uri) {

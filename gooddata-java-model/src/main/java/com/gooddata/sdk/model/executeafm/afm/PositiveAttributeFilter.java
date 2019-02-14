@@ -31,8 +31,10 @@ public class PositiveAttributeFilter extends AttributeFilter {
 
     /**
      * Creates new instance of given display form and in list
+     *
      * @param displayForm display form
-     * @param in list of in elements
+     * @param in          list of in elements
+     * @deprecated for compatibility with version 2.x only, use {@link #PositiveAttributeFilter(ObjQualifier, AttributeFilterElements)} instead
      */
     @Deprecated
     public PositiveAttributeFilter(final ObjQualifier displayForm, final List<String> in) {
@@ -41,8 +43,9 @@ public class PositiveAttributeFilter extends AttributeFilter {
 
     /**
      * Creates new instance of given display form and in list
+     *
      * @param displayForm display form
-     * @param in in elements (uris or values)
+     * @param in          in elements (uris or values)
      */
     @JsonCreator
     public PositiveAttributeFilter(@JsonProperty("displayForm") final ObjQualifier displayForm,
@@ -51,6 +54,9 @@ public class PositiveAttributeFilter extends AttributeFilter {
         this.in = in;
     }
 
+    /**
+     * @deprecated for compatibility with version 2.x only, use {@link #PositiveAttributeFilter(ObjQualifier, AttributeFilterElements)} instead
+     */
     @Deprecated
     public PositiveAttributeFilter(final ObjQualifier displayForm, final String... in) {
         this(displayForm, asList(in));

@@ -32,15 +32,6 @@ public class ProjectValidationResultGdcTimeElParam extends ProjectValidationResu
         return ids;
     }
 
-    /**
-     * @return list of values
-     * @deprecated for backward compatibility only. Do not use this method, it always returns null.
-     */
-    @Deprecated
-    public List<String> getVals() {
-        return null;
-    }
-
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

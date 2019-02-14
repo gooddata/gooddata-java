@@ -55,9 +55,6 @@ class SimpleMeasureDefinitionTest extends Specification {
         with(definition?.item as UriObjQualifier) {
             uri == QUALIFIER.uri
         }
-        with(definition?.objQualifier as UriObjQualifier) {
-            uri == QUALIFIER.uri
-        }
         definition?.aggregation == 'avg'
         definition?.computeRatio
         with(definition?.filters?.find { it.class == PositiveAttributeFilter }) {
@@ -101,16 +98,6 @@ class SimpleMeasureDefinitionTest extends Specification {
         definition.getComputeRatio()
 
         definition.hasFilters()
-    }
-
-    def "should copy with uri"() {
-        when:
-        def definition = new SimpleMeasureDefinition(new IdentifierObjQualifier("id"))
-        def copy = definition.withObjUriQualifier(new UriObjQualifier("uri"))
-
-        then:
-        copy.getUri() == 'uri'
-        copy.getObjQualifier().getUri() == 'uri'
     }
 
     def "should copy with uri converter"() {
@@ -162,15 +149,6 @@ class SimpleMeasureDefinitionTest extends Specification {
                 .suppress(Warning.NONFINAL_FIELDS)
                 .usingGetClass()
                 .verify()
-    }
-
-    def "should return null when qualifier is requested but was not set"() {
-        when:
-        def definition = new SimpleMeasureDefinition(null)
-        def qualifier = definition.getObjQualifier()
-
-        then:
-        qualifier == null
     }
 
     def "should return empty collection when qualifiers are requested but none was set"() {

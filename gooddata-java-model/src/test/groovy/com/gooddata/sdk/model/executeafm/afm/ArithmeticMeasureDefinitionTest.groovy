@@ -31,31 +31,9 @@ class ArithmeticMeasureDefinitionTest extends Specification {
         measure.getMeasureIdentifiers() == ["localIdentifier1", "localIdentifier2"]
     }
 
-    def "should throw when getting used object qualifier"() {
-        given:
-        ArithmeticMeasureDefinition measure = new ArithmeticMeasureDefinition(["localIdentifier1", "localIdentifier2"], "sum")
-
-        when:
-        measure.getObjQualifier()
-
-        then:
-        thrown(UnsupportedOperationException)
-    }
-
     def "should return empty list when getting used object qualifiers"() {
         expect:
         new ArithmeticMeasureDefinition(["localIdentifier1", "localIdentifier2"], "sum").getObjQualifiers().isEmpty()
-    }
-
-    def "should throw when calling withObjectUriQualifier"() {
-        given:
-        ArithmeticMeasureDefinition measure = new ArithmeticMeasureDefinition(["localIdentifier1", "localIdentifier2"], "sum")
-
-        when:
-        measure.withObjUriQualifier(new UriObjQualifier("/gdc/md/a12332"))
-
-        then:
-        thrown(UnsupportedOperationException)
     }
 
     def "should return same object when calling withObjUriQualifiers"() {

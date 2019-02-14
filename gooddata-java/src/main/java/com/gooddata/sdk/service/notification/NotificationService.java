@@ -30,14 +30,6 @@ public class NotificationService extends AbstractService {
     }
 
     /**
-     * @deprecated use NotificationService(RestTemplate, GoodDataSettings) constructor instead
-     */
-    @Deprecated
-    public NotificationService(final RestTemplate restTemplate) {
-        super(restTemplate);
-    }
-
-    /**
      * Triggers given project event.
      *
      * @param project project of the event

@@ -31,8 +31,10 @@ public class NegativeAttributeFilter extends AttributeFilter {
 
     /**
      * Creates new instance of given display form and not in list
+     *
      * @param displayForm display form
-     * @param notIn list of not in elements
+     * @param notIn       list of not in elements
+     * @deprecated for compatibility with version 2.x only, use {@link #NegativeAttributeFilter(ObjQualifier, AttributeFilterElements)} instead
      */
     @Deprecated
     public NegativeAttributeFilter(@JsonProperty("displayForm") final ObjQualifier displayForm,
@@ -42,8 +44,9 @@ public class NegativeAttributeFilter extends AttributeFilter {
 
     /**
      * Creates new instance of given display form and not in list
+     *
      * @param displayForm display form
-     * @param notIn not in elements (uris or values)
+     * @param notIn       not in elements (uris or values)
      */
     @JsonCreator
     public NegativeAttributeFilter(@JsonProperty("displayForm") final ObjQualifier displayForm,
@@ -52,6 +55,9 @@ public class NegativeAttributeFilter extends AttributeFilter {
         this.notIn = notIn;
     }
 
+    /**
+     * @deprecated for compatibility with version 2.x only, use {@link #NegativeAttributeFilter(ObjQualifier, AttributeFilterElements)} instead
+     */
     @Deprecated
     public NegativeAttributeFilter(final ObjQualifier displayForm, final String... notIn) {
         this(displayForm, asList(notIn));

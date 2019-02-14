@@ -211,12 +211,18 @@ public class DataStoreService {
             // nothing to close - wrappedClient doesn't have to implement CloseableHttpClient
         }
 
+        /**
+         * @deprecated because supertype's {@link HttpClient#getParams()} is deprecated.
+         */
         @Override
         @Deprecated
         public HttpParams getParams() {
             return client.getParams();
         }
 
+        /**
+         * @deprecated because supertype's {@link HttpClient#getConnectionManager()} is deprecated.
+         */
         @Override
         @Deprecated
         public ClientConnectionManager getConnectionManager() {

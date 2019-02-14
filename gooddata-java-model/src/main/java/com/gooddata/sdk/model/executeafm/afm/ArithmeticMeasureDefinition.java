@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
-import com.gooddata.sdk.model.executeafm.UriObjQualifier;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
@@ -42,12 +41,6 @@ public class ArithmeticMeasureDefinition implements MeasureDefinition {
         this.operator = operator;
     }
 
-    @Deprecated
-    @Override
-    public ObjQualifier getObjQualifier() {
-        throw new UnsupportedOperationException("not supported operation");
-    }
-
     /**
      * no qualifiers are used, only local identifiers are used see {@link ArithmeticMeasureDefinition#getOperator()}
      * @return empty set
@@ -55,12 +48,6 @@ public class ArithmeticMeasureDefinition implements MeasureDefinition {
     @Override
     public Collection<ObjQualifier> getObjQualifiers() {
         return Collections.EMPTY_SET; //has no qualifiers
-    }
-
-    @Deprecated
-    @Override
-    public MeasureDefinition withObjUriQualifier(UriObjQualifier qualifier) {
-        throw new UnsupportedOperationException("not supported operation");
     }
 
     /**

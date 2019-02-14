@@ -22,10 +22,6 @@ public class AttributeDisplayForm extends DisplayForm implements Updatable {
 
     private static final long serialVersionUID = -7903851496647992573L;
 
-    /** @deprecated use {@link #attributeContent} instead */
-    @Deprecated
-    protected final AttributeContent content;
-
     @JsonProperty("content")
     protected final AttributeContent attributeContent;
 
@@ -33,7 +29,6 @@ public class AttributeDisplayForm extends DisplayForm implements Updatable {
     private AttributeDisplayForm(@JsonProperty("meta") Meta meta, @JsonProperty("content") AttributeContent content,
             @JsonProperty("links") Links links) {
         super(meta, content, links);
-        this.content = content;
         this.attributeContent = content;
     }
 

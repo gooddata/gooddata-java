@@ -88,16 +88,6 @@ public class ProcessExecutionDetail {
         return error;
     }
 
-    /**
-     * @return log URI string
-     * @deprecated use {@link #getLogUri()} instead
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getLogLink() {
-        return getLogUri();
-    }
-
     @JsonIgnore
     public String getLogUri() {
         return notNullState(links, "links").get(LOG_LINK);
@@ -106,16 +96,6 @@ public class ProcessExecutionDetail {
     @JsonIgnore
     public String getUri() {
         return notNullState(links, "links").get(SELF_LINK);
-    }
-
-    /**
-     * @return execution URI string
-     * @deprecated use {@link #getExecutionUri()} instead
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getExecutionLink() {
-        return getExecutionUri();
     }
 
     @JsonIgnore

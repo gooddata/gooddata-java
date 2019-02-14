@@ -32,27 +32,12 @@ public class WarehouseTask {
         this.links = links;
     }
 
-    @Deprecated
-    String getPollLink() {
-        return getPollUri();
-    }
-
     public String getPollUri() {
         return links.get(POLL_LINK);
     }
 
-    @Deprecated
-    String getWarehouseLink() {
-        return getWarehouseUri();
-    }
-
     public String getWarehouseUri() {
         return links.get(WAREHOUSE_LINK);
-    }
-
-    @Deprecated
-    String getWarehouseUserLink() {
-        return getWarehouseUserUri();
     }
 
     public String getWarehouseUserUri() {

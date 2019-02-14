@@ -84,28 +84,6 @@ class PreviousPeriodMeasureDefinitionTest extends Specification {
         null              | [new PreviousPeriodDateDataSet(new UriObjQualifier('/gdc/md/projectId/obj/1'), 2)]
     }
 
-    def "should throw when getting used object qualifiers via deprecated method"() {
-        when:
-        PreviousPeriodMeasureDefinition measure = new PreviousPeriodMeasureDefinition('mId', [
-                new PreviousPeriodDateDataSet(new IdentifierObjQualifier('id1'), -2),
-        ])
-        measure.getObjQualifier()
-
-        then:
-        thrown(UnsupportedOperationException)
-    }
-
-    def "should throw when try to copy with uri via deprecated method"() {
-        when:
-        PreviousPeriodMeasureDefinition measure = new PreviousPeriodMeasureDefinition('mId', [
-                new PreviousPeriodDateDataSet(new IdentifierObjQualifier('id1'), -2),
-        ])
-        measure.withObjUriQualifier(new UriObjQualifier("/gdc/md/projectId/obj/1"))
-
-        then:
-        thrown(UnsupportedOperationException)
-    }
-
     def "should copy with uri converter"() {
         when:
         PreviousPeriodMeasureDefinition measure = new PreviousPeriodMeasureDefinition('mId', [

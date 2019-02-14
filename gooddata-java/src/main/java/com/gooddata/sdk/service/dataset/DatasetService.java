@@ -31,9 +31,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
@@ -56,15 +54,6 @@ public class DatasetService extends AbstractService {
     public DatasetService(final RestTemplate restTemplate, final DataStoreService dataStoreService,
                           final GoodDataSettings settings) {
         super(restTemplate, settings);
-        this.dataStoreService = notNull(dataStoreService, "dataStoreService");
-    }
-
-    /**
-     * @deprecated use DatasetService(RestTemplate, DataStoreService, GoodDataSettings) constructor instead
-     */
-    @Deprecated
-    public DatasetService(final RestTemplate restTemplate, final DataStoreService dataStoreService) {
-        super(restTemplate);
         this.dataStoreService = notNull(dataStoreService, "dataStoreService");
     }
 
@@ -217,18 +206,6 @@ public class DatasetService extends AbstractService {
                 }
             }
         });
-    }
-
-    /**
-     * Lists datasets (links) in project. Returns empty list in case there are no datasets.
-     *
-     * @param project project to list datasets in
-     * @return collection of dataset links or empty list
-     * @deprecated use {@link #listDatasetLinks(Project)} instead
-     */
-    @Deprecated
-    public Collection<Dataset> listDatasets(Project project) {
-        return listDatasetLinks(project).stream().map(link -> new Dataset(link.getIdentifier(), link.getUri(), link.getTitle())).collect(Collectors.toCollection(HashSet::new));
     }
 
     /**

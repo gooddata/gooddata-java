@@ -79,21 +79,16 @@ public class AboutLinks {
             this.summary = summary;
         }
 
+        public Link(String identifier, String uri, String title) {
+            this(identifier, uri, title, null, null);
+        }
+
         public String getIdentifier() {
             return identifier;
         }
 
         public String getUri() {
             return uri;
-        }
-
-        /**
-         * @return self URI string
-         * @deprecated use {@link #getUri()} instead
-         */
-        @Deprecated
-        public String getLink() {
-            return getUri();
         }
 
         public String getTitle() {

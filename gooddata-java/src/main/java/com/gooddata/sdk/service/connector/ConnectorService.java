@@ -43,15 +43,6 @@ public class ConnectorService extends AbstractService {
     }
 
     /**
-     * @deprecated use ConnectorService(RestTemplate, ProjectService, GoodDataSettings) constructor instead
-     */
-    @Deprecated
-    public ConnectorService(final RestTemplate restTemplate, final ProjectService projectService) {
-        super(restTemplate);
-        this.projectService = notNull(projectService, "projectService");
-    }
-
-    /**
      * Retrieve connector integration
      *
      * @param project       project

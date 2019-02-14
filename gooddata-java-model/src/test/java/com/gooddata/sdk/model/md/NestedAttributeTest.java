@@ -22,7 +22,6 @@ import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class NestedAttributeTest {
 
-    @SuppressWarnings("deprecation")
     @Test
     public void testDeserialization() throws Exception {
         final NestedAttribute attribute = readObjectFromResource("/md/dimensionAttribute.json", NestedAttribute.class);
@@ -57,7 +56,6 @@ public class NestedAttributeTest {
         assertThat(foreignKeys.iterator().next(), is(Matchers.notNullValue()));
 
         assertThat(attribute.hasDimension(), is(true));
-        assertThat(attribute.getDimensionLink(), is("/gdc/md/PROJECT_ID/obj/DIM_ID"));
         assertThat(attribute.getDimensionUri(), is("/gdc/md/PROJECT_ID/obj/DIM_ID"));
     }
 

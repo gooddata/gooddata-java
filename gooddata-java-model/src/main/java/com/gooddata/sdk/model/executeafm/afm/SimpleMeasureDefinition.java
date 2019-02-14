@@ -10,8 +10,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
-import com.gooddata.sdk.model.executeafm.UriObjQualifier;
-import com.gooddata.sdk.model.md.Metric;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.ArrayList;
@@ -19,7 +17,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.gooddata.sdk.model.executeafm.afm.SimpleMeasureDefinition.NAME;
 import static com.gooddata.util.Validate.notNull;
@@ -120,42 +117,11 @@ public class SimpleMeasureDefinition implements MeasureDefinition {
         return getItem().getUri();
     }
 
-    /**
-     * Returns the qualifier used by the {@link Metric}.
-     *
-     * @return qualifier used by the metric, which is its {@link #item}. The null is returned in case when {@link #item} was not set.
-     *
-     * @deprecated Use {@link #getObjQualifiers()} instead.
-     */
-    @Override
-    @Deprecated
-    public ObjQualifier getObjQualifier() {
-        return getObjQualifiers().stream()
-                .findFirst()
-                .orElse(null);
-    }
-
     @Override
     public Collection<ObjQualifier> getObjQualifiers() {
         return item == null
                 ? Collections.emptySet()
                 : Collections.singleton(item);
-    }
-
-    /**
-     * Copy itself using given URI qualifier.
-     *
-     * @param uriQualifier
-     *         The qualifier to use by the new object instead of the currently used one.
-     *
-     * @return self copy with given qualifier
-     *
-     * @deprecated Use {@link #withObjUriQualifiers(ObjQualifierConverter)} instead.
-     */
-    @Override
-    @Deprecated
-    public MeasureDefinition withObjUriQualifier(final UriObjQualifier uriQualifier) {
-        return withObjUriQualifiers((identifierObjQualifier) -> Optional.of(uriQualifier));
     }
 
     /**
