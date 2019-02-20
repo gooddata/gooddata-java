@@ -55,6 +55,7 @@ public class Measure extends MeasureItem implements BucketItem {
     /**
      * @return true if measure definition has compute ratio set to true, false otherwise
      */
+    @SuppressWarnings("deprecation")
     @JsonIgnore
     public boolean hasComputeRatio() {
         return getDefinition() instanceof VOSimpleMeasureDefinition && ((VOSimpleMeasureDefinition) getDefinition()).hasComputeRatio();
@@ -77,6 +78,7 @@ public class Measure extends MeasureItem implements BucketItem {
     /**
      * @return true if measure contains {@link VOPopMeasureDefinition}, false otherwise
      */
+    @SuppressWarnings("deprecation")
     @JsonIgnore
     public boolean isPop() {
         return getDefinition() instanceof VOPopMeasureDefinition;

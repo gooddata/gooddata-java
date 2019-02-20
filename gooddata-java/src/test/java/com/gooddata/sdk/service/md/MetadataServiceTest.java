@@ -250,7 +250,7 @@ public class MetadataServiceTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testFindIdentifierUrisNullRestriction() {
-        service.findUris(project, null);
+        service.findUris(project, (Restriction) null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)

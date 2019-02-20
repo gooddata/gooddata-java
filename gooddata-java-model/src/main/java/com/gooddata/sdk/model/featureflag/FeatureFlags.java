@@ -5,23 +5,15 @@
  */
 package com.gooddata.sdk.model.featureflag;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import com.gooddata.util.GoodDataToStringBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 import static java.util.stream.Collectors.toMap;
-import static org.springframework.util.Assert.notNull;
 
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("featureFlags")
@@ -36,12 +28,12 @@ public class FeatureFlags implements Iterable<FeatureFlag> {
     /**
      * Adds the feature flag of given name and given value.
      *
-     * @param name feature flag name
+     * @param name    feature flag name
      * @param enabled feature flag value (enabled / disabled)
      */
     @JsonAnySetter
     public void addFlag(final String name, final boolean enabled) {
-        notNull(name);
+        notNull(name, "name");
         featureFlags.add(new FeatureFlag(name, enabled));
     }
 
@@ -56,6 +48,7 @@ public class FeatureFlags implements Iterable<FeatureFlag> {
 
     /**
      * Converts feature flags to map where flags' names are the keys and values are flags' enabled property
+     *
      * @return feature flags as map
      */
     @JsonAnyGetter

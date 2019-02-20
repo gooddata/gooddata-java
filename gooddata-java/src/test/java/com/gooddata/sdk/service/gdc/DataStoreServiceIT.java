@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 import static com.gooddata.util.ResourceUtils.readFromResource;
 import static net.jadler.Jadler.onRequest;
@@ -49,7 +50,7 @@ public class DataStoreServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void shouldUploadWithFullStagingLink() throws Exception {
-        final String gdcBody = IOUtils.toString(readFromResource("/gdc/gdc.json"))
+        final String gdcBody = IOUtils.toString(readFromResource("/gdc/gdc.json"), Charset.defaultCharset())
                 .replaceAll("/uploads", "http://localhost:" + port() + "/uploads");
         onRequest()
                 .havingMethodEqualTo("GET")

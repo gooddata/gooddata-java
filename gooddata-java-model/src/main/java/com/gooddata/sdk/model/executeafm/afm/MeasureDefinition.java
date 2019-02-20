@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gooddata.sdk.model.executeafm.IdentifierObjQualifier;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
-import com.gooddata.sdk.model.executeafm.UriObjQualifier;
 import com.gooddata.sdk.model.md.visualization.VOPopMeasureDefinition;
 import com.gooddata.sdk.model.md.visualization.VOSimpleMeasureDefinition;
 import com.gooddata.sdk.model.md.Metric;
@@ -18,6 +17,7 @@ import com.gooddata.sdk.model.md.Metric;
 import java.io.Serializable;
 import java.util.Collection;
 
+@SuppressWarnings("deprecation")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = SimpleMeasureDefinition.class, name = SimpleMeasureDefinition.NAME),

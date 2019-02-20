@@ -32,6 +32,7 @@ class BucketTest extends Specification {
         that new Bucket("noItems", new ArrayList<BucketItem>()), jsonEquals(noItemsBucket)
     }
 
+    @SuppressWarnings("GrDeprecatedAPIUsage")
     def "should serialize full"() {
         expect:
         that new Bucket("attributeBucket", [

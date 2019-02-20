@@ -5,29 +5,21 @@
  */
 package com.gooddata.sdk.service.project;
 
-import com.gooddata.sdk.service.AbstractGoodDataAT;
-import com.gooddata.sdk.model.account.Account;
 import com.gooddata.collections.PageRequest;
+import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.project.*;
+import com.gooddata.sdk.service.AbstractGoodDataAT;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.hamcrest.core.IsIterableContaining;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static com.gooddata.sdk.model.project.ProjectEnvironment.TESTING;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.core.IsCollectionContaining.hasItem;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Project acceptance tests.
@@ -51,22 +43,22 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = "project", dependsOnGroups = "account")
-    public void createProject() throws Exception {
+    public void createProject() {
         final Project p = new Project(title, projectToken);
         p.setEnvironment(TESTING);
         project = gd.getProjectService().createProject(p).get();
     }
 
     @Test(groups = "project", dependsOnMethods = "createProject")
-    public void listProjects() throws Exception {
+    public void listProjects() {
         final ProjectService projectService = gd.getProjectService();
 
         final Collection<Project> projects = projectService.getProjects();
-        assertThat(projects, hasItem(ProjectIdMatcher.hasSameIdAs(project)));
+        assertThat(projects, IsIterableContaining.hasItem(ProjectIdMatcher.hasSameIdAs(project)));
     }
 
     @Test(groups = "project", dependsOnMethods = "createProject")
-    public void listProjectUsers() throws Exception {
+    public void listProjectUsers() {
         final ProjectService projectService = gd.getProjectService();
 
         final List<User> users = new ArrayList<>();
@@ -78,7 +70,7 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = "project", dependsOnMethods = "createProject")
-    public void listProjectRoles() throws Exception {
+    public void listProjectRoles() {
         final ProjectService projectService = gd.getProjectService();
 
         final Set<Role> roles = projectService.getRoles(project);
@@ -86,26 +78,26 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = "project", dependsOnMethods = "createProject")
-    public void getProjectById() throws Exception {
+    public void getProjectById() {
         final Project project = gd.getProjectService().getProjectById(this.project.getId());
         assertThat(project, ProjectIdMatcher.hasSameIdAs(this.project));
     }
 
     @Test(groups = "project", dependsOnMethods = "createProject")
-    public void getProjectByUri() throws Exception {
+    public void getProjectByUri() {
         final Project project = gd.getProjectService().getProjectByUri(this.project.getUri());
         assertThat(project, ProjectIdMatcher.hasSameIdAs(this.project));
     }
 
     @Test(groups = "project", dependsOnMethods = "createProject")
-    public void validateProject() throws Exception {
+    public void validateProject() {
         final ProjectValidationResults results = gd.getProjectService().validateProject(project).get();
         assertThat(results, is(notNullValue()));
         assertThat(results.getResults(), is(notNullValue()));
     }
 
     @Test(groups = "project", dependsOnMethods = "createProject")
-    public void sendInvitations() throws Exception {
+    public void sendInvitations() {
         final Invitation invitation = new Invitation("qa+" + RandomStringUtils.randomAlphanumeric(10) + "@gooddata.com");
         final CreatedInvitations invitations = gd.getProjectService().sendInvitations(project, invitation);
         assertThat(invitations, is(notNullValue()));
@@ -113,7 +105,7 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = {"project", "isolated_domain"}, dependsOnMethods = "createProject")
-    public void addUserToProject() throws Exception {
+    public void addUserToProject() {
         final Set<Role> roles = gd.getProjectService().getRoles(project);
         final Role role = roles.iterator().next();
 
@@ -123,7 +115,7 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = {"project", "isolated_domain"}, dependsOnMethods = "addUserToProject")
-    public void disableUserInProject() throws Exception {
+    public void disableUserInProject() {
         user.setStatus(DISABLED_STATUS);
 
         gd.getProjectService().updateUserInProject(project, user);

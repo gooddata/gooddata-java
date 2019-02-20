@@ -16,8 +16,8 @@ import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class NestedAttributeTest {
@@ -36,14 +36,14 @@ public class NestedAttributeTest {
 
         assertThat(displayForm.getFormOf(), is("/gdc/md/PROJECT_ID/obj/DF_FORM_OF_ID"));
         assertThat(displayForm.getExpression(), is("[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]"));
-        assertThat(displayForm.getLdmExpression(), isEmptyString());
+        assertThat(displayForm.getLdmExpression(), is(emptyString()));
 
         final DisplayForm defaultDisplayForm = attribute.getDefaultDisplayForm();
         assertThat(defaultDisplayForm, is(notNullValue()));
 
         assertThat(defaultDisplayForm.getFormOf(), is("/gdc/md/PROJECT_ID/obj/DF_FORM_OF_ID"));
         assertThat(defaultDisplayForm.getExpression(), is("[/gdc/md/PROJECT_ID/obj/DF_EXPRESSION_ID]"));
-        assertThat(defaultDisplayForm.getLdmExpression(), isEmptyString());
+        assertThat(defaultDisplayForm.getLdmExpression(), is(emptyString()));
 
         final Collection<Key> primaryKeys = attribute.getPrimaryKeys();
         assertThat(primaryKeys, is(Matchers.notNullValue()));

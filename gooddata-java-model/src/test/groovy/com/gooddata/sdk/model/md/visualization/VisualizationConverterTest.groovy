@@ -44,6 +44,7 @@ class VisualizationConverterTest extends Specification {
     private static final String STACKED_COLUMN_CHART = "md/visualization/stackedColumnChart.json"
     private static final String LINE_CHART = "md/visualization/lineChart.json"
 
+    @SuppressWarnings("GrDeprecatedAPIUsage")
     def "should convert complex"() {
         given:
         Afm expected = new Afm(

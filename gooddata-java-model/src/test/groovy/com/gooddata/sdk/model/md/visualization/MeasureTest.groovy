@@ -66,6 +66,7 @@ class MeasureTest extends Specification {
         that deserialized, jsonEquals(measureWithCr)
     }
 
+    @SuppressWarnings("GrDeprecatedAPIUsage")
     def "test serialize simple"() {
         expect:
         that new Measure(new VOSimpleMeasureDefinition(new UriObjQualifier('uri')), 'loc1'), jsonEquals(resource(SIMPLE_MEASURE_JSON))

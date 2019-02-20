@@ -5,17 +5,18 @@
  */
 package com.gooddata.sdk.service.warehouse;
 
-import com.gooddata.sdk.service.AbstractGoodDataAT;
-import com.gooddata.sdk.model.account.Account;
 import com.gooddata.collections.Page;
 import com.gooddata.collections.PageRequest;
 import com.gooddata.collections.PageableList;
+import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.project.Environment;
 import com.gooddata.sdk.model.warehouse.Warehouse;
 import com.gooddata.sdk.model.warehouse.WarehouseSchema;
 import com.gooddata.sdk.model.warehouse.WarehouseUser;
 import com.gooddata.sdk.model.warehouse.WarehouseUserRole;
+import com.gooddata.sdk.service.AbstractGoodDataAT;
 import org.hamcrest.Matchers;
+import org.hamcrest.core.IsIterableContaining;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -26,14 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.gooddata.sdk.service.warehouse.WarehouseIdMatcher.hasSameIdAs;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.core.IsCollectionContaining.hasItem;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Warehouse acceptance tests
@@ -64,20 +58,20 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = "warehouse", dependsOnGroups = "account")
-    public void createWarehouse() throws Exception {
+    public void createWarehouse() {
         final Warehouse wh = new Warehouse(title, warehouseToken);
         wh.setEnvironment(Environment.TESTING);
         warehouse = service.createWarehouse(wh).get(60, TimeUnit.MINUTES);
     }
 
     @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
-    public void getWarehouse() throws Exception {
+    public void getWarehouse() {
         final Warehouse warehouse = service.getWarehouseById(this.warehouse.getId());
         assertThat(warehouse, Matchers.is(hasSameIdAs(warehouse)));
     }
 
     @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
-    public void listWarehouses() throws Exception {
+    public void listWarehouses() {
         final LinkedList<Warehouse> result = new LinkedList<>();
         Page page = new PageRequest(1000);
         PageableList<Warehouse> warehouses;
@@ -88,11 +82,11 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
             page = warehouses.getNextPage();
         } while (warehouses.hasNextPage());
 
-        assertThat(result, hasItem(hasSameIdAs(warehouse)));
+        assertThat(result, IsIterableContaining.hasItem(hasSameIdAs(warehouse)));
     }
 
     @Test(groups = "warehouse", dependsOnMethods = {"createWarehouse", "listWarehouses"})
-    public void shouldPageList() throws Exception {
+    public void shouldPageList() {
         final String title = this.title + " second";
         final Warehouse wh = new Warehouse(title, warehouseToken);
         wh.setEnvironment(Environment.TESTING);
@@ -106,7 +100,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = "warehouse", dependsOnMethods = "shouldPageList")
-    public void shouldReturnNullOnEndOfPaging() throws Exception {
+    public void shouldReturnNullOnEndOfPaging() {
         PageableList<Warehouse> page = service.listWarehouses();
         Page nextPage;
         while ((nextPage = page.getNextPage()) != null) {
@@ -115,7 +109,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
-    public void shouldListUsers() throws Exception {
+    public void shouldListUsers() {
         final PageableList<WarehouseUser> users = service.listWarehouseUsers(warehouse, new PageRequest(1));
         assertThat(users, hasSize(1));
         assertThat(users.get(0), is(notNullValue()));
@@ -154,7 +148,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(dependsOnGroups = "warehouse")
-    public void removeWarehouse() throws Exception {
+    public void removeWarehouse() {
         service.removeWarehouse(warehouse);
         warehouse = null;
         service.removeWarehouse(warehouse2);
@@ -162,7 +156,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
     }
 
     @AfterClass
-    public void tearDown() throws Exception {
+    public void tearDown() {
         try {
             if (warehouse != null) {
                 service.removeWarehouse(warehouse);

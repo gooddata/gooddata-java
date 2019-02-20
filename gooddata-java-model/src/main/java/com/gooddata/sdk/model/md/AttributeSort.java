@@ -69,8 +69,8 @@ class AttributeSort implements Serializable {
             } else if (root.isObject()) {
                 return new AttributeSort(root.findValue("uri").textValue(), true);
             } else {
-                throw ctxt.mappingException("Only textual or object node expected but %s node found",
-                        root.getNodeType().name());
+                return (AttributeSort) ctxt.handleUnexpectedToken(AttributeSort.class, root.asToken(), p,
+                        "Only textual or object node expected but %s node found", root.getNodeType().name());
             }
         }
     }

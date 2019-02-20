@@ -26,12 +26,14 @@ class GridElementDeserializer extends JsonDeserializer<GridElement> {
                 if (MetricGroup.equals(textValue)) {
                     return METRIC_GROUP;
                 } else {
-                    throw ctxt.mappingException("Unknown string representation of GridElement: %s", textValue);
+                    return (GridElement) ctxt.handleWeirdStringValue(GridElement.class, textValue,
+                            "Unknown string representation of GridElement: %s", textValue);
                 }
             case START_OBJECT:
                 return ctxt.readValue(jp, AttributeInGrid.class);
             default:
-                throw ctxt.mappingException("Unknown type of GridElement");
+                return (GridElement) ctxt.handleUnexpectedToken(GridElement.class, jp.currentToken(), jp,
+                        "Unknown type of GridElement");
         }
     }
 }
