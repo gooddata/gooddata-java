@@ -46,7 +46,6 @@ The *GoodData Java SDK* logs using `slf4j-api`. Please adjust your logging confi
 <dependency>
     <groupId>org.slf4j</groupId>
     <artifactId>slf4j-nop</artifactId>
-    <version>2.33.0+api1</version>
 </dependency>
 ```
 
