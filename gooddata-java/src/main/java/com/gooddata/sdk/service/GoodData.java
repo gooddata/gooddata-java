@@ -324,7 +324,7 @@ public class GoodData {
      *
      * @return initialized service for project management
      */
-    @Bean
+    @Bean("goodDataProjectService")
     public ProjectService getProjectService() {
         return projectService;
     }
@@ -334,7 +334,7 @@ public class GoodData {
      *
      * @return initialized service for account management
      */
-    @Bean
+    @Bean("goodDataAccountService")
     public AccountService getAccountService() {
         return accountService;
     }
@@ -345,7 +345,7 @@ public class GoodData {
      *
      * @return initialized service for metadata management
      */
-    @Bean
+    @Bean("goodDataMetadataService")
     public MetadataService getMetadataService() {
         return metadataService;
     }
@@ -355,7 +355,7 @@ public class GoodData {
      *
      * @return initialized service for model management
      */
-    @Bean
+    @Bean("goodDataModelService")
     public ModelService getModelService() {
         return modelService;
     }
@@ -365,7 +365,7 @@ public class GoodData {
      *
      * @return initialized service for API root management
      */
-    @Bean
+    @Bean("goodDataGdcService")
     public GdcService getGdcService() {
         return gdcService;
     }
@@ -375,7 +375,7 @@ public class GoodData {
      *
      * @return initialized service for data store management
      */
-    @Bean
+    @Bean("goodDataDataStoreService")
     public DataStoreService getDataStoreService() {
         return dataStoreService;
     }
@@ -385,7 +385,7 @@ public class GoodData {
      *
      * @return initialized service for dataset management
      */
-    @Bean
+    @Bean("goodDataDatasetService")
     public DatasetService getDatasetService() {
         return datasetService;
     }
@@ -395,7 +395,7 @@ public class GoodData {
      *
      * @return initialized service for exports
      */
-    @Bean
+    @Bean("goodDataExportService")
     public ExportService getExportService() {
         return exportService;
     }
@@ -405,7 +405,7 @@ public class GoodData {
      *
      * @return initialized service for dataload processes management and process executions
      */
-    @Bean
+    @Bean("goodDataProcessService")
     public ProcessService getProcessService() {
         return processService;
     }
@@ -415,7 +415,7 @@ public class GoodData {
      *
      * @return initialized service for ADS management
      */
-    @Bean
+    @Bean("goodDataWarehouseService")
     public WarehouseService getWarehouseService() {
         return warehouseService;
     }
@@ -425,7 +425,7 @@ public class GoodData {
      *
      * @return initialized service for connector integration management
      */
-    @Bean
+    @Bean("goodDataConnectorService")
     public ConnectorService getConnectorService() {
         return connectorService;
     }
@@ -435,7 +435,7 @@ public class GoodData {
      *
      * @return initialized service for project notifications management
      */
-    @Bean
+    @Bean("goodDataNotificationService")
     public NotificationService getNotificationService() {
         return notificationService;
     }
@@ -445,7 +445,7 @@ public class GoodData {
      *
      * @return initialized service for metadata export/import
      */
-    @Bean
+    @Bean("goodDataExportImportService")
     public ExportImportService getExportImportService() {
         return exportImportService;
     }
@@ -455,7 +455,7 @@ public class GoodData {
      *
      * @return initialized service for feature flag management
      */
-    @Bean
+    @Bean("goodDataFeatureFlagService")
     public FeatureFlagService getFeatureFlagService() {
         return featureFlagService;
     }
@@ -465,7 +465,7 @@ public class GoodData {
      *
      * @return initialized service for output stage management
      */
-    @Bean
+    @Bean("goodDataOutputStageService")
     public OutputStageService getOutputStageService() {
         return outputStageService;
     }
@@ -475,7 +475,7 @@ public class GoodData {
      *
      * @return initialized service for project templates
      */
-    @Bean
+    @Bean("goodDataProjectTemplateService")
     public ProjectTemplateService getProjectTemplateService() {
         return projectTemplateService;
     }
@@ -484,7 +484,7 @@ public class GoodData {
      * Get initialized service for audit events
      * @return initialized service for audit events
      */
-    @Bean
+    @Bean("goodDataAuditEventService")
     public AuditEventService getAuditEventService() {
         return auditEventService;
     }
@@ -493,7 +493,7 @@ public class GoodData {
      * Get initialized service for afm execution
      * @return initialized service for afm execution
      */
-    @Bean
+    @Bean("goodDataExecuteAfmService")
     public ExecuteAfmService getExecuteAfmService() {
         return executeAfmService;
     }
@@ -502,7 +502,7 @@ public class GoodData {
      * Get initialized service for Life Cycle Management
      * @return initialized service for Life Cycle Management
      */
-    @Bean
+    @Bean("goodDataLcmService")
     public LcmService getLcmService() {
         return lcmService;
     }
