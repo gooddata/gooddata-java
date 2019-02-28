@@ -46,15 +46,6 @@ public class LinkEntries {
             this.category = category;
         }
 
-        /**
-         * @return self URI string
-         * @deprecated use {@link #getUri()} instead
-         */
-        @Deprecated
-        public String getLink() {
-            return getUri();
-        }
-
         public String getUri() {
             return uri;
         }

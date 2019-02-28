@@ -5,11 +5,13 @@
  */
 package com.gooddata.sdk.model.md.report;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -27,6 +29,16 @@ public class GridElementDeserializerTest {
         assertThat(elems, hasSize(2));
         assertThat(elems.get(0), instanceOf(AttributeInGrid.class));
         assertThat(elems.get(1), instanceOf(MetricGroup.class));
+    }
+
+    @Test(expectedExceptions = JsonMappingException.class)
+    public void testDeserializerWithInvalidMetricGroupString() throws Exception {
+        OBJECT_MAPPER.readValue("[\"meh\"]", GridElements.class);
+    }
+
+    @Test(expectedExceptions = JsonMappingException.class)
+    public void testDeserializerWithUnknownType() throws Exception {
+        OBJECT_MAPPER.readValue("[123]", GridElements.class);
     }
 
     @JsonDeserialize(contentUsing = GridElementDeserializer.class)

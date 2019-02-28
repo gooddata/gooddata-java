@@ -22,7 +22,6 @@ public class AttributeTest {
 
     public static final String TITLE = "Person ID";
 
-    @SuppressWarnings("deprecation")
     @Test
     public void shouldDeserialize() throws Exception {
         final Attribute attribute = readObjectFromResource("/md/attribute.json", Attribute.class);
@@ -58,7 +57,6 @@ public class AttributeTest {
         assertThat(foreignKeys.iterator().next(), is(Matchers.notNullValue()));
 
         assertThat(attribute.hasDimension(), is(true));
-        assertThat(attribute.getDimensionLink(), is("/gdc/md/PROJECT_ID/obj/DIM_ID"));
         assertThat(attribute.getDimensionUri(), is("/gdc/md/PROJECT_ID/obj/DIM_ID"));
 
         assertThat(attribute.getDirection(), is("asc"));
@@ -67,7 +65,6 @@ public class AttributeTest {
         assertThat(attribute.isSortedByUsedDf(), is(false));
         assertThat(attribute.isSortedByLinkedDf(), is(false));
         assertThat(attribute.getType(), is("GDC.time.date"));
-        assertThat(attribute.getLinkedDisplayFormLink(), is("/gdc/md/PROJECT_ID/obj/DF_LINK"));
         assertThat(attribute.getLinkedDisplayFormUri(), is("/gdc/md/PROJECT_ID/obj/DF_LINK"));
         assertThat(attribute.getCompositeAttribute(), hasSize(0));
         assertThat(attribute.getCompositeAttributePk(), hasSize(0));

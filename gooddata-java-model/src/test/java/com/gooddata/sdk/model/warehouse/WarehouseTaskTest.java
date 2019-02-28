@@ -17,7 +17,6 @@ public class WarehouseTaskTest {
     @Test
     public void testDeserializePoll() throws Exception {
         final WarehouseTask warehouseTask = readObjectFromResource("/warehouse/warehouseTask-poll.json", WarehouseTask.class);
-        assertThat(warehouseTask.getPollLink(), is("/gdc/datawarehouse/executions/executionId"));
         assertThat(warehouseTask.getPollUri(), is("/gdc/datawarehouse/executions/executionId"));
     }
 
@@ -25,7 +24,6 @@ public class WarehouseTaskTest {
     @Test
     public void testDeserializeInstance() throws Exception {
         final WarehouseTask warehouseTask = readObjectFromResource("/warehouse/warehouseTask-finished.json", WarehouseTask.class);
-        assertThat(warehouseTask.getWarehouseLink(), is("/gdc/datawarehouse/instances/instanceId"));
         assertThat(warehouseTask.getWarehouseUri(), is("/gdc/datawarehouse/instances/instanceId"));
     }
 

@@ -37,13 +37,11 @@ public class EntryTest {
     public static final boolean LOCKED = true;
     public static final boolean UNLISTED = false;
 
-    @SuppressWarnings("deprecation")
     @Test
-    public void testDeserialize() throws Exception {
+    public void testDeserialize() {
         final Entry entry = readObjectFromResource("/md/entry.json", Entry.class);
         assertThat(entry, is(notNullValue()));
         assertThat(entry.getId(), is(OBJ_ID));
-        assertThat(entry.getLink(), is(URI));
         assertThat(entry.getUri(), is(URI));
         assertThat(entry.getTitle(), is(TITLE));
         assertThat(entry.getSummary(), is(SUMMARY));

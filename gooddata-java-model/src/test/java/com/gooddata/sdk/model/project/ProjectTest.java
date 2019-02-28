@@ -21,7 +21,6 @@ import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class ProjectTest {
 
-    @SuppressWarnings("deprecation")
     @Test
     public void testDeserialize() throws Exception {
         final Project project = readObjectFromResource("/project/project.json", Project.class);
@@ -42,37 +41,22 @@ public class ProjectTest {
         assertThat(project.getCreated(), is(new DateTime(2014, 4, 11, 11, 43, 45, DateTimeZone.UTC)));
         assertThat(project.getUpdated(), is(new DateTime(2014, 4, 11, 11, 43, 47, DateTimeZone.UTC)));
 
-        assertThat(project.getLdmThumbnailLink(), is("/gdc/projects/PROJECT_ID/ldm?thumbnail=1"));
         assertThat(project.getLdmThumbnailUri(), is("/gdc/projects/PROJECT_ID/ldm?thumbnail=1"));
         assertThat(project.getUri(), is("/gdc/projects/PROJECT_ID"));
-        assertThat(project.getClearCachesLink(), is("/gdc/projects/PROJECT_ID/clearCaches"));
         assertThat(project.getClearCachesUri(), is("/gdc/projects/PROJECT_ID/clearCaches"));
-        assertThat(project.getInvitationsLink(), is("/gdc/projects/PROJECT_ID/invitations"));
         assertThat(project.getInvitationsUri(), is("/gdc/projects/PROJECT_ID/invitations"));
-        assertThat(project.getUsersLink(), is("/gdc/projects/PROJECT_ID/users?link=1"));
         assertThat(project.getUsersUri(), is("/gdc/projects/PROJECT_ID/users?link=1"));
-        assertThat(project.getGroupsLink(), is("/gdc/projects/PROJECT_ID/groups"));
         assertThat(project.getGroupsUri(), is("/gdc/projects/PROJECT_ID/groups"));
-        assertThat(project.getUploadsLink(), is("https://ea-di.staging.getgooddata.com/project-uploads/PROJECT_ID/"));
         assertThat(project.getUploadsUri(), is("https://ea-di.staging.getgooddata.com/project-uploads/PROJECT_ID/"));
-        assertThat(project.getLdmLink(), is("/gdc/projects/PROJECT_ID/ldm"));
         assertThat(project.getLdmUri(), is("/gdc/projects/PROJECT_ID/ldm"));
-        assertThat(project.getMetadataLink(), is("/gdc/md/PROJECT_ID"));
         assertThat(project.getMetadataUri(), is("/gdc/md/PROJECT_ID"));
-        assertThat(project.getPublicArtifactsLink(), is("/gdc/projects/PROJECT_ID/publicartifacts"));
         assertThat(project.getPublicArtifactsUri(), is("/gdc/projects/PROJECT_ID/publicartifacts"));
-        assertThat(project.getRolesLink(), is("/gdc/projects/PROJECT_ID/roles"));
         assertThat(project.getRolesUri(), is("/gdc/projects/PROJECT_ID/roles"));
-        assertThat(project.getDataLoadLink(), is("/gdc/projects/PROJECT_ID/dataload"));
         assertThat(project.getDataLoadUri(), is("/gdc/projects/PROJECT_ID/dataload"));
-        assertThat(project.getConnectorsLink(), is("/gdc/projects/PROJECT_ID/connectors"));
         assertThat(project.getConnectorsUri(), is("/gdc/projects/PROJECT_ID/connectors"));
-        assertThat(project.getExecuteLink(), is("/gdc/projects/PROJECT_ID/execute"));
         assertThat(project.getExecuteUri(), is("/gdc/projects/PROJECT_ID/execute"));
-        assertThat(project.getSchedulesLink(), is("/gdc/projects/PROJECT_ID/schedules"));
         assertThat(project.getSchedulesUri(), is("/gdc/projects/PROJECT_ID/schedules"));
-        assertThat(project.getTemplatesLink(), is("/gdc/md/PROJECT_ID/templates"));
-        assertThat(project.getEventStoresLink(), is("/gdc/projects/PROJECT_ID/dataload/eventstore/stores"));
+        assertThat(project.getTemplatesUri(), is("/gdc/md/PROJECT_ID/templates"));
         assertThat(project.getEventStoresUri(), is("/gdc/projects/PROJECT_ID/dataload/eventstore/stores"));
     }
 

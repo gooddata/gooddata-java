@@ -57,7 +57,7 @@ public class ExportImportServiceAT extends AbstractGoodDataAT {
     public void partialExportMetric() throws Exception {
         partialMdExportToken = gd.getExportImportService().partialExport(project, new PartialMdExport(metric.getUri())).get();
         assertThat(partialMdExportToken, notNullValue());
-        assertThat(partialMdExportToken.getToken(), not(isEmptyOrNullString()));
+        assertThat(partialMdExportToken.getToken(), not(is(emptyOrNullString())));
         assertThat(partialMdExportToken.isImportAttributeProperties(), is(false));
     }
 

@@ -5,6 +5,7 @@
  */
 package com.gooddata.sdk.model.md.report;
 
+import com.gooddata.sdk.model.md.Metric;
 import org.apache.commons.lang3.SerializationUtils;
 import org.hamcrest.CoreMatchers;
 import org.testng.annotations.Test;
@@ -53,7 +54,6 @@ public class GridTest {
 
 
     @Test
-    @SuppressWarnings("deprecation")
     public void testSerialization() throws Exception {
         final Map<String, Object> colWidths = new HashMap<>();
         final Map<String, List<String>> sort = new HashMap<>();
@@ -63,7 +63,7 @@ public class GridTest {
         final Grid grid = new Grid(
                 asList(METRIC_GROUP),
                 asList(new AttributeInGrid("/gdc/md/PROJECT_ID/obj/ATTR_ID", "attr")),
-                asList(new MetricElement("/gdc/md/PROJECT_ID/obj/METR_ID", "metr")),
+                asList(new MetricElement(readObjectFromResource("/md/metric-out.json", Metric.class), "metr")),
                 sort,
                 asList(colWidths)
         );

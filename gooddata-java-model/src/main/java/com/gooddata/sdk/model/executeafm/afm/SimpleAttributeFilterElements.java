@@ -11,7 +11,9 @@ import java.util.List;
 import static com.gooddata.util.Validate.notNull;
 
 /**
- * {@link AttributeFilterElements} represented by simple array. It has the same semantic as {@link UriAttributeFilterElements}.
+ * {@link AttributeFilterElements} represented by simple array.
+ *
+ * @deprecated It has the same semantic as {@link UriAttributeFilterElements}.
  * Preserved because of compatibility and will be removed in future API version.
  */
 @Deprecated

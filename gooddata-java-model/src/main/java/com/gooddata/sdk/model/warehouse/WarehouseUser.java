@@ -32,21 +32,6 @@ public class WarehouseUser {
 
     public static final String URI = WarehouseUsers.URI + "/{userId}";
     public static final UriTemplate TEMPLATE = new UriTemplate(URI);
-    /**
-     * @deprecated in favour of {@link WarehouseUserRole#ADMIN}
-     */
-    @Deprecated
-    public static final String ADMIN_ROLE = WarehouseUserRole.ADMIN.getRoleName();
-    /**
-     * @deprecated in favour of {@link WarehouseUserRole#DATA_ADMIN}
-     */
-    @Deprecated
-    public static final String DATA_ADMIN_ROLE = WarehouseUserRole.DATA_ADMIN.getRoleName();
-    /**
-     * @deprecated in favour of {@link WarehouseUserRole#READ_ONLY}
-     */
-    @Deprecated
-    public static final String READ_ONLY_ROLE = WarehouseUserRole.READ_ONLY.getRoleName();
 
     private static final String SELF_LINK = "self";
 

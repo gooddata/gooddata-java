@@ -114,29 +114,9 @@ public class DataloadProcess {
         return TEMPLATE.match(getUri()).get("processId");
     }
 
-    /**
-     * @return executions URI string
-     * @deprecated use {@link #getExecutionsUri()} instead
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getExecutionsLink() {
-        return getExecutionsUri();
-    }
-
     @JsonIgnore
     public String getExecutionsUri() {
         return notNullState(links, "links").get(EXECUTIONS_LINK);
-    }
-
-    /**
-     * @return source URI string
-     * @deprecated use {@link #getSourceUri()} instead
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getSourceLink() {
-        return getSourceUri();
     }
 
     @JsonIgnore

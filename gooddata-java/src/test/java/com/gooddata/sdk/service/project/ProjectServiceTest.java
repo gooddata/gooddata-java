@@ -139,7 +139,7 @@ public class ProjectServiceTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testUpdateUserInProjectNullUser() {
-        service.updateUserInProject(mock(Project.class), null);
+        service.updateUserInProject(mock(Project.class), (User) null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)

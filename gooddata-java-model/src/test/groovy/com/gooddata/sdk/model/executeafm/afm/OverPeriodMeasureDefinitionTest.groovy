@@ -84,26 +84,6 @@ class OverPeriodMeasureDefinitionTest extends Specification {
         null              | [new OverPeriodDateAttribute(new UriObjQualifier('/gdc/md/projectId/obj/1'), 2)]
     }
 
-    def "should throw when getting used object qualifiers via deprecated method"() {
-        when:
-        OverPeriodMeasureDefinition measure = new OverPeriodMeasureDefinition('mId', [
-                new OverPeriodDateAttribute(new IdentifierObjQualifier('id1'), -2),
-        ])
-        measure.getObjQualifier()
-        then:
-        thrown(UnsupportedOperationException)
-    }
-
-    def "should throw when try to copy with uri via deprecated method"() {
-        when:
-        OverPeriodMeasureDefinition measure = new OverPeriodMeasureDefinition('mId', [
-                new OverPeriodDateAttribute(new IdentifierObjQualifier('id1'), -2),
-        ])
-        measure.withObjUriQualifier(new UriObjQualifier("/gdc/md/projectId/obj/1"))
-        then:
-        thrown(UnsupportedOperationException)
-    }
-
     def "should copy with uri converter"() {
         when:
         OverPeriodMeasureDefinition measure = new OverPeriodMeasureDefinition('mId', [

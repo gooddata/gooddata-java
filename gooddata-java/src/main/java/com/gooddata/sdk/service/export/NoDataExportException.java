@@ -5,13 +5,12 @@
  */
 package com.gooddata.sdk.service.export;
 
-import com.gooddata.sdk.service.report.NoDataReportException;
+import com.gooddata.GoodDataException;
 
 /**
  * Thrown when report export contains no data
  */
-@SuppressWarnings("deprecation")
-public class NoDataExportException extends NoDataReportException {
+public class NoDataExportException extends GoodDataException {
 
     public NoDataExportException() {
         this("Export contains no data");

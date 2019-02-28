@@ -13,5 +13,6 @@
     "locked": 0,
     "unlisted": 1,
     "isProduction": 1,
-    "sharedWithSomeone": 0
+    "sharedWithSomeone": 0,
+    "flags": ["preloaded", "strictAccessControl"]
 }

@@ -8,15 +8,7 @@ package com.gooddata.sdk.service.gdc;
 import com.github.sardine.Sardine;
 import com.github.sardine.impl.SardineException;
 import com.gooddata.UriPrefixer;
-import org.apache.http.Header;
-import org.apache.http.HeaderIterator;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.NoHttpResponseException;
-import org.apache.http.ProtocolVersion;
-import org.apache.http.StatusLine;
+import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.NonRepeatableRequestException;
@@ -211,12 +203,18 @@ public class DataStoreService {
             // nothing to close - wrappedClient doesn't have to implement CloseableHttpClient
         }
 
+        /**
+         * @deprecated because supertype's {@link HttpClient#getParams()} is deprecated.
+         */
         @Override
         @Deprecated
         public HttpParams getParams() {
             return client.getParams();
         }
 
+        /**
+         * @deprecated because supertype's {@link HttpClient#getConnectionManager()} is deprecated.
+         */
         @Override
         @Deprecated
         public ClientConnectionManager getConnectionManager() {
@@ -403,11 +401,19 @@ public class DataStoreService {
             return wrappedResponse.headerIterator(name);
         }
 
+        /**
+         * @deprecated because supertype's {@link HttpMessage#getParams()} is deprecated.
+         */
+        @Deprecated
         @Override
         public HttpParams getParams() {
             return wrappedResponse.getParams();
         }
 
+        /**
+         * @deprecated because supertype's {@link HttpMessage#setParams(HttpParams)} is deprecated.
+         */
+        @Deprecated
         @Override
         public void setParams(HttpParams params) {
             wrappedResponse.setParams(params);

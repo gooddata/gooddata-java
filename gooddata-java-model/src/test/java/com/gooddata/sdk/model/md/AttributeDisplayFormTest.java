@@ -27,7 +27,6 @@ public class AttributeDisplayFormTest {
     private static final String ELEMENTS_LINK = "/gdc/md/PROJECT_ID/obj/DF_ID/elements";
     private static final String TITLE = "Person Name";
 
-    @SuppressWarnings("deprecation")
     @Test
     public void shouldDeserialize() throws Exception {
         final AttributeDisplayForm attrDF = readObjectFromResource("/md/attributeDisplayForm.json", AttributeDisplayForm.class);
@@ -38,7 +37,6 @@ public class AttributeDisplayFormTest {
         assertThat(attrDF.isDefault(), is(DEFAULT_TRUE));
         assertThat(attrDF.getLdmExpression(), is(LDM_EXPRESSION));
         assertThat(attrDF.getType(), is(TYPE));
-        assertThat(attrDF.getElementsLink(), is(ELEMENTS_LINK));
         assertThat(attrDF.getElementsUri(), is(ELEMENTS_LINK));
     }
 

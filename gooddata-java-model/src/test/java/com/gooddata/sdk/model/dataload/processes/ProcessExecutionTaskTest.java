@@ -17,9 +17,7 @@ public class ProcessExecutionTaskTest {
     @Test
     public void testDeserialize() throws Exception {
         final ProcessExecutionTask task = readObjectFromResource("/dataload/processes/executionTask.json", ProcessExecutionTask.class);
-        assertThat(task.getPollLink(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId"));
         assertThat(task.getPollUri(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId"));
-        assertThat(task.getDetailLink(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId/detail"));
         assertThat(task.getDetailUri(), is("/gdc/projects/PROJECT_ID/dataload/processes/processId/executions/executionId/detail"));
     }
 }

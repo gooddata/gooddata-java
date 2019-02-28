@@ -66,15 +66,6 @@ public class Entry {
     }
 
     /**
-     * @return self URI string
-     * @deprecated use {@link #getUri()} instead
-     */
-    @Deprecated
-    public String getLink() {
-        return getUri();
-    }
-
-    /**
      * Returns internally generated ID of the object (that's part of the object URI).
      * @return internal ID of the object
      */
@@ -83,7 +74,7 @@ public class Entry {
         return Obj.OBJ_TEMPLATE.match(getUri()).get("objId");
     }
 
-    @JsonIgnore
+    @JsonProperty("link")
     public String getUri() {
         return uri;
     }

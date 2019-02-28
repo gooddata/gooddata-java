@@ -89,6 +89,7 @@ public class ExecuteAfmServiceAT extends AbstractGoodDataAT {
         checkExecutionResult(visResult);
     }
 
+    @SuppressWarnings("deprecation")
     private VisualizationObject createVisualizationObject() {
         final String vizClassUri = gd.getMetadataService().getObjUri(project, VisualizationClass.class,
                 identifier(GDC_TABLE_VISUALIZATION_CLASS_ID));

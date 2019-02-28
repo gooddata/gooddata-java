@@ -24,7 +24,6 @@ import com.gooddata.sdk.model.md.ProjectDashboard.Tab;
 import com.gooddata.sdk.model.md.report.Report;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.project.Project;
-import com.gooddata.sdk.service.report.ReportService;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
@@ -42,7 +41,6 @@ import static org.springframework.http.HttpMethod.POST;
 /**
  * Export project data
  *
- * @see ReportService
  */
 public class ExportService extends AbstractService {
 
@@ -62,18 +60,6 @@ public class ExportService extends AbstractService {
      */
     public ExportService(final RestTemplate restTemplate, final GoodDataEndpoint endpoint, final GoodDataSettings settings) {
         super(restTemplate, settings);
-        this.endpoint = notNull(endpoint, "endpoint");
-    }
-
-    /**
-     * Service for data export
-     * @param restTemplate REST template
-     * @param endpoint GoodData Endpoint
-     * @deprecated use ExportService(RestTemplate, GoodDataEndpoint, GoodDataSettings) constructor instead
-     */
-    @Deprecated
-    public ExportService(final RestTemplate restTemplate, final GoodDataEndpoint endpoint) {
-        super(restTemplate);
         this.endpoint = notNull(endpoint, "endpoint");
     }
 

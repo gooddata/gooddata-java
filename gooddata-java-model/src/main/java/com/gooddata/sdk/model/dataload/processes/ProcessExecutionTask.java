@@ -33,18 +33,8 @@ public class ProcessExecutionTask {
         this.links = links;
     }
 
-    @Deprecated
-    String getPollLink() {
-        return getPollUri();
-    }
-
     public String getPollUri() {
         return notNullState(links, "links").get(POLL_LINK);
-    }
-
-    @Deprecated
-    String getDetailLink() {
-        return getDetailUri();
     }
 
     public String getDetailUri() {

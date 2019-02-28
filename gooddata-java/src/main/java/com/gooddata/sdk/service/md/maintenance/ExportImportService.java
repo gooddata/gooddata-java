@@ -32,14 +32,6 @@ public class ExportImportService extends AbstractService {
     }
 
     /**
-     * @deprecated use ExportImportService(RestTemplate, GoodDataSettings) constructor instead
-     */
-    @Deprecated
-    public ExportImportService(final RestTemplate restTemplate) {
-        super(restTemplate);
-    }
-
-    /**
      * Exports partial metadata from project and returns token identifying this export
      *
      * @param project project from which metadata should be exported

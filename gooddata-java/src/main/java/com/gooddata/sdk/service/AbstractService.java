@@ -51,18 +51,6 @@ public abstract class AbstractService {
         this.settings = notNull(settings, "settings");
     }
 
-    /**
-     * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
-     * this abstract one.
-     *
-     * @param restTemplate RESTful HTTP Spring template
-     * @deprecated use {@link #AbstractService(RestTemplate, GoodDataSettings)}
-     */
-    @Deprecated
-    public AbstractService(RestTemplate restTemplate) {
-        this(restTemplate, new GoodDataSettings());
-    }
-
     final <R> R poll(final PollHandler<?,R> handler, long timeout, final TimeUnit unit) {
         notNull(handler, "handler");
         final long start = System.currentTimeMillis();

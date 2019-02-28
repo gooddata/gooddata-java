@@ -32,37 +32,11 @@ public class RootLinks extends AboutLinks {
      * Get GoodData API root URI string
      *
      * @return GoodData API root URI string
-     * @deprecated use {@link #getHomeUri()} instead
-     * @throws GoodDataException in case no link with such category found
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getHomeLink() {
-        return getHomeUri();
-    }
-
-    /**
-     * Get GoodData API root URI string
-     *
-     * @return GoodData API root URI string
      * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getHomeUri() {
         return getLink(LinkCategory.HOME).getUri();
-    }
-
-    /**
-     * Get temporary token generator URI string
-     *
-     * @return temporary token generator URI string
-     * @deprecated use {@link #getTokenUri()} instead
-     * @throws GoodDataException in case no link with such category found
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getTokenLink() {
-        return getTokenUri();
     }
 
     /**
@@ -80,37 +54,11 @@ public class RootLinks extends AboutLinks {
      * Get authentication service URI string
      *
      * @return authentication service URI string
-     * @deprecated use {@link #getLoginUri()} instead
-     * @throws GoodDataException in case no link with such category found
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getLoginLink() {
-        return getLoginUri();
-    }
-
-    /**
-     * Get authentication service URI string
-     *
-     * @return authentication service URI string
      * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getLoginUri() {
         return getLink(LinkCategory.LOGIN).getUri();
-    }
-
-    /**
-     * Get metadata resources URI string
-     *
-     * @return metadata resources URI string
-     * @deprecated use {@link #getMetadataUri()} instead
-     * @throws GoodDataException in case no link with such category found
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getMetadataLink() {
-        return getMetadataUri();
     }
 
     /**
@@ -128,37 +76,11 @@ public class RootLinks extends AboutLinks {
      * Get report execution resource URI string
      *
      * @return report execution resource URI string
-     * @deprecated use {@link #getXTabUri()} instead
-     * @throws GoodDataException in case no link with such category found
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getXTabLink() {
-        return getXTabUri();
-    }
-
-    /**
-     * Get report execution resource URI string
-     *
-     * @return report execution resource URI string
      * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getXTabUri() {
         return getLink(LinkCategory.XTAB).getUri();
-    }
-
-    /**
-     * Get URI string of resource used to determine valid attribute values in the context of a report
-     *
-     * @return URI string of resource used to determine valid attribute values in the context of a report
-     * @deprecated use {@link #getAvailableElementsUri()} instead
-     * @throws GoodDataException in case no link with such category found
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getAvailableElementsLink() {
-        return getAvailableElementsUri();
     }
 
     /**
@@ -176,37 +98,11 @@ public class RootLinks extends AboutLinks {
      * Get report exporting resource URI string
      *
      * @return report exporting resource URI string
-     * @deprecated use {@link #getReportExporterUri()} instead
-     * @throws GoodDataException in case no link with such category found
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getReportExporterLink() {
-        return getReportExporterUri();
-    }
-
-    /**
-     * Get report exporting resource URI string
-     *
-     * @return report exporting resource URI string
      * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getReportExporterUri() {
         return getLink(LinkCategory.REPORT_EXPORTER).getUri();
-    }
-
-    /**
-     * Get account manipulation resource URI string
-     *
-     * @return account manipulation resource URI string
-     * @deprecated use {@link #getAccountUri()} instead
-     * @throws GoodDataException in case no link with such category found
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getAccountLink() {
-        return getAccountUri();
     }
 
     /**
@@ -224,37 +120,11 @@ public class RootLinks extends AboutLinks {
      * Get user and project management resource URI string
      *
      * @return user and project management resource URI string
-     * @deprecated use {@link #getProjectsUri()} instead
-     * @throws GoodDataException in case no link with such category found
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getProjectsLink() {
-        return getProjectsUri();
-    }
-
-    /**
-     * Get user and project management resource URI string
-     *
-     * @return user and project management resource URI string
      * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getProjectsUri() {
         return getLink(LinkCategory.PROJECTS).getUri();
-    }
-
-    /**
-     * Get miscellaneous tool resource URI string
-     *
-     * @return miscellaneous tool resource URI string
-     * @deprecated use {@link #getToolUri()} instead
-     * @throws GoodDataException in case no link with such category found
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getToolLink() {
-        return getToolUri();
     }
 
     /**
@@ -272,19 +142,6 @@ public class RootLinks extends AboutLinks {
      * Get template resource URI string
      *
      * @return template resource URI string
-     * @deprecated use {@link #getTemplatesUri()} instead
-     * @throws GoodDataException in case no link with such category found
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getTemplatesLink() {
-        return getTemplatesUri();
-    }
-
-    /**
-     * Get template resource URI string
-     *
-     * @return template resource URI string
      * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
@@ -296,37 +153,11 @@ public class RootLinks extends AboutLinks {
      * Get release information URI string
      *
      * @return release information URI string
-     * @deprecated use {@link #getReleaseInfoUri()} instead
-     * @throws GoodDataException in case no link with such category found
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getReleaseInfoLink() {
-        return getReleaseInfoUri();
-    }
-
-    /**
-     * Get release information URI string
-     *
-     * @return release information URI string
      * @throws GoodDataException in case no link with such category found
      */
     @JsonIgnore
     public String getReleaseInfoUri() {
         return getLink(LinkCategory.RELEASE_INFO).getUri();
-    }
-
-    /**
-     * Get user data staging area URI string
-     *
-     * @return user data staging area URI string
-     * @deprecated use {@link #getUserStagingUri()} instead
-     * @throws GoodDataException in case no link with such category found
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getUserStagingLink() {
-        return getUserStagingUri();
     }
 
     /**

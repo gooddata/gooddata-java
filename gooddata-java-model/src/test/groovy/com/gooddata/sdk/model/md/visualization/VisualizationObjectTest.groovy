@@ -57,6 +57,7 @@ class VisualizationObjectTest extends Specification {
         complexVisualization?.referenceItems?.size() == 2
     }
 
+    @SuppressWarnings("GrDeprecatedAPIUsage")
     def "should serialize full"() {
         given:
         VOSimpleMeasureDefinition measureDefinition = new VOSimpleMeasureDefinition(new UriObjQualifier("/uri/to/measure/1"), 'sum', false,

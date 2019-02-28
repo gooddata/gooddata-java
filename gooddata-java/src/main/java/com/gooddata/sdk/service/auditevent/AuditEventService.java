@@ -43,18 +43,6 @@ public class AuditEventService extends AbstractService {
     }
 
     /**
-     * Service for audit events
-     * @param restTemplate rest template
-     * @param accountService account service
-     * @deprecated use AuditEventService(RestTemplate, AccountService, GoodDataSettings) constructor instead
-     */
-    @Deprecated
-    public AuditEventService(final RestTemplate restTemplate, final AccountService accountService) {
-        super(restTemplate);
-        this.accountService = notNull(accountService, "account service");
-    }
-
-    /**
      * Get list of audit events for the given domain id
      * @param domainId domain id
      * @return non-null paged list of events

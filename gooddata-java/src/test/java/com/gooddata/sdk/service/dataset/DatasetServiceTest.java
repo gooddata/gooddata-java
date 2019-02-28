@@ -23,11 +23,9 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
 
 import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static java.lang.String.format;
-import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -48,8 +46,6 @@ public class DatasetServiceTest {
     private DataStoreService dataStoreService;
     @Mock
     private Project project;
-    @Mock
-    private Link datasetLink;
     @Mock
     private DatasetManifest manifest;
     @Mock
@@ -143,41 +139,6 @@ public class DatasetServiceTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testLoadDatasetByIdWithNullInputStream() {
         service.loadDataset(project, DATASET_ID, null);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testListDatasetsWithNullProject() {
-        service.listDatasets(null);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Test(expectedExceptions = GoodDataException.class)
-    public void testListDatasetsWithNullResponse() {
-        when(restTemplate.getForObject(Datasets.URI, Link.class, PROJECT_ID)).thenReturn(null);
-        service.listDatasets(project);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Test(expectedExceptions = GoodDataException.class)
-    public void testListDatasetsWithRestClientError() {
-        when(restTemplate.getForObject(Datasets.URI, Link.class, PROJECT_ID)).thenThrow(new RestClientException(""));
-        service.listDatasets(project);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Test
-    public void testListDatasetsWithEmptyResponse() {
-        final DatasetLinks datasets = mock(DatasetLinks.class);
-        when(restTemplate.getForObject(DatasetLinks.URI, DatasetLinks.class, PROJECT_ID)).thenReturn(datasets);
-        when(datasets.getLinks()).thenReturn(singletonList(datasetLink));
-        when(datasetLink.getIdentifier()).thenReturn("ID");
-
-        final Collection<Dataset> result = service.listDatasets(project);
-        assertThat(result, hasSize(1));
-        final Dataset dataset = result.iterator().next();
-        assertThat(dataset, is(notNullValue()));
-        assertThat(dataset.getIdentifier(), is("ID"));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)

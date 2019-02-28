@@ -93,6 +93,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
     /**
      * @return all measures from all buckets whose measure definition is instance of {@link VOSimpleMeasureDefinition}
      */
+    @SuppressWarnings("deprecation")
     @JsonIgnore
     public List<Measure> getSimpleMeasures() {
         return getMeasures().stream()
@@ -224,7 +225,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
     }
 
     /**
-     * @param filters replacing previsous visualization object's filters
+     * @param filters replacing previous visualization object's filters
      */
     @JsonIgnore
     public void setFilters(List<FilterItem> filters) {
@@ -264,7 +265,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
     }
 
     /**
-     * @return uri to visualizaton class wrapped as {@link UriObjQualifier}
+     * @return uri to visualization class wrapped as {@link UriObjQualifier}
      */
     @JsonIgnore
     public UriObjQualifier getVisualizationClass() {

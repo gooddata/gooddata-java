@@ -20,7 +20,6 @@ public class MaqlDdlLinksTest {
         final MaqlDdlLinks maqlDdlLinks = readObjectFromResource("/model/maqlDdlLinks.json", MaqlDdlLinks.class);
 
         assertThat(maqlDdlLinks, is(notNullValue()));
-        assertThat(maqlDdlLinks.getStatusLink(), is("/gdc/md/PROJECT_ID/tasks/123/status"));
         assertThat(maqlDdlLinks.getStatusUri(), is("/gdc/md/PROJECT_ID/tasks/123/status"));
     }
 }

@@ -44,14 +44,6 @@ public class ModelService extends AbstractService {
         super(restTemplate, settings);
     }
 
-    /**
-     * @deprecated use ModelService(RestTemplate, GoodDataSettings) constructor instead
-     */
-    @Deprecated
-    public ModelService(final RestTemplate restTemplate) {
-        super(restTemplate);
-    }
-
     private FutureResult<ModelDiff> getProjectModelDiff(Project project, DiffRequest diffRequest) {
         notNull(project, "project");
         notNull(project.getId(), "project.id");

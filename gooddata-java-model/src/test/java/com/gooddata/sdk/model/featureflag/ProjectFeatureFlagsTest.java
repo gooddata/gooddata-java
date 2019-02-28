@@ -16,7 +16,7 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.isOneOf;
+import static org.hamcrest.Matchers.oneOf;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.testng.AssertJUnit.assertNotNull;
@@ -53,10 +53,10 @@ public class ProjectFeatureFlagsTest {
         final ProjectFeatureFlags flags = readObjectFromResource(getClass(), "/featureflag/projectFeatureFlags.json",
                 ProjectFeatureFlags.class);
         for (ProjectFeatureFlag flag : flags) {
-            assertThat(flag, isOneOf(
+            assertThat(flag, is(oneOf(
                     new ProjectFeatureFlag("myCoolFeature", true),
                     new ProjectFeatureFlag("mySuperCoolFeature", true),
-                    new ProjectFeatureFlag("mySuperSecretFeature", false)));
+                    new ProjectFeatureFlag("mySuperSecretFeature", false))));
         }
     }
 

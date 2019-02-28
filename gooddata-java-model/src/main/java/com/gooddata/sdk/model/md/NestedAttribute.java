@@ -50,16 +50,6 @@ public class NestedAttribute extends AbstractObj {
         return getDisplayForms().iterator().next();
     }
 
-    /**
-     * @return dimension URI string
-     * @deprecated use {@link #getDimensionUri()} instead
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getDimensionLink() {
-        return getDimensionUri();
-    }
-
     @JsonIgnore
     public String getDimensionUri() {
         return content.getDimensionUri();
@@ -129,29 +119,9 @@ public class NestedAttribute extends AbstractObj {
         return content.getCompositeAttributePk();
     }
 
-    /**
-     * @return drill-down step display form URI string
-     * @deprecated use {@link #getDrillDownStepDisplayFormUri()} instead
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getDrillDownStepDisplayFormLink() {
-        return getDrillDownStepDisplayFormUri();
-    }
-
     @JsonIgnore
     public String getDrillDownStepDisplayFormUri() {
         return content.getDrillDownStepDisplayFormUri();
-    }
-
-    /**
-     * @return linked display form URI string
-     * @deprecated use {@link #getLinkedDisplayFormUri()} instead
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getLinkedDisplayFormLink() {
-        return getLinkedDisplayFormUri();
     }
 
     @JsonIgnore
@@ -240,16 +210,6 @@ public class NestedAttribute extends AbstractObj {
             return displayForms;
         }
 
-        /**
-         * @return dimension URI string
-         * @deprecated use {@link #getDimensionUri()} instead
-         */
-        @Deprecated
-        @JsonIgnore
-        public String getDimensionLink() {
-            return getDimensionUri();
-        }
-
         @JsonProperty("dimension")
         public String getDimensionUri() {
             return dimension;
@@ -280,29 +240,9 @@ public class NestedAttribute extends AbstractObj {
             return compositeAttributePk;
         }
 
-        /**
-         * @return drill-down step display form URI string
-         * @deprecated use {@link #getDrillDownStepDisplayFormUri()} instead
-         */
-        @Deprecated
-        @JsonIgnore
-        public String getDrillDownStepDisplayFormLink() {
-            return getDrillDownStepDisplayFormUri();
-        }
-
         @JsonProperty("drillDownStepAttributeDF")
         public String getDrillDownStepDisplayFormUri() {
             return drillDownStepAttributeDF;
-        }
-
-        /**
-         * @return linked display form URI string
-         * @deprecated use {@link #getLinkedDisplayFormUri()} instead
-         */
-        @Deprecated
-        @JsonIgnore
-        public String getLinkedDisplayFormLink() {
-            return getLinkedDisplayFormUri();
         }
 
         @JsonProperty("linkAttributeDF")

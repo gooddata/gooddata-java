@@ -36,48 +36,6 @@ public class AttributeHeader implements Header, LocallyIdentifiable {
 
     /**
      * Creates new header
-     * @deprecated use the constructor with {@link AttributeInHeader}
-     *
-     * @param name name
-     * @param localIdentifier local identifier
-     * @param uri uri
-     * @param identifier identifier
-     */
-    @Deprecated
-    public AttributeHeader(final String name, final String localIdentifier, final String uri, final String identifier) {
-        this.name = notEmpty(name, "name");
-        this.localIdentifier = notEmpty(localIdentifier, "localIdentifier");
-        this.uri = notEmpty(uri, "uri");
-        this.identifier = notEmpty(identifier, "identifier");
-        this.formOf = null;
-    }
-
-    /**
-     * Creates new header
-     * @deprecated use the constructor with {@link AttributeInHeader}
-     *
-     * @param name name
-     * @param localIdentifier local identifier
-     * @param uri uri
-     * @param identifier identifier
-     * @param totalHeaderItems total header items
-     */
-    @Deprecated
-    public AttributeHeader(final String name,
-                           final String localIdentifier,
-                           final String uri,
-                           final String identifier,
-                           final List<TotalHeaderItem> totalHeaderItems) {
-        this.name = notEmpty(name, "name");
-        this.localIdentifier = notEmpty(localIdentifier, "localIdentifier");
-        this.uri = notEmpty(uri, "uri");
-        this.identifier = notEmpty(identifier, "identifier");
-        this.formOf = null;
-        this.totalItems = totalHeaderItems;
-    }
-
-    /**
-     * Creates new header
      * @param name name
      * @param localIdentifier local identifier
      * @param uri uri

@@ -20,15 +20,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public interface Settings {
 
-    /**
-     * Settings URL dedicated for Zendesk4 connector only.
-     * Other connectors have different URL than this one.
-     *
-     * @deprecated use {@link Zendesk4Settings#URL} instead
-     */
-    @Deprecated
-    String URL = "/gdc/projects/{project}/connectors/{connector}/integration/settings";
-
     @JsonIgnore
     ConnectorType getConnectorType();
 

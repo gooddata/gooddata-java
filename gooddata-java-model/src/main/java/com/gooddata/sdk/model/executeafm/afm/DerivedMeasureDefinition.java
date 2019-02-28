@@ -16,6 +16,7 @@ import static com.gooddata.util.Validate.notNull;
 /**
  * The superclass of the {@link MeasureDefinition} classes that are derived from the master measure and have the identifier of the master measure.
  */
+@SuppressWarnings("deprecation")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = PopMeasureDefinition.class, name = PopMeasureDefinition.NAME),

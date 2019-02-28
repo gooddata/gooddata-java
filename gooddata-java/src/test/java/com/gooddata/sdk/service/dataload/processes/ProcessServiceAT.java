@@ -13,7 +13,7 @@ import com.gooddata.sdk.service.FutureResult;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.Matchers;
-import org.hamcrest.core.IsCollectionContaining;
+import org.hamcrest.core.IsIterableContaining;
 import org.joda.time.Duration;
 import org.springframework.core.io.ClassPathResource;
 import org.testng.annotations.Test;
@@ -126,7 +126,7 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
     @Test(groups = "process", dependsOnMethods = "createProcess")
     public void processes() {
         final Collection<DataloadProcess> processes = gd.getProcessService().listProcesses(project);
-        assertThat(processes, IsCollectionContaining.hasItem(ProcessIdMatcher.hasSameProcessIdAs(process)));
+        assertThat(processes, IsIterableContaining.hasItem(ProcessIdMatcher.hasSameProcessIdAs(process)));
     }
 
     @Test(groups = "process", dependsOnMethods = "createProcess")
@@ -151,7 +151,7 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         gd.getProcessService().removeProcess(process);
         gd.getProcessService().removeProcess(processAppstore);
         final Collection<DataloadProcess> processes = gd.getProcessService().listProcesses(project);
-        assertThat(processes, Matchers.not(IsCollectionContaining.hasItems(ProcessIdMatcher.hasSameProcessIdAs(process), ProcessIdMatcher.hasSameProcessIdAs(processAppstore))));
+        assertThat(processes, Matchers.not(IsIterableContaining.hasItems(ProcessIdMatcher.hasSameProcessIdAs(process), ProcessIdMatcher.hasSameProcessIdAs(processAppstore))));
     }
 
     @Test(dependsOnGroups = "process")
@@ -159,7 +159,7 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         gd.getProcessService().removeSchedule(schedule);
         gd.getProcessService().removeSchedule(triggeredSchedule);
         final MultiPageList<Schedule> schedules = (MultiPageList<Schedule>) gd.getProcessService().listSchedules(project);
-        assertThat(schedules.collectAll(), Matchers.not(IsCollectionContaining.hasItems(ScheduleIdMatcher.hasSameScheduleIdAs(schedule), ScheduleIdMatcher.hasSameScheduleIdAs(triggeredSchedule))));
+        assertThat(schedules.collectAll(), Matchers.not(IsIterableContaining.hasItems(ScheduleIdMatcher.hasSameScheduleIdAs(schedule), ScheduleIdMatcher.hasSameScheduleIdAs(triggeredSchedule))));
     }
 
 }

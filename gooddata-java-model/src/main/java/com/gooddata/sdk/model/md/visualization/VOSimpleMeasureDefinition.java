@@ -21,7 +21,9 @@ import static com.gooddata.sdk.model.md.visualization.VOSimpleMeasureDefinition.
 
 /**
  * Simple measure definition to be used within {@link Measure}
+ *
  * @deprecated identical with {@link MeasureDefinition}, see https://github.com/gooddata/gooddata-java/issues/581
+ * Let's remove it once it's removed from API.
  */
 @Deprecated
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -42,10 +44,11 @@ public class VOSimpleMeasureDefinition extends SimpleMeasureDefinition {
 
     /**
      * Creates instance of simple measure definition to be used in {@link VisualizationObject}
-     * @param item uri to measure
-     * @param aggregation used aggregation function
+     *
+     * @param item         uri to measure
+     * @param aggregation  used aggregation function
      * @param computeRatio indicates if result should be calculated in percents
-     * @param filters filters by which measure is filtered
+     * @param filters      filters by which measure is filtered
      */
     @JsonCreator
     public VOSimpleMeasureDefinition(@JsonProperty("item") final ObjQualifier item,
@@ -60,7 +63,8 @@ public class VOSimpleMeasureDefinition extends SimpleMeasureDefinition {
      *
      * @see SimpleMeasureDefinition#SimpleMeasureDefinition(ObjQualifier, Aggregation, Boolean, List)
      */
-    public VOSimpleMeasureDefinition(ObjQualifier item, Aggregation aggregation, Boolean computeRatio, List<FilterItem> filters) {
+    public VOSimpleMeasureDefinition(ObjQualifier item, Aggregation aggregation, Boolean computeRatio,
+                                     List<FilterItem> filters) {
         super(item, aggregation, computeRatio, filters);
     }
 
@@ -69,7 +73,8 @@ public class VOSimpleMeasureDefinition extends SimpleMeasureDefinition {
      *
      * @see SimpleMeasureDefinition#SimpleMeasureDefinition(ObjQualifier, Aggregation, Boolean, FilterItem...)
      */
-    public VOSimpleMeasureDefinition(ObjQualifier item, Aggregation aggregation, Boolean computeRatio, FilterItem... filters) {
+    public VOSimpleMeasureDefinition(ObjQualifier item, Aggregation aggregation, Boolean computeRatio,
+                                     FilterItem... filters) {
         super(item, aggregation, computeRatio, filters);
     }
 }
