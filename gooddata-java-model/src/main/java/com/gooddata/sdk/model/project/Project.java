@@ -37,7 +37,6 @@ import static java.util.Arrays.asList;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Project {
 
-    public static final String PROJECTS_URI = "/gdc/account/profile/{id}/projects";
     public static final String URI = Projects.URI + "/{id}";
     public static final UriTemplate TEMPLATE = new UriTemplate(URI);
     private static final Set<String> PREPARING_STATES = new HashSet<>(asList("PREPARING", "PREPARED", "LOADING"));

@@ -1,0 +1,54 @@
+{
+    "projects": {
+        "paging": {
+            "offset": 0,
+            "limit": 5,
+            "count": 1,
+            "totalCount": 1
+        },
+        "items": [
+            {
+                "project": {
+                    "content": {
+                        "state": "ENABLED",
+                        "cluster": "",
+                        "environment": "TESTING",
+                        "driver": "Pg",
+                        "isPublic": "0",
+                        "guidedNavigation": "1"
+                    },
+                    "meta": {
+                        "title": "Project Name",
+                        "summary": "",
+                        "created": "2018-08-10 23:00:21",
+                        "updated": "2018-08-10 23:00:22",
+                        "author": "/gdc/account/profile/876ec68f5630b38de65852ed5d6236ff",
+                        "contributor": "/gdc/account/profile/876ec68f5630b38de65852ed5d6236ff"
+                    },
+                    "links": {
+                        "self": "/gdc/projects/defaultEmptyProject",
+                        "roles": "/gdc/projects/defaultEmptyProject/roles",
+                        "users": "/gdc/projects/defaultEmptyProject/users?link=1&offset=0&limit=100",
+                        "userRoles": "/gdc/projects/defaultEmptyProject/users/876ec68f5630b38de65852ed5d6236ff/roles",
+                        "userPermissions": "/gdc/projects/defaultEmptyProject/users/876ec68f5630b38de65852ed5d6236ff/permissions",
+                        "invitations": "/gdc/projects/defaultEmptyProject/invitations",
+                        "ldm": "/gdc/projects/defaultEmptyProject/ldm",
+                        "ldm_thumbnail": "/gdc/projects/defaultEmptyProject/ldm?thumbnail=1",
+                        "publicartifacts": "/gdc/projects/defaultEmptyProject/publicartifacts",
+                        "uploads": "/gdc/projects/defaultEmptyProject/uploads/",
+                        "metadata": "/gdc/md/defaultEmptyProject",
+                        "templates": "/gdc/md/defaultEmptyProject/templates",
+                        "connectors": "/gdc/projects/defaultEmptyProject/connectors",
+                        "schedules": "/gdc/projects/defaultEmptyProject/schedules",
+                        "dataload": "/gdc/projects/defaultEmptyProject/dataload",
+                        "eventstores": "/gdc/projects/defaultEmptyProject/dataload/eventstore/stores",
+                        "execute": "/gdc/projects/defaultEmptyProject/execute",
+                        "clearCaches": "/gdc/projects/defaultEmptyProject/clearCaches",
+                        "projectFeatureFlags": "/gdc/projects/defaultEmptyProject/projectFeatureFlags",
+                        "config": "/gdc/projects/defaultEmptyProject/config"
+                    }
+                }
+            }
+        ]
+    }
+}
