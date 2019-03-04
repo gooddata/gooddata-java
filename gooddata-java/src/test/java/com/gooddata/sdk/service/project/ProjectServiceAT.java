@@ -49,11 +49,20 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
         project = gd.getProjectService().createProject(p).get();
     }
 
+    @SuppressWarnings("deprecation")
+    @Test(groups = "project", dependsOnMethods = "createProject")
+    public void getProjects() {
+        final ProjectService projectService = gd.getProjectService();
+
+        final Collection<Project> projects = projectService.getProjects();
+        assertThat(projects, IsIterableContaining.hasItem(ProjectIdMatcher.hasSameIdAs(project)));
+    }
+
     @Test(groups = "project", dependsOnMethods = "createProject")
     public void listProjects() {
         final ProjectService projectService = gd.getProjectService();
 
-        final Collection<Project> projects = projectService.getProjects();
+        final Collection<Project> projects = projectService.listProjects();
         assertThat(projects, IsIterableContaining.hasItem(ProjectIdMatcher.hasSameIdAs(project)));
     }
 

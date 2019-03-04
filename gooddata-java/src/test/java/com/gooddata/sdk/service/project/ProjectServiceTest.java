@@ -7,6 +7,8 @@ package com.gooddata.sdk.service.project;
 
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
+import com.gooddata.collections.PageRequest;
+import com.gooddata.collections.Paging;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.model.project.Projects;
@@ -20,15 +22,16 @@ import org.springframework.web.client.RestTemplate;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.net.URI;
 import java.util.Collection;
 
-import static java.util.Arrays.asList;
+import static com.gooddata.sdk.model.project.Projects.LIST_PROJECTS_TEMPLATE;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ProjectServiceTest {
 
@@ -56,30 +59,60 @@ public class ProjectServiceTest {
         when(project.getId()).thenReturn(ID);
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testGetProjects() throws Exception {
-        when(restTemplate.getForObject(Project.PROJECTS_URI, Projects.class, ACCOUNT_ID))
-                .thenReturn(new Projects(asList(project)));
+        doReturn(new Projects(singletonList(project), new Paging(""))).when(restTemplate)
+                .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?limit=100"), Projects.class);
         final Collection<Project> result = service.getProjects();
 
         assertThat(result, hasSize(1));
         assertThat(result, hasItem(project));
     }
 
+    @SuppressWarnings("deprecation")
     @Test(expectedExceptions = GoodDataException.class)
     public void testGetProjectsWithClientException() throws Exception {
-        when(restTemplate.getForObject(Project.PROJECTS_URI, Projects.class, ACCOUNT_ID))
-                .thenThrow(new GoodDataException(""));
+        doThrow(new GoodDataException("")).when(restTemplate)
+                .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?limit=100"), Projects.class);
+
         service.getProjects();
     }
 
+    @Test
+    public void testListProjects() throws Exception {
+        doReturn(new Projects(singletonList(project), new Paging(""))).when(restTemplate)
+                .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?limit=100"), Projects.class);
+        final Collection<Project> result = service.listProjects();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(project));
+    }
+
+    @Test
+    public void testListProjectsWithPage() throws Exception {
+        doReturn(new Projects(singletonList(project), new Paging(""))).when(restTemplate)
+                .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?offset=2&limit=100"), Projects.class);
+        final Collection<Project> result = service.listProjects(new PageRequest(2, 100));
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(project));
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void testListProjectsWithClientException() throws Exception {
+        doThrow(new GoodDataException("")).when(restTemplate)
+                .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?limit=100"), Projects.class);
+        service.listProjects();
+    }
+
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetProjectByUriWithNullUri() throws Exception {
+    public void testGetProjectByUriWithNullUri() {
         service.getProjectByUri(null);
     }
 
     @Test
-    public void testGetProjectByUri() throws Exception {
+    public void testGetProjectByUri() {
         when(restTemplate.getForObject(URI, Project.class)).thenReturn(project);
 
         final Project result = service.getProjectByUri(URI);
@@ -87,30 +120,30 @@ public class ProjectServiceTest {
     }
 
     @Test(expectedExceptions = ProjectNotFoundException.class)
-    public void testGetProjectByUriNotFound() throws Exception {
+    public void testGetProjectByUriNotFound() {
         when(restTemplate.getForObject(URI, Project.class)).thenThrow(new GoodDataRestException(404, "", "", "", ""));
         service.getProjectByUri(URI);
     }
 
     @Test(expectedExceptions = GoodDataRestException.class)
-    public void testGetProjectByUriServerError() throws Exception {
+    public void testGetProjectByUriServerError() {
         when(restTemplate.getForObject(URI, Project.class)).thenThrow(new GoodDataRestException(500, "", "", "", ""));
         service.getProjectByUri(URI);
     }
 
     @Test(expectedExceptions = GoodDataException.class)
-    public void testGetProjectByUriClientError() throws Exception {
+    public void testGetProjectByUriClientError() {
         when(restTemplate.getForObject(URI, Project.class)).thenThrow(new RestClientException(""));
         service.getProjectByUri(URI);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetProjectByUriWithNullId() throws Exception {
+    public void testGetProjectByUriWithNullId() {
         service.getProjectById(null);
     }
 
     @Test
-    public void testGetProjectById() throws Exception {
+    public void testGetProjectById() {
         when(restTemplate.getForObject(URI, Project.class)).thenReturn(project);
 
         final Project result = service.getProjectById(ID);
@@ -143,12 +176,12 @@ public class ProjectServiceTest {
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetUserInProjectNullProject() throws Exception {
+    public void testGetUserInProjectNullProject() {
         service.getUser(null, mock(Account.class));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetUserInProjectNullAccount() throws Exception {
+    public void testGetUserInProjectNullAccount() {
         service.getUser(mock(Project.class), null);
     }
 }

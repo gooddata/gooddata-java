@@ -72,15 +72,55 @@ public class ProjectService extends AbstractService {
      *
      * @return collection of all projects current user has access to
      * @throws com.gooddata.GoodDataException when projects can't be accessed
+     * @deprecated use {@link #listProjects()} or {@link #listProjects(Page)} instead.
+     * Deprecated since version 3.0.0. Will be removed in one of future versions.
      */
+    @Deprecated
     public Collection<Project> getProjects() {
+        return listProjects().collectAll();
+    }
+
+    /**
+     * Get first page of paged list of projects that current user has access to.
+     *
+     * @return MultiPageList list of found projects or empty list
+     */
+    public PageableList<Project> listProjects() {
+        final String userId = accountService.getCurrent().getId();
+        return new MultiPageList<>(page -> listProjects(getProjectsUri(userId, page)));
+    }
+
+    /**
+     * Get defined page of paged list of projects that current user has access to.
+     *
+     * @param startPage page to be retrieved first
+     * @return MultiPageList list of found projects or empty list
+     */
+    public PageableList<Project> listProjects(final Page startPage) {
+        notNull(startPage, "startPage");
+        final String userId = accountService.getCurrent().getId();
+        return new MultiPageList<>(startPage, page -> listProjects(getProjectsUri(userId, page)));
+    }
+
+    private PageableList<Project> listProjects(final URI uri) {
         try {
-            final String id = accountService.getCurrent().getId();
-            final Projects projects = restTemplate.getForObject(Project.PROJECTS_URI, Projects.class, id);
-            return projects.getProjects();
+            final Projects projects = restTemplate.getForObject(uri, Projects.class);
+            if (projects == null) {
+                return new PageableList<>();
+            }
+            return projects;
         } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to get projects", e);
+            throw new GoodDataException("Unable to list projects", e);
         }
+    }
+
+    private static URI getProjectsUri(final String userId) {
+        notEmpty(userId, "userId");
+        return Projects.LIST_PROJECTS_TEMPLATE.expand(userId);
+    }
+
+    private static URI getProjectsUri(final String userId, final Page page) {
+        return page.getPageUri(fromUri(getProjectsUri(userId)));
     }
 
     /**
