@@ -18,7 +18,7 @@ import static org.hamcrest.CoreMatchers.startsWith
 class GoodDataIT extends GoodDataITBase<GdcService> {
 
     private static final String USER_AGENT = 'customAgent/X.Y'
-    private static final String API_VERSION = '2'
+    private static final String API_VERSION = '3'
 
     @Override
     protected GoodDataSettings createGoodDataSettings() {
