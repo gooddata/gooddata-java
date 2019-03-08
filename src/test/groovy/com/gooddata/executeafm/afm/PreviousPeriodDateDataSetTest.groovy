@@ -21,14 +21,14 @@ class PreviousPeriodDateDataSetTest extends Specification {
 
     def "should serialize"() {
         expect:
-        PreviousPeriodDateDataSet dateDataSet = new PreviousPeriodDateDataSet(
+        def dateDataSet = new PreviousPeriodDateDataSet(
                 new UriObjQualifier('/gdc/md/projectId/obj/1'), 2)
         that dateDataSet, jsonEquals(resource(DATA_SET_JSON))
     }
 
     def "should deserialize"() {
         when:
-        PreviousPeriodDateDataSet dateDataSet = readObjectFromResource("/$DATA_SET_JSON", PreviousPeriodDateDataSet)
+        def dateDataSet = readObjectFromResource("/$DATA_SET_JSON", PreviousPeriodDateDataSet)
 
         then:
         dateDataSet.dataSet.uri == '/gdc/md/projectId/obj/1'
@@ -37,8 +37,8 @@ class PreviousPeriodDateDataSetTest extends Specification {
 
     def "test serializable"() {
         given:
-        PreviousPeriodDateDataSet dateDataSet = readObjectFromResource("/$DATA_SET_JSON", PreviousPeriodDateDataSet)
-        PreviousPeriodDateDataSet deserialized = SerializationUtils.roundtrip(dateDataSet)
+        def dateDataSet = readObjectFromResource("/$DATA_SET_JSON", PreviousPeriodDateDataSet)
+        def deserialized = SerializationUtils.roundtrip(dateDataSet)
 
         expect:
         that deserialized, jsonEquals(dateDataSet)

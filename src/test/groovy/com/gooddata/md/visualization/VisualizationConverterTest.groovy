@@ -45,7 +45,7 @@ class VisualizationConverterTest extends Specification {
 
     def "should convert complex"() {
         given:
-        Afm expected = new Afm(
+        def expected = new Afm(
                 [new AttributeItem(new UriObjQualifier("/uri/to/displayForm/1"), "attribute1", "attributeAlias")],
                 [
                         new PositiveAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), ["ab", "cd"]),
