@@ -40,7 +40,7 @@ class ExecutionTest extends Specification {
                         [new AttributeItem(QUALIFIER, 'a1')],
                         [new ExpressionFilter('some expression')],
                         [new MeasureItem(new SimpleMeasureDefinition(QUALIFIER), 'm1')],
-                        [new NativeTotalItem('mId', 'a1', 'a2')]
+                        [new NativeTotalItem('mId', ['a1', 'a2'])]
                 )
         ),
                 jsonEquals(resource(EXECUTION_JSON))
@@ -53,7 +53,7 @@ class ExecutionTest extends Specification {
                         [new AttributeItem(QUALIFIER, 'a1')],
                         [new ExpressionFilter('some expression')],
                         [new MeasureItem(new SimpleMeasureDefinition(QUALIFIER), 'm1')],
-                        [new NativeTotalItem('mId', 'a1', 'a2')]
+                        [new NativeTotalItem('mId', ['a1', 'a2'])]
                 ),
                 new ResultSpec(
                         [new Dimension(['i1'], [new TotalItem('mId', Total.AVG, 'a1')] as Set)],
