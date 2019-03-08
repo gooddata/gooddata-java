@@ -36,15 +36,6 @@ public class NativeTotalItem {
     }
 
     /**
-     * Native total definition
-     * @param measureIdentifier measure on which is total defined
-     * @param attributeIdentifiers subset of internal attribute identifiers in AFM defining total placement
-     */
-    public NativeTotalItem(final String measureIdentifier, final String... attributeIdentifiers) {
-        this(measureIdentifier, asList(attributeIdentifiers));
-    }
-
-    /**
      * internal identifier of measure in AFM, on which is total defined
      * @return measure
      */

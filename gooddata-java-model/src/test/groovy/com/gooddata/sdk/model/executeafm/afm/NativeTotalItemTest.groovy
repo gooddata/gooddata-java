@@ -18,7 +18,7 @@ class NativeTotalItemTest extends Specification {
 
     def "should serialize"() {
         expect:
-        that new NativeTotalItem('mId', 'a1', 'a2'),
+        that new NativeTotalItem('mId', ['a1', 'a2']),
                 jsonEquals(resource(NATIVE_TOTAL_ITEM_JSON))
     }
 

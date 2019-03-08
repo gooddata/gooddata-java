@@ -28,7 +28,7 @@ class AfmTest extends Specification {
                 [new AttributeItem(QUALIFIER, 'a1')],
                 [new ExpressionFilter('some expression')],
                 [new MeasureItem(new SimpleMeasureDefinition(QUALIFIER), 'mId')],
-                [new NativeTotalItem('mId', 'a1', 'a2')]
+                [new NativeTotalItem('mId', ['a1', 'a2'])]
         ),
                 jsonEquals(resource(OBJECT_AFM_JSON))
     }
@@ -90,7 +90,7 @@ class AfmTest extends Specification {
         afm.addFilter(Spy(CompatibilityFilter))
         afm.addAttribute(new AttributeItem(new IdentifierObjQualifier('id'), 'localIdA'))
         afm.addMeasure(new MeasureItem(Spy(MeasureDefinition), 'mId'))
-        afm.addNativeTotal(new NativeTotalItem('mId'))
+        afm.addNativeTotal(new NativeTotalItem('mId', []))
 
         then:
         !afm.getFilters().isEmpty()
