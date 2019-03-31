@@ -3,7 +3,7 @@
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
-package com.gooddata.sdk.service.auditevent;
+package com.gooddata.sdk.model.auditevent;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -23,7 +23,7 @@ public class AuditEventPageRequestTest {
     private static final DateTime TO = new DateTime();
     private static final Integer LIMIT = 10;
     private static final String OFFSET = "foo";
-    public static final String EVENT_TYPE = "STANDARD_LOGIN";
+    private static final String EVENT_TYPE = "STANDARD_LOGIN";
 
     @Test
     public void testCopy() {

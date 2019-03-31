@@ -5,6 +5,7 @@
  */
 package com.gooddata.sdk.service.auditevent;
 
+import com.gooddata.sdk.model.auditevent.AuditEventPageRequest;
 import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
