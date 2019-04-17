@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
@@ -19,8 +18,7 @@ import static com.gooddata.util.Validate.notNull;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClientExport {
 
-    private static final String DASHBOARD_EXPORT_URI = "/dashboard.html#project={projectUri}&dashboard={dashboardUri}&tab={tabId}&export=1";
-    private static final UriTemplate DASHBOARD_EXPORT_TEMPLATE = new UriTemplate(DASHBOARD_EXPORT_URI);
+    private static final String DASHBOARD_EXPORT_URI = "/dashboard.html#project=%s&dashboard=%s&tab=%s&export=1";
 
     private final String url;
     private final String name;
@@ -33,12 +31,10 @@ public class ClientExport {
     public ClientExport(final String goodDataEndpointUri, final String projectUri, final String dashboardUri,
                         final String tabId) {
         this(notEmpty(goodDataEndpointUri, "goodDataEndpointUri") +
-                        DASHBOARD_EXPORT_TEMPLATE
-                                .expand(
+                        String.format(DASHBOARD_EXPORT_URI,
                                         notNull(projectUri, "projectUri"),
                                         notNull(dashboardUri, "dashboardUri"),
-                                        notNull(tabId, "tabId")
-                                ).toString(),
+                                        notNull(tabId, "tabId")),
                 "export.pdf");
     }
 

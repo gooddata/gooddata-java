@@ -15,7 +15,6 @@ import com.gooddata.collections.PageableList;
 import com.gooddata.collections.PageableListDeserializer;
 import com.gooddata.collections.PageableListSerializer;
 import com.gooddata.collections.Paging;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.List;
 import java.util.Map;
@@ -34,7 +33,6 @@ import static java.util.Arrays.asList;
 public class LcmEntities extends PageableList<LcmEntity> {
 
     public static final String URI = "/gdc/account/profile/{profileId}/lcmEntities";
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
     static final String ROOT_NODE = "lcmEntities";
 

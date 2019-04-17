@@ -5,20 +5,22 @@
  */
 package com.gooddata.sdk.service.lcm;
 
-import com.gooddata.sdk.model.lcm.LcmEntityFilter;
-import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.GoodDataException;
-import com.gooddata.sdk.service.GoodDataSettings;
-import com.gooddata.sdk.model.account.Account;
 import com.gooddata.collections.MultiPageList;
 import com.gooddata.collections.Page;
 import com.gooddata.collections.PageRequest;
 import com.gooddata.collections.PageableList;
+import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.lcm.LcmEntities;
 import com.gooddata.sdk.model.lcm.LcmEntity;
+import com.gooddata.sdk.model.lcm.LcmEntityFilter;
+import com.gooddata.sdk.service.AbstractService;
+import com.gooddata.sdk.service.GoodDataSettings;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriTemplate;
 
 import java.net.URI;
 
@@ -28,6 +30,8 @@ import static com.gooddata.util.Validate.notNull;
  * Service, which provides access to lifecycle management objects.
  */
 public class LcmService extends AbstractService {
+
+    protected static final UriTemplate LCM_ENTITIES_TEMPLATE = new UriTemplate(LcmEntities.URI);
 
     /**
      * Constructs service for GoodData Life Cycle Management.
@@ -97,13 +101,13 @@ public class LcmService extends AbstractService {
     }
 
     private URI getLcmEntitiesUri(final String accountId) {
-        return LcmEntities.TEMPLATE.expand(accountId);
+        return LCM_ENTITIES_TEMPLATE.expand(accountId);
     }
 
     private URI getLcmEntitiesUri(final String accountId, final LcmEntityFilter filter, final Page page) {
         return page.getPageUri(
                 UriComponentsBuilder.fromUri(getLcmEntitiesUri(accountId))
-                        .queryParams(filter.asQueryParams()));
+                        .queryParams(new LinkedMultiValueMap<>(filter.asQueryParams())));
     }
 
     private PageableList<LcmEntity> listLcmEntities(final URI uri) {

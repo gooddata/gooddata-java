@@ -5,18 +5,12 @@
  */
 package com.gooddata.sdk.model.warehouse;
 
-import static com.gooddata.util.Validate.notNullState;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.Map;
+
+import static com.gooddata.util.Validate.notNullState;
 
 /**
  * Warehouse schema.
@@ -31,7 +25,6 @@ public class WarehouseSchema {
     private static final String INSTANCE_LINK = "instance";
 
     public static final String URI = WarehouseSchemas.URI + "/{name}";
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
     private final String name;
 

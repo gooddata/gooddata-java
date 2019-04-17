@@ -5,26 +5,20 @@
  */
 package com.gooddata.sdk.model.warehouse;
 
-import static com.gooddata.util.Validate.notNull;
-import static com.gooddata.util.Validate.notNullState;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gooddata.sdk.model.project.Environment;
+import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.util.GoodDataToStringBuilder;
 import com.gooddata.util.ISODateTimeDeserializer;
 import com.gooddata.util.ISODateTimeSerializer;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.joda.time.DateTime;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.Map;
+
+import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNullState;
 
 /**
  * Warehouse
@@ -37,9 +31,6 @@ public class Warehouse {
 
     private static final String ID_PARAM = "id";
     public static final String URI = Warehouses.URI + "/{" + ID_PARAM + "}";
-
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
-    public static final UriTemplate JDBC_CONNECTION_TEMPLATE = new UriTemplate("jdbc:gdc:datawarehouse://{host}:{port}/gdc/datawarehouse/instances/{id}");
 
     private static final String SELF_LINK = "self";
     private static final String STATUS_ENABLED = "ENABLED";
@@ -173,7 +164,7 @@ public class Warehouse {
 
     @JsonIgnore
     public String getId() {
-        return TEMPLATE.match(getUri()).get(ID_PARAM);
+        return UriHelper.getLastUriPart(getUri());
     }
 
     @JsonIgnore

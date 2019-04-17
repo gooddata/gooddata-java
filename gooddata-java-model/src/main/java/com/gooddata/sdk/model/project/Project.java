@@ -5,27 +5,19 @@
  */
 package com.gooddata.sdk.model.project;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.gooddata.sdk.model.md.Meta;
+import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.util.BooleanDeserializer;
 import com.gooddata.util.GDDateTimeDeserializer;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.gooddata.util.GoodDataToStringBuilder;
 import org.joda.time.DateTime;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
-import static com.gooddata.util.Validate.notNullState;
+import static com.gooddata.util.Validate.*;
 import static java.util.Arrays.asList;
 
 /**
@@ -38,7 +30,6 @@ import static java.util.Arrays.asList;
 public class Project {
 
     public static final String URI = Projects.URI + "/{id}";
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
     private static final Set<String> PREPARING_STATES = new HashSet<>(asList("PREPARING", "PREPARED", "LOADING"));
 
     @JsonProperty("content")
@@ -74,7 +65,7 @@ public class Project {
 
     @JsonIgnore
     public String getId() {
-        return TEMPLATE.match(getUri()).get("id");
+        return UriHelper.getLastUriPart(getUri());
     }
 
     @JsonIgnore

@@ -5,25 +5,20 @@
  */
 package com.gooddata.sdk.service.md;
 
-import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.model.md.*;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.AbstractService;
+import com.gooddata.sdk.service.GoodDataSettings;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriTemplate;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.gooddata.util.Validate.noNullElements;
@@ -35,6 +30,7 @@ import static java.util.Arrays.asList;
  */
 public class MetadataService extends AbstractService {
 
+    protected static final UriTemplate OBJ_TEMPLATE = new UriTemplate(Obj.OBJ_URI);
     private static final Set<String> IRREGULAR_PLURAL_WORD_SUFFIXES = new HashSet<>(asList("s", "ch", "sh", "x", "o"));
 
     public MetadataService(final RestTemplate restTemplate, final GoodDataSettings settings) {
@@ -215,7 +211,7 @@ public class MetadataService extends AbstractService {
         notNull(project.getId(), "project.id");
         notNull(id, "id");
         notNull(cls, "cls");
-        return getObjByUri(Obj.OBJ_TEMPLATE.expand(project.getId(), id).toString(), cls);
+        return getObjByUri(OBJ_TEMPLATE.expand(project.getId(), id).toString(), cls);
     }
 
     /**

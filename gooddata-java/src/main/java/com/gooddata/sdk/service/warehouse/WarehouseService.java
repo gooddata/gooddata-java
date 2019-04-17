@@ -5,24 +5,21 @@
  */
 package com.gooddata.sdk.service.warehouse;
 
-import com.gooddata.sdk.service.AbstractPollHandler;
-import com.gooddata.sdk.service.AbstractService;
-import com.gooddata.sdk.service.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.sdk.service.GoodDataSettings;
-import com.gooddata.sdk.service.PollResult;
 import com.gooddata.collections.MultiPageList;
 import com.gooddata.collections.Page;
 import com.gooddata.collections.PageRequest;
 import com.gooddata.collections.PageableList;
 import com.gooddata.sdk.model.warehouse.*;
+import com.gooddata.sdk.service.*;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriTemplate;
 
 import java.io.IOException;
 import java.net.URI;
@@ -35,6 +32,10 @@ import static com.gooddata.util.Validate.notNull;
  */
 public class WarehouseService extends AbstractService {
 
+    protected static final UriTemplate SCHEMAS_TEMPLATE = new UriTemplate(WarehouseSchemas.URI);
+    protected static final UriTemplate SCHEMA_TEMPLATE = new UriTemplate(WarehouseSchema.URI);
+    protected static final UriTemplate WAREHOUSE_TEMPLATE = new UriTemplate(Warehouse.URI);
+    protected static final UriTemplate USERS_TEMPLATE = new UriTemplate(WarehouseUsers.URI);
     private static final String DEFAULT_SCHEMA_NAME = "default";
 
     /**
@@ -147,7 +148,7 @@ public class WarehouseService extends AbstractService {
     }
 
     private static String uriFromId(String id) {
-        return Warehouse.TEMPLATE.expand(id).toString();
+        return WAREHOUSE_TEMPLATE.expand(id).toString();
     }
 
     /**
@@ -224,7 +225,7 @@ public class WarehouseService extends AbstractService {
     }
 
     private URI getWarehouseUsersUri(final Warehouse warehouse) {
-        return WarehouseUsers.TEMPLATE.expand(warehouse.getId());
+        return USERS_TEMPLATE.expand(warehouse.getId());
     }
 
     private URI getWarehouseUsersUri(final Warehouse warehouse, final Page page) {
@@ -382,7 +383,7 @@ public class WarehouseService extends AbstractService {
     private URI getWarehouseSchemasUri(final Warehouse warehouse) {
         notNull(warehouse, "warehouse");
         notNull(warehouse.getId(), "warehouse.id");
-        return WarehouseSchemas.TEMPLATE.expand(warehouse.getId());
+        return SCHEMAS_TEMPLATE.expand(warehouse.getId());
     }
 
     private URI getWarehouseSchemasUri(final Warehouse warehouse, final Page page) {
@@ -413,7 +414,7 @@ public class WarehouseService extends AbstractService {
         notNull(warehouse, "warehouse");
         notNull(warehouse.getId(), "warehouse.id");
         notEmpty(name, "name");
-        final String uri = WarehouseSchema.TEMPLATE.expand(warehouse.getId(), name).toString();
+        final String uri = SCHEMA_TEMPLATE.expand(warehouse.getId(), name).toString();
         return getWarehouseSchemaByUri(uri);
     }
 

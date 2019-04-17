@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.gooddata.collections.PageableList;
 import com.gooddata.collections.Paging;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +26,6 @@ import java.util.Map;
 public class WarehouseSchemas extends PageableList<WarehouseSchema> {
 
     public static final String URI = Warehouse.URI + "/schemas";
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
     static final String ROOT_NODE = "schemas";
 

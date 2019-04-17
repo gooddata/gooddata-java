@@ -5,14 +5,8 @@
  */
 package com.gooddata.sdk.model.md;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.List;
 
@@ -28,7 +22,6 @@ import static com.gooddata.util.Validate.notNull;
 public class AttributeElements {
 
     static final String URI = Obj.OBJ_URI + "/elements";
-    static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
     private final List<AttributeElement> elements;
 

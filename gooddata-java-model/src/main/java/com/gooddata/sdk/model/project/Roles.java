@@ -5,13 +5,8 @@
  */
 package com.gooddata.sdk.model.project;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.Set;
 
@@ -23,7 +18,6 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Roles {
     public static final String URI = "/gdc/projects/{projectId}/roles";
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
     private final Set<String> roles;
 

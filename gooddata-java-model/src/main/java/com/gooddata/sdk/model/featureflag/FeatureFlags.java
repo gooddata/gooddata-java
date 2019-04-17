@@ -7,7 +7,6 @@ package com.gooddata.sdk.model.featureflag;
 
 import com.fasterxml.jackson.annotation.*;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.*;
 
@@ -21,7 +20,6 @@ import static java.util.stream.Collectors.toMap;
 public class FeatureFlags implements Iterable<FeatureFlag> {
 
     public static final String AGGREGATED_FEATURE_FLAGS_URI = "/gdc/internal/projects/{projectId}/featureFlags";
-    public static final UriTemplate AGGREGATED_FEATURE_FLAGS_TEMPLATE = new UriTemplate(AGGREGATED_FEATURE_FLAGS_URI);
 
     private final List<FeatureFlag> featureFlags = new LinkedList<>();
 

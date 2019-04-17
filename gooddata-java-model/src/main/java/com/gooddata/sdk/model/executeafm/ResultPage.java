@@ -7,9 +7,7 @@ package com.gooddata.sdk.model.executeafm;
 
 import com.gooddata.sdk.model.executeafm.response.ExecutionResponse;
 import com.gooddata.sdk.model.executeafm.result.ExecutionResult;
-import org.springframework.web.util.UriUtils;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import static com.gooddata.util.Validate.notEmpty;
@@ -52,10 +50,6 @@ public class ResultPage {
     }
 
     private static String toQueryParam(final List<Integer> list) {
-        try {
-            return UriUtils.encode(list.stream().map(String::valueOf).collect(joining(",")), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalStateException("Missing UTF-8 charset");
-        }
+        return list.stream().map(String::valueOf).collect(joining("%2C"));
     }
 }

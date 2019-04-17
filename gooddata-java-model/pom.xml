@@ -14,22 +14,14 @@
         <dependency>
             <groupId>com.gooddata</groupId>
             <artifactId>gooddata-rest-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
             <exclusions>
                 <exclusion>
-                    <groupId>aopalliance</groupId>
-                    <artifactId>aopalliance</artifactId>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-core</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>org.springframework</groupId>
-                    <artifactId>spring-aop</artifactId>
+                    <artifactId>spring-web</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -107,6 +99,11 @@
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib-nodep</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

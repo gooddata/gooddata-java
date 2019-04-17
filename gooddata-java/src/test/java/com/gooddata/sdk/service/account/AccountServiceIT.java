@@ -5,17 +5,15 @@
  */
 package com.gooddata.sdk.service.account;
 
-import com.gooddata.sdk.service.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
 import com.gooddata.sdk.model.account.Account;
+import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-import static com.gooddata.util.ResourceUtils.readFromResource;
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
-import static com.gooddata.util.ResourceUtils.readStringFromResource;
+import static com.gooddata.util.ResourceUtils.*;
 import static net.jadler.Jadler.onRequest;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,9 +26,9 @@ public class AccountServiceIT extends AbstractGoodDataIT {
     public static final String ACCOUNT = "/account/account.json";
     private static final String ACCOUNT_UPDATE = "/account/update-account.json";
     private static final String ACCOUNT_ID = "ID";
-    private static final String ACCOUNT_URI = Account.TEMPLATE.expand(ACCOUNT_ID).toString();
-    public static final String CURRENT_ACCOUNT_URI = Account.TEMPLATE.expand(Account.CURRENT_ID).toString();
-    private static final String LOGOUT_CURRENT = Account.LOGIN_TEMPLATE.expand(ACCOUNT_ID).toString();
+    private static final String ACCOUNT_URI = AccountService.ACCOUNT_TEMPLATE.expand(ACCOUNT_ID).toString();
+    public static final String CURRENT_ACCOUNT_URI = AccountService.ACCOUNT_TEMPLATE.expand(Account.CURRENT_ID).toString();
+    private static final String LOGOUT_CURRENT = AccountService.LOGIN_TEMPLATE.expand(ACCOUNT_ID).toString();
     private static final String DOMAIN = "default";
 
     private static Account account;
@@ -46,7 +44,7 @@ public class AccountServiceIT extends AbstractGoodDataIT {
     public void shouldCreateAccount() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
-                .havingPathEqualTo(Account.ACCOUNTS_TEMPLATE.expand(DOMAIN).toString())
+                .havingPathEqualTo(AccountService.ACCOUNTS_TEMPLATE.expand(DOMAIN).toString())
                 .respond()
                 .withBody("{\"uri\": \"" + ACCOUNT_URI + "\"}")
                 .withStatus(201);
@@ -67,7 +65,7 @@ public class AccountServiceIT extends AbstractGoodDataIT {
     public void shouldFailToCreateAccount() {
         onRequest()
                 .havingMethodEqualTo("POST")
-                .havingPathEqualTo(Account.ACCOUNTS_TEMPLATE.expand(DOMAIN).toString())
+                .havingPathEqualTo(AccountService.ACCOUNTS_TEMPLATE.expand(DOMAIN).toString())
                 .respond()
                 .withBody("")
                 .withStatus(400);

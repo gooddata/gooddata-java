@@ -5,12 +5,11 @@
  */
 package com.gooddata.sdk.model.md.maintenance;
 
-import static com.gooddata.util.Validate.notEmpty;
-
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
+
+import static com.gooddata.util.Validate.notEmpty;
 
 /**
  * Partial metadata export token. Serves as configuration structure for import.
@@ -21,7 +20,6 @@ import org.springframework.web.util.UriTemplate;
 public class PartialMdExportToken {
 
     public static final String URI = "/gdc/md/{projectId}/maintenance/partialmdimport";
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
     private final String token;
     private boolean overwriteNewer;

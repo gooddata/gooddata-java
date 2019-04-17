@@ -26,14 +26,12 @@ import java.io.InputStream;
 
 import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static java.lang.String.format;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 public class DatasetServiceTest {
 
@@ -246,7 +244,7 @@ public class DatasetServiceTest {
 
         final UploadsInfo uploadsInfo = OBJECT_MAPPER.readValue(format("{\"dataSetsInfo\":{\"sets\":[{\"meta\":{\"identifier\":%s},%s}]}}", DATASET_ID, LAST_UPLOAD), UploadsInfo.class);
 
-        when(restTemplate.getForObject(UploadsInfo.URI_TEMPLATE.expand(PROJECT_ID), UploadsInfo.class))
+        when(restTemplate.getForObject(DatasetService.UPLOADS_INFO_TEMPLATE.expand(PROJECT_ID), UploadsInfo.class))
                 .thenReturn(uploadsInfo);
     }
 }

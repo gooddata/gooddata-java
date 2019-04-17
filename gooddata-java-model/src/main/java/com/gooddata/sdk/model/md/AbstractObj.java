@@ -7,6 +7,7 @@ package com.gooddata.sdk.model.md;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.util.GoodDataToStringBuilder;
 import org.joda.time.DateTime;
 
@@ -36,7 +37,7 @@ public abstract class AbstractObj implements Serializable {
      */
     @JsonIgnore
     public String getId() {
-        return Obj.OBJ_TEMPLATE.match(getUri()).get("objId");
+        return UriHelper.getLastUriPart(getUri());
     }
 
     @JsonIgnore

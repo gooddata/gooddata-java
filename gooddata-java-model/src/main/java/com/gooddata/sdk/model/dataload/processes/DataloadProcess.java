@@ -5,24 +5,15 @@
  */
 package com.gooddata.sdk.model.dataload.processes;
 
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
-import static com.gooddata.util.Validate.notNullState;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
+import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.util.CollectionUtils;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+
+import static com.gooddata.util.Validate.*;
 
 /**
  * Dataload process.
@@ -34,7 +25,6 @@ import java.util.Set;
 public class DataloadProcess {
 
     public static final String URI = "/gdc/projects/{projectId}/dataload/processes/{processId}";
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
     private static final String SELF_LINK = "self";
     private static final String EXECUTIONS_LINK = "executions";
@@ -111,7 +101,7 @@ public class DataloadProcess {
 
     @JsonIgnore
     public String getId() {
-        return TEMPLATE.match(getUri()).get("processId");
+        return UriHelper.getLastUriPart(getUri());
     }
 
     @JsonIgnore
@@ -125,7 +115,7 @@ public class DataloadProcess {
     }
 
     public void validateExecutable(final String executable) {
-        if (!CollectionUtils.isEmpty(getExecutables()) &&
+        if (getExecutables() != null && !getExecutables().isEmpty() &&
                 !getExecutables().contains(executable)) {
             throw new IllegalArgumentException("Executable " + executable + " not found in process executables " + getExecutables());
         }

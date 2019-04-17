@@ -5,19 +5,18 @@
  */
 package com.gooddata.sdk.model.dataset;
 
-import static com.gooddata.util.Validate.notEmpty;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.sdk.model.md.Meta;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.gooddata.util.Validate.notEmpty;
 
 /**
  * Contains information about dataset uploads for every single dataset in the project.
@@ -30,7 +29,6 @@ import java.util.Map;
 public class UploadsInfo {
 
     public static final String URI = "/gdc/md/{projectId}/data/sets";
-    public static final UriTemplate URI_TEMPLATE = new UriTemplate(URI);
 
     private final Map<String, DataSet> datasets = new HashMap<>();
 

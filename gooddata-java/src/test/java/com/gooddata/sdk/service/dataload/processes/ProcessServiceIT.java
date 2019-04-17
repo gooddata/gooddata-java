@@ -5,11 +5,11 @@
  */
 package com.gooddata.sdk.service.dataload.processes;
 
-import com.gooddata.sdk.service.AbstractGoodDataIT;
-import com.gooddata.sdk.model.dataload.processes.*;
-import com.gooddata.sdk.service.FutureResult;
 import com.gooddata.collections.PageableList;
+import com.gooddata.sdk.model.dataload.processes.*;
 import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.AbstractGoodDataIT;
+import com.gooddata.sdk.service.FutureResult;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -22,26 +22,23 @@ import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
 import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 
 public class ProcessServiceIT extends AbstractGoodDataIT {
 
-    private static final String PROCESSES_PATH = DataloadProcesses.TEMPLATE.expand("PROJECT_ID").toString();
+    private static final String PROCESSES_PATH = ProcessService.PROCESSES_TEMPLATE.expand("PROJECT_ID").toString();
     private static final String PROCESS_ID = "processId";
-    private static final String PROCESS_PATH = DataloadProcess.TEMPLATE.expand("PROJECT_ID", PROCESS_ID).toString();
+    private static final String PROCESS_PATH = ProcessService.PROCESS_TEMPLATE.expand("PROJECT_ID", PROCESS_ID).toString();
     private static final String PROCESS_SOURCE_PATH = PROCESS_PATH + "/source";
     private static final String EXECUTIONS_PATH = PROCESS_PATH + "/executions";
     private static final String EXECUTION_PATH = EXECUTIONS_PATH + "/executionId";
     private static final String EXECUTION_DETAIL_PATH = EXECUTION_PATH + "/detail";
     private static final String PROJECT_ID = "PROJECT_ID";
-    private static final String SCHEDULES_PATH = Schedules.TEMPLATE.expand(PROJECT_ID).toString();
+    private static final String SCHEDULES_PATH = ProcessService.SCHEDULES_TEMPLATE.expand(PROJECT_ID).toString();
     private static final String SCHEDULE_ID = "SCHEDULE_ID";
-    private static final String SCHEDULE_PATH = Schedule.TEMPLATE.expand(PROJECT_ID, SCHEDULE_ID).toString();
+    private static final String SCHEDULE_PATH = ProcessService.SCHEDULE_TEMPLATE.expand(PROJECT_ID, SCHEDULE_ID).toString();
     private static final String EXECUTABLE = "test.groovy";
     private static final String PROCESS_DEPLOYMENT_POLLING_URI = "/gdc/projects/PROJECT_ID/dataload/processesDeploy/uri";
     private static final String EXECUTION_ID = "EXECUTION_ID";
@@ -382,7 +379,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
 
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(ScheduleExecution.TEMPLATE.expand(PROJECT_ID, SCHEDULE_ID, EXECUTION_ID).toString())
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/schedules/SCHEDULE_ID/executions/EXECUTION_ID")
               .respond()
                 .withBody(readFromResource("/dataload/processes/scheduleExecution.json"))
                 .withStatus(200);

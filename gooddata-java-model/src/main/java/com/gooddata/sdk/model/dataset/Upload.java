@@ -14,7 +14,6 @@ import com.gooddata.util.BooleanDeserializer;
 import com.gooddata.util.GDDateTimeDeserializer;
 import com.gooddata.util.GoodDataToStringBuilder;
 import org.joda.time.DateTime;
-import org.springframework.web.util.UriTemplate;
 
 /**
  * Contains information about single dataset upload.
@@ -26,7 +25,6 @@ import org.springframework.web.util.UriTemplate;
 public class Upload {
 
     public static final String URI = "/gdc/md/{projectId}/data/upload/{uploadId}";
-    public static final UriTemplate URI_TEMPLATE = new UriTemplate(URI);
 
     private final String uri;
     private final String status;

@@ -5,13 +5,15 @@
  */
 package com.gooddata.sdk.model.project;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.gooddata.collections.PageableList;
 import com.gooddata.collections.PageableListDeserializer;
 import com.gooddata.collections.Paging;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,7 +33,6 @@ public class Projects extends PageableList<Project> {
 
     public static final String URI = "/gdc/projects";
     public static final String LIST_PROJECTS_URI = "/gdc/account/profile/{id}/projects";
-    public static final UriTemplate LIST_PROJECTS_TEMPLATE = new UriTemplate(LIST_PROJECTS_URI);
 
     static final String ROOT_NODE = "projects";
 

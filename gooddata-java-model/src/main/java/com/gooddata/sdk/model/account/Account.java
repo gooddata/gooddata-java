@@ -5,16 +5,9 @@
  */
 package com.gooddata.sdk.model.account;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.*;
+import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.List;
 
@@ -29,11 +22,8 @@ public class Account {
 
     public static final String URI = "/gdc/account/profile/{id}";
     public static final String ACCOUNTS_URI = "/gdc/account/domains/{organization_name}/users";
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
-    public static final UriTemplate ACCOUNTS_TEMPLATE = new UriTemplate(ACCOUNTS_URI);
 
     public static final String LOGIN_URI = "/gdc/account/login/{id}";
-    public static final UriTemplate LOGIN_TEMPLATE = new UriTemplate(LOGIN_URI);
 
     public static final String CURRENT_ID = "current";
 
@@ -189,7 +179,7 @@ public class Account {
      * @return Account's ID extracted from URI
      */
     public static String getId(String uri) {
-        return TEMPLATE.match(uri).get("id");
+        return UriHelper.getLastUriPart(uri);
     }
 
     @Override

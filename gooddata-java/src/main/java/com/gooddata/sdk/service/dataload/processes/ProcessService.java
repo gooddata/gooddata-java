@@ -5,36 +5,27 @@
  */
 package com.gooddata.sdk.service.dataload.processes;
 
-import com.gooddata.sdk.service.AbstractPollHandler;
-import com.gooddata.sdk.service.AbstractService;
-import com.gooddata.sdk.service.FutureResult;
-import com.gooddata.sdk.service.GoodDataSettings;
-import com.gooddata.sdk.service.PollResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.sdk.service.SimplePollHandler;
-import com.gooddata.sdk.service.account.AccountService;
 import com.gooddata.collections.MultiPageList;
 import com.gooddata.collections.Page;
 import com.gooddata.collections.PageRequest;
 import com.gooddata.collections.PageableList;
 import com.gooddata.sdk.model.dataload.processes.*;
+import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.*;
+import com.gooddata.sdk.service.account.AccountService;
 import com.gooddata.sdk.service.gdc.DataStoreService;
 import com.gooddata.sdk.service.util.ZipHelper;
-import com.gooddata.sdk.model.project.Project;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriTemplate;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,6 +45,11 @@ import static org.apache.commons.lang3.Validate.isTrue;
  */
 public class ProcessService extends AbstractService {
 
+    protected static final UriTemplate SCHEDULE_TEMPLATE = new UriTemplate(Schedule.URI);
+    protected static final UriTemplate PROCESS_TEMPLATE = new UriTemplate(DataloadProcess.URI);
+    protected static final UriTemplate SCHEDULES_TEMPLATE = new UriTemplate(Schedules.URI);
+    protected static final UriTemplate PROCESSES_TEMPLATE = new UriTemplate(DataloadProcesses.URI);
+    protected static final UriTemplate USER_PROCESSES_TEMPLATE = new UriTemplate(DataloadProcesses.USER_PROCESSES_URI);
     private static final MediaType MEDIA_TYPE_ZIP = MediaType.parseMediaType("application/zip");
     private static final long MAX_MULTIPART_SIZE = 1024 * 1024;
 
@@ -204,7 +200,7 @@ public class ProcessService extends AbstractService {
      * @return list of found processes or empty list
      */
     public Collection<DataloadProcess> listUserProcesses() {
-        return listProcesses(DataloadProcesses.USER_PROCESSES_TEMPLATE.expand(accountService.getCurrent().getId()));
+        return listProcesses(USER_PROCESSES_TEMPLATE.expand(accountService.getCurrent().getId()));
     }
 
     /**
@@ -484,13 +480,13 @@ public class ProcessService extends AbstractService {
         notNull(project.getId(), "project.id");
         notEmpty(id, "id");
 
-        return Schedule.TEMPLATE.expand(project.getId(), id);
+        return SCHEDULE_TEMPLATE.expand(project.getId(), id);
     }
 
     private static URI getSchedulesUri(final Project project) {
         notNull(project, "project");
         notNull(project.getId(), "project.id");
-        return Schedules.TEMPLATE.expand(project.getId());
+        return SCHEDULES_TEMPLATE.expand(project.getId());
     }
 
     private static URI getSchedulesUri(final Project project, final Page page) {
@@ -524,11 +520,11 @@ public class ProcessService extends AbstractService {
         notNull(project.getId(), "project.id");
         notEmpty(id, "id");
 
-        return DataloadProcess.TEMPLATE.expand(project.getId(), id);
+        return PROCESS_TEMPLATE.expand(project.getId(), id);
     }
 
     private static URI getProcessesUri(Project project) {
-        return DataloadProcesses.TEMPLATE.expand(project.getId());
+        return PROCESSES_TEMPLATE.expand(project.getId());
     }
 
     private DataloadProcess postProcess(DataloadProcess process, File processData, URI postUri) {
@@ -547,7 +543,7 @@ public class ProcessService extends AbstractService {
                 process.setPath(dataStoreService.getUri(tempFile.getName()).getPath());
                 dataStoreService.upload(tempFile.getName(), input);
                 processToSend = process;
-                if (DataloadProcess.TEMPLATE.matches(postUri.toString())) {
+                if (PROCESS_TEMPLATE.matches(postUri.toString())) {
                     method = HttpMethod.PUT;
                 }
             } catch (IOException e) {

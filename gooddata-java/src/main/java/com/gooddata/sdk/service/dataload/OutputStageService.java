@@ -5,27 +5,28 @@
  */
 package com.gooddata.sdk.service.dataload;
 
-import static com.gooddata.util.Validate.isTrue;
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
-
-import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.model.dataload.OutputStage;
-import com.gooddata.sdk.service.dataload.processes.ProcessNotFoundException;
 import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.AbstractService;
+import com.gooddata.sdk.service.GoodDataSettings;
+import com.gooddata.sdk.service.dataload.processes.ProcessNotFoundException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriTemplate;
+
+import static com.gooddata.util.Validate.*;
 
 /**
  * Service to manage output stage.
  */
 public class OutputStageService extends AbstractService {
+
+    protected static final UriTemplate OUTPUT_STAGE_TEMPLATE = new UriTemplate(OutputStage.URI);
 
     /**
      * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
@@ -45,7 +46,7 @@ public class OutputStageService extends AbstractService {
      */
     public OutputStage getOutputStageByUri(final String uri) {
         notEmpty(uri, "uri");
-        isTrue(OutputStage.TEMPLATE.matches(uri), "uri does not match output stage pattern: " + OutputStage.TEMPLATE.toString());
+        isTrue(OUTPUT_STAGE_TEMPLATE.matches(uri), "uri does not match output stage pattern: " + OUTPUT_STAGE_TEMPLATE.toString());
         try {
             return restTemplate.getForObject(uri, OutputStage.class);
         } catch (RestClientException e) {
@@ -63,7 +64,7 @@ public class OutputStageService extends AbstractService {
         notNull(project, "project");
         notNull(project.getId(), "project.id");
 
-        return getOutputStageByUri(OutputStage.TEMPLATE.expand(project.getId()).toString());
+        return getOutputStageByUri(OUTPUT_STAGE_TEMPLATE.expand(project.getId()).toString());
     }
 
     /**

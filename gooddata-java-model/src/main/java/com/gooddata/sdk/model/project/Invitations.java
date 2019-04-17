@@ -8,7 +8,6 @@ package com.gooddata.sdk.model.project;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.List;
 
@@ -22,7 +21,6 @@ public class Invitations {
      * @see Project#getInvitationsUri()
      */
     public static final String URI = Project.URI + "/invitations";
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
     private final List<Invitation> invitations;
 

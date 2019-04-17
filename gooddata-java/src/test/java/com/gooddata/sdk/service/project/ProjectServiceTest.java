@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 import java.net.URI;
 import java.util.Collection;
 
-import static com.gooddata.sdk.model.project.Projects.LIST_PROJECTS_TEMPLATE;
+import static com.gooddata.sdk.service.project.ProjectService.LIST_PROJECTS_TEMPLATE;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;

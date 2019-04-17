@@ -7,7 +7,6 @@ package com.gooddata.sdk.model.featureflag;
 
 import com.fasterxml.jackson.annotation.*;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNullState;
@@ -23,7 +22,6 @@ import static com.gooddata.util.Validate.notNullState;
 public class ProjectFeatureFlag {
 
     public static final String PROJECT_FEATURE_FLAG_URI = ProjectFeatureFlags.PROJECT_FEATURE_FLAGS_URI + "/{featureFlag}";
-    public static final UriTemplate PROJECT_FEATURE_FLAG_TEMPLATE = new UriTemplate(PROJECT_FEATURE_FLAG_URI);
 
     private final String name;
     private boolean enabled;
