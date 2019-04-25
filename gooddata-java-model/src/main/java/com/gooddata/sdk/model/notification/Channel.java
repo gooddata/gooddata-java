@@ -5,18 +5,13 @@
  */
 package com.gooddata.sdk.model.notification;
 
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.md.Meta;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
+
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Notification channel
@@ -27,7 +22,6 @@ import org.springframework.web.util.UriTemplate;
 public class Channel {
 
     public static final String URI = Account.URI + "/channelConfigurations";
-    public static final UriTemplate URI_TEMPLATE = new UriTemplate(URI);
 
     private final Configuration configuration;
     private final Meta meta;

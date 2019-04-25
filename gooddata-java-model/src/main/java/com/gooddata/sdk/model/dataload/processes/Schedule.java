@@ -5,28 +5,20 @@
  */
 package com.gooddata.sdk.model.dataload.processes;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.util.GoodDataToStringBuilder;
 import com.gooddata.util.ISODateTimeDeserializer;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Duration;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
-import static com.gooddata.util.Validate.notNullState;
+import static com.gooddata.util.Validate.*;
 
 /**
  * Schedule.
@@ -38,7 +30,6 @@ import static com.gooddata.util.Validate.notNullState;
 public class Schedule {
 
     public static final String URI = "/gdc/projects/{projectId}/schedules/{scheduleId}";
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
     private static final String SELF_LINK = "self";
     private static final String EXECUTIONS_LINK = "executions";
@@ -252,7 +243,7 @@ public class Schedule {
 
     @JsonIgnore
     public String getId() {
-        return TEMPLATE.match(getUri()).get("scheduleId");
+        return UriHelper.getLastUriPart(getUri());
     }
 
     @JsonIgnore

@@ -5,22 +5,19 @@
  */
 package com.gooddata.sdk.service.connector;
 
-import com.gooddata.sdk.service.AbstractService;
-import com.gooddata.sdk.service.FutureResult;
-import com.gooddata.sdk.service.GoodDataSettings;
-import com.gooddata.sdk.service.PollResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.sdk.service.SimplePollHandler;
 import com.gooddata.sdk.model.connector.*;
 import com.gooddata.sdk.model.gdc.UriResponse;
-import com.gooddata.sdk.service.project.ProjectService;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.model.project.ProjectTemplate;
+import com.gooddata.sdk.service.*;
+import com.gooddata.sdk.service.project.ProjectService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriTemplate;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -35,6 +32,7 @@ import static java.util.Collections.emptyList;
  */
 public class ConnectorService extends AbstractService {
 
+    protected static final UriTemplate STATUS_TEMPLATE = new UriTemplate(IntegrationProcessStatus.URI);
     private final ProjectService projectService;
 
     public ConnectorService(final RestTemplate restTemplate, final ProjectService projectService, final GoodDataSettings settings) {
@@ -312,7 +310,7 @@ public class ConnectorService extends AbstractService {
     }
 
     protected FutureResult<ProcessStatus> createProcessPollResult(final String uri) {
-        final Map<String, String> match = IntegrationProcessStatus.TEMPLATE.match(uri);
+        final Map<String, String> match = STATUS_TEMPLATE.match(uri);
         final String connectorType = match.get("connector");
         final String processId = match.get("process");
         return new PollResult<>(this, new SimplePollHandler<ProcessStatus>(uri, ProcessStatus.class) {

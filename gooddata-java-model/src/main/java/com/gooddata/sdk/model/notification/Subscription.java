@@ -5,20 +5,15 @@
  */
 package com.gooddata.sdk.model.notification;
 
-import static org.apache.commons.lang3.Validate.notEmpty;
-import static org.apache.commons.lang3.Validate.notNull;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import com.gooddata.sdk.model.md.Meta;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.Validate.notEmpty;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Subscription for notifications
@@ -29,7 +24,6 @@ import java.util.stream.Collectors;
 public class Subscription {
 
     public static final String URI = "/gdc/projects/{project}/users/{user}/subscriptions";
-    public static final UriTemplate URI_TEMPLATE = new UriTemplate(URI);
 
     private final List<Trigger> triggers;
     private final TriggerCondition condition;

@@ -5,39 +5,29 @@
  */
 package com.gooddata.sdk.service.project;
 
-import com.gooddata.sdk.service.AbstractPollHandler;
-import com.gooddata.sdk.service.AbstractService;
-import com.gooddata.sdk.service.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.sdk.service.GoodDataSettings;
-import com.gooddata.sdk.service.PollResult;
-import com.gooddata.sdk.service.SimplePollHandler;
-import com.gooddata.sdk.model.account.Account;
-import com.gooddata.sdk.service.account.AccountService;
 import com.gooddata.collections.MultiPageList;
 import com.gooddata.collections.Page;
 import com.gooddata.collections.PageableList;
+import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.gdc.AsyncTask;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.project.*;
+import com.gooddata.sdk.service.*;
+import com.gooddata.sdk.service.account.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriTemplate;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.gooddata.util.Validate.noNullElements;
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.util.Validate.*;
 import static java.util.Arrays.asList;
 import static org.springframework.web.util.UriComponentsBuilder.fromUri;
 
@@ -53,6 +43,10 @@ import static org.springframework.web.util.UriComponentsBuilder.fromUri;
  */
 public class ProjectService extends AbstractService {
 
+    protected static final UriTemplate PROJECT_TEMPLATE = new UriTemplate(Project.URI);
+    protected static final UriTemplate PROJECT_USERS_TEMPLATE = new UriTemplate(Users.URI);
+    protected static final UriTemplate PROJECT_USER_TEMPLATE = new UriTemplate(User.URI);
+    protected static final UriTemplate LIST_PROJECTS_TEMPLATE = new UriTemplate(Projects.LIST_PROJECTS_URI);
     private final AccountService accountService;
 
     /**
@@ -116,7 +110,7 @@ public class ProjectService extends AbstractService {
 
     private static URI getProjectsUri(final String userId) {
         notEmpty(userId, "userId");
-        return Projects.LIST_PROJECTS_TEMPLATE.expand(userId);
+        return LIST_PROJECTS_TEMPLATE.expand(userId);
     }
 
     private static URI getProjectsUri(final String userId, final Page page) {
@@ -197,7 +191,7 @@ public class ProjectService extends AbstractService {
      */
     public Project getProjectById(String id) {
         notEmpty(id, "id");
-        return getProjectByUri(Project.TEMPLATE.expand(id).toString());
+        return getProjectByUri(PROJECT_TEMPLATE.expand(id).toString());
     }
 
     /**
@@ -355,7 +349,7 @@ public class ProjectService extends AbstractService {
 
     private static URI getUsersUri(final Project project) {
         notNull(project.getId(), "project.id");
-        return Users.TEMPLATE.expand(project.getId());
+        return PROJECT_USERS_TEMPLATE.expand(project.getId());
     }
 
     private static URI getUsersUri(final Project project, final Page page) {
@@ -364,7 +358,7 @@ public class ProjectService extends AbstractService {
 
     private static URI getUserUri(final Project project, final Account account) {
         notNull(account.getId(), "account.id");
-        return User.TEMPLATE.expand(project.getId(), account.getId());
+        return PROJECT_USER_TEMPLATE.expand(project.getId(), account.getId());
     }
 
     /**

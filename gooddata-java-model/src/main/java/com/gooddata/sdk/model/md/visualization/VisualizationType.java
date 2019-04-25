@@ -5,10 +5,10 @@
  */
 package com.gooddata.sdk.model.md.visualization;
 
-import org.springframework.util.StringUtils;
-
 import static com.gooddata.util.Validate.notNull;
 import static java.lang.String.format;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.joining;
 
 /**
  * Represents supported types of currently used visualizations
@@ -26,7 +26,7 @@ public enum VisualizationType {
         } catch (IllegalArgumentException e) {
             throw new UnsupportedOperationException(
                     format("Unknown visualization type: \"%s\", supported types are: [%s]",
-                            type, StringUtils.arrayToCommaDelimitedString(VisualizationType.values())),
+                            type, stream(VisualizationType.values()).map(Enum::name).collect(joining(","))),
                     e);
         }
     }

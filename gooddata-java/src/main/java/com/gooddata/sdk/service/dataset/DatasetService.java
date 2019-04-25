@@ -5,25 +5,22 @@
  */
 package com.gooddata.sdk.service.dataset;
 
-import com.gooddata.sdk.service.AbstractPollHandler;
-import com.gooddata.sdk.service.AbstractService;
-import com.gooddata.sdk.service.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.sdk.service.GoodDataSettings;
-import com.gooddata.sdk.service.PollResult;
 import com.gooddata.sdk.model.dataset.*;
 import com.gooddata.sdk.model.gdc.AboutLinks.Link;
-import com.gooddata.sdk.service.gdc.DataStoreException;
-import com.gooddata.sdk.service.gdc.DataStoreService;
 import com.gooddata.sdk.model.gdc.TaskStatus;
 import com.gooddata.sdk.model.gdc.UriResponse;
-import com.gooddata.sdk.service.project.model.ModelService;
 import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.*;
+import com.gooddata.sdk.service.gdc.DataStoreException;
+import com.gooddata.sdk.service.gdc.DataStoreService;
+import com.gooddata.sdk.service.project.model.ModelService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriTemplate;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -46,6 +43,7 @@ import static org.springframework.util.StringUtils.isEmpty;
  */
 public class DatasetService extends AbstractService {
 
+    protected static final UriTemplate UPLOADS_INFO_TEMPLATE = new UriTemplate(UploadsInfo.URI);
     private static final String MANIFEST_FILE_NAME = "upload_info.json";
     private static final String ETL_PULL_DEFAULT_ERROR_MESSAGE = "ETL Pull failed with status %s";
 
@@ -400,7 +398,7 @@ public class DatasetService extends AbstractService {
         notNull(project.getId(), "project.id");
         notEmpty(datasetId, "datasetId");
 
-        final URI uploadsInfoUri = UploadsInfo.URI_TEMPLATE.expand(project.getId());
+        final URI uploadsInfoUri = UPLOADS_INFO_TEMPLATE.expand(project.getId());
         try {
             final UploadsInfo uploadsInfo = restTemplate.getForObject(uploadsInfoUri, UploadsInfo.class);
             if (uploadsInfo == null) {

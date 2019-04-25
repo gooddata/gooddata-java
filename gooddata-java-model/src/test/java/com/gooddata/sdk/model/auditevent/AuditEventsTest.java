@@ -9,17 +9,14 @@ import com.gooddata.collections.Paging;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
+import org.springframework.web.util.UriTemplate;
 import org.testng.annotations.Test;
 
 import java.util.Collections;
 
-import static com.gooddata.sdk.model.auditevent.AuditEvent.ADMIN_URI_TEMPLATE;
-import static com.gooddata.sdk.model.auditevent.AuditEvent.USER_URI_TEMPLATE;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.singletonList;
-import static java.util.Collections.singletonMap;
+import static java.util.Collections.*;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
@@ -44,8 +41,8 @@ public class AuditEventsTest {
     private static final AuditEvent EVENT_1 = new AuditEvent("123", USER1_LOGIN, DATE, DATE, IP, SUCCESS, TYPE, emptyMap(), emptyMap());
     private static final AuditEvent EVENT_2 = new AuditEvent("456", USER2_LOGIN, DATE, DATE, IP, SUCCESS, TYPE, emptyMap(), emptyMap());
 
-    private static final String ADMIN_URI = ADMIN_URI_TEMPLATE.expand(DOMAIN).toString();
-    private static final String USER_URI = USER_URI_TEMPLATE.expand(USER1_ID).toString();
+    private static final String ADMIN_URI = new UriTemplate(AuditEvent.ADMIN_URI).expand(DOMAIN).toString();
+    private static final String USER_URI = new UriTemplate(AuditEvent.USER_URI).expand(USER1_ID).toString();
     private static final String ADMIN_NEXT_URI = ADMIN_URI + "?offset=456";
     private static final String USER_NEXT_URI = USER_URI + "?offset=456&limit=1";
 

@@ -7,13 +7,14 @@ package com.gooddata.sdk.model.md.report;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static com.gooddata.util.Validate.notNull;
 import static java.lang.String.format;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.joining;
 
 /**
  * Represents type of Total for {@link AttributeInGrid}
@@ -40,7 +41,7 @@ public enum Total {
         } catch (IllegalArgumentException e) {
             throw new UnsupportedOperationException(
                     format("Unknown value for Grid's total: \"%s\", supported values are: [%s]",
-                            total, StringUtils.arrayToCommaDelimitedString(Total.values())),
+                            total, stream(Total.values()).map(Enum::name).collect(joining(","))),
                     e);
         }
     }

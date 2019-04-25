@@ -7,33 +7,29 @@ package com.gooddata.sdk.service.export;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.gooddata.sdk.service.AbstractService;
-import com.gooddata.sdk.service.FutureResult;
-import com.gooddata.sdk.service.GoodDataEndpoint;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.sdk.service.GoodDataSettings;
-import com.gooddata.sdk.service.PollResult;
-import com.gooddata.sdk.service.SimplePollHandler;
 import com.gooddata.sdk.model.export.*;
 import com.gooddata.sdk.model.gdc.AsyncTask;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.md.AbstractObj;
+import com.gooddata.sdk.model.md.Obj;
 import com.gooddata.sdk.model.md.ProjectDashboard;
 import com.gooddata.sdk.model.md.ProjectDashboard.Tab;
 import com.gooddata.sdk.model.md.report.Report;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.*;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriTemplate;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static com.gooddata.sdk.model.md.Obj.OBJ_TEMPLATE;
 import static com.gooddata.util.Validate.notNull;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -49,6 +45,9 @@ public class ExportService extends AbstractService {
     private static final String CLIENT_EXPORT_URI = "/gdc/projects/{projectId}/clientexport";
 
     private static final String RAW_EXPORT_URI = "/gdc/projects/{projectId}/execute/raw";
+
+    protected static final UriTemplate OBJ_TEMPLATE = new UriTemplate(Obj.OBJ_URI);
+    protected static final UriTemplate PROJECT_TEMPLATE = new UriTemplate(Project.URI);
 
     private final GoodDataEndpoint endpoint;
 
@@ -177,7 +176,7 @@ public class ExportService extends AbstractService {
         notNull(output, "output");
 
         final String projectId = extractProjectId(dashboard);
-        final String projectUri = Project.TEMPLATE.expand(projectId).toString();
+        final String projectUri = PROJECT_TEMPLATE.expand(projectId).toString();
         final String dashboardUri = dashboard.getUri();
 
         final ClientExport export = new ClientExport(endpoint.toUri(), projectUri, dashboardUri, tab.getIdentifier());

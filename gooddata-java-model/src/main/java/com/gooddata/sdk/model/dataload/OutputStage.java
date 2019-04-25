@@ -5,20 +5,13 @@
  */
 package com.gooddata.sdk.model.dataload;
 
-import static com.gooddata.util.Validate.notNullState;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import com.gooddata.sdk.model.warehouse.WarehouseSchema;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.Map;
+
+import static com.gooddata.util.Validate.notNullState;
 
 /**
  * Output stage.
@@ -31,7 +24,6 @@ import java.util.Map;
 public class OutputStage {
 
     public static final String URI = "/gdc/dataload/projects/{id}/outputStage";
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
     private static final String SELF_LINK = "self";
     private static final String OUTPUT_STAGE_DIFF = "outputStageDiff";

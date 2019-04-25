@@ -5,21 +5,13 @@
  */
 package com.gooddata.sdk.model.md;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.gooddata.sdk.model.util.TagsDeserializer;
-import com.gooddata.sdk.model.util.TagsSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.gooddata.util.BooleanDeserializer;
-import com.gooddata.util.BooleanIntegerSerializer;
-import com.gooddata.util.BooleanStringSerializer;
-import com.gooddata.util.GDDateTimeDeserializer;
-import com.gooddata.util.GDDateTimeSerializer;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.util.TagsDeserializer;
+import com.gooddata.sdk.model.util.TagsSerializer;
+import com.gooddata.sdk.model.util.UriHelper;
+import com.gooddata.util.*;
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
@@ -139,7 +131,7 @@ public class Meta implements Serializable {
      */
     @JsonIgnore
     public String getId() {
-        return Obj.OBJ_TEMPLATE.match(getUri()).get("objId");
+        return UriHelper.getLastUriPart(getUri());
     }
 
     public String getAuthor() {

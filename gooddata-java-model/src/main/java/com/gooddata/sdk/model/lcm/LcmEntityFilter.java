@@ -5,8 +5,9 @@
  */
 package com.gooddata.sdk.model.lcm;
 
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.singletonList;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -82,8 +83,8 @@ public class LcmEntityFilter {
      * This filter in the form of query parameters map.
      * @return filter as query params map
      */
-    public MultiValueMap<String, String> asQueryParams() {
-        final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    public Map<String, List<String>> asQueryParams() {
+        final Map<String, List<String>> params = new LinkedHashMap<>();
         if (dataProduct != null) {
             params.put(DATA_PRODUCT, singletonList(dataProduct));
         }

@@ -5,14 +5,14 @@
  */
 package com.gooddata.sdk.service.project;
 
-import com.gooddata.sdk.service.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
-import com.gooddata.sdk.model.account.Account;
 import com.gooddata.collections.PageRequest;
+import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.gdc.AsyncTask;
 import com.gooddata.sdk.model.gdc.TaskStatus;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.project.*;
+import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -20,19 +20,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
-import static com.gooddata.util.ResourceUtils.readFromResource;
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.util.ResourceUtils.*;
 import static net.jadler.Jadler.onRequest;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -314,13 +308,13 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     public void shouldListPagedUsers() throws Exception {
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(Users.TEMPLATE.expand("PROJECT_ID").toString())
+                .havingPathEqualTo(ProjectService.PROJECT_USERS_TEMPLATE.expand("PROJECT_ID").toString())
         .respond()
                 .withBody(readFromResource("/project/project-users.json"))
                 .withStatus(200);
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(Users.TEMPLATE.expand("PROJECT_ID").toString())
+                .havingPathEqualTo(ProjectService.PROJECT_USERS_TEMPLATE.expand("PROJECT_ID").toString())
                 .havingQueryStringEqualTo("offset=1&limit=1")
         .respond()
                 .withBody(readFromResource("/project/project-users-empty.json"))
@@ -339,7 +333,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     public void shouldSendInvitations() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
-                .havingPathEqualTo(Invitations.TEMPLATE.expand("PROJECT_ID").toString())
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/invitations")
         .respond()
                 .withBody(readFromResource("/project/created-invitations.json"))
                 .withStatus(200);
@@ -353,14 +347,14 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     public void addUserToProject() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
-                .havingPathEqualTo(Users.TEMPLATE.expand("PROJECT_ID").toString())
+                .havingPathEqualTo(ProjectService.PROJECT_USERS_TEMPLATE.expand("PROJECT_ID").toString())
                 .havingBody(jsonEquals(resource("project/addUserRequest.json")).when(IGNORING_ARRAY_ORDER))
         .respond()
                 .withBody(readFromResource("/project/projectUsersUpdateResult.json"));
 
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(User.TEMPLATE.expand("PROJECT_ID", "ID").toString())
+                .havingPathEqualTo(ProjectService.PROJECT_USER_TEMPLATE.expand("PROJECT_ID", "ID").toString())
         .respond()
                 .withBody(readFromResource("/project/project-user.json"));
 
@@ -373,7 +367,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     public void addUserToProjectFail() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
-                .havingPathEqualTo(Users.TEMPLATE.expand("PROJECT_ID").toString())
+                .havingPathEqualTo(ProjectService.PROJECT_USERS_TEMPLATE.expand("PROJECT_ID").toString())
                 .havingBody(jsonEquals(resource("project/addUserRequest.json")).when(IGNORING_ARRAY_ORDER))
         .respond()
                 .withBody(readFromResource("/project/projectUsersUpdateResultFail.json"));
@@ -385,7 +379,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     public void disableUserInProject() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
-                .havingPathEqualTo(Users.TEMPLATE.expand("PROJECT_ID").toString())
+                .havingPathEqualTo(ProjectService.PROJECT_USERS_TEMPLATE.expand("PROJECT_ID").toString())
                 .havingBody(jsonEquals(resource("project/disableUserInProject.json")).when(IGNORING_ARRAY_ORDER))
         .respond()
                 .withBody(readFromResource("/project/projectUsersUpdateResult.json"));
@@ -400,7 +394,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     public void getUserInProject() throws Exception {
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(User.TEMPLATE.expand("PROJECT_ID", "ID").toString())
+                .havingPathEqualTo(ProjectService.PROJECT_USER_TEMPLATE.expand("PROJECT_ID", "ID").toString())
         .respond()
                 .withBody(readFromResource("/project/project-user.json"));
 
@@ -413,7 +407,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     public void getUserInProjectNotFound() throws Exception {
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(User.TEMPLATE.expand("PROJECT_ID", "ID").toString())
+                .havingPathEqualTo(ProjectService.PROJECT_USER_TEMPLATE.expand("PROJECT_ID", "ID").toString())
                 .respond()
         .withStatus(404);
 

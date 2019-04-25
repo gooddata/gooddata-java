@@ -5,16 +5,10 @@
  */
 package com.gooddata.sdk.model.warehouse;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import com.gooddata.sdk.model.account.Account;
+import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.Map;
 
@@ -31,7 +25,6 @@ import static com.gooddata.util.Validate.notNullState;
 public class WarehouseUser {
 
     public static final String URI = WarehouseUsers.URI + "/{userId}";
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
     private static final String SELF_LINK = "self";
 
@@ -111,7 +104,7 @@ public class WarehouseUser {
 
     @JsonIgnore
     public String getId() {
-        return TEMPLATE.match(getUri()).get("userId");
+        return UriHelper.getLastUriPart(getUri());
     }
 
     @JsonIgnore

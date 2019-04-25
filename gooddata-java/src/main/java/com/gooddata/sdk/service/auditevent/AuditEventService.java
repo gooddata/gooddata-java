@@ -5,20 +5,21 @@
  */
 package com.gooddata.sdk.service.auditevent;
 
-import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.sdk.service.GoodDataSettings;
-import com.gooddata.sdk.model.account.Account;
-import com.gooddata.sdk.service.account.AccountService;
 import com.gooddata.collections.MultiPageList;
 import com.gooddata.collections.Page;
 import com.gooddata.collections.PageableList;
+import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.auditevent.AuditEvent;
 import com.gooddata.sdk.model.auditevent.AuditEvents;
+import com.gooddata.sdk.service.AbstractService;
+import com.gooddata.sdk.service.GoodDataSettings;
+import com.gooddata.sdk.service.account.AccountService;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriTemplate;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
@@ -28,6 +29,9 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
  * List audit events.
  */
 public class AuditEventService extends AbstractService {
+
+    protected static final UriTemplate ADMIN_URI_TEMPLATE = new UriTemplate(AuditEvent.ADMIN_URI);
+    protected static final UriTemplate USER_URI_TEMPLATE = new UriTemplate(AuditEvent.USER_URI);
 
     private final AccountService accountService;
 
@@ -63,7 +67,7 @@ public class AuditEventService extends AbstractService {
         notEmpty(domainId, "domainId");
         notNull(page, "page");
 
-        final String uri = AuditEvent.ADMIN_URI_TEMPLATE.expand(domainId).toString();
+        final String uri = ADMIN_URI_TEMPLATE.expand(domainId).toString();
         return new MultiPageList<>(page, (p) -> doListAuditEvents(getAuditEventsUri(p, uri)));
     }
 
@@ -91,7 +95,7 @@ public class AuditEventService extends AbstractService {
         notEmpty(account.getId(), "account.id");
         notNull(page, "page");
 
-        final String uri = AuditEvent.USER_URI_TEMPLATE.expand(account.getId()).toString();
+        final String uri = USER_URI_TEMPLATE.expand(account.getId()).toString();
 
         return new MultiPageList<>(page, (p) -> doListAuditEvents(getAuditEventsUri(p, uri)));
     }

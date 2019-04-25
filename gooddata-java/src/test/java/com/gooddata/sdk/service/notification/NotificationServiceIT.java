@@ -5,9 +5,16 @@
  */
 package com.gooddata.sdk.service.notification;
 
-import static com.gooddata.util.ResourceUtils.readFromResource;
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
-import static com.gooddata.util.ResourceUtils.readStringFromResource;
+import com.gooddata.sdk.model.account.Account;
+import com.gooddata.sdk.model.notification.*;
+import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.AbstractGoodDataIT;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+import java.util.Arrays;
+
+import static com.gooddata.util.ResourceUtils.*;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 import static net.jadler.Jadler.onRequest;
@@ -16,19 +23,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import com.gooddata.sdk.service.AbstractGoodDataIT;
-import com.gooddata.sdk.model.account.Account;
-import com.gooddata.sdk.model.notification.*;
-import com.gooddata.sdk.model.project.Project;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
-
-import java.util.Arrays;
-
 public class NotificationServiceIT extends AbstractGoodDataIT {
 
-    private static final String PROJECT_ID = "PROJECT_ID";
-    private static final String PROJECT_EVENT_PATH = ProjectEvent.TEMPLATE.expand(PROJECT_ID).toString();
+    private static final String PROJECT_EVENT_PATH = "/gdc/projects/PROJECT_ID/notifications/events";
 
     private Project project;
     private Account account;
@@ -58,7 +55,7 @@ public class NotificationServiceIT extends AbstractGoodDataIT {
     public void shouldCreateChannel() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
-                .havingPathEqualTo(Channel.URI_TEMPLATE.expand(account.getId()).toString())
+                .havingPathEqualTo("/gdc/account/profile/" + account.getId() + "/channelConfigurations")
                 .havingBody(jsonEquals(readStringFromResource("/notification/channelToCreate.json")))
              .respond()
                 .withStatus(201)
@@ -76,7 +73,7 @@ public class NotificationServiceIT extends AbstractGoodDataIT {
     public void shouldCreateSubscription() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
-                .havingPathEqualTo(Subscription.URI_TEMPLATE.expand(project.getId(), account.getId()).toString())
+                .havingPathEqualTo("/gdc/projects/" + project.getId() + "/users/" + account.getId() + "/subscriptions")
                 .havingBody(jsonEquals(readStringFromResource("/notification/subscriptionToCreate.json")))
             .respond()
                 .withStatus(201)

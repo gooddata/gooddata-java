@@ -5,14 +5,9 @@
  */
 package com.gooddata.sdk.model.dataload.processes;
 
+import com.fasterxml.jackson.annotation.*;
 import com.gooddata.sdk.model.account.Account;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,10 +20,8 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DataloadProcesses {
     public static final String URI = "/gdc/projects/{projectId}/dataload/processes";
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
     public static final String USER_PROCESSES_URI = Account.URI + "/dataload/processes";
-    public static final UriTemplate USER_PROCESSES_TEMPLATE = new UriTemplate(USER_PROCESSES_URI);
 
     private final List<DataloadProcess> items;
 

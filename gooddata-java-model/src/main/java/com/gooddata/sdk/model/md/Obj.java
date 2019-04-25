@@ -11,7 +11,6 @@ import com.gooddata.sdk.model.md.report.Report;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.md.visualization.VisualizationClass;
 import com.gooddata.sdk.model.md.visualization.VisualizationObject;
-import org.springframework.web.util.UriTemplate;
 
 /**
  * First class metadata object - only dto objects, which have URI pointing to themselves should implement this.
@@ -41,7 +40,6 @@ public interface Obj {
     String CREATE_URI = URI + "?createAndGet=true";
     String CREATE_WITH_ID_URI = CREATE_URI + "&setIdentifier=true";
     String OBJ_URI = URI + "/{objId}";
-    UriTemplate OBJ_TEMPLATE = new UriTemplate(OBJ_URI);
 
     String getUri();
 }

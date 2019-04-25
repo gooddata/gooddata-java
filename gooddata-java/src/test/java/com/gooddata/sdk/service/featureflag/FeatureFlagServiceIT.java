@@ -5,12 +5,12 @@
  */
 package com.gooddata.sdk.service.featureflag;
 
-import com.gooddata.sdk.service.AbstractGoodDataIT;
 import com.gooddata.sdk.model.featureflag.FeatureFlag;
 import com.gooddata.sdk.model.featureflag.FeatureFlags;
 import com.gooddata.sdk.model.featureflag.ProjectFeatureFlag;
 import com.gooddata.sdk.model.featureflag.ProjectFeatureFlags;
 import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -18,9 +18,7 @@ import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static com.gooddata.util.ResourceUtils.readStringFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 public class FeatureFlagServiceIT extends AbstractGoodDataIT {
 
@@ -28,10 +26,10 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
     private Project project;
 
     private static final String PROJECT_ID = "PROJECT_ID";
-    private static final String PROJECT_FEATURE_FLAGS_URI_STRING = ProjectFeatureFlags.PROJECT_FEATURE_FLAGS_TEMPLATE.expand(PROJECT_ID)
+    private static final String PROJECT_FEATURE_FLAGS_URI_STRING = FeatureFlagService.PROJECT_FEATURE_FLAGS_TEMPLATE.expand(PROJECT_ID)
             .toString();
     private static final String FEATURE_FLAG_NAME = "myCoolFeature";
-    private static final String PROJECT_FEATURE_FLAG_URI_STRING = ProjectFeatureFlag.PROJECT_FEATURE_FLAG_TEMPLATE
+    private static final String PROJECT_FEATURE_FLAG_URI_STRING = FeatureFlagService.PROJECT_FEATURE_FLAG_TEMPLATE
             .expand(PROJECT_ID, FEATURE_FLAG_NAME).toString();
 
     @BeforeMethod

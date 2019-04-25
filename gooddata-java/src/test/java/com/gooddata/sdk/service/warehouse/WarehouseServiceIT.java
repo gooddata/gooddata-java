@@ -5,13 +5,12 @@
  */
 package com.gooddata.sdk.service.warehouse;
 
-import com.gooddata.sdk.service.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
-import com.gooddata.sdk.model.account.Account;
 import com.gooddata.collections.MultiPageList;
 import com.gooddata.collections.PageRequest;
 import com.gooddata.collections.PageableList;
 import com.gooddata.sdk.model.warehouse.*;
+import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matchers;
@@ -21,9 +20,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.Collections;
 
-import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
-import static com.gooddata.util.ResourceUtils.readFromResource;
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.util.ResourceUtils.*;
 import static net.jadler.Jadler.onRequest;
 import static net.jadler.Jadler.verifyThatRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -44,10 +41,9 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
     private static final String WAREHOUSE_USER = "/warehouse/user.json";
     private static final String WAREHOUSE_SCHEMA = "/warehouse/schema.json";
 
-    private static final String WAREHOUSE_URI = Warehouse.TEMPLATE.expand(WAREHOUSE_ID).toString();
-    private static final String WAREHOUSE_USER_URI = WarehouseUsers.TEMPLATE.expand(WAREHOUSE_ID).toString();
+    private static final String WAREHOUSE_URI = WarehouseService.WAREHOUSE_TEMPLATE.expand(WAREHOUSE_ID).toString();
+    private static final String WAREHOUSE_USER_URI = WarehouseService.USERS_TEMPLATE.expand(WAREHOUSE_ID).toString();
     private static final String REMOVE_USER_TASK_DONE = "/warehouse/removeUserTask-finished.json";
-    private static final String UPDATED_BY_URI = Account.TEMPLATE.expand("updatedBy").toString();
 
     private static final String CONNECTION_URL = "CONNECTION_URL";
 
@@ -381,7 +377,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
     public void shouldListWarehouseSchemas() throws Exception {
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(WarehouseSchemas.TEMPLATE.expand(warehouse.getId()).toString())
+                .havingPathEqualTo(WarehouseService.SCHEMAS_TEMPLATE.expand(warehouse.getId()).toString())
                 .respond()
                 .withBody(readFromResource("/warehouse/schemas.json"))
                 .withStatus(200);

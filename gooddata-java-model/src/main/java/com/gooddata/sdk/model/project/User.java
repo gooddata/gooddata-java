@@ -5,16 +5,9 @@
  */
 package com.gooddata.sdk.model.project;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +24,6 @@ import java.util.stream.Collectors;
 public class User {
 
     public static final String URI = "/gdc/projects/{projectId}/users/{userId}";
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
     @JsonProperty
     private UserContent content;

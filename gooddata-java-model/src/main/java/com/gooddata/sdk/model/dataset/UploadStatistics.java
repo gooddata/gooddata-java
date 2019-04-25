@@ -9,9 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +23,6 @@ import java.util.Map;
 public class UploadStatistics {
 
     public static final String URI = "/gdc/md/{projectId}/data/uploads_info";
-    public static final UriTemplate URI_TEMPLATE = new UriTemplate(URI);
 
     private final Map<String, Integer> statusesCount;
 

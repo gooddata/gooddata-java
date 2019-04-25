@@ -5,19 +5,13 @@
  */
 package com.gooddata.sdk.model.auditevent;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gooddata.util.GoodDataToStringBuilder;
 import com.gooddata.util.ISODateTimeDeserializer;
 import com.gooddata.util.ISODateTimeSerializer;
 import org.joda.time.DateTime;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.Map;
 
@@ -32,9 +26,6 @@ public class AuditEvent {
     public static final String GDC_URI = "/gdc";
     public static final String USER_URI = GDC_URI + "/account/profile/{userId}/auditEvents";
     public static final String ADMIN_URI = GDC_URI + "/domains/{domainId}/auditEvents";
-
-    public static final UriTemplate ADMIN_URI_TEMPLATE = new UriTemplate(ADMIN_URI);
-    public static final UriTemplate USER_URI_TEMPLATE = new UriTemplate(USER_URI);
 
     static final String ROOT_NODE = "event";
 

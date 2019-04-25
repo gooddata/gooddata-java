@@ -8,14 +8,12 @@ package com.gooddata.sdk.model.featureflag;
 import com.fasterxml.jackson.annotation.*;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.gooddata.util.Validate.notEmpty;
-import static org.springframework.util.CollectionUtils.isEmpty;
 
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("featureFlags")
@@ -23,14 +21,13 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 public class ProjectFeatureFlags implements Iterable<ProjectFeatureFlag> {
 
     public static final String PROJECT_FEATURE_FLAGS_URI = Project.URI + "/projectFeatureFlags";
-    public static final UriTemplate PROJECT_FEATURE_FLAGS_TEMPLATE = new UriTemplate(PROJECT_FEATURE_FLAGS_URI);
 
     @JsonProperty("items")
     private final List<ProjectFeatureFlag> items = new LinkedList<>();
 
     @JsonCreator
     ProjectFeatureFlags(@JsonProperty("items") List<ProjectFeatureFlag> items) {
-        if (!isEmpty(items)) {
+        if (items != null && !items.isEmpty()) {
             this.items.addAll(items);
         }
     }

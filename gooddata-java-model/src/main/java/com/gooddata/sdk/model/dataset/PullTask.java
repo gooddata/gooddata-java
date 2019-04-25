@@ -5,15 +5,10 @@
  */
 package com.gooddata.sdk.model.dataset;
 
+import com.fasterxml.jackson.annotation.*;
+
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import org.springframework.web.util.UriTemplate;
 
 /**
  * Asynchronous ETL Pull 2 task (for internal use).
@@ -25,7 +20,6 @@ import org.springframework.web.util.UriTemplate;
 public class PullTask {
 
     public static final String URI = "/gdc/md/{projectId}/tasks/task/{taskId}";
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
     private final Links links;
 

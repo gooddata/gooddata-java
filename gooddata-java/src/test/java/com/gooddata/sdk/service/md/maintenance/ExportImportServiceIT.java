@@ -5,6 +5,14 @@
  */
 package com.gooddata.sdk.service.md.maintenance;
 
+import com.gooddata.sdk.model.md.maintenance.PartialMdExport;
+import com.gooddata.sdk.model.md.maintenance.PartialMdExportToken;
+import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.AbstractGoodDataIT;
+import org.springframework.web.util.UriTemplate;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
 import static com.gooddata.util.ResourceUtils.readFromResource;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
@@ -15,16 +23,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import com.gooddata.sdk.service.AbstractGoodDataIT;
-import com.gooddata.sdk.model.md.maintenance.PartialMdExport;
-import com.gooddata.sdk.model.md.maintenance.PartialMdExportToken;
-import com.gooddata.sdk.model.project.Project;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
-
 public class ExportImportServiceIT extends AbstractGoodDataIT {
 
     private Project project;
+
+    private static final UriTemplate EXPORT_TEMPLATE = new UriTemplate(PartialMdExport.URI);
+    private static final UriTemplate TOKEN_TEMPLATE = new UriTemplate(PartialMdExportToken.URI);
 
     @BeforeClass
     public void setUp() throws Exception {
@@ -35,7 +39,7 @@ public class ExportImportServiceIT extends AbstractGoodDataIT {
     public void shouldExportPartialMetadata() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
-                .havingPathEqualTo(PartialMdExport.TEMPLATE.expand(project.getId()).toString())
+                .havingPathEqualTo(EXPORT_TEMPLATE.expand(project.getId()).toString())
                 .havingBody(jsonEquals(resource("md/maintenance/partialMDExport-defaultVals.json")).when(IGNORING_ARRAY_ORDER))
                 .respond()
                 .withStatus(200)
@@ -61,7 +65,7 @@ public class ExportImportServiceIT extends AbstractGoodDataIT {
     public void shouldPartialExportFailWhenErrorResult() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
-                .havingPathEqualTo(PartialMdExport.TEMPLATE.expand(project.getId()).toString())
+                .havingPathEqualTo(EXPORT_TEMPLATE.expand(project.getId()).toString())
                 .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/maintenance/partialMDArtifact.json"));
@@ -80,7 +84,7 @@ public class ExportImportServiceIT extends AbstractGoodDataIT {
     public void shouldPartialExportFailWhenPollingError() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
-                .havingPathEqualTo(PartialMdExport.TEMPLATE.expand(project.getId()).toString())
+                .havingPathEqualTo(EXPORT_TEMPLATE.expand(project.getId()).toString())
                 .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/maintenance/partialMDArtifact.json"));
@@ -98,7 +102,7 @@ public class ExportImportServiceIT extends AbstractGoodDataIT {
     public void shouldImportPartialMetadata() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
-                .havingPathEqualTo(PartialMdExportToken.TEMPLATE.expand(project.getId()).toString())
+                .havingPathEqualTo(TOKEN_TEMPLATE.expand(project.getId()).toString())
                 .havingBody(jsonEquals(resource("md/maintenance/partialMDImport.json")).when(IGNORING_ARRAY_ORDER))
                 .respond()
                 .withStatus(200)
@@ -122,7 +126,7 @@ public class ExportImportServiceIT extends AbstractGoodDataIT {
     public void shouldPartialImportFailWhenErrorResult() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
-                .havingPathEqualTo(PartialMdExportToken.TEMPLATE.expand(project.getId()).toString())
+                .havingPathEqualTo(TOKEN_TEMPLATE.expand(project.getId()).toString())
                 .respond()
                 .withStatus(200)
                 .withBody("{ \"uri\": \"/gdc/md/projectId/tasks/taskId/status\" }");
@@ -141,7 +145,7 @@ public class ExportImportServiceIT extends AbstractGoodDataIT {
     public void shouldPartialImportFailWhenPollingError() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
-                .havingPathEqualTo(PartialMdExportToken.TEMPLATE.expand(project.getId()).toString())
+                .havingPathEqualTo(TOKEN_TEMPLATE.expand(project.getId()).toString())
                 .respond()
                 .withStatus(200)
                 .withBody("{ \"uri\": \"/gdc/md/projectId/tasks/taskId/status\" }");

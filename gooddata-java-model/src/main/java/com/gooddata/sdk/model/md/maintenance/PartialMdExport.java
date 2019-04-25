@@ -5,17 +5,16 @@
  */
 package com.gooddata.sdk.model.md.maintenance;
 
-import static com.gooddata.util.Validate.notEmpty;
-import static java.util.Arrays.asList;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.springframework.web.util.UriTemplate;
 
 import java.util.Collection;
 import java.util.HashSet;
+
+import static com.gooddata.util.Validate.notEmpty;
+import static java.util.Arrays.asList;
 
 /**
  * Partial metadata export configuration structure.
@@ -27,7 +26,6 @@ import java.util.HashSet;
 public class PartialMdExport {
 
     public static final String URI = "/gdc/md/{projectId}/maintenance/partialmdexport";
-    public static final UriTemplate TEMPLATE = new UriTemplate(URI);
 
     private final Collection<String> uris;
     private final boolean crossDataCenterExport;

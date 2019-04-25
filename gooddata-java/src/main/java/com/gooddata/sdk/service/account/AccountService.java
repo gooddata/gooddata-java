@@ -5,16 +5,17 @@
  */
 package com.gooddata.sdk.service.account;
 
-import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.gdc.UriResponse;
+import com.gooddata.sdk.service.AbstractService;
+import com.gooddata.sdk.service.GoodDataSettings;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriTemplate;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
@@ -23,6 +24,10 @@ import static com.gooddata.util.Validate.notNull;
  * Service to access and manipulate account.
  */
 public class AccountService extends AbstractService {
+
+    protected static final UriTemplate ACCOUNT_TEMPLATE = new UriTemplate(Account.URI);
+    protected static final UriTemplate ACCOUNTS_TEMPLATE = new UriTemplate(Account.ACCOUNTS_URI);
+    protected static final UriTemplate LOGIN_TEMPLATE = new UriTemplate(Account.LOGIN_URI);
 
     /**
      * Constructs service for GoodData account management.
@@ -114,7 +119,7 @@ public class AccountService extends AbstractService {
             return restTemplate.getForObject(Account.URI, Account.class, id);
         } catch (GoodDataRestException e) {
             if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
-                throw new AccountNotFoundException(Account.TEMPLATE.expand(id).toString(), e);
+                throw new AccountNotFoundException(ACCOUNT_TEMPLATE.expand(id).toString(), e);
             } else {
                 throw e;
             }
