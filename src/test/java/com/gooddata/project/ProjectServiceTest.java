@@ -20,7 +20,7 @@ import org.testng.annotations.Test;
 
 import java.util.Collection;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -57,9 +57,9 @@ public class ProjectServiceTest {
     }
 
     @Test
-    public void testGetProjects() throws Exception {
+    public void testGetProjects() {
         when(restTemplate.getForObject(Project.PROJECTS_URI, Projects.class, ACCOUNT_ID))
-                .thenReturn(new Projects(asList(project)));
+                .thenReturn(new Projects(singletonList(project)));
         final Collection<Project> result = service.getProjects();
 
         assertThat(result, hasSize(1));
@@ -67,19 +67,19 @@ public class ProjectServiceTest {
     }
 
     @Test(expectedExceptions = GoodDataException.class)
-    public void testGetProjectsWithClientException() throws Exception {
+    public void testGetProjectsWithClientException() {
         when(restTemplate.getForObject(Project.PROJECTS_URI, Projects.class, ACCOUNT_ID))
                 .thenThrow(new GoodDataException(""));
         service.getProjects();
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetProjectByUriWithNullUri() throws Exception {
+    public void testGetProjectByUriWithNullUri() {
         service.getProjectByUri(null);
     }
 
     @Test
-    public void testGetProjectByUri() throws Exception {
+    public void testGetProjectByUri() {
         when(restTemplate.getForObject(URI, Project.class)).thenReturn(project);
 
         final Project result = service.getProjectByUri(URI);
@@ -87,30 +87,30 @@ public class ProjectServiceTest {
     }
 
     @Test(expectedExceptions = ProjectNotFoundException.class)
-    public void testGetProjectByUriNotFound() throws Exception {
+    public void testGetProjectByUriNotFound() {
         when(restTemplate.getForObject(URI, Project.class)).thenThrow(new GoodDataRestException(404, "", "", "", ""));
         service.getProjectByUri(URI);
     }
 
     @Test(expectedExceptions = GoodDataRestException.class)
-    public void testGetProjectByUriServerError() throws Exception {
+    public void testGetProjectByUriServerError() {
         when(restTemplate.getForObject(URI, Project.class)).thenThrow(new GoodDataRestException(500, "", "", "", ""));
         service.getProjectByUri(URI);
     }
 
     @Test(expectedExceptions = GoodDataException.class)
-    public void testGetProjectByUriClientError() throws Exception {
+    public void testGetProjectByUriClientError() {
         when(restTemplate.getForObject(URI, Project.class)).thenThrow(new RestClientException(""));
         service.getProjectByUri(URI);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetProjectByUriWithNullId() throws Exception {
+    public void testGetProjectByUriWithNullId() {
         service.getProjectById(null);
     }
 
     @Test
-    public void testGetProjectById() throws Exception {
+    public void testGetProjectById() {
         when(restTemplate.getForObject(URI, Project.class)).thenReturn(project);
 
         final Project result = service.getProjectById(ID);
@@ -143,12 +143,12 @@ public class ProjectServiceTest {
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetUserInProjectNullProject() throws Exception {
+    public void testGetUserInProjectNullProject() {
         service.getUser(null, mock(Account.class));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetUserInProjectNullAccount() throws Exception {
+    public void testGetUserInProjectNullAccount() {
         service.getUser(mock(Project.class), null);
     }
 
