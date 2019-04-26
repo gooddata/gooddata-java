@@ -9,6 +9,7 @@ import com.gooddata.collections.PageRequest;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.project.*;
 import com.gooddata.sdk.service.AbstractGoodDataAT;
+import com.gooddata.sdk.service.account.AccountService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.core.IsIterableContaining;
 import org.testng.annotations.AfterClass;
@@ -26,10 +27,12 @@ import static org.hamcrest.Matchers.*;
  */
 public class ProjectServiceAT extends AbstractGoodDataAT {
 
-    private static final String LOGIN = "john.smith." + UUID.randomUUID() + "@gooddata.com";
+    private static final String LOGIN1 = "john.smith." + UUID.randomUUID() + "@gooddata.com";
+    private static final String LOGIN2 = "john.doe." + UUID.randomUUID() + "@gooddata.com";
 
     private User user;
-    private Account account;
+    private Account account1;
+    private Account account2;
 
     private static final String DISABLED_STATUS = "DISABLED";
 
@@ -39,7 +42,12 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
 
     @BeforeClass(groups = "isolated_domain")
     public void initIsolatedDomainGroup() {
-        account = gd.getAccountService().createAccount(new Account(LOGIN, "nnPvcGXU7f", "FirstName", "LastName"), getProperty("domain"));
+        final AccountService accountService = gd.getAccountService();
+        final String domain = getProperty("domain");
+        account1 = accountService.createAccount(new Account(LOGIN1, "nnPvcGXU7f", "FirstName1", "LastName1"),
+                domain);
+        account2 = accountService.createAccount(new Account(LOGIN2, "mmPvcGXU8f", "FirstName2", "LastName2"),
+                domain);
     }
 
     @Test(groups = "project", dependsOnGroups = "account")
@@ -114,22 +122,27 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = {"project", "isolated_domain"}, dependsOnMethods = "createProject")
-    public void addUserToProject() {
-        final Set<Role> roles = gd.getProjectService().getRoles(project);
+    public void addUsersToProject() {
+        final ProjectService projectService = gd.getProjectService();
+        final Set<Role> roles = projectService.getRoles(project);
         final Role role = roles.iterator().next();
+        this.user = projectService.addUserToProject(project, account1, role);
 
-        this.user = gd.getProjectService().addUserToProject(project, account, role);
+        // to test scenario with role obtained by its URI
+        final Role roleByUri = projectService.getRoleByUri(role.getUri());
+        final User user2 = projectService.addUserToProject(project, account2, roleByUri);
 
         assertThat(this.user, is(notNullValue()));
+        assertThat(user2, is(notNullValue()));
     }
 
-    @Test(groups = {"project", "isolated_domain"}, dependsOnMethods = "addUserToProject")
+    @Test(groups = {"project", "isolated_domain"}, dependsOnMethods = "addUsersToProject")
     public void disableUserInProject() {
         user.setStatus(DISABLED_STATUS);
 
         gd.getProjectService().updateUserInProject(project, user);
 
-        final User user = gd.getProjectService().getUser(project, account);
+        final User user = gd.getProjectService().getUser(project, account1);
 
         assertThat(user, notNullValue());
         assertThat(user.getStatus(), is("DISABLED"));
@@ -145,8 +158,11 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
     @AfterClass(groups = "isolated_domain")
     public void tearDownIsolatedDomainGroup() {
         try {
-            if (account != null) {
-                gd.getAccountService().removeAccount(account);
+            if (account1 != null) {
+                gd.getAccountService().removeAccount(account1);
+            }
+            if (account2 != null) {
+                gd.getAccountService().removeAccount(account2);
             }
         } catch (Exception ignored) {}
     }

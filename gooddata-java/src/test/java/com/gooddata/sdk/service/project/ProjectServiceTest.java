@@ -12,6 +12,7 @@ import com.gooddata.collections.Paging;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.model.project.Projects;
+import com.gooddata.sdk.model.project.Role;
 import com.gooddata.sdk.model.project.User;
 import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.service.account.AccountService;
@@ -38,7 +39,7 @@ public class ProjectServiceTest {
     private static final String ACCOUNT_ID = "17";
     private static final String ID = "11";
     private static final String URI = "/gdc/projects/11";
-
+    private static final String ROLE_URI = URI + "/roles/2";
     @Mock
     private Project project;
     @Mock
@@ -47,6 +48,8 @@ public class ProjectServiceTest {
     private AccountService accountService;
     @Mock
     private Account account;
+    @Mock
+    private Role role;
 
     private ProjectService service;
 
@@ -184,4 +187,15 @@ public class ProjectServiceTest {
     public void testGetUserInProjectNullAccount() {
         service.getUser(mock(Project.class), null);
     }
+
+    @Test
+    public void testGetRoleByUri() {
+        when(restTemplate.getForObject(ROLE_URI, Role.class)).thenReturn(role);
+
+        final Role roleByUri = service.getRoleByUri(ROLE_URI);
+
+        verify(role).setUri(ROLE_URI);
+        assertThat(roleByUri, is(role));
+    }
+
 }
