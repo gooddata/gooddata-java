@@ -10,6 +10,7 @@ import com.gooddata.GoodDataRestException;
 import com.gooddata.GoodDataSettings;
 import com.gooddata.account.Account;
 import com.gooddata.account.AccountService;
+import com.gooddata.md.Meta;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestClientException;
@@ -32,6 +33,8 @@ public class ProjectServiceTest {
     private static final String ACCOUNT_ID = "17";
     private static final String ID = "11";
     private static final String URI = "/gdc/projects/11";
+    private static final String ROLE_URI = URI + "/roles/2";
+    private static final String ROLE_TITLE = "role_title";
 
     @Mock
     private Project project;
@@ -147,5 +150,16 @@ public class ProjectServiceTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testGetUserInProjectNullAccount() throws Exception {
         service.getUser(mock(Project.class), null);
+    }
+
+    @Test
+    public void testGetRoleByUri() {
+        final Role role = new Role(null, new Meta(ROLE_TITLE), null);
+        when(restTemplate.getForObject(ROLE_URI, Role.class)).thenReturn(role);
+
+        final Role roleByUri = service.getRoleByUri(ROLE_URI);
+
+        assertThat(roleByUri.getUri(), is(ROLE_URI));
+        assertThat(roleByUri.getTitle(), is(ROLE_TITLE));
     }
 }

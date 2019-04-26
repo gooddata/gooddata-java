@@ -308,6 +308,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         final Role role = gd.getProjectService().getRoleByUri(roleUri);
         assertThat(role, notNullValue());
         assertThat(role.getTitle(), is("Embedded Dashboard Only"));
+        assertThat(role.getUri(), is(roleUri));
     }
 
     @Test
