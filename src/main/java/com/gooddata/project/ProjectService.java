@@ -27,11 +27,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.gooddata.util.Validate.noNullElements;
@@ -370,7 +366,9 @@ public class ProjectService extends AbstractService {
     public Role getRoleByUri(String uri) {
         notEmpty(uri, "uri");
         try {
-            return restTemplate.getForObject(uri, Role.class);
+            final Role role = restTemplate.getForObject(uri, Role.class);
+            role.setUri(uri);
+            return role;
         } catch (GoodDataRestException e) {
             if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
                 throw new RoleNotFoundException(uri, e);
@@ -440,6 +438,7 @@ public class ProjectService extends AbstractService {
         notNull(account, "account");
         notEmpty(account.getUri(), "account.uri");
         notNull(userRoles, "userRoles");
+        validateRoleURIs(userRoles);
         notEmpty(project.getId(), "project.id");
 
         final User user = new User(account, userRoles);
@@ -447,6 +446,21 @@ public class ProjectService extends AbstractService {
         doPostProjectUsersUpdate(project, user);
 
         return getUser(project, account);
+    }
+
+    /**
+     * Checks whether all the roles have URI specified.
+     */
+    private void validateRoleURIs(final Role[] userRoles) {
+        final List<String> invalidRoles = new ArrayList<>();
+        for(Role role: userRoles) {
+            if(role.getUri() == null) {
+                invalidRoles.add(role.getIdentifier());
+            }
+        }
+        if (!invalidRoles.isEmpty()) {
+            throw new IllegalArgumentException("Roles with URI not specified found: " + invalidRoles);
+        }
     }
 
     /**
