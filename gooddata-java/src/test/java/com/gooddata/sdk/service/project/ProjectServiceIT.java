@@ -81,7 +81,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     }
 
     @Test(expectedExceptions = GoodDataException.class)
-    public void shouldFailWhenPostFails() throws Exception {
+    public void shouldFailWhenPostFails() {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(Projects.URI)
@@ -132,7 +132,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldRemoveProject() throws Exception {
+    public void shouldRemoveProject() {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo(PROJECT_URI)
@@ -143,7 +143,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldReturnProjectTemplates() throws Exception {
+    public void shouldReturnProjectTemplates() {
         onRequest()
                 .havingPathEqualTo("/gdc/md/" + PROJECT_ID + "/templates")
             .respond()
@@ -155,7 +155,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldReturnAvailableValidations() throws Exception {
+    public void shouldReturnAvailableValidations() {
         onRequest()
                 .havingPathEqualTo("/gdc/md/" + PROJECT_ID + "/validate")
                     .respond()
@@ -302,10 +302,11 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         final Role role = gd.getProjectService().getRoleByUri(roleUri);
         assertThat(role, notNullValue());
         assertThat(role.getTitle(), is("Embedded Dashboard Only"));
+        assertThat(role.getUri(), is(roleUri));
     }
 
     @Test
-    public void shouldListPagedUsers() throws Exception {
+    public void shouldListPagedUsers() {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(ProjectService.PROJECT_USERS_TEMPLATE.expand("PROJECT_ID").toString())
@@ -330,7 +331,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldSendInvitations() throws Exception {
+    public void shouldSendInvitations() {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/invitations")
@@ -344,7 +345,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void addUserToProject() throws Exception {
+    public void addUserToProject() {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(ProjectService.PROJECT_USERS_TEMPLATE.expand("PROJECT_ID").toString())
@@ -364,7 +365,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     }
 
     @Test(expectedExceptions = ProjectUsersUpdateException.class)
-    public void addUserToProjectFail() throws Exception {
+    public void addUserToProjectFail() {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(ProjectService.PROJECT_USERS_TEMPLATE.expand("PROJECT_ID").toString())
@@ -376,7 +377,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void disableUserInProject() throws Exception {
+    public void disableUserInProject() {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(ProjectService.PROJECT_USERS_TEMPLATE.expand("PROJECT_ID").toString())
@@ -391,7 +392,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void getUserInProject() throws Exception {
+    public void getUserInProject() {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(ProjectService.PROJECT_USER_TEMPLATE.expand("PROJECT_ID", "ID").toString())
@@ -404,7 +405,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
     }
 
     @Test(expectedExceptions = UserInProjectNotFoundException.class)
-    public void getUserInProjectNotFound() throws Exception {
+    public void getUserInProjectNotFound() {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(ProjectService.PROJECT_USER_TEMPLATE.expand("PROJECT_ID", "ID").toString())
