@@ -7,6 +7,7 @@ package com.gooddata.connector;
 
 import com.gooddata.AbstractGoodDataIT;
 import com.gooddata.GoodDataException;
+import com.gooddata.GoodDataRestException;
 import com.gooddata.gdc.UriResponse;
 import com.gooddata.project.Project;
 import org.testng.annotations.BeforeMethod;
@@ -78,6 +79,17 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
             .respond()
                 .withStatus(404);
+
+        connectors.getIntegration(project, ConnectorType.ZENDESK4);
+    }
+
+    @Test(expectedExceptions = GoodDataRestException.class)
+    public void shouldFailGetIntegrationInternalServerError() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
+            .respond()
+                .withStatus(500);
 
         connectors.getIntegration(project, ConnectorType.ZENDESK4);
     }
