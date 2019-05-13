@@ -74,6 +74,7 @@
         <dependency>
             <groupId>com.github.lookfirst</groupId>
             <artifactId>sardine</artifactId>
+            <optional>true</optional> <!-- Only needed when one uses DataStoreService -->
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

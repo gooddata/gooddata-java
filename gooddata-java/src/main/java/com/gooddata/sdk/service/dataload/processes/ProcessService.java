@@ -17,6 +17,8 @@ import com.gooddata.sdk.service.*;
 import com.gooddata.sdk.service.account.AccountService;
 import com.gooddata.sdk.service.gdc.DataStoreService;
 import com.gooddata.sdk.service.util.ZipHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
@@ -55,6 +57,8 @@ public class ProcessService extends AbstractService {
 
     private final AccountService accountService;
     private final DataStoreService dataStoreService;
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
@@ -538,7 +542,7 @@ public class ProcessService extends AbstractService {
 
         Object processToSend;
         HttpMethod method = HttpMethod.POST;
-        if (tempFile.length() > MAX_MULTIPART_SIZE) {
+        if (dataStoreService != null && tempFile.length() > MAX_MULTIPART_SIZE) {
             try (final InputStream input = Files.newInputStream(tempFile.toPath())) {
                 process.setPath(dataStoreService.getUri(tempFile.getName()).getPath());
                 dataStoreService.upload(tempFile.getName(), input);
@@ -551,6 +555,12 @@ public class ProcessService extends AbstractService {
                         + tempFile.getAbsolutePath(), e);
             }
         } else {
+            if (dataStoreService == null) { // we have no WebDAV support, so let's try send big file by multipart
+                if (logger.isInfoEnabled()) {
+                    logger.info("WebDAV calls not supported - sending huge file using multipart. " +
+                            "Consider adding com.github.lookfirst:sardine to dependencies.");
+                }
+            }
             final MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>(2);
             parts.add("process", process);
             final HttpHeaders headers = new HttpHeaders();
