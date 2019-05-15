@@ -73,7 +73,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     }
 
     @Test(expectedExceptions = IntegrationNotFoundException.class)
-    public void shouldFailGetIntegrationNotFount() throws Exception {
+    public void shouldFailGetIntegrationNotFound() throws Exception {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
