@@ -19,6 +19,9 @@ import com.gooddata.sdk.service.lcm.LcmService;
 import com.gooddata.sdk.service.md.maintenance.ExportImportService;
 import com.gooddata.sdk.service.notification.NotificationService;
 import com.gooddata.sdk.service.projecttemplate.ProjectTemplateService;
+import com.gooddata.sdk.service.retry.RetrySettings;
+import com.gooddata.sdk.service.retry.GetServerErrorRetryStrategy;
+import com.gooddata.sdk.service.retry.RetryableRestTemplate;
 import com.gooddata.sdk.service.util.ResponseErrorHandler;
 import com.gooddata.sdk.service.authentication.LoginPasswordAuthentication;
 import com.gooddata.sdk.service.warehouse.WarehouseService;
@@ -38,6 +41,10 @@ import org.apache.http.util.VersionInfo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.retry.backoff.ExponentialBackOffPolicy;
+import org.springframework.retry.backoff.FixedBackOffPolicy;
+import org.springframework.retry.policy.SimpleRetryPolicy;
+import org.springframework.retry.support.RetryTemplate;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestTemplate;
 
@@ -207,7 +214,7 @@ public class GoodData {
     protected GoodData(GoodDataEndpoint endpoint, Authentication authentication, GoodDataSettings settings) {
         httpClient = authentication.createHttpClient(endpoint, createHttpClientBuilder(settings));
 
-        restTemplate = createRestTemplate(endpoint, httpClient);
+        restTemplate = createRestTemplate(endpoint, httpClient, settings.getRetrySettings());
 
         accountService = new AccountService(getRestTemplate(), settings);
         projectService = new ProjectService(getRestTemplate(), accountService, settings);
@@ -230,7 +237,7 @@ public class GoodData {
         lcmService = new LcmService(getRestTemplate(), settings);
     }
 
-    static RestTemplate createRestTemplate(GoodDataEndpoint endpoint, HttpClient httpClient) {
+    static RestTemplate createRestTemplate(GoodDataEndpoint endpoint, HttpClient httpClient, RetrySettings retrySettings) {
         notNull(endpoint, "endpoint");
         notNull(httpClient, "httpClient");
 
@@ -243,7 +250,12 @@ public class GoodData {
         presetHeaders.put("Accept", MediaType.APPLICATION_JSON_VALUE);
         presetHeaders.put(Header.GDC_VERSION, readApiVersion());
 
-        final RestTemplate restTemplate = new RestTemplate(factory);
+        final RestTemplate restTemplate;
+        if (retrySettings == null) {
+            restTemplate = new RestTemplate(factory);
+        } else {
+            restTemplate = createRetryRestTemplate(retrySettings, factory);
+        }
         restTemplate.setInterceptors(asList(
                 new HeaderSettingRequestInterceptor(presetHeaders),
                 new DeprecationWarningRequestInterceptor()));
@@ -251,6 +263,30 @@ public class GoodData {
         restTemplate.setErrorHandler(new ResponseErrorHandler(restTemplate.getMessageConverters()));
 
         return restTemplate;
+    }
+
+    private static RestTemplate createRetryRestTemplate(RetrySettings retrySettings, UriPrefixingClientHttpRequestFactory factory) {
+        final RetryTemplate retryTemplate = new RetryTemplate();
+
+        if (retrySettings.getRetryCount() != null) {
+            retryTemplate.setRetryPolicy(new SimpleRetryPolicy(retrySettings.getRetryCount()));
+        }
+
+        if (retrySettings.getRetryInitialInterval() != null) {
+            if (retrySettings.getRetryMultiplier() != null) {
+                final ExponentialBackOffPolicy exponentialBackOffPolicy = new ExponentialBackOffPolicy();
+                exponentialBackOffPolicy.setInitialInterval(retrySettings.getRetryInitialInterval());
+                exponentialBackOffPolicy.setMultiplier(retrySettings.getRetryMultiplier());
+                exponentialBackOffPolicy.setMaxInterval(retrySettings.getRetryMaxInterval());
+                retryTemplate.setBackOffPolicy(exponentialBackOffPolicy);
+            } else {
+                final FixedBackOffPolicy backOffPolicy = new FixedBackOffPolicy();
+                backOffPolicy.setBackOffPeriod(retrySettings.getRetryInitialInterval());
+                retryTemplate.setBackOffPolicy(backOffPolicy);
+            }
+        }
+
+        return new RetryableRestTemplate(factory, retryTemplate, new GetServerErrorRetryStrategy());
     }
 
     private HttpClientBuilder createHttpClientBuilder(final GoodDataSettings settings) {
