@@ -37,6 +37,19 @@ The *GoodData Java SDK* uses:
 * the *Slf4j API* version 1.7.*
 * the *Java Development Kit (JDK)* version 8 or later
 
+##### Retry of failed API calls
+
+You can retry your failed requests since version *2.34.0*. Turn it on by configuring
+[RetrySettings](https://github.com/gooddata/gooddata-java/blob/master/src/main/java/com/gooddata/retry/RetrySettings.java)
+and add [Spring retry](https://github.com/spring-projects/spring-retry) to your classpath:
+```xml
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
+            <version>${spring.retry.version}</version>
+        </dependency>
+```
+
 ### Logging
 
 The *GoodData Java SDK* logs using `slf4j-api`. Please adjust your logging configuration for 

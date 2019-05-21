@@ -5,8 +5,10 @@
  */
 package com.gooddata;
 
+import com.gooddata.retry.RetrySettings;
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static org.springframework.util.Assert.isTrue;
@@ -26,6 +28,7 @@ public class GoodDataSettings {
     private int socketTimeout = secondsToMillis(60);
     private int pollSleep = secondsToMillis(5);
     private String userAgent;
+    private RetrySettings retrySettings;
 
 
     /**
@@ -205,30 +208,36 @@ public class GoodDataSettings {
         this.userAgent = userAgent;
     }
 
+    public RetrySettings getRetrySettings() {
+        return retrySettings;
+    }
+
+    /**
+     * Set retry settings
+     * @param retrySettings retry settings
+     */
+    public void setRetrySettings(RetrySettings retrySettings) {
+        this.retrySettings = retrySettings;
+    }
+
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         final GoodDataSettings that = (GoodDataSettings) o;
-
-        if (maxConnections != that.maxConnections) return false;
-        if (connectionTimeout != that.connectionTimeout) return false;
-        if (connectionRequestTimeout != that.connectionRequestTimeout) return false;
-        if (socketTimeout != that.socketTimeout) return false;
-        if (pollSleep != that.pollSleep) return false;
-        return userAgent != null ? userAgent.equals(that.userAgent) : that.userAgent == null;
+        return maxConnections == that.maxConnections
+                && connectionTimeout == that.connectionTimeout
+                && connectionRequestTimeout == that.connectionRequestTimeout
+                && socketTimeout == that.socketTimeout
+                && pollSleep == that.pollSleep
+                && Objects.equals(userAgent, that.userAgent)
+                && Objects.equals(retrySettings, that.retrySettings);
     }
 
     @Override
     public int hashCode() {
-        int result = maxConnections;
-        result = 31 * result + connectionTimeout;
-        result = 31 * result + connectionRequestTimeout;
-        result = 31 * result + socketTimeout;
-        result = 31 * result + pollSleep;
-        result = 31 * result + (userAgent != null ? userAgent.hashCode() : 0);
-        return result;
+        return Objects.hash(maxConnections, connectionTimeout, connectionRequestTimeout, socketTimeout, pollSleep,
+                userAgent, retrySettings);
     }
 
     @Override
