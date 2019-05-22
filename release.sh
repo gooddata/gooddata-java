@@ -78,11 +78,21 @@ DEV_VERSION=$(echo ${VERSION} | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')-SN
 sed -i.bak "s/\(<version>\)[0-9]*\.[0-9]*\.[0-9]*[^<]*\(<\/version>\)/\1${FULL_VERSION}\2/" README.md && rm -f README.md.bak
 git commit -a -m "bump version"
 
-mvn --batch-mode release:prepare release:perform -DreleaseVersion=${FULL_VERSION} -DdevelopmentVersion=${DEV_VERSION} -Darguments="-Dgpg.passphrase=${GPG_PASS}"
+mvn --batch-mode release:prepare -DreleaseVersion=${FULL_VERSION} -DdevelopmentVersion=${DEV_VERSION}
 MVN_RET_VAL=$?
 if [[ ${MVN_RET_VAL} -ne 0 ]]; then
     echo
-    echo "ERROR: Maven build failed - please fix it and try to release again."
+    echo "ERROR: Maven build failed during release:prepare phase - please fix it and try to release again."
+    echo "WARN: You may need to remove up to 3 commits depending on what was done before the failure. Use e.g.: git reset --hard origin/HEAD"
+    echo
+    exit ${MVN_RET_VAL}
+fi
+
+mvn --batch-mode release:perform -Darguments="-Dgpg.passphrase=${GPG_PASS} -Dmaven.test.skip=true -Dfindbugs.skip=true"
+MVN_RET_VAL=$?
+if [[ ${MVN_RET_VAL} -ne 0 ]]; then
+    echo
+    echo "ERROR: Maven build failed during release:perform phase - please fix it and try to release again."
     echo "WARN: You may need to remove up to 3 commits depending on what was done before the failure. Use e.g.: git reset --hard origin/HEAD"
     echo
     exit ${MVN_RET_VAL}
