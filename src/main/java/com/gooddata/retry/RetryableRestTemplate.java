@@ -6,6 +6,8 @@
 package com.gooddata.retry;
 
 import com.gooddata.GoodDataRestException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.retry.support.RetryTemplate;
@@ -22,6 +24,8 @@ import static org.apache.commons.lang3.Validate.notNull;
  * REST template with retry ability. Its behavior is described by given strategy and retry template.
  */
 public class RetryableRestTemplate extends RestTemplate {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final RetryTemplate retryTemplate;
     private final RetryStrategy retryStrategy;
@@ -43,12 +47,14 @@ public class RetryableRestTemplate extends RestTemplate {
     protected <T> T doExecute(URI url, HttpMethod method, RequestCallback requestCallback,
                               ResponseExtractor<T> responseExtractor) throws RestClientException {
         return retryTemplate.execute(context -> {
-            System.out.println("Retrying " + context.getRetryCount() + " " + method + " ");
             try {
                 return super.doExecute(url, method, requestCallback, responseExtractor);
             } catch (GoodDataRestException e) {
                 if (!retryStrategy.retryAllowed(method.toString(), e.getStatusCode(), url)) {
                     context.setExhaustedOnly();
+                } else {
+                    final int retryCount = context.getRetryCount();
+                    logger.info("{}call of {} {} failed, HTTP {} and will be retried, {} ", retryCount == 0 ? "" : retryCount + " ", method, url, e.getStatusCode(), e.getMessage());
                 }
                 throw e;
             }
