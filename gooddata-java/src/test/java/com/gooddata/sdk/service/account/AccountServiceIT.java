@@ -7,6 +7,7 @@ package com.gooddata.sdk.service.account;
 
 import com.gooddata.GoodDataException;
 import com.gooddata.sdk.model.account.Account;
+import com.gooddata.sdk.model.account.SeparatorSettings;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -25,8 +26,10 @@ public class AccountServiceIT extends AbstractGoodDataIT {
     private static final String CREATE_ACCOUNT = "/account/create-account.json";
     public static final String ACCOUNT = "/account/account.json";
     private static final String ACCOUNT_UPDATE = "/account/update-account.json";
+    private static final String SEPARATORS = "/account/separators.json";
     private static final String ACCOUNT_ID = "ID";
     private static final String ACCOUNT_URI = AccountService.ACCOUNT_TEMPLATE.expand(ACCOUNT_ID).toString();
+    private static final String SEPARATORS_URI = AccountService.SEPARATORS_TEMPLATE.expand(ACCOUNT_ID).toString();
     public static final String CURRENT_ACCOUNT_URI = AccountService.ACCOUNT_TEMPLATE.expand(Account.CURRENT_ID).toString();
     private static final String LOGOUT_CURRENT = AccountService.LOGIN_TEMPLATE.expand(ACCOUNT_ID).toString();
     private static final String DOMAIN = "default";
@@ -229,4 +232,32 @@ public class AccountServiceIT extends AbstractGoodDataIT {
         gd.getAccountService().updateAccount(toBeUpdated);
     }
 
+    @Test
+    public void shouldGetAccountSeparatorSettings() {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(SEPARATORS_URI)
+                .respond()
+                .withStatus(200)
+                .withBody(readFromResource(SEPARATORS));
+
+        final Account account = readObjectFromResource(ACCOUNT, Account.class);
+
+        final SeparatorSettings separators = gd.getAccountService().getSeparatorSettings(account);
+
+        assertThat(separators, notNullValue());
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void shouldFailGetAccountSeparatorSettings() {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(SEPARATORS_URI)
+                .respond()
+                .withStatus(404);
+
+        final Account account = readObjectFromResource(ACCOUNT, Account.class);
+
+        gd.getAccountService().getSeparatorSettings(account);
+    }
 }

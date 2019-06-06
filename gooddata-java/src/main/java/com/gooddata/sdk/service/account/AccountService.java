@@ -8,6 +8,7 @@ package com.gooddata.sdk.service.account;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
 import com.gooddata.sdk.model.account.Account;
+import com.gooddata.sdk.model.account.SeparatorSettings;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.sdk.service.GoodDataSettings;
@@ -28,6 +29,7 @@ public class AccountService extends AbstractService {
     protected static final UriTemplate ACCOUNT_TEMPLATE = new UriTemplate(Account.URI);
     protected static final UriTemplate ACCOUNTS_TEMPLATE = new UriTemplate(Account.ACCOUNTS_URI);
     protected static final UriTemplate LOGIN_TEMPLATE = new UriTemplate(Account.LOGIN_URI);
+    protected static final UriTemplate SEPARATORS_TEMPLATE = new UriTemplate(SeparatorSettings.URI);
 
     /**
      * Constructs service for GoodData account management.
@@ -164,4 +166,20 @@ public class AccountService extends AbstractService {
         }
     }
 
+    /**
+     * Returns default thousand and decimal separator settings for the given account.
+     *
+     * @param account account
+     * @return default {@link SeparatorSettings} for the account
+     */
+    public SeparatorSettings getSeparatorSettings(final Account account) {
+        notNull(account, "account");
+        notEmpty(account.getUri(), "account.uri");
+
+        try {
+            return restTemplate.getForObject(SEPARATORS_TEMPLATE.expand(account.getId()), SeparatorSettings.class);
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to get separators for account=" + account.getUri(), e);
+        }
+    }
 }

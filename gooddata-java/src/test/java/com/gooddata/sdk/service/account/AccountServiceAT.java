@@ -5,6 +5,7 @@
  */
 package com.gooddata.sdk.service.account;
 
+import com.gooddata.sdk.model.account.SeparatorSettings;
 import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.model.account.Account;
 import org.testng.annotations.AfterClass;
@@ -57,6 +58,15 @@ public class AccountServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = "isolated_domain", dependsOnMethods = "getAccount")
+    public void getSeparatorSettings() {
+        final SeparatorSettings separators = accountService.getSeparatorSettings(account);
+
+        assertThat(separators, notNullValue());
+        assertThat(separators.getThousand(), notNullValue());
+        assertThat(separators.getDecimal(), notNullValue());
+    }
+
+    @Test(groups = "isolated_domain", dependsOnMethods = "getSeparatorSettings")
     public void updateAccount() throws Exception {
         final String newName = "Petra";
         account.setFirstName(newName);
