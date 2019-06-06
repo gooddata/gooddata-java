@@ -6,6 +6,7 @@
 package com.gooddata.sdk.service.connector;
 
 import com.gooddata.GoodDataException;
+import com.gooddata.GoodDataRestException;
 import com.gooddata.sdk.model.connector.*;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.project.Project;
@@ -81,6 +82,17 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
             .respond()
                 .withStatus(404);
+
+        connectors.getIntegration(project, ConnectorType.ZENDESK4);
+    }
+
+    @Test(expectedExceptions = GoodDataRestException.class)
+    public void shouldFailGetIntegrationInternalServerError() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
+            .respond()
+                .withStatus(500);
 
         connectors.getIntegration(project, ConnectorType.ZENDESK4);
     }

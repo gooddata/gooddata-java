@@ -26,9 +26,9 @@ import org.testng.annotations.Test;
 import java.net.URI;
 import java.util.Collection;
 
+import static org.hamcrest.CoreMatchers.hasItem;
 import static com.gooddata.sdk.service.project.ProjectService.LIST_PROJECTS_TEMPLATE;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -40,6 +40,7 @@ public class ProjectServiceTest {
     private static final String ID = "11";
     private static final String URI = "/gdc/projects/11";
     private static final String ROLE_URI = URI + "/roles/2";
+
     @Mock
     private Project project;
     @Mock
