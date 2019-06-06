@@ -1,0 +1,31 @@
+{
+  "kpi": {
+    "content": {
+      "comparisonDirection": "growIsGood",
+      "comparisonType": "lastYear",
+      "dateDataSet": "/gdc/md/lkljlgpbqziy3mjjtczf5nbeu32ck1iz/obj/75776",
+      "ignoreDashboardFilters": [
+        {
+          "dateFilterReference": {
+            "dataSet": "/date/dataset/1"
+          }
+        }
+      ],
+      "metric": "/gdc/md/lkljlgpbqziy3mjjtczf5nbeu32ck1iz/obj/75808"
+    },
+    "meta": {
+      "author": "/gdc/account/profile/9d6aac8f5372a21685ed663a082108c8",
+      "category": "kpi",
+      "contributor": "/gdc/account/profile/9d6aac8f5372a21685ed663a082108c8",
+      "created": "2019-05-24 10:16:56",
+      "deprecated": "0",
+      "identifier": "aacxiSU1dGtI",
+      "isProduction": 1,
+      "summary": "",
+      "tags": "",
+      "title": "Avg. Salary (CSV)",
+      "updated": "2019-05-29 13:25:06",
+      "uri": "/gdc/md/lkljlgpbqziy3mjjtczf5nbeu32ck1iz/obj/75809"
+    }
+  }
+}

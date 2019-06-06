@@ -1,0 +1,28 @@
+{
+  "filterContext" : {
+    "content" : {
+      "filters" : [
+        {
+          "dateFilter" : {
+            "from" : "-1",
+            "granularity" : "GDC.time.year",
+            "to" : "-1",
+            "type" : "relative"
+          }
+        },
+        {
+          "attributeFilter" : {
+            "attributeElements" : [
+              "/elem/1"
+            ],
+            "displayForm" : "/df/1",
+            "negativeSelection" : false
+          }
+        }
+      ]
+    },
+    "meta" : {
+      "title" : "filterContext"
+    }
+  }
+}
