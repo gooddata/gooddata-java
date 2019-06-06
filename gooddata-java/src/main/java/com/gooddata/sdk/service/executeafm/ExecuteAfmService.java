@@ -34,10 +34,24 @@ import static com.gooddata.util.Validate.notNull;
  */
 public class ExecuteAfmService extends AbstractService {
 
-    private static final String AFM_EXECUTION_URI = "/gdc/app/projects/{projectId}/executeAfm";
-    private static final String VISUALIZATION_EXECUTION_URI = "/gdc/app/projects/{projectId}/executeVisualization";
-    private static final String RESULT_OFFSET = "offset";
-    private static final String RESULT_LIMIT = "limit";
+    /**
+     * URI string containing template link to the {@code /executeAfm} resource.
+     */
+    public static final String AFM_EXECUTION_URI = "/gdc/app/projects/{projectId}/executeAfm";
+    /**
+     * URI string containing template link to the {@code /executeVisualization} resource.
+     */
+    public static final String VISUALIZATION_EXECUTION_URI = "/gdc/app/projects/{projectId}/executeVisualization";
+    /**
+     * Query param representing offset of result data returned by AFM execution.
+     * Can be used for offset query param value replacement in {@link ExecutionResponse#getExecutionResultUri()} link.
+     */
+    public static final String RESULT_OFFSET = "offset";
+    /**
+     * Query param representing limit of result data returned by AFM execution.
+     * Can be used for limit query param value replacement in {@link ExecutionResponse#getExecutionResultUri()} link.
+     */
+    public static final String RESULT_LIMIT = "limit";
 
     /**
      * Constructor.
