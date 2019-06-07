@@ -1,0 +1,10 @@
+{
+  "attributeFilter": {
+    "displayForm": "/df/1",
+    "negativeSelection": true,
+    "attributeElements": [
+      "/elem/1",
+      "/elem/2"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "kpiAlert" : {
+    "content" : {
+      "dashboard" : "/dashboard/1",
+      "filterContext" : "/filter/context/1",
+      "isTriggered" : false,
+      "kpi" : "/kpi/1",
+      "threshold" : 100.0,
+      "whenTriggered" : "belowThreshold"
+    },
+    "meta" : {
+      "title" : "kpi alert new"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "kpi" : {
+    "content" : {
+      "comparisonDirection" : "growIsGood",
+      "comparisonType" : "lastYear",
+      "dateDataSet" : "/dateDs/1",
+      "metric" : "/metric/1",
+      "ignoreDashboardFilters": [
+        {
+          "dateFilterReference": {
+            "dataSet": "/date/dataset/1"
+          }
+        }
+      ]
+    },
+    "meta" : {
+      "title" : "KPI 1"
+    }
+  }
+}
