@@ -20,7 +20,6 @@ import com.gooddata.sdk.service.md.maintenance.ExportImportService;
 import com.gooddata.sdk.service.notification.NotificationService;
 import com.gooddata.sdk.service.projecttemplate.ProjectTemplateService;
 import com.gooddata.sdk.service.retry.RetrySettings;
-import com.gooddata.sdk.service.retry.GetServerErrorRetryStrategy;
 import com.gooddata.sdk.service.retry.RetryableRestTemplate;
 import com.gooddata.sdk.service.util.ResponseErrorHandler;
 import com.gooddata.sdk.service.authentication.LoginPasswordAuthentication;
@@ -41,10 +40,6 @@ import org.apache.http.util.VersionInfo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.retry.backoff.ExponentialBackOffPolicy;
-import org.springframework.retry.backoff.FixedBackOffPolicy;
-import org.springframework.retry.policy.SimpleRetryPolicy;
-import org.springframework.retry.support.RetryTemplate;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestTemplate;
 
@@ -254,7 +249,7 @@ public class GoodData {
         if (retrySettings == null) {
             restTemplate = new RestTemplate(factory);
         } else {
-            restTemplate = createRetryRestTemplate(retrySettings, factory);
+            restTemplate = RetryableRestTemplate.create(retrySettings, factory);
         }
         restTemplate.setInterceptors(asList(
                 new HeaderSettingRequestInterceptor(presetHeaders),
@@ -263,30 +258,6 @@ public class GoodData {
         restTemplate.setErrorHandler(new ResponseErrorHandler(restTemplate.getMessageConverters()));
 
         return restTemplate;
-    }
-
-    private static RestTemplate createRetryRestTemplate(RetrySettings retrySettings, UriPrefixingClientHttpRequestFactory factory) {
-        final RetryTemplate retryTemplate = new RetryTemplate();
-
-        if (retrySettings.getRetryCount() != null) {
-            retryTemplate.setRetryPolicy(new SimpleRetryPolicy(retrySettings.getRetryCount()));
-        }
-
-        if (retrySettings.getRetryInitialInterval() != null) {
-            if (retrySettings.getRetryMultiplier() != null) {
-                final ExponentialBackOffPolicy exponentialBackOffPolicy = new ExponentialBackOffPolicy();
-                exponentialBackOffPolicy.setInitialInterval(retrySettings.getRetryInitialInterval());
-                exponentialBackOffPolicy.setMultiplier(retrySettings.getRetryMultiplier());
-                exponentialBackOffPolicy.setMaxInterval(retrySettings.getRetryMaxInterval());
-                retryTemplate.setBackOffPolicy(exponentialBackOffPolicy);
-            } else {
-                final FixedBackOffPolicy backOffPolicy = new FixedBackOffPolicy();
-                backOffPolicy.setBackOffPeriod(retrySettings.getRetryInitialInterval());
-                retryTemplate.setBackOffPolicy(backOffPolicy);
-            }
-        }
-
-        return new RetryableRestTemplate(factory, retryTemplate, new GetServerErrorRetryStrategy());
     }
 
     private HttpClientBuilder createHttpClientBuilder(final GoodDataSettings settings) {
