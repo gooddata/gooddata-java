@@ -8,8 +8,12 @@ package com.gooddata.retry;
 import com.gooddata.GoodDataRestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.gooddata.UriPrefixingClientHttpRequestFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.retry.backoff.ExponentialBackOffPolicy;
+import org.springframework.retry.backoff.FixedBackOffPolicy;
+import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
@@ -61,4 +65,33 @@ public class RetryableRestTemplate extends RestTemplate {
         });
     }
 
+    /**
+     * Creates new retryable REST template.
+     * @param retrySettings retry settings
+     * @param factory request factory
+     * @return retryable rest template
+     */
+    public static RestTemplate create(RetrySettings retrySettings, ClientHttpRequestFactory factory) {
+        final RetryTemplate retryTemplate = new RetryTemplate();
+
+        if (retrySettings.getRetryCount() != null) {
+            retryTemplate.setRetryPolicy(new SimpleRetryPolicy(retrySettings.getRetryCount()));
+        }
+
+        if (retrySettings.getRetryInitialInterval() != null) {
+            if (retrySettings.getRetryMultiplier() != null) {
+                final ExponentialBackOffPolicy exponentialBackOffPolicy = new ExponentialBackOffPolicy();
+                exponentialBackOffPolicy.setInitialInterval(retrySettings.getRetryInitialInterval());
+                exponentialBackOffPolicy.setMultiplier(retrySettings.getRetryMultiplier());
+                exponentialBackOffPolicy.setMaxInterval(retrySettings.getRetryMaxInterval());
+                retryTemplate.setBackOffPolicy(exponentialBackOffPolicy);
+            } else {
+                final FixedBackOffPolicy backOffPolicy = new FixedBackOffPolicy();
+                backOffPolicy.setBackOffPeriod(retrySettings.getRetryInitialInterval());
+                retryTemplate.setBackOffPolicy(backOffPolicy);
+            }
+        }
+
+        return new RetryableRestTemplate(factory, retryTemplate, new GetServerErrorRetryStrategy());
+    }
 }
