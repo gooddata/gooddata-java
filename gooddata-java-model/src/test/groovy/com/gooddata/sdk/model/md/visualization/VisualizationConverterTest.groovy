@@ -47,7 +47,7 @@ class VisualizationConverterTest extends Specification {
     @SuppressWarnings("GrDeprecatedAPIUsage")
     def "should convert complex"() {
         given:
-        Afm expected = new Afm(
+        Afm expectedAfm = new Afm(
                 [new AttributeItem(new UriObjQualifier("/uri/to/displayForm/1"), "attribute1", "attributeAlias")],
                 [
                         new PositiveAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), new UriAttributeFilterElements(["ab", "cd"])),
@@ -71,17 +71,17 @@ class VisualizationConverterTest extends Specification {
         Afm converted = convertToAfm(visualizationObject)
 
         expect:
-        that converted, jsonEquals(expected)
+        that converted, jsonEquals(expectedAfm)
     }
 
     def "should convert simple"() {
         given:
-        Afm expected = new Afm([], [], [], null)
+        Afm expectedAfm = new Afm([], [], [], null)
         VisualizationObject visualizationObject = readObjectFromResource("/$SIMPLE_VISUALIZATION", VisualizationObject)
         Afm converted = convertToAfm(visualizationObject)
 
         expect:
-        that converted, jsonEquals(expected)
+        that converted, jsonEquals(expectedAfm)
     }
 
 
@@ -98,10 +98,10 @@ class VisualizationConverterTest extends Specification {
         ResultSpec converted = convertToResultSpec(vo, getter)
 
         expect:
-        that converted, jsonEquals(expected)
+        that converted, jsonEquals(expectedResultSpec)
 
         where:
-        name         | resource                   | expected
+        name         | resource                   | expectedResultSpec
         "measures"   | MULTIPLE_MEASURE_BUCKETS   | new ResultSpec(
                 [new Dimension([]), new Dimension("measureGroup")],
                 null
@@ -125,10 +125,10 @@ class VisualizationConverterTest extends Specification {
         ResultSpec converted = convertToResultSpec(vo, getter)
 
         expect:
-        that converted, jsonEquals(expected)
+        that converted, jsonEquals(expectedResultSpec)
 
         where:
-        type   | resource             | expected
+        type   | resource             | expectedResultSpec
         "pie"  | STACKED_COLUMN_CHART | new ResultSpec(
                 [new Dimension("measureGroup"), new Dimension("1")],
                 null
@@ -148,7 +148,7 @@ class VisualizationConverterTest extends Specification {
         List<SortItem> sorts = parseSorting(properties)
 
         expect:
-        that sorts, jsonEquals(expected)
+        that sorts, jsonEquals(expectedSorts)
 
         where:
         value << [ "attribute sorting", "measure sorting"]
@@ -156,7 +156,7 @@ class VisualizationConverterTest extends Specification {
                 '{"sortItems":[{"attributeSortItem":{"direction":"desc","attributeIdentifier":"id"}}]}',
                 '{"sortItems":[{"measureSortItem":{"direction":"desc","locators":[{"measureLocatorItem":{"measureIdentifier":"id"}}]}}]}'
         ]
-        expected << [
+        expectedSorts << [
                 [new AttributeSortItem("desc", "id")],
                 [new MeasureSortItem("desc", [new MeasureLocatorItem("id")])]
         ]
