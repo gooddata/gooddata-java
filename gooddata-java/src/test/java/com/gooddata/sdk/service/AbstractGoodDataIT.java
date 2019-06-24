@@ -16,12 +16,14 @@ import static net.jadler.Jadler.port;
 public abstract class AbstractGoodDataIT {
 
     protected GoodData gd;
+    protected GoodDataEndpoint endpoint;
 
     @BeforeMethod
     public void commonSetUp() {
         initJadler().withDefaultResponseContentType("application/json");
+        endpoint = new GoodDataEndpoint("localhost", port(), "http");
         gd = new GoodData(
-                new GoodDataEndpoint("localhost", port(), "http"),
+                endpoint,
                 new LoginPasswordAuthentication("sdk@gooddata.com", "sdk"),
                 createGoodDataSettings()
         );

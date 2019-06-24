@@ -27,9 +27,11 @@ public abstract class AbstractGoodDataAT {
     protected static final String title =
             "sdktest " + new LocalDate() + " " + System.getenv("BUILD_NUMBER");
 
+    protected static final GoodDataEndpoint endpoint = new GoodDataEndpoint(getProperty("host"));
+
     protected static final GoodData gd =
             new GoodData(
-                    new GoodDataEndpoint(getProperty("host")),
+                    endpoint,
                     new LoginPasswordAuthentication(getProperty("login"), getProperty("pass")) {
                         /**
                          * had to be overridden to access connectionManager, to test how many connections were not closed

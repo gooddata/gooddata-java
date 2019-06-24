@@ -49,17 +49,13 @@ public class ExportService extends AbstractService {
     protected static final UriTemplate OBJ_TEMPLATE = new UriTemplate(Obj.OBJ_URI);
     protected static final UriTemplate PROJECT_TEMPLATE = new UriTemplate(Project.URI);
 
-    private final GoodDataEndpoint endpoint;
-
     /**
      * Service for data export
      * @param restTemplate REST template
-     * @param endpoint GoodData Endpoint
      * @param settings settings
      */
-    public ExportService(final RestTemplate restTemplate, final GoodDataEndpoint endpoint, final GoodDataSettings settings) {
+    public ExportService(final RestTemplate restTemplate, final GoodDataSettings settings) {
         super(restTemplate, settings);
-        this.endpoint = notNull(endpoint, "endpoint");
     }
 
     /**
@@ -164,13 +160,15 @@ public class ExportService extends AbstractService {
     /**
      * Export the given dashboard tab in PDF format to the given output stream
      *
+     * @param endpoint  endpoint for which the export is generated
      * @param dashboard dashboard
      * @param tab       tab
      * @param output    output
      * @return polling result
      * @throws ExportException if export fails
      */
-    public FutureResult<Void> exportPdf(final ProjectDashboard dashboard, final Tab tab, final OutputStream output) {
+    public FutureResult<Void> exportPdf(final GoodDataEndpoint endpoint, final ProjectDashboard dashboard, final Tab tab, final OutputStream output) {
+        notNull(endpoint, "endpoint");
         notNull(dashboard, "dashboard");
         notNull(tab, "tab");
         notNull(output, "output");

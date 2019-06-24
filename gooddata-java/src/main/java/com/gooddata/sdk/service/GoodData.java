@@ -218,7 +218,7 @@ public class GoodData {
         gdcService = new GdcService(getRestTemplate(), settings);
         dataStoreService = new DataStoreService(getHttpClient(), getRestTemplate(), gdcService, endpoint.toUri());
         datasetService = new DatasetService(getRestTemplate(), dataStoreService, settings);
-        exportService = new ExportService(getRestTemplate(), endpoint, settings);
+        exportService = new ExportService(getRestTemplate(), settings);
         processService = new ProcessService(getRestTemplate(), accountService, dataStoreService, settings);
         warehouseService = new WarehouseService(getRestTemplate(), settings);
         connectorService = new ConnectorService(getRestTemplate(), projectService, settings);
