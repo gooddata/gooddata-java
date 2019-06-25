@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Intercepts the request-response to check for X-GDC-DEPRECATED header and log it's content.
  */
-class DeprecationWarningRequestInterceptor implements ClientHttpRequestInterceptor {
+public class DeprecationWarningRequestInterceptor implements ClientHttpRequestInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger("com.gooddata.sdk.DeprecationWarning");
 

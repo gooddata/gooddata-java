@@ -35,7 +35,6 @@ public class LcmService extends AbstractService {
 
     /**
      * Constructs service for GoodData Life Cycle Management.
-     *
      * @param restTemplate RESTful HTTP Spring template
      * @param settings settings
      */

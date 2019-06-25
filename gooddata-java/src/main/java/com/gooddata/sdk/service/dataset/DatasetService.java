@@ -52,7 +52,7 @@ public class DatasetService extends AbstractService {
     public DatasetService(final RestTemplate restTemplate, final DataStoreService dataStoreService,
                           final GoodDataSettings settings) {
         super(restTemplate, settings);
-        this.dataStoreService = notNull(dataStoreService, "dataStoreService");
+        this.dataStoreService = dataStoreService;
     }
 
     /**
@@ -136,6 +136,10 @@ public class DatasetService extends AbstractService {
      * @see <a href="https://developer.gooddata.com/article/multiload-of-csv-data">batch upload reference</a>
      */
     public FutureResult<Void> loadDatasets(final Project project, final Collection<DatasetManifest> datasets) {
+        if (dataStoreService == null) {
+            throw new UnsupportedOperationException("WebDAV calls not supported. Please add com.github.lookfirst:sardine to dependencies.");
+        }
+
         notNull(project, "project");
         validateUploadManifests(datasets);
         final List<String> datasetsNames = new ArrayList<>(datasets.size());

@@ -5,20 +5,20 @@
  */
 package com.gooddata.sdk.service.notification;
 
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
-
-import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.notification.Channel;
 import com.gooddata.sdk.model.notification.ProjectEvent;
 import com.gooddata.sdk.model.notification.Subscription;
 import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.AbstractService;
+import com.gooddata.sdk.service.GoodDataSettings;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Service to trigger and manage notifications.

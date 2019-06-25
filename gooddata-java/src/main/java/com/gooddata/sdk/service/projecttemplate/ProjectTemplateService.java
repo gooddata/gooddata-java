@@ -5,13 +5,13 @@
  */
 package com.gooddata.sdk.service.projecttemplate;
 
-import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.model.dataset.DatasetManifest;
 import com.gooddata.sdk.model.projecttemplate.Template;
 import com.gooddata.sdk.model.projecttemplate.Templates;
+import com.gooddata.sdk.service.AbstractService;
+import com.gooddata.sdk.service.GoodDataSettings;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,7 +29,6 @@ public class ProjectTemplateService extends AbstractService {
     /**
      * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
      * this abstract one.
-     *
      * @param restTemplate RESTful HTTP Spring template
      * @param settings settings
      */

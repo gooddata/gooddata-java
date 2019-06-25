@@ -11,13 +11,14 @@ import com.gooddata.sdk.model.md.ProjectDashboard;
 import com.gooddata.sdk.model.md.ScheduledMail;
 import com.gooddata.sdk.model.md.report.Report;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
-import com.gooddata.sdk.service.authentication.LoginPasswordAuthentication;
 import com.gooddata.sdk.model.project.Project;
-import org.apache.http.client.HttpClient;
+import com.gooddata.sdk.service.httpcomponents.SingleEndpointGoodDataRestProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.joda.time.LocalDate;
 import org.testng.annotations.AfterSuite;
+
+import static com.gooddata.sdk.service.httpcomponents.LoginPasswordGoodDataRestProvider.createHttpClient;
 
 /**
  * Parent for acceptance tests
@@ -31,20 +32,13 @@ public abstract class AbstractGoodDataAT {
 
     protected static final GoodData gd =
             new GoodData(
-                    endpoint,
-                    new LoginPasswordAuthentication(getProperty("login"), getProperty("pass")) {
-                        /**
-                         * had to be overridden to access connectionManager, to test how many connections were not closed
-                         */
-                        @Override
-                        public HttpClient createHttpClient(final GoodDataEndpoint endpoint, final HttpClientBuilder builder) {
-                            PoolingHttpClientConnectionManager httpClientConnectionManager = new PoolingHttpClientConnectionManager();
-                            final HttpClientBuilder builderWithManager = builder.setConnectionManager(httpClientConnectionManager);
-                            connManager = httpClientConnectionManager;
+                    new SingleEndpointGoodDataRestProvider(endpoint, new GoodDataSettings(), (b, e, s) -> {
+                        PoolingHttpClientConnectionManager httpClientConnectionManager = new PoolingHttpClientConnectionManager();
+                        final HttpClientBuilder builderWithManager = b.setConnectionManager(httpClientConnectionManager);
+                        connManager = httpClientConnectionManager;
 
-                            return super.createHttpClient(endpoint, builderWithManager);
-                        }
-                    });
+                        return createHttpClient(builderWithManager, endpoint, getProperty("login"), getProperty("password"));
+                    }){});
 
 
     protected static PoolingHttpClientConnectionManager connManager;

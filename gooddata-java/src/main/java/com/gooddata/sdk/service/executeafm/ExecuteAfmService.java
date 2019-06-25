@@ -5,19 +5,15 @@
  */
 package com.gooddata.sdk.service.executeafm;
 
-import com.gooddata.sdk.service.AbstractService;
-import com.gooddata.sdk.service.FutureResult;
 import com.gooddata.GoodDataException;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.sdk.service.GoodDataSettings;
-import com.gooddata.sdk.service.PollResult;
-import com.gooddata.sdk.service.SimplePollHandler;
 import com.gooddata.sdk.model.executeafm.Execution;
 import com.gooddata.sdk.model.executeafm.ResultPage;
 import com.gooddata.sdk.model.executeafm.VisualizationExecution;
 import com.gooddata.sdk.model.executeafm.response.ExecutionResponse;
 import com.gooddata.sdk.model.executeafm.result.ExecutionResult;
 import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -55,7 +51,6 @@ public class ExecuteAfmService extends AbstractService {
 
     /**
      * Constructor.
-     *
      * @param restTemplate rest template
      * @param settings     settings
      */

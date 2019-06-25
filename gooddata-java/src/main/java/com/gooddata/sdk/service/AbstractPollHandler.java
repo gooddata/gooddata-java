@@ -27,9 +27,9 @@ public abstract class AbstractPollHandler<P,R> extends AbstractPollHandlerBase<P
 
     /**
      * Creates a new instance of polling handler
-     *  @param pollingUri  URI for polling
-     *  @param pollClass class of the polling object (or {@link Void})
-     *  @param resultClass class of the result (or {@link Void})
+     * @param pollingUri  URI for polling
+     * @param pollClass class of the polling object (or {@link Void})
+     * @param resultClass class of the result (or {@link Void})
      */
     public AbstractPollHandler(final String pollingUri, final Class<P> pollClass, Class<R> resultClass) {
         super(pollClass, resultClass);

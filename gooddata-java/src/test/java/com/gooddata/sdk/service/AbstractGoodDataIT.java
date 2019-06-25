@@ -5,13 +5,11 @@
  */
 package com.gooddata.sdk.service;
 
-import com.gooddata.sdk.service.authentication.LoginPasswordAuthentication;
+import com.gooddata.sdk.service.httpcomponents.LoginPasswordGoodDataRestProvider;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-import static net.jadler.Jadler.closeJadler;
-import static net.jadler.Jadler.initJadler;
-import static net.jadler.Jadler.port;
+import static net.jadler.Jadler.*;
 
 public abstract class AbstractGoodDataIT {
 
@@ -23,10 +21,12 @@ public abstract class AbstractGoodDataIT {
         initJadler().withDefaultResponseContentType("application/json");
         endpoint = new GoodDataEndpoint("localhost", port(), "http");
         gd = new GoodData(
-                endpoint,
-                new LoginPasswordAuthentication("sdk@gooddata.com", "sdk"),
-                createGoodDataSettings()
-        );
+                new LoginPasswordGoodDataRestProvider(
+                        endpoint,
+                        createGoodDataSettings(),
+                        "sdk@gooddata.com",
+                        "sdk"
+                ));
     }
 
     protected GoodDataSettings createGoodDataSettings() {

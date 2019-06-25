@@ -8,6 +8,7 @@ package com.gooddata.sdk.service.gdc;
 import com.github.sardine.Sardine;
 import com.github.sardine.impl.SardineException;
 import com.gooddata.UriPrefixer;
+import com.gooddata.sdk.service.httpcomponents.SingleEndpointGoodDataRestProvider;
 import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -49,16 +50,15 @@ public class DataStoreService {
 
     /**
      * Creates new DataStoreService
-     * @param httpClient httpClient to make datastore connection
-     * @param restTemplate restTemplate to make datastore connection
+     * @param restProvider restProvider to make datastore connection
      * @param gdcService used to obtain datastore URI
-     * @param gdcUri complete GDC URI used to prefix possibly relative datastore path
      */
-    public DataStoreService(HttpClient httpClient, RestTemplate restTemplate, GdcService gdcService, String gdcUri) {
+    public DataStoreService(SingleEndpointGoodDataRestProvider restProvider, GdcService gdcService) {
+        notNull(restProvider, "restProvider");
         this.gdcService = notNull(gdcService, "gdcService");
-        this.gdcUri = URI.create(notEmpty(gdcUri, "gdcUri"));
-        this.restTemplate = notNull(restTemplate, "restTemplate");
-        sardine = new GdcSardine(new CustomHttpClientBuilder(httpClient));
+        this.gdcUri = URI.create(notNull(restProvider.getEndpoint(), "endpoint").toUri());
+        this.restTemplate = notNull(restProvider.getRestTemplate(), "restTemplate");
+        sardine = new GdcSardine(new CustomHttpClientBuilder(notNull(restProvider.getHttpClient(), "httpClient")));
     }
 
     private UriPrefixer getPrefixer() {

@@ -33,7 +33,6 @@ public class AccountService extends AbstractService {
 
     /**
      * Constructs service for GoodData account management.
-     *
      * @param restTemplate RESTful HTTP Spring template
      * @param settings settings
      */
