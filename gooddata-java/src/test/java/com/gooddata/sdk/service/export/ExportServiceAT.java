@@ -33,7 +33,7 @@ public class ExportServiceAT extends AbstractGoodDataAT {
     @Test(groups = "export", dependsOnGroups = "dataset")
     public void shouldExportDashboard() throws Exception {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        service.exportPdf(dashboard, dashboard.getTabs().iterator().next(), output).get();
+        service.exportPdf(endpoint, dashboard, dashboard.getTabs().iterator().next(), output).get();
         assertThat(output, is(notNullValue()));
     }
 

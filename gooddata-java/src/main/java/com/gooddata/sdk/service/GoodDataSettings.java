@@ -5,12 +5,24 @@
  */
 package com.gooddata.sdk.service;
 
+import com.gooddata.gdc.Header;
 import com.gooddata.sdk.service.retry.RetrySettings;
 import com.gooddata.util.GoodDataToStringBuilder;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.VersionInfo;
+import org.springframework.http.MediaType;
+import org.springframework.util.StreamUtils;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import static com.gooddata.util.Validate.notNull;
+import static org.apache.http.util.VersionInfo.loadVersionInfo;
 import static org.springframework.util.Assert.isTrue;
 
 /**
@@ -29,7 +41,14 @@ public class GoodDataSettings {
     private int pollSleep = secondsToMillis(5);
     private String userAgent;
     private RetrySettings retrySettings;
+    private Map<String, String> presetHeaders = new HashMap<>(2);
 
+    private static final String UNKNOWN_VERSION = "UNKNOWN";
+
+    public GoodDataSettings() {
+        presetHeaders.put("Accept", MediaType.APPLICATION_JSON_VALUE);
+        presetHeaders.put(Header.GDC_VERSION, readApiVersion());
+    }
 
     /**
      * Set maximum number of connections used. This applies same for connections per host as for total connections.
@@ -193,11 +212,19 @@ public class GoodDataSettings {
     }
 
     /**
+     * GoodData User agent
+     * @return user agent string formatted with default suffix (identifying the SDK)
+     */
+    public String getGoodDataUserAgent() {
+        return StringUtils.isNotBlank(userAgent) ? String.format("%s %s", userAgent, getDefaultUserAgent()) : getDefaultUserAgent();
+    }
+
+    /**
      * User agent
      * @return user agent string
      */
     public String getUserAgent() {
-        return userAgent;
+        return StringUtils.isNotBlank(userAgent) ? userAgent : getDefaultUserAgent();
     }
 
     /**
@@ -220,6 +247,23 @@ public class GoodDataSettings {
         this.retrySettings = retrySettings;
     }
 
+    /**
+     * Set preset header
+     * @param header header name
+     * @param value header value
+     */
+    public void setPresetHeader(String header, String value) {
+        presetHeaders.put(notNull(header, "header"), notNull(value, "value"));
+    }
+
+    /**
+     * Preset headers
+     * @return preset headers set by SDK on each HTTP call
+     */
+    public Map<String, String> getPresetHeaders() {
+        return presetHeaders;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -231,13 +275,14 @@ public class GoodDataSettings {
                 && socketTimeout == that.socketTimeout
                 && pollSleep == that.pollSleep
                 && Objects.equals(userAgent, that.userAgent)
-                && Objects.equals(retrySettings, that.retrySettings);
+                && Objects.equals(retrySettings, that.retrySettings)
+                && Objects.equals(presetHeaders, that.presetHeaders);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(maxConnections, connectionTimeout, connectionRequestTimeout, socketTimeout, pollSleep,
-                userAgent, retrySettings);
+                userAgent, retrySettings, presetHeaders);
     }
 
     @Override
@@ -248,6 +293,28 @@ public class GoodDataSettings {
     private static int secondsToMillis(int seconds) {
         return (int) TimeUnit.SECONDS.toMillis(seconds);
     }
+
+    private String getDefaultUserAgent() {
+        final Package pkg = Package.getPackage("com.gooddata.sdk.service");
+        final String clientVersion = pkg != null && pkg.getImplementationVersion() != null
+                ? pkg.getImplementationVersion() : UNKNOWN_VERSION;
+
+        final VersionInfo vi = loadVersionInfo("org.apache.http.client", HttpClientBuilder.class.getClassLoader());
+        final String apacheVersion = vi != null ? vi.getRelease() : UNKNOWN_VERSION;
+
+        return String.format("%s/%s (%s; %s) %s/%s", "GoodData-Java-SDK", clientVersion,
+                System.getProperty("os.name"), System.getProperty("java.specification.version"),
+                "Apache-HttpClient", apacheVersion);
+    }
+
+    private static String readApiVersion() {
+        try {
+            return StreamUtils.copyToString(GoodData.class.getResourceAsStream("/GoodDataApiVersion"), Charset.defaultCharset());
+        } catch (IOException e) {
+            throw new IllegalStateException("Cannot read GoodDataApiVersion from classpath", e);
+        }
+    }
+
 
 
 }

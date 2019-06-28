@@ -209,7 +209,7 @@ public class GoodData {
     protected GoodData(GoodDataEndpoint endpoint, Authentication authentication, GoodDataSettings settings) {
         httpClient = authentication.createHttpClient(endpoint, createHttpClientBuilder(settings));
 
-        restTemplate = createRestTemplate(endpoint, httpClient, settings.getRetrySettings());
+        restTemplate = createRestTemplate(endpoint, httpClient, settings);
 
         accountService = new AccountService(getRestTemplate(), settings);
         projectService = new ProjectService(getRestTemplate(), accountService, settings);
@@ -218,7 +218,7 @@ public class GoodData {
         gdcService = new GdcService(getRestTemplate(), settings);
         dataStoreService = new DataStoreService(getHttpClient(), getRestTemplate(), gdcService, endpoint.toUri());
         datasetService = new DatasetService(getRestTemplate(), dataStoreService, settings);
-        exportService = new ExportService(getRestTemplate(), endpoint, settings);
+        exportService = new ExportService(getRestTemplate(), settings);
         processService = new ProcessService(getRestTemplate(), accountService, dataStoreService, settings);
         warehouseService = new WarehouseService(getRestTemplate(), settings);
         connectorService = new ConnectorService(getRestTemplate(), projectService, settings);
@@ -232,7 +232,7 @@ public class GoodData {
         lcmService = new LcmService(getRestTemplate(), settings);
     }
 
-    static RestTemplate createRestTemplate(GoodDataEndpoint endpoint, HttpClient httpClient, RetrySettings retrySettings) {
+    static RestTemplate createRestTemplate(GoodDataEndpoint endpoint, HttpClient httpClient, GoodDataSettings settings) {
         notNull(endpoint, "endpoint");
         notNull(httpClient, "httpClient");
 
@@ -241,18 +241,15 @@ public class GoodData {
                 endpoint.toUri()
         );
 
-        final Map<String, String> presetHeaders = new HashMap<>(2);
-        presetHeaders.put("Accept", MediaType.APPLICATION_JSON_VALUE);
-        presetHeaders.put(Header.GDC_VERSION, readApiVersion());
-
         final RestTemplate restTemplate;
+        final RetrySettings retrySettings = settings.getRetrySettings();
         if (retrySettings == null) {
             restTemplate = new RestTemplate(factory);
         } else {
             restTemplate = RetryableRestTemplate.create(retrySettings, factory);
         }
         restTemplate.setInterceptors(asList(
-                new HeaderSettingRequestInterceptor(presetHeaders),
+                new HeaderSettingRequestInterceptor(settings.getPresetHeaders()),
                 new DeprecationWarningRequestInterceptor()));
 
         restTemplate.setErrorHandler(new ResponseErrorHandler(restTemplate.getMessageConverters()));
@@ -275,30 +272,9 @@ public class GoodData {
         requestConfig.setSocketTimeout(settings.getSocketTimeout());
 
         return HttpClientBuilder.create()
-                .setUserAgent(StringUtils.isNotBlank(settings.getUserAgent()) ? String.format("%s %s", settings.getUserAgent(), getUserAgent()) : getUserAgent())
+                .setUserAgent(settings.getGoodDataUserAgent())
                 .setConnectionManager(connectionManager)
                 .setDefaultRequestConfig(requestConfig.build());
-    }
-
-    private String getUserAgent() {
-        final Package pkg = Package.getPackage("com.gooddata");
-        final String clientVersion = pkg != null && pkg.getImplementationVersion() != null
-                ? pkg.getImplementationVersion() : UNKNOWN_VERSION;
-
-        final VersionInfo vi = loadVersionInfo("org.apache.http.client", HttpClientBuilder.class.getClassLoader());
-        final String apacheVersion = vi != null ? vi.getRelease() : UNKNOWN_VERSION;
-
-        return String.format("%s/%s (%s; %s) %s/%s", "GoodData-Java-SDK", clientVersion,
-                System.getProperty("os.name"), System.getProperty("java.specification.version"),
-                "Apache-HttpClient", apacheVersion);
-    }
-
-    private static String readApiVersion() {
-        try {
-            return StreamUtils.copyToString(GoodData.class.getResourceAsStream("/GoodDataApiVersion"), Charset.defaultCharset());
-        } catch (IOException e) {
-            throw new IllegalStateException("Cannot read GoodDataApiVersion from classpath", e);
-        }
     }
 
     /**
