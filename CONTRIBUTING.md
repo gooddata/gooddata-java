@@ -72,3 +72,11 @@ is specific enough.
 * When you need some **utility code**, look for handy utilities in used libraries first (e.g. _Spring_ has
 its `StreamUtils`, `FileCopyUtils`, ...). When you decide to create new utility class,
 use _abstract utility class pattern_.
+
+## Release candidates
+
+We're using branches like "3.0.0-RC" for development of new major releases containing backward incompatible changes.
+Such RC branch is forked from master branch and has to be kept in sync later, when something is committed into master so
+RC can be merged to master when new major version is ready.
+
+Do not use **cherry-pick**s to keep branches in sync! Always use **merge** from master to RC.
