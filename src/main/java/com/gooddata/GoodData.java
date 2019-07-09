@@ -33,6 +33,7 @@ import com.gooddata.project.ProjectService;
 import com.gooddata.report.ReportService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.SocketConfig;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -283,6 +284,7 @@ public class GoodData {
         requestConfig.setConnectTimeout(settings.getConnectionTimeout());
         requestConfig.setConnectionRequestTimeout(settings.getConnectionRequestTimeout());
         requestConfig.setSocketTimeout(settings.getSocketTimeout());
+        requestConfig.setCookieSpec(CookieSpecs.STANDARD);
 
         return HttpClientBuilder.create()
                 .setUserAgent(StringUtils.isNotBlank(settings.getUserAgent()) ? String.format("%s %s", settings.getUserAgent(), getUserAgent()) : getUserAgent())
