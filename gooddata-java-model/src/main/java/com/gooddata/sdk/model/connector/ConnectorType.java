@@ -6,13 +6,11 @@
 package com.gooddata.sdk.model.connector;
 
 /**
- * Enum containing implemented connector types.
+ * Enum containing implemented connector types (currently version 4 of Zendesk connector only).
  */
 public enum ConnectorType {
 
-    ZENDESK4(Zendesk4Settings.URL),
-    COUPA(CoupaSettings.URL),
-    PARDOT(PardotSettings.URL);
+    ZENDESK4(Zendesk4Settings.URL);
 
     //URL of the settings endpoint (which is not equal for individual connector types)
     private final String settingsUrl;

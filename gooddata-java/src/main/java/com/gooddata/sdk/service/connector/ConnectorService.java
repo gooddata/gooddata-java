@@ -25,7 +25,6 @@ import java.util.Map;
 
 import static com.gooddata.util.Validate.notNull;
 import static java.lang.String.format;
-import static java.util.Collections.emptyList;
 
 /**
  * Service for connector integration creation, update of its settings or execution of its process.
@@ -149,81 +148,6 @@ public class ConnectorService extends AbstractService {
      */
     public Zendesk4Settings getZendesk4Settings(Project project) {
         return getSettings(project, ConnectorType.ZENDESK4, Zendesk4Settings.class);
-    }
-
-    /**
-     * Gets settings for coupa connector.
-     * @param project project
-     * @return settings for coupa connector
-     */
-    public CoupaSettings getCoupaSettings(Project project) {
-        return getSettings(project, ConnectorType.COUPA, CoupaSettings.class);
-    }
-
-    /**
-     * Gets settings for pardot connector.
-     * @param project project
-     * @return settings for pardot connector
-     */
-    public PardotSettings getPardotSettings(Project project) {
-        return getSettings(project, ConnectorType.PARDOT, PardotSettings.class);
-    }
-
-    /**
-     * Creates Coupa connector instance.
-     *
-     * @param project project
-     * @param instance instance with it's API URL, API key and name
-     * @return created Coupa instance
-     */
-    public CoupaInstance createCoupaInstance(Project project, CoupaInstance instance) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
-        notNull(instance, "instance");
-
-        //POST request for creating Coupa instance returns created instance URI as response
-        final UriResponse instanceUri;
-        try {
-            instanceUri = restTemplate.postForObject(CoupaInstances.URL, instance, UriResponse.class,
-                    project.getId());
-        } catch (GoodDataRestException | RestClientException e) {
-            throw new ConnectorException("Unable to create Coupa instance with API URL '" + instance.getApiUrl() +
-                    "'", e);
-        }
-
-        try {
-            return restTemplate.getForObject(instanceUri.getUri(), CoupaInstance.class);
-        } catch (GoodDataRestException | RestClientException e) {
-            throw new ConnectorException("Unable to get created Coupa instance with URI '" + instanceUri.getUri() +
-                    "'", e);
-        }
-    }
-
-    /**
-     * Returns collection of all existing Coupa instances
-     *
-     * @param project project
-     * @return collection of Coupa instances or empty collection if no Coupa instances are defined
-     */
-    public Collection<CoupaInstance> findCoupaInstances(final Project project) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
-
-        try {
-            final CoupaInstances instances =
-                    restTemplate.getForObject(CoupaInstances.URL, CoupaInstances.class, project.getId());
-
-            if (instances == null) {
-                throw new ConnectorException("Empty response from API call.");
-            }
-            if (instances.getItems() == null) {
-                return emptyList();
-            }
-
-            return instances.getItems();
-        } catch (GoodDataRestException | RestClientException e) {
-            throw new ConnectorException("Unable to get Coupa instances.", e);
-        }
     }
 
     /**

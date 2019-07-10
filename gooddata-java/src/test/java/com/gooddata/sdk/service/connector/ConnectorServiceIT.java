@@ -14,8 +14,6 @@ import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.Collection;
-
 import static com.gooddata.sdk.model.connector.Status.Code.ERROR;
 import static com.gooddata.sdk.model.connector.Status.Code.SYNCHRONIZED;
 import static com.gooddata.util.ResourceUtils.*;
@@ -24,7 +22,6 @@ import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.emptyCollectionOf;
 
 public class ConnectorServiceIT extends AbstractGoodDataIT {
     private Project project;
@@ -234,116 +231,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
              .respond()
                 .withStatus(404);
 
-        connectors.updateSettings(project, new CoupaSettings("UTC"));
+        connectors.updateSettings(project, new Zendesk4Settings("http://zendesk"));
     }
 
-    @Test
-    public void shouldGetCoupaSettings() throws Exception {
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings")
-             .respond()
-                .withBody(readFromResource("/connector/settings-coupa.json"));
-
-        final CoupaSettings coupaSettings = connectors.getCoupaSettings(project);
-        assertThat(coupaSettings, jsonEquals(resource("connector/settings-coupa.json")));
-    }
-
-    @Test
-    public void shouldCreateCoupaInstance() throws Exception {
-        onRequest()
-                .havingMethodEqualTo("POST")
-                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances")
-             .respond()
-                .withStatus(201)
-                .withBody("{\"uri\":\"/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances/123\"}");
-
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances/123")
-             .respond()
-                .withBody(readFromResource("/connector/coupa_instance.json"));
-
-        final CoupaInstance instance = connectors.createCoupaInstance(project, new CoupaInstance("i1", "url", "key"));
-        assertThat(instance, notNullValue());
-    }
-
-    @Test(expectedExceptions = ConnectorException.class)
-    public void shouldFailCreatingCoupaInstance() throws Exception {
-        onRequest()
-                .havingMethodEqualTo("POST")
-                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances")
-             .respond()
-                .withStatus(404);
-
-        connectors.createCoupaInstance(project, new CoupaInstance("i1", "url", "key"));
-    }
-
-    @Test(expectedExceptions = ConnectorException.class)
-    public void shouldFailGettingCreatedCoupaInstance() throws Exception {
-        onRequest()
-                .havingMethodEqualTo("POST")
-                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances")
-             .respond()
-                .withStatus(201)
-                .withBody("{\"uri\":\"/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances/123\"}");
-
-        //method should throw exception for any error response status returned by GET request on created Coupa instance uri
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances/123")
-             .respond()
-                .withStatus(404);
-
-        connectors.createCoupaInstance(project, new CoupaInstance("i1", "url", "key"));
-    }
-
-    @Test
-    public void shouldGetCoupaInstances() throws Exception {
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances")
-             .respond()
-                .withBody(readFromResource("/connector/coupa_instances.json"));
-
-        final Collection<CoupaInstance> instances = connectors.findCoupaInstances(project);
-
-        assertThat(instances, hasItem(new CoupaInstance("instance 1", "https://gooddata-demo01.coupacloud.com/api", null)));
-    }
-
-    @Test
-    public void shouldGetEmptyCollectionWhenNoCoupaInstances() throws Exception {
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances")
-             .respond()
-                .withBody(readFromResource("/connector/coupa_instances-empty.json"));
-
-        final Collection<CoupaInstance> instances = connectors.findCoupaInstances(project);
-
-        assertThat(instances, is(emptyCollectionOf(CoupaInstance.class)));
-    }
-
-    @Test(expectedExceptions = ConnectorException.class)
-    public void shouldFailGettingCoupaInstances() throws Exception {
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/coupa/integration/config/settings/instances")
-             .respond()
-                .withStatus(404);
-
-        connectors.findCoupaInstances(project);
-    }
-
-    @Test
-    public void shouldGetPardotSettings() throws Exception {
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/pardot/integration/config/settings")
-             .respond()
-                .withBody(readFromResource("/connector/settings-pardot.json"));
-
-        final PardotSettings pardotSettings = connectors.getPardotSettings(project);
-        assertThat(pardotSettings, jsonEquals(resource("connector/settings-pardot.json")));
-    }
 }
