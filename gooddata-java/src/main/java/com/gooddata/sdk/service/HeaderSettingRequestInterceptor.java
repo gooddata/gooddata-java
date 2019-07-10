@@ -21,7 +21,7 @@ import static com.gooddata.util.Validate.notNull;
  * Implementations of this interface can be registered with the RestTemplate, as to modify the outgoing
  * ClientHttpRequest and/or the incoming ClientHttpResponse.
  */
-class HeaderSettingRequestInterceptor implements ClientHttpRequestInterceptor {
+public class HeaderSettingRequestInterceptor implements ClientHttpRequestInterceptor {
 
     private final Map<String, String> headers;
 

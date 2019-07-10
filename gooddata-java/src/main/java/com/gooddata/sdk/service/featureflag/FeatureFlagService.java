@@ -33,7 +33,6 @@ public class FeatureFlagService extends AbstractService {
 
     /**
      * Constructs service for GoodData feature flags management.
-     *
      * @param restTemplate RESTful HTTP Spring template
      * @param settings settings
      */

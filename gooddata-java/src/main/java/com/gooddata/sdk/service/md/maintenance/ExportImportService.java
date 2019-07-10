@@ -5,22 +5,18 @@
  */
 package com.gooddata.sdk.service.md.maintenance;
 
-import static com.gooddata.util.Validate.notNull;
-
-import com.gooddata.sdk.service.AbstractPollHandler;
-import com.gooddata.sdk.service.AbstractService;
-import com.gooddata.sdk.service.FutureResult;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.sdk.service.GoodDataSettings;
-import com.gooddata.sdk.service.PollResult;
 import com.gooddata.sdk.model.gdc.TaskStatus;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.md.maintenance.PartialMdArtifact;
 import com.gooddata.sdk.model.md.maintenance.PartialMdExport;
 import com.gooddata.sdk.model.md.maintenance.PartialMdExportToken;
 import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Service providing metadata export/import tasks.

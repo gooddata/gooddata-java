@@ -8,6 +8,7 @@ package com.gooddata.sdk.service.gdc;
 import com.github.sardine.Sardine;
 import com.github.sardine.impl.SardineException;
 import com.gooddata.UriPrefixer;
+import com.gooddata.sdk.service.httpcomponents.SingleEndpointGoodDataRestProvider;
 import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -30,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Locale;
+import java.util.function.Supplier;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
@@ -40,7 +42,7 @@ import static com.gooddata.util.Validate.notNull;
 public class DataStoreService {
 
     private final Sardine sardine;
-    private final GdcService gdcService;
+    private final Supplier<String> stagingUriSupplier;
     private final URI gdcUri;
     private final RestTemplate restTemplate;
 
@@ -49,21 +51,20 @@ public class DataStoreService {
 
     /**
      * Creates new DataStoreService
-     * @param httpClient httpClient to make datastore connection
-     * @param restTemplate restTemplate to make datastore connection
-     * @param gdcService used to obtain datastore URI
-     * @param gdcUri complete GDC URI used to prefix possibly relative datastore path
+     * @param restProvider restProvider to make datastore connection
+     * @param stagingUriSupplier used to obtain datastore URI
      */
-    public DataStoreService(HttpClient httpClient, RestTemplate restTemplate, GdcService gdcService, String gdcUri) {
-        this.gdcService = notNull(gdcService, "gdcService");
-        this.gdcUri = URI.create(notEmpty(gdcUri, "gdcUri"));
-        this.restTemplate = notNull(restTemplate, "restTemplate");
-        sardine = new GdcSardine(new CustomHttpClientBuilder(httpClient));
+    public DataStoreService(SingleEndpointGoodDataRestProvider restProvider, Supplier<String> stagingUriSupplier) {
+        notNull(restProvider, "restProvider");
+        this.stagingUriSupplier = notNull(stagingUriSupplier, "stagingUriSupplier");
+        this.gdcUri = URI.create(notNull(restProvider.getEndpoint(), "endpoint").toUri());
+        this.restTemplate = notNull(restProvider.getRestTemplate(), "restTemplate");
+        sardine = new GdcSardine(new CustomHttpClientBuilder(notNull(restProvider.getHttpClient(), "httpClient")));
     }
 
     private UriPrefixer getPrefixer() {
         if (prefixer == null) {
-            final String uriString = gdcService.getRootLinks().getUserStagingUri();
+            final String uriString = stagingUriSupplier.get();
             final URI uri = URI.create(uriString);
             prefixer = new UriPrefixer(uri.isAbsolute() ? uri : gdcUri.resolve(uriString));
             sardine.enablePreemptiveAuthentication(prefixer.getUriPrefix().getHost());

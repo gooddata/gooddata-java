@@ -5,52 +5,31 @@
  */
 package com.gooddata.sdk.service;
 
-import com.gooddata.UriPrefixingClientHttpRequestFactory;
 import com.gooddata.sdk.service.account.AccountService;
 import com.gooddata.sdk.service.auditevent.AuditEventService;
 import com.gooddata.sdk.service.connector.ConnectorService;
 import com.gooddata.sdk.service.dataload.OutputStageService;
 import com.gooddata.sdk.service.dataload.processes.ProcessService;
+import com.gooddata.sdk.service.dataset.DatasetService;
 import com.gooddata.sdk.service.executeafm.ExecuteAfmService;
 import com.gooddata.sdk.service.export.ExportService;
 import com.gooddata.sdk.service.featureflag.FeatureFlagService;
-import com.gooddata.gdc.Header;
-import com.gooddata.sdk.service.lcm.LcmService;
-import com.gooddata.sdk.service.md.maintenance.ExportImportService;
-import com.gooddata.sdk.service.notification.NotificationService;
-import com.gooddata.sdk.service.projecttemplate.ProjectTemplateService;
-import com.gooddata.sdk.service.retry.RetrySettings;
-import com.gooddata.sdk.service.retry.RetryableRestTemplate;
-import com.gooddata.sdk.service.util.ResponseErrorHandler;
-import com.gooddata.sdk.service.authentication.LoginPasswordAuthentication;
-import com.gooddata.sdk.service.warehouse.WarehouseService;
-import com.gooddata.sdk.service.dataset.DatasetService;
 import com.gooddata.sdk.service.gdc.DataStoreService;
 import com.gooddata.sdk.service.gdc.GdcService;
+import com.gooddata.sdk.service.httpcomponents.LoginPasswordGoodDataRestProvider;
+import com.gooddata.sdk.service.lcm.LcmService;
 import com.gooddata.sdk.service.md.MetadataService;
-import com.gooddata.sdk.service.project.model.ModelService;
+import com.gooddata.sdk.service.md.maintenance.ExportImportService;
+import com.gooddata.sdk.service.notification.NotificationService;
 import com.gooddata.sdk.service.project.ProjectService;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.config.SocketConfig;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.util.VersionInfo;
+import com.gooddata.sdk.service.project.model.ModelService;
+import com.gooddata.sdk.service.projecttemplate.ProjectTemplateService;
+import com.gooddata.sdk.service.warehouse.WarehouseService;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
-
+import static com.gooddata.sdk.service.GoodDataEndpoint.*;
 import static com.gooddata.util.Validate.notNull;
-import static java.util.Arrays.asList;
-import static org.apache.http.util.VersionInfo.loadVersionInfo;
 
 /**
  * Entry point for GoodData SDK usage.
@@ -67,32 +46,7 @@ import static org.apache.http.util.VersionInfo.loadVersionInfo;
  */
 public class GoodData {
 
-    protected static final String PROTOCOL = GoodDataEndpoint.PROTOCOL;
-    protected static final int PORT = GoodDataEndpoint.PORT;
-    protected static final String HOSTNAME = GoodDataEndpoint.HOSTNAME;
-    private static final String UNKNOWN_VERSION = "UNKNOWN";
-
-    private final RestTemplate restTemplate;
-    private final HttpClient httpClient;
-    private final AccountService accountService;
-    private final ProjectService projectService;
-    private final MetadataService metadataService;
-    private final ModelService modelService;
-    private final GdcService gdcService;
-    private final DataStoreService dataStoreService;
-    private final DatasetService datasetService;
-    private final ConnectorService connectorService;
-    private final ProcessService processService;
-    private final WarehouseService warehouseService;
-    private final NotificationService notificationService;
-    private final ExportImportService exportImportService;
-    private final FeatureFlagService featureFlagService;
-    private final OutputStageService outputStageService;
-    private final ProjectTemplateService projectTemplateService;
-    private final ExportService exportService;
-    private final AuditEventService auditEventService;
-    private final ExecuteAfmService executeAfmService;
-    private final LcmService lcmService;
+    private final GoodDataServices services;
 
     /**
      * Create instance configured to communicate with GoodData Platform under user with given credentials.
@@ -179,120 +133,27 @@ public class GoodData {
      * @param settings additional settings
      */
     protected GoodData(String hostname, String login, String password, int port, String protocol, GoodDataSettings settings) {
-        this(
+        this(new LoginPasswordGoodDataRestProvider(
                 new GoodDataEndpoint(hostname, port, protocol),
-                new LoginPasswordAuthentication(login, password),
-                settings
-        );
+                settings,
+                login,
+                password
+        ));
     }
 
     /**
-     * Create instance configured to communicate with GoodData Platform running on given endpoint and using
-     * given http client factory.
-     *
-     * @param endpoint GoodData Platform's endpoint
-     * @param authentication authentication
+     * Create instance based on given {@link GoodDataRestProvider}.
+     * @param goodDataRestProvider configured provider
      */
-    protected GoodData(GoodDataEndpoint endpoint, Authentication authentication) {
-        this(endpoint, authentication, new GoodDataSettings());
+    protected GoodData(final GoodDataRestProvider goodDataRestProvider) {
+        this.services = new GoodDataServices(notNull(goodDataRestProvider, "goodDataRestProvider"));
     }
 
     /**
-     * Create instance configured to communicate with GoodData Platform running on given endpoint and using
-     * given http client factory.
-     *
-     * @param endpoint GoodData Platform's endpoint
-     * @param authentication authentication
-     * @param settings additional settings
+     * @return underlying RestTemplate
      */
-    @SuppressWarnings("deprecation")
-    protected GoodData(GoodDataEndpoint endpoint, Authentication authentication, GoodDataSettings settings) {
-        httpClient = authentication.createHttpClient(endpoint, createHttpClientBuilder(settings));
-
-        restTemplate = createRestTemplate(endpoint, httpClient, settings);
-
-        accountService = new AccountService(getRestTemplate(), settings);
-        projectService = new ProjectService(getRestTemplate(), accountService, settings);
-        metadataService = new MetadataService(getRestTemplate(), settings);
-        modelService = new ModelService(getRestTemplate(), settings);
-        gdcService = new GdcService(getRestTemplate(), settings);
-        dataStoreService = new DataStoreService(getHttpClient(), getRestTemplate(), gdcService, endpoint.toUri());
-        datasetService = new DatasetService(getRestTemplate(), dataStoreService, settings);
-        exportService = new ExportService(getRestTemplate(), settings);
-        processService = new ProcessService(getRestTemplate(), accountService, dataStoreService, settings);
-        warehouseService = new WarehouseService(getRestTemplate(), settings);
-        connectorService = new ConnectorService(getRestTemplate(), projectService, settings);
-        notificationService = new NotificationService(getRestTemplate(), settings);
-        exportImportService = new ExportImportService(getRestTemplate(), settings);
-        featureFlagService = new FeatureFlagService(getRestTemplate(), settings);
-        outputStageService = new OutputStageService(getRestTemplate(), settings);
-        projectTemplateService = new ProjectTemplateService(getRestTemplate(), settings);
-        auditEventService = new AuditEventService(getRestTemplate(), accountService, settings);
-        executeAfmService = new ExecuteAfmService(getRestTemplate(), settings);
-        lcmService = new LcmService(getRestTemplate(), settings);
-    }
-
-    static RestTemplate createRestTemplate(GoodDataEndpoint endpoint, HttpClient httpClient, GoodDataSettings settings) {
-        notNull(endpoint, "endpoint");
-        notNull(httpClient, "httpClient");
-
-        final UriPrefixingClientHttpRequestFactory factory = new UriPrefixingClientHttpRequestFactory(
-                new HttpComponentsClientHttpRequestFactory(httpClient),
-                endpoint.toUri()
-        );
-
-        final RestTemplate restTemplate;
-        final RetrySettings retrySettings = settings.getRetrySettings();
-        if (retrySettings == null) {
-            restTemplate = new RestTemplate(factory);
-        } else {
-            restTemplate = RetryableRestTemplate.create(retrySettings, factory);
-        }
-        restTemplate.setInterceptors(asList(
-                new HeaderSettingRequestInterceptor(settings.getPresetHeaders()),
-                new DeprecationWarningRequestInterceptor()));
-
-        restTemplate.setErrorHandler(new ResponseErrorHandler(restTemplate.getMessageConverters()));
-
-        return restTemplate;
-    }
-
-    private HttpClientBuilder createHttpClientBuilder(final GoodDataSettings settings) {
-        final PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-        connectionManager.setDefaultMaxPerRoute(settings.getMaxConnections());
-        connectionManager.setMaxTotal(settings.getMaxConnections());
-
-        final SocketConfig.Builder socketConfig = SocketConfig.copy(SocketConfig.DEFAULT);
-        socketConfig.setSoTimeout(settings.getSocketTimeout());
-        connectionManager.setDefaultSocketConfig(socketConfig.build());
-
-        final RequestConfig.Builder requestConfig = RequestConfig.copy(RequestConfig.DEFAULT);
-        requestConfig.setConnectTimeout(settings.getConnectionTimeout());
-        requestConfig.setConnectionRequestTimeout(settings.getConnectionRequestTimeout());
-        requestConfig.setSocketTimeout(settings.getSocketTimeout());
-
-        return HttpClientBuilder.create()
-                .setUserAgent(settings.getGoodDataUserAgent())
-                .setConnectionManager(connectionManager)
-                .setDefaultRequestConfig(requestConfig.build());
-    }
-
-    /**
-     * Get the configured {@link RestTemplate} used by the library.
-     * This is the extension point for inheriting classes providing additional services.
-     * @return REST template
-     */
-    protected final RestTemplate getRestTemplate() {
-        return restTemplate;
-    }
-
-    /**
-     * Get the configured {@link HttpClient} used by the library.
-     * This is the extension point for inheriting classes providing additional services.
-     * @return HTTP client
-     */
-    protected final HttpClient getHttpClient() {
-        return httpClient;
+    protected RestTemplate getRestTemplate() {
+        return services.getRestTemplate();
     }
 
     /**
@@ -309,7 +170,7 @@ public class GoodData {
      */
     @Bean("goodDataProjectService")
     public ProjectService getProjectService() {
-        return projectService;
+        return services.getProjectService();
     }
 
     /**
@@ -319,7 +180,7 @@ public class GoodData {
      */
     @Bean("goodDataAccountService")
     public AccountService getAccountService() {
-        return accountService;
+        return services.getAccountService();
     }
 
     /**
@@ -330,7 +191,7 @@ public class GoodData {
      */
     @Bean("goodDataMetadataService")
     public MetadataService getMetadataService() {
-        return metadataService;
+        return services.getMetadataService();
     }
 
     /**
@@ -340,7 +201,7 @@ public class GoodData {
      */
     @Bean("goodDataModelService")
     public ModelService getModelService() {
-        return modelService;
+        return services.getModelService();
     }
 
     /**
@@ -350,7 +211,7 @@ public class GoodData {
      */
     @Bean("goodDataGdcService")
     public GdcService getGdcService() {
-        return gdcService;
+        return services.getGdcService();
     }
 
     /**
@@ -360,7 +221,7 @@ public class GoodData {
      */
     @Bean("goodDataDataStoreService")
     public DataStoreService getDataStoreService() {
-        return dataStoreService;
+        return services.getDataStoreService();
     }
 
     /**
@@ -370,7 +231,7 @@ public class GoodData {
      */
     @Bean("goodDataDatasetService")
     public DatasetService getDatasetService() {
-        return datasetService;
+        return services.getDatasetService();
     }
 
     /**
@@ -380,7 +241,7 @@ public class GoodData {
      */
     @Bean("goodDataExportService")
     public ExportService getExportService() {
-        return exportService;
+        return services.getExportService();
     }
 
     /**
@@ -390,7 +251,7 @@ public class GoodData {
      */
     @Bean("goodDataProcessService")
     public ProcessService getProcessService() {
-        return processService;
+        return services.getProcessService();
     }
 
     /**
@@ -400,7 +261,7 @@ public class GoodData {
      */
     @Bean("goodDataWarehouseService")
     public WarehouseService getWarehouseService() {
-        return warehouseService;
+        return services.getWarehouseService();
     }
 
     /**
@@ -410,7 +271,7 @@ public class GoodData {
      */
     @Bean("goodDataConnectorService")
     public ConnectorService getConnectorService() {
-        return connectorService;
+        return services.getConnectorService();
     }
 
     /**
@@ -420,7 +281,7 @@ public class GoodData {
      */
     @Bean("goodDataNotificationService")
     public NotificationService getNotificationService() {
-        return notificationService;
+        return services.getNotificationService();
     }
 
     /**
@@ -430,7 +291,7 @@ public class GoodData {
      */
     @Bean("goodDataExportImportService")
     public ExportImportService getExportImportService() {
-        return exportImportService;
+        return services.getExportImportService();
     }
 
     /**
@@ -440,7 +301,7 @@ public class GoodData {
      */
     @Bean("goodDataFeatureFlagService")
     public FeatureFlagService getFeatureFlagService() {
-        return featureFlagService;
+        return services.getFeatureFlagService();
     }
 
     /**
@@ -450,7 +311,7 @@ public class GoodData {
      */
     @Bean("goodDataOutputStageService")
     public OutputStageService getOutputStageService() {
-        return outputStageService;
+        return services.getOutputStageService();
     }
 
     /**
@@ -460,7 +321,7 @@ public class GoodData {
      */
     @Bean("goodDataProjectTemplateService")
     public ProjectTemplateService getProjectTemplateService() {
-        return projectTemplateService;
+        return services.getProjectTemplateService();
     }
 
     /**
@@ -469,7 +330,7 @@ public class GoodData {
      */
     @Bean("goodDataAuditEventService")
     public AuditEventService getAuditEventService() {
-        return auditEventService;
+        return services.getAuditEventService();
     }
 
     /**
@@ -478,7 +339,7 @@ public class GoodData {
      */
     @Bean("goodDataExecuteAfmService")
     public ExecuteAfmService getExecuteAfmService() {
-        return executeAfmService;
+        return services.getExecuteAfmService();
     }
 
     /**
@@ -487,6 +348,6 @@ public class GoodData {
      */
     @Bean("goodDataLcmService")
     public LcmService getLcmService() {
-        return lcmService;
+        return services.getLcmService();
     }
 }

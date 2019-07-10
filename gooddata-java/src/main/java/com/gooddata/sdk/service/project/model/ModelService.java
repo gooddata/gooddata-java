@@ -5,21 +5,16 @@
  */
 package com.gooddata.sdk.service.project.model;
 
-import com.gooddata.sdk.service.AbstractService;
-import com.gooddata.sdk.service.FutureResult;
-import com.gooddata.sdk.service.GoodDataSettings;
-import com.gooddata.sdk.service.PollResult;
 import com.gooddata.GoodDataRestException;
-import com.gooddata.sdk.service.AbstractPollHandlerBase;
-import com.gooddata.sdk.service.SimplePollHandler;
 import com.gooddata.sdk.model.gdc.AsyncTask;
 import com.gooddata.sdk.model.gdc.TaskStatus;
-import com.gooddata.sdk.service.dataset.DatasetService;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.model.project.model.DiffRequest;
 import com.gooddata.sdk.model.project.model.MaqlDdl;
 import com.gooddata.sdk.model.project.model.MaqlDdlLinks;
 import com.gooddata.sdk.model.project.model.ModelDiff;
+import com.gooddata.sdk.service.*;
+import com.gooddata.sdk.service.dataset.DatasetService;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.client.RestClientException;
@@ -30,9 +25,9 @@ import java.io.Reader;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import static com.gooddata.sdk.model.project.model.ModelDiff.UpdateScript;
 import static com.gooddata.util.Validate.noNullElements;
 import static com.gooddata.util.Validate.notNull;
-import static com.gooddata.sdk.model.project.model.ModelDiff.UpdateScript;
 import static java.util.Arrays.asList;
 
 /**

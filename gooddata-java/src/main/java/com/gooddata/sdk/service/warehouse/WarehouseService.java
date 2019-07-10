@@ -41,7 +41,6 @@ public class WarehouseService extends AbstractService {
     /**
      * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
      * this abstract one.
-     *
      * @param restTemplate RESTful HTTP Spring template
      * @param settings settings
      */
