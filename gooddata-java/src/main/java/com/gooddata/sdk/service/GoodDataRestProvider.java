@@ -5,7 +5,11 @@
  */
 package com.gooddata.sdk.service;
 
+import com.gooddata.sdk.service.gdc.DataStoreService;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * The main interface responsible for GoodData platform REST connection management.
@@ -36,4 +40,14 @@ public interface GoodDataRestProvider {
      * @return provided RestTemplate
      */
     RestTemplate getRestTemplate();
+
+    /**
+     * Configured DataStoreService if provided. By default empty.
+     *
+     * @param stagingUriSupplier supplier of the data store endpoint
+     * @return dataStoreService (empty by default)
+     */
+    default Optional<DataStoreService> getDataStoreService(final Supplier<String> stagingUriSupplier) {
+        return Optional.empty();
+    }
 }

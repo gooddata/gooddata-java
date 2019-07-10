@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Locale;
+import java.util.function.Supplier;
 
 import static com.gooddata.util.Validate.notEmpty;
 import static com.gooddata.util.Validate.notNull;
@@ -41,7 +42,7 @@ import static com.gooddata.util.Validate.notNull;
 public class DataStoreService {
 
     private final Sardine sardine;
-    private final GdcService gdcService;
+    private final Supplier<String> stagingUriSupplier;
     private final URI gdcUri;
     private final RestTemplate restTemplate;
 
@@ -51,11 +52,11 @@ public class DataStoreService {
     /**
      * Creates new DataStoreService
      * @param restProvider restProvider to make datastore connection
-     * @param gdcService used to obtain datastore URI
+     * @param stagingUriSupplier used to obtain datastore URI
      */
-    public DataStoreService(SingleEndpointGoodDataRestProvider restProvider, GdcService gdcService) {
+    public DataStoreService(SingleEndpointGoodDataRestProvider restProvider, Supplier<String> stagingUriSupplier) {
         notNull(restProvider, "restProvider");
-        this.gdcService = notNull(gdcService, "gdcService");
+        this.stagingUriSupplier = notNull(stagingUriSupplier, "stagingUriSupplier");
         this.gdcUri = URI.create(notNull(restProvider.getEndpoint(), "endpoint").toUri());
         this.restTemplate = notNull(restProvider.getRestTemplate(), "restTemplate");
         sardine = new GdcSardine(new CustomHttpClientBuilder(notNull(restProvider.getHttpClient(), "httpClient")));
@@ -63,7 +64,7 @@ public class DataStoreService {
 
     private UriPrefixer getPrefixer() {
         if (prefixer == null) {
-            final String uriString = gdcService.getRootLinks().getUserStagingUri();
+            final String uriString = stagingUriSupplier.get();
             final URI uri = URI.create(uriString);
             prefixer = new UriPrefixer(uri.isAbsolute() ? uri : gdcUri.resolve(uriString));
             sardine.enablePreemptiveAuthentication(prefixer.getUriPrefix().getHost());

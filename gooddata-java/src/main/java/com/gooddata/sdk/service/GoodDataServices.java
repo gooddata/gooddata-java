@@ -29,6 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Optional;
+
 /**
  * Configures services provided by {@link GoodData}
  */
@@ -36,7 +38,7 @@ class GoodDataServices {
 
     private final GoodDataRestProvider goodDataRestProvider;
 
-    private static final Logger logger = LoggerFactory.getLogger(GoodDataServices.class);
+    private final Logger logger = LoggerFactory.getLogger(GoodDataServices.class);
 
     private final AccountService accountService;
     private final ProjectService projectService;
@@ -78,29 +80,16 @@ class GoodDataServices {
         executeAfmService = new ExecuteAfmService(getRestTemplate(), getSettings());
         lcmService = new LcmService(getRestTemplate(), getSettings());
 
-        dataStoreService = initDataStoreService(goodDataRestProvider, gdcService);
-
-        datasetService = new DatasetService(getRestTemplate(), dataStoreService, getSettings());
-        processService = new ProcessService(getRestTemplate(), accountService, dataStoreService, getSettings());
-    }
-
-    private static DataStoreService initDataStoreService(final GoodDataRestProvider goodDataRestProvider, final GdcService gdcService) {
-        if (goodDataRestProvider instanceof SingleEndpointGoodDataRestProvider) {
-            try {
-                Class.forName("com.github.sardine.Sardine", false, GoodDataServices.class.getClassLoader());
-                return new DataStoreService((SingleEndpointGoodDataRestProvider) goodDataRestProvider, gdcService);
-            } catch (ClassNotFoundException e) {
-                if (logger.isInfoEnabled()) {
-                    logger.info("Optional dependency Sardine not found - WebDAV related operations are not supported");
-                }
-            }
+        final Optional<DataStoreService> dataStoreService = goodDataRestProvider.getDataStoreService(() -> gdcService.getRootLinks().getUserStagingUri());
+        if (dataStoreService.isPresent()) {
+            this.dataStoreService = dataStoreService.get();
         } else {
-            if (logger.isInfoEnabled()) {
-                logger.info("GoodDataRestProvider is not SingleEndpointGoodDataRestProvider - WebDAV related operations are not supported");
-            }
+            this.dataStoreService = null;
+            logger.info("GoodDataRestProvider provided empty DataStoreService - WebDAV related operations are not supported");
         }
 
-        return null;
+        datasetService = new DatasetService(getRestTemplate(), this.dataStoreService, getSettings());
+        processService = new ProcessService(getRestTemplate(), accountService, this.dataStoreService, getSettings());
     }
 
     RestTemplate getRestTemplate() {

@@ -7,6 +7,7 @@ package com.gooddata.sdk.service.httpcomponents;
 
 import com.gooddata.UriPrefixingClientHttpRequestFactory;
 import com.gooddata.sdk.service.*;
+import com.gooddata.sdk.service.gdc.DataStoreService;
 import com.gooddata.sdk.service.retry.RetryableRestTemplate;
 import com.gooddata.sdk.service.util.ResponseErrorHandler;
 import org.apache.http.client.HttpClient;
@@ -14,10 +15,14 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.SocketConfig;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 import static com.gooddata.util.Validate.notNull;
 import static java.util.Arrays.asList;
@@ -37,6 +42,8 @@ import static java.util.Arrays.asList;
  * {@link GoodDataHttpClientBuilder} to the constructor. Namely the authentication logic remains to be provided by descendants.
  */
 public abstract class SingleEndpointGoodDataRestProvider implements GoodDataRestProvider {
+
+    private final Logger logger = LoggerFactory.getLogger(SingleEndpointGoodDataRestProvider.class);
 
     protected final GoodDataEndpoint endpoint;
     protected final GoodDataSettings settings;
@@ -67,6 +74,17 @@ public abstract class SingleEndpointGoodDataRestProvider implements GoodDataRest
     @Override
     public GoodDataSettings getSettings() {
         return settings;
+    }
+
+    @Override
+    public Optional<DataStoreService> getDataStoreService(Supplier<String> stagingUriSupplier) {
+        try {
+            Class.forName("com.github.sardine.Sardine", false, getClass().getClassLoader());
+            return Optional.of(new DataStoreService(this, stagingUriSupplier));
+        } catch (ClassNotFoundException e) {
+            logger.info("Optional dependency Sardine not found - WebDAV related operations are not supported");
+            return Optional.empty();
+        }
     }
 
     /**

@@ -7,6 +7,7 @@ package com.gooddata.sdk.service.httpcomponents
 
 import com.gooddata.sdk.service.GoodDataEndpoint
 import com.gooddata.sdk.service.GoodDataSettings
+import com.gooddata.sdk.service.gdc.DataStoreService
 import org.apache.http.client.HttpClient
 import spock.lang.Specification
 
@@ -24,5 +25,14 @@ class SingleEndpointGoodDataRestProviderTest extends Specification {
 
         then:
         provider.httpClient == client
+    }
+
+    def "should get dataStoreService"() {
+        when:
+        def provider = new SingleEndpointGoodDataRestProvider(new GoodDataEndpoint(), new GoodDataSettings(), Stub(GoodDataHttpClientBuilder)) {}
+        def dataStoreService = provider.getDataStoreService({ 'stagingUri' })
+
+        then:
+        dataStoreService.isPresent()
     }
 }
