@@ -11,6 +11,7 @@ import com.gooddata.sdk.service.gdc.DataStoreService;
 import com.gooddata.sdk.service.retry.RetryableRestTemplate;
 import com.gooddata.sdk.service.util.ResponseErrorHandler;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.SocketConfig;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -20,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -151,6 +151,7 @@ public abstract class SingleEndpointGoodDataRestProvider implements GoodDataRest
         requestConfig.setConnectTimeout(settings.getConnectionTimeout());
         requestConfig.setConnectionRequestTimeout(settings.getConnectionRequestTimeout());
         requestConfig.setSocketTimeout(settings.getSocketTimeout());
+        requestConfig.setCookieSpec(CookieSpecs.STANDARD);
 
         return HttpClientBuilder.create()
                 .setUserAgent(settings.getGoodDataUserAgent())
