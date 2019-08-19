@@ -5,16 +5,19 @@
  */
 package com.gooddata.sdk.model.warehouse;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.sdk.model.project.Environment;
 import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.util.GoodDataToStringBuilder;
-import com.gooddata.util.ISODateTimeDeserializer;
-import com.gooddata.util.ISODateTimeSerializer;
-import org.joda.time.DateTime;
+import com.gooddata.util.ISOZonedDateTime;
 
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 import static com.gooddata.util.Validate.notNull;
@@ -39,8 +42,10 @@ public class Warehouse {
     private String description;
 
     private final String authorizationToken;
-    private DateTime created;
-    private DateTime updated;
+    @ISOZonedDateTime
+    private ZonedDateTime created;
+    @ISOZonedDateTime
+    private ZonedDateTime updated;
     private String createdBy;
     private String updatedBy;
     private String status;
@@ -59,7 +64,7 @@ public class Warehouse {
         this.description = description;
     }
 
-    public Warehouse(String title, String authToken, String description, DateTime created, DateTime updated,
+    public Warehouse(String title, String authToken, String description, ZonedDateTime created, ZonedDateTime updated,
                      String createdBy, String updatedBy, String status, String environment, String connectionUrl,
                      Map<String, String> links) {
         this(title, authToken, description);
@@ -76,8 +81,8 @@ public class Warehouse {
     @JsonCreator
     public Warehouse(@JsonProperty("title") String title, @JsonProperty("authorizationToken") String authToken,
                      @JsonProperty("description") String description,
-                     @JsonProperty("created") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime created,
-                     @JsonProperty("updated") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime updated,
+                     @JsonProperty("created") ZonedDateTime created,
+                     @JsonProperty("updated") ZonedDateTime updated,
                      @JsonProperty("createdBy") String createdBy, @JsonProperty("updatedBy") String updatedBy,
                      @JsonProperty("status") String status, @JsonProperty("environment") String environment,
                      @JsonProperty("connectionUrl") String connectionUrl,
@@ -115,13 +120,11 @@ public class Warehouse {
         this.description = description;
     }
 
-    @JsonSerialize(using = ISODateTimeSerializer.class)
-    public DateTime getCreated() {
+    public ZonedDateTime getCreated() {
         return created;
     }
 
-    @JsonSerialize(using = ISODateTimeSerializer.class)
-    public DateTime getUpdated() {
+    public ZonedDateTime getUpdated() {
         return updated;
     }
 

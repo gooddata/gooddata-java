@@ -5,10 +5,9 @@
  */
 package com.gooddata.sdk.model.connector;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 import static com.gooddata.sdk.model.connector.Status.Code.ERROR;
@@ -16,12 +15,13 @@ import static com.gooddata.sdk.model.connector.Status.Code.SYNCHRONIZED;
 import static com.gooddata.sdk.model.connector.Status.Code.UPLOADING;
 import static com.gooddata.sdk.model.connector.Status.Code.USER_ERROR;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static java.time.ZoneOffset.UTC;
+import static java.time.ZonedDateTime.now;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
-import static org.joda.time.DateTime.now;
 
 public class IntegrationProcessStatusTest {
 
@@ -30,8 +30,8 @@ public class IntegrationProcessStatusTest {
         final IntegrationProcessStatus process = readObjectFromResource("/connector/process-status-embedded.json", IntegrationProcessStatus.class);
 
         assertThat(process, is(notNullValue()));
-        assertThat(process.getStarted(), is(new DateTime(2014, 5, 30, 7, 50, 15, DateTimeZone.UTC)));
-        assertThat(process.getFinished(), is(new DateTime(2014, 5, 30, 7, 50, 50, DateTimeZone.UTC)));
+        assertThat(process.getStarted(), is(LocalDateTime.of(2014, 5, 30, 7, 50, 15).atZone(UTC)));
+        assertThat(process.getFinished(), is(LocalDateTime.of(2014, 5, 30, 7, 50, 50).atZone(UTC)));
         assertThat(process.getStatus(), is(notNullValue()));
         assertThat(process.getStatus().getCode(), is(ERROR.name()));
         assertThat(process.getStatus().getDetail(), is("GDC-INTERNAL-ERROR"));

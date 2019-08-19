@@ -5,13 +5,14 @@
  */
 package com.gooddata.sdk.model.md;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Set;
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static java.time.ZoneOffset.UTC;
 import static java.util.Collections.singleton;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
@@ -26,10 +27,10 @@ public class EntryTest {
     public static final String URI = "/gdc/md/PROJECT_ID/obj/" + OBJ_ID;
     public static final String AUTHOR = "/gdc/account/profile/AUTHOR_USER_ID";
     public static final String CONTRIBUTOR = "/gdc/account/profile/CONTRIBUTOR_USER_ID";
-    public static final DateTime CREATED = new DateTime(2014, 4, 11, 13, 45, 54, DateTimeZone.UTC);
+    public static final ZonedDateTime CREATED = LocalDateTime.of(2014, 4, 11, 13, 45, 54).atZone(UTC);
     public static final String SUMMARY = "Entry summary";
     public static final String TITLE = "Entry title";
-    public static final DateTime UPDATED = new DateTime(2014, 4, 11, 13, 45, 55, DateTimeZone.UTC);
+    public static final ZonedDateTime UPDATED = LocalDateTime.of(2014, 4, 11, 13, 45, 55).atZone(UTC);
     public static final String CATEGORY = "ENTRY_CATEGORY";
     public static final Set<String> TAGS = singleton("TAG");
     public static final boolean DEPRECATED = true;

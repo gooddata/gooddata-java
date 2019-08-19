@@ -5,15 +5,15 @@
  */
 package com.gooddata.sdk.model.connector;
 
-import com.gooddata.util.ISODateTimeDeserializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.joda.time.DateTime;
+import com.gooddata.util.ISOZonedDateTimeDeserializer;
 
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 /**
@@ -29,8 +29,8 @@ public class ProcessStatus extends IntegrationProcessStatus {
 
     @JsonCreator
     ProcessStatus(@JsonProperty("status") Status status,
-                  @JsonProperty("started") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime started,
-                  @JsonProperty("finished") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime finished,
+                  @JsonProperty("started") @JsonDeserialize(using = ISOZonedDateTimeDeserializer.class) ZonedDateTime started,  //TODO check if necessary
+                  @JsonProperty("finished") @JsonDeserialize(using = ISOZonedDateTimeDeserializer.class) ZonedDateTime finished,
                   @JsonProperty("links") Map<String, String> links) {
         super(status, started, finished, links);
     }

@@ -5,11 +5,17 @@
  */
 package com.gooddata.sdk.model.dataload.processes;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.gooddata.util.ISODateTimeDeserializer;
-import org.joda.time.DateTime;
+import com.gooddata.util.ISOZonedDateTimeDeserializer;
 
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
@@ -29,7 +35,7 @@ public class ScheduleExecution {
     public static final String URI = "/gdc/projects/{projectId}/schedules/{scheduleId}/executions/{executionId}";
     private static final Set<String> FINISHED_STATUSES = new HashSet<>(Arrays.asList("OK", "ERROR", "CANCELED", "TIMEOUT"));
 
-    private DateTime created;
+    private ZonedDateTime created;
     private String status;
     private String trigger;
     private String processLastDeployedBy;
@@ -39,7 +45,7 @@ public class ScheduleExecution {
     public ScheduleExecution() {}
 
     @JsonCreator
-    private ScheduleExecution(@JsonProperty("createdTime") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime created,
+    private ScheduleExecution(@JsonProperty("createdTime") @JsonDeserialize(using = ISOZonedDateTimeDeserializer.class) ZonedDateTime created,
                               @JsonProperty("status") String executionStatus,
                               @JsonProperty("trigger") String trigger,
                               @JsonProperty("processLastDeployedBy") String processLastDeployedBy,
@@ -59,7 +65,7 @@ public class ScheduleExecution {
         return links;
     }
 
-    public DateTime getCreated() {
+    public ZonedDateTime getCreated() {
         return created;
     }
 

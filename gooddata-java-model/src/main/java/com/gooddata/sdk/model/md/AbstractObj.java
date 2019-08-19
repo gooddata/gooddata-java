@@ -9,9 +9,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.joda.time.DateTime;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.Set;
 
 import static com.gooddata.util.Validate.noNullElements;
@@ -51,7 +51,7 @@ public abstract class AbstractObj implements Serializable {
     }
 
     @JsonIgnore
-    public DateTime getCreated() {
+    public ZonedDateTime getCreated() {
         return meta.getCreated();
     }
 
@@ -74,7 +74,7 @@ public abstract class AbstractObj implements Serializable {
     }
 
     @JsonIgnore
-    public DateTime getUpdated() {
+    public ZonedDateTime getUpdated() {
         return meta.getUpdated();
     }
 

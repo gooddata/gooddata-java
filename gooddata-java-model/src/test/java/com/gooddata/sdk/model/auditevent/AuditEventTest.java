@@ -5,12 +5,13 @@
  */
 package com.gooddata.sdk.model.auditevent;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
 
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static java.time.ZoneOffset.UTC;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
@@ -27,7 +28,7 @@ public class AuditEventTest {
     private static final String LINK_KEY = "LINK_KEY";
     private static final String LINK_VALUE = "LINK_VALUE";
 
-    private static final DateTime DATE = new LocalDate(1993, 3, 9).toDateTimeAtStartOfDay(DateTimeZone.UTC);
+    private static final ZonedDateTime DATE = ZonedDateTime.of(LocalDate.of(1993, 3, 9).atStartOfDay(), UTC);
 
     private final AuditEvent event = new AuditEvent("123", "bear@gooddata.com", DATE, DATE, "127.0.0.1", true, "login", emptyMap(), null);
     private final AuditEvent eventWithParams = new AuditEvent("123", "bear@gooddata.com", DATE, DATE, "127.0.0.1", true, "login",

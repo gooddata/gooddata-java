@@ -7,9 +7,9 @@ package com.gooddata.sdk.model.md;
 
 import com.gooddata.sdk.model.export.ExportFormat;
 import org.apache.commons.lang3.SerializationUtils;
-import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -40,7 +40,7 @@ public class ScheduledMailTest {
             "/gdc/md/PROJ_ID/obj/EXECUTION_CONTEXT_ID",
             "testTab");
 
-    private final ScheduledMailWhen scheduledMailWhen = new ScheduledMailWhen("0:0:0:1*12:0:0", new LocalDate(2012, 6, 5), "America/Los_Angeles");
+    private final ScheduledMailWhen scheduledMailWhen = new ScheduledMailWhen("0:0:0:1*12:0:0", LocalDate.of(2012, 6, 5), "America/Los_Angeles");
 
     @Test
     public void testDeserialization() throws Exception {
@@ -57,14 +57,14 @@ public class ScheduledMailTest {
     @Test
     public void testSerialization() throws Exception {
         final ScheduledMail scheduledMail = new ScheduledMail("Scheduled report example", "Daily at 12:00pm PT")
-                                                .setRecurrency("0:0:0:1*12:0:0")
-                                                .setStartDate(new LocalDate(2012, 6, 5))
-                                                .setTimeZone("America/Los_Angeles")
-                                                .setTo(Arrays.asList("email@example.com"))
-                                                .setBcc(Arrays.asList("secret-email@example.com"))
-                                                .setSubject("Scheduled report")
-                                                .setBody("Hey, I'm sending you new Reports and Dashboards!")
-                                                .setAttachments(Arrays.asList(rp1, da1, da2));
+                .setRecurrency("0:0:0:1*12:0:0")
+                .setStartDate(LocalDate.of(2012, 6, 5))
+                .setTimeZone("America/Los_Angeles")
+                .setTo(Arrays.asList("email@example.com"))
+                .setBcc(Arrays.asList("secret-email@example.com"))
+                .setSubject("Scheduled report")
+                .setBody("Hey, I'm sending you new Reports and Dashboards!")
+                .setAttachments(Arrays.asList(rp1, da1, da2));
 
         assertThat(scheduledMail, jsonEquals(resource("md/scheduledMail.json")));
     }

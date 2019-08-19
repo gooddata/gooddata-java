@@ -7,14 +7,19 @@ package com.gooddata.sdk.service.dataload.processes;
 
 import com.gooddata.collections.MultiPageList;
 import com.gooddata.collections.PageableList;
-import com.gooddata.sdk.model.dataload.processes.*;
+import com.gooddata.sdk.model.dataload.processes.DataloadProcess;
+import com.gooddata.sdk.model.dataload.processes.ProcessExecution;
+import com.gooddata.sdk.model.dataload.processes.ProcessExecutionDetail;
+import com.gooddata.sdk.model.dataload.processes.ProcessType;
+import com.gooddata.sdk.model.dataload.processes.Schedule;
+import com.gooddata.sdk.model.dataload.processes.ScheduleExecution;
+import com.gooddata.sdk.model.dataload.processes.ScheduleState;
 import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.service.FutureResult;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsIterableContaining;
-import org.joda.time.Duration;
 import org.springframework.core.io.ClassPathResource;
 import org.testng.annotations.Test;
 
@@ -22,11 +27,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Collection;
 
 import static java.nio.file.Files.createTempDirectory;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  * Dataload processes acceptance tests.
@@ -54,7 +66,7 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
     @Test(groups = "process", dependsOnMethods = "createProcess")
     public void createSchedule() {
         schedule = gd.getProcessService().createSchedule(project, new Schedule(process, "sdktest.grf", "0 0 * * *"));
-        schedule.setReschedule(Duration.standardMinutes(15));
+        schedule.setReschedule(Duration.ofMinutes(15));
         schedule.setName("sdkTestSchedule");
 
         assertThat(schedule, notNullValue());
@@ -91,7 +103,7 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
     @Test(groups = "process", dependsOnMethods = "createSchedule")
     public void updateSchedule() {
         schedule.setState(ScheduleState.DISABLED);
-        schedule.setReschedule(Duration.standardMinutes(26));
+        schedule.setReschedule(Duration.ofMinutes(26));
 
         schedule = gd.getProcessService().updateSchedule(schedule);
 

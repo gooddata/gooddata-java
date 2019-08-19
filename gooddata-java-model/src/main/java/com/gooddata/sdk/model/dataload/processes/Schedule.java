@@ -5,20 +5,27 @@
  */
 package com.gooddata.sdk.model.dataload.processes;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.util.GoodDataToStringBuilder;
-import com.gooddata.util.ISODateTimeDeserializer;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.Duration;
+import com.gooddata.util.ISOZonedDateTimeDeserializer;
 
+import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.gooddata.util.Validate.*;
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNullState;
 
 /**
  * Schedule.
@@ -45,10 +52,10 @@ public class Schedule {
     private Integer reschedule;
     private String triggerScheduleId;
     private String name;
-    private final DateTime nextExecutionTime;
+    private final ZonedDateTime nextExecutionTime;
     private final int consecutiveFailedExecutionCount;
     private final Map<String, String> params;
-    private final Map<String,String> links;
+    private final Map<String, String> links;
 
     public Schedule(final DataloadProcess process, final String executable, final String cron) {
         this(process, executable);
@@ -57,8 +64,9 @@ public class Schedule {
 
     /**
      * Creates schedule, which is triggered by execution of different schedule
-     * @param process process to create schedule for
-     * @param executable executable to be scheduled for execution
+     *
+     * @param process         process to create schedule for
+     * @param executable      executable to be scheduled for execution
      * @param triggerSchedule schedule, which will trigger created schedule
      */
     public Schedule(final DataloadProcess process, final String executable, final Schedule triggerSchedule) {
@@ -85,7 +93,7 @@ public class Schedule {
                      @JsonProperty("state") final String state,
                      @JsonProperty("cron") final String cron,
                      @JsonProperty("timezone") final String timezone,
-                     @JsonProperty("nextExecutionTime") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime nextExecutionTime,
+                     @JsonProperty("nextExecutionTime") @JsonDeserialize(using = ISOZonedDateTimeDeserializer.class) ZonedDateTime nextExecutionTime,
                      @JsonProperty("consecutiveFailedExecutionCount") final int consecutiveFailedExecutionCount,
                      @JsonProperty("params") final Map<String, String> params,
                      @JsonProperty("reschedule") final Integer reschedule,
@@ -181,6 +189,7 @@ public class Schedule {
 
     /**
      * Duration after a failed execution of the schedule is executed again
+     *
      * @return reschedule duration in minutes
      */
     @JsonProperty("reschedule")
@@ -190,19 +199,21 @@ public class Schedule {
 
     /**
      * Duration after a failed execution of the schedule is executed again
+     *
      * @return reschedule duration in minutes
      */
     @JsonIgnore
     public Duration getReschedule() {
-        return reschedule != null ? Duration.standardMinutes(getRescheduleInMinutes()) : null;
+        return reschedule != null ? Duration.ofMinutes(getRescheduleInMinutes()) : null;
     }
 
     /**
      * Duration after a failed execution of the schedule is executed again
+     *
      * @param reschedule this duration should not be too low, because it can be rejected by REST API (e.g. 15 minutes or more)
      */
     public void setReschedule(Duration reschedule) {
-        this.reschedule = notNull(reschedule, "reschedule").toStandardMinutes().getMinutes();
+        this.reschedule = Long.valueOf(notNull(reschedule, "reschedule").toMinutes()).intValue();
     }
 
     public String getTriggerScheduleId() {
@@ -222,12 +233,12 @@ public class Schedule {
     }
 
     @JsonIgnore
-    public void setTimezone(final DateTimeZone timezone) {
-        this.timezone = notNull(timezone, "timezone").getID();
+    public void setTimezone(final ZonedDateTime timezone) {
+        this.timezone = notNull(timezone, "timezone").getZone().getId();
     }
 
     @JsonIgnore
-    public DateTime getNextExecutionTime() {
+    public ZonedDateTime getNextExecutionTime() {
         return nextExecutionTime;
     }
 

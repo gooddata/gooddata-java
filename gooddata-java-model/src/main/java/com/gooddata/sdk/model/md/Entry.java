@@ -5,15 +5,23 @@
  */
 package com.gooddata.sdk.model.md;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gooddata.sdk.model.util.TagsDeserializer;
 import com.gooddata.sdk.model.util.TagsSerializer;
 import com.gooddata.sdk.model.util.UriHelper;
-import com.gooddata.util.*;
-import org.joda.time.DateTime;
+import com.gooddata.util.BooleanDeserializer;
+import com.gooddata.util.BooleanIntegerSerializer;
+import com.gooddata.util.BooleanStringSerializer;
+import com.gooddata.util.GDZonedDateTime;
+import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.time.ZonedDateTime;
 import java.util.Set;
 
 /**
@@ -32,8 +40,10 @@ public class Entry {
     private final Boolean deprecated;
     private final String identifier;
     private final Set<String> tags;
-    private final DateTime created;
-    private final DateTime updated;
+    @GDZonedDateTime
+    private final ZonedDateTime created;
+    @GDZonedDateTime
+    private final ZonedDateTime updated;
     private final Boolean locked;
     private final Boolean unlisted;
 
@@ -47,8 +57,8 @@ public class Entry {
                  @JsonProperty("deprecated") @JsonDeserialize(using = BooleanDeserializer.class) Boolean deprecated,
                  @JsonProperty("identifier") String identifier,
                  @JsonProperty("tags") @JsonDeserialize(using = TagsDeserializer.class) Set<String> tags,
-                 @JsonProperty("created") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime created,
-                 @JsonProperty("updated") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime updated,
+                 @JsonProperty("created") ZonedDateTime created,
+                 @JsonProperty("updated") ZonedDateTime updated,
                  @JsonProperty("locked") @JsonDeserialize(using = BooleanDeserializer.class) Boolean locked,
                  @JsonProperty("unlisted") @JsonDeserialize(using = BooleanDeserializer.class) Boolean unlisted) {
         this.uri = uri;
@@ -126,13 +136,11 @@ public class Entry {
         return tags;
     }
 
-    @JsonSerialize(using = GDDateTimeSerializer.class)
-    public DateTime getCreated() {
+    public ZonedDateTime getCreated() {
         return created;
     }
 
-    @JsonSerialize(using = GDDateTimeSerializer.class)
-    public DateTime getUpdated() {
+    public ZonedDateTime getUpdated() {
         return updated;
     }
 

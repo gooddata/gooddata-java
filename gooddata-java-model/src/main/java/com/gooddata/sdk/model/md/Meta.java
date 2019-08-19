@@ -5,16 +5,24 @@
  */
 package com.gooddata.sdk.model.md;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gooddata.sdk.model.util.TagsDeserializer;
 import com.gooddata.sdk.model.util.TagsSerializer;
 import com.gooddata.sdk.model.util.UriHelper;
-import com.gooddata.util.*;
-import org.joda.time.DateTime;
+import com.gooddata.util.BooleanDeserializer;
+import com.gooddata.util.BooleanIntegerSerializer;
+import com.gooddata.util.BooleanStringSerializer;
+import com.gooddata.util.GDZonedDateTime;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.Set;
 
 import static org.apache.commons.lang3.StringUtils.substring;
@@ -32,8 +40,10 @@ public class Meta implements Serializable {
 
     private String author;
     private String contributor;
-    private DateTime created;
-    private DateTime updated;
+    @GDZonedDateTime
+    private ZonedDateTime created;
+    @GDZonedDateTime
+    private ZonedDateTime updated;
     private String summary;
     private String title;
     private String category;
@@ -50,8 +60,8 @@ public class Meta implements Serializable {
     @JsonCreator
     protected Meta(@JsonProperty("author") String author,
                    @JsonProperty("contributor") String contributor,
-                   @JsonProperty("created") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime created,
-                   @JsonProperty("updated") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime updated,
+                   @JsonProperty("created") ZonedDateTime created,
+                   @JsonProperty("updated") ZonedDateTime updated,
                    @JsonProperty("summary") String summary,
                    @JsonProperty("title") String title,
                    @JsonProperty("category") String category,
@@ -93,7 +103,7 @@ public class Meta implements Serializable {
      * @param sharedWithSomeone
      * @param flags
      */
-    public Meta(String author, String contributor, DateTime created, DateTime updated, String summary,
+    public Meta(String author, String contributor, ZonedDateTime created, ZonedDateTime updated, String summary,
                 String title, String category, Set<String> tags, String uri, String identifier,
                 Boolean deprecated, Boolean production, Boolean locked, Boolean unlisted,
                 Boolean sharedWithSomeone, Set<String> flags) {
@@ -142,8 +152,7 @@ public class Meta implements Serializable {
         return contributor;
     }
 
-    @JsonSerialize(using = GDDateTimeSerializer.class)
-    public DateTime getCreated() {
+    public ZonedDateTime getCreated() {
         return created;
     }
 
@@ -163,8 +172,7 @@ public class Meta implements Serializable {
         this.title = title;
     }
 
-    @JsonSerialize(using = GDDateTimeSerializer.class)
-    public DateTime getUpdated() {
+    public ZonedDateTime getUpdated() {
         return updated;
     }
 

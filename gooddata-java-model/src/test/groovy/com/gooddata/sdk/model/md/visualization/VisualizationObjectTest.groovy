@@ -11,10 +11,11 @@ import com.gooddata.sdk.model.executeafm.afm.NegativeAttributeFilter
 import com.gooddata.sdk.model.executeafm.afm.PositiveAttributeFilter
 import com.gooddata.sdk.model.executeafm.afm.RelativeDateFilter
 import org.apache.commons.lang3.SerializationUtils
-import org.joda.time.LocalDate
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+
+import java.time.LocalDate
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
@@ -93,7 +94,9 @@ class VisualizationObjectTest extends Specification {
         vizObject.filters = [
                 new PositiveAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), ["ab", "cd"]),
                 new NegativeAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), []),
-                new AbsoluteDateFilter(new UriObjQualifier("/uri/to/dataSet/1"), new LocalDate("2000-08-30"), new LocalDate("2017-08-07")),
+                new AbsoluteDateFilter(new UriObjQualifier("/uri/to/dataSet/1"),
+                        LocalDate.of(2000, 8, 30),
+                        LocalDate.of(2017, 8, 7) ),
                 new RelativeDateFilter(new UriObjQualifier("/uri/to/dataSet/2"), "month", null, null)
             ]
         vizObject.properties = '{"key":"value"}'
