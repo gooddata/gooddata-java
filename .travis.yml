@@ -4,7 +4,7 @@ install: true
 # Customized build command (default is only `mvn test`)
 script: mvn verify javadoc:javadoc coveralls:report -Pcoverage -B -V
 jdk:
-  - oraclejdk8
+  - openjdk8
 branches:
   only:
      - master
