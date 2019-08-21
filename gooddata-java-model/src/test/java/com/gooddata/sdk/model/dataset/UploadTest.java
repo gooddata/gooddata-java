@@ -5,11 +5,12 @@
  */
 package com.gooddata.sdk.model.dataset;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
+import java.time.LocalDateTime;
+
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static java.time.ZoneOffset.UTC;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
@@ -28,9 +29,9 @@ public class UploadTest {
         assertThat(upload.getStatus(), is("OK"));
         assertThat(upload.getUploadMode(), is(UploadMode.INCREMENTAL));
         assertThat(upload.getUri(), is("/gdc/md/project/data/upload/123"));
-        assertThat(upload.getCreatedAt(), is(new DateTime(2016, 4, 8, 12, 55, 21, DateTimeZone.UTC)));
+        assertThat(upload.getCreatedAt(), is(LocalDateTime.of(2016, 4, 8, 12, 55, 21).atZone(UTC)));
         assertThat(upload.getSize(), is(130501));
-        assertThat(upload.getProcessedAt(), is(new DateTime(2016, 4, 8, 12, 55, 25, DateTimeZone.UTC)));
+        assertThat(upload.getProcessedAt(), is(LocalDateTime.of(2016, 4, 8, 12, 55, 25).atZone(UTC)));
     }
 
     @Test

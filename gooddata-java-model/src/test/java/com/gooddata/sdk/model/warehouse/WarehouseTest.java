@@ -5,21 +5,22 @@
  */
 package com.gooddata.sdk.model.warehouse;
 
-import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
-import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.text.MatchesPattern.matchesPattern;
-
 import com.gooddata.sdk.model.project.Environment;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static java.time.ZoneOffset.UTC;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
+import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class WarehouseTest {
 
@@ -27,8 +28,8 @@ public class WarehouseTest {
     public static final String TOKEN = "{Token}";
     public static final String DESCRIPTION = "Storage";
     private static final String ENVIRONMENT = "TESTING";
-    public static final DateTime CREATED = new DateTime(2014, 5, 5, 8, 27, 33, DateTimeZone.UTC);
-    public static final DateTime UPDATED = new DateTime(2014, 5, 5, 8, 27, 34, DateTimeZone.UTC);
+    public static final ZonedDateTime CREATED = LocalDateTime.of(2014, 5, 5, 8, 27, 33).atZone(UTC);
+    public static final ZonedDateTime UPDATED = LocalDateTime.of(2014, 5, 5, 8, 27, 34).atZone(UTC);
     public static final String CREATED_BY = "/gdc/account/profile/createdBy";
     public static final String UPDATED_BY = "/gdc/account/profile/updatedBy";
     public static final String STATUS = "ENABLED";

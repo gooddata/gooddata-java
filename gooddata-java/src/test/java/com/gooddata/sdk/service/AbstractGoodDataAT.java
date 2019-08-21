@@ -15,8 +15,9 @@ import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.httpcomponents.SingleEndpointGoodDataRestProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.joda.time.LocalDate;
 import org.testng.annotations.AfterSuite;
+
+import java.time.LocalDate;
 
 import static com.gooddata.sdk.service.httpcomponents.LoginPasswordGoodDataRestProvider.createHttpClient;
 
@@ -26,7 +27,7 @@ import static com.gooddata.sdk.service.httpcomponents.LoginPasswordGoodDataRestP
 public abstract class AbstractGoodDataAT {
 
     protected static final String title =
-            "sdktest " + new LocalDate() + " " + System.getenv("BUILD_NUMBER");
+            "sdktest " + LocalDate.now() + " " + System.getenv("BUILD_NUMBER");
 
     protected static final GoodDataEndpoint endpoint = new GoodDataEndpoint(getProperty("host"));
 

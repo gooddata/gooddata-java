@@ -5,9 +5,6 @@
  */
 package com.gooddata.sdk.model.dataload.processes;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.Duration;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -15,11 +12,13 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -67,7 +66,7 @@ public class ScheduleTest {
         assertThat(schedule.getConsecutiveFailedExecutionCount(), is(0));
         assertThat(schedule.getProcessId(), is("process_id"));
         assertThat(schedule.getExecutable(), is(EXECUTABLE));
-        assertThat(schedule.getNextExecutionTime(), is(DateTime.parse("2013-11-16T00:00:00.000Z")));
+        assertThat(schedule.getNextExecutionTime(), is(ZonedDateTime.parse("2013-11-16T00:00:00.000Z")));
         assertThat(schedule.getUri(), is("/gdc/projects/PROJECT_ID/schedules/SCHEDULE_ID"));
         assertThat(schedule.getName(), is("scheduleName"));
     }
@@ -85,7 +84,7 @@ public class ScheduleTest {
         assertThat(schedule.getConsecutiveFailedExecutionCount(), is(0));
         assertThat(schedule.getProcessId(), is("process_id"));
         assertThat(schedule.getExecutable(), is(EXECUTABLE));
-        assertThat(schedule.getNextExecutionTime(), is(DateTime.parse("2013-11-16T00:00:00.000Z")));
+        assertThat(schedule.getNextExecutionTime(), is(ZonedDateTime.parse("2013-11-16T00:00:00.000Z")));
         assertThat(schedule.getUri(), is("/gdc/projects/PROJECT_ID/schedules/SCHEDULE_ID"));
         assertThat(schedule.getTriggerScheduleId(), is("trigger_schedule_id"));
     }
@@ -105,7 +104,7 @@ public class ScheduleTest {
     @Test
     public void testSerializationWithAllFields() {
         final Schedule schedule = new Schedule(process, EXECUTABLE, "0 0 * * *");
-        schedule.setReschedule(Duration.standardMinutes(26));
+        schedule.setReschedule(Duration.ofMinutes(26));
         schedule.setName("scheduleName");
 
         assertThat(schedule, jsonEquals(resource("dataload/processes/schedule-input-all-fields.json")));
@@ -149,7 +148,7 @@ public class ScheduleTest {
             expectedExceptionsMessageRegExp = ".*timezone can't be null.*"
     )
     public void testSetTimezoneObject() {
-        new Schedule(process, EXECUTABLE, "0 0 * * *").setTimezone((DateTimeZone) null);
+        new Schedule(process, EXECUTABLE, "0 0 * * *").setTimezone((ZonedDateTime) null);
     }
 
     @Test
@@ -192,7 +191,7 @@ public class ScheduleTest {
     @Test
     public void testReschedule() {
         final Schedule schedule = new Schedule(process, EXECUTABLE, "0 0 * * *");
-        final Duration duration = Duration.standardMinutes(26);
+        final Duration duration = Duration.ofMinutes(26);
         schedule.setReschedule(duration);
 
         assertThat(schedule.getRescheduleInMinutes(), is(equalTo(26)));
@@ -202,7 +201,7 @@ public class ScheduleTest {
     @Test
     public void testRescheduleTooLowDuration() {
         final Schedule schedule = new Schedule(process, EXECUTABLE, "0 0 * * *");
-        schedule.setReschedule(Duration.standardSeconds(26));
+        schedule.setReschedule(Duration.ofSeconds(26));
 
         assertThat(schedule.getRescheduleInMinutes(), is(equalTo(0)));
         assertThat(schedule.getReschedule(), is(equalTo(Duration.ZERO)));

@@ -5,16 +5,18 @@
  */
 package com.gooddata.sdk.model.dataload.processes;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.gdc.ErrorStructure;
 import com.gooddata.util.GoodDataToStringBuilder;
-import com.gooddata.util.ISODateTimeDeserializer;
-import com.gooddata.util.ISODateTimeSerializer;
-import org.joda.time.DateTime;
+import com.gooddata.util.ISOZonedDateTime;
 
 import java.net.URI;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 import static com.gooddata.util.Validate.notEmpty;
@@ -35,20 +37,24 @@ public class ProcessExecutionDetail {
     private static final String STATUS_OK = "OK";
     private final String status;
 
-    private final DateTime created;
-    private final DateTime started;
-    private final DateTime updated;
-    private final DateTime finished;
+    @ISOZonedDateTime
+    private final ZonedDateTime created;
+    @ISOZonedDateTime
+    private final ZonedDateTime started;
+    @ISOZonedDateTime
+    private final ZonedDateTime updated;
+    @ISOZonedDateTime
+    private final ZonedDateTime finished;
 
     private final ErrorStructure error;
     private final Map<String,String> links;
 
     @JsonCreator
     private ProcessExecutionDetail(@JsonProperty("status") String status,
-                                   @JsonProperty("created") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime created,
-                                   @JsonProperty("started") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime started,
-                                   @JsonProperty("updated") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime updated,
-                                   @JsonProperty("finished") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime finished,
+                                   @JsonProperty("created") ZonedDateTime created,
+                                   @JsonProperty("started") ZonedDateTime started,
+                                   @JsonProperty("updated") ZonedDateTime updated,
+                                   @JsonProperty("finished") ZonedDateTime finished,
                                    @JsonProperty("error") ErrorStructure error,
                                    @JsonProperty("links") Map<String, String> links) {
         this.status = notEmpty(status, "status");
@@ -64,23 +70,19 @@ public class ProcessExecutionDetail {
         return status;
     }
 
-    @JsonSerialize(using = ISODateTimeSerializer.class)
-    public DateTime getCreated() {
+    public ZonedDateTime getCreated() {
         return created;
     }
 
-    @JsonSerialize(using = ISODateTimeSerializer.class)
-    public DateTime getStarted() {
+    public ZonedDateTime getStarted() {
         return started;
     }
 
-    @JsonSerialize(using = ISODateTimeSerializer.class)
-    public DateTime getUpdated() {
+    public ZonedDateTime getUpdated() {
         return updated;
     }
 
-    @JsonSerialize(using = ISODateTimeSerializer.class)
-    public DateTime getFinished() {
+    public ZonedDateTime getFinished() {
         return finished;
     }
 

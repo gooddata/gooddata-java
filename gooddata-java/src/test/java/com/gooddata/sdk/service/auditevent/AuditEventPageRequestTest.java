@@ -7,20 +7,21 @@ package com.gooddata.sdk.service.auditevent;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.testng.annotations.Test;
 
+import java.time.ZonedDateTime;
+
 import static com.gooddata.collections.PageRequest.DEFAULT_LIMIT;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static java.time.ZoneOffset.UTC;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class AuditEventPageRequestTest {
 
-    private static final DateTime FROM = new DateTime();
-    private static final DateTime TO = new DateTime();
+    private static final ZonedDateTime FROM = ZonedDateTime.now();
+    private static final ZonedDateTime TO = ZonedDateTime.now();
     private static final Integer LIMIT = 10;
     private static final String OFFSET = "foo";
     public static final String EVENT_TYPE = "STANDARD_LOGIN";
@@ -57,7 +58,7 @@ public class AuditEventPageRequestTest {
 
         assertThat(result.getFrom(), is(FROM));
         assertThat(result.getTo(), is(TO));
-        assertThat(result.getSanitizedLimit(), is(LIMIT+1));
+        assertThat(result.getSanitizedLimit(), is(LIMIT + 1));
         assertThat(result.getOffset(), is(OFFSET));
         assertThat(result.getType(), is(EVENT_TYPE));
     }
@@ -74,7 +75,7 @@ public class AuditEventPageRequestTest {
         UriComponentsBuilder result = request.updateWithPageParams(UriComponentsBuilder.newInstance());
 
         assertThat(result.build().toUriString(), is(String.format("?offset=%s&limit=%d&from=%s&to=%s&type=%s",
-                OFFSET, LIMIT, FROM.toDateTime(DateTimeZone.UTC), TO.toDateTime(DateTimeZone.UTC), EVENT_TYPE)));
+                OFFSET, LIMIT, FROM.withZoneSameInstant(UTC), TO.withZoneSameInstant(UTC), EVENT_TYPE)));
     }
 
     @Test
@@ -97,7 +98,7 @@ public class AuditEventPageRequestTest {
         UriComponentsBuilder result = request.updateWithPageParams(UriComponentsBuilder.newInstance());
 
         assertThat(result.build().toUriString(), is("?limit=" + DEFAULT_LIMIT +
-                "&from=" + FROM.toDateTime(DateTimeZone.UTC) + "&to=" + TO.toDateTime(DateTimeZone.UTC)));
+                "&from=" + FROM.withZoneSameInstant(UTC) + "&to=" + TO.withZoneSameInstant(UTC)));
     }
 
     @Test

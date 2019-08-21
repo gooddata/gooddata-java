@@ -5,17 +5,25 @@
  */
 package com.gooddata.sdk.service.md;
 
-import com.gooddata.sdk.service.AbstractGoodDataAT;
-import com.gooddata.sdk.model.md.*;
+import com.gooddata.sdk.model.md.Attribute;
+import com.gooddata.sdk.model.md.AttributeElement;
+import com.gooddata.sdk.model.md.Entry;
+import com.gooddata.sdk.model.md.Fact;
+import com.gooddata.sdk.model.md.Metric;
+import com.gooddata.sdk.model.md.Obj;
+import com.gooddata.sdk.model.md.ProjectDashboard;
 import com.gooddata.sdk.model.md.ProjectDashboard.Tab;
+import com.gooddata.sdk.model.md.ScheduledMail;
+import com.gooddata.sdk.model.md.Usage;
 import com.gooddata.sdk.model.md.report.AttributeInGrid;
 import com.gooddata.sdk.model.md.report.Filter;
 import com.gooddata.sdk.model.md.report.GridReportDefinitionContent;
 import com.gooddata.sdk.model.md.report.MetricElement;
 import com.gooddata.sdk.model.md.report.Report;
-import org.joda.time.LocalDate;
+import com.gooddata.sdk.service.AbstractGoodDataAT;
 import org.testng.annotations.Test;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -152,7 +160,7 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         scheduledMail = md.createObj(project,
                 (new ScheduledMail("Scheduled Mail Title", "Scheduled Mail Summary"))
                         .setRecurrency("0:0:0:1*12:0:0")
-                        .setStartDate(new LocalDate(2012, 6, 5))
+                        .setStartDate(LocalDate.of(2012, 6, 5))
                         .setTimeZone("America/Los_Angeles")
                         .addToAddress(getProperty("login"))
                         .addBccAddress(getProperty("login"))

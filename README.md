@@ -62,6 +62,10 @@ The *GoodData Java SDK* logs using `slf4j-api`. Please adjust your logging confi
 </dependency>
 ```
 
+### Date/Time
+The *GoodData Java SDK* is using Java 8 Date/Time API (JSR 310) for all Date / Time / Zone public facing types.
+Good SO thread about differences between various types in Java Date/Time API: https://stackoverflow.com/a/32443004
+
 ## Development
 
 Build the library with `mvn package`, see the

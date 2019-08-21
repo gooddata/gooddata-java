@@ -6,9 +6,11 @@
 package com.gooddata.sdk.model.connector;
 
 import com.gooddata.sdk.model.connector.Zendesk4ProcessExecution.DownloadParams;
-import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
+import java.time.Instant;
+
+import static java.time.ZoneOffset.UTC;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -33,7 +35,7 @@ public class Zendesk4ProcessExecutionTest {
     public void testShouldSerializeStartTimes() {
         final Zendesk4ProcessExecution execution = new Zendesk4ProcessExecution();
         execution.setIncremental(true);
-        execution.setStartTime("tickets", new DateTime(0L));
+        execution.setStartTime("tickets", Instant.EPOCH.atZone(UTC));
         assertThat(execution, jsonEquals(resource("connector/process-execution-zendesk4-startDate.json")));
     }
 

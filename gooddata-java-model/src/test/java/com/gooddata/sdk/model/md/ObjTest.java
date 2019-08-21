@@ -6,14 +6,15 @@
 package com.gooddata.sdk.model.md;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static java.time.ZoneOffset.UTC;
 import static java.util.Arrays.asList;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
@@ -26,10 +27,10 @@ public class ObjTest {
 
     public static final String AUTHOR = "/gdc/account/profile/USER_ID";
     public static final String CONTRIBUTOR = "/gdc/account/profile/CONTRIBUTOR_USER_ID";
-    public static final DateTime CREATED = new DateTime(2014, 4, 11, 13, 45, 56, DateTimeZone.UTC);
+    public static final ZonedDateTime CREATED = LocalDateTime.of(2014, 4, 11, 13, 45, 56).atZone(UTC);
     public static final String SUMMARY = "Obj summary";
     public static final String TITLE = "Obj title";
-    public static final DateTime UPDATED = new DateTime(2014, 4, 11, 13, 45, 57, DateTimeZone.UTC);
+    public static final ZonedDateTime UPDATED = LocalDateTime.of(2014, 4, 11, 13, 45, 57).atZone(UTC);
     public static final String CATEGORY = "attributeDisplayForm";
     public static final Set<String> TAGS = new LinkedHashSet<>(asList("TAG1", "TAG2"));
     public static final String OBJ_ID = "OBJ_ID";

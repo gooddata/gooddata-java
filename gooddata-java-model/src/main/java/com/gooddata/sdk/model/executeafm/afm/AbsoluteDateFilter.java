@@ -9,15 +9,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.model.executeafm.UriObjQualifier;
-import com.gooddata.util.GDDateDeserializer;
-import com.gooddata.util.GDDateSerializer;
+import com.gooddata.util.GDLocalDate;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.joda.time.LocalDate;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -29,7 +26,9 @@ public class AbsoluteDateFilter extends DateFilter {
     private static final long serialVersionUID = -1857726227400504182L;
     static final String NAME = "absoluteDateFilter";
 
+    @GDLocalDate
     private final LocalDate from;
+    @GDLocalDate
     private final LocalDate to;
 
     /**
@@ -40,8 +39,8 @@ public class AbsoluteDateFilter extends DateFilter {
      */
     @JsonCreator
     public AbsoluteDateFilter(@JsonProperty("dataSet") final ObjQualifier dataSet,
-                              @JsonProperty("from") @JsonDeserialize(using = GDDateDeserializer.class) final LocalDate from,
-                              @JsonProperty("to") @JsonDeserialize(using = GDDateDeserializer.class) final LocalDate to) {
+                              @JsonProperty("from") final LocalDate from,
+                              @JsonProperty("to") final LocalDate to) {
         super(dataSet);
         this.from = from;
         this.to = to;
@@ -50,7 +49,6 @@ public class AbsoluteDateFilter extends DateFilter {
     /**
      * @return date from
      */
-    @JsonSerialize(using = GDDateSerializer.class)
     public LocalDate getFrom() {
         return from;
     }
@@ -58,7 +56,6 @@ public class AbsoluteDateFilter extends DateFilter {
     /**
      * @return date to
      */
-    @JsonSerialize(using = GDDateSerializer.class)
     public LocalDate getTo() {
         return to;
     }

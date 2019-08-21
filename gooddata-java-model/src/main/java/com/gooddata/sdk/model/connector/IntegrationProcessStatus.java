@@ -5,15 +5,16 @@
  */
 package com.gooddata.sdk.model.connector;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.util.GoodDataToStringBuilder;
-import com.gooddata.util.ISODateTimeDeserializer;
-import com.gooddata.util.ISODateTimeSerializer;
-import org.joda.time.DateTime;
+import com.gooddata.util.ISOZonedDateTime;
 
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 import static com.gooddata.util.Validate.notNullState;
@@ -29,14 +30,16 @@ public class IntegrationProcessStatus {
     private static final String SELF_LINK = "self";
 
     private final Status status;
-    private final DateTime started;
-    private final DateTime finished;
+    @ISOZonedDateTime
+    private final ZonedDateTime started;
+    @ISOZonedDateTime
+    private final ZonedDateTime finished;
     private final Map<String, String> links;
 
     @JsonCreator
     protected IntegrationProcessStatus(@JsonProperty("status") Status status,
-                                       @JsonProperty("started") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime started,
-                                       @JsonProperty("finished") @JsonDeserialize(using = ISODateTimeDeserializer.class) DateTime finished,
+                                       @JsonProperty("started") ZonedDateTime started,
+                                       @JsonProperty("finished") ZonedDateTime finished,
                                        @JsonProperty("links") Map<String, String> links) {
         this.status = status;
         this.started = started;
@@ -48,13 +51,11 @@ public class IntegrationProcessStatus {
         return status;
     }
 
-    @JsonSerialize(using = ISODateTimeSerializer.class)
-    public DateTime getStarted() {
+    public ZonedDateTime getStarted() {
         return started;
     }
 
-    @JsonSerialize(using = ISODateTimeSerializer.class)
-    public DateTime getFinished() {
+    public ZonedDateTime getFinished() {
         return finished;
     }
 

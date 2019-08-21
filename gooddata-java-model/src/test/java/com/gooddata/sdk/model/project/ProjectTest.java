@@ -5,13 +5,16 @@
  */
 package com.gooddata.sdk.model.project;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.testng.annotations.Test;
+
+import java.time.LocalDateTime;
 
 import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
-import static org.hamcrest.CoreMatchers.*;
+import static java.time.ZoneOffset.UTC;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.core.StringStartsWith.startsWith;
@@ -36,8 +39,8 @@ public class ProjectTest {
         assertThat(project.getSummary(), is("DESC"));
         assertThat(project.getAuthor(), is("/gdc/account/profile/USER_ID"));
         assertThat(project.getContributor(), is("/gdc/account/profile/CONTRIB_USER_ID"));
-        assertThat(project.getCreated(), is(new DateTime(2014, 4, 11, 11, 43, 45, DateTimeZone.UTC)));
-        assertThat(project.getUpdated(), is(new DateTime(2014, 4, 11, 11, 43, 47, DateTimeZone.UTC)));
+        assertThat(project.getCreated(), is(LocalDateTime.of(2014, 4, 11, 11, 43, 45).atZone(UTC)));
+        assertThat(project.getUpdated(), is(LocalDateTime.of(2014, 4, 11, 11, 43, 47).atZone(UTC)));
 
         assertThat(project.getLdmThumbnailUri(), is("/gdc/projects/PROJECT_ID/ldm?thumbnail=1"));
         assertThat(project.getUri(), is("/gdc/projects/PROJECT_ID"));

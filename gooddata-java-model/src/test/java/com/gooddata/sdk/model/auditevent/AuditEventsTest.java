@@ -6,17 +6,19 @@
 package com.gooddata.sdk.model.auditevent;
 
 import com.gooddata.collections.Paging;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
 import org.springframework.web.util.UriTemplate;
 import org.testng.annotations.Test;
 
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 
 import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static java.time.ZoneOffset.UTC;
 import static java.util.Arrays.asList;
-import static java.util.Collections.*;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonList;
+import static java.util.Collections.singletonMap;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;
@@ -37,7 +39,7 @@ public class AuditEventsTest {
     private static final boolean SUCCESS = true;
     private static final String TYPE = "login";
 
-    private static final DateTime DATE = new LocalDate(1993, 3, 9).toDateTimeAtStartOfDay(DateTimeZone.UTC);
+    private static final ZonedDateTime DATE = ZonedDateTime.of(LocalDate.of(1993, 3, 9).atStartOfDay(), UTC);
     private static final AuditEvent EVENT_1 = new AuditEvent("123", USER1_LOGIN, DATE, DATE, IP, SUCCESS, TYPE, emptyMap(), emptyMap());
     private static final AuditEvent EVENT_2 = new AuditEvent("456", USER2_LOGIN, DATE, DATE, IP, SUCCESS, TYPE, emptyMap(), emptyMap());
 

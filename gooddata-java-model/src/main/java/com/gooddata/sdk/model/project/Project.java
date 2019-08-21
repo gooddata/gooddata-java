@@ -5,19 +5,27 @@
  */
 package com.gooddata.sdk.model.project;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.gooddata.sdk.model.md.Meta;
 import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.util.BooleanDeserializer;
-import com.gooddata.util.GDDateTimeDeserializer;
+import com.gooddata.util.GDZonedDateTimeDeserializer;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.joda.time.DateTime;
 
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.gooddata.util.Validate.*;
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNullState;
 import static java.util.Arrays.asList;
 
 /**
@@ -119,12 +127,12 @@ public class Project {
     }
 
     @JsonIgnore
-    public DateTime getCreated() {
+    public ZonedDateTime getCreated() {
         return meta.getCreated();
     }
 
     @JsonIgnore
-    public DateTime getUpdated() {
+    public ZonedDateTime getUpdated() {
         return meta.getUpdated();
     }
 
@@ -481,8 +489,8 @@ public class Project {
         @JsonCreator
         private ProjectMeta(@JsonProperty("author") String author,
                             @JsonProperty("contributor") String contributor,
-                            @JsonProperty("created") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime created,
-                            @JsonProperty("updated") @JsonDeserialize(using = GDDateTimeDeserializer.class) DateTime updated,
+                            @JsonProperty("created") @JsonDeserialize(using = GDZonedDateTimeDeserializer.class) ZonedDateTime created,
+                            @JsonProperty("updated") @JsonDeserialize(using = GDZonedDateTimeDeserializer.class) ZonedDateTime updated,
                             @JsonProperty("summary") String summary,
                             @JsonProperty("title") String title,
                             @JsonProperty("category") String category,

@@ -7,11 +7,12 @@ package com.gooddata.sdk.service.auditevent;
 
 import com.gooddata.collections.PageRequest;
 import com.gooddata.util.GoodDataToStringBuilder;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.ZonedDateTime;
+
+import static java.time.ZoneOffset.UTC;
 import static org.apache.commons.lang3.Validate.notNull;
 
 /**
@@ -19,34 +20,34 @@ import static org.apache.commons.lang3.Validate.notNull;
  */
 public final class AuditEventPageRequest extends PageRequest {
 
-    private DateTime from;
+    private ZonedDateTime from;
 
-    private DateTime to;
+    private ZonedDateTime to;
 
     private String type;
 
     public AuditEventPageRequest() {
     }
 
-    public DateTime getFrom() {
+    public ZonedDateTime getFrom() {
         return from;
     }
 
     /**
      * Specify lower bound of interval
      */
-    public void setFrom(final DateTime from) {
+    public void setFrom(final ZonedDateTime from) {
         this.from = from;
     }
 
-    public DateTime getTo() {
+    public ZonedDateTime getTo() {
         return to;
     }
 
     /**
      * Specify upper bound of interval
      */
-    public void setTo(final DateTime to) {
+    public void setTo(final ZonedDateTime to) {
         this.to = to;
     }
 
@@ -94,10 +95,10 @@ public final class AuditEventPageRequest extends PageRequest {
     public UriComponentsBuilder updateWithPageParams(final UriComponentsBuilder builder) {
         UriComponentsBuilder builderWithPaging = super.updateWithPageParams(builder);
         if (from != null) {
-            builderWithPaging.queryParam("from", from.toDateTime(DateTimeZone.UTC));
+            builderWithPaging.queryParam("from", from.withZoneSameInstant(UTC));
         }
         if (to != null) {
-            builderWithPaging.queryParam("to", to.toDateTime(DateTimeZone.UTC));
+            builderWithPaging.queryParam("to", to.withZoneSameInstant(UTC));
         }
         if (type != null) {
             builderWithPaging.queryParam("type", type);
