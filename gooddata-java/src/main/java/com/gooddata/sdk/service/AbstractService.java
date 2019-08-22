@@ -16,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
@@ -132,17 +133,17 @@ public abstract class AbstractService {
         }
 
         @Override
-        public HttpStatus getStatusCode() throws IOException {
+        public HttpStatus getStatusCode() {
             return statusCode;
         }
 
         @Override
-        public int getRawStatusCode() throws IOException {
+        public int getRawStatusCode() {
             return rawStatusCode;
         }
 
         @Override
-        public String getStatusText() throws IOException {
+        public String getStatusText() {
             return statusText;
         }
 
@@ -152,8 +153,8 @@ public abstract class AbstractService {
         }
 
         @Override
-        public InputStream getBody() throws IOException {
-            return body != null ? new ByteArrayInputStream(body) : null;
+        public InputStream getBody() {
+            return body != null ? new ByteArrayInputStream(body) : StreamUtils.emptyInput();
         }
 
         @Override

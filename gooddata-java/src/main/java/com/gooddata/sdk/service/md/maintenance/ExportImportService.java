@@ -17,6 +17,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 
 /**
  * Service providing metadata export/import tasks.
@@ -47,7 +48,8 @@ public class ExportImportService extends AbstractService {
             throw new ExportImportException("Unable to export metadata from objects " + export.getUris() + ".", e);
         }
 
-        return new PollResult<>(this, new AbstractPollHandler<TaskStatus, PartialMdExportToken>(partialMdArtifact.getStatusUri(),
+        return new PollResult<>(this, new AbstractPollHandler<TaskStatus, PartialMdExportToken>(
+                notNullState(partialMdArtifact, "partial export response").getStatusUri(),
                 TaskStatus.class, PartialMdExportToken.class) {
             @Override
             public void handlePollResult(TaskStatus pollResult) {
@@ -85,7 +87,8 @@ public class ExportImportService extends AbstractService {
                     + "' with token '" + mdExportToken.getToken() + "'.", e);
         }
 
-        return new PollResult<>(this, new AbstractPollHandler<TaskStatus, Void>(importResponse.getUri(), TaskStatus.class, Void.class) {
+        return new PollResult<>(this, new AbstractPollHandler<TaskStatus, Void>(notNullState(importResponse, "partial import response").getUri(),
+                TaskStatus.class, Void.class) {
             @Override
             public void handlePollResult(TaskStatus pollResult) {
                 if (!pollResult.isSuccess()) {

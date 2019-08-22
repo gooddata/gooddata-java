@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 import static java.lang.String.format;
 
 /**
@@ -210,7 +211,7 @@ public class ConnectorService extends AbstractService {
         try {
             final UriResponse response = restTemplate
                     .postForObject(ProcessStatus.URL, execution, UriResponse.class, project.getId(), connectorType);
-            return createProcessPollResult(response.getUri());
+            return createProcessPollResult(notNullState(response, "created process response").getUri());
         } catch (GoodDataRestException | RestClientException e) {
             throw new ConnectorException("Unable to execute " + connectorType + " process", e);
         }

@@ -57,6 +57,7 @@ import java.util.Collection;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.Validate.isTrue;
 
@@ -466,7 +467,9 @@ public class ProcessService extends AbstractService {
             throw new ScheduleExecutionException("Cannot execute schedule", e);
         }
 
-        return new PollResult<>(this, new AbstractPollHandler<ScheduleExecution, ScheduleExecution>(scheduleExecution.getUri(), ScheduleExecution.class, ScheduleExecution.class) {
+        return new PollResult<>(this, new AbstractPollHandler<ScheduleExecution, ScheduleExecution>(
+                notNullState(scheduleExecution, "created schedule execution").getUri(),
+                ScheduleExecution.class, ScheduleExecution.class) {
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
                 final ScheduleExecution pollResult = extractData(response, ScheduleExecution.class);
