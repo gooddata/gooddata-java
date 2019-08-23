@@ -9,6 +9,7 @@ import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Collections.singletonList;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -41,10 +42,37 @@ public class SubscriptionTest {
                 Arrays.asList(new TimerEvent("0 * * * * *"), new TimerEvent("1 * * * * *")),
                 new TriggerCondition("true"),
                 new MessageTemplate("test message"),
+                null,
                 singletonList("/gdc/account/profile/876ec68f5630b38de65852ed5d6236ff/channelConfigurations/59dca62e60b2c601f3c72e18"),
                 new Meta("test subscription"));
 
         assertThat(subscription, jsonEquals(resource("notification/subscriptionToCreate.json")));
     }
 
+    @Test
+    public void testSerializationWithSubject() {
+        Subscription subscription = new Subscription(
+                singletonList(new TimerEvent("0 * * * * *")),
+                new TriggerCondition("true"),
+                new MessageTemplate("test message"),
+                new MessageTemplate("test subject"),
+                singletonList("/gdc/account/profile/876ec68f5630b38de65852ed5d6236ff/channelConfigurations/59dca62e60b2c601f3c72e18"),
+                new Meta("test subscription"));
+
+        assertThat(subscription, jsonEquals(resource("notification/subscriptionWithSubject.json")));
+    }
+
+    @Test
+    public void testDeserializationWithSubject() {
+        Subscription subscription = readObjectFromResource("/notification/subscriptionWithSubject.json", Subscription.class);
+        assertThat(subscription.getSubjectTemplate().getExpression(), is("test subject"));
+        assertThat(subscription.getTemplate().getExpression(), is("test message"));
+        assertThat(subscription.getCondition().getExpression(), is("true"));
+        assertThat(subscription.getChannels().get(0), is("/gdc/account/profile/876ec68f5630b38de65852ed5d6236ff/channelConfigurations/59dca62e60b2c601f3c72e18"));
+        assertThat(subscription.getMeta().getTitle(), is ("test subscription"));
+
+        Trigger trigger = subscription.getTriggers().get(0);
+        assertThat(trigger, instanceOf(TimerEvent.class));
+        assertThat(((TimerEvent)trigger).getCronExpression(), is("0 * * * * *"));
+    }
 }
