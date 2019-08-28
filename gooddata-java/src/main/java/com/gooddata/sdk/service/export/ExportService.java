@@ -46,8 +46,8 @@ public class ExportService extends AbstractService {
 
     private static final String RAW_EXPORT_URI = "/gdc/projects/{projectId}/execute/raw";
 
-    protected static final UriTemplate OBJ_TEMPLATE = new UriTemplate(Obj.OBJ_URI);
-    protected static final UriTemplate PROJECT_TEMPLATE = new UriTemplate(Project.URI);
+    public static final UriTemplate OBJ_TEMPLATE = new UriTemplate(Obj.OBJ_URI);
+    public static final UriTemplate PROJECT_TEMPLATE = new UriTemplate(Project.URI);
 
     /**
      * Service for data export

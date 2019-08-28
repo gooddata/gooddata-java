@@ -31,7 +31,7 @@ import static com.gooddata.util.Validate.notNull;
  */
 public class LcmService extends AbstractService {
 
-    protected static final UriTemplate LCM_ENTITIES_TEMPLATE = new UriTemplate(LcmEntities.URI);
+    public static final UriTemplate LCM_ENTITIES_TEMPLATE = new UriTemplate(LcmEntities.URI);
 
     /**
      * Constructs service for GoodData Life Cycle Management.

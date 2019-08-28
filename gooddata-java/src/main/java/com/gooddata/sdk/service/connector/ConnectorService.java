@@ -31,7 +31,7 @@ import static java.lang.String.format;
  */
 public class ConnectorService extends AbstractService {
 
-    protected static final UriTemplate STATUS_TEMPLATE = new UriTemplate(IntegrationProcessStatus.URI);
+    public static final UriTemplate STATUS_TEMPLATE = new UriTemplate(IntegrationProcessStatus.URI);
     private final ProjectService projectService;
 
     public ConnectorService(final RestTemplate restTemplate, final ProjectService projectService, final GoodDataSettings settings) {

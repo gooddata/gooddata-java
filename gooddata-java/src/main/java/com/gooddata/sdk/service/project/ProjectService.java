@@ -43,10 +43,10 @@ import static org.springframework.web.util.UriComponentsBuilder.fromUri;
  */
 public class ProjectService extends AbstractService {
 
-    protected static final UriTemplate PROJECT_TEMPLATE = new UriTemplate(Project.URI);
-    protected static final UriTemplate PROJECT_USERS_TEMPLATE = new UriTemplate(Users.URI);
-    protected static final UriTemplate PROJECT_USER_TEMPLATE = new UriTemplate(User.URI);
-    protected static final UriTemplate LIST_PROJECTS_TEMPLATE = new UriTemplate(Projects.LIST_PROJECTS_URI);
+    public static final UriTemplate PROJECT_TEMPLATE = new UriTemplate(Project.URI);
+    public static final UriTemplate PROJECT_USERS_TEMPLATE = new UriTemplate(Users.URI);
+    public static final UriTemplate PROJECT_USER_TEMPLATE = new UriTemplate(User.URI);
+    public static final UriTemplate LIST_PROJECTS_TEMPLATE = new UriTemplate(Projects.LIST_PROJECTS_URI);
     private final AccountService accountService;
 
     /**

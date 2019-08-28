@@ -26,7 +26,7 @@ import static com.gooddata.util.Validate.*;
  */
 public class OutputStageService extends AbstractService {
 
-    protected static final UriTemplate OUTPUT_STAGE_TEMPLATE = new UriTemplate(OutputStage.URI);
+    public static final UriTemplate OUTPUT_STAGE_TEMPLATE = new UriTemplate(OutputStage.URI);
 
     /**
      * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
