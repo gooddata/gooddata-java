@@ -70,12 +70,6 @@
                 "category" : "templates"
             },
             {
-                "link" : "/gdc/releaseInfo",
-                "summary" : "Release information.",
-                "title" : "releaseInfo",
-                "category" : "releaseInfo"
-            },
-            {
                 "link" : "/uploads",
                 "summary" : "User data staging area.",
                 "title" : "user-uploads",

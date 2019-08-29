@@ -30,7 +30,6 @@ public class RootLinksTest {
         assertThat(rootLinks.getProjectsUri(), is("/gdc/projects"));
         assertThat(rootLinks.getToolUri(), is("/gdc/tool"));
         assertThat(rootLinks.getTemplatesUri(), is("/gdc/templates"));
-        assertThat(rootLinks.getReleaseInfoUri(), is("/gdc/releaseInfo"));
         assertThat(rootLinks.getUserStagingUri(), is("/uploads"));
     }
 }

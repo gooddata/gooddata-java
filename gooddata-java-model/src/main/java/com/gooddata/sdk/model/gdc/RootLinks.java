@@ -150,17 +150,6 @@ public class RootLinks extends AboutLinks {
     }
 
     /**
-     * Get release information URI string
-     *
-     * @return release information URI string
-     * @throws GoodDataException in case no link with such category found
-     */
-    @JsonIgnore
-    public String getReleaseInfoUri() {
-        return getLink(LinkCategory.RELEASE_INFO).getUri();
-    }
-
-    /**
      * Get user data staging area URI string
      *
      * @return user data staging area URI string
@@ -236,10 +225,6 @@ public class RootLinks extends AboutLinks {
          * Template resource - for internal use only
          */
         TEMPLATES("templates"),
-        /**
-         * Release information
-         */
-        RELEASE_INFO("releaseInfo"),
         /**
          * User data staging area
          */
