@@ -42,8 +42,6 @@ public class RootLinksTest {
         assertThat(rootLinks.getToolUri(), is("/gdc/tool"));
         assertThat(rootLinks.getTemplatesLink(), is("/gdc/templates"));
         assertThat(rootLinks.getTemplatesUri(), is("/gdc/templates"));
-        assertThat(rootLinks.getReleaseInfoLink(), is("/gdc/releaseInfo"));
-        assertThat(rootLinks.getReleaseInfoUri(), is("/gdc/releaseInfo"));
         assertThat(rootLinks.getUserStagingLink(), is("/uploads"));
         assertThat(rootLinks.getUserStagingUri(), is("/uploads"));
     }

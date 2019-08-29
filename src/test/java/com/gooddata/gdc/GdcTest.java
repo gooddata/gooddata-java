@@ -42,8 +42,6 @@ public class GdcTest {
         assertThat(gdc.getToolUri(), is("/gdc/tool"));
         assertThat(gdc.getTemplatesLink(), is("/gdc/templates"));
         assertThat(gdc.getTemplatesUri(), is("/gdc/templates"));
-        assertThat(gdc.getReleaseInfoLink(), is("/gdc/releaseInfo"));
-        assertThat(gdc.getReleaseInfoUri(), is("/gdc/releaseInfo"));
         assertThat(gdc.getUserStagingLink(), is("/uploads"));
         assertThat(gdc.getUserStagingUri(), is("/uploads"));
     }
