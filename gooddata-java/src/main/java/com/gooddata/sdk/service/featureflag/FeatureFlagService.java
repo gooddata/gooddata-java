@@ -27,9 +27,9 @@ import static com.gooddata.util.Validate.notNull;
  */
 public class FeatureFlagService extends AbstractService {
 
-    protected static final UriTemplate PROJECT_FEATURE_FLAG_TEMPLATE = new UriTemplate(ProjectFeatureFlag.PROJECT_FEATURE_FLAG_URI);
-    protected static final UriTemplate PROJECT_FEATURE_FLAGS_TEMPLATE = new UriTemplate(ProjectFeatureFlags.PROJECT_FEATURE_FLAGS_URI);
-    protected static final UriTemplate AGGREGATED_FEATURE_FLAGS_TEMPLATE = new UriTemplate(FeatureFlags.AGGREGATED_FEATURE_FLAGS_URI);
+    public static final UriTemplate PROJECT_FEATURE_FLAG_TEMPLATE = new UriTemplate(ProjectFeatureFlag.PROJECT_FEATURE_FLAG_URI);
+    public static final UriTemplate PROJECT_FEATURE_FLAGS_TEMPLATE = new UriTemplate(ProjectFeatureFlags.PROJECT_FEATURE_FLAGS_URI);
+    public static final UriTemplate AGGREGATED_FEATURE_FLAGS_TEMPLATE = new UriTemplate(FeatureFlags.AGGREGATED_FEATURE_FLAGS_URI);
 
     /**
      * Constructs service for GoodData feature flags management.

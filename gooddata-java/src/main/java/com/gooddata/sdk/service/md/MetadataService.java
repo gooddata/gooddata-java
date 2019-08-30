@@ -30,7 +30,7 @@ import static java.util.Arrays.asList;
  */
 public class MetadataService extends AbstractService {
 
-    protected static final UriTemplate OBJ_TEMPLATE = new UriTemplate(Obj.OBJ_URI);
+    public static final UriTemplate OBJ_TEMPLATE = new UriTemplate(Obj.OBJ_URI);
     private static final Set<String> IRREGULAR_PLURAL_WORD_SUFFIXES = new HashSet<>(asList("s", "ch", "sh", "x", "o"));
 
     public MetadataService(final RestTemplate restTemplate, final GoodDataSettings settings) {

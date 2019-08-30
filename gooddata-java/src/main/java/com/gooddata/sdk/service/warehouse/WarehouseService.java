@@ -32,10 +32,10 @@ import static com.gooddata.util.Validate.notNull;
  */
 public class WarehouseService extends AbstractService {
 
-    protected static final UriTemplate SCHEMAS_TEMPLATE = new UriTemplate(WarehouseSchemas.URI);
-    protected static final UriTemplate SCHEMA_TEMPLATE = new UriTemplate(WarehouseSchema.URI);
-    protected static final UriTemplate WAREHOUSE_TEMPLATE = new UriTemplate(Warehouse.URI);
-    protected static final UriTemplate USERS_TEMPLATE = new UriTemplate(WarehouseUsers.URI);
+    public static final UriTemplate SCHEMAS_TEMPLATE = new UriTemplate(WarehouseSchemas.URI);
+    public static final UriTemplate SCHEMA_TEMPLATE = new UriTemplate(WarehouseSchema.URI);
+    public static final UriTemplate WAREHOUSE_TEMPLATE = new UriTemplate(Warehouse.URI);
+    public static final UriTemplate USERS_TEMPLATE = new UriTemplate(WarehouseUsers.URI);
     private static final String DEFAULT_SCHEMA_NAME = "default";
 
     /**

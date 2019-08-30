@@ -132,7 +132,7 @@ public class GoodData {
      * @param protocol GoodData Platform's API protocol (e.g. https)
      * @param settings additional settings
      */
-    protected GoodData(String hostname, String login, String password, int port, String protocol, GoodDataSettings settings) {
+    public GoodData(String hostname, String login, String password, int port, String protocol, GoodDataSettings settings) {
         this(new LoginPasswordGoodDataRestProvider(
                 new GoodDataEndpoint(hostname, port, protocol),
                 settings,

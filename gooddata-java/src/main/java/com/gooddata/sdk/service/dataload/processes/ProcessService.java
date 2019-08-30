@@ -47,11 +47,11 @@ import static org.apache.commons.lang3.Validate.isTrue;
  */
 public class ProcessService extends AbstractService {
 
-    protected static final UriTemplate SCHEDULE_TEMPLATE = new UriTemplate(Schedule.URI);
-    protected static final UriTemplate PROCESS_TEMPLATE = new UriTemplate(DataloadProcess.URI);
-    protected static final UriTemplate SCHEDULES_TEMPLATE = new UriTemplate(Schedules.URI);
-    protected static final UriTemplate PROCESSES_TEMPLATE = new UriTemplate(DataloadProcesses.URI);
-    protected static final UriTemplate USER_PROCESSES_TEMPLATE = new UriTemplate(DataloadProcesses.USER_PROCESSES_URI);
+    public static final UriTemplate SCHEDULE_TEMPLATE = new UriTemplate(Schedule.URI);
+    public static final UriTemplate PROCESS_TEMPLATE = new UriTemplate(DataloadProcess.URI);
+    public static final UriTemplate SCHEDULES_TEMPLATE = new UriTemplate(Schedules.URI);
+    public static final UriTemplate PROCESSES_TEMPLATE = new UriTemplate(DataloadProcesses.URI);
+    public static final UriTemplate USER_PROCESSES_TEMPLATE = new UriTemplate(DataloadProcesses.USER_PROCESSES_URI);
     private static final MediaType MEDIA_TYPE_ZIP = MediaType.parseMediaType("application/zip");
     private static final long MAX_MULTIPART_SIZE = 1024 * 1024;
 

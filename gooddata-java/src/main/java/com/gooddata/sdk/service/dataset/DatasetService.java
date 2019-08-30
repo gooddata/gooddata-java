@@ -43,7 +43,7 @@ import static org.springframework.util.StringUtils.isEmpty;
  */
 public class DatasetService extends AbstractService {
 
-    protected static final UriTemplate UPLOADS_INFO_TEMPLATE = new UriTemplate(UploadsInfo.URI);
+    public static final UriTemplate UPLOADS_INFO_TEMPLATE = new UriTemplate(UploadsInfo.URI);
     private static final String MANIFEST_FILE_NAME = "upload_info.json";
     private static final String ETL_PULL_DEFAULT_ERROR_MESSAGE = "ETL Pull failed with status %s";
 

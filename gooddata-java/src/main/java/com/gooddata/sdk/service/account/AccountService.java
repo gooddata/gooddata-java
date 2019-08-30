@@ -26,10 +26,10 @@ import static com.gooddata.util.Validate.notNull;
  */
 public class AccountService extends AbstractService {
 
-    protected static final UriTemplate ACCOUNT_TEMPLATE = new UriTemplate(Account.URI);
-    protected static final UriTemplate ACCOUNTS_TEMPLATE = new UriTemplate(Account.ACCOUNTS_URI);
-    protected static final UriTemplate LOGIN_TEMPLATE = new UriTemplate(Account.LOGIN_URI);
-    protected static final UriTemplate SEPARATORS_TEMPLATE = new UriTemplate(SeparatorSettings.URI);
+    public static final UriTemplate ACCOUNT_TEMPLATE = new UriTemplate(Account.URI);
+    public static final UriTemplate ACCOUNTS_TEMPLATE = new UriTemplate(Account.ACCOUNTS_URI);
+    public static final UriTemplate LOGIN_TEMPLATE = new UriTemplate(Account.LOGIN_URI);
+    public static final UriTemplate SEPARATORS_TEMPLATE = new UriTemplate(SeparatorSettings.URI);
 
     /**
      * Constructs service for GoodData account management.

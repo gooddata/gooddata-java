@@ -30,8 +30,8 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
  */
 public class AuditEventService extends AbstractService {
 
-    protected static final UriTemplate ADMIN_URI_TEMPLATE = new UriTemplate(AuditEvent.ADMIN_URI);
-    protected static final UriTemplate USER_URI_TEMPLATE = new UriTemplate(AuditEvent.USER_URI);
+    public static final UriTemplate ADMIN_URI_TEMPLATE = new UriTemplate(AuditEvent.ADMIN_URI);
+    public static final UriTemplate USER_URI_TEMPLATE = new UriTemplate(AuditEvent.USER_URI);
 
     private final AccountService accountService;
 
