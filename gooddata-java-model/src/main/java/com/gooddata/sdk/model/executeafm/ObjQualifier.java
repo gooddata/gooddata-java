@@ -17,7 +17,7 @@ import com.gooddata.sdk.model.md.Obj;
         @JsonSubTypes.Type(value = UriObjQualifier.class, name = "uri"),
         @JsonSubTypes.Type(value = IdentifierObjQualifier.class, name = "identifier")
 })
-public interface ObjQualifier {
+public interface ObjQualifier extends Qualifier {
 
     /**
      * Returns the qualifier in the form of uri. Default implementation throws {@link UnsupportedOperationException}

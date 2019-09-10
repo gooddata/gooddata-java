@@ -11,12 +11,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooddata.sdk.model.executeafm.Execution;
 import com.gooddata.sdk.model.executeafm.afm.Afm;
 import com.gooddata.sdk.model.executeafm.afm.AttributeItem;
-import com.gooddata.sdk.model.executeafm.afm.CompatibilityFilter;
-import com.gooddata.sdk.model.executeafm.afm.DateFilter;
-import com.gooddata.sdk.model.executeafm.afm.FilterItem;
+import com.gooddata.sdk.model.executeafm.afm.filter.CompatibilityFilter;
+import com.gooddata.sdk.model.executeafm.afm.filter.DateFilter;
+import com.gooddata.sdk.model.executeafm.afm.filter.ExtendedFilter;
+import com.gooddata.sdk.model.executeafm.afm.filter.FilterItem;
 import com.gooddata.sdk.model.executeafm.afm.MeasureItem;
-import com.gooddata.sdk.model.executeafm.afm.NegativeAttributeFilter;
-import com.gooddata.sdk.model.executeafm.afm.PositiveAttributeFilter;
+import com.gooddata.sdk.model.executeafm.afm.filter.MeasureValueFilter;
+import com.gooddata.sdk.model.executeafm.afm.filter.NegativeAttributeFilter;
+import com.gooddata.sdk.model.executeafm.afm.filter.PositiveAttributeFilter;
 import com.gooddata.sdk.model.executeafm.afm.SimpleMeasureDefinition;
 import com.gooddata.sdk.model.executeafm.resultspec.Dimension;
 import com.gooddata.sdk.model.executeafm.resultspec.ResultSpec;
@@ -240,12 +242,12 @@ public abstract class VisualizationConverter {
                 .collect(toList());
     }
 
-    private static List<CompatibilityFilter> convertFilters(final List<FilterItem> filters) {
+    private static List<CompatibilityFilter> convertFilters(final List<ExtendedFilter> filters) {
         if (filters == null) {
             return new ArrayList<>();
         }
 
-        List<FilterItem> validFilters = removeIrrelevantFilters(filters);
+        List<ExtendedFilter> validFilters = removeIrrelevantFilters(filters);
         return getCompatibilityFilters(validFilters);
     }
 
@@ -293,23 +295,23 @@ public abstract class VisualizationConverter {
         return measure;
     }
 
-
-    private static List<CompatibilityFilter> getCompatibilityFilters(final List<FilterItem> filters) {
-        return (List<CompatibilityFilter>)(List<?>) filters;
+    private static List<CompatibilityFilter> getCompatibilityFilters(final List<ExtendedFilter> filters) {
+        return filters.stream()
+            .map(CompatibilityFilter.class::cast)
+            .collect(toList());
     }
 
-    private static List<FilterItem> removeIrrelevantFilters(final List<FilterItem> filters) {
+    private static <T> List<T> removeIrrelevantFilters(final List<T> filters) {
         return filters.stream()
-                .filter((f) -> {
+                .filter(f -> {
                     if (f instanceof DateFilter) {
                         return !((DateFilter) f).isAllTimeSelected();
+                    } else if (f instanceof MeasureValueFilter) {
+                        return ((MeasureValueFilter) f).getCondition() != null;
                     } else if (f instanceof NegativeAttributeFilter) {
                         return !((NegativeAttributeFilter) f).isAllSelected();
-                    } else if (f instanceof PositiveAttributeFilter) {
-                        return true;
-                    }
+                    } else return f instanceof PositiveAttributeFilter;
 
-                    return false;
                 })
                 .collect(Collectors.toList());
     }

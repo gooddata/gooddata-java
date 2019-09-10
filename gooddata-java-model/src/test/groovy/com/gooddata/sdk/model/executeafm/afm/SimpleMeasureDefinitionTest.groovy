@@ -7,6 +7,8 @@ package com.gooddata.sdk.model.executeafm.afm
 
 import com.gooddata.sdk.model.executeafm.IdentifierObjQualifier
 import com.gooddata.sdk.model.executeafm.UriObjQualifier
+import com.gooddata.sdk.model.executeafm.afm.filter.NegativeAttributeFilter
+import com.gooddata.sdk.model.executeafm.afm.filter.PositiveAttributeFilter
 import nl.jqno.equalsverifier.EqualsVerifier
 import nl.jqno.equalsverifier.Warning
 import org.apache.commons.lang3.SerializationUtils

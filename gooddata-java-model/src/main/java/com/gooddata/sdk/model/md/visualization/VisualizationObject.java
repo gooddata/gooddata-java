@@ -21,8 +21,8 @@ import static org.apache.commons.lang3.Validate.notNull;
 
 import com.gooddata.sdk.model.executeafm.UriObjQualifier;
 import com.gooddata.sdk.model.executeafm.afm.Afm;
-import com.gooddata.sdk.model.executeafm.afm.FilterItem;
 import com.gooddata.sdk.model.executeafm.Execution;
+import com.gooddata.sdk.model.executeafm.afm.filter.ExtendedFilter;
 import com.gooddata.sdk.model.executeafm.resultspec.ResultSpec;
 import com.gooddata.sdk.model.md.AbstractObj;
 import com.gooddata.sdk.model.md.Meta;
@@ -220,7 +220,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
      * @return filters from visualization object
      */
     @JsonIgnore
-    public List<FilterItem> getFilters() {
+    public List<ExtendedFilter> getFilters() {
         return content.getFilters();
     }
 
@@ -228,7 +228,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
      * @param filters replacing previous visualization object's filters
      */
     @JsonIgnore
-    public void setFilters(List<FilterItem> filters) {
+    public void setFilters(List<ExtendedFilter> filters) {
         content.setFilters(filters);
     }
 
@@ -327,7 +327,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
         private static final long serialVersionUID = 2895359822118041504L;
         private UriObjQualifier visualizationClass;
         private List<Bucket> buckets;
-        private List<FilterItem> filters;
+        private List<ExtendedFilter> filters;
         private String properties;
         private Map<String, String> referenceItems;
 
@@ -338,7 +338,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
         @JsonCreator
         private Content(@JsonProperty("visualizationClass") final UriObjQualifier visualizationClass,
                        @JsonProperty("buckets") final List<Bucket> buckets,
-                       @JsonProperty("filters") final List<FilterItem> filters,
+                       @JsonProperty("filters") final List<ExtendedFilter> filters,
                        @JsonProperty("properties") final String properties,
                        @JsonProperty("references") final Map<String, String> referenceItems) {
 
@@ -370,7 +370,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
             this.buckets = buckets;
         }
 
-        public void setFilters(List<FilterItem> filters) {
+        public void setFilters(List<ExtendedFilter> filters) {
             this.filters = filters;
         }
 
@@ -396,7 +396,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
             return visualizationClass.getUri();
         }
 
-        public List<FilterItem> getFilters() {
+        public List<ExtendedFilter> getFilters() {
             if (filters == null) {
                 return new ArrayList<>();
             }

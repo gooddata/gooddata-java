@@ -6,7 +6,7 @@
 
 package com.gooddata.sdk.model.executeafm
 
-import com.gooddata.sdk.model.executeafm.afm.ExpressionFilter
+import com.gooddata.sdk.model.executeafm.afm.filter.ExpressionFilter
 import com.gooddata.sdk.model.executeafm.resultspec.AttributeSortItem
 import com.gooddata.sdk.model.executeafm.resultspec.Dimension
 import com.gooddata.sdk.model.executeafm.resultspec.ResultSpec

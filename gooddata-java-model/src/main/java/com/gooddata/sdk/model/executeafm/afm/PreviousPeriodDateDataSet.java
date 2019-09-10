@@ -8,6 +8,7 @@ package com.gooddata.sdk.model.executeafm.afm;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
+import com.gooddata.sdk.model.executeafm.afm.filter.DateFilter;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
