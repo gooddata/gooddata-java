@@ -7,6 +7,8 @@ package com.gooddata.sdk.model.executeafm.afm
 
 import com.gooddata.sdk.model.executeafm.IdentifierObjQualifier
 import com.gooddata.sdk.model.executeafm.UriObjQualifier
+import com.gooddata.sdk.model.executeafm.afm.filter.CompatibilityFilter
+import com.gooddata.sdk.model.executeafm.afm.filter.ExpressionFilter
 import spock.lang.Specification
 import spock.lang.Unroll
 

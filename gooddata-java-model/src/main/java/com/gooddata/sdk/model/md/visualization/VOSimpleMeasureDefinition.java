@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.model.executeafm.afm.Aggregation;
-import com.gooddata.sdk.model.executeafm.afm.FilterItem;
+import com.gooddata.sdk.model.executeafm.afm.filter.FilterItem;
 import com.gooddata.sdk.model.executeafm.afm.MeasureDefinition;
 import com.gooddata.sdk.model.executeafm.afm.SimpleMeasureDefinition;
 

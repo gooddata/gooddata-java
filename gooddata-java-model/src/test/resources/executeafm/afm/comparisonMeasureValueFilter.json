@@ -1,0 +1,13 @@
+{
+  "measureValueFilter": {
+    "measure": {
+      "localIdentifier": "local.identifier"
+    },
+    "condition": {
+      "comparison": {
+        "operator": "EQUAL_TO",
+        "value": 12
+      }
+    }
+  }
+}

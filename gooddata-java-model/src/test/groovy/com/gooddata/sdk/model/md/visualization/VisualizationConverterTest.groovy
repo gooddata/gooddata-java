@@ -6,15 +6,19 @@
 package com.gooddata.sdk.model.md.visualization
 
 import com.fasterxml.jackson.core.JsonParseException
+import com.gooddata.sdk.model.executeafm.LocalIdentifierQualifier
 import com.gooddata.sdk.model.executeafm.UriObjQualifier
-import com.gooddata.sdk.model.executeafm.afm.AbsoluteDateFilter
+import com.gooddata.sdk.model.executeafm.afm.filter.AbsoluteDateFilter
 import com.gooddata.sdk.model.executeafm.afm.Afm
 import com.gooddata.sdk.model.executeafm.afm.AttributeItem
+import com.gooddata.sdk.model.executeafm.afm.filter.ComparisonCondition
+import com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator
 import com.gooddata.sdk.model.executeafm.afm.MeasureItem
-import com.gooddata.sdk.model.executeafm.afm.NegativeAttributeFilter
-import com.gooddata.sdk.model.executeafm.afm.PositiveAttributeFilter
-import com.gooddata.sdk.model.executeafm.afm.RelativeDateFilter
-import com.gooddata.sdk.model.executeafm.afm.UriAttributeFilterElements
+import com.gooddata.sdk.model.executeafm.afm.filter.MeasureValueFilter
+import com.gooddata.sdk.model.executeafm.afm.filter.NegativeAttributeFilter
+import com.gooddata.sdk.model.executeafm.afm.filter.PositiveAttributeFilter
+import com.gooddata.sdk.model.executeafm.afm.filter.RelativeDateFilter
+import com.gooddata.sdk.model.executeafm.afm.filter.UriAttributeFilterElements
 import com.gooddata.sdk.model.executeafm.resultspec.AttributeSortItem
 import com.gooddata.sdk.model.executeafm.resultspec.Dimension
 import com.gooddata.sdk.model.executeafm.resultspec.MeasureLocatorItem
@@ -51,7 +55,8 @@ class VisualizationConverterTest extends Specification {
                 [new AttributeItem(new UriObjQualifier("/uri/to/displayForm/1"), "attribute1", "attributeAlias")],
                 [
                         new PositiveAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), new UriAttributeFilterElements(["ab", "cd"])),
-                        new AbsoluteDateFilter(new UriObjQualifier("/uri/to/dataSet/1"), LocalDate.of(2000, 8, 30), LocalDate.of(2017, 8, 07))
+                        new AbsoluteDateFilter(new UriObjQualifier("/uri/to/dataSet/1"), LocalDate.of(2000, 8, 30), LocalDate.of(2017, 8, 07)),
+                        new MeasureValueFilter(new LocalIdentifierQualifier("measure0"), new ComparisonCondition(ComparisonConditionOperator.GREATER_THAN, 200.1))
                 ],
                 [
                         new MeasureItem(new VOSimpleMeasureDefinition(new UriObjQualifier("/uri/to/measure/0"), null, null, []),

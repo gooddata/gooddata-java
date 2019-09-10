@@ -1,0 +1,7 @@
+{
+  "range": {
+    "operator": "NOT_BETWEEN",
+    "from": 12,
+    "to": 4999
+  }
+}

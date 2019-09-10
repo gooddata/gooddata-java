@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
+import com.gooddata.sdk.model.executeafm.afm.filter.FilterItem;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.ArrayList;

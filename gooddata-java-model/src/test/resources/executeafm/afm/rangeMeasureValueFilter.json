@@ -1,0 +1,14 @@
+{
+  "measureValueFilter": {
+    "measure": {
+      "localIdentifier": "local.identifier"
+    },
+    "condition": {
+      "range": {
+        "operator": "BETWEEN",
+        "from": -12,
+        "to": 42069.669
+      }
+    }
+  }
+}

@@ -7,7 +7,7 @@ package com.gooddata.sdk.model.executeafm
 
 import com.gooddata.sdk.model.executeafm.afm.Afm
 import com.gooddata.sdk.model.executeafm.afm.AttributeItem
-import com.gooddata.sdk.model.executeafm.afm.ExpressionFilter
+import com.gooddata.sdk.model.executeafm.afm.filter.ExpressionFilter
 import com.gooddata.sdk.model.executeafm.afm.MeasureItem
 import com.gooddata.sdk.model.executeafm.afm.NativeTotalItem
 import com.gooddata.sdk.model.executeafm.afm.SimpleMeasureDefinition

@@ -123,6 +123,24 @@
             },
             "granularity": "month"
           }
+        }, {
+          "measureValueFilter": {
+            "measure": {
+              "localIdentifier": "measure0"
+            },
+            "condition": {
+              "comparison": {
+                "operator": "GREATER_THAN",
+                "value": 200.1
+              }
+            }
+          }
+        }, {
+          "measureValueFilter": {
+            "measure": {
+              "localIdentifier": "measure1"
+            }
+          }
         }
       ],
       "properties": "{\"key\":\"value\"}",
