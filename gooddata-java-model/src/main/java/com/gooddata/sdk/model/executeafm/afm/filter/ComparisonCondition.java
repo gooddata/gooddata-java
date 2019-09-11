@@ -6,6 +6,7 @@
 package com.gooddata.sdk.model.executeafm.afm.filter;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.util.GoodDataToStringBuilder;
@@ -13,6 +14,8 @@ import com.gooddata.util.GoodDataToStringBuilder;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Condition of {@link MeasureValueFilter} that compares measure values against a single value.
@@ -24,29 +27,42 @@ public class ComparisonCondition implements MeasureValueFilterCondition, Seriali
 
     private static final long serialVersionUID = 2944349621407799356L;
 
-    private final ComparisonConditionOperator operator;
+    private final String operator;
     private final BigDecimal value;
+
+    @JsonCreator
+    public ComparisonCondition(
+        @JsonProperty("operator") final String operator,
+        @JsonProperty("value") final BigDecimal value
+    ) {
+        this.operator = notNull(operator, "operator");
+        this.value = notNull(value, "value");
+    }
 
     /**
      * Creates a new {@link ComparisonCondition} instance.
      *
      * @param operator The operator of the condition .
-     * @param value The value of the condition.
+     * @param value    The value of the condition.
      */
-    @JsonCreator
     public ComparisonCondition(
-            @JsonProperty("operator") final ComparisonConditionOperator operator,
-            @JsonProperty("value") final BigDecimal value
+        final ComparisonConditionOperator operator,
+        final BigDecimal value
     ) {
-        this.operator = operator;
-        this.value = value;
+        this(notNull(operator, "operator").toString(), value);
     }
 
     /**
      * @return comparison condition operator
      */
+    @JsonIgnore
     public ComparisonConditionOperator getOperator() {
-        return operator;
+        return ComparisonConditionOperator.of(operator);
+    }
+
+    @JsonProperty("operator")
+    public String getStringOperator() {
+        return this.operator;
     }
 
     /**
@@ -61,8 +77,8 @@ public class ComparisonCondition implements MeasureValueFilterCondition, Seriali
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final ComparisonCondition that = (ComparisonCondition) o;
-        return operator == that.operator &&
-                Objects.equals(value, that.value);
+        return Objects.equals(operator, that.operator) &&
+            Objects.equals(value, that.value);
     }
 
     @Override

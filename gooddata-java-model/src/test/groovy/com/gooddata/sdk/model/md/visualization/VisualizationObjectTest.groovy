@@ -162,23 +162,29 @@ class VisualizationObjectTest extends Specification {
         expect:
         measures == expected
 
+
         where:
+        // @formatter:off
         measures                                    | expected
-        multipleMeasuresVisualization.getMeasures() | [multipleMeasuresVisualization.buckets[0].items[0],
-                multipleMeasuresVisualization.buckets[1].items[0],
-                multipleMeasuresVisualization.buckets[1].items[1]]
-        emptyBucketsVisualization.getMeasures()     | []
+        multipleMeasuresVisualization.getMeasures() | [ multipleMeasuresVisualization.buckets[0].items[0],
+                                                        multipleMeasuresVisualization.buckets[1].items[0],
+                                                        multipleMeasuresVisualization.buckets[1].items[1] ]
+        emptyBucketsVisualization.getMeasures()       | []
+        // @formatter:on
     }
 
     def "return only simple measures"() {
         expect:
         measures == expected
 
+
         where:
+        // @formatter:off
         measures                                          | expected
-        multipleMeasuresVisualization.getSimpleMeasures() | [multipleMeasuresVisualization.buckets[0].items[0],
-                multipleMeasuresVisualization.buckets[1].items[0]]
+        multipleMeasuresVisualization.getSimpleMeasures() | [ multipleMeasuresVisualization.buckets[0].items[0],
+                                                              multipleMeasuresVisualization.buckets[1].items[0] ]
         emptyBucketsVisualization.getSimpleMeasures()     | []
+        // @formatter:on
     }
 
     def "should return attributes"() {
@@ -186,10 +192,12 @@ class VisualizationObjectTest extends Specification {
         attributes == expected
 
         where:
+        // @formatter:off
         attributes                                | expected
-        segmentedLineChart.getAttributes()        | [segmentedLineChart.buckets[0].items[0],
-                segmentedLineChart.buckets[1].items[0]]
+        segmentedLineChart.getAttributes()        | [ segmentedLineChart.buckets[0].items[0],
+                                                      segmentedLineChart.buckets[1].items[0] ]
         emptyBucketsVisualization.getAttributes() | []
+        // @formatter:on
     }
 
     def "should check if visualization object has derived measures"() {

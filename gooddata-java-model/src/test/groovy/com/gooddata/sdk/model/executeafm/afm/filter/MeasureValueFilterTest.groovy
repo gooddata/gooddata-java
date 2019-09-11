@@ -41,7 +41,7 @@ class MeasureValueFilterTest extends Specification {
     def "should copy"() {
         when:
         def filter = new MeasureValueFilter(new IdentifierObjQualifier("id"), new ComparisonCondition(GREATER_THAN, 12.1))
-        def copy = filter.withObjUriQualifier(new UriObjQualifier("uri"))
+        def copy = filter.withUriObjQualifier(new UriObjQualifier("uri"))
 
         then:
         copy.measure.uri == "uri"

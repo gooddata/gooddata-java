@@ -11,10 +11,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.model.executeafm.Qualifier;
 import com.gooddata.sdk.model.executeafm.UriObjQualifier;
+import com.gooddata.sdk.model.md.visualization.Measure;
 import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
 import java.util.Objects;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Represents measure value filter applied on an insight.
@@ -31,17 +34,26 @@ public class MeasureValueFilter implements ExtendedFilter, CompatibilityFilter, 
     private final MeasureValueFilterCondition condition;
 
     /**
+     * Creates a new {@link MeasureValueFilter} instance without specified condition {@link MeasureValueFilterCondition}
+     * It represents use-case with not active filter in insight which could be modified later.
+     *
+     * @param measure The qualifier of referenced measure.
+     */
+    public MeasureValueFilter(final Qualifier measure) {
+        this(measure, null);
+    }
+
+    /**
      * Creates a new {@link MeasureValueFilter} instance.
      *
      * @param measure The qualifier of referenced measure.
-     * @param condition The condition applied to a sliced measure value.
+     * @param condition The condition applied to a sliced measure value. (Optional)
      */
     @JsonCreator
     public MeasureValueFilter(
             @JsonProperty("measure") final Qualifier measure,
             @JsonProperty("condition") final MeasureValueFilterCondition condition) {
-
-        this.measure = measure;
+        this.measure = notNull(measure, "measure");
         this.condition = condition;
     }
 
@@ -52,7 +64,7 @@ public class MeasureValueFilter implements ExtendedFilter, CompatibilityFilter, 
      *
      * @return self copy with given qualifier
      */
-    public MeasureValueFilter withObjUriQualifier(final UriObjQualifier qualifier) {
+    public MeasureValueFilter withUriObjQualifier(final UriObjQualifier qualifier) {
         return new MeasureValueFilter(qualifier, this.condition);
     }
 

@@ -6,6 +6,7 @@
 package com.gooddata.sdk.model.executeafm.afm.filter;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.util.GoodDataToStringBuilder;
@@ -13,6 +14,8 @@ import com.gooddata.util.GoodDataToStringBuilder;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Condition of {@link MeasureValueFilter} that compares measure values against two values.
@@ -24,33 +27,44 @@ public class RangeCondition implements MeasureValueFilterCondition, Serializable
 
     private static final long serialVersionUID = -1219122779136638864L;
 
-    private final RangeConditionOperator operator;
+    private final String operator;
     private final BigDecimal from;
     private final BigDecimal to;
+
+    @JsonCreator
+    public RangeCondition(
+        @JsonProperty("operator") final String operator,
+        @JsonProperty("from") final BigDecimal from,
+        @JsonProperty("to") final BigDecimal to) {
+        this.operator = notNull(operator, "operator");
+        this.from = notNull(from, "from");
+        this.to = notNull(to, "to");
+    }
 
     /**
      * Creates a new {@link RangeCondition} instance.
      *
      * @param operator The operator of the range condition.
-     * @param from The left boundary value.
-     * @param to The right boundary value.
+     * @param from     The left boundary value.
+     * @param to       The right boundary value.
      */
-    @JsonCreator
     public RangeCondition(
-            @JsonProperty("operator") final RangeConditionOperator operator,
-            @JsonProperty("from") final BigDecimal from,
-            @JsonProperty("to") final BigDecimal to) {
-        this.operator = operator;
-        this.from = from;
-        this.to = to;
+        final RangeConditionOperator operator,
+        final BigDecimal from,
+        final BigDecimal to) {
+        this(notNull(operator, "operator").toString(), from, to);
     }
 
     /**
      * @return range condition operator
      */
+    @JsonIgnore
     public RangeConditionOperator getOperator() {
-        return operator;
+        return RangeConditionOperator.of(operator);
     }
+
+    @JsonProperty("operator")
+    public String getStringOperator() { return this.operator; }
 
     /**
      * @return left boundary of the range
@@ -71,9 +85,9 @@ public class RangeCondition implements MeasureValueFilterCondition, Serializable
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final RangeCondition that = (RangeCondition) o;
-        return operator == that.operator &&
-                Objects.equals(from, that.from) &&
-                Objects.equals(to, that.to);
+        return Objects.equals(operator, that.operator) &&
+            Objects.equals(from, that.from) &&
+            Objects.equals(to, that.to);
     }
 
     @Override

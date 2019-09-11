@@ -16,6 +16,8 @@ import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOp
 import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator.LESS_THAN
 import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator.LESS_THAN_OR_EQUAL_TO
 import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator.NOT_EQUAL_TO
+import static com.gooddata.sdk.model.executeafm.afm.filter.RangeConditionOperator.BETWEEN
+import static com.gooddata.sdk.model.executeafm.afm.filter.RangeConditionOperator.BETWEEN
 import static com.gooddata.util.ResourceUtils.readObjectFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource
@@ -29,11 +31,23 @@ class ComparisonConditionTest extends Specification {
     private static final String COMPARISON_CONDITION_LESS_THAN_OR_EQUAL_TO_OPERATOR_JSON = 'executeafm/afm/comparisonConditionLessThanOrEqualToOperator.json'
     private static final String COMPARISON_CONDITION_EQUAL_TO_OPERATOR_JSON = 'executeafm/afm/comparisonConditionEqualToOperator.json'
     private static final String COMPARISON_CONDITION_NOT_EQUAL_TO_JSON = 'executeafm/afm/comparisonConditionNotEqualToOperator.json'
+    private static final String COMPARISON_CONDITION_INVALID_JSON = 'executeafm/afm/comparisonConditionInvalidOperator.json'
 
     def "should serialize"() {
         expect:
         that new ComparisonCondition(GREATER_THAN, -42.154),
                 jsonEquals(resource(COMPARISON_CONDITION_GREATER_THAN_OPERATOR_JSON))
+    }
+
+    def "should create ComparisonCondition with ComparisonConditionOperator enum"() {
+        when:
+        ComparisonCondition comparisonCondition = new ComparisonCondition(GREATER_THAN, 100.0)
+
+        then:
+        with(comparisonCondition) {
+            operator == GREATER_THAN
+            value == 100.0
+        }
     }
 
     @Unroll
@@ -75,6 +89,18 @@ class ComparisonConditionTest extends Specification {
         COMPARISON_CONDITION_LESS_THAN_OR_EQUAL_TO_OPERATOR_JSON    | LESS_THAN_OR_EQUAL_TO
         COMPARISON_CONDITION_EQUAL_TO_OPERATOR_JSON                 | EQUAL_TO
         COMPARISON_CONDITION_NOT_EQUAL_TO_JSON                      | NOT_EQUAL_TO
+    }
+
+    def "should deserialize object without exception in case of unknown operator"() {
+        given:
+        ComparisonCondition comparisonCondition = readObjectFromResource("/$COMPARISON_CONDITION_INVALID_JSON", ComparisonCondition)
+        ComparisonCondition deserialized = SerializationUtils.roundtrip(comparisonCondition)
+
+        expect:
+        with(deserialized) {
+            stringOperator == 'INVALID_OPERATOR'
+            value == 100
+        }
     }
 
     def "should verify equals"() {

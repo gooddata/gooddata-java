@@ -12,6 +12,8 @@ import com.gooddata.util.GoodDataToStringBuilder;
 import java.io.Serializable;
 import java.util.Objects;
 
+import static org.apache.commons.lang3.Validate.notNull;
+
 /**
  * Qualifies AFM object using an local identifier
  */
@@ -28,7 +30,7 @@ public final class LocalIdentifierQualifier implements Qualifier, Serializable {
      * @param localIdentifier The local identifier value.
      */
     public LocalIdentifierQualifier(final String localIdentifier) {
-        this.localIdentifier = localIdentifier;
+        this.localIdentifier = notNull(localIdentifier, "localIdentifier");
     }
 
     /**

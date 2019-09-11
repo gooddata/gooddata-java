@@ -21,11 +21,24 @@ class RangeConditionTest extends Specification {
 
     private static final String RANGE_CONDITION_BETWEEN_OPERATOR_JSON = 'executeafm/afm/rangeConditionBetweenOperator.json'
     private static final String RANGE_CONDITION_NOT_BETWEEN_OPERATOR_JSON = 'executeafm/afm/rangeConditionNotBetweenOperator.json'
+    private static final String RANGE_CONDITION_INVALID_OPERATOR_JSON = 'executeafm/afm/rangeConditionInvalidOperator.json'
 
     def "should serialize"() {
         expect:
         that new RangeCondition(BETWEEN, -12, 42069.669),
                 jsonEquals(resource(RANGE_CONDITION_BETWEEN_OPERATOR_JSON))
+    }
+
+    def "should create RangeCondition with RangeConditionOperator enum"() {
+        when:
+        RangeCondition rangeCondition = new RangeCondition(BETWEEN, -12.3, 42069.669)
+
+        then:
+        with(rangeCondition) {
+            operator == BETWEEN
+            from == -12.3
+            to == 42069.669
+        }
     }
 
     @Unroll
@@ -60,6 +73,19 @@ class RangeConditionTest extends Specification {
         jsonPath                                  | operator
         RANGE_CONDITION_BETWEEN_OPERATOR_JSON     | BETWEEN
         RANGE_CONDITION_NOT_BETWEEN_OPERATOR_JSON | NOT_BETWEEN
+    }
+
+    def "should deserialize object without exception in case of unknown operator"() {
+        given:
+        RangeCondition rangeCondition = readObjectFromResource("/$RANGE_CONDITION_INVALID_OPERATOR_JSON", RangeCondition)
+        RangeCondition deserialized = SerializationUtils.roundtrip(rangeCondition)
+
+        expect:
+        with(deserialized) {
+            stringOperator == 'INVALID_OPERATOR'
+            from == -12
+            to == 42069.669
+        }
     }
 
     def "should verify equals"() {
