@@ -28,11 +28,11 @@ Ensure pull request and issues are
 * All DTOs which can be updated should be **mutable**. Please keep mutable only the fields which are subject of change,
 the rest should be immutable.
 * Create method named `String getUri()` to provide **URI string to self**.
-* Introduce **constants**:
-```java
-public static final String URI = "/gdc/someresource/{resource-id}";
-public static final UriTemplate TEMPLATE = new UriTemplate(URI);
-```
+* Introduce **constant** with URI:
+  * ```java
+    public static final String URI = "/gdc/someresource/{resource-id}";
+    ```
+  * If you need also constants with `UriTemplate`, do not put them into DTOs not to drag Spring dependency into model module.
 * Put _Jackson_ annotations on getters rather then on fields.
 * Consider the **visibility** - use `package protected` when DTO is not intended for SDK user, but is needed
 in related service.
