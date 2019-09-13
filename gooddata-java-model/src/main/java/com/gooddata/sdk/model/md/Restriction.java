@@ -7,6 +7,10 @@ package com.gooddata.sdk.model.md;
 
 import com.gooddata.util.GoodDataToStringBuilder;
 
+import java.util.Objects;
+
+import static com.gooddata.util.Validate.notNull;
+
 /**
  * Metadata query restriction. See static factory methods to get instance of desired restriction type.
  */
@@ -17,8 +21,8 @@ public class Restriction {
     private final String value;
 
     private Restriction(Type type, String value) {
-        this.type = type;
-        this.value = value;
+        this.type = notNull(type, "type");
+        this.value = notNull(value, "value");
     }
 
     public Type getType() {
@@ -57,6 +61,20 @@ public class Restriction {
      */
     public static Restriction summary(String value) {
         return new Restriction(Type.SUMMARY, value);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Restriction that = (Restriction) o;
+        return type == that.type &&
+                value.equals(that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, value);
     }
 
     @Override
