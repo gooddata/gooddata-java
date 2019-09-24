@@ -16,6 +16,7 @@ class CompatibilityFilterTest extends Specification {
     private static final String POSITIVE_ATTRIBUTE_FILTER_JSON = '/executeafm/afm/positiveAttributeFilter.json'
     private static final String NEGATIVE_ATTRIBUTE_FILTER_JSON = '/executeafm/afm/negativeAttributeFilter.json'
     private static final String ABSOLUTE_DATE_FILTER_JSON = '/executeafm/afm/absoluteDateFilter.json'
+    private static final String ABSOLUTE_DATE_FILTER_NO_ZERO_PAD_DATE_JSON = '/executeafm/afm/absoluteDateFilter_noZeroPadDate.json'
     private static final String RELATIVE_DATE_FILTER_JSON = '/executeafm/afm/relativeDateFilter.json'
     private static final String MEASURE_VALUE_FILTER_JSON = '/executeafm/afm/measureValueFilter.json'
 
@@ -33,6 +34,7 @@ class CompatibilityFilterTest extends Specification {
         PositiveAttributeFilter | POSITIVE_ATTRIBUTE_FILTER_JSON
         NegativeAttributeFilter | NEGATIVE_ATTRIBUTE_FILTER_JSON
         AbsoluteDateFilter      | ABSOLUTE_DATE_FILTER_JSON
+        AbsoluteDateFilter      | ABSOLUTE_DATE_FILTER_NO_ZERO_PAD_DATE_JSON
         RelativeDateFilter      | RELATIVE_DATE_FILTER_JSON
         MeasureValueFilter      | MEASURE_VALUE_FILTER_JSON
 

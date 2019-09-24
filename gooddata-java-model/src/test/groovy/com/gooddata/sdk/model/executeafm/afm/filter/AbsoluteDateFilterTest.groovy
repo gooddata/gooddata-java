@@ -22,8 +22,9 @@ import static spock.util.matcher.HamcrestSupport.that
 class AbsoluteDateFilterTest extends Specification {
 
     private static final String ABSOLUTE_DATE_FILTER_JSON = 'executeafm/afm/absoluteDateFilter.json'
+    private static final String ABSOLUTE_DATE_FILTER_NO_ZERO_PAD_DATE_JSON = 'executeafm/afm/absoluteDateFilter_noZeroPadDate.json'
 
-    private static final LocalDate FROM = LocalDate.of(2017, 9, 25)
+    private static final LocalDate FROM = LocalDate.of(2017, 9, 2)
     private static final LocalDate TO = LocalDate.of(2017, 9, 30)
 
     def "should serialize"() {
@@ -34,7 +35,7 @@ class AbsoluteDateFilterTest extends Specification {
 
     def "should deserialize"() {
         when:
-        AbsoluteDateFilter filter = readObjectFromResource("/$ABSOLUTE_DATE_FILTER_JSON", AbsoluteDateFilter)
+        AbsoluteDateFilter filter = readObjectFromResource("/$filterJson", AbsoluteDateFilter)
 
         then:
         with(filter) {
@@ -43,6 +44,9 @@ class AbsoluteDateFilterTest extends Specification {
             to == TO
         }
         filter.toString()
+
+        where:
+        filterJson << [ABSOLUTE_DATE_FILTER_JSON, ABSOLUTE_DATE_FILTER_NO_ZERO_PAD_DATE_JSON]
     }
 
 
@@ -56,11 +60,14 @@ class AbsoluteDateFilterTest extends Specification {
     }
 
     def "test serializable"() {
-        AbsoluteDateFilter dateFilter = readObjectFromResource("/$ABSOLUTE_DATE_FILTER_JSON", AbsoluteDateFilter)
+        AbsoluteDateFilter dateFilter = readObjectFromResource("/$filterJson", AbsoluteDateFilter)
         AbsoluteDateFilter deserialized = SerializationUtils.roundtrip(dateFilter)
 
         expect:
         that deserialized, jsonEquals(dateFilter)
+
+        where:
+        filterJson << [ABSOLUTE_DATE_FILTER_JSON, ABSOLUTE_DATE_FILTER_NO_ZERO_PAD_DATE_JSON]
     }
 
     def "should verify equals"() {
