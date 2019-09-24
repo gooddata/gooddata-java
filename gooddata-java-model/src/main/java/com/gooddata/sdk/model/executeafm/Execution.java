@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.sdk.model.executeafm.afm.Afm;
 import com.gooddata.sdk.model.executeafm.resultspec.ResultSpec;
-import com.gooddata.util.GoodDataToStringBuilder;
 
 /**
  * Represents structure for triggering execution of contained AFM (Attributes Filters Metrics).
@@ -20,36 +19,14 @@ import com.gooddata.util.GoodDataToStringBuilder;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonTypeName("execution")
-public class Execution {
-
-    private final Afm afm;
-    private ResultSpec resultSpec;
-
+public class Execution extends NestedExecution {
     @JsonCreator
     public Execution(@JsonProperty("afm") final Afm afm,
                      @JsonProperty("resultSpec") final ResultSpec resultSpec) {
-        this.afm = afm;
-        this.resultSpec = resultSpec;
+        super(afm, resultSpec);
     }
 
     public Execution(final Afm afm) {
-        this.afm = afm;
-    }
-
-    public Afm getAfm() {
-        return afm;
-    }
-
-    public ResultSpec getResultSpec() {
-        return resultSpec;
-    }
-
-    public void setResultSpec(final ResultSpec resultSpec) {
-        this.resultSpec = resultSpec;
-    }
-
-    @Override
-    public String toString() {
-        return GoodDataToStringBuilder.defaultToString(this);
+        super(afm);
     }
 }
