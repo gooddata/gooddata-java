@@ -5,6 +5,7 @@
  */
 package com.gooddata.sdk.service.auditevent;
 
+import com.gooddata.util.ISOZonedDateTime;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -20,8 +21,8 @@ import static org.hamcrest.core.Is.is;
 
 public class AuditEventPageRequestTest {
 
-    private static final ZonedDateTime FROM = ZonedDateTime.now();
-    private static final ZonedDateTime TO = ZonedDateTime.now();
+    private static final ZonedDateTime FROM = ZonedDateTime.of(2019, 10, 28, 15, 30, 12, 0, UTC);
+    private static final ZonedDateTime TO = ZonedDateTime.of(2019, 11, 25, 8, 5, 58, 125000000, UTC);
     private static final Integer LIMIT = 10;
     private static final String OFFSET = "foo";
     public static final String EVENT_TYPE = "STANDARD_LOGIN";
@@ -75,7 +76,8 @@ public class AuditEventPageRequestTest {
         UriComponentsBuilder result = request.updateWithPageParams(UriComponentsBuilder.newInstance());
 
         assertThat(result.build().toUriString(), is(String.format("?offset=%s&limit=%d&from=%s&to=%s&type=%s",
-                OFFSET, LIMIT, FROM.withZoneSameInstant(UTC), TO.withZoneSameInstant(UTC), EVENT_TYPE)));
+                OFFSET, LIMIT, ISOZonedDateTime.FORMATTER.format(FROM.withZoneSameInstant(UTC)),
+                ISOZonedDateTime.FORMATTER.format(TO.withZoneSameInstant(UTC)), EVENT_TYPE)));
     }
 
     @Test
@@ -98,7 +100,7 @@ public class AuditEventPageRequestTest {
         UriComponentsBuilder result = request.updateWithPageParams(UriComponentsBuilder.newInstance());
 
         assertThat(result.build().toUriString(), is("?limit=" + DEFAULT_LIMIT +
-                "&from=" + FROM.withZoneSameInstant(UTC) + "&to=" + TO.withZoneSameInstant(UTC)));
+                "&from=2019-10-28T15:30:12.000Z&to=2019-11-25T08:05:58.125Z"));
     }
 
     @Test
