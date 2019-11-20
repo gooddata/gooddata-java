@@ -7,6 +7,7 @@ package com.gooddata.sdk.service.auditevent;
 
 import com.gooddata.collections.PageRequest;
 import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.util.ISOZonedDateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -95,10 +96,10 @@ public final class AuditEventPageRequest extends PageRequest {
     public UriComponentsBuilder updateWithPageParams(final UriComponentsBuilder builder) {
         UriComponentsBuilder builderWithPaging = super.updateWithPageParams(builder);
         if (from != null) {
-            builderWithPaging.queryParam("from", from.withZoneSameInstant(UTC));
+            builderWithPaging.queryParam("from", ISOZonedDateTime.FORMATTER.format(from.withZoneSameInstant(UTC)));
         }
         if (to != null) {
-            builderWithPaging.queryParam("to", to.withZoneSameInstant(UTC));
+            builderWithPaging.queryParam("to", ISOZonedDateTime.FORMATTER.format(to.withZoneSameInstant(UTC)));
         }
         if (type != null) {
             builderWithPaging.queryParam("type", type);

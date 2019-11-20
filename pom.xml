@@ -272,7 +272,7 @@
             <dependency>
                 <groupId>com.gooddata</groupId>
                 <artifactId>gooddata-rest-common</artifactId>
-                <version>1.4.1</version>
+                <version>1.5.0</version>
                 <exclusions>
                     <exclusion>
                         <groupId>joda-time</groupId>
