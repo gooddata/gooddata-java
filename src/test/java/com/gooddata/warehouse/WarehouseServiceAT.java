@@ -74,7 +74,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
     @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
     public void listWarehouses() throws Exception {
         final LinkedList<Warehouse> result = new LinkedList<>();
-        Page page = new PageRequest(1000);
+        Page page = new PageRequest(100);
         PageableList<Warehouse> warehouses;
 
         do {
