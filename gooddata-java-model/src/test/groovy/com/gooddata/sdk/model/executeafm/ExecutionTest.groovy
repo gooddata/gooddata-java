@@ -22,7 +22,7 @@ import com.gooddata.sdk.model.executeafm.resultspec.TotalItem
 import com.gooddata.sdk.model.md.report.Total
 import spock.lang.Specification
 
-import static com.gooddata.util.ResourceUtils.readObjectFromResource
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource
 import static spock.util.matcher.HamcrestSupport.that

@@ -6,7 +6,7 @@
 package com.gooddata.sdk.service
 
 import com.gooddata.sdk.service.gdc.GdcService
-import com.gooddata.gdc.Header
+import com.gooddata.sdk.common.gdc.Header
 import org.apache.http.HttpHeaders
 
 import static net.jadler.Jadler.onRequest

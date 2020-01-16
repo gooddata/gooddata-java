@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.account;
 
-import com.gooddata.GoodDataException;
-import com.gooddata.GoodDataRestException;
+import com.gooddata.sdk.common.GoodDataException;
+import com.gooddata.sdk.common.GoodDataRestException;
 
 /**
  * Account doesn't exist.

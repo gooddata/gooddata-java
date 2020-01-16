@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.connector;
 
-import com.gooddata.GoodDataException;
-import com.gooddata.GoodDataRestException;
+import com.gooddata.sdk.common.GoodDataException;
+import com.gooddata.sdk.common.GoodDataRestException;
 import com.gooddata.sdk.model.connector.*;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.project.Project;
@@ -16,7 +16,7 @@ import org.testng.annotations.Test;
 
 import static com.gooddata.sdk.model.connector.Status.Code.ERROR;
 import static com.gooddata.sdk.model.connector.Status.Code.SYNCHRONIZED;
-import static com.gooddata.util.ResourceUtils.*;
+import static com.gooddata.sdk.common.util.ResourceUtils.*;
 import static net.jadler.Jadler.onRequest;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;

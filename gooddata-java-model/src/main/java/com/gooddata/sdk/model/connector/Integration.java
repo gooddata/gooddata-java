@@ -12,9 +12,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
-import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
 
 /**
  * Connector integration (i.e. one instance of configured ETL for loading of one GDC project).

@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.project;
 
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 
 import static java.util.Collections.emptyList;
 import static org.hamcrest.CoreMatchers.is;

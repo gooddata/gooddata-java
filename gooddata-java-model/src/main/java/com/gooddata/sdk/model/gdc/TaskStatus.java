@@ -10,8 +10,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gooddata.gdc.GdcError;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.gdc.GdcError;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
 import java.util.Collections;

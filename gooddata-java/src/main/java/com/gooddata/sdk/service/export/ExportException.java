@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.export;
 
-import com.gooddata.GoodDataException;
+import com.gooddata.sdk.common.GoodDataException;
 
 /**
  * Exception during export

@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
 
 import java.util.Collection;
 
-import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;

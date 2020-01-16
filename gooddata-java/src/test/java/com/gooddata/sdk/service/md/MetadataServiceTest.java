@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.md;
 
-import com.gooddata.GoodDataException;
-import com.gooddata.GoodDataRestException;
+import com.gooddata.sdk.common.GoodDataException;
+import com.gooddata.sdk.common.GoodDataRestException;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.md.*;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
@@ -26,7 +26,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.*;

@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;

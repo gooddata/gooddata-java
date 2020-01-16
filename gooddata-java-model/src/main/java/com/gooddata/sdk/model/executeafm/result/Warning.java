@@ -7,12 +7,12 @@ package com.gooddata.sdk.model.executeafm.result;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.List;
 
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 import static java.util.Collections.emptyList;
 
 /**

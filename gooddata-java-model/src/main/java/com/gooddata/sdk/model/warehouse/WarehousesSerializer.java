@@ -5,12 +5,12 @@
  */
 package com.gooddata.sdk.model.warehouse;
 
-import com.gooddata.collections.PageableListSerializer;
+import com.gooddata.sdk.common.collections.PageSerializer;
 
 /**
  * Serializer of Warehouses object into JSON.
  */
-class WarehousesSerializer extends PageableListSerializer {
+class WarehousesSerializer extends PageSerializer {
 
     public WarehousesSerializer() {
         super(Warehouses.ROOT_NODE);

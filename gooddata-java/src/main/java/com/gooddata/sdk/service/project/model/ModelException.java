@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.project.model;
 
-import com.gooddata.GoodDataException;
+import com.gooddata.sdk.common.GoodDataException;
 
 /**
  * Represents error in ModelService

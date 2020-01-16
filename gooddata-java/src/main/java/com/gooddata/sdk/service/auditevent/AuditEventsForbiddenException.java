@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.auditevent;
 
-import com.gooddata.GoodDataException;
+import com.gooddata.sdk.common.GoodDataException;
 
 public class AuditEventsForbiddenException extends GoodDataException {
 

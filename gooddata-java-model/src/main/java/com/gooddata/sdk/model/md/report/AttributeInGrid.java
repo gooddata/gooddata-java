@@ -14,14 +14,14 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.sdk.model.md.Attribute;
 import com.gooddata.sdk.model.md.DisplayForm;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Attribute in Grid

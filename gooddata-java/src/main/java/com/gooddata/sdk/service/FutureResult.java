@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service;
 
-import com.gooddata.GoodDataException;
+import com.gooddata.sdk.common.GoodDataException;
 
 import java.util.concurrent.TimeUnit;
 

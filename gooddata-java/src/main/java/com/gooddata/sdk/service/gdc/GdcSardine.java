@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.gdc;
 
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 import com.github.sardine.impl.SardineImpl;
 import org.apache.http.client.ResponseHandler;

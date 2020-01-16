@@ -14,7 +14,7 @@ import org.springframework.http.client.support.HttpRequestWrapper;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Intercepts client-side HTTP requests and sets HTTP headers passed to constructor of this class.

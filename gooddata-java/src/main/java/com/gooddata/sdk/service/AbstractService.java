@@ -5,13 +5,13 @@
  */
 package com.gooddata.sdk.service;
 
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 import static java.lang.String.format;
 import static org.springframework.http.HttpMethod.GET;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gooddata.GoodDataException;
-import com.gooddata.GoodDataRestException;
+import com.gooddata.sdk.common.GoodDataException;
+import com.gooddata.sdk.common.GoodDataRestException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;

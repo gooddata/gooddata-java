@@ -11,8 +11,8 @@ import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 
-import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;

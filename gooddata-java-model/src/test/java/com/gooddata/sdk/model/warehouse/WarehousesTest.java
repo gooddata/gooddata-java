@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.warehouse;
 
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.Matchers.notNullValue;
@@ -26,8 +26,8 @@ public class WarehousesTest {
     @Test
     public void testDeserialization() throws Exception {
         assertThat(warehouses, notNullValue());
-        assertThat(warehouses, hasSize(2));
-        assertThat(warehouses.get(0).getTitle(), is("Storage"));
+        assertThat(warehouses.getPageItems(), hasSize(2));
+        assertThat(warehouses.getPageItems().get(0).getTitle(), is("Storage"));
     }
 
     @Test
@@ -43,7 +43,7 @@ public class WarehousesTest {
     @Test
     public void shouldDeserializeEmpty() throws Exception {
         final Warehouses result = readObjectFromResource("/warehouse/warehouses-empty.json", Warehouses.class);
-        assertThat(result, hasSize(0));
+        assertThat(result.getPageItems(), hasSize(0));
         assertThat(result.getPaging(), is(notNullValue()));
     }
 }

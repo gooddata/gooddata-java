@@ -14,7 +14,7 @@ import static com.gooddata.sdk.model.connector.Status.Code.ERROR;
 import static com.gooddata.sdk.model.connector.Status.Code.SYNCHRONIZED;
 import static com.gooddata.sdk.model.connector.Status.Code.UPLOADING;
 import static com.gooddata.sdk.model.connector.Status.Code.USER_ERROR;
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static java.time.ZoneOffset.UTC;
 import static java.time.ZonedDateTime.now;
 import static org.hamcrest.CoreMatchers.is;

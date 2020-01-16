@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.dataload.processes;
 
-import com.gooddata.GoodDataException;
+import com.gooddata.sdk.common.GoodDataException;
 
 /**
  * Schedule of the given URI doesn't exist

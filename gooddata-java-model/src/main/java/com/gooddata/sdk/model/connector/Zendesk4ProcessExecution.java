@@ -10,16 +10,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.gooddata.util.GoodDataToStringBuilder;
-import com.gooddata.util.ISOZonedDateTimeSerializer;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.ISOZonedDateTimeSerializer;
 
 import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.TreeMap;
 
 import static com.gooddata.sdk.model.connector.ConnectorType.ZENDESK4;
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Zendesk 4 (Insights) connector process execution (i.e. definition for single ETL run). Serialization only.

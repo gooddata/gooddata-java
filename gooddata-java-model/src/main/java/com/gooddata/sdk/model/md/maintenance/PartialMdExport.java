@@ -8,12 +8,12 @@ package com.gooddata.sdk.model.md.maintenance;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
 import java.util.HashSet;
 
-import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static java.util.Arrays.asList;
 
 /**

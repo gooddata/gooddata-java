@@ -15,11 +15,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gooddata.sdk.model.util.TagsDeserializer;
 import com.gooddata.sdk.model.util.TagsSerializer;
 import com.gooddata.sdk.model.util.UriHelper;
-import com.gooddata.util.BooleanDeserializer;
-import com.gooddata.util.BooleanIntegerSerializer;
-import com.gooddata.util.BooleanStringSerializer;
-import com.gooddata.util.GDZonedDateTime;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.BooleanDeserializer;
+import com.gooddata.sdk.common.util.BooleanIntegerSerializer;
+import com.gooddata.sdk.common.util.BooleanStringSerializer;
+import com.gooddata.sdk.common.util.GDZonedDateTime;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.time.ZonedDateTime;
 import java.util.Set;

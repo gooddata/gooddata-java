@@ -14,8 +14,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
-import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 

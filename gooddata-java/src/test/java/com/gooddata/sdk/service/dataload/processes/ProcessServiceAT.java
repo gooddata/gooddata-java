@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.dataload.processes;
 
-import com.gooddata.collections.MultiPageList;
-import com.gooddata.collections.PageableList;
+import com.gooddata.sdk.common.collections.Page;
+import com.gooddata.sdk.common.collections.PageBrowser;
 import com.gooddata.sdk.model.dataload.processes.DataloadProcess;
 import com.gooddata.sdk.model.dataload.processes.ProcessExecution;
 import com.gooddata.sdk.model.dataload.processes.ProcessExecutionDetail;
@@ -93,10 +93,10 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
 
     @Test(groups = "process", dependsOnMethods = {"createSchedule", "createTriggeredSchedule"})
     public void listSchedules() {
-        final PageableList<Schedule> collection = gd.getProcessService().listSchedules(project);
+        final Page<Schedule> collection = gd.getProcessService().listSchedules(project);
 
         assertThat(collection, notNullValue());
-        assertThat(collection, hasSize(2));
+        assertThat(collection.getPageItems(), hasSize(2));
         assertThat(collection.getNextPage(), nullValue());
     }
 
@@ -170,8 +170,8 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
     public void removeSchedule() {
         gd.getProcessService().removeSchedule(schedule);
         gd.getProcessService().removeSchedule(triggeredSchedule);
-        final MultiPageList<Schedule> schedules = (MultiPageList<Schedule>) gd.getProcessService().listSchedules(project);
-        assertThat(schedules.collectAll(), Matchers.not(IsIterableContaining.hasItems(ScheduleIdMatcher.hasSameScheduleIdAs(schedule), ScheduleIdMatcher.hasSameScheduleIdAs(triggeredSchedule))));
+        final PageBrowser<Schedule> schedules = gd.getProcessService().listSchedules(project);
+        assertThat(schedules.getAllItems(), Matchers.not(IsIterableContaining.hasItems(ScheduleIdMatcher.hasSameScheduleIdAs(schedule), ScheduleIdMatcher.hasSameScheduleIdAs(triggeredSchedule))));
     }
 
 }

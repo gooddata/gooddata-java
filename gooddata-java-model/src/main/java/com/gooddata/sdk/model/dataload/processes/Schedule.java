@@ -14,8 +14,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.gooddata.sdk.model.util.UriHelper;
-import com.gooddata.util.GoodDataToStringBuilder;
-import com.gooddata.util.ISOZonedDateTimeDeserializer;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.ISOZonedDateTimeDeserializer;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -23,9 +23,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
-import static com.gooddata.util.Validate.notNullState;
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 
 /**
  * Schedule.

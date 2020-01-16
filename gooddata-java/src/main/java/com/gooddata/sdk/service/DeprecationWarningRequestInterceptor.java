@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service;
 
-import com.gooddata.gdc.Header;
+import com.gooddata.sdk.common.gdc.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpRequest;

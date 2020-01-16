@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.gdc;
 
-import com.gooddata.GoodDataException;
+import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.model.gdc.RootLinks;
 import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.sdk.service.GoodDataSettings;
