@@ -10,8 +10,8 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
-import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;

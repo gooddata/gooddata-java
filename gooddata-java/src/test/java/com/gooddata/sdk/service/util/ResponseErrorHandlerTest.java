@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.util;
 
-import com.gooddata.GoodDataRestException;
-import com.gooddata.gdc.Header;
+import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.sdk.common.gdc.Header;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,8 +17,8 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
-import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;

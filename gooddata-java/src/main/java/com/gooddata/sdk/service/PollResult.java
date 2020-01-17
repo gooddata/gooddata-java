@@ -7,7 +7,7 @@ package com.gooddata.sdk.service;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Represents the result retrieved by polling on the REST API.

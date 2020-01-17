@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.md.maintenance;
 
-import com.gooddata.GoodDataException;
+import com.gooddata.sdk.common.GoodDataException;
 
 /**
  * Exception thrown by ExportImportService when some task failed.

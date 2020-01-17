@@ -5,10 +5,11 @@
  */
 package com.gooddata.sdk.service.auditevent;
 
+import com.gooddata.sdk.common.collections.CustomPageRequest;
 import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.service.account.AccountService;
-import com.gooddata.collections.PageRequest;
+import com.gooddata.sdk.common.collections.PageRequest;
 import org.springframework.web.client.RestTemplate;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -32,12 +33,12 @@ public class AuditEventServiceTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = ".*account.*")
     public void shouldFailOnNullAccountButPage() throws Exception {
-        service.listAuditEvents((Account) null, new PageRequest());
+        service.listAuditEvents((Account) null, new CustomPageRequest());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = ".*account.id.*")
     public void shouldFailOnNullAccountIdButPage() throws Exception {
-        service.listAuditEvents(mock(Account.class), new PageRequest());
+        service.listAuditEvents(mock(Account.class), new CustomPageRequest());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = ".*page.*")
@@ -54,7 +55,7 @@ public class AuditEventServiceTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = ".*domain.*")
     public void shouldFailOnNullDomainButPage() throws Exception {
-        service.listAuditEvents((String) null, new PageRequest());
+        service.listAuditEvents((String) null, new CustomPageRequest());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = ".*domain.*")

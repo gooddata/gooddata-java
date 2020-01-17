@@ -5,11 +5,15 @@
  */
 package com.gooddata.sdk.service.warehouse;
 
-import com.gooddata.GoodDataException;
-import com.gooddata.collections.MultiPageList;
-import com.gooddata.collections.PageRequest;
-import com.gooddata.collections.PageableList;
-import com.gooddata.sdk.model.warehouse.*;
+import com.gooddata.sdk.common.GoodDataException;
+import com.gooddata.sdk.common.collections.CustomPageRequest;
+import com.gooddata.sdk.common.collections.Page;
+import com.gooddata.sdk.common.collections.PageBrowser;
+import com.gooddata.sdk.model.warehouse.Warehouse;
+import com.gooddata.sdk.model.warehouse.WarehouseSchema;
+import com.gooddata.sdk.model.warehouse.WarehouseTask;
+import com.gooddata.sdk.model.warehouse.WarehouseUser;
+import com.gooddata.sdk.model.warehouse.Warehouses;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -19,8 +23,12 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static com.gooddata.util.ResourceUtils.*;
+import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
 import static net.jadler.Jadler.verifyThatRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -115,11 +123,12 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withBody(readFromResource("/warehouse/warehouses.json"))
                 .withStatus(200);
 
-        final PageableList<Warehouse> list = gd.getWarehouseService().listWarehouses();
+        final Page<Warehouse> list = gd.getWarehouseService().listWarehouses();
         assertThat(list, notNullValue());
-        assertThat(list, hasSize(2));
-        assertThat(list.get(0).getConnectionUrl(), notNullValue());
-        assertThat(list.get(1).getConnectionUrl(), notNullValue());
+        final List<Warehouse> pageItems = list.getPageItems();
+        assertThat(pageItems, hasSize(2));
+        assertThat(pageItems.get(0).getConnectionUrl(), notNullValue());
+        assertThat(pageItems.get(1).getConnectionUrl(), notNullValue());
     }
 
     @Test
@@ -211,10 +220,10 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withBody(readFromResource("/warehouse/users.json"));
 
-        final MultiPageList<WarehouseUser> users = (MultiPageList<WarehouseUser>) gd.getWarehouseService().listWarehouseUsers(warehouse);
-        assertThat(users.size(), is(2));
-        assertThat(users.totalSize(), is(4));
-        assertThat(users.collectAll().size(), is(4));
+        final PageBrowser<WarehouseUser> users = gd.getWarehouseService().listWarehouseUsers(warehouse);
+        assertThat(users.getPageItems().size(), is(2));
+        assertThat(users.hasNextPage(), is(true));
+        assertThat((int) users.allItemsStream().count(), is(4));
     }
 
 
@@ -227,8 +236,8 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withBody(readFromResource("/warehouse/users.json"));
 
-        final PageableList<WarehouseUser> users = gd.getWarehouseService().listWarehouseUsers(warehouse, new PageRequest(2));
-        assertThat(users, Matchers.hasSize(2));
+        final Page<WarehouseUser> users = gd.getWarehouseService().listWarehouseUsers(warehouse, new CustomPageRequest(2));
+        assertThat(users.getPageItems(), Matchers.hasSize(2));
     }
 
     @Test
@@ -382,10 +391,11 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withBody(readFromResource("/warehouse/schemas.json"))
                 .withStatus(200);
 
-        final PageableList<WarehouseSchema> list = gd.getWarehouseService().listWarehouseSchemas(warehouse);
+        final Page<WarehouseSchema> list = gd.getWarehouseService().listWarehouseSchemas(warehouse);
         assertThat(list, notNullValue());
-        assertThat(list, hasSize(1));
-        assertThat(list.get(0).getName(), is(equalTo(SCHEMA_NAME)));
+        final List<WarehouseSchema> pageItems = list.getPageItems();
+        assertThat(pageItems, hasSize(1));
+        assertThat(pageItems.get(0).getName(), is(equalTo(SCHEMA_NAME)));
     }
 
     @Test(expectedExceptions = WarehouseSchemaNotFoundException.class)

@@ -6,11 +6,11 @@
 package com.gooddata.sdk.model.md;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
 
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Structure with list of symbolic names (identifiers) to be expanded to list of URIs.

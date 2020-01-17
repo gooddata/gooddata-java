@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 
 import java.io.InputStreamReader;
 
-import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
 
 /**
  * Project model acceptance test

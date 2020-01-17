@@ -30,8 +30,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.gooddata.sdk.model.executeafm.resultspec.Dimension.MEASURE_GROUP;
-import static com.gooddata.util.Validate.isTrue;
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.isTrue;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 import static java.util.stream.Collectors.toList;
 
 /**

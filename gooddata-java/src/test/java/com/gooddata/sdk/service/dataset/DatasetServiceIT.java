@@ -6,7 +6,7 @@
 package com.gooddata.sdk.service.dataset;
 
 import com.gooddata.sdk.service.AbstractGoodDataIT;
-import com.gooddata.GoodDataException;
+import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.model.dataset.*;
 import com.gooddata.sdk.model.gdc.AboutLinks.Link;
 import com.gooddata.sdk.model.gdc.TaskStatus;
@@ -20,9 +20,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 
-import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
-import static com.gooddata.util.ResourceUtils.readFromResource;
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

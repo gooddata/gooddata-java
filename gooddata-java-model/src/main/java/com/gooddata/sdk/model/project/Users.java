@@ -11,8 +11,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.gooddata.collections.PageableList;
-import com.gooddata.collections.Paging;
+import com.gooddata.sdk.common.collections.Page;
+import com.gooddata.sdk.common.collections.Paging;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ import static java.util.Arrays.asList;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(using = UsersDeserializer.class)
 @JsonSerialize(using = UsersSerializer.class)
-public class Users extends PageableList<User> {
+public class Users extends Page<User> {
     public static final String URI = "/gdc/projects/{projectId}/users";
 
     static final String ROOT_NODE = "users";

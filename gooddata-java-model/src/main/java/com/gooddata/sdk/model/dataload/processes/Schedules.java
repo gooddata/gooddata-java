@@ -9,8 +9,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.gooddata.collections.PageableList;
-import com.gooddata.collections.Paging;
+import com.gooddata.sdk.common.collections.Page;
+import com.gooddata.sdk.common.collections.Paging;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import java.util.List;
 @JsonTypeName("schedules")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(using = SchedulesDeserializer.class)
-public class Schedules extends PageableList<Schedule> {
+public class Schedules extends Page<Schedule> {
     public static final String URI = "/gdc/projects/{projectId}/schedules";
 
     Schedules(final List<Schedule> items, final Paging paging) {

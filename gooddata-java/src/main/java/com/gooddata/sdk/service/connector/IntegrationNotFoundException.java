@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.connector;
 
-import com.gooddata.GoodDataException;
+import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.model.connector.ConnectorType;
 import com.gooddata.sdk.model.project.Project;
 

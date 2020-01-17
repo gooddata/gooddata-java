@@ -6,7 +6,7 @@
 
 package com.gooddata.sdk.model.project
 
-import com.gooddata.util.ResourceUtils
+import com.gooddata.sdk.common.util.ResourceUtils
 import spock.lang.Specification
 
 class ProjectsTest extends Specification {

@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.model.warehouse;
 
-import com.gooddata.collections.PageableList;
-import com.gooddata.collections.Paging;
+import com.gooddata.sdk.common.collections.Page;
+import com.gooddata.sdk.common.collections.Paging;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -24,7 +24,7 @@ import java.util.Map;
 @JsonTypeName(Warehouses.ROOT_NODE)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(using = WarehousesSerializer.class)
-public class Warehouses extends PageableList<Warehouse> {
+public class Warehouses extends Page<Warehouse> {
 
     public static final String URI = "/gdc/datawarehouse/instances";
 

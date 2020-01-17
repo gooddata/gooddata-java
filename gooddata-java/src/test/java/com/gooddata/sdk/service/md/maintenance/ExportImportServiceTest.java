@@ -9,7 +9,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
-import com.gooddata.GoodDataRestException;
+import com.gooddata.sdk.common.GoodDataRestException;
 import com.gooddata.sdk.model.md.maintenance.PartialMdArtifact;
 import com.gooddata.sdk.model.md.maintenance.PartialMdExport;
 import com.gooddata.sdk.model.md.maintenance.PartialMdExportToken;

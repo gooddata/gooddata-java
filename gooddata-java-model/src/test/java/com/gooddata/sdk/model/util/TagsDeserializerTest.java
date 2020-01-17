@@ -7,7 +7,7 @@ package com.gooddata.sdk.model.util;
 
 import org.testng.annotations.Test;
 
-import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;

@@ -7,7 +7,7 @@ package com.gooddata.sdk.model.md.maintenance;
 
 import com.fasterxml.jackson.annotation.*;
 import com.gooddata.sdk.model.gdc.UriResponse;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 /**
  * Partial metadata export result structure.

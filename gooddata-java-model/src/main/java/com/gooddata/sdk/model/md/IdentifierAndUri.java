@@ -7,7 +7,7 @@ package com.gooddata.sdk.model.md;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 /**
  * Encapsulates identifier and its URI.

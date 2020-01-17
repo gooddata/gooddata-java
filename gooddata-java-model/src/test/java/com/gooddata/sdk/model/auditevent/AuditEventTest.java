@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static java.time.ZoneOffset.UTC;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
