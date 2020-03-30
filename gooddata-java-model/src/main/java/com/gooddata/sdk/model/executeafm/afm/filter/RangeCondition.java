@@ -21,7 +21,7 @@ import static org.apache.commons.lang3.Validate.notNull;
  * Condition of {@link MeasureValueFilter} that compares measure values against two values.
  */
 @JsonRootName(RangeCondition.NAME)
-public class RangeCondition implements MeasureValueFilterCondition, Serializable {
+public class RangeCondition extends MeasureValueFilterCondition implements Serializable {
 
     static final String NAME = "range";
 
@@ -35,7 +35,9 @@ public class RangeCondition implements MeasureValueFilterCondition, Serializable
     public RangeCondition(
         @JsonProperty("operator") final String operator,
         @JsonProperty("from") final BigDecimal from,
-        @JsonProperty("to") final BigDecimal to) {
+        @JsonProperty("to") final BigDecimal to,
+        @JsonProperty("treatNullValuesAs") final BigDecimal treatNullValuesAs) {
+        super(treatNullValuesAs);
         this.operator = notNull(operator, "operator");
         this.from = notNull(from, "from");
         this.to = notNull(to, "to");
@@ -52,7 +54,23 @@ public class RangeCondition implements MeasureValueFilterCondition, Serializable
         final RangeConditionOperator operator,
         final BigDecimal from,
         final BigDecimal to) {
-        this(notNull(operator, "operator").toString(), from, to);
+        this(notNull(operator, "operator").toString(), from, to, null);
+    }
+
+    /**
+     * Creates a new {@link RangeCondition} instance.
+     *
+     * @param operator          The operator of the range condition.
+     * @param from              The left boundary value.
+     * @param to                The right boundary value.
+     * @param treatNullValuesAs The number that will be used instead of compared values that are null.
+     */
+    public RangeCondition(
+        final RangeConditionOperator operator,
+        final BigDecimal from,
+        final BigDecimal to,
+        final BigDecimal treatNullValuesAs) {
+        this(notNull(operator, "operator").toString(), from, to, treatNullValuesAs);
     }
 
     /**
@@ -84,6 +102,7 @@ public class RangeCondition implements MeasureValueFilterCondition, Serializable
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         final RangeCondition that = (RangeCondition) o;
         return Objects.equals(operator, that.operator) &&
             Objects.equals(from, that.from) &&
@@ -92,7 +111,7 @@ public class RangeCondition implements MeasureValueFilterCondition, Serializable
 
     @Override
     public int hashCode() {
-        return Objects.hash(operator, from, to);
+        return Objects.hash(super.hashCode(), operator, from, to);
     }
 
     @Override

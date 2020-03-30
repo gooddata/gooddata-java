@@ -21,7 +21,7 @@ import static org.apache.commons.lang3.Validate.notNull;
  * Condition of {@link MeasureValueFilter} that compares measure values against a single value.
  */
 @JsonRootName(ComparisonCondition.NAME)
-public class ComparisonCondition implements MeasureValueFilterCondition, Serializable {
+public class ComparisonCondition extends MeasureValueFilterCondition implements Serializable {
 
     static final String NAME = "comparison";
 
@@ -33,8 +33,10 @@ public class ComparisonCondition implements MeasureValueFilterCondition, Seriali
     @JsonCreator
     public ComparisonCondition(
         @JsonProperty("operator") final String operator,
-        @JsonProperty("value") final BigDecimal value
+        @JsonProperty("value") final BigDecimal value,
+        @JsonProperty("treatNullValuesAs") final BigDecimal treatNullValuesAs
     ) {
+        super(treatNullValuesAs);
         this.operator = notNull(operator, "operator");
         this.value = notNull(value, "value");
     }
@@ -49,7 +51,22 @@ public class ComparisonCondition implements MeasureValueFilterCondition, Seriali
         final ComparisonConditionOperator operator,
         final BigDecimal value
     ) {
-        this(notNull(operator, "operator").toString(), value);
+        this(notNull(operator, "operator").toString(), value, null);
+    }
+
+    /**
+     * Creates a new {@link ComparisonCondition} instance.
+     *
+     * @param operator          The operator of the condition .
+     * @param value             The value of the condition.
+     * @param treatNullValuesAs The number that will be used instead of compared values that are null.
+     */
+    public ComparisonCondition(
+        final ComparisonConditionOperator operator,
+        final BigDecimal value,
+        final BigDecimal treatNullValuesAs
+    ) {
+        this(notNull(operator, "operator").toString(), value, treatNullValuesAs);
     }
 
     /**
@@ -76,6 +93,7 @@ public class ComparisonCondition implements MeasureValueFilterCondition, Seriali
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         final ComparisonCondition that = (ComparisonCondition) o;
         return Objects.equals(operator, that.operator) &&
             Objects.equals(value, that.value);
@@ -83,7 +101,7 @@ public class ComparisonCondition implements MeasureValueFilterCondition, Seriali
 
     @Override
     public int hashCode() {
-        return Objects.hash(operator, value);
+        return Objects.hash(super.hashCode(), operator, value);
     }
 
     @Override
