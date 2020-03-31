@@ -1,0 +1,8 @@
+{
+  "range": {
+    "operator": "BETWEEN",
+    "from": -12,
+    "to": 42069.669,
+    "treatNullValuesAs": 0
+  }
+}

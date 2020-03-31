@@ -22,6 +22,8 @@ class RangeConditionTest extends Specification {
     private static final String RANGE_CONDITION_BETWEEN_OPERATOR_JSON = 'executeafm/afm/rangeConditionBetweenOperator.json'
     private static final String RANGE_CONDITION_NOT_BETWEEN_OPERATOR_JSON = 'executeafm/afm/rangeConditionNotBetweenOperator.json'
     private static final String RANGE_CONDITION_INVALID_OPERATOR_JSON = 'executeafm/afm/rangeConditionInvalidOperator.json'
+    private static final String RANGE_CONDITION_TREAT_NULL_AS_ZERO_JSON = 'executeafm/afm/rangeConditionWithTreatNullValueAsZero.json'
+    private static final String RANGE_CONDITION_TREAT_NULL_AS_DECIMAL_JSON = 'executeafm/afm/rangeConditionWithTreatNullValueAsNegativeDecimal.json'
 
     def "should serialize"() {
         expect:
@@ -38,6 +40,20 @@ class RangeConditionTest extends Specification {
             operator == BETWEEN
             from == -12.3
             to == 42069.669
+            treatNullValuesAs == null
+        }
+    }
+
+    def "should create RangeCondition with treatNullValuesAs"() {
+        when:
+        RangeCondition rangeCondition = new RangeCondition(BETWEEN, -12.3, 42069.669, 0)
+
+        then:
+        with(rangeCondition) {
+            operator == BETWEEN
+            from == -12.3
+            to == 42069.669
+            treatNullValuesAs == 0
         }
     }
 
@@ -51,17 +67,20 @@ class RangeConditionTest extends Specification {
             operator == conditionOperator
             from == conditionFrom
             to == conditionTo
+            treatNullValuesAs == conditionTreatNullValuesAs
         }
         rangeCondition.toString()
 
         where:
-        jsonPath                                  | conditionOperator | conditionFrom | conditionTo
-        RANGE_CONDITION_BETWEEN_OPERATOR_JSON     | BETWEEN           | -12           | 42069.669
-        RANGE_CONDITION_NOT_BETWEEN_OPERATOR_JSON | NOT_BETWEEN       | 12            | 4999
+        jsonPath                                   | conditionOperator | conditionFrom | conditionTo | conditionTreatNullValuesAs
+        RANGE_CONDITION_BETWEEN_OPERATOR_JSON      | BETWEEN           | -12           | 42069.669   | null
+        RANGE_CONDITION_NOT_BETWEEN_OPERATOR_JSON  | NOT_BETWEEN       | 12            | 4999        | null
+        RANGE_CONDITION_TREAT_NULL_AS_ZERO_JSON    | BETWEEN           | -12           | 42069.669   | 0
+        RANGE_CONDITION_TREAT_NULL_AS_DECIMAL_JSON | BETWEEN           | -12           | 42069.669   | -12.4
     }
 
     @Unroll
-    def "test serializable of condition with #operator operator"() {
+    def "test serializable of condition with #operator operator and #treatNullValueAs as treatNullValueAs"() {
         given:
         RangeCondition rangeCondition = readObjectFromResource("/$jsonPath", RangeCondition)
         RangeCondition deserialized = SerializationUtils.roundtrip(rangeCondition)
@@ -70,9 +89,11 @@ class RangeConditionTest extends Specification {
         that deserialized, jsonEquals(rangeCondition)
 
         where:
-        jsonPath                                  | operator
-        RANGE_CONDITION_BETWEEN_OPERATOR_JSON     | BETWEEN
-        RANGE_CONDITION_NOT_BETWEEN_OPERATOR_JSON | NOT_BETWEEN
+        jsonPath                                   | operator    | treatNullValueAs
+        RANGE_CONDITION_BETWEEN_OPERATOR_JSON      | BETWEEN     | null
+        RANGE_CONDITION_NOT_BETWEEN_OPERATOR_JSON  | NOT_BETWEEN | null
+        RANGE_CONDITION_TREAT_NULL_AS_ZERO_JSON    | BETWEEN     | 0
+        RANGE_CONDITION_TREAT_NULL_AS_DECIMAL_JSON | BETWEEN     | -12.4
     }
 
     def "should deserialize object without exception in case of unknown operator"() {
@@ -85,6 +106,7 @@ class RangeConditionTest extends Specification {
             stringOperator == 'INVALID_OPERATOR'
             from == -12
             to == 42069.669
+            treatNullValuesAs == null
         }
     }
 
