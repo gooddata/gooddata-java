@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.gooddata.util.BooleanDeserializer;
+import com.gooddata.sdk.common.util.BooleanDeserializer;
 
 import java.util.List;
 import java.util.Objects;

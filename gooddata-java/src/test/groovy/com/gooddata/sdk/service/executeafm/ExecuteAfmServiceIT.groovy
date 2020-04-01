@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.executeafm
 
-import com.gooddata.GoodDataException
+import com.gooddata.sdk.common.GoodDataException
 import com.gooddata.sdk.model.executeafm.Execution
 import com.gooddata.sdk.model.executeafm.ResultPage
 import com.gooddata.sdk.model.executeafm.UriObjQualifier
@@ -27,8 +27,8 @@ import com.gooddata.sdk.service.GoodDataITBase
 import spock.lang.Shared
 import spock.lang.Unroll
 
-import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER
-import static com.gooddata.util.ResourceUtils.readObjectFromResource
+import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
 import static net.jadler.Jadler.onRequest
 import static net.jadler.Jadler.verifyThatRequest
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals

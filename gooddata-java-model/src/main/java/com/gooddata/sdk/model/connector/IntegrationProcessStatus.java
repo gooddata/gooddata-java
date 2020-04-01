@@ -11,13 +11,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.sdk.model.util.UriHelper;
-import com.gooddata.util.GoodDataToStringBuilder;
-import com.gooddata.util.ISOZonedDateTime;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.ISOZonedDateTime;
 
 import java.time.ZonedDateTime;
 import java.util.Map;
 
-import static com.gooddata.util.Validate.notNullState;
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 
 /**
  * Connector process (i.e. single ETL run) status used in integration object. Deserialization only.

@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.project.model;
 
-import com.gooddata.GoodDataRestException;
+import com.gooddata.sdk.common.GoodDataRestException;
 import com.gooddata.sdk.model.gdc.AsyncTask;
 import com.gooddata.sdk.model.gdc.TaskStatus;
 import com.gooddata.sdk.model.project.Project;
@@ -26,8 +26,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import static com.gooddata.sdk.model.project.model.ModelDiff.UpdateScript;
-import static com.gooddata.util.Validate.noNullElements;
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.noNullElements;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 import static java.util.Arrays.asList;
 
 /**

@@ -5,28 +5,46 @@
  */
 package com.gooddata.sdk.service.dataload.processes;
 
-import com.gooddata.GoodDataException;
-import com.gooddata.GoodDataRestException;
-import com.gooddata.collections.MultiPageList;
-import com.gooddata.collections.Page;
-import com.gooddata.collections.PageRequest;
-import com.gooddata.collections.PageableList;
-import com.gooddata.sdk.model.dataload.processes.*;
+import com.gooddata.sdk.common.GoodDataException;
+import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.sdk.common.collections.CustomPageRequest;
+import com.gooddata.sdk.common.collections.Page;
+import com.gooddata.sdk.common.collections.PageBrowser;
+import com.gooddata.sdk.common.collections.PageRequest;
+import com.gooddata.sdk.common.util.SpringMutableUri;
+import com.gooddata.sdk.model.dataload.processes.AsyncTask;
+import com.gooddata.sdk.model.dataload.processes.DataloadProcess;
+import com.gooddata.sdk.model.dataload.processes.DataloadProcesses;
+import com.gooddata.sdk.model.dataload.processes.ProcessExecution;
+import com.gooddata.sdk.model.dataload.processes.ProcessExecutionDetail;
+import com.gooddata.sdk.model.dataload.processes.ProcessExecutionTask;
+import com.gooddata.sdk.model.dataload.processes.Schedule;
+import com.gooddata.sdk.model.dataload.processes.ScheduleExecution;
+import com.gooddata.sdk.model.dataload.processes.Schedules;
 import com.gooddata.sdk.model.project.Project;
-import com.gooddata.sdk.service.*;
+import com.gooddata.sdk.service.AbstractPollHandler;
+import com.gooddata.sdk.service.AbstractService;
+import com.gooddata.sdk.service.FutureResult;
+import com.gooddata.sdk.service.GoodDataSettings;
+import com.gooddata.sdk.service.PollResult;
+import com.gooddata.sdk.service.SimplePollHandler;
 import com.gooddata.sdk.service.account.AccountService;
 import com.gooddata.sdk.service.gdc.DataStoreService;
 import com.gooddata.sdk.service.util.ZipHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import java.io.File;
@@ -37,8 +55,8 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.util.Collection;
 
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.Validate.isTrue;
 
@@ -392,13 +410,13 @@ public class ProcessService extends AbstractService {
     }
 
     /**
-     * Get first page of paged list of schedules by given project.
+     * Get browser of schedules by given project.
      *
      * @param project project of schedules
-     * @return MultiPageList list of found schedules or empty list
+     * @return {@link PageBrowser} of found schedules or empty list
      */
-    public PageableList<Schedule> listSchedules(final Project project) {
-        return listSchedules(project, new PageRequest());
+    public PageBrowser<Schedule> listSchedules(final Project project) {
+        return listSchedules(project, new CustomPageRequest());
     }
 
     /**
@@ -406,13 +424,13 @@ public class ProcessService extends AbstractService {
      *
      * @param project   project of schedules
      * @param startPage page to be retrieved
-     * @return MultiPageList list of found schedules or empty list
+     * @return {@link PageBrowser} list of found schedules or empty list
      */
-    public PageableList<Schedule> listSchedules(final Project project,
-                                                final Page startPage) {
+    public PageBrowser<Schedule> listSchedules(final Project project,
+                                                final PageRequest startPage) {
         notNull(project, "project");
         notNull(startPage, "startPage");
-        return new MultiPageList<>(startPage, page -> listSchedules(getSchedulesUri(project, page)));
+        return new PageBrowser<>(startPage, page -> listSchedules(getSchedulesUri(project, page)));
     }
 
     /**
@@ -467,11 +485,11 @@ public class ProcessService extends AbstractService {
         });
     }
 
-    private PageableList<Schedule> listSchedules(URI uri) {
+    private Page<Schedule> listSchedules(URI uri) {
         try {
             final Schedules schedules = restTemplate.getForObject(uri, Schedules.class);
             if (schedules == null) {
-                return new PageableList<>();
+                return new Page<>();
             }
             return schedules;
         } catch (GoodDataException | RestClientException e) {
@@ -493,8 +511,8 @@ public class ProcessService extends AbstractService {
         return SCHEDULES_TEMPLATE.expand(project.getId());
     }
 
-    private static URI getSchedulesUri(final Project project, final Page page) {
-        return page.getPageUri(UriComponentsBuilder.fromUri(getSchedulesUri(project)));
+    private static URI getSchedulesUri(final Project project, final PageRequest page) {
+        return page.getPageUri(new SpringMutableUri(getSchedulesUri(project)));
     }
 
     private Schedule postSchedule(Schedule schedule, URI postUri) {

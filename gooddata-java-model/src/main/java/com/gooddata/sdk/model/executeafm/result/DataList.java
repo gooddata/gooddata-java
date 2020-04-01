@@ -5,13 +5,13 @@
  */
 package com.gooddata.sdk.model.executeafm.result;
 
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 import static java.util.stream.Collectors.toList;
 
 /**

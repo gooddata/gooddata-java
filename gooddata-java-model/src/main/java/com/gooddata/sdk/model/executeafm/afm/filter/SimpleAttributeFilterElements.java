@@ -8,7 +8,7 @@ package com.gooddata.sdk.model.executeafm.afm.filter;
 import java.io.Serializable;
 import java.util.List;
 
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * {@link AttributeFilterElements} represented by simple array.

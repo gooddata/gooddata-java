@@ -7,7 +7,7 @@ package com.gooddata.sdk.model.lcm
 
 import spock.lang.Specification
 
-import static com.gooddata.util.ResourceUtils.readObjectFromResource
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource
 import static spock.util.matcher.HamcrestSupport.that
@@ -33,7 +33,7 @@ class LcmEntitiesTest extends Specification {
         LcmEntities lcmEntities = readObjectFromResource("/$EMPTY_JSON", LcmEntities)
 
         then:
-        lcmEntities.size() == 0
+        lcmEntities.pageItems.size() == 0
         lcmEntities.paging
     }
 
@@ -42,8 +42,8 @@ class LcmEntitiesTest extends Specification {
         LcmEntities lcmEntities = readObjectFromResource("/$LCM_ENTITIES_JSON", LcmEntities)
 
         then:
-        lcmEntities.size() == 1
-        lcmEntities.first().projectId == 'PROJECT_ID'
+        lcmEntities.pageItems.size() == 1
+        lcmEntities.pageItems.first().projectId == 'PROJECT_ID'
         lcmEntities.paging
     }
 }

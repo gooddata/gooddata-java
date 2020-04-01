@@ -14,8 +14,8 @@ import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
-import static com.gooddata.util.ResourceUtils.readStringFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readStringFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

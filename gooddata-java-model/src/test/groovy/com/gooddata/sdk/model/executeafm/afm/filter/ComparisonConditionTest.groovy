@@ -16,7 +16,7 @@ import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOp
 import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator.LESS_THAN
 import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator.LESS_THAN_OR_EQUAL_TO
 import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator.NOT_EQUAL_TO
-import static com.gooddata.util.ResourceUtils.readObjectFromResource
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource
 import static spock.util.matcher.HamcrestSupport.that

@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.model.warehouse;
 
-import com.gooddata.collections.PageableListDeserializer;
-import com.gooddata.collections.Paging;
+import com.gooddata.sdk.common.collections.PageDeserializer;
+import com.gooddata.sdk.common.collections.Paging;
 
 import java.util.List;
 import java.util.Map;
@@ -14,14 +14,14 @@ import java.util.Map;
 /**
  * Deserializer of WarehouseSchemas.
  */
-class WarehouseSchemasDeserializer extends PageableListDeserializer<WarehouseSchemas, WarehouseSchema> {
+class WarehouseSchemasDeserializer extends PageDeserializer<WarehouseSchemas, WarehouseSchema> {
 
     protected WarehouseSchemasDeserializer() {
         super(WarehouseSchema.class);
     }
 
     @Override
-    protected WarehouseSchemas createList(final List<WarehouseSchema> items, final Paging paging, final Map<String, String> links) {
+    protected WarehouseSchemas createPage(final List<WarehouseSchema> items, final Paging paging, final Map<String, String> links) {
         return new WarehouseSchemas(items, paging, links);
     }
 }

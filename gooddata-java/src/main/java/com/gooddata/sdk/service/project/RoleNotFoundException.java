@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.project;
 
-import com.gooddata.GoodDataException;
+import com.gooddata.sdk.common.GoodDataException;
 
 /**
  * Project role of the given URI doesn't exist

@@ -9,7 +9,7 @@ import org.springframework.http.client.ClientHttpResponse;
 
 import java.net.URI;
 
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * For internal use by services employing polling.<p>

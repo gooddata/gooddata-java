@@ -9,8 +9,8 @@ package com.gooddata.sdk.model.md.dashboard
 import com.gooddata.sdk.model.md.dashboard.filter.DateFilterReference
 import spock.lang.Specification
 
-import static com.gooddata.util.ResourceUtils.readObjectFromResource
-import static com.gooddata.util.ResourceUtils.readStringFromResource
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
+import static com.gooddata.sdk.common.util.ResourceUtils.readStringFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static spock.util.matcher.HamcrestSupport.that
 

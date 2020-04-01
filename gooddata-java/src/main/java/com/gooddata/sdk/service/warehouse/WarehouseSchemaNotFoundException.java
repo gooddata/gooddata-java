@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.warehouse;
 
-import com.gooddata.GoodDataException;
-import com.gooddata.GoodDataRestException;
+import com.gooddata.sdk.common.GoodDataException;
+import com.gooddata.sdk.common.GoodDataRestException;
 
 /**
  * Warehouse schema doesn't exist.

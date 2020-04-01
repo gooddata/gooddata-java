@@ -5,9 +5,9 @@
  */
 package com.gooddata.sdk.service;
 
-import com.gooddata.gdc.Header;
+import com.gooddata.sdk.common.gdc.Header;
 import com.gooddata.sdk.service.retry.RetrySettings;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.VersionInfo;
@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 import static org.apache.http.util.VersionInfo.loadVersionInfo;
 import static org.springframework.util.Assert.isTrue;
 

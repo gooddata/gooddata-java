@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.executeafm
 
-import com.gooddata.GoodDataRestException
+import com.gooddata.sdk.common.GoodDataRestException
 import com.gooddata.sdk.service.executeafm.ExecutionResultException
 import spock.lang.Specification
 import spock.lang.Unroll

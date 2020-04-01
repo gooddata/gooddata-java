@@ -10,8 +10,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.gooddata.collections.PageableList;
-import com.gooddata.collections.Paging;
+import com.gooddata.sdk.common.collections.Page;
+import com.gooddata.sdk.common.collections.Paging;
 
 import java.util.List;
 import java.util.Map;
@@ -24,7 +24,7 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(using = WarehouseUsersDeserializer.class)
 @JsonSerialize(using = WarehouseUsersSerializer.class)
-public class WarehouseUsers extends PageableList<WarehouseUser> {
+public class WarehouseUsers extends Page<WarehouseUser> {
 
     public static final String URI = Warehouse.URI + "/users";
 

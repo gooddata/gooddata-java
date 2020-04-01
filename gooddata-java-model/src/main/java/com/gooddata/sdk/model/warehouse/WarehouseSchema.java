@@ -6,11 +6,11 @@
 package com.gooddata.sdk.model.warehouse;
 
 import com.fasterxml.jackson.annotation.*;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.Map;
 
-import static com.gooddata.util.Validate.notNullState;
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 
 /**
  * Warehouse schema.
