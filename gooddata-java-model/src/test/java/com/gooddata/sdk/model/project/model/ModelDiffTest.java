@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import java.util.Collections;
 
 import static com.gooddata.sdk.model.project.model.ModelDiff.UpdateScript;
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;

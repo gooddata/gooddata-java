@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.export;
 
-import com.gooddata.sdk.common.GoodDataException;
+import com.gooddata.GoodDataException;
 
 /**
  * Thrown when report export contains no data

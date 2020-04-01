@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 
-import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singleton;
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -7,7 +7,7 @@ package com.gooddata.sdk.model.dataset;
 
 import org.testng.annotations.Test;
 
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;

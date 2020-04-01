@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 import static com.gooddata.sdk.service.GoodDataEndpoint.*;
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Entry point for GoodData SDK usage.

@@ -12,7 +12,7 @@ import spock.lang.Unroll
 
 import static RangeConditionOperator.BETWEEN
 import static RangeConditionOperator.NOT_BETWEEN
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
+import static com.gooddata.util.ResourceUtils.readObjectFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource
 import static spock.util.matcher.HamcrestSupport.that

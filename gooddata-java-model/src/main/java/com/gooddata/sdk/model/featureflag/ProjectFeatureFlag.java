@@ -6,10 +6,10 @@
 package com.gooddata.sdk.model.featureflag;
 
 import com.fasterxml.jackson.annotation.*;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
-import static com.gooddata.sdk.common.util.Validate.notNullState;
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNullState;
 
 /**
  * Project feature flag is a boolean flag used for enabling / disabling some specific feature of GoodData platform

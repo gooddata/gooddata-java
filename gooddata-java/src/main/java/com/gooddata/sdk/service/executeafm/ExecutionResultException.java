@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.executeafm;
 
-import com.gooddata.sdk.common.GoodDataException;
-import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.GoodDataException;
+import com.gooddata.GoodDataRestException;
 import com.gooddata.sdk.model.executeafm.result.ExecutionResult;
 import org.springframework.http.HttpStatus;
 

@@ -17,10 +17,10 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.*;
 
-import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
-import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
-import static com.gooddata.sdk.common.util.ResourceUtils.readStringFromResource;
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.util.ResourceUtils.readStringFromResource;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;

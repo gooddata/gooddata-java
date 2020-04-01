@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service;
 
-import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.GoodDataRestException;
 import org.springframework.http.client.ClientHttpResponse;
 
 import java.io.IOException;
@@ -82,7 +82,7 @@ public interface PollHandler<P,R> {
 
     /**
      * Handle exception while polling.
-     * The implementing class should throw instance of {@link com.gooddata.sdk.common.GoodDataException}
+     * The implementing class should throw instance of {@link com.gooddata.GoodDataException}
      * (or ancestor) with the given argument as cause.
      * @param e the exception
      */

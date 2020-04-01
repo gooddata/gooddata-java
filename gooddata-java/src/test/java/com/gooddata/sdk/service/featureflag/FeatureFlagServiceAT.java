@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.featureflag;
 
-import com.gooddata.sdk.common.GoodDataException;
+import com.gooddata.GoodDataException;
 import com.gooddata.sdk.model.featureflag.FeatureFlag;
 import com.gooddata.sdk.model.featureflag.FeatureFlags;
 import com.gooddata.sdk.model.featureflag.ProjectFeatureFlag;

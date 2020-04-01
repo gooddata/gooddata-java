@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Deserializes whitespace separated tags from one string to set of tags (strings)

@@ -10,7 +10,7 @@ import org.springframework.http.client.ClientHttpResponse;
 
 import java.io.IOException;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * For internal use by services employing polling.<p>

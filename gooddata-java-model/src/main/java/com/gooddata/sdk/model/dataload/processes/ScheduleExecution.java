@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.gooddata.sdk.common.util.ISOZonedDateTimeDeserializer;
+import com.gooddata.util.ISOZonedDateTimeDeserializer;
 
 import java.time.ZonedDateTime;
 import java.util.Arrays;
@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static com.gooddata.sdk.common.util.Validate.notNullState;
+import static com.gooddata.util.Validate.notNullState;
 
 /**
  * Schedule execution

@@ -7,7 +7,7 @@ package com.gooddata.sdk.model.account;
 
 import com.fasterxml.jackson.annotation.*;
 import com.gooddata.sdk.model.util.UriHelper;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.List;
 

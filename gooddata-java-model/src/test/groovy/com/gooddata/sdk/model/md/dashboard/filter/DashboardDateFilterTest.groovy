@@ -15,8 +15,8 @@ import static com.gooddata.sdk.model.md.dashboard.filter.DashboardDateFilter.ABS
 import static com.gooddata.sdk.model.md.dashboard.filter.DashboardDateFilter.RELATIVE_FILTER_TYPE
 import static com.gooddata.sdk.model.md.dashboard.filter.DashboardDateFilter.absoluteDateFilter
 import static com.gooddata.sdk.model.md.dashboard.filter.DashboardDateFilter.relativeDateFilter
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
-import static com.gooddata.sdk.common.util.ResourceUtils.readStringFromResource
+import static com.gooddata.util.ResourceUtils.readObjectFromResource
+import static com.gooddata.util.ResourceUtils.readStringFromResource
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static spock.util.matcher.HamcrestSupport.that
 

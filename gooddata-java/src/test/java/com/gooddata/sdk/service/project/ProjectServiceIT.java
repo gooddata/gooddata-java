@@ -5,21 +5,13 @@
  */
 package com.gooddata.sdk.service.project;
 
-import com.gooddata.sdk.common.GoodDataException;
-import com.gooddata.sdk.common.collections.CustomPageRequest;
+import com.gooddata.GoodDataException;
+import com.gooddata.collections.PageRequest;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.gdc.AsyncTask;
 import com.gooddata.sdk.model.gdc.TaskStatus;
 import com.gooddata.sdk.model.gdc.UriResponse;
-import com.gooddata.sdk.model.project.CreatedInvitations;
-import com.gooddata.sdk.model.project.Invitation;
-import com.gooddata.sdk.model.project.Project;
-import com.gooddata.sdk.model.project.ProjectTemplate;
-import com.gooddata.sdk.model.project.ProjectValidationResults;
-import com.gooddata.sdk.model.project.ProjectValidationType;
-import com.gooddata.sdk.model.project.Projects;
-import com.gooddata.sdk.model.project.Role;
-import com.gooddata.sdk.model.project.User;
+import com.gooddata.sdk.model.project.*;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -28,19 +20,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
-import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.util.ResourceUtils.*;
 import static net.jadler.Jadler.onRequest;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -335,12 +321,11 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
                 .withBody(readFromResource("/project/project-users-empty.json"))
                 .withStatus(200);
 
-        final List<User> firstPage = gd.getProjectService().listUsers(enabled).getPageItems();
+        final List<User> firstPage = gd.getProjectService().listUsers(enabled);
         assertThat(firstPage, notNullValue());
         assertThat(firstPage, hasSize(1));
 
-        final List<User> secondPage = gd.getProjectService()
-                .listUsers(enabled, new CustomPageRequest(firstPage.size(), 1)).getPageItems();
+        final List<User> secondPage = gd.getProjectService().listUsers(enabled, new PageRequest(firstPage.size(), 1));
         assertThat(secondPage, notNullValue());
         assertThat(secondPage, empty());
     }

@@ -5,20 +5,20 @@
  */
 package com.gooddata.sdk.model.dataload.processes;
 
-import com.gooddata.sdk.common.collections.PageDeserializer;
-import com.gooddata.sdk.common.collections.Paging;
+import com.gooddata.collections.PageableListDeserializer;
+import com.gooddata.collections.Paging;
 
 import java.util.List;
 import java.util.Map;
 
-class SchedulesDeserializer extends PageDeserializer<Schedules, Schedule> {
+class SchedulesDeserializer extends PageableListDeserializer<Schedules, Schedule> {
 
     protected SchedulesDeserializer() {
         super(Schedule.class);
     }
 
     @Override
-    protected Schedules createPage(final List<Schedule> items, final Paging paging, final Map<String, String> links) {
+    protected Schedules createList(final List<Schedule> items, final Paging paging, final Map<String, String> links) {
         return new Schedules(items, paging);
     }
 }

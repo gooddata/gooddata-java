@@ -10,7 +10,7 @@ import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import java.io.Serializable;
 import java.util.Objects;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Represents filter by attribute.

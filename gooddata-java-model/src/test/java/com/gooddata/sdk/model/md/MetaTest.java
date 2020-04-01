@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.time.ZoneOffset.UTC;
 import static java.util.Arrays.asList;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;

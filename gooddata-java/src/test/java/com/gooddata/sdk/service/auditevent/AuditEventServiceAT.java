@@ -6,7 +6,7 @@
 package com.gooddata.sdk.service.auditevent;
 
 import com.gooddata.sdk.service.AbstractGoodDataAT;
-import com.gooddata.sdk.common.collections.Page;
+import com.gooddata.collections.PageableList;
 import com.gooddata.sdk.model.auditevent.AuditEvent;
 import org.testng.annotations.Test;
 
@@ -18,13 +18,13 @@ public class AuditEventServiceAT extends AbstractGoodDataAT {
 
     @Test
     public void shouldListEventsForCurrentUser() throws Exception {
-        final Page<AuditEvent> events = AbstractGoodDataAT.gd.getAuditEventService().listAuditEvents();
+        final PageableList<AuditEvent> events = AbstractGoodDataAT.gd.getAuditEventService().listAuditEvents();
         assertThat(events, is(notNullValue()));
     }
 
     @Test(groups = "isolated_domain")
     public void shouldListEventsForDomain() throws Exception {
-        final Page<AuditEvent> events = AbstractGoodDataAT.gd.getAuditEventService().listAuditEvents("default");
+        final PageableList<AuditEvent> events = AbstractGoodDataAT.gd.getAuditEventService().listAuditEvents("default");
         assertThat(events, is(notNullValue()));
     }
 }

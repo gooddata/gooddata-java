@@ -8,7 +8,7 @@ package com.gooddata.sdk.model.project;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.testng.annotations.Test;
 
-import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;

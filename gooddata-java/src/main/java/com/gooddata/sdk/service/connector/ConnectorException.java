@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.connector;
 
-import com.gooddata.sdk.common.GoodDataException;
+import com.gooddata.GoodDataException;
 
 /**
  * Represents error in ConnectorService.

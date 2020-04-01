@@ -6,11 +6,11 @@
 package com.gooddata.sdk.model.md;
 
 import com.fasterxml.jackson.annotation.*;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.List;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Represents elements of attribute

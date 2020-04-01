@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.md;
 
-import com.gooddata.sdk.common.GoodDataException;
+import com.gooddata.GoodDataException;
 import com.gooddata.sdk.model.md.Obj;
 
 /**

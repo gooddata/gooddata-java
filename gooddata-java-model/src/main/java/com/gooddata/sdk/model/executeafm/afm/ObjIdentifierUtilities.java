@@ -11,7 +11,7 @@ import com.gooddata.sdk.model.executeafm.UriObjQualifier;
 
 import java.util.function.Function;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 import static java.lang.String.format;
 
 /**

@@ -10,7 +10,7 @@ import com.gooddata.sdk.model.executeafm.result.ExecutionResult;
 
 import java.util.List;
 
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notEmpty;
 import static java.util.stream.Collectors.joining;
 
 /**

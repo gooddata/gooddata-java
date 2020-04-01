@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.projecttemplate;
 
-import com.gooddata.sdk.common.GoodDataException;
-import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.GoodDataException;
+import com.gooddata.GoodDataRestException;
 import com.gooddata.sdk.model.dataset.DatasetManifest;
 import com.gooddata.sdk.model.projecttemplate.Template;
 import com.gooddata.sdk.model.projecttemplate.Templates;
@@ -18,8 +18,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Service enabling access to project templates, under /projectTemplates/...

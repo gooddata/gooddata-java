@@ -6,7 +6,7 @@
 package com.gooddata.sdk.model.executeafm.afm.filter;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
 import java.util.List;

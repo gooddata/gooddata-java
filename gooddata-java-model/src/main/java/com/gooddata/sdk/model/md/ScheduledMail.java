@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.sdk.model.export.ExportFormat;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * A scheduled mail MD object. It represents a <a href="http://search.cpan.org/~sbeck/Date-Manip-6.49/lib/Date/Manip/Recur.pod">schedule</a> on mail-sending of

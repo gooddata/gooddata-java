@@ -7,8 +7,8 @@ package com.gooddata.sdk.model.dataset;
 
 import com.fasterxml.jackson.annotation.*;
 
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Asynchronous ETL Pull 2 task (for internal use).

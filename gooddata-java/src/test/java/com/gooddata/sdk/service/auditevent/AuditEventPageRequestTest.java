@@ -5,16 +5,15 @@
  */
 package com.gooddata.sdk.service.auditevent;
 
-import com.gooddata.sdk.common.util.ISOZonedDateTime;
-import com.gooddata.sdk.common.util.MutableUri;
-import com.gooddata.sdk.common.util.SpringMutableUri;
+import com.gooddata.util.ISOZonedDateTime;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.testng.annotations.Test;
 
 import java.time.ZonedDateTime;
 
-import static com.gooddata.sdk.common.collections.CustomPageRequest.DEFAULT_LIMIT;
+import static com.gooddata.collections.PageRequest.DEFAULT_LIMIT;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static java.time.ZoneOffset.UTC;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -74,9 +73,9 @@ public class AuditEventPageRequestTest {
         request.setOffset(OFFSET);
         request.setType(EVENT_TYPE);
 
-        MutableUri result = request.updateWithPageParams(new SpringMutableUri(""));
+        UriComponentsBuilder result = request.updateWithPageParams(UriComponentsBuilder.newInstance());
 
-        assertThat(result.toUriString(), is(String.format("?offset=%s&limit=%d&from=%s&to=%s&type=%s",
+        assertThat(result.build().toUriString(), is(String.format("?offset=%s&limit=%d&from=%s&to=%s&type=%s",
                 OFFSET, LIMIT, ISOZonedDateTime.FORMATTER.format(FROM.withZoneSameInstant(UTC)),
                 ISOZonedDateTime.FORMATTER.format(TO.withZoneSameInstant(UTC)), EVENT_TYPE)));
     }
@@ -87,9 +86,9 @@ public class AuditEventPageRequestTest {
         request.setLimit(LIMIT);
         request.setOffset(OFFSET);
 
-        MutableUri result = request.updateWithPageParams(new SpringMutableUri(""));
+        UriComponentsBuilder result = request.updateWithPageParams(UriComponentsBuilder.newInstance());
 
-        assertThat(result.toUriString(), is("?offset=" + OFFSET + "&limit=" + LIMIT));
+        assertThat(result.build().toUriString(), is("?offset=" + OFFSET + "&limit=" + LIMIT));
     }
 
     @Test
@@ -98,9 +97,9 @@ public class AuditEventPageRequestTest {
         request.setFrom(FROM);
         request.setTo(TO);
 
-        MutableUri result = request.updateWithPageParams(new SpringMutableUri(""));
+        UriComponentsBuilder result = request.updateWithPageParams(UriComponentsBuilder.newInstance());
 
-        assertThat(result.toUriString(), is("?limit=" + DEFAULT_LIMIT +
+        assertThat(result.build().toUriString(), is("?limit=" + DEFAULT_LIMIT +
                 "&from=2019-10-28T15:30:12.000Z&to=2019-11-25T08:05:58.125Z"));
     }
 

@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.dataload.processes;
 
-import com.gooddata.sdk.common.GoodDataException;
+import com.gooddata.GoodDataException;
 import com.gooddata.sdk.model.dataload.processes.ProcessExecutionDetail;
 
 /**

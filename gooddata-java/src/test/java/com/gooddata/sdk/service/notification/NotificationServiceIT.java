@@ -14,7 +14,7 @@ import org.testng.annotations.Test;
 
 import java.util.Arrays;
 
-import static com.gooddata.sdk.common.util.ResourceUtils.*;
+import static com.gooddata.util.ResourceUtils.*;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 import static net.jadler.Jadler.onRequest;

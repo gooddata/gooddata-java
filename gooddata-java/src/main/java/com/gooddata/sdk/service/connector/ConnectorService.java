@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.connector;
 
-import com.gooddata.sdk.common.GoodDataException;
-import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.GoodDataException;
+import com.gooddata.GoodDataRestException;
 import com.gooddata.sdk.model.connector.*;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.project.Project;
@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 import static java.lang.String.format;
 
 /**

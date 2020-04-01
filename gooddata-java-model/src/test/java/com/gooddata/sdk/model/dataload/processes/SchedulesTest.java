@@ -7,9 +7,7 @@ package com.gooddata.sdk.model.dataload.processes;
 
 import org.testng.annotations.Test;
 
-import java.util.List;
-
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -23,10 +21,9 @@ public class SchedulesTest {
         final Schedules schedules = readObjectFromResource("/dataload/processes/schedules.json", Schedules.class);
 
         assertThat(schedules, notNullValue());
-        final List<Schedule> pageItems = schedules.getPageItems();
-        assertThat(pageItems, hasSize(1));
-        assertThat(pageItems.get(0).getId(), is("schedule_id"));
-        assertThat(pageItems.get(0).getType(), is("MSETL"));
+        assertThat(schedules, hasSize(1));
+        assertThat(schedules.get(0).getId(), is("schedule_id"));
+        assertThat(schedules.get(0).getType(), is("MSETL"));
         assertThat(schedules.getNextPage(), nullValue());
     }
 
@@ -35,10 +32,9 @@ public class SchedulesTest {
         final Schedules schedules = readObjectFromResource("/dataload/processes/schedules_page1.json", Schedules.class);
 
         assertThat(schedules, notNullValue());
-        final List<Schedule> pageItems = schedules.getPageItems();
-        assertThat(pageItems, hasSize(1));
-        assertThat(pageItems.get(0).getId(), is("schedule_id_1"));
-        assertThat(pageItems.get(0).getType(), is("MSETL"));
+        assertThat(schedules, hasSize(1));
+        assertThat(schedules.get(0).getId(), is("schedule_id_1"));
+        assertThat(schedules.get(0).getType(), is("MSETL"));
         assertThat(schedules.getNextPage(), notNullValue());
         assertThat(schedules.getNextPage().getPageUri(null).toString(), is("/gdc/projects/PROJECT_ID/schedules?offset=1&limit=1"));
     }

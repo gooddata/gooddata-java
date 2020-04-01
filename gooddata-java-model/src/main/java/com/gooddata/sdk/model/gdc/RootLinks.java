@@ -8,7 +8,7 @@ package com.gooddata.sdk.model.gdc;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.sdk.common.GoodDataException;
+import com.gooddata.GoodDataException;
 
 import java.util.List;
 

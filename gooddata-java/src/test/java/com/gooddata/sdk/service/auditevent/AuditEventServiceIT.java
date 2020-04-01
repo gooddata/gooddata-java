@@ -6,15 +6,15 @@
 package com.gooddata.sdk.service.auditevent;
 
 import com.gooddata.sdk.service.AbstractGoodDataIT;
-import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.GoodDataRestException;
 import com.gooddata.sdk.model.account.Account;
-import com.gooddata.sdk.common.collections.Page;
+import com.gooddata.collections.PageableList;
 import com.gooddata.sdk.service.account.AccountServiceIT;
 import com.gooddata.sdk.model.auditevent.AuditEvent;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
+import static com.gooddata.util.ResourceUtils.readFromResource;
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static net.jadler.Jadler.onRequest;
@@ -83,11 +83,11 @@ public class AuditEventServiceIT extends AbstractGoodDataIT {
                 .withBody(readFromResource("/auditevents/auditEventsPage2.json"))
         ;
 
-        final Page<AuditEvent> page1 = service.listAuditEvents("DOMAIN");
-        assertThat(page1.getPageItems(), hasSize(2));
+        final PageableList<AuditEvent> page1 = service.listAuditEvents("DOMAIN");
+        assertThat(page1, hasSize(2));
 
-        final Page<AuditEvent> page2 = service.listAuditEvents("DOMAIN", page1.getNextPage());
-        assertThat(page2.getPageItems(), hasSize(1));
+        final PageableList<AuditEvent> page2 = service.listAuditEvents("DOMAIN", page1.getNextPage());
+        assertThat(page2, hasSize(1));
     }
 
     @Test
@@ -105,7 +105,7 @@ public class AuditEventServiceIT extends AbstractGoodDataIT {
                 .withBody(readFromResource("/auditevents/auditEvents.json"))
         ;
 
-        final Page<AuditEvent> events = service.listAuditEvents();
-        assertThat(events.getPageItems(), hasSize(2));
+        final PageableList<AuditEvent> events = service.listAuditEvents();
+        assertThat(events, hasSize(2));
     }
 }

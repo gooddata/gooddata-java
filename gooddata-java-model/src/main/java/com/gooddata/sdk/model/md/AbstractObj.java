@@ -8,13 +8,13 @@ package com.gooddata.sdk.model.md;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.sdk.model.util.UriHelper;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Set;
 
-import static com.gooddata.sdk.common.util.Validate.noNullElements;
+import static com.gooddata.util.Validate.noNullElements;
 
 /**
  * Metadata object (common part)

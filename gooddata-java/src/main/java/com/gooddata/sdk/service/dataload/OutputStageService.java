@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.dataload;
 
-import com.gooddata.sdk.common.GoodDataException;
-import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.GoodDataException;
+import com.gooddata.GoodDataRestException;
 import com.gooddata.sdk.model.dataload.OutputStage;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.AbstractService;
@@ -19,7 +19,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriTemplate;
 
-import static com.gooddata.sdk.common.util.Validate.*;
+import static com.gooddata.util.Validate.*;
 
 /**
  * Service to manage output stage.

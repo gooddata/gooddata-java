@@ -5,12 +5,11 @@
  */
 package com.gooddata.sdk.service.lcm;
 
-import com.gooddata.sdk.common.GoodDataException;
-import com.gooddata.sdk.common.collections.CustomPageRequest;
-import com.gooddata.sdk.common.collections.Page;
-import com.gooddata.sdk.common.collections.PageRequest;
-import com.gooddata.sdk.common.collections.PageBrowser;
-import com.gooddata.sdk.common.util.SpringMutableUri;
+import com.gooddata.GoodDataException;
+import com.gooddata.collections.MultiPageList;
+import com.gooddata.collections.Page;
+import com.gooddata.collections.PageRequest;
+import com.gooddata.collections.PageableList;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.lcm.LcmEntities;
 import com.gooddata.sdk.model.lcm.LcmEntity;
@@ -20,11 +19,12 @@ import com.gooddata.sdk.service.GoodDataSettings;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import java.net.URI;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Service, which provides access to lifecycle management objects.
@@ -45,28 +45,28 @@ public class LcmService extends AbstractService {
     /**
      * Lists all {@link  LcmEntities} for given {@link Account}.
      * Returns empty list in case there is no {@link LcmEntity}.
-     * Returns only first page if there's more instances than page limit. Use {@link PageBrowser#allItemsStream()} ()} to iterate
-     * over all pages, or {@link PageBrowser#getAllItems()} ()} to load the entire list.
+     * Returns only first page if there's more instances than page limit. Use {@link PageableList#stream()} to iterate
+     * over all pages, or {@link MultiPageList#collectAll()} to load the entire list.
      *
      * @param account account to list LCM entities for
-     * @return {@link PageBrowser} first page of list of lcm entities or empty list
+     * @return MultiPageList first page of list of lcm entities or empty list
      */
-    public PageBrowser<LcmEntity> listLcmEntities(final Account account) {
-        return listLcmEntities(account, new CustomPageRequest());
+    public PageableList<LcmEntity> listLcmEntities(final Account account) {
+        return listLcmEntities(account, new PageRequest());
     }
 
     /**
      * Lists {@link  LcmEntities} for given {@link Account} filtered according given {@link LcmEntityFilter}.
      * Returns empty list in case there is no {@link LcmEntity}.
-     * Returns only first page if there's more instances than page limit. Use {@link PageBrowser#allItemsStream()} ()} to iterate
-     * over all pages, or {@link PageBrowser#getAllItems()} to load the entire list.
+     * Returns only first page if there's more instances than page limit. Use {@link PageableList#stream()} to iterate
+     * over all pages, or {@link MultiPageList#collectAll()} to load the entire list.
      *
      * @param account account to list LCM entities for
      * @param filter filter of the entities
-     * @return {@link PageBrowser} first page of list of lcm entitiesor empty list
+     * @return MultiPageList first page of list of lcm entitiesor empty list
      */
-    public PageBrowser<LcmEntity> listLcmEntities(final Account account, final LcmEntityFilter filter) {
-        return listLcmEntities(account, filter, new CustomPageRequest());
+    public PageableList<LcmEntity> listLcmEntities(final Account account, final LcmEntityFilter filter) {
+        return listLcmEntities(account, filter, new PageRequest());
     }
 
     /**
@@ -76,9 +76,9 @@ public class LcmService extends AbstractService {
      *
      * @param account account to list LCM entities for
      * @param startPage page to be listed
-     * @return {@link PageBrowser} requested page of list of lcm entities or empty list
+     * @return MultiPageList requested page of list of lcm entities or empty list
      */
-    public PageBrowser<LcmEntity> listLcmEntities(final Account account, final PageRequest startPage) {
+    public PageableList<LcmEntity> listLcmEntities(final Account account, final Page startPage) {
         return listLcmEntities(account, new LcmEntityFilter(), startPage);
     }
 
@@ -90,30 +90,30 @@ public class LcmService extends AbstractService {
      * @param account account to list LCM entities for
      * @param filter filter of the entities
      * @param startPage page to be listed
-     * @return {@link PageBrowser} requested page of list of lcm entities or empty list
+     * @return MultiPageList requested page of list of lcm entities or empty list
      */
-    public PageBrowser<LcmEntity> listLcmEntities(final Account account, final LcmEntityFilter filter, final PageRequest startPage) {
+    public PageableList<LcmEntity> listLcmEntities(final Account account, final LcmEntityFilter filter, final Page startPage) {
         notNull(filter, "filter");
         notNull(startPage, "startPage");
         final String accountId = notNull(account, "account").getId();
-        return new PageBrowser<>(startPage, page -> listLcmEntities(getLcmEntitiesUri(accountId, filter, page)));
+        return new MultiPageList<>(startPage, page -> listLcmEntities(getLcmEntitiesUri(accountId, filter, page)));
     }
 
     private URI getLcmEntitiesUri(final String accountId) {
         return LCM_ENTITIES_TEMPLATE.expand(accountId);
     }
 
-    private URI getLcmEntitiesUri(final String accountId, final LcmEntityFilter filter, final PageRequest page) {
-        final SpringMutableUri mutableUri = new SpringMutableUri(getLcmEntitiesUri(accountId));
-        mutableUri.replaceQueryParams(new LinkedMultiValueMap<>(filter.asQueryParams()));
-        return page.getPageUri(mutableUri);
+    private URI getLcmEntitiesUri(final String accountId, final LcmEntityFilter filter, final Page page) {
+        return page.getPageUri(
+                UriComponentsBuilder.fromUri(getLcmEntitiesUri(accountId))
+                        .queryParams(new LinkedMultiValueMap<>(filter.asQueryParams())));
     }
 
-    private Page<LcmEntity> listLcmEntities(final URI uri) {
+    private PageableList<LcmEntity> listLcmEntities(final URI uri) {
         try {
             final LcmEntities result = restTemplate.getForObject(uri, LcmEntities.class);
             if (result == null) {
-                return new Page<>();
+                return new PageableList<>();
             }
             return result;
         } catch (GoodDataException | RestClientException e) {
