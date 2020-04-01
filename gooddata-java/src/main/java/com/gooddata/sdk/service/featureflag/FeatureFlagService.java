@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.featureflag;
 
-import com.gooddata.GoodDataException;
+import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.model.featureflag.FeatureFlags;
 import com.gooddata.sdk.model.featureflag.ProjectFeatureFlag;
 import com.gooddata.sdk.model.featureflag.ProjectFeatureFlags;
@@ -18,8 +18,8 @@ import org.springframework.web.util.UriTemplate;
 
 import java.net.URI;
 
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Provides feature flag management. Feature flag is a boolean flag used for enabling / disabling some specific feature

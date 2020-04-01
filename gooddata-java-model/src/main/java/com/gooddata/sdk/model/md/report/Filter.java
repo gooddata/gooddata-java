@@ -9,11 +9,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
 
-import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
 
 /**
  * Filter (in report definition)

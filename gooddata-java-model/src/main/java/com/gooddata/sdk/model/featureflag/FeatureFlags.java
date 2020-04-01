@@ -6,12 +6,12 @@
 package com.gooddata.sdk.model.featureflag;
 
 import com.fasterxml.jackson.annotation.*;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.*;
 
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 import static java.util.stream.Collectors.toMap;
 
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)

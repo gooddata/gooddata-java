@@ -12,8 +12,8 @@ import com.gooddata.sdk.service.GoodDataITBase
 import spock.lang.Shared
 import spock.lang.Unroll
 
-import static com.gooddata.util.ResourceUtils.readFromResource
-import static com.gooddata.util.ResourceUtils.readObjectFromResource
+import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
 import static net.jadler.Jadler.onRequest
 
 class LcmServiceIT extends GoodDataITBase<LcmService> {
@@ -36,7 +36,7 @@ class LcmServiceIT extends GoodDataITBase<LcmService> {
         def entities = list(service)
 
         then:
-        entities.size() == 1
+        entities.getAllItems().size() == 1
 
         where:
         type       | list                                    || queryString

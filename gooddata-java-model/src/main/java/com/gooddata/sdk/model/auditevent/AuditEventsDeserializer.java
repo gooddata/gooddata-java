@@ -5,20 +5,20 @@
  */
 package com.gooddata.sdk.model.auditevent;
 
-import com.gooddata.collections.PageableListDeserializer;
-import com.gooddata.collections.Paging;
+import com.gooddata.sdk.common.collections.PageDeserializer;
+import com.gooddata.sdk.common.collections.Paging;
 
 import java.util.List;
 import java.util.Map;
 
-class AuditEventsDeserializer extends PageableListDeserializer<AuditEvents, AuditEvent>{
+class AuditEventsDeserializer extends PageDeserializer<AuditEvents, AuditEvent>{
 
     protected AuditEventsDeserializer() {
         super(AuditEvent.class);
     }
 
     @Override
-    protected AuditEvents createList(final List<AuditEvent> items, final Paging paging, final Map<String, String> links) {
+    protected AuditEvents createPage(final List<AuditEvent> items, final Paging paging, final Map<String, String> links) {
         return new AuditEvents(items, paging, links);
     }
 }

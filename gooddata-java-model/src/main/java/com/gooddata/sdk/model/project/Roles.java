@@ -6,7 +6,7 @@
 package com.gooddata.sdk.model.project;
 
 import com.fasterxml.jackson.annotation.*;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.Set;
 

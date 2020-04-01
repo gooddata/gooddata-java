@@ -6,7 +6,7 @@
 
 package com.gooddata.sdk.model.md.dashboard.filter;
 
-import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

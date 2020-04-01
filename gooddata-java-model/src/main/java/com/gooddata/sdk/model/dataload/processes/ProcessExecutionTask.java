@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.dataload.processes;
 
-import static com.gooddata.util.Validate.notNullState;
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

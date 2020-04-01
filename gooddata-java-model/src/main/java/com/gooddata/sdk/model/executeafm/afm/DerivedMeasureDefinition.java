@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import java.util.Objects;
 
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * The superclass of the {@link MeasureDefinition} classes that are derived from the master measure and have the identifier of the master measure.

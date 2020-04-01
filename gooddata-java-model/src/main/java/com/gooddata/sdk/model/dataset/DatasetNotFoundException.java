@@ -7,7 +7,7 @@ package com.gooddata.sdk.model.dataset;
 
 import static java.lang.String.format;
 
-import com.gooddata.GoodDataException;
+import com.gooddata.sdk.common.GoodDataException;
 
 /**
  * Represents error when dataset of the given id was not found

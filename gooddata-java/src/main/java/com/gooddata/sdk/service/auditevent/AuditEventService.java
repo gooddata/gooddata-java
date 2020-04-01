@@ -5,11 +5,11 @@
  */
 package com.gooddata.sdk.service.auditevent;
 
-import com.gooddata.GoodDataException;
-import com.gooddata.GoodDataRestException;
-import com.gooddata.collections.MultiPageList;
-import com.gooddata.collections.Page;
-import com.gooddata.collections.PageableList;
+import com.gooddata.sdk.common.GoodDataException;
+import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.sdk.common.collections.PageBrowser;
+import com.gooddata.sdk.common.collections.PageRequest;
+import com.gooddata.sdk.common.util.SpringMutableUri;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.auditevent.AuditEvent;
 import com.gooddata.sdk.model.auditevent.AuditEvents;
@@ -18,11 +18,10 @@ import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.service.account.AccountService;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 /**
@@ -52,7 +51,7 @@ public class AuditEventService extends AbstractService {
      * @return non-null paged list of events
      * @throws AuditEventsForbiddenException if current user is not admin of the given domain
      */
-    public PageableList<AuditEvent> listAuditEvents(final String domainId) {
+    public PageBrowser<AuditEvent> listAuditEvents(final String domainId) {
         return listAuditEvents(domainId, new AuditEventPageRequest());
     }
 
@@ -63,12 +62,12 @@ public class AuditEventService extends AbstractService {
      * @return non-null paged list of events
      * @throws AuditEventsForbiddenException if current user is not admin of the given domain
      */
-    public PageableList<AuditEvent> listAuditEvents(final String domainId, final Page page) {
+    public PageBrowser<AuditEvent> listAuditEvents(final String domainId, final PageRequest page) {
         notEmpty(domainId, "domainId");
         notNull(page, "page");
 
         final String uri = ADMIN_URI_TEMPLATE.expand(domainId).toString();
-        return new MultiPageList<>(page, (p) -> doListAuditEvents(getAuditEventsUri(p, uri)));
+        return new PageBrowser<>(page, (p) -> doListAuditEvents(getAuditEventsUri(p, uri)));
     }
 
     /**
@@ -78,7 +77,7 @@ public class AuditEventService extends AbstractService {
      * @throws AuditEventsForbiddenException if audit events are not enabled for the given user or the current user is
      * not domain admin
      */
-    public PageableList<AuditEvent> listAuditEvents(final Account account) {
+    public PageBrowser<AuditEvent> listAuditEvents(final Account account) {
         return listAuditEvents(account, new AuditEventPageRequest());
     }
 
@@ -90,14 +89,14 @@ public class AuditEventService extends AbstractService {
      * @throws AuditEventsForbiddenException if audit events are not enabled for the given user or the current user is
      * not domain admin
      */
-    public PageableList<AuditEvent> listAuditEvents(final Account account, final Page page) {
+    public PageBrowser<AuditEvent> listAuditEvents(final Account account, final PageRequest page) {
         notNull(account, "account");
         notEmpty(account.getId(), "account.id");
         notNull(page, "page");
 
         final String uri = USER_URI_TEMPLATE.expand(account.getId()).toString();
 
-        return new MultiPageList<>(page, (p) -> doListAuditEvents(getAuditEventsUri(p, uri)));
+        return new PageBrowser<>(page, (p) -> doListAuditEvents(getAuditEventsUri(p, uri)));
     }
 
     /**
@@ -105,7 +104,7 @@ public class AuditEventService extends AbstractService {
      * @return non-null paged list of events
      * @throws AuditEventsForbiddenException if audit events are not enabled for current user
      */
-    public PageableList<AuditEvent> listAuditEvents() {
+    public PageBrowser<AuditEvent> listAuditEvents() {
         return listAuditEvents(new AuditEventPageRequest());
     }
 
@@ -115,7 +114,7 @@ public class AuditEventService extends AbstractService {
      * @return non-null paged list of events
      * @throws AuditEventsForbiddenException if audit events are not enabled for current user
      */
-    public PageableList<AuditEvent> listAuditEvents(final Page page) {
+    public PageBrowser<AuditEvent> listAuditEvents(final PageRequest page) {
         notNull(page, "page");
         final Account account = accountService.getCurrent();
 
@@ -136,8 +135,8 @@ public class AuditEventService extends AbstractService {
         }
     }
 
-    private String getAuditEventsUri(final Page page, final String uri) {
-        return page.updateWithPageParams(UriComponentsBuilder.fromUriString(uri)).build().toUriString();
+    private String getAuditEventsUri(final PageRequest page, final String uri) {
+        return page.updateWithPageParams(new SpringMutableUri(uri)).toUriString();
     }
 }
 

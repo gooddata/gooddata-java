@@ -5,11 +5,11 @@
  */
 package com.gooddata.sdk.model.md;
 
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.Objects;
 
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Metadata query restriction. See static factory methods to get instance of desired restriction type.

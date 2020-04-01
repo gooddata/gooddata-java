@@ -5,15 +5,16 @@
  */
 package com.gooddata.sdk.model.auditevent;
 
-import com.gooddata.collections.Paging;
+import com.gooddata.sdk.common.collections.Paging;
 import org.springframework.web.util.UriTemplate;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Collections;
+import java.util.List;
 
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static java.time.ZoneOffset.UTC;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyMap;
@@ -75,9 +76,10 @@ public class AuditEventsTest {
     public void testDeserialize() throws Exception {
         final AuditEvents deserialized = readObjectFromResource("/auditevents/auditEvents.json", AuditEvents.class);
         assertThat(deserialized.getPaging().getNextUri(), is(ADMIN_NEXT_URI));
-        assertThat(deserialized, hasSize(2));
-        assertThat(deserialized.get(0).getId(), is(EVENT_1.getId()));
-        assertThat(deserialized.get(1).getId(), is(EVENT_2.getId()));
+        final List<AuditEvent> pageItems = deserialized.getPageItems();
+        assertThat(pageItems, hasSize(2));
+        assertThat(pageItems.get(0).getId(), is(EVENT_1.getId()));
+        assertThat(pageItems.get(1).getId(), is(EVENT_2.getId()));
     }
 
     @Test
@@ -89,7 +91,7 @@ public class AuditEventsTest {
     public void testDeserializeEmptyEvents() throws Exception {
         final AuditEvents deserialized = readObjectFromResource("/auditevents/emptyAuditEvents.json", AuditEvents.class);
         assertThat(deserialized.getPaging().getNextUri(), nullValue());
-        assertThat(deserialized, hasSize(0));
+        assertThat(deserialized.getPageItems(), hasSize(0));
     }
 
     @Test
@@ -101,7 +103,7 @@ public class AuditEventsTest {
     public void testDeserializeUserEvents() throws Exception {
         final AuditEvents deserialized = readObjectFromResource("/auditevents/userAuditEvents.json", AuditEvents.class);
         assertThat(deserialized.getPaging().getNextUri(), is(USER_NEXT_URI));
-        assertThat(deserialized, hasSize(1));
-        assertThat(deserialized.get(0).getId(), is(EVENT_1.getId()));
+        assertThat(deserialized.getPageItems(), hasSize(1));
+        assertThat(deserialized.getPageItems().get(0).getId(), is(EVENT_1.getId()));
     }
 }

@@ -6,7 +6,7 @@
 
 package com.gooddata.sdk.model.md.dashboard.filter;
 
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,7 +18,7 @@ import com.gooddata.sdk.model.md.AbstractObj;
 import com.gooddata.sdk.model.md.Meta;
 import com.gooddata.sdk.model.md.Queryable;
 import com.gooddata.sdk.model.md.Updatable;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
 import java.util.Collections;

@@ -5,11 +5,11 @@
  */
 package com.gooddata.sdk.service.auditevent;
 
-import com.gooddata.collections.PageRequest;
-import com.gooddata.util.GoodDataToStringBuilder;
-import com.gooddata.util.ISOZonedDateTime;
+import com.gooddata.sdk.common.collections.CustomPageRequest;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.ISOZonedDateTime;
+import com.gooddata.sdk.common.util.MutableUri;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.ZonedDateTime;
 
@@ -19,7 +19,7 @@ import static org.apache.commons.lang3.Validate.notNull;
 /**
  * Class to encapsulate time filtering and paging parameters
  */
-public final class AuditEventPageRequest extends PageRequest {
+public final class AuditEventPageRequest extends CustomPageRequest {
 
     private ZonedDateTime from;
 
@@ -93,16 +93,16 @@ public final class AuditEventPageRequest extends PageRequest {
     }
 
     @Override
-    public UriComponentsBuilder updateWithPageParams(final UriComponentsBuilder builder) {
-        UriComponentsBuilder builderWithPaging = super.updateWithPageParams(builder);
+    public MutableUri updateWithPageParams(final MutableUri builder) {
+        MutableUri builderWithPaging = super.updateWithPageParams(builder);
         if (from != null) {
-            builderWithPaging.queryParam("from", ISOZonedDateTime.FORMATTER.format(from.withZoneSameInstant(UTC)));
+            builderWithPaging.replaceQueryParam("from", ISOZonedDateTime.FORMATTER.format(from.withZoneSameInstant(UTC)));
         }
         if (to != null) {
-            builderWithPaging.queryParam("to", ISOZonedDateTime.FORMATTER.format(to.withZoneSameInstant(UTC)));
+            builderWithPaging.replaceQueryParam("to", ISOZonedDateTime.FORMATTER.format(to.withZoneSameInstant(UTC)));
         }
         if (type != null) {
-            builderWithPaging.queryParam("type", type);
+            builderWithPaging.replaceQueryParam("type", type);
         }
 
         return builderWithPaging;

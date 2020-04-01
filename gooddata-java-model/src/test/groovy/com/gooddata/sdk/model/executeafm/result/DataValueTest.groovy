@@ -8,7 +8,7 @@ package com.gooddata.sdk.model.executeafm.result
 import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 
-import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER
+import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER
 
 class DataValueTest extends Specification {
 

@@ -6,8 +6,8 @@
 package com.gooddata.sdk.model.dataset;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.gooddata.util.BooleanDeserializer;
-import com.gooddata.util.BooleanIntegerSerializer;
+import com.gooddata.sdk.common.util.BooleanDeserializer;
+import com.gooddata.sdk.common.util.BooleanIntegerSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -16,14 +16,14 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import static com.gooddata.util.Validate.notEmpty;
-import static com.gooddata.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 
 /**

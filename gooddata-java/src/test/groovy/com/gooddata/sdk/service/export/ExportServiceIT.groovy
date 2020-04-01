@@ -18,8 +18,8 @@ import spock.lang.Unroll
 
 import java.nio.charset.StandardCharsets
 
-import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER
-import static com.gooddata.util.ResourceUtils.readObjectFromResource
+import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
 import static net.jadler.Jadler.onRequest
 import static net.jadler.Jadler.port
 

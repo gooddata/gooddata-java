@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.gdc;
 
-import com.gooddata.GoodDataException;
+import com.gooddata.sdk.common.GoodDataException;
 
 /**
  * DataStore operation problem

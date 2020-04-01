@@ -8,7 +8,7 @@ package com.gooddata.sdk.model.project;
 import com.gooddata.sdk.model.account.Account;
 import org.testng.annotations.Test;
 
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,10 +27,10 @@ public class UsersTest {
         final Users users = readObjectFromResource("/project/project-users.json", Users.class);
 
         assertThat(users, notNullValue());
-        assertThat(users, hasSize(1));
+        assertThat(users.getPageItems(), hasSize(1));
         assertThat(users.getNextPage(), nullValue());
 
-        final User user = users.get(0);
+        final User user = users.getPageItems().get(0);
         assertThat(user, notNullValue());
         assertThat(user.getEmail(), is("ateam+ads-testing@gooddata.com"));
         assertThat(user.getFirstName(), is("ateam"));

@@ -7,13 +7,13 @@ package com.gooddata.sdk.model.dataload.processes;
 
 import com.fasterxml.jackson.annotation.*;
 import com.gooddata.sdk.model.util.UriHelper;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import static com.gooddata.util.Validate.*;
+import static com.gooddata.sdk.common.util.Validate.*;
 
 /**
  * Dataload process.

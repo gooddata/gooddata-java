@@ -5,10 +5,10 @@
  */
 package com.gooddata.sdk.service.project;
 
-import com.gooddata.GoodDataException;
-import com.gooddata.GoodDataRestException;
-import com.gooddata.collections.PageRequest;
-import com.gooddata.collections.Paging;
+import com.gooddata.sdk.common.GoodDataException;
+import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.sdk.common.collections.CustomPageRequest;
+import com.gooddata.sdk.common.collections.Paging;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.model.project.Projects;
@@ -26,13 +26,17 @@ import org.testng.annotations.Test;
 import java.net.URI;
 import java.util.Collection;
 
-import static org.hamcrest.CoreMatchers.hasItem;
 import static com.gooddata.sdk.service.project.ProjectService.LIST_PROJECTS_TEMPLATE;
 import static java.util.Collections.singletonList;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class ProjectServiceTest {
 
@@ -87,7 +91,7 @@ public class ProjectServiceTest {
     public void testListProjects() throws Exception {
         doReturn(new Projects(singletonList(project), new Paging(""))).when(restTemplate)
                 .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?limit=100"), Projects.class);
-        final Collection<Project> result = service.listProjects();
+        final Collection<Project> result = service.listProjects().getPageItems();
 
         assertThat(result, hasSize(1));
         assertThat(result, hasItem(project));
@@ -97,7 +101,7 @@ public class ProjectServiceTest {
     public void testListProjectsWithPage() throws Exception {
         doReturn(new Projects(singletonList(project), new Paging(""))).when(restTemplate)
                 .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?offset=2&limit=100"), Projects.class);
-        final Collection<Project> result = service.listProjects(new PageRequest(2, 100));
+        final Collection<Project> result = service.listProjects(new CustomPageRequest(2, 100)).getPageItems();
 
         assertThat(result, hasSize(1));
         assertThat(result, hasItem(project));

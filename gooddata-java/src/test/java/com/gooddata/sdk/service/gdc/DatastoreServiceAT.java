@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.gdc;
 
-import com.gooddata.GoodDataRestException;
+import com.gooddata.sdk.common.GoodDataRestException;
 import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.service.GoodData;
 import org.apache.commons.io.IOUtils;
@@ -17,7 +17,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.UUID;
 
-import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

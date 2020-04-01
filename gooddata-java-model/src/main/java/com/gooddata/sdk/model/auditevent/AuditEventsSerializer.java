@@ -5,9 +5,9 @@
  */
 package com.gooddata.sdk.model.auditevent;
 
-import com.gooddata.collections.PageableListSerializer;
+import com.gooddata.sdk.common.collections.PageSerializer;
 
-class AuditEventsSerializer extends PageableListSerializer {
+class AuditEventsSerializer extends PageSerializer {
 
     public AuditEventsSerializer() {
         super(AuditEvents.ROOT_NODE);

@@ -14,8 +14,8 @@ import org.testng.annotations.Test;
 
 import java.util.Collection;
 
-import static com.gooddata.util.ResourceUtils.readFromResource;
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;

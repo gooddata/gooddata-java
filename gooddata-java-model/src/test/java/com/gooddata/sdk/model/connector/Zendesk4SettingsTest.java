@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 import static com.gooddata.sdk.model.connector.ConnectorType.ZENDESK4;
 import static com.gooddata.sdk.model.connector.Zendesk4Settings.Zendesk4Type.plus;
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;

@@ -7,7 +7,7 @@ package com.gooddata.sdk.model.dataset;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 /**
  * ETL Pull input DTO (for internal use).

@@ -6,7 +6,7 @@
 package com.gooddata.sdk.service.md;
 
 import static com.gooddata.sdk.model.md.Restriction.identifier;
-import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 

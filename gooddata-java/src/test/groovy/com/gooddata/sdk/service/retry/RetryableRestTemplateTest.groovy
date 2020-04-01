@@ -5,9 +5,9 @@
  */
 package com.gooddata.sdk.service.retry
 
-import com.gooddata.GoodDataException
+import com.gooddata.sdk.common.GoodDataException
 import com.gooddata.sdk.service.GoodDataITBase
-import com.gooddata.GoodDataRestException
+import com.gooddata.sdk.common.GoodDataRestException
 import com.gooddata.sdk.service.GoodDataSettings
 import com.gooddata.sdk.service.connector.ConnectorException
 import com.gooddata.sdk.service.connector.ConnectorService
@@ -16,8 +16,8 @@ import com.gooddata.sdk.model.connector.Integration
 import com.gooddata.sdk.model.project.Project
 import spock.lang.Unroll
 
-import static com.gooddata.util.ResourceUtils.readFromResource
-import static com.gooddata.util.ResourceUtils.readObjectFromResource
+import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
 import static net.jadler.Jadler.closeJadler
 import static net.jadler.Jadler.onRequest
 

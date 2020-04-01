@@ -13,7 +13,7 @@ import spock.lang.Specification
 
 import java.time.LocalDate
 
-import static com.gooddata.util.ResourceUtils.readObjectFromResource
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
 import static java.time.LocalDate.now
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource

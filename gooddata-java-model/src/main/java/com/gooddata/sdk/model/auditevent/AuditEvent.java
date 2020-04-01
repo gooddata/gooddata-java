@@ -11,8 +11,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gooddata.util.GoodDataToStringBuilder;
-import com.gooddata.util.ISOZonedDateTime;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.ISOZonedDateTime;
 
 import java.time.ZonedDateTime;
 import java.util.Map;

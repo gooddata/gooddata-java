@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.md;
 
-import com.gooddata.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
 

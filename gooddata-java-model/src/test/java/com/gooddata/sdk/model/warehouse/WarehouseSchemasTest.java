@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.warehouse;
 
-import static com.gooddata.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -19,7 +19,7 @@ public class WarehouseSchemasTest {
     @Test
     public void testDeserialization() throws Exception {
         assertThat(warehouseSchemas, notNullValue());
-        assertThat(warehouseSchemas, hasSize(1));
-        assertThat(warehouseSchemas.get(0).getName(), is("default"));
+        assertThat(warehouseSchemas.getPageItems(), hasSize(1));
+        assertThat(warehouseSchemas.getPageItems().get(0).getName(), is("default"));
     }
 }

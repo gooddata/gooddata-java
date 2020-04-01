@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service;
 
-import com.gooddata.GoodDataRestException;
+import com.gooddata.sdk.common.GoodDataRestException;
 import org.springframework.web.client.RestTemplate;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
