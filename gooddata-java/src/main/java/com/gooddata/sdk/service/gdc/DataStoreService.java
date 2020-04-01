@@ -7,7 +7,7 @@ package com.gooddata.sdk.service.gdc;
 
 import com.github.sardine.Sardine;
 import com.github.sardine.impl.SardineException;
-import com.gooddata.sdk.common.UriPrefixer;
+import com.gooddata.UriPrefixer;
 import com.gooddata.sdk.service.httpcomponents.SingleEndpointGoodDataRestProvider;
 import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
@@ -33,8 +33,8 @@ import java.net.URI;
 import java.util.Locale;
 import java.util.function.Supplier;
 
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Uploads, downloads, deletes, ... at datastore

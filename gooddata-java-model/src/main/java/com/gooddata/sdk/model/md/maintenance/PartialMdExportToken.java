@@ -7,9 +7,9 @@ package com.gooddata.sdk.model.md.maintenance;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notEmpty;
 
 /**
  * Partial metadata export token. Serves as configuration structure for import.

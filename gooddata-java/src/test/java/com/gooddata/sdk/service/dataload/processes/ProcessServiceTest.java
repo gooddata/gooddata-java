@@ -7,8 +7,8 @@ package com.gooddata.sdk.service.dataload.processes;
 
 import com.gooddata.sdk.model.dataload.processes.*;
 import com.gooddata.sdk.service.FutureResult;
-import com.gooddata.sdk.common.GoodDataException;
-import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.GoodDataException;
+import com.gooddata.GoodDataRestException;
 import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.service.account.AccountService;
@@ -35,7 +35,7 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.Random;
 
-import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static java.lang.String.format;
 import static java.net.URI.create;
 import static java.util.Arrays.asList;

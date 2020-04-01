@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import java.util.Collections;
 
 import static java.util.Arrays.asList;
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;

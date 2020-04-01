@@ -8,7 +8,7 @@ package com.gooddata.sdk.model.executeafm.response;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.List;
 

@@ -5,14 +5,8 @@
  */
 package com.gooddata.sdk.service.dataload.processes;
 
-import com.gooddata.sdk.common.collections.Page;
-import com.gooddata.sdk.model.dataload.processes.DataloadProcess;
-import com.gooddata.sdk.model.dataload.processes.ProcessExecution;
-import com.gooddata.sdk.model.dataload.processes.ProcessExecutionDetail;
-import com.gooddata.sdk.model.dataload.processes.ProcessType;
-import com.gooddata.sdk.model.dataload.processes.Schedule;
-import com.gooddata.sdk.model.dataload.processes.ScheduleExecution;
-import com.gooddata.sdk.model.dataload.processes.ScheduleState;
+import com.gooddata.collections.PageableList;
+import com.gooddata.sdk.model.dataload.processes.*;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
 import com.gooddata.sdk.service.FutureResult;
@@ -23,15 +17,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Collection;
 
-import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
 import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 
@@ -279,15 +270,15 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .withBody(readFromResource("/dataload/processes/schedules_page2.json"))
                 .withStatus(200);
 
-        final Page<Schedule> firstPage = gd.getProcessService().listSchedules(project);
+        final PageableList<Schedule> firstPage = gd.getProcessService().listSchedules(project);
         assertThat(firstPage, notNullValue());
-        assertThat(firstPage.getPageItems(), hasSize(1));
+        assertThat(firstPage, hasSize(1));
         assertThat(firstPage.getNextPage(), notNullValue());
         assertThat(firstPage.getNextPage().getPageUri(null).toString(), is("/gdc/projects/PROJECT_ID/schedules?offset=1&limit=1"));
 
-        final Page<Schedule> secondPage = gd.getProcessService().listSchedules(project, firstPage.getNextPage());
+        final PageableList<Schedule> secondPage = gd.getProcessService().listSchedules(project, firstPage.getNextPage());
         assertThat(secondPage, notNullValue());
-        assertThat(secondPage.getPageItems(), hasSize(1));
+        assertThat(secondPage, hasSize(1));
         assertThat(secondPage.getNextPage(), nullValue());
     }
 

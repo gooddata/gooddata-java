@@ -5,20 +5,20 @@
  */
 package com.gooddata.sdk.model.project;
 
-import com.gooddata.sdk.common.collections.PageDeserializer;
-import com.gooddata.sdk.common.collections.Paging;
+import com.gooddata.collections.PageableListDeserializer;
+import com.gooddata.collections.Paging;
 
 import java.util.List;
 import java.util.Map;
 
-class UsersDeserializer extends PageDeserializer<Users, User> {
+class UsersDeserializer extends PageableListDeserializer<Users, User> {
 
     protected UsersDeserializer() {
         super(User.class, "users");
     }
 
     @Override
-    protected Users createPage(final List<User> items, final Paging paging, final Map<String, String> links) {
+    protected Users createList(final List<User> items, final Paging paging, final Map<String, String> links) {
         return new Users(items, paging);
     }
 }

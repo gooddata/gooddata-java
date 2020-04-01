@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.httpcomponents;
 
-import com.gooddata.sdk.common.UriPrefixingClientHttpRequestFactory;
+import com.gooddata.UriPrefixingClientHttpRequestFactory;
 import com.gooddata.sdk.service.*;
 import com.gooddata.sdk.service.gdc.DataStoreService;
 import com.gooddata.sdk.service.retry.RetryableRestTemplate;
@@ -24,7 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 import static java.util.Arrays.asList;
 
 /**

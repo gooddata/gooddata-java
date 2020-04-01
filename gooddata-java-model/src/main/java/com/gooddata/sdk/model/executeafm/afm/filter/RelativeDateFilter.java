@@ -11,11 +11,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.model.executeafm.UriObjQualifier;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Objects;
 
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notEmpty;
 
 
 /**

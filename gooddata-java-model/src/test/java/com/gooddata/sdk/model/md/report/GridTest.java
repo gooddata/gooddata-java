@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.gooddata.sdk.model.md.report.MetricGroup.METRIC_GROUP;
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;

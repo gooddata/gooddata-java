@@ -10,8 +10,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.gooddata.sdk.common.collections.Page;
-import com.gooddata.sdk.common.collections.Paging;
+import com.gooddata.collections.PageableList;
+import com.gooddata.collections.Paging;
 
 import java.util.List;
 import java.util.Map;
@@ -24,7 +24,7 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(using = AuditEventsSerializer.class)
 @JsonDeserialize(using = AuditEventsDeserializer.class)
-public class AuditEvents extends Page<AuditEvent> {
+public class AuditEvents extends PageableList<AuditEvent> {
 
     static final String ROOT_NODE = "events";
 

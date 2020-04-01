@@ -7,8 +7,8 @@ package com.gooddata.sdk.service.export;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.gooddata.sdk.common.GoodDataException;
-import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.GoodDataException;
+import com.gooddata.GoodDataRestException;
 import com.gooddata.sdk.model.export.*;
 import com.gooddata.sdk.model.gdc.AsyncTask;
 import com.gooddata.sdk.model.gdc.UriResponse;
@@ -30,7 +30,7 @@ import org.springframework.web.util.UriTemplate;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 

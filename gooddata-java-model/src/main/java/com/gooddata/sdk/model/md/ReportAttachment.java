@@ -8,7 +8,7 @@ package com.gooddata.sdk.model.md;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.sdk.model.export.ExportFormat;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Arrays;
 import java.util.Collection;

@@ -8,7 +8,7 @@ package com.gooddata.sdk.model.project;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 @JsonTypeName("common")
 @JsonIgnoreProperties(ignoreUnknown = true)

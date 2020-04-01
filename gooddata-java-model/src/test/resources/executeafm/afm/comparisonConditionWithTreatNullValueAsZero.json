@@ -1,0 +1,7 @@
+{
+  "comparison": {
+    "operator": "EQUAL_TO",
+    "value": 12,
+    "treatNullValuesAs": 0
+  }
+}

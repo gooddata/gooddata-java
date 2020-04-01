@@ -10,11 +10,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.sdk.model.md.Metric;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Metric used in {@link Grid} for report definition.

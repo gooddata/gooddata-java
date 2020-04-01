@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.model.executeafm.afm.filter.FilterItem;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.gooddata.sdk.model.executeafm.afm.SimpleMeasureDefinition.NAME;
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 import static java.util.Arrays.asList;
 
 /**

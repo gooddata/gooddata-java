@@ -13,8 +13,8 @@ import org.springframework.web.util.UriTemplate;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.util.ResourceUtils.readFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;

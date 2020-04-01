@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.account;
 
-import com.gooddata.sdk.common.GoodDataException;
-import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.GoodDataException;
+import com.gooddata.GoodDataRestException;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.account.SeparatorSettings;
 import com.gooddata.sdk.model.gdc.UriResponse;
@@ -18,8 +18,8 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriTemplate;
 
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Service to access and manipulate account.
@@ -44,7 +44,7 @@ public class AccountService extends AbstractService {
      * Gets current account of logged user.
      *
      * @return current account
-     * @throws com.gooddata.sdk.common.GoodDataException when current account can't be accessed.
+     * @throws com.gooddata.GoodDataException when current account can't be accessed.
      */
     public Account getCurrent() {
         return getAccountById(Account.CURRENT_ID);
@@ -53,7 +53,7 @@ public class AccountService extends AbstractService {
     /**
      * Performs user logout.
      *
-     * @throws com.gooddata.sdk.common.GoodDataException when logout failed.
+     * @throws com.gooddata.GoodDataException when logout failed.
      */
     public void logout() {
         try {

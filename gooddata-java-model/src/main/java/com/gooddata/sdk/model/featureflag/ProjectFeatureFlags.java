@@ -7,13 +7,13 @@ package com.gooddata.sdk.model.featureflag;
 
 import com.fasterxml.jackson.annotation.*;
 import com.gooddata.sdk.model.project.Project;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notEmpty;
 
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("featureFlags")

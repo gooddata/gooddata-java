@@ -14,7 +14,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * The {@link com.gooddata.sdk.service.GoodDataRestProvider}, which

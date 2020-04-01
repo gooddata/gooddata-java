@@ -11,12 +11,12 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.model.executeafm.afm.Afm;
 import com.gooddata.sdk.model.executeafm.afm.LocallyIdentifiable;
 import com.gooddata.sdk.model.executeafm.afm.AttributeItem;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.List;
 
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Header of an attribute.

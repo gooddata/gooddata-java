@@ -5,9 +5,9 @@
  */
 package com.gooddata.sdk.service.util;
 
-import com.gooddata.sdk.common.GoodDataRestException;
-import com.gooddata.sdk.common.gdc.ErrorStructure;
-import com.gooddata.sdk.common.gdc.Header;
+import com.gooddata.GoodDataRestException;
+import com.gooddata.gdc.ErrorStructure;
+import com.gooddata.gdc.Header;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -18,7 +18,7 @@ import org.springframework.web.client.RestClientException;
 import java.io.IOException;
 import java.util.List;
 
-import static com.gooddata.sdk.common.util.Validate.noNullElements;
+import static com.gooddata.util.Validate.noNullElements;
 
 /**
  * A response error handler able to extract GoodData error response

@@ -11,10 +11,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.gooddata.sdk.common.collections.Page;
-import com.gooddata.sdk.common.collections.PageDeserializer;
-import com.gooddata.sdk.common.collections.PageSerializer;
-import com.gooddata.sdk.common.collections.Paging;
+import com.gooddata.collections.PageableList;
+import com.gooddata.collections.PageableListDeserializer;
+import com.gooddata.collections.PageableListSerializer;
+import com.gooddata.collections.Paging;
 
 import java.util.List;
 import java.util.Map;
@@ -30,7 +30,7 @@ import static java.util.Arrays.asList;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(using = LcmEntities.Serializer.class)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class LcmEntities extends Page<LcmEntity> {
+public class LcmEntities extends PageableList<LcmEntity> {
 
     public static final String URI = "/gdc/account/profile/{profileId}/lcmEntities";
 
@@ -44,19 +44,19 @@ public class LcmEntities extends Page<LcmEntity> {
         this(asList(lcmEntities), null, null);
     }
 
-    static class Serializer extends PageSerializer {
+    static class Serializer extends PageableListSerializer {
         public Serializer() {
             super(ROOT_NODE);
         }
     }
 
-    static class Deserializer extends PageDeserializer<LcmEntities, LcmEntity> {
+    static class Deserializer extends PageableListDeserializer<LcmEntities, LcmEntity> {
         protected Deserializer() {
             super(LcmEntity.class);
         }
 
         @Override
-        protected LcmEntities createPage(final List<LcmEntity> items, final Paging paging, final Map<String, String> links) {
+        protected LcmEntities createList(final List<LcmEntity> items, final Paging paging, final Map<String, String> links) {
             return new LcmEntities(items, paging, links);
         }
     }

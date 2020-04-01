@@ -8,7 +8,7 @@ package com.gooddata.sdk.model.executeafm.resultspec;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 /**
  * Holds total type and attribute to which this total corresponds.

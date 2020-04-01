@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.dataset;
 
-import com.gooddata.sdk.common.GoodDataException;
-import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.GoodDataException;
+import com.gooddata.GoodDataRestException;
 import com.gooddata.sdk.model.dataset.*;
 import com.gooddata.sdk.model.gdc.AboutLinks.Link;
 import com.gooddata.sdk.model.gdc.TaskStatus;
@@ -30,8 +30,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;

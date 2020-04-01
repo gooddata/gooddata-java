@@ -7,7 +7,7 @@ package com.gooddata.sdk.service;
 
 import org.apache.http.HttpHost;
 
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notEmpty;
 
 /**
  * GoodData Platform endpoint represented by host, port and protocol

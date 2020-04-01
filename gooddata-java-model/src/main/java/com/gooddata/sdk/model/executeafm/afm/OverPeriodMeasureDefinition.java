@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,8 +17,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.gooddata.sdk.model.executeafm.afm.OverPeriodMeasureDefinition.NAME;
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notEmpty;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Definition of the period over period measure that is used for the Same period last year and Same period 2 years back comparisons.

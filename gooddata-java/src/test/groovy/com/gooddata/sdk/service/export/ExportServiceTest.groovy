@@ -15,7 +15,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Subject
 
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
+import static com.gooddata.util.ResourceUtils.readObjectFromResource
 
 class ExportServiceTest extends Specification {
 

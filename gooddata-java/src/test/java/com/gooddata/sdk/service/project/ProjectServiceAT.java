@@ -5,10 +5,7 @@
  */
 package com.gooddata.sdk.service.project;
 
-import com.gooddata.sdk.common.collections.CustomPageRequest;
-import com.gooddata.sdk.common.collections.Page;
-import com.gooddata.sdk.common.collections.PageBrowser;
-import com.gooddata.sdk.common.collections.PageRequest;
+import com.gooddata.collections.PageRequest;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.project.*;
 import com.gooddata.sdk.service.AbstractGoodDataAT;
@@ -64,8 +61,8 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
     public void listProjects() {
         final ProjectService projectService = gd.getProjectService();
 
-        final PageBrowser<Project> projects = projectService.listProjects();
-        assertThat(projects.getAllItems(), IsIterableContaining.hasItem(ProjectIdMatcher.hasSameIdAs(project)));
+        final Collection<Project> projects = projectService.listProjects();
+        assertThat(projects, IsIterableContaining.hasItem(ProjectIdMatcher.hasSameIdAs(project)));
     }
 
     @Test(groups = "project", dependsOnMethods = "createProject")
@@ -73,9 +70,9 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
         final ProjectService projectService = gd.getProjectService();
 
         final List<User> users = new ArrayList<>();
-        Page<User> page;
-        while (!(page = projectService.listUsers(project, new CustomPageRequest(users.size(), 100))).hasNextPage()) {
-            users.addAll(page.getPageItems());
+        List<User> page;
+        while (!(page = projectService.listUsers(project, new PageRequest(users.size(), 100))).isEmpty()) {
+            users.addAll(page);
         }
         assertThat(users, not(empty()));
     }

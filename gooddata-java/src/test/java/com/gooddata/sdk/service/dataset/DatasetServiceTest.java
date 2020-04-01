@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.dataset;
 
-import com.gooddata.sdk.common.GoodDataException;
-import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.GoodDataException;
+import com.gooddata.GoodDataRestException;
 import com.gooddata.sdk.model.dataset.*;
 import com.gooddata.sdk.model.gdc.AboutLinks.Link;
 import com.gooddata.sdk.model.project.Project;
@@ -24,7 +24,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.util.ResourceUtils.OBJECT_MAPPER;
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.nullValue;

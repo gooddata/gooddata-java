@@ -8,7 +8,7 @@ package com.gooddata.sdk.model.executeafm.afm.filter
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
+import static com.gooddata.util.ResourceUtils.readObjectFromResource
 
 class ExtendedFilterTest extends Specification {
 

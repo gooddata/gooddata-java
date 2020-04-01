@@ -8,9 +8,9 @@ package com.gooddata.sdk.model.md;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.gooddata.sdk.common.util.BooleanDeserializer;
-import com.gooddata.sdk.common.util.BooleanIntegerSerializer;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.BooleanDeserializer;
+import com.gooddata.util.BooleanIntegerSerializer;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 /**
  * Display form of attribute

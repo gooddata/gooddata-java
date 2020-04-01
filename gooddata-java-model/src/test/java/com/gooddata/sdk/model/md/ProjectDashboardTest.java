@@ -9,7 +9,7 @@ import com.gooddata.sdk.model.md.ProjectDashboard.Tab;
 import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.util.ResourceUtils.readObjectFromResource;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -6,9 +6,9 @@
 package com.gooddata.sdk.model.executeafm.result;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Simple value type of {@link Data}. Wrapper of textual value.

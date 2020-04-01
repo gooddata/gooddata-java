@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.model.executeafm.Qualifier;
 import com.gooddata.sdk.model.executeafm.UriObjQualifier;
 import com.gooddata.sdk.model.md.visualization.Measure;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
 import java.util.Objects;

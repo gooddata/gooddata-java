@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service.md.maintenance;
 
-import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.GoodDataRestException;
 import com.gooddata.sdk.model.gdc.TaskStatus;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.md.maintenance.PartialMdArtifact;
@@ -16,7 +16,7 @@ import com.gooddata.sdk.service.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.notNull;
 
 /**
  * Service providing metadata export/import tasks.

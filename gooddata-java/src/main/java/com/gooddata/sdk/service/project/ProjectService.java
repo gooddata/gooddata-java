@@ -5,36 +5,16 @@
  */
 package com.gooddata.sdk.service.project;
 
-import com.gooddata.sdk.common.GoodDataException;
-import com.gooddata.sdk.common.GoodDataRestException;
-import com.gooddata.sdk.common.collections.Page;
-import com.gooddata.sdk.common.collections.PageBrowser;
-import com.gooddata.sdk.common.collections.PageRequest;
-import com.gooddata.sdk.common.util.SpringMutableUri;
+import com.gooddata.GoodDataException;
+import com.gooddata.GoodDataRestException;
+import com.gooddata.collections.MultiPageList;
+import com.gooddata.collections.Page;
+import com.gooddata.collections.PageableList;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.gdc.AsyncTask;
 import com.gooddata.sdk.model.gdc.UriResponse;
-import com.gooddata.sdk.model.project.CreatedInvitations;
-import com.gooddata.sdk.model.project.Invitation;
-import com.gooddata.sdk.model.project.Invitations;
-import com.gooddata.sdk.model.project.Project;
-import com.gooddata.sdk.model.project.ProjectTemplate;
-import com.gooddata.sdk.model.project.ProjectTemplates;
-import com.gooddata.sdk.model.project.ProjectUsersUpdateResult;
-import com.gooddata.sdk.model.project.ProjectValidationResults;
-import com.gooddata.sdk.model.project.ProjectValidationType;
-import com.gooddata.sdk.model.project.ProjectValidations;
-import com.gooddata.sdk.model.project.Projects;
-import com.gooddata.sdk.model.project.Role;
-import com.gooddata.sdk.model.project.Roles;
-import com.gooddata.sdk.model.project.User;
-import com.gooddata.sdk.model.project.Users;
-import com.gooddata.sdk.service.AbstractPollHandler;
-import com.gooddata.sdk.service.AbstractService;
-import com.gooddata.sdk.service.FutureResult;
-import com.gooddata.sdk.service.GoodDataSettings;
-import com.gooddata.sdk.service.PollResult;
-import com.gooddata.sdk.service.SimplePollHandler;
+import com.gooddata.sdk.model.project.*;
+import com.gooddata.sdk.service.*;
 import com.gooddata.sdk.service.account.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
@@ -44,19 +24,12 @@ import org.springframework.web.util.UriTemplate;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.gooddata.sdk.common.util.Validate.noNullElements;
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
-import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.util.Validate.*;
 import static java.util.Arrays.asList;
+import static org.springframework.web.util.UriComponentsBuilder.fromUri;
 
 /**
  * List projects, create a project, ...
@@ -92,42 +65,42 @@ public class ProjectService extends AbstractService {
      * Get all projects current user has access to.
      *
      * @return collection of all projects current user has access to
-     * @throws com.gooddata.sdk.common.GoodDataException when projects can't be accessed
-     * @deprecated use {@link #listProjects()} or {@link #listProjects(PageRequest)} instead.
+     * @throws com.gooddata.GoodDataException when projects can't be accessed
+     * @deprecated use {@link #listProjects()} or {@link #listProjects(Page)} instead.
      * Deprecated since version 3.0.0. Will be removed in one of future versions.
      */
     @Deprecated
     public Collection<Project> getProjects() {
-        return listProjects().allItemsStream().collect(Collectors.toList());
+        return listProjects().collectAll();
     }
 
     /**
-     * Get browser of projects that current user has access to.
+     * Get first page of paged list of projects that current user has access to.
      *
-     * @return {@link PageBrowser} list of found projects or empty list
+     * @return MultiPageList list of found projects or empty list
      */
-    public PageBrowser<Project> listProjects() {
+    public PageableList<Project> listProjects() {
         final String userId = accountService.getCurrent().getId();
-        return new PageBrowser<>(page -> listProjects(getProjectsUri(userId, page)));
+        return new MultiPageList<>(page -> listProjects(getProjectsUri(userId, page)));
     }
 
     /**
      * Get defined page of paged list of projects that current user has access to.
      *
      * @param startPage page to be retrieved first
-     * @return {@link PageBrowser} list of found projects or empty list
+     * @return MultiPageList list of found projects or empty list
      */
-    public PageBrowser<Project> listProjects(final PageRequest startPage) {
+    public PageableList<Project> listProjects(final Page startPage) {
         notNull(startPage, "startPage");
         final String userId = accountService.getCurrent().getId();
-        return new PageBrowser<>(startPage, page -> listProjects(getProjectsUri(userId, page)));
+        return new MultiPageList<>(startPage, page -> listProjects(getProjectsUri(userId, page)));
     }
 
-    private Page<Project> listProjects(final URI uri) {
+    private PageableList<Project> listProjects(final URI uri) {
         try {
             final Projects projects = restTemplate.getForObject(uri, Projects.class);
             if (projects == null) {
-                return new Page<>();
+                return new PageableList<>();
             }
             return projects;
         } catch (GoodDataException | RestClientException e) {
@@ -140,8 +113,8 @@ public class ProjectService extends AbstractService {
         return LIST_PROJECTS_TEMPLATE.expand(userId);
     }
 
-    private static URI getProjectsUri(final String userId, final PageRequest page) {
-        return page.getPageUri(new SpringMutableUri(getProjectsUri(userId)));
+    private static URI getProjectsUri(final String userId, final Page page) {
+        return page.getPageUri(fromUri(getProjectsUri(userId)));
     }
 
     /**
@@ -149,7 +122,7 @@ public class ProjectService extends AbstractService {
      *
      * @param project project to be created
      * @return created project (including very useful id)
-     * @throws com.gooddata.sdk.common.GoodDataException when projects creation fails
+     * @throws com.gooddata.GoodDataException when projects creation fails
      */
     public FutureResult<Project> createProject(final Project project) {
         notNull(project, "project");
@@ -192,7 +165,7 @@ public class ProjectService extends AbstractService {
      *
      * @param uri URI of project resource (/gdc/projects/{id})
      * @return project
-     * @throws com.gooddata.sdk.common.GoodDataException when project can't be accessed
+     * @throws com.gooddata.GoodDataException when project can't be accessed
      */
     public Project getProjectByUri(final String uri) {
         notEmpty(uri, "uri");
@@ -214,7 +187,7 @@ public class ProjectService extends AbstractService {
      *
      * @param id id of project
      * @return project
-     * @throws com.gooddata.sdk.common.GoodDataException when project can't be accessed
+     * @throws com.gooddata.GoodDataException when project can't be accessed
      */
     public Project getProjectById(String id) {
         notEmpty(id, "id");
@@ -224,7 +197,7 @@ public class ProjectService extends AbstractService {
     /**
      * Removes given project
      * @param project project to be removed
-     * @throws com.gooddata.sdk.common.GoodDataException when project can't be deleted
+     * @throws com.gooddata.GoodDataException when project can't be deleted
      */
     public void removeProject(final Project project) {
         notNull(project, "project");
@@ -339,14 +312,14 @@ public class ProjectService extends AbstractService {
     }
 
     /**
-     * Get browser of users by given project.
+     * Get first page of paged list of users by given project.
      *
      * @param project project of users
-     * @return {@link PageBrowser} list of found users or empty list
+     * @return MultiPageList list of found users or empty list
      */
-    public PageBrowser<User> listUsers(final Project project) {
+    public PageableList<User> listUsers(final Project project) {
         notNull(project, "project");
-        return new PageBrowser<>(page -> listUsers(getUsersUri(project, page)));
+        return new MultiPageList<>(page -> listUsers(getUsersUri(project, page)));
     }
 
     /**
@@ -354,19 +327,19 @@ public class ProjectService extends AbstractService {
      *
      * @param project   project of users
      * @param startPage page to be retrieved first
-     * @return {@link PageBrowser} list of found users or empty list
+     * @return MultiPageList list of found users or empty list
      */
-    public PageBrowser<User> listUsers(final Project project, final PageRequest startPage) {
+    public PageableList<User> listUsers(final Project project, final Page startPage) {
         notNull(project, "project");
         notNull(startPage, "startPage");
-        return new PageBrowser<>(startPage, page -> listUsers(getUsersUri(project, page)));
+        return new MultiPageList<>(startPage, page -> listUsers(getUsersUri(project, page)));
     }
 
-    private Page<User> listUsers(final URI uri) {
+    private PageableList<User> listUsers(final URI uri) {
         try {
             final Users users = restTemplate.getForObject(uri, Users.class);
             if (users == null) {
-                return new Page<>();
+                return new PageableList<>();
             }
             return users;
         } catch (GoodDataException | RestClientException e) {
@@ -379,8 +352,8 @@ public class ProjectService extends AbstractService {
         return PROJECT_USERS_TEMPLATE.expand(project.getId());
     }
 
-    private static URI getUsersUri(final Project project, final PageRequest page) {
-        return page.getPageUri(new SpringMutableUri(getUsersUri(project)));
+    private static URI getUsersUri(final Project project, final Page page) {
+        return page.getPageUri(fromUri(getUsersUri(project)));
     }
 
     private static URI getUserUri(final Project project, final Account account) {
