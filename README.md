@@ -41,7 +41,7 @@ The *GoodData Java SDK* uses:
 * the *Spring Framework* version 4.3.*
 * the *Jackson JSON Processor* version 2.*
 * the *Slf4j API* version 1.7.*
-* the *Java Development Kit (JDK)* version 8 or later
+* the *Java Development Kit (JDK)* version 11 or later to build, can run on 8 and later
 
 ##### Retry of failed API calls
 
