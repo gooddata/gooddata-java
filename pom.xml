@@ -12,7 +12,7 @@
     <parent>
         <groupId>com.gooddata</groupId>
         <artifactId>gooddata-parent</artifactId>
-        <version>1.0.0</version>
+        <version>2.0.0</version>
     </parent>
 
     <licenses>
@@ -96,47 +96,6 @@
                         <version>${surefire.version}</version>
                     </dependency>
                 </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <id>set-animalSnifferJdkVersion-property</id>
-                        <goals>
-                            <goal>regex-property</goal>
-                        </goals>
-                        <configuration>
-                            <name>animalSnifferJdkVersion</name>
-                            <value>${targetJdk}</value>
-                            <regex>^1\.([0-9]+)$</regex>
-                            <replacement>java1$1</replacement>
-                            <failIfNoMatch>true</failIfNoMatch>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>animal-sniffer-maven-plugin</artifactId>
-                <version>1.18</version>
-                <configuration>
-                    <signature>
-                        <groupId>org.codehaus.mojo.signature</groupId>
-                        <artifactId>${animalSnifferJdkVersion}</artifactId>
-                        <version>1.0</version>
-                    </signature>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>check-compatibility-with-java-api</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -272,7 +231,7 @@
             <dependency>
                 <groupId>com.gooddata</groupId>
                 <artifactId>gooddata-rest-common</artifactId>
-                <version>2.0.0-RC.2</version>
+                <version>2.0.0-RC.3</version>
                 <exclusions>
                     <exclusion>
                         <groupId>joda-time</groupId>
