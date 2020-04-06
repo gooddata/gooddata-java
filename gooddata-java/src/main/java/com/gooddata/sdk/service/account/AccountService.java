@@ -20,6 +20,7 @@ import org.springframework.web.util.UriTemplate;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 
 /**
  * Service to access and manipulate account.
@@ -78,7 +79,7 @@ public class AccountService extends AbstractService {
 
         try {
             final UriResponse uriResponse = restTemplate.postForObject(Account.ACCOUNTS_URI, account, UriResponse.class, organizationName);
-            return getAccountByUri(uriResponse.getUri());
+            return getAccountByUri(notNullState(uriResponse, "created account response").getUri());
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to create account", e);
         }

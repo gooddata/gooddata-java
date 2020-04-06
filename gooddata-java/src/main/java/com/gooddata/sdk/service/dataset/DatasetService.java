@@ -32,6 +32,7 @@ import java.util.List;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
@@ -182,7 +183,8 @@ public class DatasetService extends AbstractService {
         final PullTask pullTask = restTemplate
                 .postForObject(Pull.URI, new Pull(dirPath), PullTask.class, project.getId());
 
-        return new PollResult<>(this, new AbstractPollHandler<TaskStatus, Void>(pullTask.getPollUri(), TaskStatus.class, Void.class) {
+        return new PollResult<>(this, new AbstractPollHandler<TaskStatus, Void>(
+                notNullState(pullTask, "created pull task").getPollUri(), TaskStatus.class, Void.class) {
             @Override
             public void handlePollResult(TaskStatus pollResult) {
                 if (!pollResult.isSuccess()) {
@@ -247,7 +249,9 @@ public class DatasetService extends AbstractService {
                 EtlMode.URL, new EtlMode(EtlModeType.SLI, LookupMode.RECREATE), UriResponse.class, project.getId());
 
         return new PollResult<>(this,
-                new AbstractPollHandler<TaskStatus, Void>(uriResponse.getUri(), TaskStatus.class, Void.class) {
+                new AbstractPollHandler<TaskStatus, Void>(
+                        notNullState(uriResponse, "created optimize task").getUri(),
+                        TaskStatus.class, Void.class) {
             @Override
             public void handlePollResult(final TaskStatus pollResult) {
                 if (!pollResult.isSuccess()) {
@@ -296,7 +300,9 @@ public class DatasetService extends AbstractService {
         final String errorMessage = format("Unable to update data for project '%s'", project.getId());
 
         return new PollResult<>(this,
-                new AbstractPollHandler<TaskState, Void>(uriResponse.getUri(), TaskState.class, Void.class) {
+                new AbstractPollHandler<TaskState, Void>(
+                        notNullState(uriResponse, "created update project task").getUri(),
+                        TaskState.class, Void.class) {
             @Override
             public void handlePollResult(final TaskState pollResult) {
                 if (!pollResult.isSuccess()) {

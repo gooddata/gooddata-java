@@ -25,6 +25,7 @@ import java.io.Reader;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 import static com.gooddata.sdk.model.project.model.ModelDiff.UpdateScript;
 import static com.gooddata.sdk.common.util.Validate.noNullElements;
 import static com.gooddata.sdk.common.util.Validate.notNull;
@@ -46,7 +47,7 @@ public class ModelService extends AbstractService {
         try {
             final AsyncTask asyncTask = restTemplate
                     .postForObject(DiffRequest.URI, diffRequest, AsyncTask.class, project.getId());
-            return new PollResult<>(this, new SimplePollHandler<ModelDiff>(asyncTask.getUri(), ModelDiff.class) {
+            return new PollResult<>(this, new SimplePollHandler<ModelDiff>(notNullState(asyncTask, "model diff task").getUri(), ModelDiff.class) {
                 @Override
                 public void handlePollException(final GoodDataRestException e) {
                     throw new ModelException("Unable to get project model diff", e);
@@ -148,7 +149,7 @@ public class ModelService extends AbstractService {
                 try {
                     final MaqlDdlLinks links = restTemplate.postForObject(MaqlDdl.URI, new MaqlDdl(maqlChunks.poll()),
                         MaqlDdlLinks.class, projectId);
-                    this.pollUri = links.getStatusUri();
+                    this.pollUri = notNullState(links, "maqlDdlLinks").getStatusUri();
                 } catch (GoodDataRestException | RestClientException e) {
                     throw new ModelException("Unable to update project model", e);
                 }

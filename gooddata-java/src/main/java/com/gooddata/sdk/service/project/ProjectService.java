@@ -56,6 +56,7 @@ import java.util.stream.Collectors;
 import static com.gooddata.sdk.common.util.Validate.noNullElements;
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 import static java.util.Arrays.asList;
 
 /**
@@ -260,7 +261,8 @@ public class ProjectService extends AbstractService {
         notNull(project.getId(), "project.id");
 
         try {
-            return restTemplate.getForObject(ProjectValidations.URI, ProjectValidations.class, project.getId()).getValidations();
+            final ProjectValidations projectValidations = restTemplate.getForObject(ProjectValidations.URI, ProjectValidations.class, project.getId());
+            return projectValidations != null ? projectValidations.getValidations() : Collections.emptySet();
         } catch (GoodDataRestException | RestClientException e) {
             throw new GoodDataException("Unable to get project available validation types", e);
         }
@@ -307,7 +309,8 @@ public class ProjectService extends AbstractService {
         return new PollResult<>(this,
                 // PollHandler able to poll on different URIs (by the Location header)
                 // poll class is Void because the object returned varies between invocations (even on the same URI)
-                new AbstractPollHandler<Void, ProjectValidationResults>(task.getUri(), Void.class, ProjectValidationResults.class) {
+                new AbstractPollHandler<Void, ProjectValidationResults>(notNullState(task, "project validation task").getUri(),
+                        Void.class, ProjectValidationResults.class) {
 
                     @Override
                     public boolean isFinished(ClientHttpResponse response) throws IOException {
@@ -401,13 +404,17 @@ public class ProjectService extends AbstractService {
         notNull(project.getId(), "project.id");
 
         final Roles roles = restTemplate.getForObject(Roles.URI, Roles.class, project.getId());
-        final Set<Role> result = new HashSet<>();
-        for (String roleUri : roles.getRoles()) {
-            final Role role = restTemplate.getForObject(roleUri, Role.class);
-            role.setUri(roleUri);
-            result.add(role);
+        if (roles == null) {
+            return Collections.emptySet();
+        } else {
+            final Set<Role> result = new HashSet<>();
+            for (String roleUri : roles.getRoles()) {
+                final Role role = restTemplate.getForObject(roleUri, Role.class);
+                notNullState(role, "role").setUri(roleUri);
+                result.add(role);
+            }
+            return result;
         }
-        return result;
     }
 
     /**
@@ -421,7 +428,7 @@ public class ProjectService extends AbstractService {
         notEmpty(uri, "uri");
         try {
             final Role role = restTemplate.getForObject(uri, Role.class);
-            role.setUri(uri);
+            notNullState(role, "role").setUri(uri);
             return role;
         } catch (GoodDataRestException e) {
             if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
@@ -538,7 +545,7 @@ public class ProjectService extends AbstractService {
         try {
             final ProjectUsersUpdateResult projectUsersUpdateResult = restTemplate.postForObject(usersUri, new Users(users), ProjectUsersUpdateResult.class);
 
-            if (!projectUsersUpdateResult.getFailed().isEmpty()) {
+            if (! notNullState(projectUsersUpdateResult, "projectUsersUpdateResult").getFailed().isEmpty()) {
                 throw new ProjectUsersUpdateException("Unable to update users: " + projectUsersUpdateResult.getFailed());
             }
         } catch (RestClientException e) {

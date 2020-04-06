@@ -16,6 +16,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
@@ -42,7 +43,8 @@ public class ProjectTemplateService extends AbstractService {
      */
     public Collection<Template> getTemplates() {
         try {
-            return restTemplate.getForObject(Templates.URI, Templates.class).getTemplates();
+            final Templates templates = restTemplate.getForObject(Templates.URI, Templates.class);
+            return templates != null ? templates.getTemplates() : Collections.emptyList();
         } catch (GoodDataRestException | RestClientException e) {
             throw new GoodDataException("Unable to get templates", e);
         }

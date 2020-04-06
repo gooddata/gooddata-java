@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import static com.gooddata.sdk.common.util.Validate.noNullElements;
 import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 import static java.util.Arrays.asList;
 
 /**
@@ -361,7 +362,7 @@ public class MetadataService extends AbstractService {
             throw new GoodDataException("Unable to find objects.", e);
         }
         final List<Usage> usages = new ArrayList<>(uris.size());
-        final Collection<UseManyEntries> useManyEntries = response.getUseMany();
+        final Collection<UseManyEntries> useManyEntries = notNullState(response, "usedBy response").getUseMany();
         usages.addAll(useManyEntries.stream().map(useMany -> new Usage(useMany.getUri(), useMany.getEntries())).collect(Collectors.toList()));
         return usages;
     }
@@ -433,7 +434,7 @@ public class MetadataService extends AbstractService {
 
         try {
             final AttributeElements attributeElements = restTemplate.getForObject(elementsUri, AttributeElements.class);
-            return attributeElements.getElements();
+            return notNullState(attributeElements, "attributeElements").getElements();
         } catch (GoodDataRestException | RestClientException e) {
             throw new GoodDataException("Unable to get attribute elements from " + elementsUri + ".", e);
         }

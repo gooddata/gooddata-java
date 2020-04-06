@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
@@ -151,7 +152,7 @@ public class ExportService extends AbstractService {
         root.set("result_req", child);
 
         try {
-            return restTemplate.postForObject(EXPORTING_URI, root, UriResponse.class).getUri();
+            return notNullState(restTemplate.postForObject(EXPORTING_URI, root, UriResponse.class), "exported report").getUri();
         } catch (GoodDataException | RestClientException e) {
             throw new ExportException("Unable to export report", e);
         }
@@ -185,7 +186,7 @@ public class ExportService extends AbstractService {
             throw new ExportException("Unable to export dashboard: " + dashboardUri, e);
         }
 
-        return new PollResult<>(this, new SimplePollHandler<Void>(task.getUri(), Void.class) {
+        return new PollResult<>(this, new SimplePollHandler<Void>(notNullState(task, "export pdf task").getUri(), Void.class) {
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
                 switch (response.getStatusCode()) {
