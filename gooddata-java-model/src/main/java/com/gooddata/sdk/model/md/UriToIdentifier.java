@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2020, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -13,23 +13,23 @@ import java.util.Collection;
 import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
- * Structure with list of symbolic names (identifiers) to be expanded to list of URIs.
+ * Structure with list of URIs to be expanded to list of symbolic names (identifiers).
  * Serialization only.
  *
- * See also {@link UriToIdentifier}.
+ * See also {@link IdentifierToUri}.
  */
-public class IdentifierToUri {
+public class UriToIdentifier {
 
-    private final Collection<String> identifiers;
+    private final Collection<String> uris;
 
-    public IdentifierToUri(final Collection<String> identifiers) {
-        notNull(identifiers, "identifiers");
-        this.identifiers = identifiers;
+    public UriToIdentifier(final Collection<String> uris) {
+        notNull(uris, "uris");
+        this.uris = uris;
     }
 
-    @JsonProperty("identifierToUri")
-    public Collection<String> getIdentifiers() {
-        return identifiers;
+    @JsonProperty("uriToIdentifier")
+    public Collection<String> getUris() {
+        return uris;
     }
 
     @Override
@@ -37,16 +37,16 @@ public class IdentifierToUri {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        IdentifierToUri that = (IdentifierToUri) o;
+        UriToIdentifier that = (UriToIdentifier) o;
 
-        if (!identifiers.equals(that.identifiers)) return false;
+        if (!uris.equals(that.uris)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return identifiers.hashCode();
+        return uris.hashCode();
     }
 
     @Override
