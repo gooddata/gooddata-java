@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2020, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -9,7 +9,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -31,12 +33,39 @@ public class IdentifiersAndUris {
         return identifiersAndUris.stream().map(IdentifierAndUri::getUri).collect(Collectors.toList());
     }
 
+    @Deprecated
     public Map<String, String> asMap() {
-        final Map<String, String> identifiersToUris = new HashMap<>();
-        for (IdentifierAndUri idAndUri : identifiersAndUris) {
-            identifiersToUris.put(idAndUri.getIdentifier(), idAndUri.getUri());
+        return asIdentifierToUri();
+    }
+
+    /**
+     * Get values as identifier to URI map.
+     *
+     * @return map with identifiers as keys, URI as values
+     */
+    public Map<String, String> asIdentifierToUri() {
+        if (identifiersAndUris == null) {
+            return Collections.emptyMap();
         }
-        return Collections.unmodifiableMap(identifiersToUris);
+
+        final Map<String, String> identifierToUri = identifiersAndUris.stream()
+                .collect(Collectors.toMap(IdentifierAndUri::getIdentifier, IdentifierAndUri::getUri));
+        return Collections.unmodifiableMap(identifierToUri);
+    }
+
+    /**
+     * Get values as URI to identifier map.
+     *
+     * @return map with URI as keys, identifiers as values
+     */
+    public Map<String, String> asUriToIdentifier() {
+        if (identifiersAndUris == null) {
+            return Collections.emptyMap();
+        }
+
+        final Map<String, String> uriToIdentifier = identifiersAndUris.stream()
+                .collect(Collectors.toMap(IdentifierAndUri::getUri, IdentifierAndUri::getIdentifier));
+        return Collections.unmodifiableMap(uriToIdentifier);
     }
 
     @Override

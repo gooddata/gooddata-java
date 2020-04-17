@@ -403,7 +403,7 @@ public class MetadataService extends AbstractService {
         notNull(project, "project" );
         noNullElements(identifiers, "identifiers");
 
-        return getUrisForIdentifiers(project, identifiers).asMap();
+        return getUrisForIdentifiers(project, identifiers).asIdentifierToUri();
     }
 
     /**
