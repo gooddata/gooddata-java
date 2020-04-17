@@ -1,0 +1,13 @@
+{
+  "itemIdentifiers": [
+    "i1",
+    "i2"
+  ],
+  "totals": [
+    {
+      "measureIdentifier": "m1",
+      "type": "avg",
+      "attributeIdentifier": "i1"
+    }
+  ]
+}

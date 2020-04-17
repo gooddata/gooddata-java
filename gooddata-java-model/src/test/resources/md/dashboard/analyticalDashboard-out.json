@@ -1,0 +1,24 @@
+{
+  "analyticalDashboard" : {
+    "content" : {
+      "filterContext" : "/gdc/md/projectID/obj/76102",
+      "widgets" : [
+        "/gdc/md/projectID/obj/76101"
+      ]
+    },
+    "meta" : {
+      "author" : "/gdc/account/profile/profileID",
+      "category" : "analyticalDashboard",
+      "contributor" : "/gdc/account/profile/profileID",
+      "created" : "2019-05-28 13:25:12",
+      "deprecated" : "0",
+      "identifier" : "aamVx0ZviiKv",
+      "isProduction" : 1,
+      "summary" : "",
+      "tags" : "",
+      "title" : "KPIs #1",
+      "updated" : "2019-05-28 13:25:12",
+      "uri" : "/gdc/md/projectID/obj/76103"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+    "reportDefinition" : {
+        "content" : {
+            "grid" : {
+                "sort" : {
+                    "columns" : [],
+                    "rows" : []
+                },
+                "columnWidths" : [],
+                "columns" : [],
+                "metrics" : [],
+                "rows" : []
+            },
+            "oneNumber" : {
+                "labels" : {
+                    "description" : "desc"
+                }
+            },
+            "format" : "oneNumber",
+            "filters" : [ { "expression" : "(SELECT [/gdc/md/projectId/obj/123]) >= 2" } ]
+        },
+        "meta" : {
+            "title" : "Untitled"
+        }
+    }
+}

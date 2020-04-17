@@ -1,0 +1,89 @@
+{
+  "executionResult": {
+    "data": [
+      [
+        "-12958511.8099999",
+        "25315434.8199999",
+        "-2748323.76",
+        "-7252542.67"
+      ],
+      [
+        "1234",
+        "5853",
+        "12340",
+        "9999"
+      ]
+    ],
+    "paging" : {
+      "count": [
+        2,4
+      ],
+      "offset": [
+        0,0
+      ],
+      "total": [
+        2,4
+      ]
+    },
+    "headerItems": [
+      [
+        [
+          {
+            "attributeHeaderItem": {
+              "uri": "/gdc/md/FoodMartDemo/obj/122/elements?id=123",
+              "name": "Employee1"
+            }
+          },
+          {
+            "attributeHeaderItem": {
+              "uri": "/gdc/md/FoodMartDemo/obj/122/elements?id=456",
+              "name": "Employee2"
+            }
+          }
+        ]
+      ],
+      [
+        [
+          {
+            "attributeHeaderItem": {
+              "uri": "/gdc/md/FoodMartDemo/obj/124/elements?id=3200",
+              "name": "Cost of Goods Sold"
+            }
+          },
+          {
+            "attributeHeaderItem": {
+              "uri": "/gdc/md/FoodMartDemo/obj/124/elements?id=6000",
+              "name": "Salaries"
+            }
+          }
+        ]
+      ]
+    ],
+    "totals": [
+      [
+        [
+          "25"
+        ]
+      ],
+      [
+        [
+          "38"
+        ]
+      ]
+    ],
+    "totalTotals": [
+      [
+        [
+          "43"
+        ]
+      ]
+    ],
+    "warnings": [
+      {
+        "warningCode": "gdc123",
+        "message": "Some msg %s %s %s",
+        "parameters": ["bum", 1, null]
+      }
+    ]
+  }
+}

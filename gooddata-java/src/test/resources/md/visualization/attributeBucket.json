@@ -1,0 +1,14 @@
+{
+  "localIdentifier": "attributeBucket",
+  "items": [
+    {
+      "visualizationAttribute": {
+        "localIdentifier": "attribute",
+        "displayForm": {
+          "uri": "/uri/to/displayForm"
+        },
+        "alias": "Attribute Alias"
+      }
+    }
+  ]
+}

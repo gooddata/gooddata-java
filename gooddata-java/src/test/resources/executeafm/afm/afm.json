@@ -1,0 +1,38 @@
+{
+  "attributes": [
+    {
+      "displayForm": {
+        "uri": "/gdc/md/projectId/obj/1"
+      },
+      "localIdentifier": "a1"
+    }
+  ],
+  "filters": [
+    {
+      "expression": {
+        "value": "some expression"
+      }
+    }
+  ],
+  "measures": [
+    {
+      "definition": {
+        "measure": {
+          "item": {
+            "uri": "/gdc/md/projectId/obj/1"
+          }
+        }
+      },
+      "localIdentifier": "mId"
+    }
+  ],
+  "nativeTotals": [
+    {
+      "measureIdentifier": "mId",
+      "attributeIdentifiers": [
+        "a1",
+        "a2"
+      ]
+    }
+  ]
+}

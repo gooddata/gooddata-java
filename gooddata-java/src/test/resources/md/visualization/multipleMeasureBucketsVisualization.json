@@ -1,0 +1,73 @@
+{
+  "visualizationObject": {
+    "meta": {
+      "title": "New insight"
+    },
+    "content": {
+      "visualizationClass": {
+        "uri": "visClass"
+      },
+      "buckets": [
+        {
+          "localIdentifier": "measures 1",
+          "items": [
+            {
+              "measure": {
+                "localIdentifier": "measure1",
+                "title": "Measure 1",
+                "alias": "Measure 1 alias",
+                "definition": {
+                  "measureDefinition": {
+                    "item": {
+                      "uri": "/uri/to/measure/1"
+                    },
+                    "aggregation": "sum",
+                    "computeRatio": false
+                  }
+                }
+              }
+            }
+          ]
+        }, {
+          "localIdentifier": "measures 2",
+          "items": [
+            {
+              "measure": {
+                "localIdentifier": "measure2",
+                "title": "Measure 2",
+                "alias": "Measure 2 alias",
+                "definition": {
+                  "measureDefinition": {
+                    "item": {
+                      "uri": "/uri/to/measure/2"
+                    },
+                    "aggregation": "avg",
+                    "computeRatio": true,
+                    "filters": []
+                  }
+                }
+              }
+            }, {
+              "measure": {
+                "localIdentifier": "measure2pop",
+                "title": "Measure 2 pop",
+                "alias": "Measure 2 pop alias",
+                "definition": {
+                  "popMeasureDefinition": {
+                    "measureIdentifier": "measure2",
+                    "popAttribute": {
+                      "uri": "/uri/to/attribute"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "filters": [],
+      "properties": "{\"key\":\"value\"}",
+      "references": { "key": "value" }
+    }
+  }
+}

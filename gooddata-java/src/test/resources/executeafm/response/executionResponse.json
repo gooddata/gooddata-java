@@ -1,0 +1,63 @@
+{
+  "executionResponse": {
+    "links": {
+      "executionResult": "poll"
+    },
+    "dimensions": [
+      {
+        "headers": [
+          {
+            "attributeHeader": {
+              "uri": "/gdc/md/FoodMartDemo/obj/124",
+              "identifier": "attr.account",
+              "name": "Account",
+              "localIdentifier": "account",
+              "formOf": {
+                "name": "Some attr",
+                "uri": "/gdc/md/project_id/obj/567",
+                "identifier": "attr.some.id"
+              }
+            }
+          },
+          {
+            "attributeHeader": {
+              "uri": "/gdc/md/FoodMartDemo/obj/113",
+              "identifier": "attr.accountType",
+              "name": "Account Type",
+              "localIdentifier": "accountType",
+              "formOf": {
+                "name": "Some attr",
+                "uri": "/gdc/md/project_id/obj/567",
+                "identifier": "attr.some.id"
+              }
+            }
+          },
+          {
+            "measureGroupHeader": {
+              "items": [
+                {
+                  "measureHeaderItem": {
+                    "uri": "/gdc/md/FoodMartDemo/obj/114",
+                    "identifier": "metric.sum",
+                    "localIdentifier": "sum",
+                    "name": "Accounting Amount [Sum]",
+                    "format": "format1"
+                  }
+                },
+                {
+                  "measureHeaderItem": {
+                    "uri": "/gdc/md/FoodMartDemo/obj/115",
+                    "identifier": "metric.avg",
+                    "localIdentifier": "avg",
+                    "name": "Accounting Amount [Avg]",
+                    "format": "format2"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

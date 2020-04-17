@@ -1,0 +1,95 @@
+{
+  "metric": {
+    "content": {
+      "folders": [
+        "/gdc/md/ge06jy0jr6h1hzaxei6d53evw276p3xc/obj/51430"
+      ],
+      "format": "$#,##0.00",
+      "tree": {
+        "content": [
+          {
+            "content": [
+              {
+                "value": "SUM",
+                "content": [
+                  {
+                    "value": "/gdc/md/ge06jy0jr6h1hzaxei6d53evw276p3xc/obj/1144",
+                    "position": {
+                      "column": 12,
+                      "line": 2
+                    },
+                    "type": "fact object"
+                  }
+                ],
+                "position": {
+                  "column": 8,
+                  "line": 2
+                },
+                "type": "function"
+              }
+            ],
+            "position": {
+              "column": 8,
+              "line": 2
+            },
+            "type": "expression"
+          },
+          {
+            "content": [
+              {
+                "content": [
+                  {
+                    "value": "/gdc/md/ge06jy0jr6h1hzaxei6d53evw276p3xc/obj/1147",
+                    "position": {
+                      "column": 71,
+                      "line": 2
+                    },
+                    "type": "fact object"
+                  },
+                  {
+                    "value": "/gdc/md/ge06jy0jr6h1hzaxei6d53evw276p3xc/obj/1275",
+                    "position": {
+                      "column": 123,
+                      "line": 2
+                    },
+                    "type": "metric object"
+                  }
+                ],
+                "position": {
+                  "column": 122,
+                  "line": 2
+                },
+                "type": "="
+              }
+            ],
+            "position": {
+              "column": 65,
+              "line": 2
+            },
+            "type": "where"
+          }
+        ],
+        "position": {
+          "column": 1,
+          "line": 2
+        },
+        "type": "metric"
+      },
+      "expression": "SELECT SUM([/gdc/md/ge06jy0jr6h1hzaxei6d53evw276p3xc/obj/1144]) where [/gdc/md/ge06jy0jr6h1hzaxei6d53evw276p3xc/obj/1147]=[/gdc/md/ge06jy0jr6h1hzaxei6d53evw276p3xc/obj/1275]"
+    },
+    "meta": {
+      "author": "/gdc/account/profile/876ec68f5630b38de65852ed5d6236ff",
+      "uri": "/gdc/md/ge06jy0jr6h1hzaxei6d53evw276p3xc/obj/1279",
+      "tags": "",
+      "created": "2016-03-14 04:35:30",
+      "identifier": "ah1EuQxwaCqs",
+      "deprecated": "0",
+      "summary": "A sum of all deals, regardless of stage or status.",
+      "isProduction": 1,
+      "title": "Amount",
+      "category": "metric",
+      "updated": "2016-03-14 04:35:30",
+      "contributor": "/gdc/account/profile/876ec68f5630b38de65852ed5d6236ff"
+    }
+  }
+}

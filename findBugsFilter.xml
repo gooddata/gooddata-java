@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FindBugsFilter>
     <Match>
-        <Class name="com.gooddata.executeafm.result.ExecutionResult" />
+        <Class name="com.gooddata.sdk.model.executeafm.result.ExecutionResult" />
         <Bug pattern="URF_UNREAD_FIELD" />
+    </Match>
+    <Match>
+        <Class name="com.gooddata.sdk.service.gdc.DataStoreService" />
+        <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE" />
     </Match>
 </FindBugsFilter>

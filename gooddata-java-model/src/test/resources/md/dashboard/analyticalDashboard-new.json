@@ -1,0 +1,14 @@
+{
+  "analyticalDashboard" : {
+    "content" : {
+      "filterContext" : "/fc/1",
+      "widgets" : [
+        "/w/1",
+        "/w/2"
+      ]
+    },
+    "meta" : {
+      "title" : "New KPIs"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "attributeSortItem": {
+    "attributeIdentifier": "aId",
+    "direction": "asc",
+    "aggregation": "sum"
+  }
+}

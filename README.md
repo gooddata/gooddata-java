@@ -18,7 +18,7 @@ The *GoodData Java SDK* is available in Maven Central Repository, to use it from
 <dependency>
     <groupId>com.gooddata</groupId>
     <artifactId>gooddata-java</artifactId>
-    <version>2.35.0+api1</version>
+    <version>3.0.0-RC.9+api3</version>
 </dependency>
 ```
 See [releases page](https://github.com/gooddata/gooddata-java/releases) for information about versions and notable changes,
@@ -38,10 +38,10 @@ Since *GoodData Java SDK* version *2.32.0* API versioning is supported. The API 
 The *GoodData Java SDK* uses:
 * the [GoodData HTTP client](https://github.com/gooddata/gooddata-http-client) version 0.9.3 or later
 * the *Apache HTTP Client* version 4.5 or later (for white-labeled domains at least version 4.3.2 is required)
-* the *Spring Framework* version 4.3.*
+* the *Spring Framework* version 5* (can be used with spring 4.3.* as well)
 * the *Jackson JSON Processor* version 2.*
 * the *Slf4j API* version 1.7.*
-* the *Java Development Kit (JDK)* version 8 or later
+* the *Java Development Kit (JDK)* version 11 or later to build, can run on 8 and later
 
 ##### Retry of failed API calls
 
@@ -67,6 +67,10 @@ The *GoodData Java SDK* logs using `slf4j-api`. Please adjust your logging confi
     <artifactId>slf4j-nop</artifactId>
 </dependency>
 ```
+
+### Date/Time
+The *GoodData Java SDK* is using Java 8 Date/Time API (JSR 310) for all Date / Time / Zone public facing types.
+Good SO thread about differences between various types in Java Date/Time API: https://stackoverflow.com/a/32443004
 
 ## Development
 

@@ -1,0 +1,32 @@
+{
+  "subscription": {
+    "triggers": [
+      {
+        "timerEvent": {
+          "cronExpression": "0 * * * * *"
+        }
+      },
+      {
+        "timerEvent": {
+          "cronExpression": "1 * * * * *"
+        }
+      }
+    ],
+    "condition": {
+      "condition": {
+        "expression": "true"
+      }
+    },
+    "message": {
+      "template": {
+        "expression": "test message"
+      }
+    },
+    "channels": [
+      "/gdc/account/profile/876ec68f5630b38de65852ed5d6236ff/channelConfigurations/59dca62e60b2c601f3c72e18"
+    ],
+    "meta": {
+      "title": "test subscription"
+    }
+  }
+}

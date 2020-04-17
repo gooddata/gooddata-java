@@ -1,0 +1,9 @@
+{
+  "dateFilter" : {
+    "from" : "-6",
+    "granularity" : "GDC.time.year",
+    "to" : "-1",
+    "type" : "relative",
+    "dataSet": "/ds/uri"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "negativeAttributeFilter": {
+    "displayForm": {
+      "identifier": "df.bum.bac"
+    },
+    "notIn": {
+      "values": [
+        "a",
+        "b"
+      ]
+    }
+  }
+}

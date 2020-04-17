@@ -1,0 +1,15 @@
+{
+  "lcmEntities": {
+    "items": [
+      {
+        "projectId": "PROJECT_ID",
+        "projectTitle": "PROJECT_TITLE",
+        "links": {
+          "project": "/gdc/projects/PROJECT_ID"
+        }
+      }
+    ],
+    "paging": {},
+    "links": {}
+  }
+}

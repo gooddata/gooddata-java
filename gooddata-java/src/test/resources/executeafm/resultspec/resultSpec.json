@@ -1,0 +1,36 @@
+{
+  "dimensions": [
+    {
+      "itemIdentifiers": [
+        "i1"
+      ]
+    }
+  ],
+  "sorts": [
+    {
+      "attributeSortItem": {
+        "attributeIdentifier": "aId",
+        "direction": "asc"
+      }
+    }
+  ,
+    {
+      "measureSortItem": {
+        "direction": "asc",
+        "locators": [
+          {
+            "measureLocatorItem": {
+              "measureIdentifier": "mId"
+            }
+          },
+          {
+            "attributeLocatorItem": {
+              "attributeIdentifier": "aId",
+              "element": "a1"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

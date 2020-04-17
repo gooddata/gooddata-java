@@ -1,0 +1,8 @@
+{
+  "positiveAttributeFilter": {
+    "displayForm": {
+      "identifier": "df.bum.bac"
+    },
+    "in": ["a", "b"]
+  }
+}

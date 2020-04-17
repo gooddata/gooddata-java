@@ -1,0 +1,492 @@
+{
+  "projectValidateResult": {
+    "error_found": 1,
+    "fatal_error_found": 1,
+    "meta": {
+      "finished_time": 1427280574,
+      "start_time": 1427280565
+    },
+    "results": [
+      {
+        "body": {
+          "error": 0,
+          "log": []
+        },
+        "from": "invalid_objects"
+      },
+      {
+        "body": {
+          "error": 0,
+          "log": []
+        },
+        "from": "pdm"
+      },
+      {
+        "body": {
+          "error": 0,
+          "log": []
+        },
+        "from": "pdm::elem_validation"
+      },
+      {
+        "body": {
+          "error": 0,
+          "log": []
+        },
+        "from": "metric_filter"
+      },
+      {
+        "body": {
+          "error": 1,
+          "log": [
+            {
+              "ecat": "MISSING",
+              "level": "ERROR",
+              "msg": "[%s:%s;origin:%s] %s attribute '%s'.",
+              "pars": [
+                {
+                  "common": "attribute"
+                },
+                {
+                  "object": {
+                    "id": "3000",
+                    "name": "Promotion Scope",
+                    "uri": "/gdc/md/FoodMartDemo/obj/3000"
+                  }
+                },
+                {
+                  "common": ""
+                },
+                {
+                  "common": "is missing"
+                },
+                {
+                  "common": "pk"
+                }
+              ]
+            },
+            {
+              "ecat": "MISSING",
+              "level": "ERROR",
+              "msg": "[%s:%s;origin:%s] %s attribute '%s'.",
+              "pars": [
+                {
+                  "common": "attribute"
+                },
+                {
+                  "object": {
+                    "id": "43",
+                    "name": "Customer Houseowner",
+                    "uri": "/gdc/md/FoodMartDemo/obj/43"
+                  }
+                },
+                {
+                  "common": ""
+                },
+                {
+                  "common": "is missing"
+                },
+                {
+                  "common": "pk"
+                }
+              ]
+            },
+            {
+              "ecat": "MISSING",
+              "level": "ERROR",
+              "msg": "[%s:%s;origin:%s] %s attribute '%s'.",
+              "pars": [
+                {
+                  "common": "attribute"
+                },
+                {
+                  "object": {
+                    "id": "57",
+                    "name": "Employee Marital Status",
+                    "uri": "/gdc/md/FoodMartDemo/obj/57"
+                  }
+                },
+                {
+                  "common": ""
+                },
+                {
+                  "common": "is missing"
+                },
+                {
+                  "common": "pk"
+                }
+              ]
+            },
+            {
+              "ecat": "MISSING",
+              "level": "ERROR",
+              "msg": "[%s:%s;origin:%s] %s attribute '%s'.",
+              "pars": [
+                {
+                  "common": "attribute"
+                },
+                {
+                  "object": {
+                    "id": "65",
+                    "name": "Recyclable Package",
+                    "uri": "/gdc/md/FoodMartDemo/obj/65"
+                  }
+                },
+                {
+                  "common": ""
+                },
+                {
+                  "common": "is missing"
+                },
+                {
+                  "common": "pk"
+                }
+              ]
+            },
+            {
+              "ecat": "MISSING",
+              "level": "ERROR",
+              "msg": "[%s:%s;origin:%s] %s attribute '%s'.",
+              "pars": [
+                {
+                  "common": "attribute"
+                },
+                {
+                  "object": {
+                    "id": "70",
+                    "name": "Customer Gender",
+                    "uri": "/gdc/md/FoodMartDemo/obj/70"
+                  }
+                },
+                {
+                  "common": ""
+                },
+                {
+                  "common": "is missing"
+                },
+                {
+                  "common": "pk"
+                }
+              ]
+            },
+            {
+              "ecat": "MISSING",
+              "level": "ERROR",
+              "msg": "[%s:%s;origin:%s] %s attribute '%s'.",
+              "pars": [
+                {
+                  "common": "attribute"
+                },
+                {
+                  "object": {
+                    "id": "73",
+                    "name": "Day of Week",
+                    "uri": "/gdc/md/FoodMartDemo/obj/73"
+                  }
+                },
+                {
+                  "common": ""
+                },
+                {
+                  "common": "is missing"
+                },
+                {
+                  "common": "pk"
+                }
+              ]
+            },
+            {
+              "ecat": "MISSING",
+              "level": "ERROR",
+              "msg": "[%s:%s;origin:%s] %s attribute '%s'.",
+              "pars": [
+                {
+                  "common": "attribute"
+                },
+                {
+                  "object": {
+                    "id": "78",
+                    "name": "Employee Gender",
+                    "uri": "/gdc/md/FoodMartDemo/obj/78"
+                  }
+                },
+                {
+                  "common": ""
+                },
+                {
+                  "common": "is missing"
+                },
+                {
+                  "common": "pk"
+                }
+              ]
+            },
+            {
+              "ecat": "MISSING",
+              "level": "ERROR",
+              "msg": "[%s:%s;origin:%s] %s attribute '%s'.",
+              "pars": [
+                {
+                  "common": "attribute"
+                },
+                {
+                  "object": {
+                    "id": "87",
+                    "name": "Low Fat",
+                    "uri": "/gdc/md/FoodMartDemo/obj/87"
+                  }
+                },
+                {
+                  "common": ""
+                },
+                {
+                  "common": "is missing"
+                },
+                {
+                  "common": "pk"
+                }
+              ]
+            },
+            {
+              "ecat": "MISSING",
+              "level": "ERROR",
+              "msg": "[%s:%s;origin:%s] %s attribute '%s'.",
+              "pars": [
+                {
+                  "common": "attribute"
+                },
+                {
+                  "object": {
+                    "id": "90",
+                    "name": "Customer Marital Status",
+                    "uri": "/gdc/md/FoodMartDemo/obj/90"
+                  }
+                },
+                {
+                  "common": ""
+                },
+                {
+                  "common": "is missing"
+                },
+                {
+                  "common": "pk"
+                }
+              ]
+            },
+            {
+              "ecat": "TOO_MANY_EDGES",
+              "level": "ERROR",
+              "msg": "origin:%s, [%s:%s] violates EDGE CARDINALITY constraint: [ '%s' --- '%s', role:%s, %s:%s ]. Referenced instances '%s\\'.",
+              "pars": [
+                {
+                  "common": ""
+                },
+                {
+                  "common": "tableDataLoad"
+                },
+                {
+                  "object": {
+                    "id": "3152",
+                    "name": "tableDataLoad education",
+                    "uri": "/gdc/md/FoodMartDemo/obj/3152"
+                  }
+                },
+                {
+                  "common": "table"
+                },
+                {
+                  "common": "tableDataLoad"
+                },
+                {
+                  "common": "_generic"
+                },
+                {
+                  "common": "0,1"
+                },
+                {
+                  "common": "0,*"
+                },
+                {
+                  "common": "3153,3503"
+                }
+              ]
+            }
+          ]
+        },
+        "from": "ldm"
+      },
+      {
+        "body": {
+          "error": 0,
+          "log": []
+        },
+        "from": "pdm::pk_fk_consistency"
+      },
+      {
+        "body": {
+          "error": 0,
+          "log": [
+            {
+              "ecat": "TRANSITIVITY",
+              "level": "WARN",
+              "msg": "There are inconsistent values between %s->%s->%s and %s->%s for %s value '%s'.",
+              "pars": [
+                {
+                  "object": {
+                    "id": "86",
+                    "name": "Warehouse ZIP",
+                    "uri": "/gdc/md/FoodMartDemo/obj/86"
+                  }
+                },
+                {
+                  "object": {
+                    "id": "56",
+                    "name": "Warehouse City",
+                    "uri": "/gdc/md/FoodMartDemo/obj/56"
+                  }
+                },
+                {
+                  "object": {
+                    "id": "35",
+                    "name": "Warehouse County",
+                    "uri": "/gdc/md/FoodMartDemo/obj/35"
+                  }
+                },
+                {
+                  "object": {
+                    "id": "86",
+                    "name": "Warehouse ZIP",
+                    "uri": "/gdc/md/FoodMartDemo/obj/86"
+                  }
+                },
+                {
+                  "object": {
+                    "id": "35",
+                    "name": "Warehouse County",
+                    "uri": "/gdc/md/FoodMartDemo/obj/35"
+                  }
+                },
+                {
+                  "object": {
+                    "id": "86",
+                    "name": "Warehouse ZIP",
+                    "uri": "/gdc/md/FoodMartDemo/obj/86"
+                  }
+                },
+                {
+                  "common": "00968"
+                }
+              ]
+            },
+            {
+              "ecat": "TRANSITIVITY",
+              "level": "WARN",
+              "msg": "There are inconsistent values between %s->%s->%s and %s->%s for %s value '%s'.",
+              "pars": [
+                {
+                  "object": {
+                    "id": "82",
+                    "name": "Store ZIP",
+                    "uri": "/gdc/md/FoodMartDemo/obj/82"
+                  }
+                },
+                {
+                  "object": {
+                    "id": "42",
+                    "name": "Store City",
+                    "uri": "/gdc/md/FoodMartDemo/obj/42"
+                  }
+                },
+                {
+                  "object": {
+                    "id": "61",
+                    "name": "Store County",
+                    "uri": "/gdc/md/FoodMartDemo/obj/61"
+                  }
+                },
+                {
+                  "object": {
+                    "id": "82",
+                    "name": "Store ZIP",
+                    "uri": "/gdc/md/FoodMartDemo/obj/82"
+                  }
+                },
+                {
+                  "object": {
+                    "id": "61",
+                    "name": "Store County",
+                    "uri": "/gdc/md/FoodMartDemo/obj/61"
+                  }
+                },
+                {
+                  "object": {
+                    "id": "82",
+                    "name": "Store ZIP",
+                    "uri": "/gdc/md/FoodMartDemo/obj/82"
+                  }
+                },
+                {
+                  "common": "00968"
+                }
+              ]
+            },
+            {
+              "ecat": "TRANSITIVITY",
+              "level": "WARN",
+              "msg": "There are inconsistent values between %s->%s->%s and %s->%s for %s value '%s'.",
+              "pars": [
+                {
+                  "object": {
+                    "id": "47",
+                    "name": "Customer ZIP",
+                    "uri": "/gdc/md/FoodMartDemo/obj/47"
+                  }
+                },
+                {
+                  "object": {
+                    "id": "68",
+                    "name": "Customer City",
+                    "uri": "/gdc/md/FoodMartDemo/obj/68"
+                  }
+                },
+                {
+                  "object": {
+                    "id": "53",
+                    "name": "Customer County",
+                    "uri": "/gdc/md/FoodMartDemo/obj/53"
+                  }
+                },
+                {
+                  "object": {
+                    "id": "47",
+                    "name": "Customer ZIP",
+                    "uri": "/gdc/md/FoodMartDemo/obj/47"
+                  }
+                },
+                {
+                  "object": {
+                    "id": "53",
+                    "name": "Customer County",
+                    "uri": "/gdc/md/FoodMartDemo/obj/53"
+                  }
+                },
+                {
+                  "object": {
+                    "id": "47",
+                    "name": "Customer ZIP",
+                    "uri": "/gdc/md/FoodMartDemo/obj/47"
+                  }
+                },
+                {
+                  "common": "00968"
+                }
+              ]
+            }
+          ]
+        },
+        "from": "pdm::transitivity"
+      }
+    ]
+  }
+}
+

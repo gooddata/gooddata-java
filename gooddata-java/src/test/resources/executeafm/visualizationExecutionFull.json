@@ -1,0 +1,36 @@
+{
+  "visualizationExecution": {
+    "reference": "/gdc/md/PROJECT/vizObjUri",
+    "filters": [
+      {
+        "expression": {
+          "value": "some expression"
+        }
+      }
+    ],
+    "resultSpec": {
+      "dimensions": [
+        {
+          "itemIdentifiers": [
+            "i1"
+          ],
+          "totals": [
+            {
+              "measureIdentifier": "mId",
+              "type": "avg",
+              "attributeIdentifier": "a1"
+            }
+          ]
+        }
+      ],
+      "sorts": [
+        {
+          "attributeSortItem": {
+            "attributeIdentifier": "aId",
+            "direction": "asc"
+          }
+        }
+      ]
+    }
+  }
+}
