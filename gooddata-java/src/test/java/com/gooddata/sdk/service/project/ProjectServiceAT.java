@@ -74,9 +74,10 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
 
         final List<User> users = new ArrayList<>();
         Page<User> page;
-        while (!(page = projectService.listUsers(project, new CustomPageRequest(users.size(), 100))).hasNextPage()) {
+        do {
+            page = projectService.listUsers(project, new CustomPageRequest(users.size(), 100));
             users.addAll(page.getPageItems());
-        }
+        } while (page.hasNextPage());
         assertThat(users, not(empty()));
     }
 
