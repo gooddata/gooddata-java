@@ -51,7 +51,7 @@
         <httpcore.version>4.4.13</httpcore.version>
         <jackson.version>2.11.0</jackson.version>
         <slf4j.version>1.7.30</slf4j.version>
-        <spring.version>5.2.5.RELEASE</spring.version>
+        <spring.version>5.2.6.RELEASE</spring.version>
         <jadler.version>1.3.0</jadler.version>
         <json-unit.version>2.17.0</json-unit.version>
         <surefire.version>2.22.2</surefire.version>
