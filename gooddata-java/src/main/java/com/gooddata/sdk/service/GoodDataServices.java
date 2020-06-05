@@ -16,7 +16,6 @@ import com.gooddata.sdk.service.export.ExportService;
 import com.gooddata.sdk.service.featureflag.FeatureFlagService;
 import com.gooddata.sdk.service.gdc.DataStoreService;
 import com.gooddata.sdk.service.gdc.GdcService;
-import com.gooddata.sdk.service.httpcomponents.SingleEndpointGoodDataRestProvider;
 import com.gooddata.sdk.service.lcm.LcmService;
 import com.gooddata.sdk.service.md.MetadataService;
 import com.gooddata.sdk.service.md.maintenance.ExportImportService;
@@ -54,12 +53,14 @@ class GoodDataServices {
     private final ExportImportService exportImportService;
     private final FeatureFlagService featureFlagService;
     private final OutputStageService outputStageService;
+    @SuppressWarnings("deprecation")
     private final ProjectTemplateService projectTemplateService;
     private final ExportService exportService;
     private final AuditEventService auditEventService;
     private final ExecuteAfmService executeAfmService;
     private final LcmService lcmService;
 
+    @SuppressWarnings("deprecation")
     GoodDataServices(final GoodDataRestProvider goodDataRestProvider) {
         this.goodDataRestProvider = goodDataRestProvider;
 
@@ -160,6 +161,7 @@ class GoodDataServices {
         return outputStageService;
     }
 
+    @SuppressWarnings("deprecation")
     ProjectTemplateService getProjectTemplateService() {
         return projectTemplateService;
     }

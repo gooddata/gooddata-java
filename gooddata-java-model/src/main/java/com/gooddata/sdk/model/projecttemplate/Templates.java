@@ -14,7 +14,12 @@ import java.util.List;
 /**
  * Wrapper for list of project templates.
  * Deserialization only.
+ *
+ * @deprecated The project templates are deprecated and stopped working on May 15, 2019.
+ * See https://support.gooddata.com/hc/en-us/articles/360016126334-April-4-2019
+ * Deprecated since version 3.0.1. Will be removed in one of future versions.
  */
+@Deprecated
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Templates {
 

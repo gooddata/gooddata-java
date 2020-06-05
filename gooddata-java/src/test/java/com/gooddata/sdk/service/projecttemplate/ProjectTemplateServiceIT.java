@@ -21,6 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
+@SuppressWarnings("deprecation")
 public class ProjectTemplateServiceIT extends AbstractGoodDataIT {
 
     private static final String TEMPLATE_URI = "/projectTemplates/ZendeskAnalytics/20";

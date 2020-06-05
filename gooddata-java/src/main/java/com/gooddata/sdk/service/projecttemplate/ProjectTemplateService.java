@@ -24,7 +24,12 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Service enabling access to project templates, under /projectTemplates/...
+ *
+ * @deprecated The project templates are deprecated and stopped working on May 15, 2019.
+ * See https://support.gooddata.com/hc/en-us/articles/360016126334-April-4-2019
+ * Deprecated since version 3.0.1. Will be removed in one of future versions.
  */
+@Deprecated
 public class ProjectTemplateService extends AbstractService {
 
     /**
