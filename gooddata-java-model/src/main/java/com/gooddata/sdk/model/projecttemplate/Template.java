@@ -19,7 +19,12 @@ import java.util.Objects;
 /**
  * Represents one project template.
  * Deserialization only.
+ *
+ * @deprecated The project templates are deprecated and stopped working on May 15, 2019.
+ * See https://support.gooddata.com/hc/en-us/articles/360016126334-April-4-2019
+ * Deprecated since version 3.0.1. Will be removed in one of future versions.
  */
+@Deprecated
 @JsonTypeName("projectTemplate")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)

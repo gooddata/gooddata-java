@@ -318,7 +318,12 @@ public class GoodData {
      * Get initialized service for project templates
      *
      * @return initialized service for project templates
+     *
+     * @deprecated The project templates are deprecated and stopped working on May 15, 2019.
+     * See https://support.gooddata.com/hc/en-us/articles/360016126334-April-4-2019
+     * Deprecated since version 3.0.1. Will be removed in one of future versions.
      */
+    @Deprecated
     @Bean("goodDataProjectTemplateService")
     public ProjectTemplateService getProjectTemplateService() {
         return services.getProjectTemplateService();
