@@ -259,7 +259,7 @@
             <dependency>
                 <groupId>com.gooddata</groupId>
                 <artifactId>gooddata-http-client</artifactId>
-                <version>1.0.0</version>
+                <version>1.0.0+java7</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
