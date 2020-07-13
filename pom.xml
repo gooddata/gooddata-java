@@ -332,7 +332,7 @@
             <dependency>
                 <groupId>com.github.lookfirst</groupId>
                 <artifactId>sardine</artifactId>
-                <version>5.9</version>
+                <version>5.10</version>
                 <optional>true</optional>
             </dependency>
             <dependency>
