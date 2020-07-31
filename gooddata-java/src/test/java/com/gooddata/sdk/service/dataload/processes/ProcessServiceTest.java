@@ -83,7 +83,7 @@ public class ProcessServiceTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this).close();
         processService = new ProcessService(restTemplate, accountService, dataStoreService, new GoodDataSettings());
         process = OBJECT_MAPPER.readValue(PROCESS_JSON, DataloadProcess.class);
         when(project.getId()).thenReturn(PROJECT_ID);

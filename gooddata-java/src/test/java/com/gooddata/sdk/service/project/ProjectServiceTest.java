@@ -60,7 +60,7 @@ public class ProjectServiceTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this).close();;
         service = new ProjectService(restTemplate, accountService, new GoodDataSettings());
         when(accountService.getCurrent()).thenReturn(account);
         when(account.getId()).thenReturn(ACCOUNT_ID);

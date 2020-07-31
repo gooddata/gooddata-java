@@ -35,7 +35,7 @@ public class ExportImportServiceTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this).close();
         service = new ExportImportService(restTemplate, new GoodDataSettings());
         when(project.getId()).thenReturn(PROJECT_ID);
     }
