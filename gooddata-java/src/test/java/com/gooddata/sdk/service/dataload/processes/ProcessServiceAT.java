@@ -29,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Collection;
+import java.util.function.Supplier;
 
 import static java.nio.file.Files.createTempDirectory;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -44,6 +45,8 @@ import static org.hamcrest.Matchers.nullValue;
  * Dataload processes acceptance tests.
  */
 public class ProcessServiceAT extends AbstractGoodDataAT {
+
+    private static final int MAX_RETRIES = 3;
 
     private DataloadProcess process;
     private DataloadProcess processAppstore;
@@ -113,9 +116,9 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
 
     @Test(groups = "process", dependsOnGroups = "project")
     public void createProcessFromGit() {
-        processAppstore = gd.getProcessService().createProcessFromAppstore(project,
-                new DataloadProcess("sdktest ruby appstore " + System.getenv("BUILD_NUMBER"), ProcessType.RUBY.toString(),
-                "${PUBLIC_APPSTORE}:branch/demo:/test/HelloApp")).get();
+        DataloadProcess newProcess = new DataloadProcess("sdktest ruby appstore " + System.getenv("BUILD_NUMBER"), ProcessType.RUBY.toString(),
+                "${PUBLIC_APPSTORE}:branch/demo:/test/HelloApp");
+        processAppstore = retry(() -> gd.getProcessService().createProcessFromAppstore(project, newProcess).get());
 
         assertThat(processAppstore.getExecutables(), contains("hello.rb"));
     }
@@ -123,7 +126,7 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
     @Test(groups = "process", dependsOnMethods = "createProcessFromGit")
     public void updateProcessFromGit() {
         processAppstore.setPath("${PUBLIC_APPSTORE}:branch/demo:/test/AhojApp");
-        processAppstore = gd.getProcessService().updateProcessFromAppstore(processAppstore).get();
+        processAppstore = retry(() -> gd.getProcessService().updateProcessFromAppstore(processAppstore).get());
 
         assertThat(processAppstore.getExecutables(), contains("ahoj.rb"));
     }
@@ -174,4 +177,29 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         assertThat(schedules.getAllItems(), Matchers.not(IsIterableContaining.hasItems(ScheduleIdMatcher.hasSameScheduleIdAs(schedule), ScheduleIdMatcher.hasSameScheduleIdAs(triggeredSchedule))));
     }
 
+    /**
+     * Invokes a task and retries it up to 3 times
+     */
+    private DataloadProcess retry(Supplier<DataloadProcess> function) {
+        int retryCount = 0;
+        DataloadProcess result = null;
+        boolean success = false;
+        while (!success && retryCount < MAX_RETRIES) {
+            try {
+                result = function.get();
+                success = true;
+            } catch (Exception ex) {
+                if (++retryCount >= MAX_RETRIES) {
+                    throw ex;
+                }
+                try {
+                    // Sleep 5 seconds before retry
+                    Thread.sleep(5000);
+                } catch (InterruptedException inEx) {
+                    throw new RuntimeException(inEx);
+                }
+            }
+        }
+        return result;
+    }
 }
