@@ -117,6 +117,39 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         final Integration integration = new Integration("/projectTemplates/template");
         connectors.updateIntegration(project, ConnectorType.ZENDESK4, integration);
     }
+    
+    @Test
+    public void shouldDeleteIntegration() {
+        onRequest()
+                .havingMethodEqualTo("DELETE")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
+           .respond()
+                .withStatus(204);
+        
+        connectors.deleteIntegration(project, ConnectorType.ZENDESK4);
+    }
+    
+    @Test(expectedExceptions = IntegrationNotFoundException.class)
+    public void shouldFailDeleteIntegrationNotFound() {
+        onRequest()
+                .havingMethodEqualTo("DELETE")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
+          .respond()
+                .withStatus(404);
+
+        connectors.deleteIntegration(project, ConnectorType.ZENDESK4);
+    }
+
+    @Test(expectedExceptions = GoodDataRestException.class)
+    public void shouldFailDeleteIntegrationInternalServerError() {
+        onRequest()
+                .havingMethodEqualTo("DELETE")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
+                .respond()
+                .withStatus(500);
+
+        connectors.deleteIntegration(project, ConnectorType.ZENDESK4);
+    }
 
     @Test
     public void shouldExecuteProcess() throws Exception {

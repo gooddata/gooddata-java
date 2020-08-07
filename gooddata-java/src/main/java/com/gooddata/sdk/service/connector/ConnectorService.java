@@ -143,6 +143,32 @@ public class ConnectorService extends AbstractService {
     }
 
     /**
+     * Delete connector integration.
+     *
+     * @param project       project
+     * @param connectorType connector type
+     * @throws IntegrationNotFoundException if integration doesn't exist
+     * @throws ConnectorException           if integration can't be deleted
+     */
+    public void deleteIntegration(final Project project, final ConnectorType connectorType) {
+        notNull(project, "project");
+        notNull(project.getId(), "project.id");
+        notNull(connectorType, "connector");
+        
+        try {
+            restTemplate.delete(Integration.URL, project.getId(), connectorType.getName());
+        } catch (GoodDataRestException e) {
+            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+                throw new IntegrationNotFoundException(project, connectorType, e);
+            } else {
+                throw e;
+            }
+        } catch (RestClientException e) {
+            throw new ConnectorException("Unable to delete " + connectorType + " integration", e);
+        }
+    }
+
+    /**
      * Get settings for zendesk4 connector.
      * @param project project
      * @return settings for zendesk4 connector
