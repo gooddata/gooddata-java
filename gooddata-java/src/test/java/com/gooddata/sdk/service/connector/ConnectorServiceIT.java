@@ -37,7 +37,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldCreateIntegration() throws Exception {
+    public void shouldCreateIntegration() {
         onRequest()
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/templates")
             .respond()
@@ -61,7 +61,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldGetIntegration() throws Exception {
+    public void shouldGetIntegration() {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
@@ -73,7 +73,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     }
 
     @Test(expectedExceptions = IntegrationNotFoundException.class)
-    public void shouldFailGetIntegrationNotFound() throws Exception {
+    public void shouldFailGetIntegrationNotFound() {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
@@ -84,7 +84,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     }
 
     @Test(expectedExceptions = GoodDataRestException.class)
-    public void shouldFailGetIntegrationInternalServerError() throws Exception {
+    public void shouldFailGetIntegrationInternalServerError() {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
@@ -95,7 +95,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldUpdateIntegration() throws Exception {
+    public void shouldUpdateIntegration() {
         onRequest()
                 .havingMethodEqualTo("PUT")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
@@ -202,7 +202,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldGetProcessStatus() throws Exception {
+    public void shouldGetProcessStatus() {
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID")
             .respond()
@@ -215,7 +215,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     }
 
     @Test(expectedExceptions = ConnectorException.class, expectedExceptionsMessageRegExp = ".*zendesk4 process PROCESS_ID failed.*")
-    public void shouldFailGetProcessStatusPolling() throws Exception {
+    public void shouldFailGetProcessStatusPolling() {
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID")
             .respond()
@@ -225,7 +225,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     }
 
     @Test(expectedExceptions = GoodDataException.class)
-    public void shouldFailGetProcessStatus() throws Exception {
+    public void shouldFailGetProcessStatus() {
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID")
             .respond()
@@ -236,7 +236,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldGetZendesk4Settings() throws Exception {
+    public void shouldGetZendesk4Settings() {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/settings")
@@ -248,7 +248,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     }
 
     @Test(expectedExceptions = ConnectorException.class)
-    public void shouldGetSettingsNotFound() throws Exception {
+    public void shouldGetSettingsNotFound() {
         onRequest()
                 .havingMethodEqualTo("GET")
             .respond()
@@ -258,7 +258,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     }
 
     @Test(expectedExceptions = ConnectorException.class)
-    public void shouldUpdateSettingsNotFound() throws Exception {
+    public void shouldUpdateSettingsNotFound() {
         onRequest()
                 .havingMethodEqualTo("GET")
              .respond()
