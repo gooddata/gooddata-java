@@ -12,6 +12,7 @@ import com.gooddata.sdk.model.executeafm.afm.filter.ComparisonCondition
 import com.gooddata.sdk.model.executeafm.afm.filter.MeasureValueFilter
 import com.gooddata.sdk.model.executeafm.afm.filter.NegativeAttributeFilter
 import com.gooddata.sdk.model.executeafm.afm.filter.PositiveAttributeFilter
+import com.gooddata.sdk.model.executeafm.afm.filter.RankingFilter
 import com.gooddata.sdk.model.executeafm.afm.filter.RelativeDateFilter
 import org.apache.commons.lang3.SerializationUtils
 import spock.lang.Shared
@@ -53,12 +54,13 @@ class VisualizationObjectTest extends Specification {
         complexVisualization?.buckets?.size() == 2
         complexVisualization?.buckets?.find { it.localIdentifier == 'bucket1' }?.items?.every { it.class == VisualizationAttribute }
         complexVisualization?.buckets?.find { it.localIdentifier == 'bucket2' }?.items?.every { it.class == Measure }
-        complexVisualization?.filters?.size() == 6
+        complexVisualization?.filters?.size() == 7
         complexVisualization?.filters?.find { it.class == PositiveAttributeFilter }
         complexVisualization?.filters?.find { it.class == NegativeAttributeFilter }
         complexVisualization?.filters?.find { it.class == AbsoluteDateFilter }
         complexVisualization?.filters?.find { it.class == RelativeDateFilter }
         complexVisualization?.filters?.find { it.class == MeasureValueFilter }
+        complexVisualization?.filters?.find { it.class == RankingFilter }
         complexVisualization?.properties == '{"key":"value"}'
         complexVisualization?.referenceItems?.size() == 2
     }
@@ -107,7 +109,8 @@ class VisualizationObjectTest extends Specification {
                         LocalDate.of(2017, 8, 7)),
                 new RelativeDateFilter(new UriObjQualifier("/uri/to/dataSet/2"), "month", null, null),
                 new MeasureValueFilter(new LocalIdentifierQualifier("measure0"), new ComparisonCondition(GREATER_THAN, 200.1)),
-                new MeasureValueFilter(new LocalIdentifierQualifier("measure1"), null)
+                new MeasureValueFilter(new LocalIdentifierQualifier("measure1"), null),
+                new RankingFilter([new LocalIdentifierQualifier("measure0")], null, "TOP", 3)
         ]
         vizObject.properties = '{"key":"value"}'
         vizObject.referenceItems = references

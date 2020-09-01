@@ -141,6 +141,16 @@
               "localIdentifier": "measure1"
             }
           }
+        }, {
+          "rankingFilter": {
+            "measures": [
+              {
+                "localIdentifier": "measure0"
+              }
+            ],
+            "operator": "TOP",
+            "value": 3
+          }
         }
       ],
       "properties": "{\"key\":\"value\"}",

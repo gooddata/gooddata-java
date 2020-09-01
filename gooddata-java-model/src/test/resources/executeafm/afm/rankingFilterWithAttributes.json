@@ -1,0 +1,22 @@
+{
+  "rankingFilter": {
+    "measures": [
+      {
+        "localIdentifier": "m1"
+      },
+      {
+        "identifier": "id2"
+      }
+    ],
+    "attributes": [
+      {
+        "localIdentifier": "a1"
+      },
+      {
+        "uri": "/mockProject/obj/2"
+      }
+    ],
+    "operator": "BOTTOM",
+    "value": 5
+  }
+}

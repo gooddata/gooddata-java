@@ -18,6 +18,7 @@ class ExtendedFilterTest extends Specification {
     private static final String ABSOLUTE_DATE_FILTER_NO_ZERO_PAD_DATE_JSON = '/executeafm/afm/absoluteDateFilter_noZeroPadDate.json'
     private static final String RELATIVE_DATE_FILTER_JSON = '/executeafm/afm/relativeDateFilter.json'
     private static final String MEASURE_VALUE_FILTER_JSON = '/executeafm/afm/measureValueFilter.json'
+    private static final String RANKING_FILTER_JSON = '/executeafm/afm/rankingFilter.json'
 
     @Unroll
     def "should deserialize as #type"() {
@@ -35,6 +36,7 @@ class ExtendedFilterTest extends Specification {
         AbsoluteDateFilter      | ABSOLUTE_DATE_FILTER_NO_ZERO_PAD_DATE_JSON
         RelativeDateFilter      | RELATIVE_DATE_FILTER_JSON
         MeasureValueFilter      | MEASURE_VALUE_FILTER_JSON
+        RankingFilter           | RANKING_FILTER_JSON
 
         type = typeClass.simpleName
     }
