@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
         @JsonSubTypes.Type(value = FilterItem.class),
         @JsonSubTypes.Type(value = MeasureValueFilter.class, name = MeasureValueFilter.NAME),
+        @JsonSubTypes.Type(value = RankingFilter.class, name = RankingFilter.NAME),
 })
 public interface ExtendedFilter {
 }

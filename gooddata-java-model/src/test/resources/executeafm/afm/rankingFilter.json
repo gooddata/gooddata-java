@@ -1,0 +1,11 @@
+{
+  "rankingFilter": {
+    "measures": [
+      {
+        "localIdentifier": "m1"
+      }
+    ],
+    "operator": "TOP",
+    "value": 10
+  }
+}

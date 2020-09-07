@@ -20,6 +20,7 @@ import com.gooddata.sdk.model.executeafm.afm.filter.MeasureValueFilter;
 import com.gooddata.sdk.model.executeafm.afm.filter.NegativeAttributeFilter;
 import com.gooddata.sdk.model.executeafm.afm.filter.PositiveAttributeFilter;
 import com.gooddata.sdk.model.executeafm.afm.SimpleMeasureDefinition;
+import com.gooddata.sdk.model.executeafm.afm.filter.RankingFilter;
 import com.gooddata.sdk.model.executeafm.resultspec.Dimension;
 import com.gooddata.sdk.model.executeafm.resultspec.ResultSpec;
 import com.gooddata.sdk.model.executeafm.resultspec.SortItem;
@@ -310,7 +311,7 @@ public abstract class VisualizationConverter {
                         return ((MeasureValueFilter) f).getCondition() != null;
                     } else if (f instanceof NegativeAttributeFilter) {
                         return !((NegativeAttributeFilter) f).isAllSelected();
-                    } else return f instanceof PositiveAttributeFilter;
+                    } else return f instanceof PositiveAttributeFilter || f instanceof RankingFilter;
 
                 })
                 .collect(Collectors.toList());

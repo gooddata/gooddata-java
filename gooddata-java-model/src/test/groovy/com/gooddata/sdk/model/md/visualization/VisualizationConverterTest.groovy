@@ -17,6 +17,7 @@ import com.gooddata.sdk.model.executeafm.afm.MeasureItem
 import com.gooddata.sdk.model.executeafm.afm.filter.MeasureValueFilter
 import com.gooddata.sdk.model.executeafm.afm.filter.NegativeAttributeFilter
 import com.gooddata.sdk.model.executeafm.afm.filter.PositiveAttributeFilter
+import com.gooddata.sdk.model.executeafm.afm.filter.RankingFilter
 import com.gooddata.sdk.model.executeafm.afm.filter.RelativeDateFilter
 import com.gooddata.sdk.model.executeafm.afm.filter.UriAttributeFilterElements
 import com.gooddata.sdk.model.executeafm.resultspec.AttributeSortItem
@@ -56,7 +57,8 @@ class VisualizationConverterTest extends Specification {
                 [
                         new PositiveAttributeFilter(new UriObjQualifier("/uri/to/displayForm/3"), new UriAttributeFilterElements(["ab", "cd"])),
                         new AbsoluteDateFilter(new UriObjQualifier("/uri/to/dataSet/1"), LocalDate.of(2000, 8, 30), LocalDate.of(2017, 8, 07)),
-                        new MeasureValueFilter(new LocalIdentifierQualifier("measure0"), new ComparisonCondition(ComparisonConditionOperator.GREATER_THAN, 200.1))
+                        new MeasureValueFilter(new LocalIdentifierQualifier("measure0"), new ComparisonCondition(ComparisonConditionOperator.GREATER_THAN, 200.1)),
+                        new RankingFilter([new LocalIdentifierQualifier("measure0")], null, "TOP", 3)
                 ],
                 [
                         new MeasureItem(new VOSimpleMeasureDefinition(new UriObjQualifier("/uri/to/measure/0"), null, null, []),
