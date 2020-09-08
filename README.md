@@ -10,6 +10,13 @@ The *GoodData Java SDK* encapsulates the REST API of the **GoodData Platform**.
 The first version was implemented during the [All Data Hackathon](http://hackathon.gooddata.com) April 10 - 11 2014.
 It is free and open-source software provided "as-is" under the [BSD License](LICENSE.txt) as an official project by [GoodData Corporation](http://www.gooddata.com).
 
+## Modules
+
+The *GoodData Java SDK* contains following modules:
+* [gooddata-java](./gooddata-java) - The GoodData API client (depends on `gooddata-java-model`).
+* [gooddata-java-model](./gooddata-java-model) - Lightweight library containing only GoodData API structures.
+* [gooddata-java-parent](./pom.xml) - Parent for *GoodData Java SDK* libraries (just a wrapper around `gooddata-java` and `gooddata-java-model`).
+
 ## Usage
 
 The *GoodData Java SDK* is available in Maven Central Repository, to use it from Maven add to `pom.xml`:
