@@ -1,6 +1,7 @@
 # GoodData Java SDK
 [![Build Status](https://travis-ci.org/gooddata/gooddata-java.png?branch=master)](https://travis-ci.org/gooddata/gooddata-java)
 [![Javadocs](http://javadoc.io/badge/com.gooddata/gooddata-java.svg)](http://javadoc.io/doc/com.gooddata/gooddata-java)
+[![Javadocs Model](https://javadoc.io/badge/com.gooddata/gooddata-java-model/javadoc.svg?label=javadoc-model)](https://javadoc.io/doc/com.gooddata/gooddata-java-model)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gooddata/gooddata-java/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gooddata/gooddata-java)
 [![Release](https://img.shields.io/github/release/gooddata/gooddata-java.svg)](https://github.com/gooddata/gooddata-java/releases)
 [![Stability: Active](https://masterminds.github.io/stability/active.svg)](https://masterminds.github.io/stability/active.html)
@@ -9,6 +10,12 @@
 The *GoodData Java SDK* encapsulates the REST API of the **GoodData Platform**.
 The first version was implemented during the [All Data Hackathon](http://hackathon.gooddata.com) April 10 - 11 2014.
 It is free and open-source software provided "as-is" under the [BSD License](LICENSE.txt) as an official project by [GoodData Corporation](http://www.gooddata.com).
+
+## Modules
+
+The *GoodData Java SDK* contains following modules:
+* [gooddata-java-model](./gooddata-java-model) - Lightweight library containing only GoodData API structures.
+* [gooddata-java](./gooddata-java) - The main GoodData API client.
 
 ## Usage
 
