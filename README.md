@@ -11,6 +11,20 @@ The *GoodData Java SDK* encapsulates the REST API of the **GoodData Platform**.
 The first version was implemented during the [All Data Hackathon](http://hackathon.gooddata.com) April 10 - 11 2014.
 It is free and open-source software provided "as-is" under the [BSD License](LICENSE.txt) as an official project by [GoodData Corporation](http://www.gooddata.com).
 
+## Supported versions
+ 
+In order to make the user experience with integrating GoodData Java SDK as smooth and secure as possible and to ensure that the SDK is using the latest features of the platform, we only provide support to the most recent major version of Java SDK. 
+ 
+The most recent major will be supported in the following mode:
+ 
+- The latest major version will receive new functionality and bug fixes. These changes will be applied on top of last released version.
+- GoodData customer support will provide support for the latest major version only.
+
+- The customers are encouraged to always use the latest version of the Java SDK.
+- In case of using older versions, the user might face API incompatibility, performance or security issues.
+ 
+Please follow the [upgrade instructions](https://github.com/gooddata/gooddata-java/wiki/Upgrading) to update to the newest version.
+
 ## Modules
 
 The *GoodData Java SDK* contains following modules:
