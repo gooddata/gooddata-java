@@ -1,9 +1,9 @@
 /*
- * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2020, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
-package com.gooddata.sdk.service.md;
+package com.gooddata.sdk.service.md.maintenance;
 
 import static com.gooddata.sdk.model.md.Restriction.identifier;
 import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
