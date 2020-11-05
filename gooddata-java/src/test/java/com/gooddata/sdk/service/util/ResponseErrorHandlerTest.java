@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2020, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -41,13 +41,13 @@ public class ResponseErrorHandlerTest {
 
         final GoodDataRestException exc = assertException(response);
 
-        assertThat(exc.getMessage(), is("500: [request_id=REQ] MSG"));
+        assertThat(exc.getMessage(), is("500: [request_id=REQ] MSG: PARAM1, PARAM2"));
         assertThat(exc.getStatusCode(), is(500));
         assertThat(exc.getRequestId(), is("REQ"));
         assertThat(exc.getComponent(), is("COMPONENT"));
         assertThat(exc.getErrorClass(), is("CLASS"));
         assertThat(exc.getErrorCode(), is("CODE"));
-        assertThat(exc.getText(), is("MSG"));
+        assertThat(exc.getText(), is("MSG: PARAM1, PARAM2"));
     }
 
     @Test

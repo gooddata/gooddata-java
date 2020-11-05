@@ -2,7 +2,7 @@
     "error" : {
         "errorClass" : "CLASS",
         "trace" : "TRACE",
-        "message" : "MSG",
+        "message" : "MSG: %s, %s",
         "component" : "COMPONENT",
         "errorId" : "ID",
         "errorCode" : "CODE",

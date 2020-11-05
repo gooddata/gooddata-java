@@ -1,0 +1,9 @@
+{
+  "exportProject": {
+    "exportUsers": "0",
+    "exportData": "0",
+    "excludeSchedules": "1",
+    "crossDataCenterExport": "1",
+    "authorizedUsers": "test"
+  }
+}
