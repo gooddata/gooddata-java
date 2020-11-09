@@ -4,7 +4,6 @@
     "localIdentifier": "a1",
     "uri": "/gdc/md/project_id/obj/123",
     "identifier": "attr.dataset.name",
-    "type": "GDC.time.day_us",
     "formOf": {
       "name": "Some attr",
       "uri": "/gdc/md/project_id/obj/567",
