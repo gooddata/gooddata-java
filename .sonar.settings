@@ -1,0 +1,2 @@
+# Settings for sonar scan
+gdc.java_version=openjdk-11
