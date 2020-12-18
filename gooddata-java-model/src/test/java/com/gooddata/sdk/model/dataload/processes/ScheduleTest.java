@@ -5,7 +5,6 @@
  */
 package com.gooddata.sdk.model.dataload.processes;
 
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
@@ -29,6 +28,7 @@ import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 import static org.testng.Assert.fail;
 
 public class ScheduleTest {
@@ -43,12 +43,12 @@ public class ScheduleTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this).close();
 
         when(process.getExecutables()).thenReturn(Collections.singleton(EXECUTABLE));
         when(process.getId()).thenReturn("process_id");
         when(triggerSchedule.getId()).thenReturn("schedule_id");
-        doThrow(new IllegalArgumentException("wrong executable")).when(process).validateExecutable(Matchers.argThat(not(is(EXECUTABLE))));
+        doThrow(new IllegalArgumentException("wrong executable")).when(process).validateExecutable(argThat(not(is(EXECUTABLE))));
     }
 
     @Test

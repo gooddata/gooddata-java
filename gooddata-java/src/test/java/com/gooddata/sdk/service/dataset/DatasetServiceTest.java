@@ -54,7 +54,7 @@ public class DatasetServiceTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this).close();
         service = new DatasetService(restTemplate, dataStoreService, new GoodDataSettings());
         when(project.getId()).thenReturn(PROJECT_ID);
     }

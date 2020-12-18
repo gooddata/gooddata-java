@@ -41,7 +41,7 @@ public class NotificationServiceTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this).close();
         notificationService = new NotificationService(new RestTemplate(), new GoodDataSettings());
         when(project.getId()).thenReturn(PROJECT_ID);
         when(account.getId()).thenReturn(USER_ID);
