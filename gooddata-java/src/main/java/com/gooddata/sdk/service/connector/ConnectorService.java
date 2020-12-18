@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
+import static com.gooddata.sdk.common.util.Validate.isTrue;
 import static com.gooddata.sdk.common.util.Validate.notNull;
 import static com.gooddata.sdk.common.util.Validate.notNullState;
 import static java.lang.String.format;
@@ -258,6 +259,45 @@ public class ConnectorService extends AbstractService {
         notNull(process, "process");
         notNull(process.getUri(), "process.getUri");
         return createProcessPollResult(process.getUri());
+    }
+
+    /**
+     * Get Zendesk reload.
+     *
+     * You should use the result of {@link #scheduleZendesk4Reload} to see changes in {@link Reload#getStatus()} and
+     * {@link Reload#getProcessId()} or retrieve process URI {@link Reload#getProcessUri()}.
+     *
+     * @param reload existing reload.
+     * @return same reload with refreshed properties (status, processId, process URI)
+     */
+    public Reload getZendesk4Reload(final Reload reload) {
+        notNull(reload, "reload");
+        isTrue(reload.getUri().isPresent(), "reload.uri");
+        return getZendesk4ReloadByUri(reload.getUri().get());
+    }
+
+    /**
+     * Get Zendesk reload.
+     * @param reloadUri existing reload URI
+     * @return reload
+     */
+    public Reload getZendesk4ReloadByUri(final String reloadUri) {
+        notNull(reloadUri, "reloadUri");
+        try {
+            return restTemplate.getForObject(reloadUri, Reload.class);
+        } catch (GoodDataRestException | RestClientException e) {
+            throw new ConnectorException("Unable to get reload", e);
+        }
+    }
+
+    /**
+     * Scheduler new reload.
+     * @param project project to reload
+     * @param reload reload parameters
+     * @return created reload
+     */
+    public Reload scheduleZendesk4Reload(final Project project, final Reload reload) {
+        return restTemplate.postForObject(Reload.URL, reload, Reload.class, project.getId());
     }
 
     protected FutureResult<ProcessStatus> createProcessPollResult(final String uri) {

@@ -14,6 +14,9 @@ import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.gooddata.sdk.model.connector.Status.Code.ERROR;
 import static com.gooddata.sdk.model.connector.Status.Code.SYNCHRONIZED;
 import static com.gooddata.sdk.common.util.ResourceUtils.*;
@@ -145,7 +148,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
-                .respond()
+            .respond()
                 .withStatus(500);
 
         connectors.deleteIntegration(project, ConnectorType.ZENDESK4);
@@ -266,5 +269,75 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
 
         connectors.updateSettings(project, new Zendesk4Settings("http://zendesk"));
     }
+
+    @Test
+    public void shouldScheduleZendesk4Reload() {
+        final Reload reload = mockAndScheduleReload(201);
+        assertReload(reload);
+    }
+
+    @Test(expectedExceptions = GoodDataRestException.class)
+    public void shouldScheduleZendesk4ReloadServerError() {
+        mockAndScheduleReload(500);
+    }
+
+    private Reload mockAndScheduleReload(final int httpStatus) {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/reloads")
+                .havingBody(jsonEquals(readStringFromResource("/connector/reload-in.json")))
+                .respond()
+                .withBody(readFromResource("/connector/reload.json"))
+                .withStatus(httpStatus);
+
+        final Map<String, Long> startTimes = new HashMap<>();
+        startTimes.put(Reload.AGENT_TIMELINE_START_TIME_PROPERTY, 0L);
+        startTimes.put(Reload.CHATS_START_TIME_PROPERTY, 123L);
+
+        return connectors.scheduleZendesk4Reload(project, new Reload(startTimes));
+    }
+
+    @Test
+    public void shouldGetZendesk4Reload() {
+        final Reload reload = mockAndGetReload(200);
+
+        assertReload(reload);
+    }
+
+    @Test(expectedExceptions = ConnectorException.class)
+    public void shouldGetZendesk4ReloadNotFound() {
+        mockAndGetReload(404);
+    }
+
+    private Reload mockAndGetReload(final int httpStatus) {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/reloads/21")
+            .respond()
+                .withBody(readFromResource("/connector/reload.json"))
+                .withStatus(httpStatus);
+
+        final Map<String, String> links = new HashMap<>();
+        links.put("self", "/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/reloads/21");
+
+        return connectors.getZendesk4Reload(new Reload(21, null, Reload.STATUS_DO, null, links));
+    }
+
+    private void assertReload(final Reload reload) {
+        assertThat(reload, notNullValue());
+        assertThat(reload.getId(), is(21));
+        assertThat(reload.getStartTimes(), notNullValue());
+        assertThat(reload.getStartTimes().size(), is(2));
+        assertThat(reload.getAgentTimelineStartTime(), is(0L));
+        assertThat(reload.getChatsStartTime(), is(123L));
+        assertThat(reload.getStatus(), is(Reload.STATUS_RUNNING));
+        assertThat(reload.getProcessId(), is("PROCESS_ID"));
+        assertThat(reload.getLinks(), notNullValue());
+        assertThat(reload.getLinks().size(), is(3));
+        assertThat(reload.getLinks().get("self"), is("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/reloads/21"));
+        assertThat(reload.getLinks().get("integration"), is("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration"));
+        assertThat(reload.getLinks().get("process"), is("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID"));
+    }
+
 
 }
