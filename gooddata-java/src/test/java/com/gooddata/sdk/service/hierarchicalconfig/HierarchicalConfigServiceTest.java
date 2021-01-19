@@ -45,7 +45,7 @@ public class HierarchicalConfigServiceTest {
         when(project.getId()).thenReturn(PROJECT_ID);
     }
 
-    /*--- Project Settings ---*/
+    /*--- Project Config ---*/
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void whenNullArgThenListProjectConfigItemsShouldThrow() {
@@ -89,7 +89,7 @@ public class HierarchicalConfigServiceTest {
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullSettingThenSetProjectConfigItemShouldThrow() {
+    public void whenNullConfigItemThenSetProjectConfigItemShouldThrow() {
         hierarchicalConfigService.setProjectConfigItem(project,null);
     }
 

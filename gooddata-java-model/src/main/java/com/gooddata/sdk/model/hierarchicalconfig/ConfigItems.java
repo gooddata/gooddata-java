@@ -48,8 +48,8 @@ public class ConfigItems implements Iterable<ConfigItem> {
     /**
      * Returns value if config item exists, otherwise returns null.
      *
-     * @param configName the name of setting
-     * @return value if setting with given name exists, null otherwise
+     * @param configName the name/key of the config item
+     * @return value if config item with given name/key exists, null otherwise
      */
     public String getValue(final String configName) {
         notEmpty(configName, "configName");
@@ -62,10 +62,10 @@ public class ConfigItems implements Iterable<ConfigItem> {
     }
 
     /**
-     * Returns true if the config item with given name exists and is enabled, false otherwise.
+     * Returns true if the config item with given name/key exists and is enabled, false otherwise.
      *
-     * @param configName the name of config item
-     * @return true if the config item with given name exists and is enabled, false otherwise
+     * @param configName the name/key of config item
+     * @return true if the config item with given name/key exists and is enabled, false otherwise
      */
     public boolean isEnabled(final String configName) {
         notEmpty(configName, "configName");

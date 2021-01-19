@@ -8,8 +8,8 @@ package com.gooddata.sdk.model.hierarchicalconfig;
 import com.fasterxml.jackson.annotation.*;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
-
-import static com.gooddata.sdk.common.util.Validate.*;
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 import static com.gooddata.sdk.model.hierarchicalconfig.SourceType.*;
 
 /**
@@ -35,9 +35,9 @@ public class ConfigItem {
     private final Links links;
 
     /**
-     * Creates new config item with given key and value.
+     * Creates new config item with given key/name and value.
      *
-     * @param key unique name of config item
+     * @param key unique key/name of config item
      * @param value value of config item
      */
     public ConfigItem(String key, String value) {
@@ -53,13 +53,21 @@ public class ConfigItem {
         this.links = links;
     }
 
+    /**
+     * Get unique key/name of config item. The same as {@link #getName()}.
+     */
     @JsonProperty("key")
     public String getKey() {
         return key;
     }
 
+    /**
+     * Get unique key/name of config item. The same as {@link #getKey()}.
+     */
     @JsonIgnore
-    public String getName() { return key; }
+    public String getName() {
+        return key;
+    }
 
     @JsonProperty("value")
     public String getValue() {

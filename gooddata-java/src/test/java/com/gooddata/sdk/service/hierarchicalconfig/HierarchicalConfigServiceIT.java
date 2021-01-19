@@ -59,7 +59,7 @@ public class HierarchicalConfigServiceIT extends AbstractGoodDataIT {
 
     @Test
     public void setProjectConfigItemShouldCreateAndReturnSameConfigItem() {
-        final String settingItemUriString = PROJECT_CONFIG_ITEM_TEMPLATE.expand(project.getId(), CONFIG_ITEM_NAME).toString();
+        final String configItemUriString = PROJECT_CONFIG_ITEM_TEMPLATE.expand(project.getId(), CONFIG_ITEM_NAME).toString();
 
         onRequest()
                 .havingMethodEqualTo("PUT")
@@ -68,7 +68,7 @@ public class HierarchicalConfigServiceIT extends AbstractGoodDataIT {
                 .withStatus(204);
         onRequest()
                 .havingMethodEqualTo("GET")
-                .havingPathEqualTo(settingItemUriString)
+                .havingPathEqualTo(configItemUriString)
                 .respond()
                 .withBody(readStringFromResource("/hierarchicalconfig/configItem.json"))
                 .withStatus(200);

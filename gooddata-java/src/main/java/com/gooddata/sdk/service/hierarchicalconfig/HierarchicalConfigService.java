@@ -32,7 +32,7 @@ public class HierarchicalConfigService extends AbstractService {
     }
 
     /**
-     * Returns aggregated config items for given project.
+     * Returns all config items for given project (including inherited ones from its hierarchy).
      *
      * @param project project, cannot be null
      * @return config item for given project
@@ -52,7 +52,7 @@ public class HierarchicalConfigService extends AbstractService {
     }
 
     /**
-     * Returns config item for given project.
+     * Returns config item for given project (even if it's inherited from its hierarchy).
      *
      * @param project project, cannot be null
      * @param configName unique name (key) of config item, cannot be empty
@@ -71,11 +71,11 @@ public class HierarchicalConfigService extends AbstractService {
     }
 
     /**
-     * Creates or update config item for given project.
+     * Creates or updates config item for given project.
      *
      * @param project project for which the config item should be created/updated, cannot be null
      * @param configItem config item to be created/updated, cannot be null
-     * @return created/updated project setting
+     * @return created/updated project config item
      */
     public ConfigItem setProjectConfigItem(final Project project, final ConfigItem configItem) {
         notNull(project, "project");
