@@ -15,6 +15,7 @@ import static com.gooddata.sdk.common.util.Validate.notNullState;
  * Project feature flag is a boolean flag used for enabling / disabling some specific feature of GoodData platform
  * on per project basis.
  */
+@Deprecated
 @JsonTypeName("featureFlag")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
