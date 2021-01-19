@@ -31,10 +31,10 @@ public class HierarchicalConfigServiceAT extends AbstractGoodDataAT {
         final ConfigItem secondConfigItem = gd.getHierarchicalConfigService()
                 .setProjectConfigItem(project, new ConfigItem(SECOND_CONFIG_ITEM, "false"));
 
-        checkSettingItem(configItem, FIRST_CONFIG_ITEM, "true",
+        checkConfigItem(configItem, FIRST_CONFIG_ITEM, "true",
                 PROJECT_CONFIG_ITEM_TEMPLATE.expand(project.getId(), FIRST_CONFIG_ITEM).toString()
         );
-        checkSettingItem(secondConfigItem, SECOND_CONFIG_ITEM, "false",
+        checkConfigItem(secondConfigItem, SECOND_CONFIG_ITEM, "false",
                 PROJECT_CONFIG_ITEM_TEMPLATE.expand(project.getId(), SECOND_CONFIG_ITEM).toString()
         );
     }
@@ -52,7 +52,7 @@ public class HierarchicalConfigServiceAT extends AbstractGoodDataAT {
     public void getProjectConfigItem() {
         final ConfigItem configItem =
                 gd.getHierarchicalConfigService().getProjectConfigItem(project, SECOND_CONFIG_ITEM);
-        checkSettingItem(configItem, SECOND_CONFIG_ITEM, "false",
+        checkConfigItem(configItem, SECOND_CONFIG_ITEM, "false",
                 PROJECT_CONFIG_ITEM_TEMPLATE.expand(project.getId(), SECOND_CONFIG_ITEM).toString()
         );
     }
@@ -62,17 +62,17 @@ public class HierarchicalConfigServiceAT extends AbstractGoodDataAT {
         final ConfigItem configItem = gd.getHierarchicalConfigService().getProjectConfigItem(project,
                 FIRST_CONFIG_ITEM);
 
-        // update setting value
+        // update config item value to disable it
         configItem.setValue("false");
         final ConfigItem disabledConfigItem = gd.getHierarchicalConfigService().setProjectConfigItem(project, configItem);
-        checkSettingItem(disabledConfigItem, FIRST_CONFIG_ITEM, "false",
+        checkConfigItem(disabledConfigItem, FIRST_CONFIG_ITEM, "false",
                 PROJECT_CONFIG_ITEM_TEMPLATE.expand(project.getId(), FIRST_CONFIG_ITEM).toString()
         );
 
         // enable again
         configItem.setValue("true");
         final ConfigItem enabledConfigItem = gd.getHierarchicalConfigService().setProjectConfigItem(project, configItem);
-        checkSettingItem(enabledConfigItem, FIRST_CONFIG_ITEM, "true",
+        checkConfigItem(enabledConfigItem, FIRST_CONFIG_ITEM, "true",
                 PROJECT_CONFIG_ITEM_TEMPLATE.expand(project.getId(), FIRST_CONFIG_ITEM).toString()
         );
     }
@@ -86,18 +86,18 @@ public class HierarchicalConfigServiceAT extends AbstractGoodDataAT {
             gd.getHierarchicalConfigService().getProjectConfigItem(project, FIRST_CONFIG_ITEM);
             fail();
         } catch (GoodDataException e) {
-            assertThat(e.getMessage(), containsString("Unable to get project setting: " + FIRST_CONFIG_ITEM));
+            assertThat(e.getMessage(), containsString("Unable to get project config item: " + FIRST_CONFIG_ITEM));
         }
     }
 
-    private void checkSettingItem(final ConfigItem setting, final String expectedKey,
-                                  final String expectedValue, final String uri) {
-        assertThat(setting, is(notNullValue()));
-        assertThat(setting.getKey(), is(expectedKey));
-        assertThat(setting.getValue(), is(expectedValue));
-        assertThat(setting.getSourceType(), is(SourceType.PROJECT));
-        assertThat(setting.getSource(), is("project"));
-        assertThat(setting.getUri(), is(uri));
+    private void checkConfigItem(final ConfigItem item, final String expectedKey,
+                                 final String expectedValue, final String uri) {
+        assertThat(item, is(notNullValue()));
+        assertThat(item.getKey(), is(expectedKey));
+        assertThat(item.getValue(), is(expectedValue));
+        assertThat(item.getSourceType(), is(SourceType.PROJECT));
+        assertThat(item.getSource(), is("project"));
+        assertThat(item.getUri(), is(uri));
     }
 
 }
