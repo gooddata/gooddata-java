@@ -13,6 +13,7 @@ import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
  * Feature flag is a boolean flag used for enabling / disabling some specific feature of GoodData platform.
  * It can be used in various scopes (per project, per project group, per user, global etc.).
  */
+@Deprecated
 public class FeatureFlag {
 
     private final String name;

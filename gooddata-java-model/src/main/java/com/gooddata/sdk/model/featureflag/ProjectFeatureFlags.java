@@ -15,6 +15,7 @@ import java.util.List;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 
+@Deprecated
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("featureFlags")
 @JsonIgnoreProperties(ignoreUnknown = true)

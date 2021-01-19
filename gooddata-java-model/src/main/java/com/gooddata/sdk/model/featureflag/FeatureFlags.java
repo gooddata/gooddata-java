@@ -14,6 +14,7 @@ import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNull;
 import static java.util.stream.Collectors.toMap;
 
+@Deprecated
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("featureFlags")
 @JsonIgnoreProperties(ignoreUnknown = true)

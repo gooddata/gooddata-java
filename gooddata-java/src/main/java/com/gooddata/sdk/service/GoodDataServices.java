@@ -7,6 +7,7 @@ package com.gooddata.sdk.service;
 
 import com.gooddata.sdk.service.account.AccountService;
 import com.gooddata.sdk.service.auditevent.AuditEventService;
+import com.gooddata.sdk.service.hierarchicalconfig.HierarchicalConfigService;
 import com.gooddata.sdk.service.connector.ConnectorService;
 import com.gooddata.sdk.service.dataload.OutputStageService;
 import com.gooddata.sdk.service.dataload.processes.ProcessService;
@@ -59,6 +60,7 @@ class GoodDataServices {
     private final AuditEventService auditEventService;
     private final ExecuteAfmService executeAfmService;
     private final LcmService lcmService;
+    private final HierarchicalConfigService hierarchicalConfigService;
 
     @SuppressWarnings("deprecation")
     GoodDataServices(final GoodDataRestProvider goodDataRestProvider) {
@@ -80,6 +82,7 @@ class GoodDataServices {
         auditEventService = new AuditEventService(getRestTemplate(), accountService, getSettings());
         executeAfmService = new ExecuteAfmService(getRestTemplate(), getSettings());
         lcmService = new LcmService(getRestTemplate(), getSettings());
+        hierarchicalConfigService = new HierarchicalConfigService(getRestTemplate(), getSettings());
 
         final Optional<DataStoreService> dataStoreService = goodDataRestProvider.getDataStoreService(() -> gdcService.getRootLinks().getUserStagingUri());
         if (dataStoreService.isPresent()) {
@@ -176,5 +179,9 @@ class GoodDataServices {
 
     LcmService getLcmService() {
         return lcmService;
+    }
+
+    HierarchicalConfigService getHierarchicalConfigService() {
+        return hierarchicalConfigService;
     }
 }

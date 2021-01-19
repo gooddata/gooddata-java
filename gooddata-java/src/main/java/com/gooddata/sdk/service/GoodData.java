@@ -7,6 +7,7 @@ package com.gooddata.sdk.service;
 
 import com.gooddata.sdk.service.account.AccountService;
 import com.gooddata.sdk.service.auditevent.AuditEventService;
+import com.gooddata.sdk.service.hierarchicalconfig.HierarchicalConfigService;
 import com.gooddata.sdk.service.connector.ConnectorService;
 import com.gooddata.sdk.service.dataload.OutputStageService;
 import com.gooddata.sdk.service.dataload.processes.ProcessService;
@@ -298,7 +299,9 @@ public class GoodData {
      * Get initialized service for feature flag management.
      *
      * @return initialized service for feature flag management
+     * @deprecated Use {@link HierarchicalConfigService} instead.
      */
+    @Deprecated
     @Bean("goodDataFeatureFlagService")
     public FeatureFlagService getFeatureFlagService() {
         return services.getFeatureFlagService();
@@ -354,5 +357,14 @@ public class GoodData {
     @Bean("goodDataLcmService")
     public LcmService getLcmService() {
         return services.getLcmService();
+    }
+
+    /**
+     * Get initialized service for hierarchical config management
+     * @return hierarchical config service
+     */
+    @Bean("goodDataHierarchicalConfigService")
+    public HierarchicalConfigService getHierarchicalConfigService() {
+        return services.getHierarchicalConfigService();
     }
 }
