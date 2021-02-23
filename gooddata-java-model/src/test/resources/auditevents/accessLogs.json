@@ -1,0 +1,38 @@
+{
+  "accessLogs": {
+    "items": [
+      {
+        "accessLog": {
+          "id": "123",
+          "host": "visa.gooddata.com",
+          "path": "/gdc/ping",
+          "method": "GET",
+          "code": "200",
+          "size": "2231",
+          "userIp": "127.0.0.1",
+          "occurred": "1993-03-09T00:00:00.000Z",
+          "recorded": "1993-03-09T00:00:00.000Z"
+        }
+      },
+      {
+        "accessLog": {
+          "id": "456",
+          "host": "mastercard.gooddata.com",
+          "path": "/gdc/ping",
+          "method": "GET",
+          "code": "200",
+          "size": "2231",
+          "userIp": "127.0.0.1",
+          "occurred": "1993-03-09T00:00:00.000Z",
+          "recorded": "1993-03-09T00:00:00.000Z"
+        }
+      }
+    ],
+    "paging": {
+      "next": "/gdc/domains/default/accessLogs?offset=456"
+    },
+    "links": {
+      "self": "/gdc/domains/default/accessLogs"
+    }
+  }
+}
