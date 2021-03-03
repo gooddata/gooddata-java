@@ -1,55 +1,24 @@
 /*
- * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2021, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.auditevent;
 
-import com.gooddata.sdk.common.collections.CustomPageRequest;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
-import com.gooddata.sdk.common.util.ISOZonedDateTime;
 import com.gooddata.sdk.common.util.MutableUri;
 import org.springframework.beans.BeanUtils;
 
-import java.time.ZonedDateTime;
-
-import static java.time.ZoneOffset.UTC;
 import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Class to encapsulate time filtering and paging parameters
  */
-public final class AuditEventPageRequest extends CustomPageRequest {
-
-    private ZonedDateTime from;
-
-    private ZonedDateTime to;
+public final class AuditEventPageRequest extends TimeFilterPageRequest {
 
     private String type;
 
     public AuditEventPageRequest() {
-    }
-
-    public ZonedDateTime getFrom() {
-        return from;
-    }
-
-    /**
-     * Specify lower bound of interval
-     */
-    public void setFrom(final ZonedDateTime from) {
-        this.from = from;
-    }
-
-    public ZonedDateTime getTo() {
-        return to;
-    }
-
-    /**
-     * Specify upper bound of interval
-     */
-    public void setTo(final ZonedDateTime to) {
-        this.to = to;
     }
 
     public String getType() {
@@ -95,12 +64,7 @@ public final class AuditEventPageRequest extends CustomPageRequest {
     @Override
     public MutableUri updateWithPageParams(final MutableUri builder) {
         MutableUri builderWithPaging = super.updateWithPageParams(builder);
-        if (from != null) {
-            builderWithPaging.replaceQueryParam("from", ISOZonedDateTime.FORMATTER.format(from.withZoneSameInstant(UTC)));
-        }
-        if (to != null) {
-            builderWithPaging.replaceQueryParam("to", ISOZonedDateTime.FORMATTER.format(to.withZoneSameInstant(UTC)));
-        }
+
         if (type != null) {
             builderWithPaging.replaceQueryParam("type", type);
         }
