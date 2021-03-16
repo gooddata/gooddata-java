@@ -19,13 +19,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * Is not standalone metadata object - must be part of {@link com.gooddata.sdk.model.md.dashboard.Kpi}.
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonTypeName(DateFilterReference.NAME)
+@JsonTypeName(DateFilterReference.JSON_ROOT_NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DateFilterReference implements FilterReference {
 
     private static final long serialVersionUID = 6016252592161989340L;
 
-    static final String NAME = "dateFilterReference";
+    static final String JSON_ROOT_NAME = "dateFilterReference";
 
     private final String datasetUri;
 

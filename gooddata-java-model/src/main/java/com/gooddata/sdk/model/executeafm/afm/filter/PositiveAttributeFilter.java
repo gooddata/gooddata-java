@@ -20,11 +20,11 @@ import static java.util.Arrays.asList;
 /**
  * Filter of attribute filtering by IN expression
  */
-@JsonRootName(PositiveAttributeFilter.NAME)
+@JsonRootName(PositiveAttributeFilter.JSON_ROOT_NAME)
 public class PositiveAttributeFilter extends AttributeFilter {
 
     private static final long serialVersionUID = 1934771670274345290L;
-    static final String NAME = "positiveAttributeFilter";
+    static final String JSON_ROOT_NAME = "positiveAttributeFilter";
 
     private final AttributeFilterElements in;
 

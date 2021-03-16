@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.model.executeafm.Qualifier;
 import com.gooddata.sdk.model.executeafm.UriObjQualifier;
-import com.gooddata.sdk.model.md.visualization.Measure;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
@@ -22,11 +21,16 @@ import static org.apache.commons.lang3.Validate.notNull;
 /**
  * Represents measure value filter applied on an insight.
  */
-@JsonRootName(MeasureValueFilter.NAME)
+@JsonRootName(MeasureValueFilter.JSON_ROOT_NAME)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MeasureValueFilter implements ExtendedFilter, CompatibilityFilter, Serializable {
 
-    public static final String NAME = "measureValueFilter";
+    public static final String JSON_ROOT_NAME = "measureValueFilter";
+    /**
+     * @deprecated use JSON_ROOT_NAME instead
+     */
+    @Deprecated
+    public static final String NAME = JSON_ROOT_NAME;
 
     private static final long serialVersionUID = -3038654904981929337L;
 

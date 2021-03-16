@@ -19,9 +19,9 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
 @SuppressWarnings("deprecation")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = PopMeasureDefinition.class, name = PopMeasureDefinition.NAME),
-        @JsonSubTypes.Type(value = OverPeriodMeasureDefinition.class, name = OverPeriodMeasureDefinition.NAME),
-        @JsonSubTypes.Type(value = PreviousPeriodMeasureDefinition.class, name = PreviousPeriodMeasureDefinition.NAME)
+        @JsonSubTypes.Type(value = PopMeasureDefinition.class, name = PopMeasureDefinition.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = OverPeriodMeasureDefinition.class, name = OverPeriodMeasureDefinition.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = PreviousPeriodMeasureDefinition.class, name = PreviousPeriodMeasureDefinition.JSON_ROOT_NAME)
 })
 public abstract class DerivedMeasureDefinition implements MeasureDefinition {
 

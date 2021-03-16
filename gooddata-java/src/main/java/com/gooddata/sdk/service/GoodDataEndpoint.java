@@ -14,8 +14,24 @@ import static com.gooddata.sdk.common.util.Validate.notEmpty;
  */
 public class GoodDataEndpoint {
 
+    public static final String DEFAULT_PROTOCOL = "https";
+    public static final int DEFAULT_PORT = 443;
+    public static final String DEFAULT_HOSTNAME = "secure.gooddata.com";
+
+    /**
+     * @deprecated use DEFAULT_PROTOCOL instead
+     */
+    @Deprecated
     public static final String PROTOCOL = "https";
+    /**
+     * @deprecated use DEFAULT_PORT instead
+     */
+    @Deprecated
     public static final int PORT = 443;
+    /**
+     * @deprecated use DEFAULT_HOSTNAME instead
+     */
+    @Deprecated
     public static final String HOSTNAME = "secure.gooddata.com";
 
     private final String hostname;
@@ -40,7 +56,7 @@ public class GoodDataEndpoint {
      * @param port      GoodData Platform's API port (e.g. 443)
      */
     public GoodDataEndpoint(String hostname, int port) {
-        this(hostname, port, PROTOCOL);
+        this(hostname, port, DEFAULT_PROTOCOL);
     }
 
     /**
@@ -48,14 +64,14 @@ public class GoodDataEndpoint {
      * @param hostname GoodData Platform's host name (e.g. secure.gooddata.com)
      */
     public GoodDataEndpoint(String hostname) {
-        this(hostname, PORT, PROTOCOL);
+        this(hostname, DEFAULT_PORT, DEFAULT_PROTOCOL);
     }
 
     /**
      * Create GoodData endpoint for given hostname using 443 port and HTTPS protocol and secure.gooddata.com hostname
      */
     public GoodDataEndpoint() {
-        this(HOSTNAME, PORT, PROTOCOL);
+        this(DEFAULT_HOSTNAME, DEFAULT_PORT, DEFAULT_PROTOCOL);
     }
 
     /**

@@ -41,9 +41,9 @@ public interface AttributeFilterElements {
         @Override
         public void serialize(AttributeFilterElements elements, JsonGenerator jg, SerializerProvider serializerProvider) throws IOException {
             if (elements instanceof UriAttributeFilterElements) {
-                serializeWrapped(UriAttributeFilterElements.NAME, elements, jg, serializerProvider);
+                serializeWrapped(UriAttributeFilterElements.JSON_ROOT_NAME, elements, jg, serializerProvider);
             } else if (elements instanceof ValueAttributeFilterElements) {
-                serializeWrapped(ValueAttributeFilterElements.NAME, elements, jg, serializerProvider);
+                serializeWrapped(ValueAttributeFilterElements.JSON_ROOT_NAME, elements, jg, serializerProvider);
             } else {
                 serializerProvider.defaultSerializeValue(elements.getElements(), jg);
             }
@@ -65,11 +65,11 @@ public interface AttributeFilterElements {
                 case ARRAY:
                     return new UriAttributeFilterElements(nodeToElements(node));
                 case OBJECT:
-                    final JsonNode uris = node.findValue(UriAttributeFilterElements.NAME);
+                    final JsonNode uris = node.findValue(UriAttributeFilterElements.JSON_ROOT_NAME);
                     if (uris != null) {
                         return new UriAttributeFilterElements(nodeToElements(uris));
                     }
-                    final JsonNode values = node.findValue(ValueAttributeFilterElements.NAME);
+                    final JsonNode values = node.findValue(ValueAttributeFilterElements.JSON_ROOT_NAME);
                     if (values != null) {
                         return new ValueAttributeFilterElements(nodeToElements(values));
                     }

@@ -16,8 +16,8 @@ import java.io.Serializable;
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = DateFilterReference.class, name = DateFilterReference.NAME),
-        @JsonSubTypes.Type(value = AttributeFilterReference.class, name = AttributeFilterReference.NAME)
+        @JsonSubTypes.Type(value = DateFilterReference.class, name = DateFilterReference.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = AttributeFilterReference.class, name = AttributeFilterReference.JSON_ROOT_NAME)
 })
 public interface FilterReference extends Serializable {
 }

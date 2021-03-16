@@ -16,19 +16,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.gooddata.sdk.model.executeafm.afm.PreviousPeriodMeasureDefinition.NAME;
+import static com.gooddata.sdk.model.executeafm.afm.PreviousPeriodMeasureDefinition.JSON_ROOT_NAME;
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Definition of the period over period measure that is used for the Previous period comparison.
  */
-@JsonRootName(NAME)
+@JsonRootName(JSON_ROOT_NAME)
 public class PreviousPeriodMeasureDefinition extends DerivedMeasureDefinition {
 
     private static final long serialVersionUID = -4741355657671354062L;
 
-    static final String NAME = "previousPeriodMeasure";
+    static final String JSON_ROOT_NAME = "previousPeriodMeasure";
 
     private final List<PreviousPeriodDateDataSet> dateDataSets;
 

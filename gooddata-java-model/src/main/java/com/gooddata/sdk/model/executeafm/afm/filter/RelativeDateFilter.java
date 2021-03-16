@@ -21,11 +21,11 @@ import static com.gooddata.sdk.common.util.Validate.notEmpty;
 /**
  * Represents {@link DateFilter} specifying relative range of given granularity.
  */
-@JsonRootName(RelativeDateFilter.NAME)
+@JsonRootName(RelativeDateFilter.JSON_ROOT_NAME)
 public class RelativeDateFilter extends DateFilter {
 
     private static final long serialVersionUID = 7257627800833737063L;
-    static final String NAME = "relativeDateFilter";
+    static final String JSON_ROOT_NAME = "relativeDateFilter";
 
     private final String granularity;
     private final Integer from;

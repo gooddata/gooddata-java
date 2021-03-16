@@ -15,9 +15,9 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
  * Represent header items available in {@link ExecutionResult}
  */
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = AttributeHeaderItem.class, name = AttributeHeaderItem.NAME),
-        @JsonSubTypes.Type(value = ResultMeasureHeaderItem.class, name = ResultMeasureHeaderItem.NAME),
-        @JsonSubTypes.Type(value = ResultTotalHeaderItem.class, name = ResultTotalHeaderItem.NAME)
+        @JsonSubTypes.Type(value = AttributeHeaderItem.class, name = AttributeHeaderItem.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = ResultMeasureHeaderItem.class, name = ResultMeasureHeaderItem.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = ResultTotalHeaderItem.class, name = ResultTotalHeaderItem.JSON_ROOT_NAME)
 })
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 public abstract class ResultHeaderItem {

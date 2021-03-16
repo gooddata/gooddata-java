@@ -15,10 +15,10 @@ import com.gooddata.sdk.model.md.Obj;
  * Covers all the filters which can be used within AFM
  */
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = PositiveAttributeFilter.class, name = PositiveAttributeFilter.NAME),
-        @JsonSubTypes.Type(value = NegativeAttributeFilter.class, name = NegativeAttributeFilter.NAME),
-        @JsonSubTypes.Type(value = AbsoluteDateFilter.class, name = AbsoluteDateFilter.NAME),
-        @JsonSubTypes.Type(value = RelativeDateFilter.class, name = RelativeDateFilter.NAME)
+        @JsonSubTypes.Type(value = PositiveAttributeFilter.class, name = PositiveAttributeFilter.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = NegativeAttributeFilter.class, name = NegativeAttributeFilter.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = AbsoluteDateFilter.class, name = AbsoluteDateFilter.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = RelativeDateFilter.class, name = RelativeDateFilter.JSON_ROOT_NAME)
 })
 public interface FilterItem extends CompatibilityFilter, ExtendedFilter {
 

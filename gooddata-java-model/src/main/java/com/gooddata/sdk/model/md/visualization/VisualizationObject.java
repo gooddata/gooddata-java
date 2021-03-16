@@ -43,12 +43,12 @@ import java.util.function.Function;
  * The visualization object is part of new GD UI visualizations situated in AD and KPI dashboards.
  * This object is a persistent form of AFM (Attribute, Measures, Filters) report executions.
  */
-@JsonTypeName(VisualizationObject.NAME)
+@JsonTypeName(VisualizationObject.JSON_ROOT_NAME)
 @JsonTypeInfo(include = WRAPPER_OBJECT, use = NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class VisualizationObject extends AbstractObj implements Queryable, Updatable {
-    static final String NAME = "visualizationObject";
+    static final String JSON_ROOT_NAME = "visualizationObject";
 
     @JsonProperty("content")
     private final Content content;

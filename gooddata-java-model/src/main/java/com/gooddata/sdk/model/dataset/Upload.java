@@ -27,7 +27,7 @@ public class Upload {
 
     public static final String URI = "/gdc/md/{projectId}/data/upload/{uploadId}";
 
-    private final String uri;
+    private final String uploadUri;
     private final String status;
     private final double progress;
     private final String message;
@@ -45,7 +45,7 @@ public class Upload {
             @JsonProperty("fileSize") Integer size,
             @JsonProperty("processedAt") @JsonDeserialize(using = GDZonedDateTimeDeserializer.class) ZonedDateTime processedAt) {
 
-        this.uri = uri;
+        this.uploadUri = uri;
         this.status = status;
         this.progress = progress != null ? progress : 0;
         this.message = message;
@@ -59,7 +59,7 @@ public class Upload {
      * @return uri link to self
      */
     public String getUri() {
-        return uri;
+        return uploadUri;
     }
 
     /**

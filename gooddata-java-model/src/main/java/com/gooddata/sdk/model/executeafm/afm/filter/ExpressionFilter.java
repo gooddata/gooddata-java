@@ -12,12 +12,15 @@ import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.Objects;
 
+import static com.gooddata.sdk.model.executeafm.afm.filter.ExpressionFilter.JSON_ROOT_NAME;
+
 /**
  * To be deprecated filter using plain expression
  */
-@JsonRootName("expression")
+@JsonRootName(JSON_ROOT_NAME)
 public final class ExpressionFilter implements CompatibilityFilter {
-    static final String NAME = "expression";
+
+    static final String JSON_ROOT_NAME = "expression";
     private final String value;
 
     /**

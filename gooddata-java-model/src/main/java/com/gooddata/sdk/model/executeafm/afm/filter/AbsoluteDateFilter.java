@@ -20,11 +20,11 @@ import java.util.Objects;
 /**
  * Represents {@link DateFilter} specifying exact from and to dates.
  */
-@JsonRootName(AbsoluteDateFilter.NAME)
+@JsonRootName(AbsoluteDateFilter.JSON_ROOT_NAME)
 public class AbsoluteDateFilter extends DateFilter {
 
     private static final long serialVersionUID = -1857726227400504182L;
-    static final String NAME = "absoluteDateFilter";
+    static final String JSON_ROOT_NAME = "absoluteDateFilter";
 
     @GDLocalDate
     private final LocalDate from;

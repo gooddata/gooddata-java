@@ -21,10 +21,10 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
 /**
  * Header of an attribute.
  */
-@JsonRootName(AttributeHeader.NAME)
+@JsonRootName(AttributeHeader.JSON_ROOT_NAME)
 public class AttributeHeader implements Header, LocallyIdentifiable {
 
-    static final String NAME = "attributeHeader";
+    static final String JSON_ROOT_NAME = "attributeHeader";
 
     private final String name;
     private final String localIdentifier;

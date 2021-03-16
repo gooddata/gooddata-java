@@ -21,11 +21,11 @@ import static java.util.Arrays.asList;
 /**
  * Filter of attribute filtering by NOT IN expression
  */
-@JsonRootName(NegativeAttributeFilter.NAME)
+@JsonRootName(NegativeAttributeFilter.JSON_ROOT_NAME)
 public class NegativeAttributeFilter extends AttributeFilter {
 
     private static final long serialVersionUID = -6202625318104289333L;
-    static final String NAME = "negativeAttributeFilter";
+    static final String JSON_ROOT_NAME = "negativeAttributeFilter";
 
     private final AttributeFilterElements notIn;
 

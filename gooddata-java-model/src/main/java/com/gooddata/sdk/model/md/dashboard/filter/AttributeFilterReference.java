@@ -19,13 +19,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * Is not standalone metadata object - must be part of {@link com.gooddata.sdk.model.md.dashboard.Kpi}.
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonTypeName(AttributeFilterReference.NAME)
+@JsonTypeName(AttributeFilterReference.JSON_ROOT_NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AttributeFilterReference implements FilterReference {
 
     private static final long serialVersionUID = -7882622280867466659L;
 
-    static final String NAME = "attributeFilterReference";
+    static final String JSON_ROOT_NAME = "attributeFilterReference";
 
     private final String displayFormUri;
 

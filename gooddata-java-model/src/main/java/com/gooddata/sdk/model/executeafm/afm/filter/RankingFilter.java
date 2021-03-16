@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
-import com.gooddata.sdk.common.util.Validate;
 import com.gooddata.sdk.model.executeafm.IdentifierObjQualifier;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.model.executeafm.Qualifier;
@@ -31,11 +30,16 @@ import static java.lang.String.format;
 /**
  * Represents a ranking filter applied on an insight.
  */
-@JsonRootName(RankingFilter.NAME)
+@JsonRootName(RankingFilter.JSON_ROOT_NAME)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RankingFilter implements ExtendedFilter, CompatibilityFilter, Serializable {
 
-    public static final String NAME = "rankingFilter";
+    public static final String JSON_ROOT_NAME = "rankingFilter";
+    /**
+     * @deprecated use JSON_ROOT_NAME instead
+     */
+    @Deprecated
+    public static final String NAME = JSON_ROOT_NAME;
 
     private static final long serialVersionUID = 2642298346540031612L;
 

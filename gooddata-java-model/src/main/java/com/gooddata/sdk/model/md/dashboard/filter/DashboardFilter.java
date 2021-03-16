@@ -16,8 +16,8 @@ import java.io.Serializable;
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = DashboardDateFilter.class, name = DashboardDateFilter.NAME),
-        @JsonSubTypes.Type(value = DashboardAttributeFilter.class, name = DashboardAttributeFilter.NAME)
+        @JsonSubTypes.Type(value = DashboardDateFilter.class, name = DashboardDateFilter.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = DashboardAttributeFilter.class, name = DashboardAttributeFilter.JSON_ROOT_NAME)
 })
 public interface DashboardFilter extends Serializable {
 }

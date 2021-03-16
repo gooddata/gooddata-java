@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static com.gooddata.sdk.model.executeafm.afm.SimpleMeasureDefinition.NAME;
+import static com.gooddata.sdk.model.executeafm.afm.SimpleMeasureDefinition.JSON_ROOT_NAME;
 import static com.gooddata.sdk.common.util.Validate.notNull;
 import static java.util.Arrays.asList;
 
@@ -27,11 +27,11 @@ import static java.util.Arrays.asList;
  * Definition of simple measure
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonRootName(NAME)
+@JsonRootName(JSON_ROOT_NAME)
 public class SimpleMeasureDefinition implements MeasureDefinition {
 
     private static final long serialVersionUID = -385490772711914776L;
-    static final String NAME = "measure";
+    static final String JSON_ROOT_NAME = "measure";
 
     private final ObjQualifier item;
     private String aggregation;

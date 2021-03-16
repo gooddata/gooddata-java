@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.model.executeafm.afm.PopMeasureDefinition;
 
-import static com.gooddata.sdk.model.md.visualization.VOPopMeasureDefinition.NAME;
+import static com.gooddata.sdk.model.md.visualization.VOPopMeasureDefinition.JSON_ROOT_NAME;
 
 /**
  * Period over Period measure definition to be used within {@link Measure}
@@ -22,11 +22,16 @@ import static com.gooddata.sdk.model.md.visualization.VOPopMeasureDefinition.NAM
  */
 @Deprecated
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonRootName(NAME)
+@JsonRootName(JSON_ROOT_NAME)
 public class VOPopMeasureDefinition extends PopMeasureDefinition {
 
     private static final long serialVersionUID = -2727004914980057124L;
-    public static final String NAME = "popMeasureDefinition";
+    public static final String JSON_ROOT_NAME = "popMeasureDefinition";
+    /**
+     * @deprecated use JSON_ROOT_NAME instead
+     */
+    @Deprecated
+    public static final String NAME = JSON_ROOT_NAME;
 
     /**
      * Creates instance of Period over Period measure definition to be used in {@link VisualizationObject}

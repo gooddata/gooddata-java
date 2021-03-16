@@ -20,13 +20,13 @@ import java.util.Collection;
 @SuppressWarnings("deprecation")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = SimpleMeasureDefinition.class, name = SimpleMeasureDefinition.NAME),
-        @JsonSubTypes.Type(value = PopMeasureDefinition.class, name = PopMeasureDefinition.NAME),
-        @JsonSubTypes.Type(value = VOSimpleMeasureDefinition.class, name = VOSimpleMeasureDefinition.NAME),
-        @JsonSubTypes.Type(value = VOPopMeasureDefinition.class, name = VOPopMeasureDefinition.NAME),
-        @JsonSubTypes.Type(value = OverPeriodMeasureDefinition.class, name = OverPeriodMeasureDefinition.NAME),
-        @JsonSubTypes.Type(value = PreviousPeriodMeasureDefinition.class, name = PreviousPeriodMeasureDefinition.NAME),
-        @JsonSubTypes.Type(value = ArithmeticMeasureDefinition.class, name = ArithmeticMeasureDefinition.NAME)
+        @JsonSubTypes.Type(value = SimpleMeasureDefinition.class, name = SimpleMeasureDefinition.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = PopMeasureDefinition.class, name = PopMeasureDefinition.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = VOSimpleMeasureDefinition.class, name = VOSimpleMeasureDefinition.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = VOPopMeasureDefinition.class, name = VOPopMeasureDefinition.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = OverPeriodMeasureDefinition.class, name = OverPeriodMeasureDefinition.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = PreviousPeriodMeasureDefinition.class, name = PreviousPeriodMeasureDefinition.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = ArithmeticMeasureDefinition.class, name = ArithmeticMeasureDefinition.JSON_ROOT_NAME)
 })
 public interface MeasureDefinition extends Serializable {
 

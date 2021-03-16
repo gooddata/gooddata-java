@@ -22,8 +22,8 @@ import java.util.Objects;
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = ComparisonCondition.class, name = ComparisonCondition.NAME),
-        @JsonSubTypes.Type(value = RangeCondition.class, name = RangeCondition.NAME)
+        @JsonSubTypes.Type(value = ComparisonCondition.class, name = ComparisonCondition.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = RangeCondition.class, name = RangeCondition.JSON_ROOT_NAME)
 })
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class MeasureValueFilterCondition implements Serializable {

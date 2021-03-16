@@ -20,7 +20,7 @@ import java.util.Objects;
 public class VisualizationAttribute extends AttributeItem implements BucketItem {
 
     private static final long serialVersionUID = -5144496152695494774L;
-    static final String NAME = "visualizationAttribute";
+    static final String JSON_ROOT_NAME = "visualizationAttribute";
 
     /**
      * Creates new instance of visualization attribute for use in {@link Bucket}

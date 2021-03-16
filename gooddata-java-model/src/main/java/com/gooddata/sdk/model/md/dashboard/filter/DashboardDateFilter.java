@@ -26,7 +26,7 @@ import java.time.format.DateTimeFormatter;
  * Is not standalone metadata object - always must be part of {@link DashboardFilterContext}.
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonTypeName(DashboardDateFilter.NAME)
+@JsonTypeName(DashboardDateFilter.JSON_ROOT_NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DashboardDateFilter implements DashboardFilter {
@@ -37,7 +37,7 @@ public class DashboardDateFilter implements DashboardFilter {
 
     private static final String ABSOLUTE_DATE_FILTER_GRANULARITY = "GDC.time.date";
 
-    static final String NAME = "dateFilter";
+    static final String JSON_ROOT_NAME = "dateFilter";
 
     private final String from;
     private final String to;

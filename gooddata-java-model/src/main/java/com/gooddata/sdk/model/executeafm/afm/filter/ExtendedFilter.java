@@ -11,8 +11,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = FilterItem.class),
-        @JsonSubTypes.Type(value = MeasureValueFilter.class, name = MeasureValueFilter.NAME),
-        @JsonSubTypes.Type(value = RankingFilter.class, name = RankingFilter.NAME),
+        @JsonSubTypes.Type(value = MeasureValueFilter.class, name = MeasureValueFilter.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = RankingFilter.class, name = RankingFilter.JSON_ROOT_NAME),
 })
 public interface ExtendedFilter {
 }

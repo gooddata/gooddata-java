@@ -15,8 +15,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = MeasureGroupHeader.class, name = MeasureGroupHeader.NAME),
-        @JsonSubTypes.Type(value = AttributeHeader.class, name = AttributeHeader.NAME)
+        @JsonSubTypes.Type(value = MeasureGroupHeader.class, name = MeasureGroupHeader.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = AttributeHeader.class, name = AttributeHeader.JSON_ROOT_NAME)
 })
 public interface Header {
 }

@@ -15,10 +15,10 @@ import java.util.List;
 /**
  * Header of a measure group.
  */
-@JsonRootName(MeasureGroupHeader.NAME)
+@JsonRootName(MeasureGroupHeader.JSON_ROOT_NAME)
 public class MeasureGroupHeader implements Header {
 
-    static final String NAME = "measureGroupHeader";
+    static final String JSON_ROOT_NAME = "measureGroupHeader";
 
     private final List<MeasureHeaderItem> items;
 

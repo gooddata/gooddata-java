@@ -20,7 +20,7 @@ import static java.util.Arrays.asList;
 public final class ValueAttributeFilterElements implements AttributeFilterElements, Serializable {
 
     private static final long serialVersionUID = 8162844914489089022L;
-    static final String NAME = "values";
+    static final String JSON_ROOT_NAME = "values";
 
     private final List<String> values;
 

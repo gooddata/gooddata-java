@@ -17,9 +17,9 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  */
 public class LcmEntityFilter {
 
-    private static final String DATA_PRODUCT = "dataProduct";
-    private static final String SEGMENT = "segment";
-    private static final String CLIENT = "client";
+    private static final String DATA_PRODUCT_PARAM_NAME = "dataProduct";
+    private static final String SEGMENT_PARAM_NAME = "segment";
+    private static final String CLIENT_PARAM_NAME = "client";
 
     private String dataProduct;
     private String segment;
@@ -86,13 +86,13 @@ public class LcmEntityFilter {
     public Map<String, List<String>> asQueryParams() {
         final Map<String, List<String>> params = new LinkedHashMap<>();
         if (dataProduct != null) {
-            params.put(DATA_PRODUCT, singletonList(dataProduct));
+            params.put(DATA_PRODUCT_PARAM_NAME, singletonList(dataProduct));
         }
         if (segment != null) {
-            params.put(SEGMENT, singletonList(segment));
+            params.put(SEGMENT_PARAM_NAME, singletonList(segment));
         }
         if (client != null) {
-            params.put(CLIENT, singletonList(client));
+            params.put(CLIENT_PARAM_NAME, singletonList(client));
         }
         return params;
     }

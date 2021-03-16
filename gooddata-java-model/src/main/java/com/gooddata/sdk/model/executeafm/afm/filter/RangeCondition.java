@@ -20,10 +20,10 @@ import static org.apache.commons.lang3.Validate.notNull;
 /**
  * Condition of {@link MeasureValueFilter} that compares measure values against two values.
  */
-@JsonRootName(RangeCondition.NAME)
+@JsonRootName(RangeCondition.JSON_ROOT_NAME)
 public class RangeCondition extends MeasureValueFilterCondition implements Serializable {
 
-    static final String NAME = "range";
+    static final String JSON_ROOT_NAME = "range";
 
     private static final long serialVersionUID = -1219122779136638864L;
 

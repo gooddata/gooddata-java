@@ -21,7 +21,7 @@ import java.util.Objects;
 public class Measure extends MeasureItem implements BucketItem {
 
     private static final long serialVersionUID = -6311373783004640731L;
-    static final String NAME = "measure";
+    static final String JSON_ROOT_NAME = "measure";
 
     private String title;
 

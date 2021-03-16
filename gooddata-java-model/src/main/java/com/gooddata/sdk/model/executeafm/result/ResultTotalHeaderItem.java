@@ -10,17 +10,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.model.md.report.Total;
 
-import static com.gooddata.sdk.model.executeafm.result.ResultTotalHeaderItem.NAME;
+import static com.gooddata.sdk.model.executeafm.result.ResultTotalHeaderItem.JSON_ROOT_NAME;
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Header item for total.
  */
-@JsonRootName(NAME)
+@JsonRootName(JSON_ROOT_NAME)
 public class ResultTotalHeaderItem extends ResultHeaderItem {
 
-    static final String NAME = "totalHeaderItem";
+    static final String JSON_ROOT_NAME = "totalHeaderItem";
 
     private final String type;
 

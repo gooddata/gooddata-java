@@ -18,12 +18,12 @@ import java.util.List;
 /**
  * Arithmetic measure definition representing aggregation of existing measures, for example sum of measures, difference,...
  */
-@JsonRootName(PreviousPeriodMeasureDefinition.NAME)
+@JsonRootName(PreviousPeriodMeasureDefinition.JSON_ROOT_NAME)
 public class ArithmeticMeasureDefinition implements MeasureDefinition {
 
     private static final long serialVersionUID = -2597112924341600780L;
 
-    static final String NAME = "arithmeticMeasure";
+    static final String JSON_ROOT_NAME = "arithmeticMeasure";
 
     private final List<String> measureIdentifiers;
     private final String operator;

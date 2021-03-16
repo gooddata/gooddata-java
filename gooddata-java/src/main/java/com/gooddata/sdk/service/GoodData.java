@@ -56,7 +56,7 @@ public class GoodData {
      * @param password GoodData user's password
      */
     public GoodData(String login, String password) {
-        this(HOSTNAME, login, password, new GoodDataSettings());
+        this(DEFAULT_HOSTNAME, login, password, new GoodDataSettings());
     }
 
     /**
@@ -67,7 +67,7 @@ public class GoodData {
      * @param settings additional settings
      */
     public GoodData(String login, String password, GoodDataSettings settings) {
-        this(HOSTNAME, login, password, settings);
+        this(DEFAULT_HOSTNAME, login, password, settings);
     }
 
     /**
@@ -79,7 +79,7 @@ public class GoodData {
      * @param password GoodData user's password
      */
     public GoodData(String hostname, String login, String password) {
-        this(hostname, login, password, PORT, PROTOCOL, new GoodDataSettings());
+        this(hostname, login, password, DEFAULT_PORT, DEFAULT_PROTOCOL, new GoodDataSettings());
     }
 
     /**
@@ -92,7 +92,7 @@ public class GoodData {
      * @param settings additional settings
      */
     public GoodData(String hostname, String login, String password, GoodDataSettings settings) {
-        this(hostname, login, password, PORT, PROTOCOL, settings);
+        this(hostname, login, password, DEFAULT_PORT, DEFAULT_PROTOCOL, settings);
     }
 
     /**
@@ -105,7 +105,7 @@ public class GoodData {
      * @param port     GoodData Platform's API port (e.g. 443)
      */
     public GoodData(String hostname, String login, String password, int port) {
-        this(hostname, login, password, port, PROTOCOL, new GoodDataSettings());
+        this(hostname, login, password, port, DEFAULT_PROTOCOL, new GoodDataSettings());
     }
 
     /**
@@ -119,7 +119,7 @@ public class GoodData {
      * @param settings additional settings
      */
     public GoodData(String hostname, String login, String password, int port, GoodDataSettings settings) {
-        this(hostname, login, password, port, PROTOCOL, settings);
+        this(hostname, login, password, port, DEFAULT_PROTOCOL, settings);
     }
 
     /**

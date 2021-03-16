@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = ExpressionFilter.class, name = ExpressionFilter.NAME),
+        @JsonSubTypes.Type(value = ExpressionFilter.class, name = ExpressionFilter.JSON_ROOT_NAME),
         @JsonSubTypes.Type(value = ExtendedFilter.class),
 })
 public interface CompatibilityFilter {

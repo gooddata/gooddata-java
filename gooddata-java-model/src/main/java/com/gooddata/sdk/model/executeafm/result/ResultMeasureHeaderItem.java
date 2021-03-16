@@ -9,15 +9,15 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-import static com.gooddata.sdk.model.executeafm.result.ResultMeasureHeaderItem.NAME;
+import static com.gooddata.sdk.model.executeafm.result.ResultMeasureHeaderItem.JSON_ROOT_NAME;
 
 /**
  * Header item for measure
  */
-@JsonRootName(NAME)
+@JsonRootName(JSON_ROOT_NAME)
 public class ResultMeasureHeaderItem extends ResultHeaderItem {
 
-    static final String NAME = "measureHeaderItem";
+    static final String JSON_ROOT_NAME = "measureHeaderItem";
 
     private final int order;
 

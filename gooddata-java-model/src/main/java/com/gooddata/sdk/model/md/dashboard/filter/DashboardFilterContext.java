@@ -29,13 +29,13 @@ import java.util.List;
  * Currently can contain {@link DashboardDateFilter}s and {@link DashboardAttributeFilter}s.
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonTypeName(DashboardFilterContext.NAME)
+@JsonTypeName(DashboardFilterContext.JSON_ROOT_NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DashboardFilterContext extends AbstractObj implements Updatable, Queryable {
 
     private static final long serialVersionUID = -4572881756272497057L;
 
-    static final String NAME = "filterContext";
+    static final String JSON_ROOT_NAME = "filterContext";
 
     private final Content content;
 
@@ -45,7 +45,7 @@ public class DashboardFilterContext extends AbstractObj implements Updatable, Qu
      * @param filters list of dashboard filters (can be empty)
      */
     public DashboardFilterContext(final List<DashboardFilter> filters) {
-        this(new Meta(NAME), new Content(notNull(filters, "filters")));
+        this(new Meta(JSON_ROOT_NAME), new Content(notNull(filters, "filters")));
     }
 
     @JsonCreator

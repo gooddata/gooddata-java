@@ -26,14 +26,14 @@ import static org.apache.commons.lang3.Validate.notNull;
 /**
  * Class for holding information about visualization, including uri to its implementation, icons, order index and checksum
  */
-@JsonTypeName(VisualizationClass.NAME)
+@JsonTypeName(VisualizationClass.JSON_ROOT_NAME)
 @JsonTypeInfo(include = WRAPPER_OBJECT, use = NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class VisualizationClass extends AbstractObj implements Queryable, Updatable {
 
     private static final long serialVersionUID = -72785788784079208L;
-    static final String NAME = "visualizationClass";
+    static final String JSON_ROOT_NAME = "visualizationClass";
 
     private Content content;
 

@@ -15,8 +15,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = Measure.class, name = Measure.NAME),
-        @JsonSubTypes.Type(value = VisualizationAttribute.class, name = VisualizationAttribute.NAME)
+        @JsonSubTypes.Type(value = Measure.class, name = Measure.JSON_ROOT_NAME),
+        @JsonSubTypes.Type(value = VisualizationAttribute.class, name = VisualizationAttribute.JSON_ROOT_NAME)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)

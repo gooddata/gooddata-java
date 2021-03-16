@@ -17,7 +17,7 @@ import com.gooddata.sdk.model.executeafm.afm.SimpleMeasureDefinition;
 
 import java.util.List;
 
-import static com.gooddata.sdk.model.md.visualization.VOSimpleMeasureDefinition.NAME;
+import static com.gooddata.sdk.model.md.visualization.VOSimpleMeasureDefinition.JSON_ROOT_NAME;
 
 /**
  * Simple measure definition to be used within {@link Measure}
@@ -27,11 +27,16 @@ import static com.gooddata.sdk.model.md.visualization.VOSimpleMeasureDefinition.
  */
 @Deprecated
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonRootName(NAME)
+@JsonRootName(JSON_ROOT_NAME)
 public class VOSimpleMeasureDefinition extends SimpleMeasureDefinition {
 
     private static final long serialVersionUID = 8467311354259963694L;
-    public static final String NAME = "measureDefinition";
+    public static final String JSON_ROOT_NAME = "measureDefinition";
+    /**
+     * @deprecated use JSON_ROOT_NAME instead
+     */
+    @Deprecated
+    public static final String NAME = JSON_ROOT_NAME;
 
     /**
      * Creates instance of simple measure definition to be used in {@link VisualizationObject}

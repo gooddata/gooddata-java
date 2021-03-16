@@ -24,11 +24,11 @@ import java.util.List;
  * Is not standalone metadata object - always must be part of {@link DashboardFilterContext}.
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonTypeName(DashboardAttributeFilter.NAME)
+@JsonTypeName(DashboardAttributeFilter.JSON_ROOT_NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DashboardAttributeFilter implements DashboardFilter {
 
-    static final String NAME = "attributeFilter";
+    static final String JSON_ROOT_NAME = "attributeFilter";
 
     private final String displayForm;
     private final boolean negativeSelection;

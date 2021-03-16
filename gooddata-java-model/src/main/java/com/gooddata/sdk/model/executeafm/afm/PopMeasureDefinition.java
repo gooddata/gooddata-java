@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
-import static com.gooddata.sdk.model.executeafm.afm.PopMeasureDefinition.NAME;
+import static com.gooddata.sdk.model.executeafm.afm.PopMeasureDefinition.JSON_ROOT_NAME;
 
 /**
  * Definition of so called "period over period" measure.
@@ -25,13 +25,13 @@ import static com.gooddata.sdk.model.executeafm.afm.PopMeasureDefinition.NAME;
  * Let's remove it once it's removed from API.
  */
 @Deprecated
-@JsonRootName(NAME)
+@JsonRootName(JSON_ROOT_NAME)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PopMeasureDefinition extends DerivedMeasureDefinition {
 
     private static final long serialVersionUID = 1430640153994197345L;
 
-    static final String NAME = "popMeasure";
+    static final String JSON_ROOT_NAME = "popMeasure";
 
     private final ObjQualifier popAttribute;
 
