@@ -15,6 +15,8 @@ import org.springframework.beans.BeanUtils;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
+import static com.gooddata.sdk.common.util.Validate.*;
+
 /**
  * Class to encapsulate time filtering
  */
@@ -42,7 +44,7 @@ public class TimeFilterPageRequest extends CustomPageRequest {
     }
 
     public static TimeFilterPageRequest copy(TimeFilterPageRequest source) {
-        Validate.notNull(source, "source cannot be null");
+        notNull(source, "source");
         TimeFilterPageRequest copy = new TimeFilterPageRequest();
         BeanUtils.copyProperties(source, copy);
         return copy;

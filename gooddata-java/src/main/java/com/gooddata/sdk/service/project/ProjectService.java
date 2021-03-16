@@ -75,6 +75,8 @@ public class ProjectService extends AbstractService {
     public static final UriTemplate PROJECT_USERS_TEMPLATE = new UriTemplate(Users.URI);
     public static final UriTemplate PROJECT_USER_TEMPLATE = new UriTemplate(User.URI);
     public static final UriTemplate LIST_PROJECTS_TEMPLATE = new UriTemplate(Projects.LIST_PROJECTS_URI);
+    private static final String PROJECT_ARG_NAME = "project";
+    private static final String PROJECT_ID_ARG_NAME = "project.id";
     private final AccountService accountService;
 
     /**
@@ -153,7 +155,7 @@ public class ProjectService extends AbstractService {
      * @throws com.gooddata.sdk.common.GoodDataException when projects creation fails
      */
     public FutureResult<Project> createProject(final Project project) {
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
 
         final UriResponse uri;
         try {
@@ -228,7 +230,7 @@ public class ProjectService extends AbstractService {
      * @throws com.gooddata.sdk.common.GoodDataException when project can't be deleted
      */
     public void removeProject(final Project project) {
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         notNull(project.getUri(), "project.uri");
 
         try {
@@ -239,8 +241,8 @@ public class ProjectService extends AbstractService {
     }
 
     public Collection<ProjectTemplate> getProjectTemplates(final Project project) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
 
         try {
             final ProjectTemplates templates = restTemplate.getForObject(ProjectTemplate.URI, ProjectTemplates.class, project.getId());
@@ -257,8 +259,8 @@ public class ProjectService extends AbstractService {
      * @return available validations
      */
     public Set<ProjectValidationType> getAvailableProjectValidationTypes(final Project project) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
 
         try {
             final ProjectValidations projectValidations = restTemplate.getForObject(ProjectValidations.URI, ProjectValidations.class, project.getId());
@@ -297,8 +299,8 @@ public class ProjectService extends AbstractService {
      * @return results of validation
      */
     public FutureResult<ProjectValidationResults> validateProject(final Project project, Set<ProjectValidationType> validations) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
 
         final AsyncTask task;
         try {
@@ -348,7 +350,7 @@ public class ProjectService extends AbstractService {
      * @return {@link PageBrowser} list of found users or empty list
      */
     public PageBrowser<User> listUsers(final Project project) {
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         return new PageBrowser<>(page -> listUsers(getUsersUri(project, page)));
     }
 
@@ -360,7 +362,7 @@ public class ProjectService extends AbstractService {
      * @return {@link PageBrowser} list of found users or empty list
      */
     public PageBrowser<User> listUsers(final Project project, final PageRequest startPage) {
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         notNull(startPage, "startPage");
         return new PageBrowser<>(startPage, page -> listUsers(getUsersUri(project, page)));
     }
@@ -378,7 +380,7 @@ public class ProjectService extends AbstractService {
     }
 
     private static URI getUsersUri(final Project project) {
-        notNull(project.getId(), "project.id");
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         return PROJECT_USERS_TEMPLATE.expand(project.getId());
     }
 
@@ -400,8 +402,8 @@ public class ProjectService extends AbstractService {
      * @return set of found roles or empty set
      */
     public Set<Role> getRoles(final Project project) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
 
         final Roles roles = restTemplate.getForObject(Roles.URI, Roles.class, project.getId());
         if (roles == null) {
@@ -448,8 +450,8 @@ public class ProjectService extends AbstractService {
      * @return created invitation
      */
     public CreatedInvitations sendInvitations(final Project project, final Invitation... invitations) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         noNullElements(invitations, "invitations");
 
         try {
@@ -471,7 +473,7 @@ public class ProjectService extends AbstractService {
     public User getUser(final Project project, final Account account) {
         notNull(account, "account");
         notEmpty(account.getId(), "account.id");
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
 
         try {
             return restTemplate.getForObject(getUserUri(project, account), User.class);
@@ -495,12 +497,12 @@ public class ProjectService extends AbstractService {
      * @throws ProjectUsersUpdateException in case of failure
      */
     public User addUserToProject(final Project project, final Account account, final Role... userRoles) {
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         notNull(account, "account");
         notEmpty(account.getUri(), "account.uri");
         notNull(userRoles, "userRoles");
         validateRoleURIs(userRoles);
-        notEmpty(project.getId(), "project.id");
+        notEmpty(project.getId(), PROJECT_ID_ARG_NAME);
 
         final User user = new User(account, userRoles);
 
@@ -532,9 +534,9 @@ public class ProjectService extends AbstractService {
      * @throws ProjectUsersUpdateException in case of failure
      */
     public void updateUserInProject(final Project project, final User... users) {
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         notNull(users, "users");
-        notEmpty(project.getId(), "project.id");
+        notEmpty(project.getId(), PROJECT_ID_ARG_NAME);
 
         doPostProjectUsersUpdate(project, users);
     }

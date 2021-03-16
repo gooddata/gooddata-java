@@ -36,12 +36,14 @@ import static java.util.Arrays.asList;
  */
 public class ModelService extends AbstractService {
 
+    private static final String PROJECT_ARG_NAME = "project";
+
     public ModelService(final RestTemplate restTemplate, final GoodDataSettings settings) {
         super(restTemplate, settings);
     }
 
     private FutureResult<ModelDiff> getProjectModelDiff(Project project, DiffRequest diffRequest) {
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         notNull(project.getId(), "project.id");
         notNull(diffRequest, "diffRequest");
         try {
@@ -59,13 +61,13 @@ public class ModelService extends AbstractService {
     }
 
     public FutureResult<ModelDiff> getProjectModelDiff(Project project, String targetModel) {
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         notNull(targetModel, "targetModel");
         return getProjectModelDiff(project, new DiffRequest(targetModel));
     }
 
     public FutureResult<ModelDiff> getProjectModelDiff(Project project, Reader targetModel) {
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         notNull(targetModel, "targetModel");
         try {
             return getProjectModelDiff(project, FileCopyUtils.copyToString(targetModel));
@@ -123,7 +125,7 @@ public class ModelService extends AbstractService {
      * @see DatasetService#updateProjectData
      */
     public FutureResult<Void> updateProjectModel(final Project project, final Collection<String> maqlDdl) {
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         notNull(project.getId(), "project.id");
         noNullElements(maqlDdl, "maqlDdl");
         if (maqlDdl.isEmpty()) {

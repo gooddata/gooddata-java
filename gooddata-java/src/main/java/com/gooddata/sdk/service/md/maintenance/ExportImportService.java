@@ -27,6 +27,9 @@ import static java.lang.String.format;
  */
 public class ExportImportService extends AbstractService {
 
+    private static final String PROJECT_ARG_NAME = "project";
+    private static final String PROJECT_ID_ARG_NAME = "project.id";
+
     public ExportImportService(final RestTemplate restTemplate, final GoodDataSettings settings) {
         super(restTemplate, settings);
     }
@@ -40,8 +43,8 @@ public class ExportImportService extends AbstractService {
      * @throws ExportImportException when export resource call fails, polling on export status fails or export status is ERROR
      */
     public FutureResult<PartialMdExportToken> partialExport(Project project, final PartialMdExport export) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         notNull(export, "export");
 
         final PartialMdArtifact partialMdArtifact;
@@ -78,8 +81,8 @@ public class ExportImportService extends AbstractService {
      * @throws ExportImportException when import resource call fails, polling on import status fails or import status is ERROR
      */
     public FutureResult<Void> partialImport(Project project, PartialMdExportToken mdExportToken) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         notNull(mdExportToken, "mdExportToken");
 
         final UriResponse importResponse;
@@ -117,8 +120,8 @@ public class ExportImportService extends AbstractService {
      *                               ERROR
      */
     public FutureResult<ExportProjectToken> exportProject(final Project project, final ExportProject export) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         notNull(export, "export");
 
         final ExportProjectArtifact exportProjectArtifact;
@@ -169,8 +172,8 @@ public class ExportImportService extends AbstractService {
      * @throws ExportImportException when import resource call fails, polling on import status fails or import status is ERROR
      */
     public FutureResult<Void> importProject(final Project project, final ExportProjectToken exportToken) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         notNull(exportToken, "exportToken");
 
         final UriResponse importResponse;

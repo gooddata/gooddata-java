@@ -33,6 +33,9 @@ public class MetadataService extends AbstractService {
 
     public static final UriTemplate OBJ_TEMPLATE = new UriTemplate(Obj.OBJ_URI);
     private static final Set<String> IRREGULAR_PLURAL_WORD_SUFFIXES = new HashSet<>(asList("s", "ch", "sh", "x", "o"));
+    private static final String PROJECT_ARG_NAME = "project";
+    private static final String PROJECT_ID_ARG_NAME = "project.id";
+    private static final String RECEIVED_EMPTY_RESPONSE = "Received empty response from API call.";
 
     public MetadataService(final RestTemplate restTemplate, final GoodDataSettings settings) {
         super(restTemplate, settings);
@@ -53,8 +56,8 @@ public class MetadataService extends AbstractService {
      */
     @SuppressWarnings("unchecked")
     public <T extends Obj> T createObj(Project project, T obj) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         notNull(obj, "obj");
 
         final T response;
@@ -65,7 +68,7 @@ public class MetadataService extends AbstractService {
         }
 
         if (response == null) {
-            throw new ObjCreateException("Received empty response from API call.", obj);
+            throw new ObjCreateException(RECEIVED_EMPTY_RESPONSE, obj);
         }
         return response;
     }
@@ -90,7 +93,7 @@ public class MetadataService extends AbstractService {
             if (result != null) {
                 return result;
             } else {
-                throw new GoodDataException("Received empty response from API call.");
+                throw new GoodDataException(RECEIVED_EMPTY_RESPONSE);
             }
         } catch (GoodDataRestException e) {
             if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
@@ -111,8 +114,8 @@ public class MetadataService extends AbstractService {
      * @return collection of metadata objects corresponding to the supplied URIs
      */
     public Collection<Obj> getObjsByUris(Project project, Collection<String> uris) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         notNull(uris, "uris");
 
         try {
@@ -121,7 +124,7 @@ public class MetadataService extends AbstractService {
             if (result != null) {
                 return result.getItems();
             } else {
-                throw new GoodDataException("Received empty response from API call.");
+                throw new GoodDataException(RECEIVED_EMPTY_RESPONSE);
             }
         } catch (RestClientException e) {
             throw new GoodDataException("Unable to get objects. Some of the supplied URIs may be malformed.", e);
@@ -208,8 +211,8 @@ public class MetadataService extends AbstractService {
      * @throws com.gooddata.sdk.common.GoodDataException       if no response from API or client-side HTTP error
      */
     public <T extends Obj> T getObjById(Project project, String id, Class<T> cls) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         notNull(id, "id");
         notNull(cls, "cls");
         return getObjByUri(OBJ_TEMPLATE.expand(project.getId(), id).toString(), cls);
@@ -268,8 +271,8 @@ public class MetadataService extends AbstractService {
      * @throws com.gooddata.sdk.common.GoodDataException if unable to query metadata
      */
     public <T extends Queryable> Collection<Entry> find(Project project, Class<T> cls, Restriction... restrictions) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         notNull(cls, "cls");
 
         final String type = getQueryType(cls);
@@ -279,7 +282,7 @@ public class MetadataService extends AbstractService {
             if (queryResult != null && queryResult.getEntries() != null) {
                 return filterEntries(queryResult.getEntries(), restrictions);
             } else {
-                throw new GoodDataException("Received empty response from API call.");
+                throw new GoodDataException(RECEIVED_EMPTY_RESPONSE);
             }
         } catch (RestClientException e) {
             throw new GoodDataException("Unable to query metadata: " + type, e);
@@ -333,7 +336,7 @@ public class MetadataService extends AbstractService {
     @SuppressWarnings("unchecked")
     public Collection<Entry> usedBy(Project project, String uri, boolean nearest, Class<? extends Obj>... types) {
         notNull(uri, "uri");
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
 
         final Collection<Usage> usages = usedBy(project, asList(uri), nearest, types);
         return usages.size() > 0 ? usages.iterator().next().getUsedBy() : Collections.emptyList();
@@ -352,8 +355,8 @@ public class MetadataService extends AbstractService {
     @SuppressWarnings("unchecked")
     public Collection<Usage> usedBy(Project project, Collection<String> uris, boolean nearest, Class<? extends Obj>... types) {
         notNull(uris, "uris");
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
 
         final UseMany response;
         try {
@@ -376,7 +379,7 @@ public class MetadataService extends AbstractService {
      * @throws com.gooddata.sdk.common.GoodDataException if unable to query metadata
      */
     public Collection<String> findUris(Project project, Restriction... restrictions) {
-        notNull(project, "project" );
+        notNull(project, PROJECT_ARG_NAME);
         noNullElements(restrictions, "restrictions");
 
         final List<String> ids = new ArrayList<>(restrictions.length);
@@ -400,7 +403,7 @@ public class MetadataService extends AbstractService {
      * @see #findUris(Project, Restriction...)
      */
     public Map<String, String> identifiersToUris(Project project, Collection<String> identifiers) {
-        notNull(project, "project" );
+        notNull(project, PROJECT_ARG_NAME);
         noNullElements(identifiers, "identifiers");
 
         return getUrisForIdentifiers(project, identifiers).asIdentifierToUri();

@@ -47,6 +47,10 @@ public class DatasetService extends AbstractService {
     public static final UriTemplate UPLOADS_INFO_TEMPLATE = new UriTemplate(UploadsInfo.URI);
     private static final String MANIFEST_FILE_NAME = "upload_info.json";
     private static final String ETL_PULL_DEFAULT_ERROR_MESSAGE = "ETL Pull failed with status %s";
+    private static final String PROJECT_ARG_NAME = "project";
+    private static final String PROJECT_ID_ARG_NAME = "project.id";
+    private static final String DATASET_ID_ARG_NAME = "datasetId";
+    private static final String UNABLE_TO_GET = "Unable to get '%s'.";
 
     private final DataStoreService dataStoreService;
 
@@ -66,9 +70,9 @@ public class DatasetService extends AbstractService {
      * @throws DatasetException         in case the API call failure
      */
     public DatasetManifest getDatasetManifest(Project project, String datasetId) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
-        notEmpty(datasetId, "datasetId");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
+        notEmpty(datasetId, DATASET_ID_ARG_NAME);
         try {
             return restTemplate.getForObject(DatasetManifest.URI, DatasetManifest.class, project.getId(), datasetId);
         } catch (GoodDataRestException e) {
@@ -96,7 +100,7 @@ public class DatasetService extends AbstractService {
      */
     public FutureResult<Void> loadDataset(final Project project, final DatasetManifest manifest,
                                           final InputStream dataset) {
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         notNull(dataset, "dataset");
         notNull(manifest, "manifest");
         manifest.setSource(dataset);
@@ -114,8 +118,8 @@ public class DatasetService extends AbstractService {
      * @return {@link FutureResult} of the task
      */
     public FutureResult<Void> loadDataset(Project project, String datasetId, InputStream dataset) {
-        notNull(project, "project");
-        notEmpty(datasetId, "datasetId");
+        notNull(project, PROJECT_ARG_NAME);
+        notEmpty(datasetId, DATASET_ID_ARG_NAME);
         notNull(dataset, "dataset");
         return loadDataset(project, getDatasetManifest(project, datasetId), dataset);
     }
@@ -141,7 +145,7 @@ public class DatasetService extends AbstractService {
             throw new UnsupportedOperationException("WebDAV calls not supported. Please add com.github.lookfirst:sardine to dependencies.");
         }
 
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         validateUploadManifests(datasets);
         final List<String> datasetsNames = new ArrayList<>(datasets.size());
         try {
@@ -179,7 +183,7 @@ public class DatasetService extends AbstractService {
     }
 
     private FutureResult<Void> pullLoad(Project project, final String dirPath, final Collection<String> datasets) {
-        notNull(project.getId(), "project.id");
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         final PullTask pullTask = restTemplate
                 .postForObject(Pull.URI, new Pull(dirPath), PullTask.class, project.getId());
 
@@ -219,8 +223,8 @@ public class DatasetService extends AbstractService {
      * @return collection of dataset links or empty list
      */
     public Collection<Link> listDatasetLinks(final Project project) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         try {
             final DatasetLinks result = restTemplate.getForObject(DatasetLinks.URI, DatasetLinks.class, project.getId());
             if (result == null) {
@@ -242,8 +246,8 @@ public class DatasetService extends AbstractService {
      * @return {@link FutureResult} of the task
      */
     public FutureResult<Void> optimizeSliHash(final Project project) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
 
         final UriResponse uriResponse = restTemplate.postForObject(
                 EtlMode.URL, new EtlMode(EtlModeType.SLI, LookupMode.RECREATE), UriResponse.class, project.getId());
@@ -291,8 +295,8 @@ public class DatasetService extends AbstractService {
      * @see ModelService#updateProjectModel
      */
     public FutureResult<Void> updateProjectData(final Project project, final String maqlDml) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
 
         final UriResponse uriResponse = restTemplate.postForObject(
                 MaqlDml.URI, new MaqlDml(maqlDml), UriResponse.class, project.getId());
@@ -355,7 +359,7 @@ public class DatasetService extends AbstractService {
 
             return result.items();
         } catch (RestClientException e) {
-            throw new GoodDataException("Unable to get '" + dataSet.getUploadsUri() + "'.", e);
+            throw new GoodDataException(format(UNABLE_TO_GET, dataSet.getUploadsUri()), e);
         }
     }
 
@@ -377,7 +381,7 @@ public class DatasetService extends AbstractService {
         try {
             return restTemplate.getForObject(dataSet.getLastUploadUri(), Upload.class);
         } catch (RestClientException e) {
-            throw new GoodDataException("Unable to get '" + dataSet.getLastUploadUri() + "'.");
+            throw new GoodDataException(format(UNABLE_TO_GET, dataSet.getLastUploadUri()));
         }
     }
 
@@ -388,8 +392,8 @@ public class DatasetService extends AbstractService {
      * @return {@link UploadStatistics} object with project's upload statistics
      */
     public UploadStatistics getUploadStatistics(Project project) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
 
         try {
             return restTemplate.getForObject(UploadStatistics.URI, UploadStatistics.class, project.getId());
@@ -404,9 +408,9 @@ public class DatasetService extends AbstractService {
      * Package-private for testing purposes.
      */
     UploadsInfo.DataSet getDataSetInfo(Project project, String datasetId) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
-        notEmpty(datasetId, "datasetId");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
+        notEmpty(datasetId, DATASET_ID_ARG_NAME);
 
         final URI uploadsInfoUri = UPLOADS_INFO_TEMPLATE.expand(project.getId());
         try {
@@ -417,7 +421,7 @@ public class DatasetService extends AbstractService {
 
             return uploadsInfo.getDataSet(datasetId);
         } catch (RestClientException e) {
-            throw new GoodDataException("Unable to get '" + uploadsInfoUri.toString() + "'.", e);
+            throw new GoodDataException(format(UNABLE_TO_GET, uploadsInfoUri.toString()), e);
         }
     }
 }

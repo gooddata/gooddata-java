@@ -49,6 +49,11 @@ public class ExportService extends AbstractService {
 
     public static final UriTemplate OBJ_TEMPLATE = new UriTemplate(Obj.OBJ_URI);
     public static final UriTemplate PROJECT_TEMPLATE = new UriTemplate(Project.URI);
+    private static final String OUTPUT_ARG_NAME = "output";
+    private static final String FORMAT_ARG_NAME = "format";
+    private static final String UNABLE_TO_EXPORT_REPORT = "Unable to export report";
+    private static final String UNABLE_TO_EXPORT_DASHBOARD = "Unable to export dashboard: ";
+    private static final String UNABLE_TO_EXPORT = "Unable to export: ";
 
     /**
      * Service for data export
@@ -94,8 +99,8 @@ public class ExportService extends AbstractService {
     }
 
     private FutureResult<Void> exportReport(final ReportRequest request, final ExportFormat format, final OutputStream output) {
-        notNull(output, "output");
-        notNull(format, "format");
+        notNull(output, OUTPUT_ARG_NAME);
+        notNull(format, FORMAT_ARG_NAME);
         final JsonNode execResult = executeReport(ReportRequest.URI, request);
         final String uri = exportReport(execResult, format);
         return new PollResult<>(this, new SimplePollHandler<Void>(uri, Void.class) {
@@ -109,13 +114,14 @@ public class ExportService extends AbstractService {
                     case NO_CONTENT:
                         throw new NoDataExportException();
                     default:
-                        throw new ExportException("Unable to export report, unknown HTTP response code: " + response.getStatusCode());
+                        throw new ExportException(
+                                UNABLE_TO_EXPORT_REPORT + ", unknown HTTP response code: " + response.getStatusCode());
                 }
             }
 
             @Override
             public void handlePollException(final GoodDataRestException e) {
-                throw new ExportException("Unable to export report", e);
+                throw new ExportException(UNABLE_TO_EXPORT_REPORT, e);
             }
 
             @Override
@@ -123,7 +129,7 @@ public class ExportService extends AbstractService {
                 try {
                     restTemplate.execute(uri, GET, null, new OutputStreamResponseExtractor(output));
                 } catch (GoodDataException | RestClientException e) {
-                    throw new ExportException("Unable to export report", e);
+                    throw new ExportException(UNABLE_TO_EXPORT_REPORT, e);
                 }
             }
         });
@@ -143,18 +149,18 @@ public class ExportService extends AbstractService {
 
     private String exportReport(final JsonNode execResult, final ExportFormat format) {
         notNull(execResult, "execResult");
-        notNull(format, "format");
+        notNull(format, FORMAT_ARG_NAME);
         final ObjectNode root = mapper.createObjectNode();
         final ObjectNode child = mapper.createObjectNode();
 
         child.set("result", execResult);
-        child.put("format", format.getValue());
+        child.put(FORMAT_ARG_NAME, format.getValue());
         root.set("result_req", child);
 
         try {
             return notNullState(restTemplate.postForObject(EXPORTING_URI, root, UriResponse.class), "exported report").getUri();
         } catch (GoodDataException | RestClientException e) {
-            throw new ExportException("Unable to export report", e);
+            throw new ExportException(UNABLE_TO_EXPORT_REPORT, e);
         }
     }
 
@@ -172,7 +178,7 @@ public class ExportService extends AbstractService {
         notNull(endpoint, "endpoint");
         notNull(dashboard, "dashboard");
         notNull(tab, "tab");
-        notNull(output, "output");
+        notNull(output, OUTPUT_ARG_NAME);
 
         final String projectId = extractProjectId(dashboard);
         final String projectUri = PROJECT_TEMPLATE.expand(projectId).toString();
@@ -183,7 +189,7 @@ public class ExportService extends AbstractService {
         try {
             task = restTemplate.postForObject(CLIENT_EXPORT_URI, export, AsyncTask.class, projectId);
         } catch (RestClientException | GoodDataRestException e) {
-            throw new ExportException("Unable to export dashboard: " + dashboardUri, e);
+            throw new ExportException(UNABLE_TO_EXPORT_DASHBOARD + dashboardUri, e);
         }
 
         return new PollResult<>(this, new SimplePollHandler<Void>(notNullState(task, "export pdf task").getUri(), Void.class) {
@@ -195,7 +201,7 @@ public class ExportService extends AbstractService {
                     case ACCEPTED:
                         return false;
                     default:
-                        throw new ExportException("Unable to export dashboard: " + dashboardUri +
+                        throw new ExportException(UNABLE_TO_EXPORT_DASHBOARD + dashboardUri +
                                 ", unknown HTTP response code: " + response.getStatusCode());
                 }
             }
@@ -205,13 +211,13 @@ public class ExportService extends AbstractService {
                 try {
                     restTemplate.execute(task.getUri(), GET, null, new OutputStreamResponseExtractor(output));
                 } catch (GoodDataException | RestClientException e) {
-                    throw new ExportException("Unable to export dashboard: " + dashboardUri, e);
+                    throw new ExportException(UNABLE_TO_EXPORT_DASHBOARD + dashboardUri, e);
                 }
             }
 
             @Override
             public void handlePollException(final GoodDataRestException e) {
-                throw new ExportException("Unable to export dashboard: " + dashboardUri, e);
+                throw new ExportException(UNABLE_TO_EXPORT_DASHBOARD + dashboardUri, e);
             }
         });
     }
@@ -243,7 +249,7 @@ public class ExportService extends AbstractService {
     private FutureResult<Void> exportCsv(final AbstractObj obj, final ReportRequest request, final OutputStream output) {
         notNull(obj, "obj");
         notNull(request, "request");
-        notNull(output, "output");
+        notNull(output, OUTPUT_ARG_NAME);
 
         final String projectId = extractProjectId(obj);
         final String uri = obj.getUri();
@@ -252,7 +258,7 @@ public class ExportService extends AbstractService {
         try {
             response = restTemplate.postForObject(RAW_EXPORT_URI, request, UriResponse.class, projectId);
         } catch (RestClientException | GoodDataRestException e) {
-            throw new ExportException("Unable to export: " + uri);
+            throw new ExportException(UNABLE_TO_EXPORT + uri);
         }
         if (response == null || response.getUri() == null) {
             throw new ExportException("Empty response, unable to export: " + uri);
@@ -269,7 +275,7 @@ public class ExportService extends AbstractService {
                     case NO_CONTENT:
                         throw new NoDataExportException();
                     default:
-                        throw new ExportException("Unable to export: " + uri +
+                        throw new ExportException(UNABLE_TO_EXPORT + uri +
                                 ", unknown HTTP response code: " + response.getStatusCode());
                 }
             }
@@ -279,13 +285,13 @@ public class ExportService extends AbstractService {
                 try {
                     restTemplate.execute(getPolling(), GET, null, new OutputStreamResponseExtractor(output));
                 } catch (GoodDataException | RestClientException e) {
-                    throw new ExportException("Unable to export: " + uri, e);
+                    throw new ExportException(UNABLE_TO_EXPORT + uri, e);
                 }
             }
 
             @Override
             public void handlePollException(final GoodDataRestException e) {
-                throw new ExportException("Unable to export: " + uri, e);
+                throw new ExportException(UNABLE_TO_EXPORT + uri, e);
             }
         });
     }

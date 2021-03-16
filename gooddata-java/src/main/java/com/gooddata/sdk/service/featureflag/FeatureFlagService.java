@@ -34,6 +34,7 @@ public class FeatureFlagService extends AbstractService {
     public static final UriTemplate PROJECT_FEATURE_FLAG_TEMPLATE = new UriTemplate(ProjectFeatureFlag.PROJECT_FEATURE_FLAG_URI);
     public static final UriTemplate PROJECT_FEATURE_FLAGS_TEMPLATE = new UriTemplate(ProjectFeatureFlags.PROJECT_FEATURE_FLAGS_URI);
     public static final UriTemplate AGGREGATED_FEATURE_FLAGS_TEMPLATE = new UriTemplate(FeatureFlags.AGGREGATED_FEATURE_FLAGS_URI);
+    private static final String PROJECT_ARG_NAME = "project";
 
     /**
      * Constructs service for GoodData feature flags management.
@@ -54,7 +55,7 @@ public class FeatureFlagService extends AbstractService {
      * @deprecated Use {@link HierarchicalConfigService#listProjectConfigItems(Project)}.
      */
     public FeatureFlags listFeatureFlags(final Project project) {
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         try {
             final FeatureFlags featureFlags = restTemplate
                     .getForObject(AGGREGATED_FEATURE_FLAGS_TEMPLATE.expand(project.getId()), FeatureFlags.class);
@@ -78,7 +79,7 @@ public class FeatureFlagService extends AbstractService {
      * @deprecated Use {@link HierarchicalConfigService#listProjectConfigItems(Project)}.
      */
     public ProjectFeatureFlags listProjectFeatureFlags(final Project project) {
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         try {
             final ProjectFeatureFlags projectFeatureFlags = restTemplate
                     .getForObject(PROJECT_FEATURE_FLAGS_TEMPLATE.expand(project.getId()), ProjectFeatureFlags.class);
@@ -104,7 +105,7 @@ public class FeatureFlagService extends AbstractService {
      * @deprecated Use {@link HierarchicalConfigService#getProjectConfigItem(Project, String)}.
      */
     public ProjectFeatureFlag getProjectFeatureFlag(final Project project, final String featureFlagName) {
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         notEmpty(featureFlagName, "featureFlagName");
 
         try {
@@ -126,7 +127,7 @@ public class FeatureFlagService extends AbstractService {
      * @deprecated Use {@link HierarchicalConfigService#setProjectConfigItem(Project, ConfigItem)}.
      */
     public ProjectFeatureFlag createProjectFeatureFlag(final Project project, final ProjectFeatureFlag flag) {
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         notNull(flag, "flag");
 
         final String featureFlagsUri = PROJECT_FEATURE_FLAGS_TEMPLATE.expand(project.getId()).toString();

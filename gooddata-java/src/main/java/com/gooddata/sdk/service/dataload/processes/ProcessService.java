@@ -73,6 +73,10 @@ public class ProcessService extends AbstractService {
     public static final UriTemplate USER_PROCESSES_TEMPLATE = new UriTemplate(DataloadProcesses.USER_PROCESSES_URI);
     private static final MediaType MEDIA_TYPE_ZIP = MediaType.parseMediaType("application/zip");
     private static final long MAX_MULTIPART_SIZE = 1024L * 1024L;
+    private static final String PROCESS_ARG_NAME = "process";
+    private static final String PROJECT_ARG_NAME = "project";
+    private static final String SCHEDULE_ARG_NAME = "schedule";
+    private static final String PROJECT_ID_ARG_NAME = "project.id";
 
     private final AccountService accountService;
     private final DataStoreService dataStoreService;
@@ -104,9 +108,9 @@ public class ProcessService extends AbstractService {
      * @return created process
      */
     public DataloadProcess createProcess(Project project, DataloadProcess process, File processData) {
-        notNull(process, "process");
+        notNull(process, PROCESS_ARG_NAME);
         notNull(processData, "processData");
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         isTrue(process.getPath() == null, "Process path has to be null, use processData argument. If you want to create process from appstore, use method createProcessFromAppstore()");
         return postProcess(process, processData, getProcessesUri(project));
     }
@@ -121,8 +125,8 @@ public class ProcessService extends AbstractService {
      * @return created process
      */
     public DataloadProcess createProcess(Project project, DataloadProcess process) {
-        notNull(project, "project");
-        notNull(process, "process");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(process, PROCESS_ARG_NAME);
         isTrue(process.getPath() == null, "Process path has to be null. If you want to create process from appstore, use method createProcessFromAppstore()");
         return postProcess(process, getProcessesUri(project));
     }
@@ -137,8 +141,8 @@ public class ProcessService extends AbstractService {
      * @return created process
      */
     public FutureResult<DataloadProcess> createProcessFromAppstore(Project project, DataloadProcess process) {
-        notNull(project, "project");
-        notNull(process, "process");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(process, PROCESS_ARG_NAME);
         notEmpty(process.getPath(), "process path");
         return postProcess(process, getProcessesUri(project), HttpMethod.POST);
     }
@@ -152,7 +156,7 @@ public class ProcessService extends AbstractService {
      * @return updated process
      */
     public DataloadProcess updateProcess(DataloadProcess process, File processData) {
-        notNull(process, "process");
+        notNull(process, PROCESS_ARG_NAME);
         notNull(process.getUri(), "process.uri");
         notNull(processData, "processData");
         isTrue(process.getPath() == null, "Process path has to be null, use processData argument. If you want to update process from appstore, use method updateProcessFromAppstore()");
@@ -168,7 +172,7 @@ public class ProcessService extends AbstractService {
      * @return updated process
      */
     public FutureResult<DataloadProcess> updateProcessFromAppstore(DataloadProcess process) {
-        notNull(process, "process");
+        notNull(process, PROCESS_ARG_NAME);
         notNull(process.getUri(), "process.uri");
         notEmpty(process.getPath(), "process path must not be empty");
         return postProcess(process, URI.create(process.getUri()), HttpMethod.PUT);
@@ -204,7 +208,7 @@ public class ProcessService extends AbstractService {
      */
     public DataloadProcess getProcessById(Project project, String id) {
         notEmpty(id, "id");
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         return getProcessByUri(getProcessUri(project, id).toString());
     }
 
@@ -214,7 +218,7 @@ public class ProcessService extends AbstractService {
      * @return list of found processes or empty list
      */
     public Collection<DataloadProcess> listProcesses(Project project) {
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         return listProcesses(getProcessesUri(project));
     }
 
@@ -231,7 +235,7 @@ public class ProcessService extends AbstractService {
      * @param process to delete
      */
     public void removeProcess(DataloadProcess process) {
-        notNull(process, "process");
+        notNull(process, PROCESS_ARG_NAME);
         try {
             restTemplate.delete(process.getUri());
         } catch (GoodDataException | RestClientException e) {
@@ -246,7 +250,7 @@ public class ProcessService extends AbstractService {
      * @param outputStream stream where to write fetched data
      */
     public void getProcessSource(DataloadProcess process, OutputStream outputStream) {
-        notNull(process, "process");
+        notNull(process, PROCESS_ARG_NAME);
         notNull(outputStream, "outputStream");
         try {
             restTemplate.execute(process.getSourceUri(), HttpMethod.GET,
@@ -338,8 +342,8 @@ public class ProcessService extends AbstractService {
      * @return created schedule
      */
     public Schedule createSchedule(Project project, Schedule schedule) {
-        notNull(schedule, "schedule");
-        notNull(project, "project");
+        notNull(schedule, SCHEDULE_ARG_NAME);
+        notNull(project, PROJECT_ARG_NAME);
 
         return postSchedule(schedule, getSchedulesUri(project));
     }
@@ -352,7 +356,7 @@ public class ProcessService extends AbstractService {
      * @throws ScheduleNotFoundException when the schedule doesn't exist
      */
     public Schedule updateSchedule(Schedule schedule) {
-        notNull(schedule, "schedule");
+        notNull(schedule, SCHEDULE_ARG_NAME);
         notNull(schedule.getUri(), "schedule.uri");
 
         final String uri = schedule.getUri();
@@ -406,7 +410,7 @@ public class ProcessService extends AbstractService {
      */
     public Schedule getScheduleById(Project project, String id) {
         notEmpty(id, "id");
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         return getScheduleByUri(getScheduleUri(project, id).toString());
     }
 
@@ -429,7 +433,7 @@ public class ProcessService extends AbstractService {
      */
     public PageBrowser<Schedule> listSchedules(final Project project,
                                                 final PageRequest startPage) {
-        notNull(project, "project");
+        notNull(project, PROJECT_ARG_NAME);
         notNull(startPage, "startPage");
         return new PageBrowser<>(startPage, page -> listSchedules(getSchedulesUri(project, page)));
     }
@@ -440,7 +444,7 @@ public class ProcessService extends AbstractService {
      * @param schedule to delete
      */
     public void removeSchedule(final Schedule schedule) {
-        notNull(schedule, "schedule");
+        notNull(schedule, SCHEDULE_ARG_NAME);
         notNull(schedule.getUri(), "schedule.uri");
 
         try {
@@ -457,7 +461,7 @@ public class ProcessService extends AbstractService {
      * @return schedule execution
      */
     public FutureResult<ScheduleExecution> executeSchedule(final Schedule schedule) {
-        notNull(schedule, "schedule");
+        notNull(schedule, SCHEDULE_ARG_NAME);
         notNull(schedule.getExecutionsUri(), "schedule.executionsUri");
 
         ScheduleExecution scheduleExecution;
@@ -501,16 +505,16 @@ public class ProcessService extends AbstractService {
     }
 
     private static URI getScheduleUri(Project project, String id) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         notEmpty(id, "id");
 
         return SCHEDULE_TEMPLATE.expand(project.getId(), id);
     }
 
     private static URI getSchedulesUri(final Project project) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         return SCHEDULES_TEMPLATE.expand(project.getId());
     }
 
@@ -541,8 +545,8 @@ public class ProcessService extends AbstractService {
     }
 
     private static URI getProcessUri(Project project, String id) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         notEmpty(id, "id");
 
         return PROCESS_TEMPLATE.expand(project.getId(), id);
@@ -553,7 +557,7 @@ public class ProcessService extends AbstractService {
     }
 
     private DataloadProcess postProcess(DataloadProcess process, File processData, URI postUri) {
-        File tempFile = createTempFile("process", ".zip");
+        File tempFile = createTempFile(PROCESS_ARG_NAME, ".zip");
 
         try (OutputStream output = Files.newOutputStream(tempFile.toPath())) {
             ZipHelper.zip(processData, output);
@@ -583,7 +587,7 @@ public class ProcessService extends AbstractService {
                 }
             }
             final MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>(2);
-            parts.add("process", process);
+            parts.add(PROCESS_ARG_NAME, process);
             final HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MEDIA_TYPE_ZIP);
             parts.add("data", new HttpEntity<>(new FileSystemResource(tempFile), headers));
@@ -613,7 +617,7 @@ public class ProcessService extends AbstractService {
 
                     @Override
                     public void handlePollException(GoodDataRestException e) {
-                        throw new GoodDataException("Creating process failed", e);
+                        throw new GoodDataException("Creating process failed while polling for result", e);
                     }
                 });
             } else if (exchange.getStatusCode() == HttpStatus.OK) { //object has been found in package registry, deployment worker is not triggered
@@ -622,7 +626,7 @@ public class ProcessService extends AbstractService {
 
                     @Override
                     public void handlePollException(GoodDataRestException e) {
-                        throw new GoodDataException("Creating process failed", e);
+                        throw new GoodDataException("Creating process failed while polling for result", e);
                     }
                 });
             } else {

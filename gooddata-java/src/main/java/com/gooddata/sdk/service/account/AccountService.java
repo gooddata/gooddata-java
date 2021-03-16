@@ -31,6 +31,8 @@ public class AccountService extends AbstractService {
     public static final UriTemplate ACCOUNTS_TEMPLATE = new UriTemplate(Account.ACCOUNTS_URI);
     public static final UriTemplate LOGIN_TEMPLATE = new UriTemplate(Account.LOGIN_URI);
     public static final UriTemplate SEPARATORS_TEMPLATE = new UriTemplate(SeparatorSettings.URI);
+    private static final String ACCOUNT_ARG_NAME = "account";
+    private static final String ACCOUNT_URI_ARG_NAME = "account.uri";
 
     /**
      * Constructs service for GoodData account management.
@@ -74,7 +76,7 @@ public class AccountService extends AbstractService {
      * @throws GoodDataException when account can't be created
      */
     public Account createAccount(Account account, String organizationName) {
-        notNull(account, "account");
+        notNull(account, ACCOUNT_ARG_NAME);
         notEmpty(organizationName, "organizationName");
 
         try {
@@ -92,8 +94,8 @@ public class AccountService extends AbstractService {
      * @throws GoodDataException when account can't be removed for other reason
      */
     public void removeAccount(final Account account) {
-        notNull(account, "account");
-        notNull(account.getUri(), "account.uri");
+        notNull(account, ACCOUNT_ARG_NAME);
+        notNull(account.getUri(), ACCOUNT_URI_ARG_NAME);
 
         try {
             restTemplate.delete(account.getUri());
@@ -148,8 +150,8 @@ public class AccountService extends AbstractService {
      * @throws AccountNotFoundException when account for given uri can't be found
      */
     public void updateAccount(final Account account) {
-        notNull(account, "account");
-        notNull(account.getUri(), "account.uri");
+        notNull(account, ACCOUNT_ARG_NAME);
+        notNull(account.getUri(), ACCOUNT_URI_ARG_NAME);
 
         try {
             final MappingJacksonValue jacksonValue = new MappingJacksonValue(account);
@@ -173,8 +175,8 @@ public class AccountService extends AbstractService {
      * @return default {@link SeparatorSettings} for the account
      */
     public SeparatorSettings getSeparatorSettings(final Account account) {
-        notNull(account, "account");
-        notEmpty(account.getUri(), "account.uri");
+        notNull(account, ACCOUNT_ARG_NAME);
+        notEmpty(account.getUri(), ACCOUNT_URI_ARG_NAME);
 
         try {
             return restTemplate.getForObject(SEPARATORS_TEMPLATE.expand(account.getId()), SeparatorSettings.class);

@@ -26,18 +26,19 @@ public class ComparisonCondition extends MeasureValueFilterCondition implements 
     static final String JSON_ROOT_NAME = "comparison";
 
     private static final long serialVersionUID = 2944349621407799356L;
+    private static final String OPERATOR_FIELD_NAME = "operator";
 
     private final String operator;
     private final BigDecimal value;
 
     @JsonCreator
     public ComparisonCondition(
-        @JsonProperty("operator") final String operator,
+        @JsonProperty(OPERATOR_FIELD_NAME) final String operator,
         @JsonProperty("value") final BigDecimal value,
         @JsonProperty("treatNullValuesAs") final BigDecimal treatNullValuesAs
     ) {
         super(treatNullValuesAs);
-        this.operator = notNull(operator, "operator");
+        this.operator = notNull(operator, OPERATOR_FIELD_NAME);
         this.value = notNull(value, "value");
     }
 
@@ -51,7 +52,7 @@ public class ComparisonCondition extends MeasureValueFilterCondition implements 
         final ComparisonConditionOperator operator,
         final BigDecimal value
     ) {
-        this(notNull(operator, "operator").toString(), value, null);
+        this(notNull(operator, OPERATOR_FIELD_NAME).toString(), value, null);
     }
 
     /**
@@ -66,7 +67,7 @@ public class ComparisonCondition extends MeasureValueFilterCondition implements 
         final BigDecimal value,
         final BigDecimal treatNullValuesAs
     ) {
-        this(notNull(operator, "operator").toString(), value, treatNullValuesAs);
+        this(notNull(operator, OPERATOR_FIELD_NAME).toString(), value, treatNullValuesAs);
     }
 
     /**
@@ -77,7 +78,7 @@ public class ComparisonCondition extends MeasureValueFilterCondition implements 
         return ComparisonConditionOperator.of(operator);
     }
 
-    @JsonProperty("operator")
+    @JsonProperty(OPERATOR_FIELD_NAME)
     public String getStringOperator() {
         return this.operator;
     }

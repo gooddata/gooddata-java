@@ -27,6 +27,8 @@ public class WarehouseUser {
     public static final String URI = WarehouseUsers.URI + "/{userId}";
 
     private static final String SELF_LINK = "self";
+    private static final String ROLE_FIELD_NAME = "role";
+    private static final String PROFILE_FIELD_NAME = "profile";
 
     private final String role;
     private final String profile;
@@ -43,12 +45,12 @@ public class WarehouseUser {
      * @param login   login of the user
      */
     public WarehouseUser(final String role, final String profile, final String login) {
-        this.role = notNull(role, "role");
+        this.role = notNull(role, ROLE_FIELD_NAME);
         if (profile == null) {
             notNull(login, "login");
         }
         if (login == null) {
-            notNull(profile, "profile");
+            notNull(profile, PROFILE_FIELD_NAME);
         }
         this.profile = profile;
         this.login = login;
@@ -58,7 +60,7 @@ public class WarehouseUser {
      * Creates a new {@link WarehouseUser} with <code>role</code> and <code>profileUri</code> set
      */
     public static WarehouseUser createWithProfileUri(final String profileUri, final WarehouseUserRole role) {
-        notNull(role, "role cannot be null");
+        notNull(role, ROLE_FIELD_NAME);
         return new WarehouseUser(role.getRoleName(), profileUri, null);
     }
 
@@ -66,8 +68,8 @@ public class WarehouseUser {
      * Creates a new {@link WarehouseUser} with <code>role</code> and <code>profile</code> set
      */
     public static WarehouseUser createWithProfile(final Account profile, final WarehouseUserRole role) {
-        notNull(role, "role cannot be null");
-        notNull(profile, "profile cannot be null");
+        notNull(role, ROLE_FIELD_NAME);
+        notNull(profile, PROFILE_FIELD_NAME);
         return new WarehouseUser(role.getRoleName(), profile.getId(), null);
     }
 
@@ -75,12 +77,12 @@ public class WarehouseUser {
      * Creates a new {@link WarehouseUser} with <code>role</code> and <code>login</code> set
      */
     public static WarehouseUser createWithlogin(final String login, final WarehouseUserRole role) {
-        notNull(role, "role cannot be null");
+        notNull(role, ROLE_FIELD_NAME);
         return new WarehouseUser(role.getRoleName(), null, login);
     }
 
     @JsonCreator
-    public WarehouseUser(@JsonProperty("role") String role, @JsonProperty("profile") String profile,
+    public WarehouseUser(@JsonProperty(ROLE_FIELD_NAME) String role, @JsonProperty(PROFILE_FIELD_NAME) String profile,
                          @JsonProperty("login") String login, @JsonProperty("links") Map<String, String> links) {
         this(role, profile, login);
         this.links = links;

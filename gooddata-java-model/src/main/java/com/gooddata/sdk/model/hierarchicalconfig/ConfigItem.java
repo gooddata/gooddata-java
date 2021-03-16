@@ -22,12 +22,13 @@ import static com.gooddata.sdk.model.hierarchicalconfig.SourceType.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConfigItem {
 
-    public static final String CLIENT_CONFIG_ITEM_URI = CLIENT.getApiUri() + "/{configName}";
-    public static final String DATA_PRODUCT_CONFIG_ITEM_URI = DATA_PRODUCT.getApiUri() + "/{configName}";
-    public static final String SEGMENT_CONFIG_ITEM_URI = SEGMENT.getApiUri() + "/{configName}";
-    public static final String DOMAIN_CONFIG_ITEM_URI = DOMAIN.getApiUri() + "/{configName}";
-    public static final String PROJECT_CONFIG_ITEM_URI = PROJECT.getApiUri() + "/{configName}";
-    public static final String PROJECT_GROUP_CONFIG_ITEM_URI = PROJECT_GROUP.getApiUri() + "/{configName}";
+    private static final String CONFIG_NAME_SUFFIX = "/{configName}";
+    public static final String CLIENT_CONFIG_ITEM_URI = CLIENT.getApiUri() + CONFIG_NAME_SUFFIX;
+    public static final String DATA_PRODUCT_CONFIG_ITEM_URI = DATA_PRODUCT.getApiUri() + CONFIG_NAME_SUFFIX;
+    public static final String SEGMENT_CONFIG_ITEM_URI = SEGMENT.getApiUri() + CONFIG_NAME_SUFFIX;
+    public static final String DOMAIN_CONFIG_ITEM_URI = DOMAIN.getApiUri() + CONFIG_NAME_SUFFIX;
+    public static final String PROJECT_CONFIG_ITEM_URI = PROJECT.getApiUri() + CONFIG_NAME_SUFFIX;
+    public static final String PROJECT_GROUP_CONFIG_ITEM_URI = PROJECT_GROUP.getApiUri() + CONFIG_NAME_SUFFIX;
 
     private final String key;
     private String value;

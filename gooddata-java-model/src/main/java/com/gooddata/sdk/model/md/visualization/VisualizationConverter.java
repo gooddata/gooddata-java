@@ -40,6 +40,7 @@ import static java.util.stream.Collectors.toList;
  */
 public abstract class VisualizationConverter {
     private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final String VO_ARG_NAME = "visualizationObject";
 
     /**
      * Generate Execution from Visualization object.
@@ -51,7 +52,7 @@ public abstract class VisualizationConverter {
      */
     public static Execution convertToExecution(final VisualizationObject visualizationObject,
             final Function<String, VisualizationClass> visualizationClassGetter) {
-        notNull(visualizationObject, "visualizationObject");
+        notNull(visualizationObject, VO_ARG_NAME);
         notNull(visualizationClassGetter, "visualizationClassGetter");
         return convertToExecution(visualizationObject,
                 visualizationClassGetter.apply(visualizationObject.getVisualizationClassUri()));
@@ -68,7 +69,7 @@ public abstract class VisualizationConverter {
      */
     public static Execution convertToExecution(final VisualizationObject visualizationObject,
             final VisualizationClass visualizationClass) {
-        notNull(visualizationObject, "visualizationObject");
+        notNull(visualizationObject, VO_ARG_NAME);
         notNull(visualizationClass, "visualizationClass");
         ResultSpec resultSpec = convertToResultSpec(visualizationObject, visualizationClass);
         Afm afm = convertToAfm(visualizationObject);
@@ -82,7 +83,7 @@ public abstract class VisualizationConverter {
      * @return {@link Afm} object
      */
     public static Afm convertToAfm(final VisualizationObject visualizationObject) {
-        notNull(visualizationObject, "visualizationObject");
+        notNull(visualizationObject, VO_ARG_NAME);
         final List<AttributeItem> attributes = convertAttributes(visualizationObject.getAttributes());
         final List<CompatibilityFilter> filters = convertFilters(visualizationObject.getFilters());
         final List<MeasureItem> measures = convertMeasures(visualizationObject.getMeasures());
@@ -100,7 +101,7 @@ public abstract class VisualizationConverter {
      */
     public static ResultSpec convertToResultSpec(final VisualizationObject visualizationObject,
             final Function<String, VisualizationClass> visualizationClassGetter) {
-        notNull(visualizationObject, "visualizationObject");
+        notNull(visualizationObject, VO_ARG_NAME);
         notNull(visualizationClassGetter, "visualizationClassGetter");
         return convertToResultSpec(visualizationObject,
                 visualizationClassGetter.apply(visualizationObject.getVisualizationClassUri()));
@@ -116,7 +117,7 @@ public abstract class VisualizationConverter {
      */
     public static ResultSpec convertToResultSpec(final VisualizationObject visualizationObject,
             final VisualizationClass visualizationClass) {
-        notNull(visualizationObject, "visualizationObject");
+        notNull(visualizationObject, VO_ARG_NAME);
         notNull(visualizationClass, "visualizationClass");
         isTrue(visualizationObject.getVisualizationClassUri().equals(visualizationClass.getUri()),
                 "visualizationClass URI does not match the URI within visualizationObject, "

@@ -34,6 +34,7 @@ public class ProcessExecutionDetail {
     private static final String LOG_LINK = "log";
     private static final String SELF_LINK = "self";
     private static final String EXECUTION_LINK = "poll";
+    private static final String LINKS_FIELD_NAME = "links";
     private static final String STATUS_OK = "OK";
     private final String status;
 
@@ -56,7 +57,7 @@ public class ProcessExecutionDetail {
                                    @JsonProperty("updated") ZonedDateTime updated,
                                    @JsonProperty("finished") ZonedDateTime finished,
                                    @JsonProperty("error") ErrorStructure error,
-                                   @JsonProperty("links") Map<String, String> links) {
+                                   @JsonProperty(LINKS_FIELD_NAME) Map<String, String> links) {
         this.status = notEmpty(status, "status");
         this.created = notNull(created, "created");
         this.started = started;
@@ -92,17 +93,17 @@ public class ProcessExecutionDetail {
 
     @JsonIgnore
     public String getLogUri() {
-        return notNullState(links, "links").get(LOG_LINK);
+        return notNullState(links, LINKS_FIELD_NAME).get(LOG_LINK);
     }
 
     @JsonIgnore
     public String getUri() {
-        return notNullState(links, "links").get(SELF_LINK);
+        return notNullState(links, LINKS_FIELD_NAME).get(SELF_LINK);
     }
 
     @JsonIgnore
     public String getExecutionUri() {
-        return notNullState(links, "links").get(EXECUTION_LINK);
+        return notNullState(links, LINKS_FIELD_NAME).get(EXECUTION_LINK);
     }
 
     @JsonIgnore

@@ -47,6 +47,8 @@ public class WarehouseService extends AbstractService {
     public static final UriTemplate WAREHOUSE_TEMPLATE = new UriTemplate(Warehouse.URI);
     public static final UriTemplate USERS_TEMPLATE = new UriTemplate(WarehouseUsers.URI);
     private static final String DEFAULT_SCHEMA_NAME = "default";
+    private static final String WAREHOUSE_ARG_NAME = "warehouse";
+    private static final String WAREHOUSE_ID_ARG_NAME = "warehouse.id";
 
     /**
      * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
@@ -66,7 +68,7 @@ public class WarehouseService extends AbstractService {
      * @return created warehouse
      */
     public FutureResult<Warehouse> createWarehouse(final Warehouse warehouse) {
-        notNull(warehouse, "warehouse");
+        notNull(warehouse, WAREHOUSE_ARG_NAME);
         final WarehouseTask task;
         try {
             task = restTemplate.postForObject(Warehouses.URI, warehouse, WarehouseTask.class);
@@ -115,7 +117,7 @@ public class WarehouseService extends AbstractService {
      * @param warehouse to delete
      */
     public void removeWarehouse(final Warehouse warehouse) {
-        notNull(warehouse, "warehouse");
+        notNull(warehouse, WAREHOUSE_ARG_NAME);
         notNull(warehouse.getUri(), "warehouse.uri");
         try {
             restTemplate.delete(warehouse.getUri());
@@ -225,8 +227,8 @@ public class WarehouseService extends AbstractService {
      * @return {@link PageBrowser} requested page of list of instances starting with startPage or empty list
      */
     public PageBrowser<WarehouseUser> listWarehouseUsers(final Warehouse warehouse, final PageRequest startPage) {
-        notNull(warehouse, "warehouse");
-        notNull(warehouse.getId(), "warehouse.id");
+        notNull(warehouse, WAREHOUSE_ARG_NAME);
+        notNull(warehouse.getId(), WAREHOUSE_ID_ARG_NAME);
         notNull(startPage, "startPage");
 
         return new PageBrowser<>(startPage,
@@ -259,8 +261,8 @@ public class WarehouseService extends AbstractService {
      */
     public FutureResult<WarehouseUser> addUserToWarehouse(final Warehouse warehouse, final WarehouseUser user) {
         notNull(user, "user");
-        notNull(warehouse, "warehouse");
-        notNull(warehouse.getId(), "warehouse.id");
+        notNull(warehouse, WAREHOUSE_ARG_NAME);
+        notNull(warehouse.getId(), WAREHOUSE_ID_ARG_NAME);
 
         final WarehouseTask task;
         try {
@@ -355,7 +357,7 @@ public class WarehouseService extends AbstractService {
      * @throws com.gooddata.sdk.common.GoodDataException when update fails
      */
     public Warehouse updateWarehouse(final Warehouse toUpdate) {
-        notNull(toUpdate, "warehouse");
+        notNull(toUpdate, WAREHOUSE_ARG_NAME);
         notNull(toUpdate.getUri(), "warehouse.uri");
         try {
             restTemplate.put(toUpdate.getUri(), toUpdate);
@@ -390,8 +392,8 @@ public class WarehouseService extends AbstractService {
     }
 
     private URI getWarehouseSchemasUri(final Warehouse warehouse) {
-        notNull(warehouse, "warehouse");
-        notNull(warehouse.getId(), "warehouse.id");
+        notNull(warehouse, WAREHOUSE_ARG_NAME);
+        notNull(warehouse.getId(), WAREHOUSE_ID_ARG_NAME);
         return SCHEMAS_TEMPLATE.expand(warehouse.getId());
     }
 
@@ -420,8 +422,8 @@ public class WarehouseService extends AbstractService {
      * @return warehouse schema
      */
     public WarehouseSchema getWarehouseSchemaByName(final Warehouse warehouse, final String name) {
-        notNull(warehouse, "warehouse");
-        notNull(warehouse.getId(), "warehouse.id");
+        notNull(warehouse, WAREHOUSE_ARG_NAME);
+        notNull(warehouse.getId(), WAREHOUSE_ID_ARG_NAME);
         notEmpty(name, "name");
         final String uri = SCHEMA_TEMPLATE.expand(warehouse.getId(), name).toString();
         return getWarehouseSchemaByUri(uri);

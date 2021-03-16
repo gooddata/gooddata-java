@@ -28,6 +28,7 @@ public class OutputStage {
     private static final String SELF_LINK = "self";
     private static final String OUTPUT_STAGE_DIFF = "outputStageDiff";
     private static final String DATALOAD_PROCESS = "dataloadProcess";
+    private static final String LINKS_FIELD_NAME = "links";
 
     private String schema;
     private String clientId;
@@ -38,7 +39,7 @@ public class OutputStage {
     private OutputStage(@JsonProperty("schema") final String schema,
                         @JsonProperty("clientId") final String clientId,
                         @JsonProperty("outputStagePrefix") final String outputStagePrefix,
-                        @JsonProperty("links") final Map<String, String> links) {
+                        @JsonProperty(LINKS_FIELD_NAME) final Map<String, String> links) {
         this.schema = schema;
         this.clientId = clientId;
         this.outputStagePrefix = outputStagePrefix;
@@ -119,17 +120,17 @@ public class OutputStage {
 
     @JsonIgnore
     public String getUri() {
-        return notNullState(links, "links").get(SELF_LINK);
+        return notNullState(links, LINKS_FIELD_NAME).get(SELF_LINK);
     }
 
     @JsonIgnore
     public String getOutputStageDiffUri() {
-        return notNullState(links, "links").get(OUTPUT_STAGE_DIFF);
+        return notNullState(links, LINKS_FIELD_NAME).get(OUTPUT_STAGE_DIFF);
     }
 
     @JsonIgnore
     public String getDataloadProcessUri() {
-        return notNullState(links, "links").get(DATALOAD_PROCESS);
+        return notNullState(links, LINKS_FIELD_NAME).get(DATALOAD_PROCESS);
     }
 
     @Override

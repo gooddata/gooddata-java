@@ -34,6 +34,10 @@ import static java.lang.String.format;
 public class ConnectorService extends AbstractService {
 
     public static final UriTemplate STATUS_TEMPLATE = new UriTemplate(IntegrationProcessStatus.URI);
+    private static final String PROJECT_ARG_NAME = "project";
+    private static final String PROJECT_ID_ARG_NAME = "project.id";
+    private static final String CONNECTOR_ARG_NAME = "connector";
+
     private final ProjectService projectService;
 
     public ConnectorService(final RestTemplate restTemplate, final ProjectService projectService, final GoodDataSettings settings) {
@@ -50,9 +54,9 @@ public class ConnectorService extends AbstractService {
      * @throws ConnectorException if integration can't be retrieved
      */
     public Integration getIntegration(final Project project, final ConnectorType connectorType) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
-        notNull(connectorType, "connector");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
+        notNull(connectorType, CONNECTOR_ARG_NAME);
 
         try {
             return restTemplate.getForObject(Integration.URL, Integration.class, project.getId(), connectorType.getName());
@@ -63,7 +67,7 @@ public class ConnectorService extends AbstractService {
                 throw e;
             }
         } catch (RestClientException e) {
-            throw new ConnectorException("Unable to get " + connectorType + " integration", e);
+            throw new ConnectorException(format("Unable to get %s integration", connectorType), e);
         }
     }
 
@@ -76,8 +80,8 @@ public class ConnectorService extends AbstractService {
      * @throws ConnectorException if integration can't be created
      */
     public Integration createIntegration(final Project project, final Settings settings) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         notNull(settings, "settings");
 
         final Collection<ProjectTemplate> projectTemplates = projectService.getProjectTemplates(project);
@@ -102,8 +106,8 @@ public class ConnectorService extends AbstractService {
      */
     public Integration createIntegration(final Project project, final ConnectorType connectorType,
                                          final Integration integration) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         notNull(connectorType, "connectorType");
         notNull(integration, "integration");
 
@@ -111,7 +115,7 @@ public class ConnectorService extends AbstractService {
             return restTemplate.postForObject(Integration.URL, integration, Integration.class, project.getId(),
                     connectorType.getName());
         } catch (GoodDataRestException | RestClientException e) {
-            throw new ConnectorException("Unable to create " + connectorType + " integration", e);
+            throw new ConnectorException(format("Unable to create %s integration", connectorType), e);
         }
     }
 
@@ -125,9 +129,9 @@ public class ConnectorService extends AbstractService {
      */
     public void updateIntegration(final Project project, final ConnectorType connectorType,
                                   final Integration integration) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
-        notNull(connectorType, "connector");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
+        notNull(connectorType, CONNECTOR_ARG_NAME);
         notNull(integration, "integration");
 
         try {
@@ -139,7 +143,7 @@ public class ConnectorService extends AbstractService {
                 throw e;
             }
         } catch (RestClientException e) {
-            throw new ConnectorException("Unable to update " + connectorType + " integration", e);
+            throw new ConnectorException(format("Unable to update %s integration", connectorType), e);
         }
     }
 
@@ -152,9 +156,9 @@ public class ConnectorService extends AbstractService {
      * @throws ConnectorException           if integration can't be deleted
      */
     public void deleteIntegration(final Project project, final ConnectorType connectorType) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
-        notNull(connectorType, "connector");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
+        notNull(connectorType, CONNECTOR_ARG_NAME);
         
         try {
             restTemplate.delete(Integration.URL, project.getId(), connectorType.getName());
@@ -165,7 +169,7 @@ public class ConnectorService extends AbstractService {
                 throw e;
             }
         } catch (RestClientException e) {
-            throw new ConnectorException("Unable to delete " + connectorType + " integration", e);
+            throw new ConnectorException(format("Unable to delete %s integration", connectorType), e);
         }
     }
 
@@ -189,8 +193,8 @@ public class ConnectorService extends AbstractService {
      */
     public <T extends Settings> T getSettings(final Project project, final ConnectorType connectorType,
                                               final Class<T> settingsClass) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         notNull(connectorType, "connectorType");
         notNull(settingsClass, "settingsClass");
 
@@ -211,8 +215,8 @@ public class ConnectorService extends AbstractService {
     public void updateSettings(final Project project, final Settings settings) {
         notNull(settings, "settings");
         notNull(settings.getConnectorType(), "settings.connectorType");
-        notNull(project.getId(), "project.id");
-        notNull(project, "project");
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
+        notNull(project, PROJECT_ARG_NAME);
 
         try {
             restTemplate.put(settings.getConnectorType().getSettingsUrl(), settings, project.getId());
@@ -230,8 +234,8 @@ public class ConnectorService extends AbstractService {
      * @throws ConnectorException if process execution fails
      */
     public FutureResult<ProcessStatus> executeProcess(final Project project, final ProcessExecution execution) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
+        notNull(project, PROJECT_ARG_NAME);
+        notNull(project.getId(), PROJECT_ID_ARG_NAME);
         notNull(execution, "execution");
 
         final String connectorType = execution.getConnectorType().getName();
@@ -306,7 +310,7 @@ public class ConnectorService extends AbstractService {
 
     protected FutureResult<ProcessStatus> createProcessPollResult(final String uri) {
         final Map<String, String> match = STATUS_TEMPLATE.match(uri);
-        final String connectorType = match.get("connector");
+        final String connectorType = match.get(CONNECTOR_ARG_NAME);
         final String processId = match.get("process");
         return new PollResult<>(this, new SimplePollHandler<ProcessStatus>(uri, ProcessStatus.class) {
             @Override

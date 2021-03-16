@@ -33,6 +33,9 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
 public class AttributeInGrid implements GridElement, Serializable {
 
     private static final long serialVersionUID = 9061580138440068825L;
+    private static final String DISPLAY_FORM_ARG_NAME = "displayForm";
+    private static final String ATTRIBUTE_ARG_NAME = "attribute";
+
     private final String uri;
     private final String alias;
     private final List<List<String>> totals;
@@ -76,7 +79,8 @@ public class AttributeInGrid implements GridElement, Serializable {
      * @param displayForm displayForm to create AttributeInGrid from
      */
     public AttributeInGrid(final DisplayForm displayForm) {
-        this(notNull(notNull(displayForm, "displayForm").getUri(), "uri"), notNull(displayForm, "displayForm").getTitle());
+        this(notNull(notNull(displayForm, DISPLAY_FORM_ARG_NAME).getUri(), "uri"),
+                notNull(displayForm, DISPLAY_FORM_ARG_NAME).getTitle());
     }
 
     /**
@@ -85,7 +89,7 @@ public class AttributeInGrid implements GridElement, Serializable {
      * @param alias alias used to label the attribute
      */
     public AttributeInGrid(final DisplayForm displayForm, final String alias) {
-        this(notNull(notNull(displayForm, "displayForm").getUri(), "uri"), alias);
+        this(notNull(notNull(displayForm, DISPLAY_FORM_ARG_NAME).getUri(), "uri"), alias);
     }
 
     /**
@@ -93,7 +97,8 @@ public class AttributeInGrid implements GridElement, Serializable {
      * @param attribute attribute to create AttributeInGrid from
      */
     public AttributeInGrid(final Attribute attribute) {
-        this(notNull(attribute, "attribute").getDefaultDisplayForm(), notNull(attribute, "attribute").getTitle());
+        this(notNull(attribute, ATTRIBUTE_ARG_NAME).getDefaultDisplayForm(),
+                notNull(attribute, ATTRIBUTE_ARG_NAME).getTitle());
     }
 
     /**
@@ -102,7 +107,7 @@ public class AttributeInGrid implements GridElement, Serializable {
      * @param alias alias used to label the attribute
      */
     public AttributeInGrid(final Attribute attribute, final String alias) {
-        this(notNull(attribute, "attribute").getDefaultDisplayForm(), alias);
+        this(notNull(attribute, ATTRIBUTE_ARG_NAME).getDefaultDisplayForm(), alias);
     }
 
     @JsonProperty("totals")

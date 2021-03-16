@@ -36,6 +36,7 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
 public class DatasetManifest {
 
     public static final String URI = "/gdc/md/{projectId}/ldm/singleloadinterface/{dataSet}/manifest";
+    private static final String SOURCE_ARG_NAME = "source";
 
     private final String dataSet;
     private String file;
@@ -52,7 +53,7 @@ public class DatasetManifest {
      * @param source  source CSV
      */
     public DatasetManifest(final String dataSet, final InputStream source) {
-        this.source = notNull(source, "source");
+        this.source = notNull(source, SOURCE_ARG_NAME);
         this.dataSet = notEmpty(dataSet, "dataSet");
     }
 
@@ -123,12 +124,12 @@ public class DatasetManifest {
 
     @JsonIgnore
     public void setSource(final InputStream source) {
-        this.source = notNull(source, "source");
+        this.source = notNull(source, SOURCE_ARG_NAME);
     }
 
     @Override
     public String toString() {
-        return GoodDataToStringBuilder.defaultToString(this, "source");
+        return GoodDataToStringBuilder.defaultToString(this, SOURCE_ARG_NAME);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

@@ -39,6 +39,7 @@ public class Project {
 
     public static final String URI = Projects.URI + "/{id}";
     private static final Set<String> PREPARING_STATES = new HashSet<>(asList("PREPARING", "PREPARED", "LOADING"));
+    private static final String LINKS_FIELD_NAME = "links";
 
     @JsonProperty("content")
     private final ProjectContent content;
@@ -61,7 +62,7 @@ public class Project {
 
     @JsonCreator
     private Project(@JsonProperty("content") ProjectContent content, @JsonProperty("meta") ProjectMeta meta,
-                    @JsonProperty("links") Links links) {
+                    @JsonProperty(LINKS_FIELD_NAME) Links links) {
         this.content = content;
         this.meta = meta;
         this.links = links;
@@ -138,27 +139,27 @@ public class Project {
 
     @JsonIgnore
     public String getUri() {
-        return notNullState(links, "links").getSelf();
+        return notNullState(links, LINKS_FIELD_NAME).getSelf();
     }
 
     @JsonIgnore
     public String getUsersUri() {
-        return notNullState(links, "links").getUsers();
+        return notNullState(links, LINKS_FIELD_NAME).getUsers();
     }
 
     @JsonIgnore
     public String getRolesUri() {
-        return notNullState(links, "links").getRoles();
+        return notNullState(links, LINKS_FIELD_NAME).getRoles();
     }
 
     @JsonIgnore
     public String getGroupsUri() {
-        return notNullState(links, "links").getGroups();
+        return notNullState(links, LINKS_FIELD_NAME).getGroups();
     }
 
     @JsonIgnore
     public String getInvitationsUri() {
-        return notNullState(links, "links").getInvitations();
+        return notNullState(links, LINKS_FIELD_NAME).getInvitations();
     }
 
     @JsonIgnore
@@ -168,57 +169,57 @@ public class Project {
 
     @JsonIgnore
     public String getLdmThumbnailUri() {
-        return notNullState(links, "links").getLdmThumbnail();
+        return notNullState(links, LINKS_FIELD_NAME).getLdmThumbnail();
     }
 
     @JsonIgnore
     public String getMetadataUri() {
-        return notNullState(links, "links").getMetadata();
+        return notNullState(links, LINKS_FIELD_NAME).getMetadata();
     }
 
     @JsonIgnore
     public String getPublicArtifactsUri() {
-        return notNullState(links, "links").getPublicArtifacts();
+        return notNullState(links, LINKS_FIELD_NAME).getPublicArtifacts();
     }
 
     @JsonIgnore
     public String getTemplatesUri() {
-        return notNullState(links, "links").getTemplates();
+        return notNullState(links, LINKS_FIELD_NAME).getTemplates();
     }
 
     @JsonIgnore
     public String getConnectorsUri() {
-        return notNullState(links, "links").getConnectors();
+        return notNullState(links, LINKS_FIELD_NAME).getConnectors();
     }
 
     @JsonIgnore
     public String getDataLoadUri() {
-        return notNullState(links, "links").getDataLoad();
+        return notNullState(links, LINKS_FIELD_NAME).getDataLoad();
     }
 
     @JsonIgnore
     public String getSchedulesUri() {
-        return notNullState(links, "links").getSchedules();
+        return notNullState(links, LINKS_FIELD_NAME).getSchedules();
     }
 
     @JsonIgnore
     public String getExecuteUri() {
-        return notNullState(links, "links").getExecute();
+        return notNullState(links, LINKS_FIELD_NAME).getExecute();
     }
 
     @JsonIgnore
     public String getEventStoresUri() {
-        return notNullState(links, "links").getEventStores();
+        return notNullState(links, LINKS_FIELD_NAME).getEventStores();
     }
 
     @JsonIgnore
     public String getClearCachesUri() {
-        return notNullState(links, "links").getClearCaches();
+        return notNullState(links, LINKS_FIELD_NAME).getClearCaches();
     }
 
     @JsonIgnore
     public String getUploadsUri() {
-        return notNullState(links, "links").getUploads();
+        return notNullState(links, LINKS_FIELD_NAME).getUploads();
     }
 
     @JsonIgnore
