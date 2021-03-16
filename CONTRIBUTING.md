@@ -12,6 +12,8 @@ Below are few **rules, recommendations and best practices** we try to follow whe
   * with non-trivial change must be **[associated with an issue](https://help.github.com/articles/closing-issues-via-commit-messages/)**
 * Add usage examples of new high level functionality to
 [documentation](https://github.com/gooddata/gooddata-java/wiki/Code-Examples).
+* Add License header to every single source file created (except file formats where it's not allowed) -
+  see existing files for exact header text (set year to the current calendar year when the file is created).
 
 ### Reviewer
 Ensure pull request and issues are

@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#
+# (C) 2021 GoodData Corporation.
+# This source code is licensed under the BSD-style license found in the
+# LICENSE.txt file in the root directory of this source tree.
+#
+
 usage(){
 	echo "Usage: $0 -v <desired version> -g <gpg password>"
 	echo "Or if you want to be asked fro GPG password without printing to console: $0 -v <desired version>"
