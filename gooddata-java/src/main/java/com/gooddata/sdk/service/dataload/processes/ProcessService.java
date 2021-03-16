@@ -72,7 +72,7 @@ public class ProcessService extends AbstractService {
     public static final UriTemplate PROCESSES_TEMPLATE = new UriTemplate(DataloadProcesses.URI);
     public static final UriTemplate USER_PROCESSES_TEMPLATE = new UriTemplate(DataloadProcesses.USER_PROCESSES_URI);
     private static final MediaType MEDIA_TYPE_ZIP = MediaType.parseMediaType("application/zip");
-    private static final long MAX_MULTIPART_SIZE = 1024 * 1024;
+    private static final long MAX_MULTIPART_SIZE = 1024L * 1024L;
 
     private final AccountService accountService;
     private final DataStoreService dataStoreService;

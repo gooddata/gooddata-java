@@ -108,13 +108,7 @@ public class FeatureFlagService extends AbstractService {
         notEmpty(featureFlagName, "featureFlagName");
 
         try {
-            final ProjectFeatureFlag flag = getProjectFeatureFlag(getProjectFeatureFlagUri(project, featureFlagName));
-
-            if (flag == null) {
-                throw new GoodDataException("empty response from API call");
-            }
-
-            return flag;
+            return getProjectFeatureFlag(getProjectFeatureFlagUri(project, featureFlagName));
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to get project feature flag: " + featureFlagName, e);
         }

@@ -66,6 +66,7 @@ public abstract class AbstractService {
             try {
                 Thread.sleep(settings.getPollSleep());
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 throw new GoodDataException("interrupted");
             }
         }
