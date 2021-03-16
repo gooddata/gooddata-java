@@ -79,16 +79,13 @@ public class FeatureFlags implements Iterable<FeatureFlag> {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         final FeatureFlags that = (FeatureFlags) o;
-
-        return !(featureFlags != null ? !featureFlags.equals(that.featureFlags) : that.featureFlags != null);
-
+        return featureFlags.equals(that.featureFlags);
     }
 
     @Override
     public int hashCode() {
-        return featureFlags != null ? featureFlags.hashCode() : 0;
+        return featureFlags.hashCode();
     }
 
     @Override
