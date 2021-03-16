@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2021, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -22,8 +22,8 @@ import org.springframework.web.util.UriTemplate;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
-import static com.gooddata.sdk.common.util.Validate.isTrue;
 import static com.gooddata.sdk.common.util.Validate.notNull;
 import static com.gooddata.sdk.common.util.Validate.notNullState;
 import static java.lang.String.format;
@@ -267,13 +267,17 @@ public class ConnectorService extends AbstractService {
      * You should use the result of {@link #scheduleZendesk4Reload} to see changes in {@link Reload#getStatus()} and
      * {@link Reload#getProcessId()} or retrieve process URI {@link Reload#getProcessUri()}.
      *
-     * @param reload existing reload.
+     * @param reload existing reload (self link must be present).
      * @return same reload with refreshed properties (status, processId, process URI)
      */
     public Reload getZendesk4Reload(final Reload reload) {
         notNull(reload, "reload");
-        isTrue(reload.getUri().isPresent(), "reload.uri");
-        return getZendesk4ReloadByUri(reload.getUri().get());
+        final Optional<String> reloadUri = reload.getUri();
+        if (reloadUri.isPresent()) {
+            return getZendesk4ReloadByUri(reloadUri.get());
+        } else {
+            throw new IllegalArgumentException("Self link in the Reload must be present!");
+        }
     }
 
     /**
