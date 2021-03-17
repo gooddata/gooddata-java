@@ -8,11 +8,13 @@ package com.gooddata.sdk.model.executeafm.afm.filter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import java.io.Serializable;
+
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = FilterItem.class),
         @JsonSubTypes.Type(value = MeasureValueFilter.class, name = MeasureValueFilter.JSON_ROOT_NAME),
         @JsonSubTypes.Type(value = RankingFilter.class, name = RankingFilter.JSON_ROOT_NAME),
 })
-public interface ExtendedFilter {
+public interface ExtendedFilter extends Serializable {
 }
