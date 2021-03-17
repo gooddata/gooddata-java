@@ -450,20 +450,25 @@ public class MetadataService extends AbstractService {
         final Collection<Entry> result = new ArrayList<>(entries.size());
         for (Entry entry : entries) {
             for (Restriction restriction : restrictions) {
-                switch (restriction.getType()) {
-                    case IDENTIFIER:
-                        if (restriction.getValue().equals(entry.getIdentifier())) result.add(entry);
-                        break;
-                    case TITLE:
-                        if (restriction.getValue().equals(entry.getTitle())) result.add(entry);
-                        break;
-                    case SUMMARY:
-                        if (restriction.getValue().equals(entry.getSummary())) result.add(entry);
-                        break;
-                }
+                addEntryMatchingRestrictionToResult(entry, restriction, result);
             }
         }
         return result;
+    }
+
+    private void addEntryMatchingRestrictionToResult(final Entry entry, final Restriction restriction,
+                                                     final Collection<Entry> result) {
+        switch (restriction.getType()) {
+            case IDENTIFIER:
+                if (restriction.getValue().equals(entry.getIdentifier())) result.add(entry);
+                break;
+            case TITLE:
+                if (restriction.getValue().equals(entry.getTitle())) result.add(entry);
+                break;
+            case SUMMARY:
+                if (restriction.getValue().equals(entry.getSummary())) result.add(entry);
+                break;
+        }
     }
 
     private IdentifiersAndUris getUrisForIdentifiers(final Project project, final Collection<String> identifiers) {
