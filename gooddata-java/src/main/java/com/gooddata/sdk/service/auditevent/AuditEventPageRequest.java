@@ -19,6 +19,7 @@ public final class AuditEventPageRequest extends TimeFilterPageRequest {
     private String type;
 
     public AuditEventPageRequest() {
+        super();
     }
 
     public String getType() {

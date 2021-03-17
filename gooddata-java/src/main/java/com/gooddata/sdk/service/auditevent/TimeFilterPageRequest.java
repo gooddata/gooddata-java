@@ -25,6 +25,7 @@ public class TimeFilterPageRequest extends CustomPageRequest {
     protected ZonedDateTime to;
 
     public TimeFilterPageRequest() {
+        super();
     }
 
     public ZonedDateTime getFrom() {

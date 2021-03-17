@@ -334,6 +334,7 @@ public class ProjectService extends AbstractService {
 
                     @Override
                     public void handlePollResult(final Void pollResult) {
+                        // result is being set in isFinished
                     }
 
                     @Override

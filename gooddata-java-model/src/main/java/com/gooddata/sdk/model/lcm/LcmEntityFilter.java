@@ -29,6 +29,7 @@ public class LcmEntityFilter {
      * Creates new (empty) filter.
      */
     public LcmEntityFilter() {
+        // new filter is empty
     }
 
     /**
