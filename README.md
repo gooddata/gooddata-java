@@ -99,6 +99,8 @@ Good SO thread about differences between various types in Java Date/Time API: ht
 Build the library with `mvn package`, see the
 [Testing](https://github.com/gooddata/gooddata-java/wiki/Testing) page for different testing methods.
 
+For releasing see [Releasing How-To](https://github.com/gooddata/gooddata-java/wiki/Releasing).
+
 ## Contribute
 
 Found a bug? Please create an [issue](https://github.com/gooddata/gooddata-java/issues). Missing functionality?
