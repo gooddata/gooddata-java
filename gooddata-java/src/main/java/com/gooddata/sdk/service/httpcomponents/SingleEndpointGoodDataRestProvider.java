@@ -156,6 +156,8 @@ public abstract class SingleEndpointGoodDataRestProvider implements GoodDataRest
         return HttpClientBuilder.create()
                 .setUserAgent(settings.getGoodDataUserAgent())
                 .setConnectionManager(connectionManager)
+                .addInterceptorFirst(new RequestIdInterceptor())
+                .addInterceptorFirst(new ResponseMissingRequestIdInterceptor())
                 .setDefaultRequestConfig(requestConfig.build());
     }
 }
