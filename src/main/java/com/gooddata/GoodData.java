@@ -288,6 +288,8 @@ public class GoodData {
 
         return HttpClientBuilder.create()
                 .setUserAgent(StringUtils.isNotBlank(settings.getUserAgent()) ? String.format("%s %s", settings.getUserAgent(), getUserAgent()) : getUserAgent())
+                .addInterceptorFirst(new RequestIdInterceptor())
+                .addInterceptorFirst(new ResponseMissingRequestIdInterceptor())
                 .setConnectionManager(connectionManager)
                 .setDefaultRequestConfig(requestConfig.build());
     }
