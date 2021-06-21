@@ -18,10 +18,11 @@ import java.io.InputStream;
 import java.util.UUID;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
 
 /**
@@ -60,6 +61,17 @@ public class DatastoreServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = "datastore", dependsOnMethods = "datastoreDownload")
+    public void verifyRequestIdInException() throws Exception {
+        DataStoreService dataStoreService = AbstractGoodDataAT.gd.getDataStoreService();
+
+        try (InputStream ignored = dataStoreService.download(this.directory + "/none.txt")) {
+            fail("The exception should contain the request_id in its stacktrace.");
+        } catch (Exception e){
+            assertThat(e.getCause().toString(), containsString("request_id"));
+        }
+    }
+
+    @Test(groups = "datastore", dependsOnMethods = "verifyRequestIdInException")
     public void datastoreDelete() throws Exception {
         DataStoreService dataStoreService = AbstractGoodDataAT.gd.getDataStoreService();
         dataStoreService.delete(this.file);
@@ -68,8 +80,10 @@ public class DatastoreServiceAT extends AbstractGoodDataAT {
         try {
             dataStoreService.delete(this.directory);
             fail("Exception was expected, as there is nothing to delete");
-        } catch (GoodDataRestException e) {
-            assertEquals(404, e.getStatusCode());
+        } catch (DataStoreException e) {
+            assertThat(e.getCause().toString(), containsString("request_id"));
+            assertThat(e.getCause().toString(), containsString("404"));
+            assertThat(e.getCause(), instanceOf(GoodDataRestException.class));
         }
     }
 
@@ -96,7 +110,7 @@ public class DatastoreServiceAT extends AbstractGoodDataAT {
     @Test(groups = "datastore", expectedExceptions = DataStoreException.class, enabled = false,
             expectedExceptionsMessageRegExp = "(?s).* 500 .*https://github.com/.Known-limitations")
     public void shouldThrowExceptionWithMessageOnUnAuthRequest() throws Exception {
-        final GoodData datastoreGd = new GoodData(AbstractGoodDataAT.getProperty("host"), AbstractGoodDataAT.getProperty("login"), AbstractGoodDataAT.getProperty("pass"));
+        final GoodData datastoreGd = new GoodData(AbstractGoodDataAT.getProperty("host"), AbstractGoodDataAT.getProperty("login"), AbstractGoodDataAT.getProperty("password"));
         DataStoreService dataStoreService = datastoreGd.getDataStoreService();
 
         try {

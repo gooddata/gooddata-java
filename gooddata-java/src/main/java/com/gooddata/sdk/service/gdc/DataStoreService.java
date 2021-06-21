@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.gdc;
 
-import com.github.sardine.Sardine;
 import com.github.sardine.impl.SardineException;
+import com.gooddata.sdk.common.GoodDataRestException;
 import com.gooddata.sdk.common.UriPrefixer;
 import com.gooddata.sdk.service.httpcomponents.SingleEndpointGoodDataRestProvider;
 import org.apache.http.*;
@@ -17,20 +17,22 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.Locale;
+import java.util.*;
 import java.util.function.Supplier;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
@@ -41,7 +43,7 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
  */
 public class DataStoreService {
 
-    private final Sardine sardine;
+    private final GdcSardine sardine;
     private final Supplier<String> stagingUriSupplier;
     private final URI gdcUri;
     private final RestTemplate restTemplate;
@@ -95,7 +97,10 @@ public class DataStoreService {
 
     private void upload(URI url, InputStream stream) {
         try {
-            sardine.put(url.toString(), stream);
+            // We need to use it this way, if we want to track request_id in the stacktrace.
+            InputStreamEntity entity = new InputStreamEntity(stream);
+            List<Header> headers = Collections.singletonList(new BasicHeader(HTTP.EXPECT_DIRECTIVE, HTTP.EXPECT_CONTINUE));
+            sardine.put(url.toString(), entity, headers, new GdcSardineResponseHandler());
         } catch (SardineException e) {
             if (HttpStatus.INTERNAL_SERVER_ERROR.value() == e.getStatusCode()) {
                 // this error may occur when user issues request to WebDAV before SST and TT were obtained
@@ -137,7 +142,7 @@ public class DataStoreService {
         notEmpty(path, "path");
         final URI uri = getUri(path);
         try {
-            return sardine.get(uri.toString());
+            return sardine.get(uri.toString(), Collections.emptyList(), new GdcSardineResponseHandler());
         } catch (IOException e) {
             throw new DataStoreException("Unable to download from " + uri, e);
         }
@@ -158,7 +163,7 @@ public class DataStoreService {
             if (HttpStatus.MOVED_PERMANENTLY.equals(result.getStatusCode())) {
                 restTemplate.exchange(result.getHeaders().getLocation(), HttpMethod.DELETE, org.springframework.http.HttpEntity.EMPTY, Void.class);
             }
-        } catch (RestClientException e) {
+        } catch (GoodDataRestException e) {
             throw new DataStoreException("Unable to delete " + uri, e);
         }
     }
