@@ -1,11 +1,12 @@
 # GoodData Java SDK
-[![Build Status](https://travis-ci.org/gooddata/gooddata-java.png?branch=master)](https://travis-ci.org/gooddata/gooddata-java)
+[![Build Status](https://github.com/gooddata/gooddata-java/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/gooddata/gooddata-java/actions/workflows/build.yml)
 [![Javadocs](http://javadoc.io/badge/com.gooddata/gooddata-java.svg)](http://javadoc.io/doc/com.gooddata/gooddata-java)
 [![Javadocs Model](https://javadoc.io/badge2/com.gooddata/gooddata-java-model/javadoc--model.svg)](https://javadoc.io/doc/com.gooddata/gooddata-java-model)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gooddata/gooddata-java/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gooddata/gooddata-java)
 [![Release](https://img.shields.io/github/release/gooddata/gooddata-java.svg)](https://github.com/gooddata/gooddata-java/releases)
 [![Stability: Active](https://masterminds.github.io/stability/active.svg)](https://masterminds.github.io/stability/active.html)
 [![License](https://img.shields.io/badge/license-BSD-blue.svg)](LICENSE.txt)
+[![Coverage Status](https://coveralls.io/repos/github/gooddata/gooddata-java/badge.svg?branch=master)](https://coveralls.io/github/gooddata/gooddata-java?branch=master)
 
 The *GoodData Java SDK* encapsulates the REST API of the **GoodData Platform**.
 The first version was implemented during the [All Data Hackathon](http://hackathon.gooddata.com) April 10 - 11 2014.
