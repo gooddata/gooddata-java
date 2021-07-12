@@ -179,20 +179,6 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.eluder.coveralls</groupId>
-                        <artifactId>coveralls-maven-plugin</artifactId>
-                        <version>4.3.0</version>
-                        <!-- ugly hack for java 11 build until https://github.com/trautonen/coveralls-maven-plugin/issues/112 -->
-                        <!-- will be released (coverall-maven-plugin-5.0.0) -->
-                        <dependencies>
-                            <dependency>
-                                <groupId>javax.xml.bind</groupId>
-                                <artifactId>jaxb-api</artifactId>
-                                <version>2.3.1</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                    <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
                         <version>0.8.7</version>

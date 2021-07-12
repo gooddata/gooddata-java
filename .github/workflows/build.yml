@@ -22,19 +22,12 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Set branch name and PR number
-        id: refs
-        env:
-          BRANCH_NAME_OR_REF: ${{ github.head_ref || github.ref }}
+      - name: Run build steps and generate coverage report
         run: |
-          echo "::set-output name=branch_name::${BRANCH_NAME_OR_REF#refs/heads/}"
-          echo "::set-output name=pr_number::$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")"
-      - name: Run build steps and check coverage
-        env:
-          CI_NAME: Github
-          CI_BUILD_NUMBER: ${{ github.run_id }}
-          CI_BUILD_URL: https://github.com/${{ github.repository }}/commit/${{ github.event.after }}/checks
-          CI_BRANCH: ${{ steps.refs.outputs.branch_name }}
-          CI_PULL_REQUEST: ${{ steps.refs.outputs.pr_number }}
-        run: |
-          mvn verify javadoc:javadoc coveralls:report -Pcoverage -DrepoToken=${{ secrets.COVERALLS_REPO_TOKEN }} -B -V
+          mvn verify javadoc:javadoc jacoco:report -Pcoverage -B -V
+      - name: Upload coverage report to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./**/target/site/jacoco/jacoco.xml
+          name: codecov
+          fail_ci_if_error: true
