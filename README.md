@@ -6,7 +6,7 @@
 [![Release](https://img.shields.io/github/release/gooddata/gooddata-java.svg)](https://github.com/gooddata/gooddata-java/releases)
 [![Stability: Active](https://masterminds.github.io/stability/active.svg)](https://masterminds.github.io/stability/active.html)
 [![License](https://img.shields.io/badge/license-BSD-blue.svg)](LICENSE.txt)
-[![Coverage Status](https://coveralls.io/repos/github/gooddata/gooddata-java/badge.svg?branch=master)](https://coveralls.io/github/gooddata/gooddata-java?branch=master)
+[![Coverage Status](https://codecov.io/gh/gooddata/gooddata-java/branch/master/graph/badge.svg)](https://codecov.io/gh/gooddata/gooddata-java/branch/master/graph/badge.svg)
 
 The *GoodData Java SDK* encapsulates the REST API of the **GoodData Platform**.
 The first version was implemented during the [All Data Hackathon](http://hackathon.gooddata.com) April 10 - 11 2014.
