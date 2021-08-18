@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2021, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -218,4 +218,13 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         titles.addAll(elements.stream().map(AttributeElement::getTitle).collect(Collectors.toList()));
         assertThat(titles, hasItems("DevOps", "HR"));
     }
+
+    @Test(groups = "md", dependsOnGroups = "project")
+    public void getTimezone() {
+        final MetadataService md = gd.getMetadataService();
+
+        final String tz = md.getTimezone(project);
+        assertThat(tz, is("America/Los_Angeles"));
+    }
+
 }

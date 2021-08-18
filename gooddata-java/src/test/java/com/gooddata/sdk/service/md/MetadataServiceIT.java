@@ -1,10 +1,11 @@
 /*
- * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2021, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.md;
 
+import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.md.*;
@@ -389,5 +390,27 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         assertThat(attributeElements, is(Matchers.notNullValue()));
         assertThat(attributeElements, hasSize(3));
         assertThat(attributeElements.get(0).getTitle(), is("1167"));
+    }
+
+    @Test(expectedExceptions = GoodDataException.class, expectedExceptionsMessageRegExp = ".*request_id.*Unauthorized.*")
+    public void getTimezoneShouldThrowGDEOnClientError() {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/service/timezone")
+            .respond()
+                .withStatus(401);
+
+        gd.getMetadataService().getTimezone(project);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class, expectedExceptionsMessageRegExp = ".*request_id.*Server Error.*")
+    public void getTimezoneShouldThrowGDEOnServerError() {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/service/timezone")
+            .respond()
+                .withStatus(500);
+
+        gd.getMetadataService().getTimezone(project);
     }
 }
