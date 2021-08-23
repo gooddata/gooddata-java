@@ -10,6 +10,10 @@
 [![Release](https://img.shields.io/github/release/gooddata/gooddata-java.svg?sort=semver)](https://github.com/gooddata/gooddata-java/releases)
 
 The *GoodData Java SDK* encapsulates the REST API of the **GoodData Platform**.
+
+**The project is currently NOT in "active development". Meaning that feature request may or may not be implemented.
+You are welcomed to [contribute your code](CONTRIBUTING.md) and create an [issue](https://github.com/gooddata/gooddata-java/issues).**
+
 The first version was implemented during the [All Data Hackathon](http://hackathon.gooddata.com) April 10 - 11 2014.
 It is free and open-source software provided "as-is" under the [BSD License](LICENSE.txt) as an official project by [GoodData Corporation](http://www.gooddata.com).
 
