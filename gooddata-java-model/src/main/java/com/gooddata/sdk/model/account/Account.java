@@ -6,8 +6,8 @@
 package com.gooddata.sdk.model.account;
 
 import com.fasterxml.jackson.annotation.*;
-import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.util.UriHelper;
 
 import java.util.List;
 
@@ -204,5 +204,19 @@ public class Account {
      * Class representing update view of account
      */
     public static class UpdateView {
+    }
+
+    /**
+     * Enumeration type representing GoodData authentication mode.
+     */
+    public enum AuthenticationMode {
+        /**
+         * User can be authenticated using password
+         */
+        PASSWORD,
+        /**
+         * User can be authenticated via SSO
+         */
+        SSO
     }
 }

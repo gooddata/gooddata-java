@@ -11,12 +11,13 @@ import com.gooddata.sdk.model.account.Account;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
-import java.util.Collections;
 import java.util.UUID;
 
+import static com.gooddata.sdk.model.account.Account.AuthenticationMode.PASSWORD;
+import static com.gooddata.sdk.model.account.Account.AuthenticationMode.SSO;
+import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Account acceptance tests.
@@ -39,13 +40,13 @@ public class AccountServiceAT extends AbstractGoodDataAT {
     @Test(groups = "isolated_domain")
     public void createAccount() {
         final Account newAccount = new Account(LOGIN, "w4yYxSQpAbaODA64", "FistName", "LastName");
-        newAccount.setAuthenticationModes(Collections.singletonList("SSO"));
+        newAccount.setAuthenticationModes(asList(SSO.toString(), PASSWORD.toString()));
         account = accountService.createAccount(newAccount, getProperty("domain"));
 
         assertThat(account, is(notNullValue()));
         assertThat(account.getId(), is(notNullValue()));
         assertThat(account.getLogin(), is(LOGIN));
-        assertThat(account.getAuthenticationModes(), is(Collections.singletonList("SSO")));
+        assertThat(account.getAuthenticationModes(), containsInAnyOrder(SSO.toString(), PASSWORD.toString()));
     }
 
     @Test(groups = "isolated_domain", dependsOnMethods = "createAccount")
@@ -69,7 +70,7 @@ public class AccountServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = "isolated_domain", dependsOnMethods = "getSeparatorSettings")
-    public void updateAccount() throws Exception {
+    public void updateAccount() {
         final String newName = "Petra";
         account.setFirstName(newName);
 
