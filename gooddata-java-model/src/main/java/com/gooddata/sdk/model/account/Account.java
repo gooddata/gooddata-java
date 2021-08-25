@@ -47,6 +47,9 @@ public class Account {
     @JsonView(UpdateView.class)
     private List<String> ipWhitelist;
 
+    @JsonView(UpdateView.class)
+    private List<String> authenticationModes;
+
     @JsonIgnore
     private final Links links;
 
@@ -59,6 +62,7 @@ public class Account {
             @JsonProperty("firstName") String firstName,
             @JsonProperty("lastName") String lastName,
             @JsonProperty("ipWhitelist") List<String> ipWhitelist,
+            @JsonProperty("authenticationModes") List<String> authenticationModes,
             @JsonProperty("links") Links links
     ) {
         this.login = login;
@@ -68,11 +72,12 @@ public class Account {
         this.firstName = firstName;
         this.lastName = lastName;
         this.ipWhitelist = ipWhitelist;
+        this.authenticationModes = authenticationModes;
         this.links = links;
     }
 
     public Account(String firstName, String lastName, Links links) {
-        this(null, null, null, null, firstName, lastName, null, links);
+        this(null, null, null, null, firstName, lastName, null, null, links);
     }
 
     /**
@@ -83,7 +88,7 @@ public class Account {
      * @param password password
      */
     public Account(String email, String password, String firstName, String lastName) {
-        this(email, email, password, password, firstName, lastName, null, null);
+        this(email, email, password, password, firstName, lastName, null, null, null);
     }
 
     public String getLogin() {
@@ -129,6 +134,10 @@ public class Account {
         return ipWhitelist;
     }
 
+    public List<String> getAuthenticationModes() {
+        return authenticationModes;
+    }
+
     public void setEmail(final String email) {
         this.email = email;
     }
@@ -151,6 +160,10 @@ public class Account {
 
     public void setIpWhitelist(final List<String> ipWhitelist) {
         this.ipWhitelist = ipWhitelist;
+    }
+
+    public void setAuthenticationModes(final List<String> authenticationModes) {
+        this.authenticationModes = authenticationModes;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

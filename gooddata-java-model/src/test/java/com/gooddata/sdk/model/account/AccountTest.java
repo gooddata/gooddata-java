@@ -16,7 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 public class AccountTest {
 
@@ -37,12 +37,14 @@ public class AccountTest {
         assertThat(account.getUri(), is("/gdc/account/profile/ID"));
         assertThat(account.getProjectsUri(), is("/gdc/account/profile/ID/projects"));
         assertThat(account.getIpWhitelist(), contains(IP));
+        assertThat(account.getAuthenticationModes(), contains("SSO"));
     }
 
     @Test
     public void testSerialization() {
         final Account account = new Account(FIRST_NAME, LAST_NAME, null);
-        account.setIpWhitelist(Arrays.asList("1.2.3.4/32"));
+        account.setIpWhitelist(Collections.singletonList("1.2.3.4/32"));
+        account.setAuthenticationModes(Collections.singletonList("SSO"));
         assertThat(account, jsonEquals(resource("account/account-input.json")));
     }
 

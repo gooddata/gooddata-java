@@ -13,6 +13,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.*;
 import static net.jadler.Jadler.onRequest;
@@ -222,12 +224,14 @@ public class AccountServiceIT extends AbstractGoodDataIT {
         final String newEmail = "fake2@gooddata.com";
         final String newPass = "password2";
         final String newLastName = "Muhehe2";
+        final List<String> authenticationModes = Collections.singletonList("SSO");
 
         toBeUpdated.setFirstName(newFirstName);
         toBeUpdated.setEmail(newEmail);
         toBeUpdated.setPassword(newPass);
         toBeUpdated.setVerifyPassword(newPass);
         toBeUpdated.setLastName(newLastName);
+        toBeUpdated.setAuthenticationModes(authenticationModes);
 
         gd.getAccountService().updateAccount(toBeUpdated);
     }
