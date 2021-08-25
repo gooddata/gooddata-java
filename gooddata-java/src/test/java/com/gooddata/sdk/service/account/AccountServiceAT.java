@@ -11,6 +11,7 @@ import com.gooddata.sdk.model.account.Account;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -38,12 +39,13 @@ public class AccountServiceAT extends AbstractGoodDataAT {
     @Test(groups = "isolated_domain")
     public void createAccount() {
         final Account newAccount = new Account(LOGIN, "w4yYxSQpAbaODA64", "FistName", "LastName");
-
+        newAccount.setAuthenticationModes(Collections.singletonList("SSO"));
         account = accountService.createAccount(newAccount, getProperty("domain"));
 
         assertThat(account, is(notNullValue()));
         assertThat(account.getId(), is(notNullValue()));
         assertThat(account.getLogin(), is(LOGIN));
+        assertThat(account.getAuthenticationModes(), is(Collections.singletonList("SSO")));
     }
 
     @Test(groups = "isolated_domain", dependsOnMethods = "createAccount")

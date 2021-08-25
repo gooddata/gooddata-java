@@ -5,7 +5,7 @@
         "ssoProvider" : null,
         "timezone" : null,
         "position" : null,
-        "authenticationModes" : [],
+        "authenticationModes" : ["SSO"],
         "companyName" : "gdc",
         "login" : "fake@gooddata.com",
         "email" : "fake@gooddata.com",
