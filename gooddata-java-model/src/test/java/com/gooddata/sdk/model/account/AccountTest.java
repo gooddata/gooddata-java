@@ -7,6 +7,7 @@ package com.gooddata.sdk.model.account;
 
 import org.testng.annotations.Test;
 
+import static com.gooddata.sdk.model.account.Account.AuthenticationMode.SSO;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
@@ -37,14 +38,14 @@ public class AccountTest {
         assertThat(account.getUri(), is("/gdc/account/profile/ID"));
         assertThat(account.getProjectsUri(), is("/gdc/account/profile/ID/projects"));
         assertThat(account.getIpWhitelist(), contains(IP));
-        assertThat(account.getAuthenticationModes(), contains("SSO"));
+        assertThat(account.getAuthenticationModes(), contains(SSO.toString()));
     }
 
     @Test
     public void testSerialization() {
         final Account account = new Account(FIRST_NAME, LAST_NAME, null);
         account.setIpWhitelist(Collections.singletonList("1.2.3.4/32"));
-        account.setAuthenticationModes(Collections.singletonList("SSO"));
+        account.setAuthenticationModes(Collections.singletonList(SSO.toString()));
         assertThat(account, jsonEquals(resource("account/account-input.json")));
     }
 

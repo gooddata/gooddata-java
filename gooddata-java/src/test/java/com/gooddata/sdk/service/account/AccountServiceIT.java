@@ -12,11 +12,11 @@ import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.*;
+import static com.gooddata.sdk.model.account.Account.AuthenticationMode.SSO;
 import static net.jadler.Jadler.onRequest;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -40,13 +40,13 @@ public class AccountServiceIT extends AbstractGoodDataIT {
     private static Account createAccount;
 
     @BeforeClass
-    public void init() throws IOException {
+    public void init() {
         account = readObjectFromResource(ACCOUNT, Account.class);
         createAccount = readObjectFromResource(CREATE_ACCOUNT, Account.class);
     }
 
     @Test
-    public void shouldCreateAccount() throws Exception {
+    public void shouldCreateAccount() {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(AccountService.ACCOUNTS_TEMPLATE.expand(DOMAIN).toString())
@@ -79,7 +79,7 @@ public class AccountServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldRemoveAccount() throws Exception {
+    public void shouldRemoveAccount() {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo(ACCOUNT_URI)
@@ -90,7 +90,7 @@ public class AccountServiceIT extends AbstractGoodDataIT {
     }
 
     @Test(expectedExceptions = AccountNotFoundException.class)
-    public void shouldFailToFindAccountForRemoval() throws Exception {
+    public void shouldFailToFindAccountForRemoval() {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo(ACCOUNT_URI)
@@ -116,7 +116,7 @@ public class AccountServiceIT extends AbstractGoodDataIT {
     }
 
     @Test(expectedExceptions = GoodDataException.class)
-    public void shouldFailToGetCurrentAccount() throws Exception {
+    public void shouldFailToGetCurrentAccount() {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(CURRENT_ACCOUNT_URI)
@@ -127,7 +127,7 @@ public class AccountServiceIT extends AbstractGoodDataIT {
     }
 
     @Test(expectedExceptions = AccountNotFoundException.class)
-    public void shouldFailToFindCurrentAccount() throws Exception {
+    public void shouldFailToFindCurrentAccount() {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(CURRENT_ACCOUNT_URI)
@@ -210,7 +210,7 @@ public class AccountServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldUpdateAccount() throws Exception {
+    public void shouldUpdateAccount() {
         onRequest()
                 .havingMethodEqualTo("PUT")
                 .havingPathEqualTo(ACCOUNT_URI)
@@ -224,7 +224,7 @@ public class AccountServiceIT extends AbstractGoodDataIT {
         final String newEmail = "fake2@gooddata.com";
         final String newPass = "password2";
         final String newLastName = "Muhehe2";
-        final List<String> authenticationModes = Collections.singletonList("SSO");
+        final List<String> authenticationModes = Collections.singletonList(SSO.toString());
 
         toBeUpdated.setFirstName(newFirstName);
         toBeUpdated.setEmail(newEmail);
