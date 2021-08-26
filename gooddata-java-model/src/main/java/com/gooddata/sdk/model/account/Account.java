@@ -5,7 +5,14 @@
  */
 package com.gooddata.sdk.model.account;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.model.util.UriHelper;
 
@@ -22,6 +29,7 @@ public class Account {
 
     public static final String URI = "/gdc/account/profile/{id}";
     public static final String ACCOUNTS_URI = "/gdc/account/domains/{organization_name}/users";
+    public static final String ACCOUNT_BY_EMAIL_URI = ACCOUNTS_URI + "?login={email}";
 
     public static final String LOGIN_URI = "/gdc/account/login/{id}";
 
