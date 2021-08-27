@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2021, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -14,7 +14,7 @@ import java.util.Map;
 class UsersDeserializer extends PageDeserializer<Users, User> {
 
     protected UsersDeserializer() {
-        super(User.class, "users");
+        super(User.class, Users.ROOT_NODE);
     }
 
     @Override
