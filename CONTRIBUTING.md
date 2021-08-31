@@ -59,15 +59,20 @@ is specific enough.
   * `find*()` when searching for multiple objects (collection of objects, never return `null`)
   * `list*()` when listing whole or paged collection of objects (return collection or collection wrapped by DTO)
   * `remove*()` (i.e. `remove(Project project)`) instead od `delete*()`
-* Write **integration tests** for services using _[Jadler](https://github.com/jadler-mocking/jadler/wiki)_.
-* If it is possible write **acceptance tests** to be run with the real backend.
+* In addition to unit tests, write also **integration tests** and **acceptance tests** if possible. See "What to test where" in "Best practices" below.
 * Update [documentation](https://github.com/gooddata/gooddata-java/wiki/Code-Examples) with usage examples.
 
 ## Best practices
-* **Test class naming**:
-  * `*Test` unit tests, but avoid service tests using mocked `RestTemplate` - use integration test
-  * `*IT` integration tests (see [`AbstractGoodDataIT`](src/test/java/com/gooddata/AbstractGoodDataIT.java))
-  * `*AT` acceptance tests
+* **What to test where**:
+  * `*Test` = unit tests
+    * focus on verifying bussiness logic, corner cases, various input combinations, etc.
+    * avoid service tests using mocked `RestTemplate` - use integration tests with mocked API responses instead
+  * `*IT` = integration tests
+    * focus on verifying all possible outcomes of API calls
+    * see common ancestor [`AbstractGoodDataIT`](src/test/java/com/gooddata/AbstractGoodDataIT.java) setting up [Jadler](https://github.com/jadler-mocking/jadler/wiki) for API mocking
+  * `*AT` = acceptance tests
+    * focus on verifying the happy path against the real backend (so we're sure mocks in ITs are correct)
+    * see common ancestor [`AbstractGoodDataAT`](src/test/java/com/gooddata/AbstractGoodDataAT.java) setting up GoodData endpoint based on passed environment variables
 * Everything public should be **documented** using _javadoc_.
 * When you need some **utility code**, look for handy utilities in used libraries first (e.g. _Spring_ has
 its `StreamUtils`, `FileCopyUtils`, ...). When you decide to create new utility class,
