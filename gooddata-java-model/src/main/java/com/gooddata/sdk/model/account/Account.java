@@ -76,6 +76,16 @@ public class Account {
         this.links = links;
     }
 
+    public Account(final String login,
+                   final String email,
+                   final String password,
+                   final String firstName,
+                   final String lastName,
+                   final List<String> ipWhitelist,
+                   final List<String> authenticationModes) {
+        this(login, email, password, password, firstName, lastName, ipWhitelist, authenticationModes, null);
+    }
+
     public Account(String firstName, String lastName, Links links) {
         this(null, null, null, null, firstName, lastName, null, null, links);
     }

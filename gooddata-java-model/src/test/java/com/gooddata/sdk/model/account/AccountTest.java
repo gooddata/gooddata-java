@@ -25,6 +25,8 @@ public class AccountTest {
     private static final String FIRST_NAME = "Blah";
     private static final String LAST_NAME = "Muhehe";
     private static final String IP = "1.2.3.4/32";
+    private static final String TEST_LOGIN = "testLogin";
+    private static final String TEST_PASSWORD = "testPassword";
 
     @SuppressWarnings("deprecation")
     @Test
@@ -60,6 +62,26 @@ public class AccountTest {
         final Account account = new Account(FIRST_NAME, LAST_NAME, null);
 
         assertThat(account.toString(), matchesPattern(Account.class.getSimpleName() + "\\[.*\\]"));
+    }
+
+
+
+    @Test
+    public void testAllParametersConstructor() {
+
+        final Account account = new Account(TEST_LOGIN, MAIL, TEST_PASSWORD, FIRST_NAME, LAST_NAME,
+            Collections.singletonList(IP), Collections.singletonList(SSO.toString()));
+
+        assertThat(account.getLogin(), is(TEST_LOGIN));
+        assertThat(account.getEmail(), is(MAIL));
+        assertThat(account.getPassword(), is(TEST_PASSWORD));
+        assertThat(account.getVerifyPassword(), is(TEST_PASSWORD));
+        assertThat(account.getFirstName(), is(FIRST_NAME));
+        assertThat(account.getLastName(), is(LAST_NAME));
+        assertThat(account.getIpWhitelist(), contains(IP));
+        assertThat(account.getAuthenticationModes(), contains(SSO.toString()));
+
+
     }
 
 }
