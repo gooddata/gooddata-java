@@ -8,10 +8,12 @@ package com.gooddata.sdk.service.account;
 import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.common.GoodDataRestException;
 import com.gooddata.sdk.model.account.Account;
+import com.gooddata.sdk.model.account.Accounts;
 import com.gooddata.sdk.model.account.SeparatorSettings;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.sdk.service.GoodDataSettings;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.client.RestClientException;
@@ -29,6 +31,7 @@ public class AccountService extends AbstractService {
 
     public static final UriTemplate ACCOUNT_TEMPLATE = new UriTemplate(Account.URI);
     public static final UriTemplate ACCOUNTS_TEMPLATE = new UriTemplate(Account.ACCOUNTS_URI);
+    public static final UriTemplate ACCOUNT_BY_LOGIN_TEMPLATE = new UriTemplate(Account.ACCOUNT_BY_EMAIL_URI);
     public static final UriTemplate LOGIN_TEMPLATE = new UriTemplate(Account.LOGIN_URI);
     public static final UriTemplate SEPARATORS_TEMPLATE = new UriTemplate(SeparatorSettings.URI);
 
@@ -125,6 +128,31 @@ public class AccountService extends AbstractService {
             } else {
                 throw e;
             }
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to get account", e);
+        }
+    }
+
+    /**
+     * Get account by given login.
+     * Only domain admin is allowed to search users by login.
+     * @param email used as login
+     * @param organizationName (domain) in which account is present
+     * @return account found by given login
+     * @throws AccountNotFoundException when given account wasn't found
+     * @throws GoodDataException when different error occurs
+     */
+    public Account getAccountByLogin(final String email, final String organizationName) {
+        notNull(email, "email");
+        notNull(organizationName, "organizationName");
+        try {
+            final Accounts accounts = restTemplate.getForObject(
+                Account.ACCOUNT_BY_EMAIL_URI, Accounts.class, organizationName, email);
+            if (accounts != null && !accounts.getPageItems().isEmpty()) {
+                return accounts.getPageItems().get(0);
+            }
+            throw new AccountNotFoundException("User was not found by email " +
+                email + " in organization " + organizationName, Account.ACCOUNT_BY_EMAIL_URI);
         } catch (RestClientException e) {
             throw new GoodDataException("Unable to get account", e);
         }

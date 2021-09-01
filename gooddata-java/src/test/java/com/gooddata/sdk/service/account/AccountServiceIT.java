@@ -7,15 +7,19 @@ package com.gooddata.sdk.service.account;
 
 import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.model.account.Account;
+import com.gooddata.sdk.model.account.Accounts;
 import com.gooddata.sdk.model.account.SeparatorSettings;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.Collections;
 import java.util.List;
 
-import static com.gooddata.sdk.common.util.ResourceUtils.*;
+import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readStringFromResource;
 import static com.gooddata.sdk.model.account.Account.AuthenticationMode.SSO;
 import static net.jadler.Jadler.onRequest;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
@@ -25,16 +29,24 @@ import static org.hamcrest.core.Is.is;
 
 public class AccountServiceIT extends AbstractGoodDataIT {
 
+    private static final String DOMAIN = "default";
     private static final String CREATE_ACCOUNT = "/account/create-account.json";
     public static final String ACCOUNT = "/account/account.json";
+    private static final String ACCOUNT_BY_EMAIL = "/account/account-by-email.json";
+    private static final String ACCOUNT_BY_EMAIL_EMPTY_RESPONSE = "/account/account-by-email-empty-response.json";
     private static final String ACCOUNT_UPDATE = "/account/update-account.json";
     private static final String SEPARATORS = "/account/separators.json";
     private static final String ACCOUNT_ID = "ID";
     private static final String ACCOUNT_URI = AccountService.ACCOUNT_TEMPLATE.expand(ACCOUNT_ID).toString();
+    private static final String LOGIN_EMAIL = "example@company.com";
+    private static final String ACCOUNT_BY_EMAIL_URI = AccountService.ACCOUNTS_TEMPLATE
+        .expand(DOMAIN).toString();
+
+
     private static final String SEPARATORS_URI = AccountService.SEPARATORS_TEMPLATE.expand(ACCOUNT_ID).toString();
     public static final String CURRENT_ACCOUNT_URI = AccountService.ACCOUNT_TEMPLATE.expand(Account.CURRENT_ID).toString();
     private static final String LOGOUT_CURRENT = AccountService.LOGIN_TEMPLATE.expand(ACCOUNT_ID).toString();
-    private static final String DOMAIN = "default";
+
 
     private static Account account;
     private static Account createAccount;
@@ -185,6 +197,33 @@ public class AccountServiceIT extends AbstractGoodDataIT {
 
         assertThat(created, notNullValue());
         assertThat(created.getFirstName(), is("Blah"));
+    }
+
+    @Test
+    public void shouldGetAccountByEmail() {
+        onRequest()
+            .havingMethodEqualTo("GET")
+            .havingPathEqualTo(ACCOUNT_BY_EMAIL_URI)
+            .havingQueryStringEqualTo("login=" + LOGIN_EMAIL)
+            .respond()
+            .withBody(readFromResource(ACCOUNT_BY_EMAIL))
+            .withStatus(200);
+
+        final Account loaded = gd.getAccountService().getAccountByLogin(LOGIN_EMAIL, DOMAIN);
+        assertThat(loaded.getFirstName(), is("John"));
+    }
+
+    @Test(expectedExceptions = AccountNotFoundException.class)
+    public void shouldGetEmptyPageWhenAccountByEmailDoesNotExist() {
+        onRequest()
+            .havingMethodEqualTo("GET")
+            .havingPathEqualTo(ACCOUNT_BY_EMAIL_URI)
+            .havingQueryStringEqualTo("login=wrong@email.com")
+            .respond()
+            .withBody(readFromResource(ACCOUNT_BY_EMAIL_EMPTY_RESPONSE))
+            .withStatus(200);
+
+        gd.getAccountService().getAccountByLogin("wrong@email.com", DOMAIN);
     }
 
     @Test(expectedExceptions = AccountNotFoundException.class)

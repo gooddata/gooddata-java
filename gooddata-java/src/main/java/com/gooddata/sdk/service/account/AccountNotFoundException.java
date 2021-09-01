@@ -20,6 +20,12 @@ public class AccountNotFoundException extends GoodDataException {
         this.accountUri = uri;
     }
 
+    public AccountNotFoundException(final String message,
+                                    final String accountUri) {
+        super(message + " failed on " + accountUri);
+        this.accountUri = accountUri;
+    }
+
     public String getAccountUri() {
         return accountUri;
     }

@@ -1,0 +1,34 @@
+{
+    "accountSettings": {
+        "items": [
+            {
+                "accountSetting": {
+                    "companyName": null,
+                    "country": null,
+                    "created": "2014-02-24 18:51:53",
+                    "firstName": "Blah",
+                    "lastName": "Muhehe",
+                    "login": "example@company.com",
+                    "phoneNumber": null,
+                    "position": null,
+                    "timezone": null,
+                    "updated": "2014-02-24 18:51:53",
+                    "email": "example@company.com",
+                    "language": "language",
+                    "ipWhitelist": ["1.2.3.4/32"],
+                    "effectiveIpWhitelist": null,
+                    "links": {
+                        "projects": "/gdc/account/profile/ID/projects",
+                        "self": "/gdc/account/profile/ID"
+                    }
+                }
+            }
+        ],
+        "paging": {
+            "offset": 0,
+            "count": 1
+        }
+
+    }
+
+}

@@ -60,6 +60,17 @@ public class AccountServiceAT extends AbstractGoodDataAT {
         assertThat(foundAccount.getLogin(), is(account.getLogin()));
     }
 
+    @Test(groups = "isolated_domain", dependsOnMethods = "createAccount")
+    public void getAccountByLogin() {
+        final Account foundAccount = accountService.getAccountByLogin(LOGIN, getProperty("domain"));
+
+        assertThat(foundAccount, is(notNullValue()));
+        assertThat(foundAccount.getId(), is(notNullValue()));
+        assertThat(foundAccount.getId(), is(account.getId()));
+        assertThat(foundAccount.getLogin(), is(LOGIN));
+        assertThat(foundAccount.getLogin(), is(account.getLogin()));
+    }
+
     @Test(groups = "isolated_domain", dependsOnMethods = "getAccount")
     public void getSeparatorSettings() {
         final SeparatorSettings separators = accountService.getSeparatorSettings(account);
