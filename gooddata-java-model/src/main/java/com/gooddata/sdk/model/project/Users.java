@@ -16,13 +16,14 @@ import com.gooddata.sdk.common.collections.Paging;
 
 import java.util.List;
 
+import static com.gooddata.sdk.model.project.Users.ROOT_NODE;
 import static java.util.Arrays.asList;
 
 /**
  * List of users.
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = Id.NONE)
-@JsonTypeName("users")
+@JsonTypeName(ROOT_NODE)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(using = UsersDeserializer.class)
 @JsonSerialize(using = UsersSerializer.class)
