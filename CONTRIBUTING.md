@@ -9,7 +9,7 @@ Below are few **rules, recommendations and best practices** we try to follow whe
   * must be written in the **imperative mood**
   * must clearly **explain rationale** behind this change (describe _why_ you are doing the change rather than _what_ you are changing)
 * The **pull request**:
-  * with non-trivial change must be **[associated with an issue](https://help.github.com/articles/closing-issues-via-commit-messages/)**
+  * with non-trivial, non-dependencies change must be **[associated with an issue](https://help.github.com/articles/closing-issues-via-commit-messages/)**
 * Add usage examples of new high level functionality to
 [documentation](https://github.com/gooddata/gooddata-java/wiki/Code-Examples).
 
