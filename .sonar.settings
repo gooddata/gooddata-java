@@ -1,2 +1,3 @@
 # Settings for sonar scan
 gdc.java_version=openjdk-11
+sonar.exclusions=**/target/surefire-reports/**,**/target/failsafe-reports/**
