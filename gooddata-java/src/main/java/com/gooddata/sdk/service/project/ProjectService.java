@@ -552,4 +552,38 @@ public class ProjectService extends AbstractService {
             throw new GoodDataException("Unable to update users in project", e);
         }
     }
+
+    /**
+     * Removes given account from a project without checking if really account is in project.
+     * <p>
+     *     You can:
+     *     <ul>
+     *         <li>Remove yourself from a project (leave the project). You cannot leave the project if you are the only admin in the project.</li>
+     *         <li>Remove another user from a project. You need to have the <code>canSuspendUser</code> permission in this project.</li>
+     *     </ul>
+     * </p>
+     * @param account account to be removed
+     * @param project project from user will be removed
+     * @throws com.gooddata.sdk.common.GoodDataException when account can't be removed
+     */
+    public void removeUserFromProject(final Project project, final Account account) {
+        notNull(project, "project");
+        notNull(project.getId(), "project.id");
+        notNull(account, "account");
+        notNull(account.getId(), "account.id");
+
+        try {
+            restTemplate.delete(getUserUri(project, account));
+        } catch (GoodDataRestException e) {
+            if (HttpStatus.FORBIDDEN.value() == e.getStatusCode()) {
+                throw new GoodDataException("You cannot leave the project " + project.getId() + " if you are the only admin in it. You can make another user an admin in this project, and then re-issue the call.", e);
+            } else if (HttpStatus.METHOD_NOT_ALLOWED.value() == e.getStatusCode()) {
+                throw new GoodDataException("You either misspelled your user ID or tried to remove another user but did not have the canSuspendUser permission in this project. Check your ID in the request and your permissions in the project " + project.getId() + ", then re-issue the call.", e);
+            } else {
+                throw e;
+            }
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to remove account " + account.getUri() + " from project " + project.getUri(), e);
+        }
+    }
 }

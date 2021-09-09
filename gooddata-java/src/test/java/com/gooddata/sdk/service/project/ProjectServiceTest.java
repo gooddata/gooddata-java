@@ -18,12 +18,16 @@ import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.service.account.AccountService;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Collection;
 
 import static com.gooddata.sdk.service.project.ProjectService.LIST_PROJECTS_TEMPLATE;
@@ -32,6 +36,7 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -201,6 +206,73 @@ public class ProjectServiceTest {
 
         verify(role).setUri(ROLE_URI);
         assertThat(roleByUri, is(role));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void removeUserFromProjectInvalidProject(){
+        service.removeUserFromProject(project, null);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void removeUserFromProjectInvalidAccount(){
+        service.removeUserFromProject(null, account);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void removeUserProjectFail() throws URISyntaxException {
+        when(project.getId()).thenReturn("1");
+        when(account.getId()).thenReturn("1");
+        doThrow(GoodDataRestException.class).when(restTemplate).delete(new URI("/gdc/projects/1/users/1"));
+        service.removeUserFromProject(project, account);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class,
+          expectedExceptionsMessageRegExp= "You cannot leave the project 1 if you are the " +
+              "only admin in it. You can make another user an admin in this project, and then re-issue the call.")
+    public void removeUserProjectFailForbidden() throws URISyntaxException {
+        when(project.getId()).thenReturn("1");
+        when(account.getId()).thenReturn("1");
+        final GoodDataRestException goodDataRestException = new GoodDataRestException(
+            HttpStatus.FORBIDDEN.value(),
+            "r1",
+            "not allowd",
+            "component",
+            "errorClass");
+        doThrow(goodDataRestException).when(restTemplate).delete(new URI("/gdc/projects/1/users/1"));
+        service.removeUserFromProject(project, account);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class,
+          expectedExceptionsMessageRegExp= "You either misspelled your user ID or tried to remove another user but " +
+              "did not have the canSuspendUser permission in this project. Check your ID in the request and your " +
+              "permissions in the project 1, then re-issue the call.")
+    public void removeUserProjectFailNotAllowed() throws URISyntaxException {
+        when(project.getId()).thenReturn("1");
+        when(account.getId()).thenReturn("1");
+        final GoodDataRestException goodDataRestException = new GoodDataRestException(
+            HttpStatus.METHOD_NOT_ALLOWED.value() ,
+            "r1",
+            "not allowd",
+            "component",
+            "errorClass");
+        doThrow(goodDataRestException).when(restTemplate).delete(new URI("/gdc/projects/1/users/1"));
+        service.removeUserFromProject(project, account);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void removeUserProjectFailRestletClientException() throws URISyntaxException {
+        when(project.getId()).thenReturn("1");
+        when(account.getId()).thenReturn("1");
+        doThrow(RestClientException.class).when(restTemplate).delete(new URI("/gdc/projects/1/users/1"));
+        service.removeUserFromProject(project, account);
+    }
+
+    @Test
+    public void removeUserProject() throws URISyntaxException {
+        when(project.getId()).thenReturn("1");
+        when(account.getId()).thenReturn("1");
+        doNothing().when(restTemplate).delete(new URI("/gdc/projects/1/users/1"));
+        service.removeUserFromProject(project, account);
     }
 
 }
