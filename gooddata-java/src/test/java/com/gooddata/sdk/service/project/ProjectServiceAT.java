@@ -36,7 +36,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.testng.Assert.fail;
 
 /**
  * Project acceptance tests.
@@ -104,14 +103,14 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
 
     @Test(groups = "project", dependsOnMethods = "createProject")
     public void getProjectById() {
-        final Project project = gd.getProjectService().getProjectById(this.project.getId());
-        assertThat(project, ProjectIdMatcher.hasSameIdAs(this.project));
+        final Project result = gd.getProjectService().getProjectById(project.getId());
+        assertThat(result, ProjectIdMatcher.hasSameIdAs(project));
     }
 
     @Test(groups = "project", dependsOnMethods = "createProject")
     public void getProjectByUri() {
-        final Project project = gd.getProjectService().getProjectByUri(this.project.getUri());
-        assertThat(project, ProjectIdMatcher.hasSameIdAs(this.project));
+        final Project result = gd.getProjectService().getProjectByUri(project.getUri());
+        assertThat(result, ProjectIdMatcher.hasSameIdAs(project));
     }
 
     @Test(groups = "project", dependsOnMethods = "createProject")
@@ -165,7 +164,7 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
 
     @Test(groups = {"project", "isolated_domain"}, dependsOnMethods = "disableUserInProject")
     public void removeAccountFromProject() {
-        final User user = gd.getProjectService().getUser(project, account1);
+        gd.getProjectService().getUser(project, account1); // just verifying it doesn't throw before the removal
         gd.getProjectService().removeUserFromProject(project, account1);
 
         try {
