@@ -429,4 +429,26 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
 
         gd.getProjectService().getUser(enabled, account);
     }
+
+    @Test
+    public void removeUserFromProject() {
+        onRequest()
+            .havingMethodEqualTo("DELETE")
+            .havingPathEqualTo(ProjectService.PROJECT_USER_TEMPLATE.expand("PROJECT_ID", "ID").toString())
+            .respond()
+            .withStatus(200);
+
+        gd.getProjectService().removeUserFromProject(enabled, account);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void removeUserFromProjectNotFound() {
+        onRequest()
+            .havingMethodEqualTo("DELETE")
+            .havingPathEqualTo(ProjectService.PROJECT_USER_TEMPLATE.expand("PROJECT_ID", "ID").toString())
+            .respond()
+            .withStatus(404);
+
+        gd.getProjectService().removeUserFromProject(enabled, account);
+    }
 }

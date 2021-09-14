@@ -8,22 +8,35 @@ package com.gooddata.sdk.service.project;
 import com.gooddata.sdk.common.collections.CustomPageRequest;
 import com.gooddata.sdk.common.collections.Page;
 import com.gooddata.sdk.common.collections.PageBrowser;
-import com.gooddata.sdk.common.collections.PageRequest;
 import com.gooddata.sdk.model.account.Account;
-import com.gooddata.sdk.model.project.*;
+import com.gooddata.sdk.model.project.CreatedInvitations;
+import com.gooddata.sdk.model.project.Invitation;
+import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.model.project.ProjectValidationResults;
+import com.gooddata.sdk.model.project.Role;
+import com.gooddata.sdk.model.project.User;
 import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.service.account.AccountService;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.core.IsIterableContaining;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import static com.gooddata.sdk.model.project.ProjectEnvironment.TESTING;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.testng.Assert.fail;
 
 /**
  * Project acceptance tests.
@@ -148,6 +161,19 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
         final User user = gd.getProjectService().getUser(project, gd.getAccountService().getCurrent());
 
         assertThat(user, notNullValue());
+    }
+
+    @Test(groups = {"project", "isolated_domain"}, dependsOnMethods = "disableUserInProject")
+    public void removeAccountFromProject() {
+        final User user = gd.getProjectService().getUser(project, account1);
+        gd.getProjectService().removeUserFromProject(project, account1);
+
+        try {
+            gd.getProjectService().getUser(project, account1);
+            assertThat("Exception should be thrown.", false);
+        } catch (UserInProjectNotFoundException e) {
+            //expected
+        }
     }
 
     @AfterClass(groups = "isolated_domain")
