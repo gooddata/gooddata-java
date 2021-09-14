@@ -132,6 +132,16 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = {"project", "isolated_domain"}, dependsOnMethods = "addUsersToProject")
+    public void listProjectsForUser() {
+        final ProjectService projectService = gd.getProjectService();
+
+        final PageBrowser<Project> projects = projectService.listProjects(account1, new CustomPageRequest());
+
+        assertThat(projects, is(notNullValue()));
+        assertThat(projects.getPageItems(), contains(project));
+    }
+
+    @Test(groups = {"project", "isolated_domain"}, dependsOnMethods = "addUsersToProject")
     public void disableUserInProject() {
         user.setStatus(DISABLED_STATUS);
 

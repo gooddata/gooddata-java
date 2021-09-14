@@ -124,6 +124,14 @@ public class ProjectService extends AbstractService {
         return new PageBrowser<>(startPage, page -> listProjects(getProjectsUri(userId, page)));
     }
 
+    public PageBrowser<Project> listProjects(final Account account, final PageRequest startPage) {
+        notNull(startPage, "startPage");
+        notNull(account, "account");
+        notEmpty(account.getId(), "account.uri");
+        final String userId = account.getId();
+        return new PageBrowser<>(startPage, page -> listProjects(getProjectsUri(userId, page)));
+    }
+
     private Page<Project> listProjects(final URI uri) {
         try {
             final Projects projects = restTemplate.getForObject(uri, Projects.class);

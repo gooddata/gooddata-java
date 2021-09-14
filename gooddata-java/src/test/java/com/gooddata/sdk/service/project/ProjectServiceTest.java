@@ -60,7 +60,7 @@ public class ProjectServiceTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        MockitoAnnotations.openMocks(this).close();;
+        MockitoAnnotations.openMocks(this).close();
         service = new ProjectService(restTemplate, accountService, new GoodDataSettings());
         when(accountService.getCurrent()).thenReturn(account);
         when(account.getId()).thenReturn(ACCOUNT_ID);
@@ -111,6 +111,23 @@ public class ProjectServiceTest {
     public void testListProjectsWithClientException() throws Exception {
         doThrow(new GoodDataException("")).when(restTemplate)
                 .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?limit=100"), Projects.class);
+        service.listProjects();
+    }
+
+    @Test
+    public void testListProjectsForUserWithPage() throws Exception {
+        doReturn(new Projects(singletonList(project), new Paging(""))).when(restTemplate)
+            .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?offset=1&limit=100"), Projects.class);
+        final Collection<Project> result = service.listProjects(account, new CustomPageRequest(1, 100)).getPageItems();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(project));
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void testListProjectsForuserWithClientException() throws Exception {
+        doThrow(new GoodDataException("")).when(restTemplate)
+            .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?limit=100"), Projects.class);
         service.listProjects();
     }
 
