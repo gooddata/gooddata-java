@@ -7,6 +7,7 @@ package com.gooddata.sdk.service.project;
 
 import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.common.collections.CustomPageRequest;
+import com.gooddata.sdk.common.collections.PageBrowser;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.gdc.AsyncTask;
 import com.gooddata.sdk.model.gdc.TaskStatus;
@@ -21,6 +22,8 @@ import com.gooddata.sdk.model.project.Projects;
 import com.gooddata.sdk.model.project.Role;
 import com.gooddata.sdk.model.project.User;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
+
+import org.hamcrest.core.Is;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -450,5 +453,24 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
             .withStatus(404);
 
         gd.getProjectService().removeUserFromProject(enabled, account);
+    }
+
+
+    @Test
+    public void shouldListProjectsForUser() {
+        onRequest()
+            .havingMethodEqualTo("GET")
+            .havingPathEqualTo(ProjectService.LIST_PROJECTS_TEMPLATE.expand("ID").toString())
+            .havingQueryStringEqualTo("offset=0&limit=100")
+            .respond()
+            .withStatus(200)
+            .withBody(readFromResource("/project/projects-for-user.json"));
+
+
+        final PageBrowser<Project> projects = gd.getProjectService().listProjects(
+            account,
+            new CustomPageRequest(0, 100));
+        assertThat(projects.getPageItems().isEmpty(), is(false));
+        assertThat(projects.getPageItems().get(0).getTitle(), Is.is("defaultEmptyProject"));
     }
 }
