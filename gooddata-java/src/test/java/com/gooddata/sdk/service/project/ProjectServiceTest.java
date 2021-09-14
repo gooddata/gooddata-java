@@ -24,10 +24,8 @@ import org.springframework.web.client.RestTemplate;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Collection;
 
 import static com.gooddata.sdk.service.project.ProjectService.LIST_PROJECTS_TEMPLATE;
@@ -65,7 +63,7 @@ public class ProjectServiceTest {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        MockitoAnnotations.openMocks(this).close();;
+        MockitoAnnotations.openMocks(this).close();
         service = new ProjectService(restTemplate, accountService, new GoodDataSettings());
         when(accountService.getCurrent()).thenReturn(account);
         when(account.getId()).thenReturn(ACCOUNT_ID);
@@ -218,11 +216,18 @@ public class ProjectServiceTest {
         service.removeUserFromProject(null, account);
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void removeUserProjectFail() throws URISyntaxException {
+    @Test(expectedExceptions = GoodDataException.class,
+            expectedExceptionsMessageRegExp = "500.*r1.*server error")
+    public void removeUserProjectFailUnexpectedly() throws URISyntaxException {
         when(project.getId()).thenReturn("1");
         when(account.getId()).thenReturn("1");
-        doThrow(GoodDataRestException.class).when(restTemplate).delete(new URI("/gdc/projects/1/users/1"));
+        final GoodDataRestException goodDataRestException = new GoodDataRestException(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "r1",
+                "server error",
+                "component",
+                "errorClass");
+        doThrow(goodDataRestException).when(restTemplate).delete(new URI("/gdc/projects/1/users/1"));
         service.removeUserFromProject(project, account);
     }
 
@@ -235,7 +240,7 @@ public class ProjectServiceTest {
         final GoodDataRestException goodDataRestException = new GoodDataRestException(
             HttpStatus.FORBIDDEN.value(),
             "r1",
-            "not allowd",
+            "forbidden",
             "component",
             "errorClass");
         doThrow(goodDataRestException).when(restTemplate).delete(new URI("/gdc/projects/1/users/1"));
@@ -252,17 +257,20 @@ public class ProjectServiceTest {
         final GoodDataRestException goodDataRestException = new GoodDataRestException(
             HttpStatus.METHOD_NOT_ALLOWED.value() ,
             "r1",
-            "not allowd",
+            "not allowed",
             "component",
             "errorClass");
         doThrow(goodDataRestException).when(restTemplate).delete(new URI("/gdc/projects/1/users/1"));
         service.removeUserFromProject(project, account);
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void removeUserProjectFailRestletClientException() throws URISyntaxException {
+    @Test(expectedExceptions = GoodDataException.class,
+            expectedExceptionsMessageRegExp = "Unable to remove account /gdc/account/1 from project /gdc/projects/1")
+    public void removeUserProjectFailWithRestClientException() throws URISyntaxException {
         when(project.getId()).thenReturn("1");
+        when(project.getUri()).thenReturn("/gdc/projects/1");
         when(account.getId()).thenReturn("1");
+        when(account.getUri()).thenReturn("/gdc/account/1");
         doThrow(RestClientException.class).when(restTemplate).delete(new URI("/gdc/projects/1/users/1"));
         service.removeUserFromProject(project, account);
     }

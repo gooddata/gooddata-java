@@ -447,7 +447,8 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
             .havingMethodEqualTo("DELETE")
             .havingPathEqualTo(ProjectService.PROJECT_USER_TEMPLATE.expand("PROJECT_ID", "ID").toString())
             .respond()
-            .withStatus(404);
+            .withStatus(404)
+            .withBody("{\"error\":{\"parameters\":[\"1234\"],\"requestId\":\"req1\",\"component\":\"GDC::LWP::UserAgent\",\"message\":\"User uid %s doesn't exist.\",\"errorClass\":\"GDC::Exception::NotFound\"}}");
 
         gd.getProjectService().removeUserFromProject(enabled, account);
     }
