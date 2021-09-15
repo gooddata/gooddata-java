@@ -7,6 +7,7 @@ package com.gooddata.sdk.service.project;
 
 import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.sdk.common.collections.CustomPageRequest;
 import com.gooddata.sdk.common.collections.Page;
 import com.gooddata.sdk.common.collections.PageBrowser;
 import com.gooddata.sdk.common.collections.PageRequest;
@@ -122,6 +123,30 @@ public class ProjectService extends AbstractService {
         notNull(startPage, "startPage");
         final String userId = accountService.getCurrent().getId();
         return new PageBrowser<>(startPage, page -> listProjects(getProjectsUri(userId, page)));
+    }
+
+    /**
+     * Get defined page of paged list of projects that given user/account has access to.
+     *
+     * @param account user whose projects will be returned
+     * @param startPage page to be retrieved
+     * @return {@link PageBrowser} list of found projects for given user or empty list
+     */
+    public PageBrowser<Project> listProjects(final Account account, final PageRequest startPage) {
+        notNull(startPage, "startPage");
+        notNull(account, "account");
+        notEmpty(account.getId(), "account.uri");
+        return new PageBrowser<>(startPage, page -> listProjects(getProjectsUri(account.getId(), page)));
+    }
+
+    /**
+     * Get browser of projects that given user/account has access to.
+     *
+     * @param account user whose projects will be returned
+     * @return {@link PageBrowser} list of found projects for given user or empty list
+     */
+    public PageBrowser<Project> listProjects(final Account account) {
+        return listProjects(account, new CustomPageRequest());
     }
 
     private Page<Project> listProjects(final URI uri) {

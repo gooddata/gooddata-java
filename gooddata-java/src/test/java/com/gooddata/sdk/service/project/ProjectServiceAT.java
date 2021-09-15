@@ -31,6 +31,8 @@ import java.util.UUID;
 
 import static com.gooddata.sdk.model.project.ProjectEnvironment.TESTING;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -144,6 +146,26 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = {"project", "isolated_domain"}, dependsOnMethods = "addUsersToProject")
+    public void listProjectsForUser() {
+        final ProjectService projectService = gd.getProjectService();
+
+        final PageBrowser<Project> projects = projectService.listProjects(account1);
+
+        assertThat(projects, is(notNullValue()));
+        assertThat(projects.getPageItems().get(0).getTitle(), is(title));
+    }
+
+    @Test(groups = {"project", "isolated_domain"}, dependsOnMethods = "addUsersToProject")
+    public void listProjectsForUserSettingStartPage() {
+        final ProjectService projectService = gd.getProjectService();
+
+        final PageBrowser<Project> projects = projectService.listProjects(account1, new CustomPageRequest(10, 1));
+
+        assertThat(projects, is(notNullValue()));
+        assertThat(projects.getPageItems().isEmpty(), is(true));
+    }
+
+    @Test(groups = {"project", "isolated_domain"}, dependsOnMethods = {"listProjectsForUser", "listProjectsForUserSettingStartPage"})
     public void disableUserInProject() {
         user.setStatus(DISABLED_STATUS);
 

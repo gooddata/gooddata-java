@@ -117,6 +117,33 @@ public class ProjectServiceTest {
         service.listProjects();
     }
 
+    @Test
+    public void testListProjectsForUserWithPage() throws Exception {
+        doReturn(new Projects(singletonList(project), new Paging(""))).when(restTemplate)
+            .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?offset=1&limit=100"), Projects.class);
+        final Collection<Project> result = service.listProjects(account, new CustomPageRequest(1, 100)).getPageItems();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(project));
+    }
+
+    @Test
+    public void testListProjectsForUser() throws Exception {
+        doReturn(new Projects(singletonList(project), new Paging(""))).when(restTemplate)
+            .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?limit=100"), Projects.class);
+        final Collection<Project> result = service.listProjects(account).getPageItems();
+
+        assertThat(result, hasSize(1));
+        assertThat(result, hasItem(project));
+    }
+
+    @Test(expectedExceptions = GoodDataException.class)
+    public void testListProjectsForuserWithClientException() throws Exception {
+        doThrow(new GoodDataException("")).when(restTemplate)
+            .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?limit=100"), Projects.class);
+        service.listProjects();
+    }
+
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testGetProjectByUriWithNullUri() {
         service.getProjectByUri(null);
