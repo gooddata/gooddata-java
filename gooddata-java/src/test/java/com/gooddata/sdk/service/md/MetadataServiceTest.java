@@ -439,4 +439,19 @@ public class MetadataServiceTest {
         assertThat(tz, is("UTC"));
     }
 
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testSetTimezoneNullProject() {
+        service.setTimezone(null, "test");
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testSetTimezoneNullTZ() {
+        service.setTimezone(project, null);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testSetTimezoneEmptyTZ() {
+        service.setTimezone(project, "");
+    }
+
 }

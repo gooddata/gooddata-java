@@ -25,6 +25,7 @@ import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static net.jadler.Jadler.onRequest;
+import static net.jadler.Jadler.verifyThatRequest;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -413,5 +414,48 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .withStatus(500);
 
         gd.getMetadataService().getTimezone(project);
+    }
+
+    @Test
+    public void setTimezone() {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/service/timezone")
+                .havingBodyEqualTo("{\"service\":{\"timezone\":\"America/Los_Angeles\"}}")
+            .respond()
+                .withStatus(200)
+                .withBody("{\"service\":{\"timezone\":\"America/Los_Angeles\"}}");
+
+        gd.getMetadataService().setTimezone(project, "America/Los_Angeles");
+        verifyThatRequest().receivedOnce();
+    }
+
+    @Test(expectedExceptions = GoodDataException.class,
+            expectedExceptionsMessageRegExp = "Unexpected empty result from API call.")
+    public void setTimezoneReturningNothing() {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/service/timezone")
+                .havingBodyEqualTo("{\"service\":{\"timezone\":\"America/Los_Angeles\"}}")
+            .respond()
+                .withStatus(200);
+
+        gd.getMetadataService().setTimezone(project, "America/Los_Angeles");
+    }
+
+    @Test(expectedExceptions = GoodDataException.class,
+            expectedExceptionsMessageRegExp = ".*The timezone 'wrong' could not be loaded, or is an invalid name.*")
+    public void setTimezoneWithWrongName() {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/service/timezone")
+                .havingBodyEqualTo("{\"service\":{\"timezone\":\"wrong\"}}")
+            .respond()
+                .withStatus(400)
+                .withBody("{\"error\":{\"parameters\":[\"wrong\"],\"requestId\":\"reqId\",\"component\":" +
+                        "\"MD::Service::Timezone\",\"errorClass\":\"GDC::Exception::User\",\"message\":" +
+                        "\"The timezone '%s' could not be loaded, or is an invalid name.\"}}");
+
+        gd.getMetadataService().setTimezone(project, "wrong");
     }
 }

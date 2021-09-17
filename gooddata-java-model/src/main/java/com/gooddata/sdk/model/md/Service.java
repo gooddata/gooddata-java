@@ -26,7 +26,7 @@ public class Service implements Serializable {
     private final String timezone;
 
     @JsonCreator
-    private Service(@JsonProperty("timezone") String timezone) {
+    public Service(@JsonProperty("timezone") String timezone) {
         this.timezone = timezone;
     }
 

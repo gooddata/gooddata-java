@@ -464,6 +464,30 @@ public class MetadataService extends AbstractService {
         }
     }
 
+    /**
+     * Set project/workspace timezone.
+     *
+     * @param project the project/workspace where to set the timezone
+     * @param timezone the timezone to be set (see IANA/Olson tz database for possible values)
+     */
+    public void setTimezone(final Project project, final String timezone) {
+        notNull(project, "project");
+        notNull(project.getId(), "project.id");
+        notNull(timezone, "timezone");
+        notEmpty(timezone, "timezone");
+
+        try {
+            final Service result = restTemplate.postForObject(TIMEZONE_URI, new Service(timezone), Service.class,
+                    project.getId());
+
+            if (result == null) {
+                throw new GoodDataException("Unexpected empty result from API call.");
+            }
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to set timezone of project/workspace " + project.getId(), e);
+        }
+    }
+
 
     private Collection<Entry> filterEntries(Collection<Entry> entries, Restriction... restrictions) {
         if (restrictions == null || restrictions.length == 0) {
