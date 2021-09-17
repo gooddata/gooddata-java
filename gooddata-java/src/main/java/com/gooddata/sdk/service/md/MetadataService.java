@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2021, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -21,9 +21,8 @@ import org.springframework.web.util.UriTemplate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.gooddata.sdk.common.util.Validate.noNullElements;
-import static com.gooddata.sdk.common.util.Validate.notNull;
-import static com.gooddata.sdk.common.util.Validate.notNullState;
+import static com.gooddata.sdk.common.util.Validate.*;
+import static com.gooddata.sdk.model.md.Service.TIMEZONE_URI;
 import static java.util.Arrays.asList;
 
 /**
@@ -439,6 +438,56 @@ public class MetadataService extends AbstractService {
             throw new GoodDataException("Unable to get attribute elements from " + elementsUri + ".", e);
         }
     }
+
+    /**
+     * Get project/workspace timezone.
+     *
+     * @param project project from what to return the timezone
+     * @return string identifier of the timezone (see IANA/Olson tz database for possible values)
+     * @throws com.gooddata.sdk.common.GoodDataRestException if GoodData REST API returns unexpected status code
+     * @throws com.gooddata.sdk.common.GoodDataException     if no response from API or client-side HTTP error
+     */
+    public String getTimezone(final Project project) {
+        notNull(project, "project");
+        notNull(project.getId(), "project.id");
+
+        try {
+            final Service result = restTemplate.getForObject(TIMEZONE_URI, Service.class, project.getId());
+
+            if (result != null) {
+                return result.getTimezone();
+            } else {
+                throw new GoodDataException("Received empty response from API call.");
+            }
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to get timezone of project/workspace " + project.getId(), e);
+        }
+    }
+
+    /**
+     * Set project/workspace timezone.
+     *
+     * @param project the project/workspace where to set the timezone
+     * @param timezone the timezone to be set (see IANA/Olson tz database for possible values)
+     */
+    public void setTimezone(final Project project, final String timezone) {
+        notNull(project, "project");
+        notNull(project.getId(), "project.id");
+        notNull(timezone, "timezone");
+        notEmpty(timezone, "timezone");
+
+        try {
+            final Service result = restTemplate.postForObject(TIMEZONE_URI, new Service(timezone), Service.class,
+                    project.getId());
+
+            if (result == null) {
+                throw new GoodDataException("Unexpected empty result from API call.");
+            }
+        } catch (RestClientException e) {
+            throw new GoodDataException("Unable to set timezone of project/workspace " + project.getId(), e);
+        }
+    }
+
 
     private Collection<Entry> filterEntries(Collection<Entry> entries, Restriction... restrictions) {
         if (restrictions == null || restrictions.length == 0) {

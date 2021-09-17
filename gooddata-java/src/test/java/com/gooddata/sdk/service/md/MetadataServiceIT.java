@@ -1,20 +1,20 @@
 /*
- * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2021, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.md;
 
-import com.gooddata.sdk.service.AbstractGoodDataIT;
+import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.md.*;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
 import java.util.*;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
@@ -25,6 +25,7 @@ import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static net.jadler.Jadler.onRequest;
+import static net.jadler.Jadler.verifyThatRequest;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -67,14 +68,15 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .readValue(format("{\"useMany\":[{\"uri\":\"%s\", \"entries\":[{\"title\":\"%s\"}]}]}", OBJ_URI, TITLE),
                         UseMany.class);
 
-                onRequest()
+        onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(USEDBY_URI)
-                .respond()
+            .respond()
                 .withStatus(200)
                 .withBody(OBJECT_MAPPER.writeValueAsString(useMany));
 
-        final Collection<Entry> result = gd.getMetadataService().usedBy(project, OBJ_URI, false, ReportDefinition.class);
+        final Collection<Entry> result = gd.getMetadataService()
+                .usedBy(project, OBJ_URI, false, ReportDefinition.class);
 
         assertThat(result, hasSize(1));
         assertThat(result.iterator().next().getTitle(), is(TITLE));
@@ -86,7 +88,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(BULK_GET_URI)
                 .havingBody(allOf(containsString(DATASET_URL), containsString(FACT_URL), containsString(METRIC_URL)))
-                .respond()
+            .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/bulk-get.json"));
 
@@ -134,11 +136,12 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(USEDBY_URI)
-                .respond()
+            .respond()
                 .withStatus(200)
                 .withBody(OBJECT_MAPPER.writeValueAsString(useMany));
 
-        final Collection<Usage> result = gd.getMetadataService().usedBy(project, new HashSet<>(asList(OBJ_URI, OBJ_URI2)), false, ReportDefinition.class);
+        final Collection<Usage> result = gd.getMetadataService()
+                .usedBy(project, new HashSet<>(asList(OBJ_URI, OBJ_URI2)), false, ReportDefinition.class);
 
         assertThat(result, hasSize(2));
         final Iterator<Usage> usages = result.iterator();
@@ -155,12 +158,12 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void testFindIdentifierUris() throws IOException {
+    public void testFindIdentifierUris() {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(IDENTIFIERS_URI)
                 .havingBody(jsonEquals(readStringFromResource("/md/identifierToUri.json")))
-                .respond()
+            .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/identifiersAndUris.json"));
 
@@ -170,12 +173,12 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void testIdentifiersToUris() throws IOException {
+    public void testIdentifiersToUris() {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(IDENTIFIERS_URI)
                 .havingBody(jsonEquals(readStringFromResource("/md/identifierToUri.json")))
-                .respond()
+            .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/identifiersAndUris.json"));
 
@@ -185,7 +188,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldCreateObj() throws Exception {
+    public void shouldCreateObj() {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(OBJ_URI)
@@ -228,34 +231,34 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldRemoveObjByUri() throws Exception {
+    public void shouldRemoveObjByUri() {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo(SPECIFIC_OBJ_URI)
-                .respond()
+            .respond()
                 .withStatus(204);
 
         gd.getMetadataService().removeObjByUri(SPECIFIC_OBJ_URI);
     }
 
     @Test
-    public void shouldRemoveObj() throws Exception {
+    public void shouldRemoveObj() {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo(SPECIFIC_OBJ_URI)
-                .respond()
+            .respond()
                 .withStatus(204);
 
         gd.getMetadataService().removeObj(metricInput);
     }
 
     @Test
-    public void shouldCreateMailScheduleObj() throws Exception {
+    public void shouldCreateMailScheduleObj() {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(OBJ_URI)
                 .havingParameterEqualTo("createAndGet", "true")
-                .respond()
+            .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/scheduledMail.json"));
 
@@ -268,7 +271,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldGetObjByUri() throws Exception {
+    public void shouldGetObjByUri() {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(SPECIFIC_OBJ_URI)
@@ -285,7 +288,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldGetObjById() throws Exception {
+    public void shouldGetObjById() {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(SPECIFIC_OBJ_URI)
@@ -303,7 +306,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldGetObjUriByRestrictions() throws Exception {
+    public void shouldGetObjUriByRestrictions() {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/query/attributes")
@@ -318,7 +321,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldGetObjByRestrictions() throws Exception {
+    public void shouldGetObjByRestrictions() {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/query/attributes")
@@ -341,7 +344,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldFindByRestrictions() throws Exception {
+    public void shouldFindByRestrictions() {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/query/attributes")
@@ -357,7 +360,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldFindUrisByRestrictions() throws Exception {
+    public void shouldFindUrisByRestrictions() {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/query/attributes")
@@ -374,7 +377,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
     }
 
     @Test
-    public void shouldGetAttributeElements() throws Exception {
+    public void shouldGetAttributeElements() {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/obj/DF_ID/elements")
@@ -389,5 +392,70 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         assertThat(attributeElements, is(Matchers.notNullValue()));
         assertThat(attributeElements, hasSize(3));
         assertThat(attributeElements.get(0).getTitle(), is("1167"));
+    }
+
+    @Test(expectedExceptions = GoodDataException.class, expectedExceptionsMessageRegExp = ".*request_id.*Unauthorized.*")
+    public void getTimezoneShouldThrowGDEOnClientError() {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/service/timezone")
+            .respond()
+                .withStatus(401);
+
+        gd.getMetadataService().getTimezone(project);
+    }
+
+    @Test(expectedExceptions = GoodDataException.class, expectedExceptionsMessageRegExp = ".*request_id.*Server Error.*")
+    public void getTimezoneShouldThrowGDEOnServerError() {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/service/timezone")
+            .respond()
+                .withStatus(500);
+
+        gd.getMetadataService().getTimezone(project);
+    }
+
+    @Test
+    public void setTimezone() {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/service/timezone")
+                .havingBodyEqualTo("{\"service\":{\"timezone\":\"America/Los_Angeles\"}}")
+            .respond()
+                .withStatus(200)
+                .withBody("{\"service\":{\"timezone\":\"America/Los_Angeles\"}}");
+
+        gd.getMetadataService().setTimezone(project, "America/Los_Angeles");
+        verifyThatRequest().receivedOnce();
+    }
+
+    @Test(expectedExceptions = GoodDataException.class,
+            expectedExceptionsMessageRegExp = "Unexpected empty result from API call.")
+    public void setTimezoneReturningNothing() {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/service/timezone")
+                .havingBodyEqualTo("{\"service\":{\"timezone\":\"America/Los_Angeles\"}}")
+            .respond()
+                .withStatus(200);
+
+        gd.getMetadataService().setTimezone(project, "America/Los_Angeles");
+    }
+
+    @Test(expectedExceptions = GoodDataException.class,
+            expectedExceptionsMessageRegExp = ".*The timezone 'wrong' could not be loaded, or is an invalid name.*")
+    public void setTimezoneWithWrongName() {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo("/gdc/md/PROJECT_ID/service/timezone")
+                .havingBodyEqualTo("{\"service\":{\"timezone\":\"wrong\"}}")
+            .respond()
+                .withStatus(400)
+                .withBody("{\"error\":{\"parameters\":[\"wrong\"],\"requestId\":\"reqId\",\"component\":" +
+                        "\"MD::Service::Timezone\",\"errorClass\":\"GDC::Exception::User\",\"message\":" +
+                        "\"The timezone '%s' could not be loaded, or is an invalid name.\"}}");
+
+        gd.getMetadataService().setTimezone(project, "wrong");
     }
 }

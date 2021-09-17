@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2021, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -419,6 +419,39 @@ public class MetadataServiceTest {
         when(restTemplate.getForObject("elementsUri", AttributeElements.class)).thenReturn(attrElements);
         final List<AttributeElement> elements = service.getAttributeElements(attr);
         assertThat(elements, allOf(hasItem(result1), hasItem(result2)));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testGetTimezoneNullProject() {
+        service.getTimezone(null);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testGetTimezoneNullProjectId() {
+        service.getTimezone(mock(Project.class));
+    }
+
+    @Test
+    public void testGetTimezone() {
+        when(restTemplate.getForObject(Service.TIMEZONE_URI, Service.class, project.getId()))
+                .thenReturn(readObjectFromResource("/md/service-timezone.json", Service.class));
+        final String tz = service.getTimezone(project);
+        assertThat(tz, is("UTC"));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testSetTimezoneNullProject() {
+        service.setTimezone(null, "test");
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testSetTimezoneNullTZ() {
+        service.setTimezone(project, null);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testSetTimezoneEmptyTZ() {
+        service.setTimezone(project, "");
     }
 
 }
