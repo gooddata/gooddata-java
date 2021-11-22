@@ -49,7 +49,7 @@
     <properties>
         <httpclient.version>4.5.13</httpclient.version>
         <httpcore.version>4.4.14</httpcore.version>
-        <jackson.version>2.12.5</jackson.version>
+        <jackson.version>2.13.0</jackson.version>
         <slf4j.version>1.7.32</slf4j.version>
         <spring.version>5.3.10</spring.version>
         <jadler.version>1.3.0</jadler.version>
