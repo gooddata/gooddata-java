@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2019, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2007-2021, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -7,16 +7,15 @@ package com.gooddata.sdk.service;
 
 import com.gooddata.sdk.service.account.AccountService;
 import com.gooddata.sdk.service.auditevent.AuditEventService;
-import com.gooddata.sdk.service.hierarchicalconfig.HierarchicalConfigService;
 import com.gooddata.sdk.service.connector.ConnectorService;
 import com.gooddata.sdk.service.dataload.OutputStageService;
 import com.gooddata.sdk.service.dataload.processes.ProcessService;
 import com.gooddata.sdk.service.dataset.DatasetService;
 import com.gooddata.sdk.service.executeafm.ExecuteAfmService;
 import com.gooddata.sdk.service.export.ExportService;
-import com.gooddata.sdk.service.featureflag.FeatureFlagService;
 import com.gooddata.sdk.service.gdc.DataStoreService;
 import com.gooddata.sdk.service.gdc.GdcService;
+import com.gooddata.sdk.service.hierarchicalconfig.HierarchicalConfigService;
 import com.gooddata.sdk.service.lcm.LcmService;
 import com.gooddata.sdk.service.md.MetadataService;
 import com.gooddata.sdk.service.md.maintenance.ExportImportService;
@@ -52,7 +51,6 @@ class GoodDataServices {
     private final WarehouseService warehouseService;
     private final NotificationService notificationService;
     private final ExportImportService exportImportService;
-    private final FeatureFlagService featureFlagService;
     private final OutputStageService outputStageService;
     @SuppressWarnings("deprecation")
     private final ProjectTemplateService projectTemplateService;
@@ -76,7 +74,6 @@ class GoodDataServices {
         connectorService = new ConnectorService(getRestTemplate(), projectService, getSettings());
         notificationService = new NotificationService(getRestTemplate(), getSettings());
         exportImportService = new ExportImportService(getRestTemplate(), getSettings());
-        featureFlagService = new FeatureFlagService(getRestTemplate(), getSettings());
         outputStageService = new OutputStageService(getRestTemplate(), getSettings());
         projectTemplateService = new ProjectTemplateService(getRestTemplate(), getSettings());
         auditEventService = new AuditEventService(getRestTemplate(), accountService, getSettings());
@@ -154,10 +151,6 @@ class GoodDataServices {
 
     ExportImportService getExportImportService() {
         return exportImportService;
-    }
-
-    FeatureFlagService getFeatureFlagService() {
-        return featureFlagService;
     }
 
     OutputStageService getOutputStageService() {

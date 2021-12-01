@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2019, GoodData(R) Corporation. All rights reserved.
+ * Copyright (C) 2004-2021, GoodData(R) Corporation. All rights reserved.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -7,16 +7,15 @@ package com.gooddata.sdk.service;
 
 import com.gooddata.sdk.service.account.AccountService;
 import com.gooddata.sdk.service.auditevent.AuditEventService;
-import com.gooddata.sdk.service.hierarchicalconfig.HierarchicalConfigService;
 import com.gooddata.sdk.service.connector.ConnectorService;
 import com.gooddata.sdk.service.dataload.OutputStageService;
 import com.gooddata.sdk.service.dataload.processes.ProcessService;
 import com.gooddata.sdk.service.dataset.DatasetService;
 import com.gooddata.sdk.service.executeafm.ExecuteAfmService;
 import com.gooddata.sdk.service.export.ExportService;
-import com.gooddata.sdk.service.featureflag.FeatureFlagService;
 import com.gooddata.sdk.service.gdc.DataStoreService;
 import com.gooddata.sdk.service.gdc.GdcService;
+import com.gooddata.sdk.service.hierarchicalconfig.HierarchicalConfigService;
 import com.gooddata.sdk.service.httpcomponents.LoginPasswordGoodDataRestProvider;
 import com.gooddata.sdk.service.lcm.LcmService;
 import com.gooddata.sdk.service.md.MetadataService;
@@ -29,8 +28,10 @@ import com.gooddata.sdk.service.warehouse.WarehouseService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
-import static com.gooddata.sdk.service.GoodDataEndpoint.*;
 import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.service.GoodDataEndpoint.HOSTNAME;
+import static com.gooddata.sdk.service.GoodDataEndpoint.PORT;
+import static com.gooddata.sdk.service.GoodDataEndpoint.PROTOCOL;
 
 /**
  * Entry point for GoodData SDK usage.
@@ -144,6 +145,7 @@ public class GoodData {
 
     /**
      * Create instance based on given {@link GoodDataRestProvider}.
+     *
      * @param goodDataRestProvider configured provider
      */
     protected GoodData(final GoodDataRestProvider goodDataRestProvider) {
@@ -296,18 +298,6 @@ public class GoodData {
     }
 
     /**
-     * Get initialized service for feature flag management.
-     *
-     * @return initialized service for feature flag management
-     * @deprecated Use {@link HierarchicalConfigService} instead.
-     */
-    @Deprecated
-    @Bean("goodDataFeatureFlagService")
-    public FeatureFlagService getFeatureFlagService() {
-        return services.getFeatureFlagService();
-    }
-
-    /**
      * Get initialized service for output stage management.
      *
      * @return initialized service for output stage management
@@ -321,7 +311,6 @@ public class GoodData {
      * Get initialized service for project templates
      *
      * @return initialized service for project templates
-     *
      * @deprecated The project templates are deprecated and stopped working on May 15, 2019.
      * See https://support.gooddata.com/hc/en-us/articles/360016126334-April-4-2019
      * Deprecated since version 3.0.1. Will be removed in one of future versions.
@@ -334,6 +323,7 @@ public class GoodData {
 
     /**
      * Get initialized service for audit events
+     *
      * @return initialized service for audit events
      */
     @Bean("goodDataAuditEventService")
@@ -343,6 +333,7 @@ public class GoodData {
 
     /**
      * Get initialized service for afm execution
+     *
      * @return initialized service for afm execution
      */
     @Bean("goodDataExecuteAfmService")
@@ -352,6 +343,7 @@ public class GoodData {
 
     /**
      * Get initialized service for Life Cycle Management
+     *
      * @return initialized service for Life Cycle Management
      */
     @Bean("goodDataLcmService")
@@ -361,6 +353,7 @@ public class GoodData {
 
     /**
      * Get initialized service for hierarchical config management
+     *
      * @return hierarchical config service
      */
     @Bean("goodDataHierarchicalConfigService")
