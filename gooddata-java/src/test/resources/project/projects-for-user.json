@@ -45,7 +45,6 @@
             "execute": "/gdc/projects/defaultEmptyProject/execute",
             "clearCaches": "/gdc/projects/defaultEmptyProject/clearCaches",
             "checkXaeCompatibility": "/gdc/projects/defaultEmptyProject/checkXaeCompatibility",
-            "projectFeatureFlags": "/gdc/projects/defaultEmptyProject/projectFeatureFlags",
             "config": "/gdc/projects/defaultEmptyProject/config"
           }
         }

@@ -38,11 +38,11 @@ public class ConfigItemsTest {
 
     @Test
     public void testSerialize() throws IOException {
-        final ConfigItems projectFeatureFlags = new ConfigItems(asList(
+        final ConfigItems configItems = new ConfigItems(asList(
                 new ConfigItem("enabledSettingItem", "true"),
                 new ConfigItem("disabledSettingItem", "false")));
 
-        final String serializedConfigItem = OBJECT_MAPPER.writeValueAsString(projectFeatureFlags);
+        final String serializedConfigItem = OBJECT_MAPPER.writeValueAsString(configItems);
 
         assertThat(serializedConfigItem, startsWith("{\"settings\""));
         assertThat(serializedConfigItem, containsString("\"key\":\"enabledSettingItem\",\"value\":\"true\""));
