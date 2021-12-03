@@ -206,7 +206,11 @@ public class Project {
         return notNullState(links, "links").getExecute();
     }
 
+    /**
+     * @deprecated This service has been removed from platform long time ago.
+     */
     @JsonIgnore
+    @Deprecated
     public String getEventStoresUri() {
         return notNullState(links, "links").getEventStores();
     }
@@ -469,6 +473,10 @@ public class Project {
             return execute;
         }
 
+        /**
+         * @deprecated This service has been removed from platform long time ago.
+         */
+        @Deprecated
         public String getEventStores() {
             return eventStores;
         }

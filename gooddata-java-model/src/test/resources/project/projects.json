@@ -41,7 +41,6 @@
                         "connectors": "/gdc/projects/defaultEmptyProject/connectors",
                         "schedules": "/gdc/projects/defaultEmptyProject/schedules",
                         "dataload": "/gdc/projects/defaultEmptyProject/dataload",
-                        "eventstores": "/gdc/projects/defaultEmptyProject/dataload/eventstore/stores",
                         "execute": "/gdc/projects/defaultEmptyProject/execute",
                         "clearCaches": "/gdc/projects/defaultEmptyProject/clearCaches",
                         "projectFeatureFlags": "/gdc/projects/defaultEmptyProject/projectFeatureFlags",
