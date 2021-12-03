@@ -26,7 +26,8 @@
             "execute" : "/gdc/projects/PROJECT_ID/execute",
             "schedules" : "/gdc/projects/PROJECT_ID/schedules",
             "templates" : "/gdc/md/PROJECT_ID/templates",
-            "eventstores" : "/gdc/projects/PROJECT_ID/dataload/eventstore/stores"
+            "eventstores" : "/gdc/projects/PROJECT_ID/dataload/eventstore/stores",
+            "unknownLink": "To verify we're able to accept also links that are not being deserialized by this SDK."
         },
         "meta" : {
             "created" : "2014-04-11 11:43:45",

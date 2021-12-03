@@ -45,7 +45,8 @@
                         "execute": "/gdc/projects/defaultEmptyProject/execute",
                         "clearCaches": "/gdc/projects/defaultEmptyProject/clearCaches",
                         "projectFeatureFlags": "/gdc/projects/defaultEmptyProject/projectFeatureFlags",
-                        "config": "/gdc/projects/defaultEmptyProject/config"
+                        "config": "/gdc/projects/defaultEmptyProject/config",
+                        "unknownLink": "To verify we're able to accept also links that are not being deserialized by this SDK."
                     }
                 }
             }
