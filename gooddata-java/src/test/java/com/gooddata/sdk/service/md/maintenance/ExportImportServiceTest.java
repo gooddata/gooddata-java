@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.md.maintenance;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import com.gooddata.sdk.common.GoodDataRestException;
@@ -41,7 +41,7 @@ public class ExportImportServiceTest {
     }
 
     @Test(expectedExceptions = ExportImportException.class)
-    public void testCreatePartialExportError() throws Exception {
+    public void testCreatePartialExportError() {
         when(restTemplate.postForObject(eq(PartialMdExport.URI), any(PartialMdExport.class), eq(PartialMdArtifact.class), eq(PROJECT_ID)))
                 .thenThrow(new GoodDataRestException(400, "request", "Failed", "export", "error"));
 
@@ -49,7 +49,7 @@ public class ExportImportServiceTest {
     }
 
     @Test(expectedExceptions = ExportImportException.class)
-    public void testCreatePartialImportError() throws Exception {
+    public void testCreatePartialImportError() {
         when(restTemplate.postForObject(eq(PartialMdExportToken.URI), any(PartialMdExportToken.class), eq(UriResponse.class), eq(PROJECT_ID)))
                 .thenThrow(new GoodDataRestException(400, "request", "Failed", "import", "error"));
 

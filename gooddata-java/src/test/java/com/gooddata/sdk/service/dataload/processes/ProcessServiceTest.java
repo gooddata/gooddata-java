@@ -30,7 +30,6 @@ import org.testng.annotations.Test;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Random;
@@ -38,20 +37,15 @@ import java.util.Random;
 import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
 import static java.lang.String.format;
 import static java.net.URI.create;
-import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.notNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.notNull;
+import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpMethod.GET;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
@@ -107,7 +101,7 @@ public class ProcessServiceTest {
         assertNotNull(entityCaptor.getValue().getBody());
         assertTrue(entityCaptor.getValue().getBody() instanceof MultiValueMap);
 
-        verifyZeroInteractions(dataStoreService);
+        verifyNoInteractions(dataStoreService);
     }
 
     @Test
@@ -121,7 +115,7 @@ public class ProcessServiceTest {
 
         processService.createProcess(project, process, createProcessOfSize(2048));
 
-        verify(dataStoreService).upload(anyString(), notNull(InputStream.class));
+        verify(dataStoreService).upload(anyString(), notNull());
     }
 
     private static File createProcessOfSize(int size) throws Exception {

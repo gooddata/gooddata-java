@@ -58,7 +58,6 @@ public class ProjectTest {
         assertThat(project.getExecuteUri(), is("/gdc/projects/PROJECT_ID/execute"));
         assertThat(project.getSchedulesUri(), is("/gdc/projects/PROJECT_ID/schedules"));
         assertThat(project.getTemplatesUri(), is("/gdc/md/PROJECT_ID/templates"));
-        assertThat(project.getEventStoresUri(), is("/gdc/projects/PROJECT_ID/dataload/eventstore/stores"));
     }
 
     @Test

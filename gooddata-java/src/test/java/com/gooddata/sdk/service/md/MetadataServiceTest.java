@@ -13,7 +13,6 @@ import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.md.visualization.VisualizationClass;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.GoodDataSettings;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
@@ -29,6 +28,7 @@ import java.util.List;
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -61,7 +61,6 @@ public class MetadataServiceTest {
     }
 
     @Test(expectedExceptions = ObjCreateException.class)
-    @SuppressWarnings("unchecked")
     public void testCreateObjGDRestException() {
         final Obj obj = mock(Obj.class);
         when(restTemplate.postForObject(Obj.URI, obj, UriResponse.class, PROJECT_ID))
@@ -82,7 +81,7 @@ public class MetadataServiceTest {
         final Obj obj = mock(Obj.class);
         final Obj resultObj = mock(Obj.class);
 
-        when(restTemplate.postForObject(eq(Obj.CREATE_WITH_ID_URI), eq(obj), Matchers.<Class<Obj>>any(), eq(PROJECT_ID)))
+        when(restTemplate.postForObject(eq(Obj.CREATE_WITH_ID_URI), eq(obj), any(), eq(PROJECT_ID)))
                 .thenReturn(resultObj);
 
         final Obj result = service.createObj(project, obj);
@@ -139,7 +138,7 @@ public class MetadataServiceTest {
 
     @Test
     public void testGetObjsByUris() {
-        final BulkGetUris request = new BulkGetUris(Collections.singletonList(URI));
+        final BulkGetUris request = new BulkGetUris(singletonList(URI));
         final BulkGet response = readObjectFromResource("/md/bulk-get.json", BulkGet.class);
         when(restTemplate.postForObject(BulkGet.URI, request, BulkGet.class, PROJECT_ID)).thenReturn(response);
 
@@ -149,14 +148,14 @@ public class MetadataServiceTest {
 
     @Test(expectedExceptions = GoodDataException.class)
     public void testGetObjsByUrisWithClientSideHTTPError() {
-        final BulkGetUris request = new BulkGetUris(Collections.singletonList(""));
+        final BulkGetUris request = new BulkGetUris(singletonList(""));
         when(restTemplate.postForObject(BulkGet.URI, request, BulkGet.class, PROJECT_ID)).thenThrow(new RestClientException(""));
         service.getObjsByUris(project, request.getItems());
     }
 
     @Test(expectedExceptions = GoodDataRestException.class)
     public void testGetObjsByUrisWithServerSideHTTPError() {
-        final BulkGetUris request = new BulkGetUris(Collections.singletonList(""));
+        final BulkGetUris request = new BulkGetUris(singletonList(""));
         when(restTemplate.postForObject(BulkGet.URI, request, BulkGet.class, PROJECT_ID)).thenThrow(new GoodDataRestException(500, "", "", "", ""));
         service.getObjsByUris(project, request.getItems());
     }
@@ -273,7 +272,7 @@ public class MetadataServiceTest {
         final String uri = "myURI";
         final String title = "myTitle";
         when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
-        when(queryResult.getEntries()).thenReturn(asList(resultEntry));
+        when(queryResult.getEntries()).thenReturn(singletonList(resultEntry));
         when(resultEntry.getTitle()).thenReturn(title);
         when(resultEntry.getUri()).thenReturn(uri);
 
@@ -298,7 +297,7 @@ public class MetadataServiceTest {
         final Entry resultEntry = mock(Entry.class);
         final String title = "myTitle";
         when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
-        when(queryResult.getEntries()).thenReturn(asList(resultEntry));
+        when(queryResult.getEntries()).thenReturn(singletonList(resultEntry));
 
         service.getObjUri(project, Queryable.class, Restriction.title(title));
     }
@@ -311,7 +310,7 @@ public class MetadataServiceTest {
         final String uri = "myURI";
         final String id = "myId";
         when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
-        when(queryResult.getEntries()).thenReturn(asList(resultEntry));
+        when(queryResult.getEntries()).thenReturn(singletonList(resultEntry));
         when(resultEntry.getIdentifier()).thenReturn(id);
         when(resultEntry.getUri()).thenReturn(uri);
         when(restTemplate.getForObject(uri, Queryable.class)).thenReturn(intendedResult);
@@ -337,7 +336,7 @@ public class MetadataServiceTest {
         final Entry resultEntry = mock(Entry.class);
         final String title = "myTitle";
         when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
-        when(queryResult.getEntries()).thenReturn(asList(resultEntry));
+        when(queryResult.getEntries()).thenReturn(singletonList(resultEntry));
 
         service.getObj(project, Queryable.class, Restriction.title(title));
     }
