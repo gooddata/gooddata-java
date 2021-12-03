@@ -25,8 +25,7 @@
             "connectors" : "/gdc/projects/PROJECT_ID/connectors",
             "execute" : "/gdc/projects/PROJECT_ID/execute",
             "schedules" : "/gdc/projects/PROJECT_ID/schedules",
-            "templates" : "/gdc/md/PROJECT_ID/templates",
-            "eventstores" : "/gdc/projects/PROJECT_ID/dataload/eventstore/stores"
+            "templates" : "/gdc/md/PROJECT_ID/templates"
         },
         "meta" : {
             "created" : "2014-04-11 11:43:45",
