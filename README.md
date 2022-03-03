@@ -1,3 +1,4 @@
+test
 # GoodData Java SDK
 [![Build Status](https://github.com/gooddata/gooddata-java/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/gooddata/gooddata-java/actions/workflows/build.yml)
 [![Coverage Status](https://codecov.io/gh/gooddata/gooddata-java/branch/master/graph/badge.svg)](https://app.codecov.io/gh/gooddata/gooddata-java/branch/master)
