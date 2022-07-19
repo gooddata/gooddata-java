@@ -3,6 +3,7 @@
 [![Coverage Status](https://codecov.io/gh/gooddata/gooddata-java/branch/master/graph/badge.svg)](https://app.codecov.io/gh/gooddata/gooddata-java/branch/master)
 [![Stability: Active](https://masterminds.github.io/stability/active.svg)](https://masterminds.github.io/stability/active.html)
 [![License](https://img.shields.io/badge/license-BSD-blue.svg)](LICENSE.txt)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgooddata%2Fgooddata-java.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgooddata%2Fgooddata-java?ref=badge_shield)
 
 [![Javadocs](http://javadoc.io/badge/com.gooddata/gooddata-java.svg)](http://javadoc.io/doc/com.gooddata/gooddata-java)
 [![Javadocs Model](https://javadoc.io/badge2/com.gooddata/gooddata-java-model/javadoc--model.svg)](https://javadoc.io/doc/com.gooddata/gooddata-java-model)
