@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2004-2020, GoodData(R) Corporation. All rights reserved.
+ * (C) 2022 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
