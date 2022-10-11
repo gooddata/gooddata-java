@@ -6,6 +6,7 @@
 package com.gooddata.sdk.model.executeafm.afm.filter
 
 import nl.jqno.equalsverifier.EqualsVerifier
+import nl.jqno.equalsverifier.Warning
 import org.apache.commons.lang3.SerializationUtils
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -124,6 +125,6 @@ class ComparisonConditionTest extends Specification {
 
     def "should verify equals"() {
         expect:
-        EqualsVerifier.forClass(ComparisonCondition).usingGetClass().verify()
+        EqualsVerifier.forClass(ComparisonCondition).usingGetClass().suppress(Warning.BIGDECIMAL_EQUALITY).verify()
     }
 }
