@@ -56,6 +56,8 @@
         <json-unit.version>2.36.0</json-unit.version>
         <surefire.version>3.0.0-M7</surefire.version>
         <failsafe.version>3.0.0-M7</failsafe.version>
+        <sonar.organization>gooddata-github</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <build>
