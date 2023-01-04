@@ -58,6 +58,9 @@
         <failsafe.version>3.0.0-M7</failsafe.version>
         <sonar.organization>gooddata-github</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <!-- Hardcoded value, so the license:check doesn't break builds at the New Year.
+        Change to current year value together with headers in all source files and first license in LICENSE.txt. -->
+        <currentYear>2023</currentYear>
     </properties>
 
     <build>
