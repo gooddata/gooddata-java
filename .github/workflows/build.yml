@@ -30,4 +30,4 @@ jobs:
         with:
           file: ./**/target/site/jacoco/jacoco.xml
           name: codecov
-          fail_ci_if_error: true
+          fail_ci_if_error: false
