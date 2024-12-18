@@ -50,6 +50,7 @@ class VisualizationConverterTest extends Specification {
     private static final String STACKED_COLUMN_CHART = "md/visualization/stackedColumnChart.json"
     private static final String LINE_CHART = "md/visualization/lineChart.json"
     private static final String TABLE_WITH_TOTALS = "md/visualization/complexTableWithTotals.json"
+    private static final String AFM_FROM_TABLE_WITH_TOTALS = "executeafm/afm/complextTableWithTotalsConvertedAfm.json"
 
     @SuppressWarnings("GrDeprecatedAPIUsage")
     def "should convert complex"() {
@@ -74,7 +75,7 @@ class VisualizationConverterTest extends Specification {
                         ),
                                 "measure1", "Measure 1 alias", null)
                 ],
-                null
+                []
         )
         VisualizationObject visualizationObject = readObjectFromResource("/$COMPLEX_VISUALIZATION", VisualizationObject)
         Afm converted = convertToAfm(visualizationObject)
@@ -85,7 +86,7 @@ class VisualizationConverterTest extends Specification {
 
     def "should convert simple"() {
         given:
-        Afm expectedAfm = new Afm([], [], [], null)
+        Afm expectedAfm = new Afm([], [], [], [])
         VisualizationObject visualizationObject = readObjectFromResource("/$SIMPLE_VISUALIZATION", VisualizationObject)
         Afm converted = convertToAfm(visualizationObject)
 
@@ -93,6 +94,15 @@ class VisualizationConverterTest extends Specification {
         that converted, jsonEquals(expectedAfm)
     }
 
+    def "should convert AFM of complex pivot table with totals"() {
+        given:
+        Afm expectedAfm = readObjectFromResource("/$AFM_FROM_TABLE_WITH_TOTALS", Afm)
+        VisualizationObject visualizationObject = readObjectFromResource("/$TABLE_WITH_TOTALS", VisualizationObject)
+        Afm converted = convertToAfm(visualizationObject)
+
+        expect:
+        that converted, jsonEquals(expectedAfm)
+    }
 
     @Unroll
     def "should generate result spec for table with default sorting from #name"() {
