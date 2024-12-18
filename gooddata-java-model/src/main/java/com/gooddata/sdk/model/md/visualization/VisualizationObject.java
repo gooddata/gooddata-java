@@ -33,6 +33,7 @@ import com.gooddata.sdk.model.md.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -223,6 +224,14 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
     @JsonIgnore
     public void setBuckets(List<Bucket> buckets) {
         content.setBuckets(buckets);
+    }
+
+    /**
+     * @return a new copy of this {@link VisualizationObject} with the specified buckets
+     */
+    @JsonIgnore
+    public VisualizationObject withBuckets(List<Bucket> buckets) {
+        return new VisualizationObject(content.withBuckets(buckets), meta);
     }
 
     /**
@@ -432,6 +441,20 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
         @JsonProperty("references")
         public Map<String, String> getReferenceItems() {
             return referenceItems;
+        }
+
+        /**
+         * @return a new copy of this {@link Content} with the specified buckets
+         */
+        @JsonIgnore
+        public Content withBuckets(List<Bucket> buckets) {
+            return new Content(
+                    visualizationClass,
+                    buckets,
+                    filters != null ? new ArrayList<>(filters) : null,
+                    properties,
+                    referenceItems != null ? new HashMap<>(referenceItems) : null
+            );
         }
     }
 }

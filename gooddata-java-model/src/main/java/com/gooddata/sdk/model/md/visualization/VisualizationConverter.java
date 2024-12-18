@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooddata.sdk.model.executeafm.Execution;
 import com.gooddata.sdk.model.executeafm.afm.Afm;
 import com.gooddata.sdk.model.executeafm.afm.AttributeItem;
+import com.gooddata.sdk.model.executeafm.afm.NativeTotalItem;
 import com.gooddata.sdk.model.executeafm.afm.filter.CompatibilityFilter;
 import com.gooddata.sdk.model.executeafm.afm.filter.DateFilter;
 import com.gooddata.sdk.model.executeafm.afm.filter.ExtendedFilter;
@@ -24,8 +25,11 @@ import com.gooddata.sdk.model.executeafm.afm.filter.RankingFilter;
 import com.gooddata.sdk.model.executeafm.resultspec.Dimension;
 import com.gooddata.sdk.model.executeafm.resultspec.ResultSpec;
 import com.gooddata.sdk.model.executeafm.resultspec.SortItem;
+import com.gooddata.sdk.model.executeafm.resultspec.TotalItem;
+import com.gooddata.sdk.model.md.report.Total;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -43,9 +47,12 @@ public abstract class VisualizationConverter {
 
     /**
      * Generate Execution from Visualization object.
+     * <p>
+     * <b>NOTE: totals are not included in this conversion</b>
      *
      * @param visualizationObject which will be converted to {@link Execution}
-     * @param visualizationClassGetter {@link Function} for fetching VisualizationClass, which is necessary for correct generation of {@link ResultSpec}
+     * @param visualizationClassGetter {@link Function} for fetching VisualizationClass,
+     *                                 which is necessary for correct generation of {@link ResultSpec}
      * @return {@link Execution} object
      * @see #convertToExecution(VisualizationObject, VisualizationClass)
      */
@@ -59,6 +66,8 @@ public abstract class VisualizationConverter {
 
     /**
      * Generate Execution from Visualization object.
+     * <p>
+     * <b>NOTE: totals are not included in this conversion</b>
      *
      * @param visualizationObject which will be converted to {@link Execution}
      * @param visualizationClass visualizationClass, which is necessary for correct generation of {@link ResultSpec}
@@ -76,26 +85,79 @@ public abstract class VisualizationConverter {
     }
 
     /**
+     * Generate Execution from Visualization object with totals included.
+     *
+     * @param visualizationObject which will be converted to {@link Execution}
+     * @param visualizationClassGetter {@link Function} for fetching VisualizationClass,
+     *                                 which is necessary for correct generation of {@link ResultSpec}
+     * @return {@link Execution} object
+     * @see #convertToExecutionWithTotals(VisualizationObject, VisualizationClass)
+     */
+    public static Execution convertToExecutionWithTotals(final VisualizationObject visualizationObject,
+            final Function<String, VisualizationClass> visualizationClassGetter) {
+        notNull(visualizationObject, "visualizationObject");
+        notNull(visualizationClassGetter, "visualizationClassGetter");
+        return convertToExecutionWithTotals(visualizationObject,
+                visualizationClassGetter.apply(visualizationObject.getVisualizationClassUri()));
+    }
+
+    /**
+     * Generate Execution from Visualization object with totals included.
+     *
+     * @param visualizationObject which will be converted to {@link Execution}
+     * @param visualizationClass visualizationClass, which is necessary for correct generation of {@link ResultSpec}
+     * @return {@link Execution} object
+     * @see #convertToAfmWithNativeTotals(VisualizationObject)
+     * @see #convertToResultSpecWithTotals(VisualizationObject, VisualizationClass)
+     */
+    public static Execution convertToExecutionWithTotals(final VisualizationObject visualizationObject,
+            final VisualizationClass visualizationClass) {
+        notNull(visualizationObject, "visualizationObject");
+        notNull(visualizationClass, "visualizationClass");
+        ResultSpec resultSpec = convertToResultSpecWithTotals(visualizationObject, visualizationClass);
+        Afm afm = convertToAfmWithNativeTotals(visualizationObject);
+        return new Execution(afm, resultSpec);
+    }
+
+    /**
      * Generate Afm from Visualization object.
+     * <p>
+     * <b>NOTE: native totals are not included in this conversion</b>
      *
      * @param visualizationObject which will be converted to {@link Execution}
      * @return {@link Afm} object
      */
     public static Afm convertToAfm(final VisualizationObject visualizationObject) {
         notNull(visualizationObject, "visualizationObject");
+        final VisualizationObject visualizationObjectWithoutTotals = removeTotals(visualizationObject);
+        return convertToAfmWithNativeTotals(visualizationObjectWithoutTotals);
+    }
+
+    /**
+     * Generate Afm from Visualization object with native totals included.
+     *
+     * @param visualizationObject which will be converted to {@link Execution}
+     * @return {@link Afm} object
+     */
+    public static Afm convertToAfmWithNativeTotals(final VisualizationObject visualizationObject) {
+        notNull(visualizationObject, "visualizationObject");
         final List<AttributeItem> attributes = convertAttributes(visualizationObject.getAttributes());
         final List<CompatibilityFilter> filters = convertFilters(visualizationObject.getFilters());
         final List<MeasureItem> measures = convertMeasures(visualizationObject.getMeasures());
+        final List<NativeTotalItem> totals = convertNativeTotals(visualizationObject);
 
-        return new Afm(attributes, filters, measures, null);
+        return new Afm(attributes, filters, measures, totals);
     }
 
     /**
      * Generate ResultSpec from Visualization object. Currently {@link ResultSpec}'s {@link Dimension}s can be generated
      * for table and four types of chart: bar, column, line and pie.
+     * <p>
+     * <b>NOTE: totals are not included in this conversion</b>
      *
      * @param visualizationObject which will be converted to {@link Execution}
-     * @param visualizationClassGetter {@link Function} for fetching VisualizationClass, which is necessary for correct generation of {@link ResultSpec}
+     * @param visualizationClassGetter {@link Function} for fetching VisualizationClass,
+     *                                 which is necessary for correct generation of {@link ResultSpec}
      * @return {@link Execution} object
      */
     public static ResultSpec convertToResultSpec(final VisualizationObject visualizationObject,
@@ -109,12 +171,47 @@ public abstract class VisualizationConverter {
     /**
      * Generate ResultSpec from Visualization object. Currently {@link ResultSpec}'s {@link Dimension}s can be generated
      * for table and four types of chart: bar, column, line and pie.
+     * <p>
+     * <b>NOTE: totals are not included in this conversion</b>
      *
      * @param visualizationObject which will be converted to {@link Execution}
      * @param visualizationClass VisualizationClass, which is necessary for correct generation of {@link ResultSpec}
      * @return {@link Execution} object
      */
     public static ResultSpec convertToResultSpec(final VisualizationObject visualizationObject,
+            final VisualizationClass visualizationClass) {
+        notNull(visualizationObject, "visualizationObject");
+        notNull(visualizationClass, "visualizationClass");
+        final VisualizationObject visualizationObjectWithoutTotals = removeTotals(visualizationObject);
+        return convertToResultSpecWithTotals(visualizationObjectWithoutTotals, visualizationClass);
+    }
+
+    /**
+     * Generate ResultSpec from Visualization object with totals included. Currently {@link ResultSpec}'s {@link Dimension}s
+     * can be generated for table and four types of chart: bar, column, line and pie.
+     *
+     * @param visualizationObject which will be converted to {@link Execution}
+     * @param visualizationClassGetter {@link Function} for fetching VisualizationClass,
+     *                                 which is necessary for correct generation of {@link ResultSpec}
+     * @return {@link Execution} object
+     */
+    public static ResultSpec convertToResultSpecWithTotals(final VisualizationObject visualizationObject,
+            final Function<String, VisualizationClass> visualizationClassGetter) {
+        notNull(visualizationObject, "visualizationObject");
+        notNull(visualizationClassGetter, "visualizationClassGetter");
+        return convertToResultSpecWithTotals(visualizationObject,
+                visualizationClassGetter.apply(visualizationObject.getVisualizationClassUri()));
+    }
+
+    /**
+     * Generate ResultSpec from Visualization object with totals included. Currently {@link ResultSpec}'s {@link Dimension}s
+     * can be generated for table and four types of chart: bar, column, line and pie.
+     *
+     * @param visualizationObject which will be converted to {@link Execution}
+     * @param visualizationClass VisualizationClass, which is necessary for correct generation of {@link ResultSpec}
+     * @return {@link Execution} object
+     */
+    public static ResultSpec convertToResultSpecWithTotals(final VisualizationObject visualizationObject,
             final VisualizationClass visualizationClass) {
         notNull(visualizationObject, "visualizationObject");
         notNull(visualizationClass, "visualizationClass");
@@ -142,6 +239,21 @@ public abstract class VisualizationConverter {
         JsonNode nodeSortItems = jsonProperties.get("sortItems");
         TypeReference<List<SortItem>> mapType = new TypeReference<List<SortItem>>() {};
         return MAPPER.convertValue(nodeSortItems, mapType);
+    }
+
+    /**
+     * Creates a new {@link VisualizationObject} derived from the original one, with all "totals" removed from its buckets.
+     * This is to ensure backward compatibility in cases where totals were not previously handled.
+     *
+     * @param visualizationObject original {@link VisualizationObject}
+     * @return a new VisualizationObject derived from the original but without any totals in the buckets.
+     */
+    private static VisualizationObject removeTotals(final VisualizationObject visualizationObject) {
+        final List<Bucket> bucketsWithoutTotals = visualizationObject.getBuckets().stream()
+                // create buckets without totals
+                .map(bucket -> new Bucket(bucket.getLocalIdentifier(), bucket.getItems()))
+                .collect(toList());
+        return visualizationObject.withBuckets(bucketsWithoutTotals);
     }
 
     private static List<Dimension> getDimensions(final VisualizationObject visualizationObject,
@@ -216,12 +328,16 @@ public abstract class VisualizationConverter {
         List<Dimension> dimensions = new ArrayList<>();
 
         List<VisualizationAttribute> attributes = visualizationObject.getAttributes();
+        List<TotalItem> totals = visualizationObject.getTotals();
 
         if (!attributes.isEmpty()) {
-            dimensions.add(new Dimension(attributes.stream()
+            final Dimension attributeDimension = new Dimension(attributes.stream()
                     .map(VisualizationAttribute::getLocalIdentifier)
-                    .collect(toList())
-            ));
+                    .collect(toList()));
+            if (!totals.isEmpty()) {
+                attributeDimension.setTotals(new HashSet<>(totals));
+            }
+            dimensions.add(attributeDimension);
         } else {
             dimensions.add(new Dimension(new ArrayList<>()));
         }
@@ -315,5 +431,44 @@ public abstract class VisualizationConverter {
 
                 })
                 .collect(Collectors.toList());
+    }
+
+    private static List<NativeTotalItem> convertNativeTotals(final VisualizationObject visualizationObject) {
+        final List<Bucket> attributeBuckets = getAttributeBuckets(visualizationObject);
+        final List<String> attributeIds = getIdsFromAttributeBuckets(attributeBuckets);
+        return attributeBuckets.stream()
+                .filter(bucket -> bucket.getTotals() != null)
+                .flatMap(bucket -> bucket.getTotals().stream())
+                .filter(totalItem -> isNativeTotal(totalItem) && attributeIds.contains(totalItem.getAttributeIdentifier()))
+                .map(totalItem -> convertToNativeTotalItem(totalItem, attributeIds))
+                .collect(toList());
+    }
+
+    private static NativeTotalItem convertToNativeTotalItem(TotalItem totalItem, List<String> attributeIds) {
+        final int attributeIdx = attributeIds.indexOf(totalItem.getAttributeIdentifier());
+        return new NativeTotalItem(
+                totalItem.getMeasureIdentifier(),
+                new ArrayList<>(attributeIds.subList(0, attributeIdx))
+        );
+    }
+
+    private static List<Bucket> getAttributeBuckets(final VisualizationObject visualizationObject) {
+        return visualizationObject.getBuckets().stream()
+                .filter(bucket -> bucket.getItems().stream().allMatch(AttributeItem.class::isInstance))
+                .collect(toList());
+    }
+
+    private static List<String> getIdsFromAttributeBuckets(final List<Bucket> attributeBuckets) {
+        return attributeBuckets.stream()
+                .flatMap(bucket ->
+                        bucket.getItems().stream()
+                                .map(AttributeItem.class::cast)
+                                .map(AttributeItem::getLocalIdentifier)
+                )
+                .collect(toList());
+    }
+
+    private static boolean isNativeTotal(TotalItem totalItem) {
+        return totalItem.getType() != null && Total.NAT.name().equals(totalItem.getType().toUpperCase());
     }
 }

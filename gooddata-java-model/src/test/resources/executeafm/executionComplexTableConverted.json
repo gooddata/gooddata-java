@@ -1,0 +1,147 @@
+{
+  "execution": {
+    "afm": {
+      "attributes": [
+        {
+          "displayForm": {
+            "uri": "/gdc/md/w3hub93g7fwmvx60pkt2v8cr56530t0l/obj/1024"
+          },
+          "localIdentifier": "e4bb25477bca4fb2a29a4b80d94568d4"
+        },
+        {
+          "displayForm": {
+            "uri": "/gdc/md/w3hub93g7fwmvx60pkt2v8cr56530t0l/obj/1028"
+          },
+          "localIdentifier": "9008f5d33b3e41279402a25e2f05d0c9"
+        },
+        {
+          "displayForm": {
+            "uri": "/gdc/md/w3hub93g7fwmvx60pkt2v8cr56530t0l/obj/1086"
+          },
+          "localIdentifier": "023641d306f84921be39d0aa1d6464db"
+        },
+        {
+          "displayForm": {
+            "uri": "/gdc/md/w3hub93g7fwmvx60pkt2v8cr56530t0l/obj/1805"
+          },
+          "localIdentifier": "a22843f5d77f48b4938ccfb460eb8be4"
+        },
+        {
+          "displayForm": {
+            "uri": "/gdc/md/w3hub93g7fwmvx60pkt2v8cr56530t0l/obj/1094"
+          },
+          "localIdentifier": "a77983fcc9574f6bad6be1d3cb08bf71"
+        }
+      ],
+      "filters": [],
+      "measures": [
+        {
+          "definition": {
+            "measureDefinition": {
+              "item": {
+                "uri": "/gdc/md/w3hub93g7fwmvx60pkt2v8cr56530t0l/obj/9211"
+              },
+              "filters": []
+            }
+          },
+          "localIdentifier": "fd0164f14ec2444b9b5a7140ce059036",
+          "alias": "_Close [BOP]"
+        }
+      ],
+      "nativeTotals": [
+        {
+          "measureIdentifier": "fd0164f14ec2444b9b5a7140ce059036",
+          "attributeIdentifiers": []
+        },
+        {
+          "measureIdentifier": "fd0164f14ec2444b9b5a7140ce059036",
+          "attributeIdentifiers": [
+            "e4bb25477bca4fb2a29a4b80d94568d4"
+          ]
+        },
+        {
+          "measureIdentifier": "fd0164f14ec2444b9b5a7140ce059036",
+          "attributeIdentifiers": [
+            "e4bb25477bca4fb2a29a4b80d94568d4",
+            "9008f5d33b3e41279402a25e2f05d0c9"
+          ]
+        },
+        {
+          "measureIdentifier": "fd0164f14ec2444b9b5a7140ce059036",
+          "attributeIdentifiers": [
+            "e4bb25477bca4fb2a29a4b80d94568d4",
+            "9008f5d33b3e41279402a25e2f05d0c9",
+            "023641d306f84921be39d0aa1d6464db"
+          ]
+        },
+        {
+          "measureIdentifier": "fd0164f14ec2444b9b5a7140ce059036",
+          "attributeIdentifiers": [
+            "e4bb25477bca4fb2a29a4b80d94568d4",
+            "9008f5d33b3e41279402a25e2f05d0c9",
+            "023641d306f84921be39d0aa1d6464db",
+            "a22843f5d77f48b4938ccfb460eb8be4"
+          ]
+        }
+      ]
+    },
+    "resultSpec": {
+      "dimensions": [
+        {
+          "itemIdentifiers": [
+            "e4bb25477bca4fb2a29a4b80d94568d4",
+            "9008f5d33b3e41279402a25e2f05d0c9",
+            "023641d306f84921be39d0aa1d6464db",
+            "a22843f5d77f48b4938ccfb460eb8be4",
+            "a77983fcc9574f6bad6be1d3cb08bf71"
+          ],
+          "totals": [
+            {
+              "measureIdentifier": "fd0164f14ec2444b9b5a7140ce059036",
+              "type": "nat",
+              "attributeIdentifier": "e4bb25477bca4fb2a29a4b80d94568d4"
+            },
+            {
+              "measureIdentifier": "fd0164f14ec2444b9b5a7140ce059036",
+              "type": "nat",
+              "attributeIdentifier": "9008f5d33b3e41279402a25e2f05d0c9"
+            },
+            {
+              "measureIdentifier": "fd0164f14ec2444b9b5a7140ce059036",
+              "type": "nat",
+              "attributeIdentifier": "a22843f5d77f48b4938ccfb460eb8be4"
+            },
+            {
+              "measureIdentifier": "fd0164f14ec2444b9b5a7140ce059036",
+              "type": "nat",
+              "attributeIdentifier": "a77983fcc9574f6bad6be1d3cb08bf71"
+            },
+            {
+              "measureIdentifier": "fd0164f14ec2444b9b5a7140ce059036",
+              "type": "sum",
+              "attributeIdentifier": "e4bb25477bca4fb2a29a4b80d94568d4"
+            },
+            {
+              "measureIdentifier": "fd0164f14ec2444b9b5a7140ce059036",
+              "type": "nat",
+              "attributeIdentifier": "023641d306f84921be39d0aa1d6464db"
+            }
+          ]
+        },
+        {
+          "itemIdentifiers": [
+            "measureGroup"
+          ]
+        }
+      ],
+      "sorts": [
+        {
+          "attributeSortItem": {
+            "direction": "asc",
+            "attributeIdentifier": "e4bb25477bca4fb2a29a4b80d94568d4"
+          }
+        }
+      ]
+    }
+  }
+}
