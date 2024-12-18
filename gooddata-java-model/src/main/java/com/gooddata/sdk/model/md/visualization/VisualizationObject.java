@@ -24,6 +24,7 @@ import com.gooddata.sdk.model.executeafm.afm.Afm;
 import com.gooddata.sdk.model.executeafm.Execution;
 import com.gooddata.sdk.model.executeafm.afm.filter.ExtendedFilter;
 import com.gooddata.sdk.model.executeafm.resultspec.ResultSpec;
+import com.gooddata.sdk.model.executeafm.resultspec.TotalItem;
 import com.gooddata.sdk.model.md.AbstractObj;
 import com.gooddata.sdk.model.md.Meta;
 import com.gooddata.sdk.model.md.Queryable;
@@ -75,6 +76,14 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
     @JsonIgnore
     public List<Measure> getMeasures() {
         return content.getMeasures();
+    }
+
+    /**
+     * @return all totals from all buckets in visualization object
+     */
+    @JsonIgnore
+    public List<TotalItem> getTotals() {
+        return content.getTotals();
     }
 
     /**
@@ -388,6 +397,14 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
                     .flatMap(bucket -> bucket.getItems().stream())
                     .filter(Measure.class::isInstance)
                     .map(Measure.class::cast)
+                    .collect(toList());
+        }
+
+        @JsonIgnore
+        public List<TotalItem> getTotals() {
+            return buckets.stream()
+                    .filter(bucket -> bucket.getTotals() != null)
+                    .flatMap(bucket -> bucket.getTotals().stream())
                     .collect(toList());
         }
 

@@ -6,6 +6,8 @@
 package com.gooddata.sdk.model.md.visualization
 
 import com.gooddata.sdk.model.executeafm.UriObjQualifier
+import com.gooddata.sdk.model.executeafm.resultspec.TotalItem
+import com.gooddata.sdk.model.md.report.Total
 import nl.jqno.equalsverifier.EqualsVerifier
 import org.apache.commons.lang3.SerializationUtils
 import spock.lang.Shared
@@ -18,6 +20,7 @@ import static spock.util.matcher.HamcrestSupport.that
 class BucketTest extends Specification {
     private static final String NO_ITEMS_BUCKET = "md/visualization/noItemsBucket.json"
     private static final String MIXED_BUCKET = "md/visualization/mixedBucket.json"
+    private static final String MIXED_BUCKET_WITH_TOTALS = "md/visualization/mixedBucketWithTotals.json"
     private static final String ATTRIBUTE_BUCKET = "md/visualization/attributeBucket.json"
     private static final String MEASURE_BUCKET = "md/visualization/measureBucket.json"
     private static final String MULTIPLE_ATTRIBUTES_BUCKET = "md/visualization/multipleAttributesBucket.json"
@@ -32,19 +35,41 @@ class BucketTest extends Specification {
         that new Bucket("noItems", new ArrayList<BucketItem>()), jsonEquals(noItemsBucket)
     }
 
-    @SuppressWarnings("GrDeprecatedAPIUsage")
     def "should serialize full"() {
         expect:
-        that new Bucket("attributeBucket", [
-                new VisualizationAttribute(new UriObjQualifier("/uri/to/displayForm"), "attribute", "Attribute Alias"),
-                new Measure(
-                        new VOSimpleMeasureDefinition(new UriObjQualifier("/uri/to/measure"), "sum", false, []),
-                        "measure",
-                        "Measure Alias",
-                        "Measure",
-                        null
-                )
-        ]), jsonEquals(mixedBucket)
+        that new Bucket(
+                "attributeBucket",
+                [
+                        new VisualizationAttribute(new UriObjQualifier("/uri/to/displayForm"), "attribute", "Attribute Alias"),
+                        new Measure(
+                                new VOSimpleMeasureDefinition(new UriObjQualifier("/uri/to/measure"), "sum", false, []),
+                                "measure",
+                                "Measure Alias",
+                                "Measure",
+                                null
+                        )
+                ] as List<BucketItem>
+        ), jsonEquals(mixedBucket)
+    }
+
+    def "should serialize full with totals"() {
+        expect:
+        that new Bucket(
+                "attributeBucket",
+                [
+                        new VisualizationAttribute(new UriObjQualifier("/uri/to/displayForm"), "attribute", "Attribute Alias"),
+                        new Measure(
+                                new VOSimpleMeasureDefinition(new UriObjQualifier("/uri/to/measure"), "sum", false, []),
+                                "measure",
+                                "Measure Alias",
+                                "Measure",
+                                null
+                        )
+                ] as List<BucketItem>,
+                [
+                        new TotalItem("measure", Total.NAT, "attribute")
+                ]
+        ), jsonEquals(readObjectFromResource("/$MIXED_BUCKET_WITH_TOTALS", Bucket.class))
     }
 
     def "should return only attribute from bucket"() {
