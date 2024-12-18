@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooddata.sdk.model.executeafm.Execution;
 import com.gooddata.sdk.model.executeafm.afm.Afm;
 import com.gooddata.sdk.model.executeafm.afm.AttributeItem;
+import com.gooddata.sdk.model.executeafm.afm.NativeTotalItem;
 import com.gooddata.sdk.model.executeafm.afm.filter.CompatibilityFilter;
 import com.gooddata.sdk.model.executeafm.afm.filter.DateFilter;
 import com.gooddata.sdk.model.executeafm.afm.filter.ExtendedFilter;
@@ -24,8 +25,11 @@ import com.gooddata.sdk.model.executeafm.afm.filter.RankingFilter;
 import com.gooddata.sdk.model.executeafm.resultspec.Dimension;
 import com.gooddata.sdk.model.executeafm.resultspec.ResultSpec;
 import com.gooddata.sdk.model.executeafm.resultspec.SortItem;
+import com.gooddata.sdk.model.executeafm.resultspec.TotalItem;
+import com.gooddata.sdk.model.md.report.Total;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -86,8 +90,9 @@ public abstract class VisualizationConverter {
         final List<AttributeItem> attributes = convertAttributes(visualizationObject.getAttributes());
         final List<CompatibilityFilter> filters = convertFilters(visualizationObject.getFilters());
         final List<MeasureItem> measures = convertMeasures(visualizationObject.getMeasures());
+        final List<NativeTotalItem> totals = convertNativeTotals(visualizationObject);
 
-        return new Afm(attributes, filters, measures, null);
+        return new Afm(attributes, filters, measures, totals);
     }
 
     /**
@@ -216,12 +221,16 @@ public abstract class VisualizationConverter {
         List<Dimension> dimensions = new ArrayList<>();
 
         List<VisualizationAttribute> attributes = visualizationObject.getAttributes();
+        List<TotalItem> totals = visualizationObject.getTotals();
 
         if (!attributes.isEmpty()) {
-            dimensions.add(new Dimension(attributes.stream()
+            final Dimension attributeDimension = new Dimension(attributes.stream()
                     .map(VisualizationAttribute::getLocalIdentifier)
-                    .collect(toList())
-            ));
+                    .collect(toList()));
+            if (!totals.isEmpty()) {
+                attributeDimension.setTotals(new HashSet<>(totals));
+            }
+            dimensions.add(attributeDimension);
         } else {
             dimensions.add(new Dimension(new ArrayList<>()));
         }
@@ -315,5 +324,44 @@ public abstract class VisualizationConverter {
 
                 })
                 .collect(Collectors.toList());
+    }
+
+    private static List<NativeTotalItem> convertNativeTotals(final VisualizationObject visualizationObject) {
+        final List<Bucket> attributeBuckets = getAttributeBuckets(visualizationObject);
+        final List<String> attributeIds = getIdsFromAttributeBuckets(attributeBuckets);
+        return attributeBuckets.stream()
+                .filter(bucket -> bucket.getTotals() != null)
+                .flatMap(bucket -> bucket.getTotals().stream())
+                .filter(totalItem -> isNativeTotal(totalItem) && attributeIds.contains(totalItem.getAttributeIdentifier()))
+                .map(totalItem -> convertToNativeTotalItem(totalItem, attributeIds))
+                .collect(toList());
+    }
+
+    private static NativeTotalItem convertToNativeTotalItem(TotalItem totalItem, List<String> attributeIds) {
+        final int attributeIdx = attributeIds.indexOf(totalItem.getAttributeIdentifier());
+        return new NativeTotalItem(
+                totalItem.getMeasureIdentifier(),
+                new ArrayList<>(attributeIds.subList(0, attributeIdx))
+        );
+    }
+
+    private static List<Bucket> getAttributeBuckets(final VisualizationObject visualizationObject) {
+        return visualizationObject.getBuckets().stream()
+                .filter(bucket -> bucket.getItems().stream().allMatch(AttributeItem.class::isInstance))
+                .collect(toList());
+    }
+
+    private static List<String> getIdsFromAttributeBuckets(final List<Bucket> attributeBuckets) {
+        return attributeBuckets.stream()
+                .flatMap(bucket ->
+                        bucket.getItems().stream()
+                                .map(AttributeItem.class::cast)
+                                .map(AttributeItem::getLocalIdentifier)
+                )
+                .collect(toList());
+    }
+
+    private static boolean isNativeTotal(TotalItem totalItem) {
+        return totalItem.getType() != null && Total.NAT.name().equals(totalItem.getType().toUpperCase());
     }
 }
