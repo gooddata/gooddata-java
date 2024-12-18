@@ -24,8 +24,10 @@ import com.gooddata.sdk.model.executeafm.afm.filter.RankingFilter;
 import com.gooddata.sdk.model.executeafm.resultspec.Dimension;
 import com.gooddata.sdk.model.executeafm.resultspec.ResultSpec;
 import com.gooddata.sdk.model.executeafm.resultspec.SortItem;
+import com.gooddata.sdk.model.executeafm.resultspec.TotalItem;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -216,12 +218,16 @@ public abstract class VisualizationConverter {
         List<Dimension> dimensions = new ArrayList<>();
 
         List<VisualizationAttribute> attributes = visualizationObject.getAttributes();
+        List<TotalItem> totals = visualizationObject.getTotals();
 
         if (!attributes.isEmpty()) {
-            dimensions.add(new Dimension(attributes.stream()
+            final Dimension attributeDimension = new Dimension(attributes.stream()
                     .map(VisualizationAttribute::getLocalIdentifier)
-                    .collect(toList())
-            ));
+                    .collect(toList()));
+            if (!totals.isEmpty()) {
+                attributeDimension.setTotals(new HashSet<>(totals));
+            }
+            dimensions.add(attributeDimension);
         } else {
             dimensions.add(new Dimension(new ArrayList<>()));
         }

@@ -26,6 +26,7 @@ import com.gooddata.sdk.model.executeafm.resultspec.MeasureLocatorItem
 import com.gooddata.sdk.model.executeafm.resultspec.MeasureSortItem
 import com.gooddata.sdk.model.executeafm.resultspec.ResultSpec
 import com.gooddata.sdk.model.executeafm.resultspec.SortItem
+import com.gooddata.sdk.model.executeafm.resultspec.TotalItem
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -48,6 +49,7 @@ class VisualizationConverterTest extends Specification {
     private static final String MULTIPLE_ATTRIBUTE_BUCKETS = "md/visualization/multipleAttributeBucketsVisualization.json"
     private static final String STACKED_COLUMN_CHART = "md/visualization/stackedColumnChart.json"
     private static final String LINE_CHART = "md/visualization/lineChart.json"
+    private static final String TABLE_WITH_TOTALS = "md/visualization/complexTableWithTotals.json"
 
     @SuppressWarnings("GrDeprecatedAPIUsage")
     def "should convert complex"() {
@@ -116,6 +118,42 @@ class VisualizationConverterTest extends Specification {
         "attributes" | MULTIPLE_ATTRIBUTE_BUCKETS | new ResultSpec(
                 [new Dimension(["attribute1", "attribute2", "attribute"], null)],
                 null
+        )
+    }
+
+    def "should generate result spec for complex table with totals"() {
+        when:
+        VisualizationObject vo = readObjectFromResource("/$TABLE_WITH_TOTALS", VisualizationObject)
+        Function getter = { vizObject ->
+            Stub(VisualizationClass) {
+                getVisualizationType() >> VisualizationType.TABLE
+                getUri() >> vo.getVisualizationClassUri()
+            }
+        }
+        ResultSpec converted = convertToResultSpec(vo, getter)
+        then:
+        that converted, jsonEquals(
+                // pivot table is simplified to a basic table (2 dimensions: measureGroup and attributes)
+                new ResultSpec([
+                        new Dimension(
+                                [
+                                        "e4bb25477bca4fb2a29a4b80d94568d4",
+                                        "9008f5d33b3e41279402a25e2f05d0c9",
+                                        "023641d306f84921be39d0aa1d6464db",
+                                        "a22843f5d77f48b4938ccfb460eb8be4",
+                                        "a77983fcc9574f6bad6be1d3cb08bf71"
+                                ],
+                                [
+                                        new TotalItem("fd0164f14ec2444b9b5a7140ce059036", "nat", "e4bb25477bca4fb2a29a4b80d94568d4"),
+                                        new TotalItem("fd0164f14ec2444b9b5a7140ce059036", "nat", "9008f5d33b3e41279402a25e2f05d0c9"),
+                                        new TotalItem("fd0164f14ec2444b9b5a7140ce059036", "nat", "a22843f5d77f48b4938ccfb460eb8be4"),
+                                        new TotalItem("fd0164f14ec2444b9b5a7140ce059036", "nat", "a77983fcc9574f6bad6be1d3cb08bf71"),
+                                        new TotalItem("fd0164f14ec2444b9b5a7140ce059036", "sum", "e4bb25477bca4fb2a29a4b80d94568d4"),
+                                        new TotalItem("fd0164f14ec2444b9b5a7140ce059036", "nat", "023641d306f84921be39d0aa1d6464db")
+                                ] as Set<TotalItem>
+                        ),
+                        new Dimension(["measureGroup"], null)
+                ], [new AttributeSortItem("asc", "e4bb25477bca4fb2a29a4b80d94568d4", null)])
         )
     }
 
