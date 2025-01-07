@@ -24,6 +24,7 @@ import com.gooddata.sdk.model.executeafm.afm.Afm;
 import com.gooddata.sdk.model.executeafm.Execution;
 import com.gooddata.sdk.model.executeafm.afm.filter.ExtendedFilter;
 import com.gooddata.sdk.model.executeafm.resultspec.ResultSpec;
+import com.gooddata.sdk.model.executeafm.resultspec.TotalItem;
 import com.gooddata.sdk.model.md.AbstractObj;
 import com.gooddata.sdk.model.md.Meta;
 import com.gooddata.sdk.model.md.Queryable;
@@ -32,6 +33,7 @@ import com.gooddata.sdk.model.md.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -75,6 +77,14 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
     @JsonIgnore
     public List<Measure> getMeasures() {
         return content.getMeasures();
+    }
+
+    /**
+     * @return all totals from all buckets in visualization object
+     */
+    @JsonIgnore
+    public List<TotalItem> getTotals() {
+        return content.getTotals();
     }
 
     /**
@@ -214,6 +224,14 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
     @JsonIgnore
     public void setBuckets(List<Bucket> buckets) {
         content.setBuckets(buckets);
+    }
+
+    /**
+     * @return a new copy of this {@link VisualizationObject} with the specified buckets
+     */
+    @JsonIgnore
+    public VisualizationObject withBuckets(List<Bucket> buckets) {
+        return new VisualizationObject(content.withBuckets(buckets), meta);
     }
 
     /**
@@ -392,6 +410,14 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
         }
 
         @JsonIgnore
+        public List<TotalItem> getTotals() {
+            return buckets.stream()
+                    .filter(bucket -> bucket.getTotals() != null)
+                    .flatMap(bucket -> bucket.getTotals().stream())
+                    .collect(toList());
+        }
+
+        @JsonIgnore
         public String getVisualizationClassUri() {
             return visualizationClass.getUri();
         }
@@ -415,6 +441,20 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
         @JsonProperty("references")
         public Map<String, String> getReferenceItems() {
             return referenceItems;
+        }
+
+        /**
+         * @return a new copy of this {@link Content} with the specified buckets
+         */
+        @JsonIgnore
+        public Content withBuckets(List<Bucket> buckets) {
+            return new Content(
+                    visualizationClass,
+                    buckets,
+                    filters != null ? new ArrayList<>(filters) : null,
+                    properties,
+                    referenceItems != null ? new HashMap<>(referenceItems) : null
+            );
         }
     }
 }
