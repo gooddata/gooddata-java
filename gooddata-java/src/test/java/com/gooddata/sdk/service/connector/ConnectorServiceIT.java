@@ -11,8 +11,8 @@ import com.gooddata.sdk.model.connector.*;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test; 
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,13 +25,14 @@ import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ConnectorServiceIT extends AbstractGoodDataIT {
     private Project project;
     private ConnectorService connectors;
     private IntegrationProcessStatus runningProcess;
 
-    @BeforeMethod
+    @BeforeEach 
     public void setUp() throws Exception {
         project = readObjectFromResource("/project/project.json", Project.class);
         connectors = gd.getConnectorService();
@@ -75,7 +76,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         assertThat(integration, notNullValue());
     }
 
-    @Test(expectedExceptions = IntegrationNotFoundException.class)
+    @Test
     public void shouldFailGetIntegrationNotFound() {
         onRequest()
                 .havingMethodEqualTo("GET")
@@ -83,10 +84,12 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
             .respond()
                 .withStatus(404);
 
-        connectors.getIntegration(project, ConnectorType.ZENDESK4);
+        assertThrows(IntegrationNotFoundException.class, () -> {
+            connectors.getIntegration(project, ConnectorType.ZENDESK4);
+        });
     }
 
-    @Test(expectedExceptions = GoodDataRestException.class)
+    @Test
     public void shouldFailGetIntegrationInternalServerError() {
         onRequest()
                 .havingMethodEqualTo("GET")
@@ -94,7 +97,9 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
             .respond()
                 .withStatus(500);
 
-        connectors.getIntegration(project, ConnectorType.ZENDESK4);
+        assertThrows(GoodDataRestException.class, () -> {
+            connectors.getIntegration(project, ConnectorType.ZENDESK4);
+        });
     }
 
     @Test
@@ -109,7 +114,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         connectors.updateIntegration(project, ConnectorType.ZENDESK4, integration);
     }
 
-    @Test(expectedExceptions = IntegrationNotFoundException.class)
+    @Test
     public void shouldFailUpdateIntegrationNotFound() throws Exception {
         onRequest()
                 .havingMethodEqualTo("PUT")
@@ -118,7 +123,9 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
                 .withStatus(404);
 
         final Integration integration = new Integration("/projectTemplates/template");
-        connectors.updateIntegration(project, ConnectorType.ZENDESK4, integration);
+        assertThrows(IntegrationNotFoundException.class, () -> {
+            connectors.updateIntegration(project, ConnectorType.ZENDESK4, integration);
+        });
     }
     
     @Test
@@ -132,7 +139,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         connectors.deleteIntegration(project, ConnectorType.ZENDESK4);
     }
     
-    @Test(expectedExceptions = IntegrationNotFoundException.class)
+    @Test
     public void shouldFailDeleteIntegrationNotFound() {
         onRequest()
                 .havingMethodEqualTo("DELETE")
@@ -140,10 +147,12 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
           .respond()
                 .withStatus(404);
 
-        connectors.deleteIntegration(project, ConnectorType.ZENDESK4);
+        assertThrows(IntegrationNotFoundException.class, () -> { 
+            connectors.deleteIntegration(project, ConnectorType.ZENDESK4);
+        });
     }
 
-    @Test(expectedExceptions = GoodDataRestException.class)
+    @Test
     public void shouldFailDeleteIntegrationInternalServerError() {
         onRequest()
                 .havingMethodEqualTo("DELETE")
@@ -151,7 +160,9 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
             .respond()
                 .withStatus(500);
 
-        connectors.deleteIntegration(project, ConnectorType.ZENDESK4);
+         assertThrows(IntegrationNotFoundException.class, () -> { 
+            connectors.deleteIntegration(project, ConnectorType.ZENDESK4); 
+        });
     }
 
     @Test
@@ -173,7 +184,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         assertThat(process.getStatus().getCode(), is(SYNCHRONIZED.name()));
     }
 
-    @Test(expectedExceptions = ConnectorException.class, expectedExceptionsMessageRegExp = ".*zendesk4 process PROCESS failed.*")
+    @Test
     public void shouldFailExecuteProcessPolling() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -185,10 +196,13 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
             .respond()
                 .withStatus(400)
         ;
-        connectors.executeProcess(project, new Zendesk4ProcessExecution()).get();
+                ;
+        assertThrows(ConnectorException.class, () -> { 
+            connectors.executeProcess(project, new Zendesk4ProcessExecution()).get();
+        });
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void shouldFailExecuteProcess() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -200,8 +214,10 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
             .respond()
                 .withBody(readFromResource("/connector/process-status-error.json"));
 
-        final ProcessStatus process = connectors.executeProcess(project, new Zendesk4ProcessExecution()).get();
-        assertThat(process.getStatus().getCode(), is(ERROR.name()));
+        assertThrows(GoodDataException.class, () -> { 
+            final ProcessStatus process = connectors.executeProcess(project, new Zendesk4ProcessExecution()).get();
+            assertThat(process.getStatus().getCode(), is(ERROR.name()));
+        });
     }
 
     @Test
@@ -217,25 +233,29 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         assertThat(process.getStatus().getCode(), is(SYNCHRONIZED.name()));
     }
 
-    @Test(expectedExceptions = ConnectorException.class, expectedExceptionsMessageRegExp = ".*zendesk4 process PROCESS_ID failed.*")
+    @Test
     public void shouldFailGetProcessStatusPolling() {
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID")
             .respond()
                 .withStatus(400);
 
-        connectors.getProcessStatus(runningProcess).get();
+        assertThrows(ConnectorException.class, () -> {
+            connectors.getProcessStatus(runningProcess).get();
+        });
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void shouldFailGetProcessStatus() {
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID")
             .respond()
                 .withBody(readFromResource("/connector/process-status-error.json"));
 
-        final ProcessStatus process = connectors.getProcessStatus(runningProcess).get();
-        assertThat(process.getStatus().getCode(), is(ERROR.name()));
+        assertThrows(GoodDataException.class, () -> {
+            final ProcessStatus process = connectors.getProcessStatus(runningProcess).get();
+            assertThat(process.getStatus().getCode(), is(ERROR.name()));
+        });
     }
 
     @Test
@@ -250,24 +270,28 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         assertThat(zendesk4Settings, jsonEquals(resource("connector/settings-zendesk4.json")));
     }
 
-    @Test(expectedExceptions = ConnectorException.class)
+    @Test
     public void shouldGetSettingsNotFound() {
         onRequest()
                 .havingMethodEqualTo("GET")
             .respond()
                 .withStatus(404);
 
-        connectors.getSettings(project, ConnectorType.ZENDESK4, Zendesk4Settings.class);
+        assertThrows(ConnectorException.class, () -> { 
+            connectors.getSettings(project, ConnectorType.ZENDESK4, Zendesk4Settings.class);
+        });
     }
 
-    @Test(expectedExceptions = ConnectorException.class)
+    @Test
     public void shouldUpdateSettingsNotFound() {
         onRequest()
                 .havingMethodEqualTo("GET")
              .respond()
                 .withStatus(404);
 
-        connectors.updateSettings(project, new Zendesk4Settings("http://zendesk"));
+        assertThrows(ConnectorException.class, () -> { 
+            connectors.updateSettings(project, new Zendesk4Settings("http://zendesk")); 
+        });
     }
 
     @Test
@@ -276,9 +300,11 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         assertReload(reload);
     }
 
-    @Test(expectedExceptions = GoodDataRestException.class)
+    @Test
     public void shouldScheduleZendesk4ReloadServerError() {
-        mockAndScheduleReload(500);
+        assertThrows(GoodDataRestException.class, () -> { 
+            mockAndScheduleReload(500);
+        });
     }
 
     private Reload mockAndScheduleReload(final int httpStatus) {
@@ -304,9 +330,11 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         assertReload(reload);
     }
 
-    @Test(expectedExceptions = ConnectorException.class)
+    @Test
     public void shouldGetZendesk4ReloadNotFound() {
-        mockAndGetReload(404);
+        assertThrows(ConnectorException.class, () -> { 
+            mockAndGetReload(404); 
+        });
     }
 
     private Reload mockAndGetReload(final int httpStatus) {

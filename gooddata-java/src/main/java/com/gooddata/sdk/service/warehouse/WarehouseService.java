@@ -28,7 +28,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException; 
 import org.springframework.web.util.UriTemplate;
 
 import java.io.IOException;
@@ -54,8 +56,8 @@ public class WarehouseService extends AbstractService {
      * @param restTemplate RESTful HTTP Spring template
      * @param settings settings
      */
-    public WarehouseService(final RestTemplate restTemplate, final GoodDataSettings settings) {
-        super(restTemplate, settings);
+    public WarehouseService(final WebClient webClient, final GoodDataSettings settings) {
+        super(webClient, settings); 
     }
 
     /**
@@ -69,8 +71,13 @@ public class WarehouseService extends AbstractService {
         notNull(warehouse, "warehouse");
         final WarehouseTask task;
         try {
-            task = restTemplate.postForObject(Warehouses.URI, warehouse, WarehouseTask.class);
-        } catch (GoodDataException | RestClientException e) {
+            task = webClient.post()
+                    .uri(Warehouses.URI)
+                    .bodyValue(warehouse)
+                    .retrieve()
+                    .bodyToMono(WarehouseTask.class)
+                    .block();
+        } catch (WebClientResponseException | GoodDataException e) {
             throw new GoodDataException("Unable to create Warehouse", e);
         }
 
@@ -81,8 +88,8 @@ public class WarehouseService extends AbstractService {
         return new PollResult<>(this, new AbstractPollHandler<WarehouseTask,Warehouse>(task.getPollUri(), WarehouseTask.class, Warehouse.class) {
 
             @Override
-            public boolean isFinished(ClientHttpResponse response) throws IOException {
-                return HttpStatus.CREATED.equals(response.getStatusCode());
+            public boolean isFinished(ClientResponse response) {
+                return response.statusCode().equals(HttpStatus.CREATED);
             }
 
             @Override
@@ -95,9 +102,13 @@ public class WarehouseService extends AbstractService {
             @Override
             public void handlePollResult(WarehouseTask pollResult) {
                 try {
-                    final Warehouse warehouse = restTemplate.getForObject(pollResult.getWarehouseUri(), Warehouse.class);
+                    final Warehouse warehouse = webClient.get()
+                            .uri(pollResult.getWarehouseUri())
+                            .retrieve()
+                            .bodyToMono(Warehouse.class)
+                            .block();
                     setResult(warehouse);
-                } catch (GoodDataException | RestClientException e) {
+                } catch (WebClientResponseException | GoodDataException e) {
                     throw new GoodDataException("Warehouse creation finished, but can't get created warehouse, uri: "
                             + pollResult.getWarehouseUri(), e);
                 }
@@ -118,8 +129,12 @@ public class WarehouseService extends AbstractService {
         notNull(warehouse, "warehouse");
         notNull(warehouse.getUri(), "warehouse.uri");
         try {
-            restTemplate.delete(warehouse.getUri());
-        } catch (GoodDataException | RestClientException e) {
+            webClient.delete()
+                    .uri(warehouse.getUri())
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+        } catch (WebClientResponseException | GoodDataException e) {
             throw new GoodDataException("Unable to delete Warehouse, uri: " + warehouse.getUri(), e);
         }
     }
@@ -133,14 +148,18 @@ public class WarehouseService extends AbstractService {
     public Warehouse getWarehouseByUri(final String uri) {
         notEmpty(uri, "uri");
         try {
-            return restTemplate.getForObject(uri, Warehouse.class);
-        } catch (GoodDataRestException e) {
-            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+            return webClient.get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(Warehouse.class)
+                    .block();
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode().value() == HttpStatus.NOT_FOUND.value()) {
                 throw new WarehouseNotFoundException(uri, e);
             } else {
                 throw e;
             }
-        } catch (RestClientException e) {
+        } catch (Exception e) {
             throw new GoodDataException("Unable to get Warehouse instance " + uri, e);
         }
     }
@@ -193,12 +212,16 @@ public class WarehouseService extends AbstractService {
 
     private Page<Warehouse> listWarehouses(final URI uri) {
         try {
-            final Warehouses result = restTemplate.getForObject(uri, Warehouses.class);
+            final Warehouses result = webClient.get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(Warehouses.class)
+                    .block();
             if (result == null) {
                 return new Page<>();
             }
             return result;
-        } catch (GoodDataException | RestClientException e) {
+        } catch (WebClientResponseException | GoodDataException e) {
             throw new GoodDataException("Unable to list Warehouses", e);
         }
     }
@@ -215,6 +238,16 @@ public class WarehouseService extends AbstractService {
         return listWarehouseUsers(warehouse, new CustomPageRequest());
     }
 
+    public PageBrowser<WarehouseUser> listWarehouseUsers(final Warehouse warehouse, final PageRequest startPage) {
+        notNull(warehouse, "warehouse");
+        notNull(warehouse.getId(), "warehouse.id");
+        notNull(startPage, "startPage");
+
+        return new PageBrowser<>(startPage,
+                page -> listWarehouseUsers(warehouse, getWarehouseUsersUri(warehouse, page))
+        );
+    }
+
     /**
      * Lists warehouse users, starting with specified page. Returns empty list in case there are no users.
      * Use {@link PageBrowser#allItemsStream()} ()} to iterate over all pages,
@@ -224,13 +257,17 @@ public class WarehouseService extends AbstractService {
      * @param startPage page to start with
      * @return {@link PageBrowser} requested page of list of instances starting with startPage or empty list
      */
-    public PageBrowser<WarehouseUser> listWarehouseUsers(final Warehouse warehouse, final PageRequest startPage) {
-        notNull(warehouse, "warehouse");
-        notNull(warehouse.getId(), "warehouse.id");
-        notNull(startPage, "startPage");
-
-        return new PageBrowser<>(startPage,
-                page -> listWarehouseUsers(warehouse, getWarehouseUsersUri(warehouse, page)));
+    private Page<WarehouseUser> listWarehouseUsers(final Warehouse warehouse, final URI uri) { //1
+        try {
+            final WarehouseUsers result = webClient.get() 
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(WarehouseUsers.class)
+                    .block(); 
+            return result == null ? new Page<>() : result;
+        } catch (WebClientResponseException | GoodDataException e) { 
+            throw new GoodDataException("Unable to list users of warehouse " + warehouse.getId(), e);
+        }
     }
 
     private URI getWarehouseUsersUri(final Warehouse warehouse) {
@@ -241,14 +278,6 @@ public class WarehouseService extends AbstractService {
         return page.getPageUri(new SpringMutableUri(getWarehouseUsersUri(warehouse)));
     }
 
-    private Page<WarehouseUser> listWarehouseUsers(final Warehouse warehouse, final URI uri) {
-        try {
-            final WarehouseUsers result = restTemplate.getForObject(uri, WarehouseUsers.class);
-            return result == null ? new Page<>() : result;
-        } catch (GoodDataException | RestClientException e) {
-            throw new GoodDataException("Unable to list users of warehouse " + warehouse.getId(), e);
-        }
-    }
 
     /**
      * Add given user to given warehouse.
@@ -264,8 +293,13 @@ public class WarehouseService extends AbstractService {
 
         final WarehouseTask task;
         try {
-            task = restTemplate.postForObject(WarehouseUsers.URI, user, WarehouseTask.class, warehouse.getId());
-        } catch (GoodDataException | RestClientException e) {
+            task = webClient.post()
+                    .uri(uriBuilder -> uriBuilder.path(WarehouseUsers.URI).build(warehouse.getId()))
+                    .bodyValue(user)
+                    .retrieve()
+                    .bodyToMono(WarehouseTask.class)
+                    .block();
+        } catch (WebClientResponseException | GoodDataException e) {
             throw new GoodDataException("Unable add user to warehouse " + warehouse.getId(), e);
         }
         if (task == null) {
@@ -277,16 +311,20 @@ public class WarehouseService extends AbstractService {
                         (task.getPollUri(), WarehouseTask.class, WarehouseUser.class) {
 
             @Override
-            public boolean isFinished(ClientHttpResponse response) throws IOException {
-                return HttpStatus.CREATED.equals(response.getStatusCode());
+            public boolean isFinished(ClientResponse response) {
+                return response.statusCode().equals(HttpStatus.CREATED);
             }
 
             @Override
             public void handlePollResult(WarehouseTask pollResult) {
                 try {
-                    final WarehouseUser newUser = restTemplate.getForObject(pollResult.getWarehouseUserUri(), WarehouseUser.class);
+                    final WarehouseUser newUser = webClient.get()
+                            .uri(pollResult.getWarehouseUserUri())
+                            .retrieve()
+                            .bodyToMono(WarehouseUser.class)
+                            .block();
                     setResult(newUser);
-                } catch (GoodDataException | RestClientException e) {
+                } catch (WebClientResponseException | GoodDataException e) { 
                     throw new GoodDataException("User added to warehouse, but can't get it back, uri: "
                             + pollResult.getWarehouseUserUri(), e);
                 }
@@ -312,14 +350,18 @@ public class WarehouseService extends AbstractService {
 
         final WarehouseTask task;
         try {
-            task = restTemplate.exchange(user.getUri(), HttpMethod.DELETE, null, WarehouseTask.class).getBody();
-        } catch (GoodDataRestException e) {
-            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+            task = webClient.method(HttpMethod.DELETE)
+                    .uri(user.getUri())
+                    .retrieve()
+                    .bodyToMono(WarehouseTask.class)
+                    .block();
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode().value() == HttpStatus.NOT_FOUND.value()) {
                 throw new WarehouseUserNotFoundException(user.getUri(), e);
             } else {
                 throw e;
             }
-        } catch (RestClientException e) {
+        } catch (Exception e) { 
             throw new GoodDataException("Unable to remove Warehouse user from instance " + user.getUri(), e);
         }
         if (task == null) {
@@ -331,8 +373,8 @@ public class WarehouseService extends AbstractService {
                         (task.getPollUri(), WarehouseTask.class, Void.class) {
 
                 @Override
-                public boolean isFinished(ClientHttpResponse response) throws IOException {
-                    return HttpStatus.CREATED.equals(response.getStatusCode());
+                public boolean isFinished(ClientResponse response) {
+                    return response.statusCode().equals(HttpStatus.CREATED);
                 }
 
                 @Override
@@ -358,8 +400,13 @@ public class WarehouseService extends AbstractService {
         notNull(toUpdate, "warehouse");
         notNull(toUpdate.getUri(), "warehouse.uri");
         try {
-            restTemplate.put(toUpdate.getUri(), toUpdate);
-        } catch (GoodDataRestException | RestClientException e) {
+            webClient.put()
+                    .uri(toUpdate.getUri())
+                    .bodyValue(toUpdate)
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+        } catch (WebClientResponseException | GoodDataException e) {
             throw new GoodDataException("Unable to update Warehouse, uri: " + toUpdate.getUri());
         }
 
@@ -402,12 +449,16 @@ public class WarehouseService extends AbstractService {
 
     private Page<WarehouseSchema> listWarehouseSchemas(final URI uri) {
         try {
-            final WarehouseSchemas result = restTemplate.getForObject(uri, WarehouseSchemas.class);
+            final WarehouseSchemas result = webClient.get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(WarehouseSchemas.class)
+                    .block();
             if (result == null) {
                 return new Page<>();
             }
             return result;
-        } catch (GoodDataException | RestClientException e) {
+        } catch (WebClientResponseException | GoodDataException e) {
             throw new GoodDataException("Unable to list Warehouse schemas", e);
         }
     }
@@ -436,14 +487,18 @@ public class WarehouseService extends AbstractService {
     public WarehouseSchema getWarehouseSchemaByUri(final String uri) {
         notEmpty(uri, "uri");
         try {
-            return restTemplate.getForObject(uri, WarehouseSchema.class);
-        } catch (GoodDataRestException e) {
-            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+            return webClient.get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(WarehouseSchema.class)
+                    .block();
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode().value() == HttpStatus.NOT_FOUND.value()) {
                 throw new WarehouseSchemaNotFoundException(uri, e);
             } else {
                 throw e;
             }
-        } catch (RestClientException e) {
+        } catch (Exception e) { 
             throw new GoodDataException("Unable to get Warehouse instance " + uri, e);
         }
     }

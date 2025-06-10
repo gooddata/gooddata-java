@@ -8,8 +8,8 @@ package com.gooddata.sdk.service.dataload;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
 import com.gooddata.sdk.model.dataload.OutputStage;
 import com.gooddata.sdk.model.project.Project;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test; 
 
 import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
@@ -34,11 +34,11 @@ public class OutputStageServiceIT extends AbstractGoodDataIT {
     private static final String OUTPUT_STAGE_PREFIX =  "outputStagePrefix";
     private static final String PROJECT_ID = "projectId";
 
-    private OutputStage outputStage;
-    private Project project;
+    private static  OutputStage outputStage;
+    private static Project project;
 
-    @BeforeClass
-    public void setUp() throws Exception {
+    @BeforeAll 
+    public static void setUp() throws Exception {
         outputStage = readObjectFromResource(OUTPUT_STAGE_ALL_FIELDS, OutputStage.class);
         project = mock(Project.class);
         when(project.getId()).thenReturn(PROJECT_ID);

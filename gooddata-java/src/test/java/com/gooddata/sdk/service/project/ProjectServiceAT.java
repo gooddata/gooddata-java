@@ -20,9 +20,12 @@ import com.gooddata.sdk.service.account.AccountService;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.core.IsIterableContaining;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +34,7 @@ import java.util.UUID;
 
 import static com.gooddata.sdk.model.project.ProjectEnvironment.TESTING;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
+
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -42,14 +44,15 @@ import static org.hamcrest.Matchers.notNullValue;
 /**
  * Project acceptance tests.
  */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class) 
 public class ProjectServiceAT extends AbstractGoodDataAT {
 
     private static final String LOGIN1 = "john.smith." + UUID.randomUUID() + "@gooddata.com";
     private static final String LOGIN2 = "john.doe." + UUID.randomUUID() + "@gooddata.com";
 
-    private User user;
-    private Account account1;
-    private Account account2;
+    private static User user;
+    private static Account account1;
+    private static Account account2;
 
     private static final String DISABLED_STATUS = "DISABLED";
 
@@ -57,8 +60,8 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
         projectToken = getProperty("projectToken");
     }
 
-    @BeforeClass(groups = "isolated_domain")
-    public void initIsolatedDomainGroup() {
+    @BeforeAll
+    static public void initIsolatedDomainGroup() {
         final AccountService accountService = gd.getAccountService();
         final String domain = getProperty("domain");
         account1 = accountService.createAccount(new Account(LOGIN1, "nnPvcGXU7f", "FirstName1", "LastName1"),
@@ -67,23 +70,26 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
                 domain);
     }
 
-    @Test(groups = "project", dependsOnGroups = "account")
-    public void createProject() {
+    @Test
+    @Order(1)
+    void createProject() {
         final Project p = new Project(title, projectToken);
         p.setEnvironment(TESTING);
         project = gd.getProjectService().createProject(p).get();
     }
 
-    @Test(groups = "project", dependsOnMethods = "createProject")
-    public void listProjects() {
+    @Test
+    @Order(2)
+    void listProjects() {
         final ProjectService projectService = gd.getProjectService();
 
         final PageBrowser<Project> projects = projectService.listProjects();
         assertThat(projects.getAllItems(), IsIterableContaining.hasItem(ProjectIdMatcher.hasSameIdAs(project)));
     }
 
-    @Test(groups = "project", dependsOnMethods = "createProject")
-    public void listProjectUsers() {
+    @Test
+    @Order(3)
+    void listProjectUsers() {
         final ProjectService projectService = gd.getProjectService();
 
         final List<User> users = new ArrayList<>();
@@ -95,58 +101,65 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
         assertThat(users, not(empty()));
     }
 
-    @Test(groups = "project", dependsOnMethods = "createProject")
-    public void listProjectRoles() {
+    @Test
+    @Order(4)
+    void listProjectRoles() {
         final ProjectService projectService = gd.getProjectService();
 
         final Set<Role> roles = projectService.getRoles(project);
         assertThat(roles, not(empty()));
     }
 
-    @Test(groups = "project", dependsOnMethods = "createProject")
-    public void getProjectById() {
+    @Test
+    @Order(5)
+    void getProjectById() {
         final Project result = gd.getProjectService().getProjectById(project.getId());
         assertThat(result, ProjectIdMatcher.hasSameIdAs(project));
     }
 
-    @Test(groups = "project", dependsOnMethods = "createProject")
-    public void getProjectByUri() {
+    @Test
+    @Order(6)
+    void getProjectByUri() {
         final Project result = gd.getProjectService().getProjectByUri(project.getUri());
         assertThat(result, ProjectIdMatcher.hasSameIdAs(project));
     }
 
-    @Test(groups = "project", dependsOnMethods = "createProject")
-    public void validateProject() {
+    @Test
+    @Order(7)
+    void validateProject() {
         final ProjectValidationResults results = gd.getProjectService().validateProject(project).get();
         assertThat(results, is(notNullValue()));
         assertThat(results.getResults(), is(notNullValue()));
     }
 
-    @Test(groups = "project", dependsOnMethods = "createProject")
-    public void sendInvitations() {
+    @Test
+    @Order(8)
+    void sendInvitations() {
         final Invitation invitation = new Invitation("qa+" + RandomStringUtils.randomAlphanumeric(10) + "@gooddata.com");
         final CreatedInvitations invitations = gd.getProjectService().sendInvitations(project, invitation);
         assertThat(invitations, is(notNullValue()));
         assertThat(invitations.getInvitationUris(), hasSize(1));
     }
 
-    @Test(groups = {"project", "isolated_domain"}, dependsOnMethods = "createProject")
-    public void addUsersToProject() {
+    @Test
+    @Order(9)
+    void addUsersToProject() {
         final ProjectService projectService = gd.getProjectService();
         final Set<Role> roles = projectService.getRoles(project);
         final Role role = roles.iterator().next();
-        this.user = projectService.addUserToProject(project, account1, role);
+        user = projectService.addUserToProject(project, account1, role);
 
         // to test scenario with role obtained by its URI
         final Role roleByUri = projectService.getRoleByUri(role.getUri());
         final User user2 = projectService.addUserToProject(project, account2, roleByUri);
 
-        assertThat(this.user, is(notNullValue()));
+        assertThat(user, is(notNullValue()));
         assertThat(user2, is(notNullValue()));
     }
 
-    @Test(groups = {"project", "isolated_domain"}, dependsOnMethods = "addUsersToProject")
-    public void listProjectsForUser() {
+    @Test
+    @Order(10)
+    void listProjectsForUser() {
         final ProjectService projectService = gd.getProjectService();
 
         final PageBrowser<Project> projects = projectService.listProjects(account1);
@@ -155,8 +168,9 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
         assertThat(projects.getPageItems().get(0).getTitle(), is(title));
     }
 
-    @Test(groups = {"project", "isolated_domain"}, dependsOnMethods = "addUsersToProject")
-    public void listProjectsForUserSettingStartPage() {
+    @Test
+    @Order(11)
+    void listProjectsForUserSettingStartPage() {
         final ProjectService projectService = gd.getProjectService();
 
         final PageBrowser<Project> projects = projectService.listProjects(account1, new CustomPageRequest(10, 1));
@@ -165,8 +179,9 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
         assertThat(projects.getPageItems().isEmpty(), is(true));
     }
 
-    @Test(groups = {"project", "isolated_domain"}, dependsOnMethods = {"listProjectsForUser", "listProjectsForUserSettingStartPage"})
-    public void disableUserInProject() {
+    @Test
+    @Order(12)
+    void disableUserInProject() {
         user.setStatus(DISABLED_STATUS);
 
         gd.getProjectService().updateUserInProject(project, user);
@@ -177,15 +192,18 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
         assertThat(user.getStatus(), is("DISABLED"));
     }
 
-    @Test(groups = "project", dependsOnMethods = "createProject")
-    public void getUserInProject() {
+
+    @Test
+    @Order(13)
+    void getUserInProject() {
         final User user = gd.getProjectService().getUser(project, gd.getAccountService().getCurrent());
 
         assertThat(user, notNullValue());
     }
 
-    @Test(groups = {"project", "isolated_domain"}, dependsOnMethods = "disableUserInProject")
-    public void removeAccountFromProject() {
+    @Test
+    @Order(14)
+    void removeAccountFromProject() {
         gd.getProjectService().getUser(project, account1); // just verifying it doesn't throw before the removal
         gd.getProjectService().removeUserFromProject(project, account1);
 
@@ -197,8 +215,8 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
         }
     }
 
-    @AfterClass(groups = "isolated_domain")
-    public void tearDownIsolatedDomainGroup() {
+    @AfterAll
+    static void tearDownIsolatedDomainGroup() {
         try {
             if (account1 != null) {
                 gd.getAccountService().removeAccount(account1);

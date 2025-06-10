@@ -14,7 +14,6 @@ import com.gooddata.sdk.service.dataload.processes.ProcessService;
 import com.gooddata.sdk.service.dataset.DatasetService;
 import com.gooddata.sdk.service.executeafm.ExecuteAfmService;
 import com.gooddata.sdk.service.export.ExportService;
-import com.gooddata.sdk.service.featureflag.FeatureFlagService;
 import com.gooddata.sdk.service.gdc.DataStoreService;
 import com.gooddata.sdk.service.gdc.GdcService;
 import com.gooddata.sdk.service.lcm.LcmService;
@@ -23,11 +22,13 @@ import com.gooddata.sdk.service.md.maintenance.ExportImportService;
 import com.gooddata.sdk.service.notification.NotificationService;
 import com.gooddata.sdk.service.project.ProjectService;
 import com.gooddata.sdk.service.project.model.ModelService;
-import com.gooddata.sdk.service.projecttemplate.ProjectTemplateService;
 import com.gooddata.sdk.service.warehouse.WarehouseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.client.RestTemplate;
+
+import org.springframework.web.reactive.function.client.WebClient;
+import com.gooddata.sdk.service.featureflag.FeatureFlagService;
+import com.gooddata.sdk.service.projecttemplate.ProjectTemplateService;
 
 import java.util.Optional;
 
@@ -62,43 +63,46 @@ class GoodDataServices {
     private final LcmService lcmService;
     private final HierarchicalConfigService hierarchicalConfigService;
 
-    @SuppressWarnings("deprecation")
+  
+    //
     GoodDataServices(final GoodDataRestProvider goodDataRestProvider) {
-        this.goodDataRestProvider = goodDataRestProvider;
+    this.goodDataRestProvider = goodDataRestProvider;
 
-        accountService = new AccountService(getRestTemplate(), getSettings());
-        projectService = new ProjectService(getRestTemplate(), accountService, getSettings());
-        metadataService = new MetadataService(getRestTemplate(), getSettings());
-        modelService = new ModelService(getRestTemplate(), getSettings());
-        gdcService = new GdcService(getRestTemplate(), getSettings());
-        exportService = new ExportService(getRestTemplate(), getSettings());
-        warehouseService = new WarehouseService(getRestTemplate(), getSettings());
-        connectorService = new ConnectorService(getRestTemplate(), projectService, getSettings());
-        notificationService = new NotificationService(getRestTemplate(), getSettings());
-        exportImportService = new ExportImportService(getRestTemplate(), getSettings());
-        featureFlagService = new FeatureFlagService(getRestTemplate(), getSettings());
-        outputStageService = new OutputStageService(getRestTemplate(), getSettings());
-        projectTemplateService = new ProjectTemplateService(getRestTemplate(), getSettings());
-        auditEventService = new AuditEventService(getRestTemplate(), accountService, getSettings());
-        executeAfmService = new ExecuteAfmService(getRestTemplate(), getSettings());
-        lcmService = new LcmService(getRestTemplate(), getSettings());
-        hierarchicalConfigService = new HierarchicalConfigService(getRestTemplate(), getSettings());
+    accountService = new AccountService(getWebClient(), getSettings());
+    projectService = new ProjectService(getWebClient(), accountService, getSettings());
+    metadataService = new MetadataService(getWebClient(), getSettings());
+    modelService = new ModelService(getWebClient(), getSettings());
+    gdcService = new GdcService(getWebClient(), getSettings());
+    exportService = new ExportService(getWebClient(), getSettings());
+    warehouseService = new WarehouseService(getWebClient(), getSettings());
+    connectorService = new ConnectorService(getWebClient(), projectService, getSettings());
+    notificationService = new NotificationService(getWebClient(), getSettings());
+    exportImportService = new ExportImportService(getWebClient(), getSettings());
+    featureFlagService = new FeatureFlagService(getWebClient(), getSettings());
+    outputStageService = new OutputStageService(getWebClient(), getSettings());
+    projectTemplateService = new ProjectTemplateService(getWebClient(), getSettings());
+    auditEventService = new AuditEventService(getWebClient(), accountService, getSettings());
+    executeAfmService = new ExecuteAfmService(getWebClient(), getSettings());
+    lcmService = new LcmService(getWebClient(), getSettings());
+    hierarchicalConfigService = new HierarchicalConfigService(getWebClient(), getSettings());
 
-        final Optional<DataStoreService> dataStoreService = goodDataRestProvider.getDataStoreService(() -> gdcService.getRootLinks().getUserStagingUri());
-        if (dataStoreService.isPresent()) {
-            this.dataStoreService = dataStoreService.get();
-        } else {
-            this.dataStoreService = null;
-            logger.info("GoodDataRestProvider provided empty DataStoreService - WebDAV related operations are not supported");
-        }
-
-        datasetService = new DatasetService(getRestTemplate(), this.dataStoreService, getSettings());
-        processService = new ProcessService(getRestTemplate(), accountService, this.dataStoreService, getSettings());
+    final Optional<DataStoreService> dataStoreService = goodDataRestProvider.getDataStoreService(() -> gdcService.getRootLinks().getUserStagingUri());
+    if (dataStoreService.isPresent()) {
+        this.dataStoreService = dataStoreService.get();
+    } else {
+        this.dataStoreService = null;
+        logger.info("GoodDataRestProvider provided empty DataStoreService - WebDAV related operations are not supported");
     }
 
-    RestTemplate getRestTemplate() {
-        return goodDataRestProvider.getRestTemplate();
+    datasetService = new DatasetService(getWebClient(), this.dataStoreService, getSettings());
+    processService = new ProcessService(getWebClient(), accountService, this.dataStoreService, getSettings());
+}
+
+
+    WebClient getWebClient() {
+        return goodDataRestProvider.getWebClient();
     }
+
 
     GoodDataSettings getSettings() {
         return goodDataRestProvider.getSettings();

@@ -9,10 +9,11 @@ import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.apache.commons.lang3.SerializationUtils;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
@@ -34,9 +35,11 @@ public class AttributeSortTest {
         assertThat(attributeSort.getValue(), is("pk"));
     }
 
-    @Test(expectedExceptions = JsonMappingException.class)
-    public void testDeserializeInvalid() throws Exception {
-        OBJECT_MAPPER.readValue("123", AttributeSort.class);
+    @Test
+    void testDeserializeInvalid() {
+        assertThrows(JsonMappingException.class, () -> {
+            OBJECT_MAPPER.readValue("123", AttributeSort.class);
+        });
     }
 
     @Test

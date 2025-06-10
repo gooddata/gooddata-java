@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.connector;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test; 
 
 import static com.gooddata.sdk.model.connector.ConnectorType.ZENDESK4;
 import static com.gooddata.sdk.model.connector.Zendesk4Settings.Zendesk4Type.plus;
@@ -17,6 +17,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Zendesk4SettingsTest {
 
@@ -65,16 +66,16 @@ public class Zendesk4SettingsTest {
         assertThat(new Zendesk4Settings("url").getConnectorType(), is(ZENDESK4));
     }
 
-    @Test(expectedExceptions = {IllegalArgumentException.class})
+    @Test
     public void testSetApiUrlWithEmptyValue() throws Exception {
         final Zendesk4Settings settings = new Zendesk4Settings("old url");
-        settings.setApiUrl("");
+        assertThrows(IllegalArgumentException.class, () -> settings.setApiUrl(""));
     }
 
-    @Test(expectedExceptions = {IllegalArgumentException.class})
+    @Test
     public void testSetApiUrlWithNull() throws Exception {
         final Zendesk4Settings settings = new Zendesk4Settings("old url");
-        settings.setApiUrl(null);
+        assertThrows(IllegalArgumentException.class, () -> settings.setApiUrl(null));
     }
 
     @Test

@@ -20,11 +20,9 @@ import com.gooddata.sdk.model.md.report.Report;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.*;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriTemplate;
 
 import java.io.IOException;
@@ -32,42 +30,29 @@ import java.io.OutputStream;
 
 import static com.gooddata.sdk.common.util.Validate.notNull;
 import static com.gooddata.sdk.common.util.Validate.notNullState;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
 
 /**
- * Export project data
- *
+ * Export project data using WebClient (Spring 6, JDK 17)
  */
 public class ExportService extends AbstractService {
 
     public static final String EXPORTING_URI = "/gdc/exporter/executor";
-
     private static final String CLIENT_EXPORT_URI = "/gdc/projects/{projectId}/clientexport";
-
     private static final String RAW_EXPORT_URI = "/gdc/projects/{projectId}/execute/raw";
-
     public static final UriTemplate OBJ_TEMPLATE = new UriTemplate(Obj.OBJ_URI);
     public static final UriTemplate PROJECT_TEMPLATE = new UriTemplate(Project.URI);
 
     /**
      * Service for data export
-     * @param restTemplate REST template
+     * @param webClient WebClient
      * @param settings settings
      */
-    public ExportService(final RestTemplate restTemplate, final GoodDataSettings settings) {
-        super(restTemplate, settings);
+    public ExportService(final WebClient webClient, final GoodDataSettings settings) {
+        super(webClient, settings);
     }
 
     /**
      * Export the given report definition in the given format to the given output stream
-     *
-     * @param reportDefinition report definition
-     * @param format           export format
-     * @param output           target
-     * @return polling result
-     * @throws NoDataExportException in case report contains no data
-     * @throws ExportException       on error
      */
     public FutureResult<Void> export(final ReportDefinition reportDefinition, final ExportFormat format,
                                      final OutputStream output) {
@@ -78,13 +63,6 @@ public class ExportService extends AbstractService {
 
     /**
      * Export the given report in the given format to the given output stream
-     *
-     * @param report report
-     * @param format export format
-     * @param output target
-     * @return polling result
-     * @throws NoDataExportException in case report contains no data
-     * @throws ExportException       on error
      */
     public FutureResult<Void> export(final Report report, final ExportFormat format,
                                      final OutputStream output) {
@@ -100,16 +78,33 @@ public class ExportService extends AbstractService {
         final String uri = exportReport(execResult, format);
         return new PollResult<>(this, new SimplePollHandler<Void>(uri, Void.class) {
             @Override
-            public boolean isFinished(ClientHttpResponse response) throws IOException {
-                switch (response.getStatusCode()) {
-                    case OK:
-                        return true;
-                    case ACCEPTED:
-                        return false;
-                    case NO_CONTENT:
-                        throw new NoDataExportException();
-                    default:
-                        throw new ExportException("Unable to export report, unknown HTTP response code: " + response.getStatusCode());
+            public boolean isFinished(ClientResponse response) {
+                int code = response.statusCode().value();
+                if (code == 200) {
+                    return true;
+                } else if (code == 202) {
+                    return false;
+                } else if (code == 204) {
+                    throw new NoDataExportException();
+                } else {
+                    throw new ExportException("Unable to export report, unknown HTTP response code: " + code);
+                }
+            }
+
+            @Override
+            protected void onFinish() {
+                // Download file using WebClient and write to OutputStream
+                byte[] data = webClient.get()
+                        .uri(uri)
+                        .retrieve()
+                        .bodyToMono(byte[].class)
+                        .block();
+                if (data != null) {
+                    try {
+                        output.write(data);
+                    } catch (IOException e) {
+                        throw new ExportException("Unable to write export to output stream", e);
+                    }
                 }
             }
 
@@ -117,27 +112,20 @@ public class ExportService extends AbstractService {
             public void handlePollException(final GoodDataRestException e) {
                 throw new ExportException("Unable to export report", e);
             }
-
-            @Override
-            protected void onFinish() {
-                try {
-                    restTemplate.execute(uri, GET, null, new OutputStreamResponseExtractor(output));
-                } catch (GoodDataException | RestClientException e) {
-                    throw new ExportException("Unable to export report", e);
-                }
-            }
         });
     }
 
     protected JsonNode executeReport(final String executionUri, final ReportRequest request) {
         try {
-            final ResponseEntity<String> entity = restTemplate
-                    .exchange(executionUri, POST, new HttpEntity<>(request), String.class);
-            return mapper.readTree(entity.getBody());
-        } catch (GoodDataException | RestClientException e) {
+            String responseBody = webClient.post()
+                    .uri(executionUri)
+                    .bodyValue(request)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+            return mapper.readTree(responseBody);
+        } catch (Exception e) {
             throw new ExportException("Unable to execute report", e);
-        } catch (IOException e) {
-            throw new ExportException("Unable to read execution result", e);
         }
     }
 
@@ -152,21 +140,20 @@ public class ExportService extends AbstractService {
         root.set("result_req", child);
 
         try {
-            return notNullState(restTemplate.postForObject(EXPORTING_URI, root, UriResponse.class), "exported report").getUri();
-        } catch (GoodDataException | RestClientException e) {
+            UriResponse uriResponse = webClient.post()
+                    .uri(EXPORTING_URI)
+                    .bodyValue(root)
+                    .retrieve()
+                    .bodyToMono(UriResponse.class)
+                    .block();
+            return notNullState(uriResponse, "exported report").getUri();
+        } catch (Exception e) {
             throw new ExportException("Unable to export report", e);
         }
     }
 
     /**
      * Export the given dashboard tab in PDF format to the given output stream
-     *
-     * @param endpoint  endpoint for which the export is generated
-     * @param dashboard dashboard
-     * @param tab       tab
-     * @param output    output
-     * @return polling result
-     * @throws ExportException if export fails
      */
     public FutureResult<Void> exportPdf(final GoodDataEndpoint endpoint, final ProjectDashboard dashboard, final Tab tab, final OutputStream output) {
         notNull(endpoint, "endpoint");
@@ -181,31 +168,43 @@ public class ExportService extends AbstractService {
         final ClientExport export = new ClientExport(endpoint.toUri(), projectUri, dashboardUri, tab.getIdentifier());
         final AsyncTask task;
         try {
-            task = restTemplate.postForObject(CLIENT_EXPORT_URI, export, AsyncTask.class, projectId);
-        } catch (RestClientException | GoodDataRestException e) {
+            task = webClient.post()
+                    .uri(CLIENT_EXPORT_URI.replace("{projectId}", projectId))
+                    .bodyValue(export)
+                    .retrieve()
+                    .bodyToMono(AsyncTask.class)
+                    .block();
+        } catch (Exception e) {
             throw new ExportException("Unable to export dashboard: " + dashboardUri, e);
         }
 
         return new PollResult<>(this, new SimplePollHandler<Void>(notNullState(task, "export pdf task").getUri(), Void.class) {
             @Override
-            public boolean isFinished(ClientHttpResponse response) throws IOException {
-                switch (response.getStatusCode()) {
-                    case OK:
-                        return true;
-                    case ACCEPTED:
-                        return false;
-                    default:
-                        throw new ExportException("Unable to export dashboard: " + dashboardUri +
-                                ", unknown HTTP response code: " + response.getStatusCode());
+            public boolean isFinished(ClientResponse response) {
+                int code = response.statusCode().value();
+                if (code == 200) {
+                    return true;
+                } else if (code == 202) {
+                    return false;
+                } else {
+                    throw new ExportException("Unable to export dashboard: " + dashboardUri +
+                            ", unknown HTTP response code: " + code);
                 }
             }
 
             @Override
             protected void onFinish() {
-                try {
-                    restTemplate.execute(task.getUri(), GET, null, new OutputStreamResponseExtractor(output));
-                } catch (GoodDataException | RestClientException e) {
-                    throw new ExportException("Unable to export dashboard: " + dashboardUri, e);
+                byte[] data = webClient.get()
+                        .uri(task.getUri())
+                        .retrieve()
+                        .bodyToMono(byte[].class)
+                        .block();
+                if (data != null) {
+                    try {
+                        output.write(data);
+                    } catch (IOException e) {
+                        throw new ExportException("Unable to write dashboard export to stream", e);
+                    }
                 }
             }
 
@@ -218,10 +217,6 @@ public class ExportService extends AbstractService {
 
     /**
      * Export the given Report using the raw export (without columns/rows limitations)
-     * @param report report
-     * @param output output
-     * @return polling result
-     * @throws ExportException in case export fails
      */
     public FutureResult<Void> exportCsv(final Report report, final OutputStream output) {
         notNull(report, "report");
@@ -230,10 +225,6 @@ public class ExportService extends AbstractService {
 
     /**
      * Export the given Report Definition using the raw export (without columns/rows limitations)
-     * @param definition report definition
-     * @param output output
-     * @return polling result
-     * @throws ExportException in case export fails
      */
     public FutureResult<Void> exportCsv(final ReportDefinition definition, final OutputStream output) {
         final ReportRequest request = new ExecuteReportDefinition(definition);
@@ -246,40 +237,51 @@ public class ExportService extends AbstractService {
         notNull(output, "output");
 
         final String projectId = extractProjectId(obj);
-        final String uri = obj.getUri();
-
-        final UriResponse response;
+        final String uri;
         try {
-            response = restTemplate.postForObject(RAW_EXPORT_URI, request, UriResponse.class, projectId);
-        } catch (RestClientException | GoodDataRestException e) {
-            throw new ExportException("Unable to export: " + uri);
-        }
-        if (response == null || response.getUri() == null) {
-            throw new ExportException("Empty response, unable to export: " + uri);
+            UriResponse response = webClient.post()
+                    .uri(RAW_EXPORT_URI.replace("{projectId}", projectId))
+                    .bodyValue(request)
+                    .retrieve()
+                    .bodyToMono(UriResponse.class)
+                    .block();
+            if (response == null || response.getUri() == null) {
+                throw new ExportException("Empty response, unable to export: " + obj.getUri());
+            }
+            uri = response.getUri();
+        } catch (Exception e) {
+            throw new ExportException("Unable to export: " + obj.getUri(), e);
         }
 
-        return new PollResult<>(this, new SimplePollHandler<Void>(response.getUri(), Void.class) {
+        return new PollResult<>(this, new SimplePollHandler<Void>(uri, Void.class) {
             @Override
-            public boolean isFinished(ClientHttpResponse response) throws IOException {
-                switch (response.getStatusCode()) {
-                    case OK:
-                        return true;
-                    case ACCEPTED:
-                        return false;
-                    case NO_CONTENT:
-                        throw new NoDataExportException();
-                    default:
-                        throw new ExportException("Unable to export: " + uri +
-                                ", unknown HTTP response code: " + response.getStatusCode());
+            public boolean isFinished(ClientResponse response) {
+                int code = response.statusCode().value();
+                if (code == 200) { // OK
+                    return true;
+                } else if (code == 202) { // ACCEPTED
+                    return false;
+                } else if (code == 204) { // NO_CONTENT
+                    throw new NoDataExportException();
+                } else {
+                    throw new ExportException("Unable to export: " + uri +
+                            ", unknown HTTP response code: " + code);
                 }
             }
 
             @Override
             protected void onFinish() {
-                try {
-                    restTemplate.execute(getPolling(), GET, null, new OutputStreamResponseExtractor(output));
-                } catch (GoodDataException | RestClientException e) {
-                    throw new ExportException("Unable to export: " + uri, e);
+                byte[] data = webClient.get()
+                        .uri(uri)
+                        .retrieve()
+                        .bodyToMono(byte[].class)
+                        .block();
+                if (data != null) {
+                    try {
+                        output.write(data);
+                    } catch (IOException e) {
+                        throw new ExportException("Unable to write export to output stream", e);
+                    }
                 }
             }
 

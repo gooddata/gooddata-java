@@ -14,8 +14,9 @@ import com.gooddata.sdk.model.notification.Subscription;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.sdk.service.GoodDataSettings;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException; 
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNull;
@@ -25,8 +26,8 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
  */
 public class NotificationService extends AbstractService {
 
-    public NotificationService(final RestTemplate restTemplate, final GoodDataSettings settings) {
-        super(restTemplate, settings);
+    public NotificationService(final WebClient webClient, final GoodDataSettings settings) {
+        super(webClient, settings);
     }
 
     /**
@@ -39,8 +40,13 @@ public class NotificationService extends AbstractService {
         notNull(project, "project");
         notNull(event, "event");
         try {
-            restTemplate.postForEntity(ProjectEvent.URI, event, Void.class, project.getId());
-        } catch (GoodDataRestException | RestClientException e) {
+            webClient.post()
+                .uri(uriBuilder -> uriBuilder.path(ProjectEvent.URI).build(project.getId())) 
+                .bodyValue(event) 
+                .retrieve() 
+                .toBodilessEntity() 
+                .block(); 
+        } catch (WebClientResponseException | GoodDataRestException e) {
             throw new GoodDataException("Unable to post project event.", e);
         }
     }
@@ -58,8 +64,13 @@ public class NotificationService extends AbstractService {
         notEmpty(account.getId(), "account.id");
 
         try {
-            return restTemplate.postForObject(Channel.URI, channel, Channel.class, account.getId());
-        } catch (GoodDataRestException | RestClientException e) {
+            return webClient.post() 
+                .uri(uriBuilder -> uriBuilder.path(Channel.URI).build(account.getId())) 
+                .bodyValue(channel) 
+                .retrieve() 
+                .bodyToMono(Channel.class) 
+                .block(); 
+        } catch (WebClientResponseException | GoodDataRestException e) { 
             throw new GoodDataException("Unable to create channel", e);
         }
     }
@@ -75,8 +86,12 @@ public class NotificationService extends AbstractService {
         notEmpty(channel.getMeta().getUri(), "channel.meta.uri");
 
         try {
-            restTemplate.delete(channel.getMeta().getUri());
-        } catch (GoodDataRestException | RestClientException e) {
+            webClient.delete() 
+                .uri(channel.getMeta().getUri()) 
+                .retrieve() 
+                .toBodilessEntity() 
+                .block(); 
+        } catch (WebClientResponseException | GoodDataRestException e) {
             throw new GoodDataException("Unable to delete channel", e);
         }
     }
@@ -97,8 +112,13 @@ public class NotificationService extends AbstractService {
         notEmpty(account.getId(), "account.id");
 
         try {
-            return restTemplate.postForObject(Subscription.URI, subscription, Subscription.class, project.getId(), account.getId());
-        } catch (GoodDataRestException | RestClientException e) {
+            return webClient.post() 
+                .uri(uriBuilder -> uriBuilder.path(Subscription.URI).build(project.getId(), account.getId())) 
+                .bodyValue(subscription) 
+                .retrieve() 
+                .bodyToMono(Subscription.class) 
+                .block();
+        } catch (WebClientResponseException | GoodDataRestException e) {
             throw new GoodDataException("Unable to create subscription", e);
         }
     }
@@ -114,8 +134,12 @@ public class NotificationService extends AbstractService {
         notEmpty(subscription.getMeta().getUri(), "subscription.meta.uri");
 
         try {
-            restTemplate.delete(subscription.getMeta().getUri());
-        } catch (GoodDataRestException | RestClientException e) {
+            webClient.delete() 
+                .uri(subscription.getMeta().getUri()) 
+                .retrieve() 
+                .toBodilessEntity()
+                .block();
+        } catch (WebClientResponseException | GoodDataRestException e) { 
             throw new GoodDataException("Unable to delete subscription", e);
         }
     }

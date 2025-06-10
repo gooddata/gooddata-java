@@ -9,9 +9,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 import org.apache.commons.io.FileUtils;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,15 +28,15 @@ public class ZipHelperTest {
     private static final String SOME_FILE = "someFile.txt";
     private static final String SOME_FILE_PATH = Paths.get("a", "b", SOME_FILE).toString();
 
-    private Path temporaryFolder;
+    private static Path temporaryFolder;
 
-    @BeforeClass
-    public void setUp() throws Exception {
+    @BeforeAll
+    public static void setUp() throws Exception {
         temporaryFolder = Files.createTempDirectory("zip");
     }
 
-    @AfterClass
-    public void tearDown() throws Exception {
+    @AfterAll
+    public static void tearDown() throws Exception {
         FileUtils.deleteQuietly(temporaryFolder.toFile());
     }
 

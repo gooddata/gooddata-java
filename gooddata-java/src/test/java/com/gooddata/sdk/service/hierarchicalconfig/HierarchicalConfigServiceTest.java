@@ -6,27 +6,42 @@
 package com.gooddata.sdk.service.hierarchicalconfig;
 
 import com.gooddata.sdk.common.GoodDataException;
+import com.gooddata.sdk.common.GoodDataRestException;
 import com.gooddata.sdk.model.hierarchicalconfig.ConfigItem;
 import com.gooddata.sdk.model.hierarchicalconfig.ConfigItems;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.GoodDataSettings;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import reactor.core.publisher.Mono;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 import java.net.URI;
+import java.net.URISyntaxException;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
 
-public class HierarchicalConfigServiceTest {
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings({"rawtypes", "unchecked"})
+class HierarchicalConfigServiceTest {
 
     private static final String PROJECT_ID = "11";
     private static final String CONFIG_ITEM_NAME = "item1";
-    private static final String PROJECT_CONFIG_ITEMS_URI = "/gdc/projects/11/config";
     private static final String PROJECT_CONFIG_ITEM_URI = "/gdc/projects/11/config/" + CONFIG_ITEM_NAME;
 
     @Mock
@@ -34,95 +49,166 @@ public class HierarchicalConfigServiceTest {
     @Mock
     private ConfigItem configItem;
     @Mock
-    private RestTemplate restTemplate;
+    private WebClient webClient;
 
     private HierarchicalConfigService hierarchicalConfigService;
 
-    @BeforeMethod
-    public void setUp() throws Exception {
-        MockitoAnnotations.openMocks(this).close();
-        hierarchicalConfigService = new HierarchicalConfigService(restTemplate, new GoodDataSettings());
-        when(project.getId()).thenReturn(PROJECT_ID);
+    @BeforeEach
+    void setUp() {
+        hierarchicalConfigService = new HierarchicalConfigService(webClient, new GoodDataSettings());
+        lenient().when(project.getId()).thenReturn(PROJECT_ID);
     }
 
     /*--- Project Config ---*/
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullArgThenListProjectConfigItemsShouldThrow() {
-        hierarchicalConfigService.listProjectConfigItems(null);
+    @Test
+    void whenNullArgThenListProjectConfigItemsShouldThrow() {
+        assertThrows(IllegalArgumentException.class, () -> hierarchicalConfigService.listProjectConfigItems(null));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenEmptyResponseThenListProjectConfigItemsShouldThrow() throws Exception {
-        when(restTemplate.getForObject(new URI(PROJECT_CONFIG_ITEMS_URI), ConfigItems.class)).thenReturn(null);
-        hierarchicalConfigService.listProjectConfigItems(project);
+
+    @Test
+    void whenEmptyResponseThenListProjectConfigItemsShouldThrow() throws Exception {
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(org.mockito.ArgumentMatchers.<URI>any())).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(ConfigItems.class)).thenReturn(Mono.empty());
+
+        assertThrows(GoodDataException.class, () -> hierarchicalConfigService.listProjectConfigItems(project));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenClientErrorResponseThenListProjectConfigItemsShouldThrow() throws Exception {
-        when(restTemplate.getForObject(new URI(PROJECT_CONFIG_ITEMS_URI), ConfigItems.class))
-                .thenThrow(new RestClientException(""));
-        hierarchicalConfigService.listProjectConfigItems(project);
+
+    @Test
+    void whenClientErrorResponseThenListProjectConfigItemsShouldThrow() {
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        try {
+            when(uriSpec.uri(new URI("/gdc/projects/11/config"))).thenReturn(headersSpec);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(ConfigItems.class)).thenReturn(Mono.error(new RuntimeException("error")));
+
+        assertThrows(GoodDataException.class, () -> hierarchicalConfigService.listProjectConfigItems(project));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullKeyThenGetProjectConfigItemShouldThrow() {
-        hierarchicalConfigService.getProjectConfigItem(project,null);
+
+    @Test
+    void whenNullKeyThenGetProjectConfigItemShouldThrow() {
+        assertThrows(IllegalArgumentException.class, () -> hierarchicalConfigService.getProjectConfigItem(project, null));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullProjectThenGetProjectConfigItemShouldThrow() {
-        hierarchicalConfigService.getProjectConfigItem(null, CONFIG_ITEM_NAME);
+    @Test
+    void whenNullProjectThenGetProjectConfigItemShouldThrow() {
+        assertThrows(IllegalArgumentException.class, () -> hierarchicalConfigService.getProjectConfigItem(null, CONFIG_ITEM_NAME));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenEmptyResponseThenGetProjectConfigItemShouldThrow() {
-        when(restTemplate.getForObject(CONFIG_ITEM_NAME, ConfigItem.class)).thenReturn(null);
-        hierarchicalConfigService.getProjectConfigItem(project, CONFIG_ITEM_NAME);
+    @Test
+    void whenEmptyResponseThenGetProjectConfigItemShouldThrow() {
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(anyString())).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(ConfigItem.class)).thenReturn(Mono.empty());
+
+        assertThrows(GoodDataException.class, () -> hierarchicalConfigService.getProjectConfigItem(project, CONFIG_ITEM_NAME));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenClientErrorResponseThenGetProjectConfigItemShouldThrow() {
-        when(restTemplate.getForObject(PROJECT_CONFIG_ITEM_URI, ConfigItem.class))
-                .thenThrow(new RestClientException(""));
-        hierarchicalConfigService.getProjectConfigItem(project, CONFIG_ITEM_NAME);
+    @Test
+    void whenClientErrorResponseThenGetProjectConfigItemShouldThrow() {
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(anyString())).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(ConfigItem.class)).thenReturn(Mono.error(new RuntimeException("error")));
+
+        assertThrows(GoodDataException.class, () -> hierarchicalConfigService.getProjectConfigItem(project, CONFIG_ITEM_NAME));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullConfigItemThenSetProjectConfigItemShouldThrow() {
-        hierarchicalConfigService.setProjectConfigItem(project,null);
+
+    @Test
+    void whenNullConfigItemThenSetProjectConfigItemShouldThrow() {
+        assertThrows(IllegalArgumentException.class, () -> hierarchicalConfigService.setProjectConfigItem(project, null));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullProjectThenSetProjectConfigItemShouldThrow() {
-        hierarchicalConfigService.setProjectConfigItem(null, configItem);
+    @Test
+    void whenNullProjectThenSetProjectConfigItemShouldThrow() {
+        assertThrows(IllegalArgumentException.class, () -> hierarchicalConfigService.setProjectConfigItem(null, configItem));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenEmptyResponseThenSettProjectConfigItemShouldThrow() {
+
+    @Test
+    void whenEmptyResponseThenSetProjectConfigItemShouldThrow() {
         when(configItem.getUri()).thenReturn(PROJECT_CONFIG_ITEM_URI);
-        when(restTemplate.getForObject(PROJECT_CONFIG_ITEM_URI, ConfigItem.class)).thenReturn(null);
-        hierarchicalConfigService.setProjectConfigItem(project, configItem);
+
+        WebClient.RequestBodyUriSpec putUriSpec = mock(WebClient.RequestBodyUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        lenient().when(webClient.put()).thenReturn(putUriSpec);
+        lenient().when(putUriSpec.uri(anyString())).thenReturn(putUriSpec);
+        lenient().when(putUriSpec.bodyValue(any())).thenReturn(headersSpec);
+        lenient().when(headersSpec.retrieve()).thenReturn(responseSpec);
+
+        when(responseSpec.toBodilessEntity())
+            .thenReturn(Mono.error(new GoodDataException("Expected error")));
+
+        assertThrows(GoodDataException.class, () -> hierarchicalConfigService.setProjectConfigItem(project, configItem));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenClientErrorResponseThenSetProjectConfigItemShouldThrow() {
+
+    @Test
+    void whenClientErrorResponseThenSetProjectConfigItemShouldThrow() {
         when(configItem.getUri()).thenReturn(PROJECT_CONFIG_ITEM_URI);
-        when(restTemplate.getForObject(PROJECT_CONFIG_ITEM_URI, ConfigItem.class))
-                .thenThrow(new RestClientException(""));
-        hierarchicalConfigService.setProjectConfigItem(project, configItem);
+
+        WebClient.RequestBodyUriSpec putUriSpec = mock(WebClient.RequestBodyUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        lenient().when(webClient.put()).thenReturn(putUriSpec);
+        lenient().when(putUriSpec.uri(anyString())).thenReturn(putUriSpec);
+        lenient().when(putUriSpec.bodyValue(any())).thenReturn(headersSpec);
+        lenient().when(headersSpec.retrieve()).thenReturn(responseSpec);
+        lenient().when(responseSpec.toBodilessEntity()).thenReturn(Mono.error(new org.springframework.web.reactive.function.client.WebClientResponseException("error", 500, "error", null, null, null)));
+
+        assertThrows(GoodDataException.class, () -> hierarchicalConfigService.setProjectConfigItem(project, configItem));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullFlagThenRemoveProjectConfigItemShouldThrow() {
-        hierarchicalConfigService.removeProjectConfigItem(null);
+
+    @Test
+    void whenNullFlagThenRemoveProjectConfigItemShouldThrow() {
+        assertThrows(IllegalArgumentException.class, () -> hierarchicalConfigService.removeProjectConfigItem(null));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenClientErrorResponseThenRemoveProjectConfigItemShouldThrow() {
+    @Test
+    void whenClientErrorResponseThenRemoveProjectConfigItemShouldThrow() {
         when(configItem.getUri()).thenReturn(PROJECT_CONFIG_ITEM_URI);
-        doThrow(new RestClientException("")).when(restTemplate).delete(PROJECT_CONFIG_ITEM_URI);
-        hierarchicalConfigService.removeProjectConfigItem(configItem);
+
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.delete()).thenReturn(uriSpec);
+        when(uriSpec.uri(anyString())).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.toBodilessEntity()).thenReturn(Mono.error(new RuntimeException("error")));
+
+        assertThrows(GoodDataException.class, () -> hierarchicalConfigService.removeProjectConfigItem(configItem));
     }
+
 
 }

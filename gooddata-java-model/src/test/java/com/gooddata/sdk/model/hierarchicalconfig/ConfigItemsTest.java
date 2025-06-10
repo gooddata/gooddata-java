@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.hierarchicalconfig;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
@@ -20,7 +20,8 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.oneOf;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.core.StringStartsWith.startsWith;
-import static org.testng.AssertJUnit.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows; 
 
 public class ConfigItemsTest {
 
@@ -85,18 +86,18 @@ public class ConfigItemsTest {
         assertThat(items.getValue("nonexistentItem"), nullValue());
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullNameThenIsEnabledShouldThrow() {
+    @Test
+    void whenNullNameThenIsEnabledShouldThrow() {
         final ConfigItems items = new ConfigItems(
                 singletonList(new ConfigItem("enabledItem", "true")));
-        items.isEnabled(null);
+        assertThrows(IllegalArgumentException.class, () -> items.isEnabled(null));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullNameThenGetValueShouldThrow() {
+    @Test
+    void whenNullNameThenGetValueShouldThrow() {
         final ConfigItems items = new ConfigItems(
                 singletonList(new ConfigItem("enabledItem", "true")));
-        items.getValue(null);
+        assertThrows(IllegalArgumentException.class, () -> items.getValue(null)); 
     }
 
     @Test

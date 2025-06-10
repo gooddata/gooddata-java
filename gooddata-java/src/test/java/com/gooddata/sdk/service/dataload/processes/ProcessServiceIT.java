@@ -16,8 +16,8 @@ import com.gooddata.sdk.model.dataload.processes.ScheduleState;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
 import com.gooddata.sdk.service.FutureResult;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -34,6 +34,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ProcessServiceIT extends AbstractGoodDataIT {
 
@@ -60,7 +61,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
 
     private File file;
 
-    @BeforeClass
+    @BeforeEach
     public void setUp() throws Exception {
         project = readObjectFromResource("/project/project.json", Project.class);
         process = readObjectFromResource("/dataload/processes/process.json", DataloadProcess.class);
@@ -209,7 +210,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         assertJsonEquals(readObjectFromResource("/dataload/processes/executionDetail-success.json", ProcessExecutionDetail.class), executionDetail);
     }
 
-    @Test(expectedExceptions = ProcessExecutionException.class)
+    @Test
     public void shouldThrowOnExecuteProcessError() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -231,7 +232,9 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .withBody(readFromResource("/dataload/processes/executionDetail.json"))
                 .withStatus(200);
 
-        gd.getProcessService().executeProcess(new ProcessExecution(process, "test.groovy")).get();
+        assertThrows(ProcessExecutionException.class, () -> { //CHANGED
+            gd.getProcessService().executeProcess(new ProcessExecution(process, "test.groovy")).get();
+        });
     }
 
     @Test
@@ -399,7 +402,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         assertThat(scheduleExecution.getStatus(), is("OK"));
     }
 
-    @Test(expectedExceptions = ScheduleExecutionException.class)
+    @Test
     public void shouldNotExecuteSchedule() {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -407,6 +410,8 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(409);
 
-        gd.getProcessService().executeSchedule(schedule);
+        assertThrows(ScheduleExecutionException.class, () -> {
+            gd.getProcessService().executeSchedule(schedule);
+        });
     }
 }

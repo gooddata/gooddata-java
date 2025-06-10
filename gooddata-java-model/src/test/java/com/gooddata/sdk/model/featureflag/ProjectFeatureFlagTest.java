@@ -7,11 +7,12 @@ package com.gooddata.sdk.model.featureflag;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ProjectFeatureFlagTest {
 
@@ -27,14 +28,14 @@ public class ProjectFeatureFlagTest {
         assertThat(flag.isEnabled(), is(false));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testEmptyName() throws Exception {
-        new ProjectFeatureFlag(" ");
+    @Test
+    void testEmptyName() {
+        assertThrows(IllegalArgumentException.class, () -> new ProjectFeatureFlag(" "));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testEmptyNameWithValue() throws Exception {
-        new ProjectFeatureFlag(" ", false);
+    @Test
+    void testEmptyNameWithValue() {
+        assertThrows(IllegalArgumentException.class, () -> new ProjectFeatureFlag(" ", false));
     }
 
     @Test

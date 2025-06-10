@@ -14,9 +14,9 @@ import com.gooddata.sdk.model.executeafm.response.ExecutionResponse;
 import com.gooddata.sdk.model.executeafm.result.ExecutionResult;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.*;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
+
 
 import static com.gooddata.sdk.common.util.Validate.notNull;
 
@@ -49,13 +49,16 @@ public class ExecuteAfmService extends AbstractService {
      */
     public static final String RESULT_LIMIT = "limit";
 
+    private final WebClient webClient;
+
     /**
      * Constructor.
-     * @param restTemplate rest template
+     * @param webClient web client  
      * @param settings     settings
      */
-    public ExecuteAfmService(final RestTemplate restTemplate, final GoodDataSettings settings) {
-        super(restTemplate, settings);
+    public ExecuteAfmService(final WebClient webClient, final GoodDataSettings settings) {  
+        super(webClient, settings);     
+        this.webClient = webClient;     
     }
 
     /**
@@ -66,22 +69,16 @@ public class ExecuteAfmService extends AbstractService {
      */
     public ExecutionResponse executeAfm(final Project project, final Execution execution) {
         final String projectId = notNull(notNull(project, "project").getId(), "projectId");
-        final ExecutionResponse response;
         try {
-            response = restTemplate.postForObject(
-                    AFM_EXECUTION_URI,
-                    notNull(execution, "execution"),
-                    ExecutionResponse.class,
-                    projectId);
-        } catch (GoodDataException | RestClientException e) {
+            return webClient.post()
+                    .uri(AFM_EXECUTION_URI, projectId)
+                    .bodyValue(notNull(execution, "execution"))
+                    .retrieve()
+                    .bodyToMono(ExecutionResponse.class)
+                    .block();
+        } catch (Exception e) {
             throw new GoodDataException("Unable to execute AFM", e);
         }
-
-        if (response == null) {
-            throw new GoodDataException("Empty response when execution posted to API");
-        }
-
-        return response;
     }
 
     /**
@@ -92,22 +89,16 @@ public class ExecuteAfmService extends AbstractService {
      */
     public ExecutionResponse executeVisualization(final Project project, final VisualizationExecution execution) {
         final String projectId = notNull(notNull(project, "project").getId(), "projectId");
-        final ExecutionResponse response;
         try {
-            response = restTemplate.postForObject(
-                    VISUALIZATION_EXECUTION_URI,
-                    notNull(execution, "execution"),
-                    ExecutionResponse.class,
-                    projectId);
-        } catch (GoodDataException | RestClientException e) {
+            return webClient.post()
+                    .uri(VISUALIZATION_EXECUTION_URI, projectId)
+                    .bodyValue(notNull(execution, "execution"))
+                    .retrieve()
+                    .bodyToMono(ExecutionResponse.class)
+                    .block();
+        } catch (Exception e) { 
             throw new GoodDataException("Unable to execute visualization", e);
         }
-
-        if (response == null) {
-            throw new GoodDataException("Empty response when execution posted to API");
-        }
-
-        return response;
     }
 
     /**

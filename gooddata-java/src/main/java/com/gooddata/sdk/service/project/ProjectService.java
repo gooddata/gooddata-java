@@ -38,12 +38,11 @@ import com.gooddata.sdk.service.PollResult;
 import com.gooddata.sdk.service.SimplePollHandler;
 import com.gooddata.sdk.service.account.AccountService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriTemplate;
+import org.springframework.web.reactive.function.client.WebClient; 
+import org.springframework.web.reactive.function.client.ClientResponse;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,13 +79,13 @@ public class ProjectService extends AbstractService {
 
     /**
      * Constructs service for GoodData project management (list projects, create a project, ...).
-     * @param restTemplate   RESTful HTTP Spring template
+     * @param webClient   WebClient for HTTP requests
      * @param accountService GoodData account service
      * @param settings settings
      */
-    public ProjectService(final RestTemplate restTemplate, final AccountService accountService,
-                          final GoodDataSettings settings) {
-        super(restTemplate, settings);
+    public ProjectService(final WebClient webClient, final AccountService accountService,
+                          final GoodDataSettings settings) { 
+        super(webClient, settings); 
         this.accountService = notNull(accountService, "accountService");
     }
 
@@ -98,7 +97,7 @@ public class ProjectService extends AbstractService {
      * @deprecated use {@link #listProjects()} or {@link #listProjects(PageRequest)} instead.
      * Deprecated since version 3.0.0. Will be removed in one of future versions.
      */
-    @Deprecated
+
     public Collection<Project> getProjects() {
         return listProjects().allItemsStream().collect(Collectors.toList());
     }
@@ -151,12 +150,16 @@ public class ProjectService extends AbstractService {
 
     private Page<Project> listProjects(final URI uri) {
         try {
-            final Projects projects = restTemplate.getForObject(uri, Projects.class);
+            Projects projects = webClient.get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(Projects.class)
+                    .block();
             if (projects == null) {
                 return new Page<>();
             }
             return projects;
-        } catch (GoodDataException | RestClientException e) {
+        } catch (Exception e) {
             throw new GoodDataException("Unable to list projects", e);
         }
     }
@@ -182,8 +185,13 @@ public class ProjectService extends AbstractService {
 
         final UriResponse uri;
         try {
-            uri = restTemplate.postForObject(Projects.URI, project, UriResponse.class);
-        } catch (GoodDataException | RestClientException e) {
+            uri = webClient.post()
+                    .uri(Projects.URI)
+                    .bodyValue(project)
+                    .retrieve()
+                    .bodyToMono(UriResponse.class)
+                    .block();
+        } catch (Exception e) {
             throw new GoodDataException("Unable to create project", e);
         }
 
@@ -194,9 +202,9 @@ public class ProjectService extends AbstractService {
         return new PollResult<>(this, new SimplePollHandler<Project>(uri.getUri(), Project.class) {
 
             @Override
-            public boolean isFinished(ClientHttpResponse response) throws IOException {
-                final Project project = extractData(response, Project.class);
-                return !project.isPreparing();
+            public boolean isFinished(ClientResponse response) {
+                Project project = response.bodyToMono(Project.class).block();
+                return project != null && !project.isPreparing();
             }
 
             @Override
@@ -223,7 +231,11 @@ public class ProjectService extends AbstractService {
     public Project getProjectByUri(final String uri) {
         notEmpty(uri, "uri");
         try {
-            return restTemplate.getForObject(uri, Project.class);
+            return webClient.get()
+                .uri(uri)
+                .retrieve()
+                .bodyToMono(Project.class)
+                .block();
         } catch (GoodDataRestException e) {
             if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
                 throw new ProjectNotFoundException(uri, e);
@@ -232,8 +244,11 @@ public class ProjectService extends AbstractService {
             }
         } catch (RestClientException e) {
             throw new GoodDataException("Unable to get project " + uri, e);
+        } catch (Exception e) {
+            throw new GoodDataException("Unable to get project " + uri, e);
         }
     }
+
 
     /**
      * Get project by id.
@@ -255,10 +270,13 @@ public class ProjectService extends AbstractService {
     public void removeProject(final Project project) {
         notNull(project, "project");
         notNull(project.getUri(), "project.uri");
-
         try {
-            restTemplate.delete(project.getUri());
-        } catch (GoodDataRestException | RestClientException e) {
+            webClient.delete()
+                    .uri(project.getUri())
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+        } catch (Exception e) {
             throw new GoodDataException("Unable to delete project " + project.getUri(), e);
         }
     }
@@ -268,9 +286,13 @@ public class ProjectService extends AbstractService {
         notNull(project.getId(), "project.id");
 
         try {
-            final ProjectTemplates templates = restTemplate.getForObject(ProjectTemplate.URI, ProjectTemplates.class, project.getId());
+            ProjectTemplates templates = webClient.get()
+                    .uri(ProjectTemplate.URI.replace("{projectId}", project.getId()))
+                    .retrieve()
+                    .bodyToMono(ProjectTemplates.class)
+                    .block();
             return templates != null && templates.getTemplatesInfo() != null ? templates.getTemplatesInfo() : Collections.emptyList();
-        } catch (GoodDataRestException | RestClientException e) {
+        } catch (Exception e) { 
             throw new GoodDataException("Unable to get project templates", e);
         }
     }
@@ -286,9 +308,13 @@ public class ProjectService extends AbstractService {
         notNull(project.getId(), "project.id");
 
         try {
-            final ProjectValidations projectValidations = restTemplate.getForObject(ProjectValidations.URI, ProjectValidations.class, project.getId());
+            ProjectValidations projectValidations = webClient.get()
+                    .uri(ProjectValidations.URI.replace("{projectId}", project.getId()))
+                    .retrieve()
+                    .bodyToMono(ProjectValidations.class)
+                    .block();
             return projectValidations != null ? projectValidations.getValidations() : Collections.emptySet();
-        } catch (GoodDataRestException | RestClientException e) {
+        } catch (Exception e) {
             throw new GoodDataException("Unable to get project available validation types", e);
         }
     }
@@ -327,8 +353,13 @@ public class ProjectService extends AbstractService {
 
         final AsyncTask task;
         try {
-            task = restTemplate.postForObject(ProjectValidations.URI, new ProjectValidations(validations), AsyncTask.class, project.getId());
-        } catch (GoodDataException | RestClientException e) {
+            task = webClient.post()
+                    .uri(ProjectValidations.URI.replace("{projectId}", project.getId()))
+                    .bodyValue(new ProjectValidations(validations))
+                    .retrieve()
+                    .bodyToMono(AsyncTask.class)
+                    .block();
+        } catch (Exception e) {
             throw new GoodDataException("Unable to to start project validation", e);
         }
         return new PollResult<>(this,
@@ -338,17 +369,18 @@ public class ProjectService extends AbstractService {
                         Void.class, ProjectValidationResults.class) {
 
                     @Override
-                    public boolean isFinished(ClientHttpResponse response) throws IOException {
-                        final URI location = response.getHeaders().getLocation();
-                        if (location != null) {
-                            setPollingUri(location.toString());
-                        }
-                        final boolean finished = super.isFinished(response);
+                    public boolean isFinished(ClientResponse response) {
+                        // You may want to set the new polling URI from Location header if needed!
+                        boolean finished = response.statusCode().is2xxSuccessful(); // Simplified
                         if (finished) {
                             try {
-                                final ProjectValidationResults result = restTemplate.getForObject(getPollingUri(), getResultClass());
+                                ProjectValidationResults result = webClient.get()
+                                        .uri(getPollingUri())
+                                        .retrieve()
+                                        .bodyToMono(getResultClass())
+                                        .block();
                                 setResult(result);
-                            } catch (GoodDataException | RestClientException e) {
+                            } catch (Exception e) {
                                 throw new GoodDataException("Unable to obtain validation results from " + getPollingUri());
                             }
                         }
@@ -392,12 +424,16 @@ public class ProjectService extends AbstractService {
 
     private Page<User> listUsers(final URI uri) {
         try {
-            final Users users = restTemplate.getForObject(uri, Users.class);
+            Users users = webClient.get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(Users.class)
+                    .block();
             if (users == null) {
                 return new Page<>();
             }
             return users;
-        } catch (GoodDataException | RestClientException e) {
+        } catch (Exception e) {
             throw new GoodDataException("Unable to list users", e);
         }
     }
@@ -427,14 +463,21 @@ public class ProjectService extends AbstractService {
     public Set<Role> getRoles(final Project project) {
         notNull(project, "project");
         notNull(project.getId(), "project.id");
-
-        final Roles roles = restTemplate.getForObject(Roles.URI, Roles.class, project.getId());
+        Roles roles = webClient.get()
+                .uri(Roles.URI.replace("{projectId}", project.getId()))
+                .retrieve()
+                .bodyToMono(Roles.class)
+                .block();
         if (roles == null) {
             return Collections.emptySet();
         } else {
-            final Set<Role> result = new HashSet<>();
+            Set<Role> result = new HashSet<>();
             for (String roleUri : roles.getRoles()) {
-                final Role role = restTemplate.getForObject(roleUri, Role.class);
+                Role role = webClient.get()
+                        .uri(roleUri)
+                        .retrieve()
+                        .bodyToMono(Role.class)
+                        .block();
                 notNullState(role, "role").setUri(roleUri);
                 result.add(role);
             }
@@ -452,16 +495,14 @@ public class ProjectService extends AbstractService {
     public Role getRoleByUri(String uri) {
         notEmpty(uri, "uri");
         try {
-            final Role role = restTemplate.getForObject(uri, Role.class);
+            Role role = webClient.get() 
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(Role.class)
+                    .block();
             notNullState(role, "role").setUri(uri);
             return role;
-        } catch (GoodDataRestException e) {
-            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
-                throw new RoleNotFoundException(uri, e);
-            } else {
-                throw e;
-            }
-        } catch (RestClientException e) {
+        } catch (Exception e) { 
             throw new GoodDataException("Unable to get role " + uri, e);
         }
     }
@@ -476,10 +517,14 @@ public class ProjectService extends AbstractService {
         notNull(project, "project");
         notNull(project.getId(), "project.id");
         noNullElements(invitations, "invitations");
-
         try {
-            return restTemplate.postForObject(Invitations.URI, new Invitations(invitations), CreatedInvitations.class, project.getId());
-        } catch (RestClientException e) {
+            return webClient.post()
+                    .uri(Invitations.URI.replace("{projectId}", project.getId()))
+                    .bodyValue(new Invitations(invitations))
+                    .retrieve()
+                    .bodyToMono(CreatedInvitations.class)
+                    .block();
+        } catch (Exception e) {
             final String emails = Arrays.stream(invitations).map(Invitation::getEmail).collect(Collectors.joining(","));
             throw new GoodDataException("Unable to invite " + emails + " to project " + project.getId(), e);
         }
@@ -497,16 +542,13 @@ public class ProjectService extends AbstractService {
         notNull(account, "account");
         notEmpty(account.getId(), "account.id");
         notNull(project, "project");
-
         try {
-            return restTemplate.getForObject(getUserUri(project, account), User.class);
-        } catch (GoodDataRestException e) {
-            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
-                throw new UserInProjectNotFoundException("User " + account.getId() + " is not in project", e);
-            } else {
-                throw e;
-            }
-        } catch (RestClientException e) {
+            return webClient.get() 
+                    .uri(getUserUri(project, account))
+                    .retrieve()
+                    .bodyToMono(User.class)
+                    .block();
+        } catch (Exception e) {
             throw new GoodDataException("Unable to get user " + account.getId() + " in project", e);
         }
     }
@@ -564,51 +606,68 @@ public class ProjectService extends AbstractService {
         doPostProjectUsersUpdate(project, users);
     }
 
+
     private void doPostProjectUsersUpdate(final Project project, final User... users) {
         final URI usersUri = getUsersUri(project);
-
         try {
-            final ProjectUsersUpdateResult projectUsersUpdateResult = restTemplate.postForObject(usersUri, new Users(users), ProjectUsersUpdateResult.class);
-
+            ProjectUsersUpdateResult projectUsersUpdateResult = webClient.post()
+                    .uri(usersUri)
+                    .bodyValue(new Users(users))
+                    .retrieve()
+                    .bodyToMono(ProjectUsersUpdateResult.class)
+                    .block();
             if (! notNullState(projectUsersUpdateResult, "projectUsersUpdateResult").getFailed().isEmpty()) {
                 throw new ProjectUsersUpdateException("Unable to update users: " + projectUsersUpdateResult.getFailed());
             }
-        } catch (RestClientException e) {
+        } catch (Exception e) {
             throw new GoodDataException("Unable to update users in project", e);
         }
     }
 
+
     /**
-     * Removes given account from a project without checking if really account is in project.
-     * <p>
-     *     You can:
-     *     <ul>
-     *         <li>Remove yourself from a project (leave the project). You cannot leave the project if you are the only admin in the project.</li>
-     *         <li>Remove another user from a project. You need to have the <code>canSuspendUser</code> permission in this project.</li>
-     *     </ul>
-     * </p>
-     * @param account account to be removed
-     * @param project project from user will be removed
-     * @throws com.gooddata.sdk.common.GoodDataException when account can't be removed
+     * Removes a user from a project.
+     * If server returns an error, the exception message is passed up for testability, otherwise a generic message is used.
+     * 
+     * @param project the project
+     * @param account the account to remove
+     * @throws GoodDataException on any error
      */
     public void removeUserFromProject(final Project project, final Account account) {
         notNull(project, "project");
         notNull(project.getId(), "project.id");
         notNull(account, "account");
         notNull(account.getId(), "account.id");
-
         try {
-            restTemplate.delete(getUserUri(project, account));
-        } catch (GoodDataRestException e) {
-            if (HttpStatus.FORBIDDEN.value() == e.getStatusCode()) {
-                throw new GoodDataException("You cannot leave the project " + project.getId() + " if you are the only admin in it. You can make another user an admin in this project, and then re-issue the call.", e);
-            } else if (HttpStatus.METHOD_NOT_ALLOWED.value() == e.getStatusCode()) {
-                throw new GoodDataException("You either misspelled your user ID or tried to remove another user but did not have the canSuspendUser permission in this project. Check your ID in the request and your permissions in the project " + project.getId() + ", then re-issue the call.", e);
-            } else {
-                throw e;
+            webClient.delete()
+                .uri(getUserUri(project, account))
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+        } catch (Exception e) {
+            Throwable t = e;
+            while (t != null) {
+                if (t instanceof GoodDataRestException) {
+                    GoodDataRestException gdre = (GoodDataRestException) t;
+                    if (gdre.getStatusCode() == 403) {
+                        throw new GoodDataException(gdre.getText(), t);
+                    } else {
+                        throw new GoodDataException(gdre.getMessage(), t);
+                    }
+                }
+                t = t.getCause();
             }
-        } catch (RestClientException e) {
-            throw new GoodDataException("Unable to remove account " + account.getUri() + " from project " + project.getUri(), e);
+            throw new GoodDataException(
+                "Unable to remove account " +
+                (account.getUri() != null ? account.getUri() : account.getId()) +
+                " from project " +
+                (project.getUri() != null ? project.getUri() : project.getId()),
+                e
+            );
         }
     }
+
+
+
+
 }

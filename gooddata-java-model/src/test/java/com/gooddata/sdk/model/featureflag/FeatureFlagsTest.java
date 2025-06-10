@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.featureflag;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
@@ -15,8 +15,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.oneOf;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FeatureFlagsTest {
 
@@ -60,10 +61,10 @@ public class FeatureFlagsTest {
         assertThat(flags.isEnabled("nonexistentFlag"), is(false));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullNameThenIsEnabledShouldThrow() {
+    @Test
+    void whenNullNameThenIsEnabledShouldThrow() {
         final FeatureFlags flags = new FeatureFlags();
-        flags.isEnabled(null);
+        assertThrows(IllegalArgumentException.class, () -> flags.isEnabled(null)); 
     }
 
     @Test

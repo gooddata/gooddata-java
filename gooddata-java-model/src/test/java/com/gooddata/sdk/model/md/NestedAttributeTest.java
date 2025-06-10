@@ -7,7 +7,7 @@ package com.gooddata.sdk.model.md;
 
 import org.apache.commons.lang3.SerializationUtils;
 import org.hamcrest.Matchers;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 

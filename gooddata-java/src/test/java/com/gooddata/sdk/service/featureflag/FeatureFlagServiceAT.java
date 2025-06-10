@@ -12,24 +12,29 @@ import com.gooddata.sdk.model.featureflag.ProjectFeatureFlag;
 import com.gooddata.sdk.model.featureflag.ProjectFeatureFlags;
 import com.gooddata.sdk.service.AbstractGoodDataAT;
 import org.hamcrest.Matchers;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.MethodOrderer;     
+import org.junit.jupiter.api.Order; 
+import org.junit.jupiter.api.Test;  
+import org.junit.jupiter.api.TestMethodOrder; 
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.testng.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Feature flag acceptance tests.
  */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class FeatureFlagServiceAT extends AbstractGoodDataAT {
 
     private static final String PROJECT_FEATURE_FLAG = "flag1";
     private static final String SECOND_FEATURE_FLAG = "flag2";
 
-    @Test(groups = "featureFlag", dependsOnGroups = "project")
+    @Test
+    @Order(1)
     public void createProjectFeatureFlag() throws Exception {
         final ProjectFeatureFlag featureFlag = gd.getFeatureFlagService()
                 .createProjectFeatureFlag(project, new ProjectFeatureFlag(PROJECT_FEATURE_FLAG));
@@ -40,7 +45,8 @@ public class FeatureFlagServiceAT extends AbstractGoodDataAT {
         checkProjectFeatureFlag(secondFeatureFlag, SECOND_FEATURE_FLAG, false);
     }
 
-    @Test(groups = "featureFlag", dependsOnMethods = "createProjectFeatureFlag")
+    @Test
+    @Order(2)
     public void listProjectFeatureFlags() throws Exception {
         final ProjectFeatureFlags flags = gd.getFeatureFlagService().listProjectFeatureFlags(project);
 
@@ -49,7 +55,8 @@ public class FeatureFlagServiceAT extends AbstractGoodDataAT {
                 new ProjectFeatureFlag(PROJECT_FEATURE_FLAG, true)));
     }
 
-    @Test(groups = "featureFlag", dependsOnMethods = "listProjectFeatureFlags")
+    @Test
+    @Order(3)
     public void listFeatureFlags() throws Exception {
         final FeatureFlags flags = gd.getFeatureFlagService().listFeatureFlags(project);
 
@@ -58,14 +65,16 @@ public class FeatureFlagServiceAT extends AbstractGoodDataAT {
                 new FeatureFlag(PROJECT_FEATURE_FLAG, true)));
     }
 
-    @Test(groups = "featureFlag", dependsOnMethods = "createProjectFeatureFlag")
+    @Test
+    @Order(4) 
     public void getProjectFeatureFlag() throws Exception {
         final ProjectFeatureFlag featureFlag =
                 gd.getFeatureFlagService().getProjectFeatureFlag(project, PROJECT_FEATURE_FLAG);
         checkProjectFeatureFlag(featureFlag, PROJECT_FEATURE_FLAG, true);
     }
 
-    @Test(groups = "featureFlag", dependsOnMethods = "getProjectFeatureFlag")
+    @Test
+    @Order(5) 
     public void updateProjectFeatureFlag() throws Exception {
         final ProjectFeatureFlag featureFlag = gd.getFeatureFlagService().getProjectFeatureFlag(project,
                 PROJECT_FEATURE_FLAG);
@@ -81,7 +90,8 @@ public class FeatureFlagServiceAT extends AbstractGoodDataAT {
         checkProjectFeatureFlag(enabledFlag, PROJECT_FEATURE_FLAG , true);
     }
 
-    @Test(groups = "featureFlag", dependsOnMethods = "createProjectFeatureFlag")
+    @Test
+    @Order(6)
     public void deleteProjectFeatureFlag() throws Exception {
         final ProjectFeatureFlag featureFlag =
                 gd.getFeatureFlagService().createProjectFeatureFlag(project,
@@ -96,7 +106,8 @@ public class FeatureFlagServiceAT extends AbstractGoodDataAT {
         }
     }
 
-    @Test(groups = "featureFlag", dependsOnMethods = "updateProjectFeatureFlag")
+    @Test
+    @Order(7)
     public void changeProjectFeatureFlag() throws Exception {
         final FeatureFlagService featureFlagService = gd.getFeatureFlagService();
         ProjectFeatureFlag featureFlag = featureFlagService.getProjectFeatureFlag(project, PROJECT_FEATURE_FLAG);

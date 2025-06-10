@@ -12,14 +12,10 @@ import com.gooddata.sdk.model.md.ScheduledMail;
 import com.gooddata.sdk.model.md.report.Report;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.project.Project;
-import com.gooddata.sdk.service.httpcomponents.SingleEndpointGoodDataRestProvider;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.testng.annotations.AfterSuite;
+import org.junit.jupiter.api.AfterAll;
 
 import java.time.LocalDate;
 
-import static com.gooddata.sdk.service.httpcomponents.LoginPasswordGoodDataRestProvider.createHttpClient;
 
 /**
  * Parent for acceptance tests
@@ -33,16 +29,14 @@ public abstract class AbstractGoodDataAT {
 
     protected static final GoodData gd =
             new GoodData(
-                    new SingleEndpointGoodDataRestProvider(endpoint, new GoodDataSettings(), (b, e, s) -> {
-                        PoolingHttpClientConnectionManager httpClientConnectionManager = new PoolingHttpClientConnectionManager();
-                        final HttpClientBuilder builderWithManager = b.setConnectionManager(httpClientConnectionManager);
-                        connManager = httpClientConnectionManager;
+                endpoint.getHostname(),
+                getProperty("login"),
+                getProperty("password"),
+                endpoint.getPort(),
+                endpoint.getProtocol(),
+                new GoodDataSettings()
+            );
 
-                        return createHttpClient(builderWithManager, endpoint, getProperty("login"), getProperty("password"));
-                    }){});
-
-
-    protected static PoolingHttpClientConnectionManager connManager;
 
     protected static String projectToken;
     protected static Project project;
@@ -64,7 +58,7 @@ public abstract class AbstractGoodDataAT {
                 System.getenv().keySet());
     }
 
-    @AfterSuite
+    @AfterAll
     public static void removeProjectAndLogout() {
         if (project != null) {
             gd.getProjectService().removeProject(project);

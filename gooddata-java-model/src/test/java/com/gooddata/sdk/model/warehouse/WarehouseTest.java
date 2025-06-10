@@ -6,7 +6,7 @@
 package com.gooddata.sdk.model.warehouse;
 
 import com.gooddata.sdk.model.project.Environment;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;

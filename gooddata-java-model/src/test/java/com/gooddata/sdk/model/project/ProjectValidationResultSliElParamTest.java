@@ -12,7 +12,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,14 +27,18 @@ public class ProjectValidationResultSliElParamTest {
         assertThat(param.asMap(), nullValue());
     }
 
-    @Test(expectedExceptions = IllegalStateException.class)
-    public void testAsMapNullVals() throws Exception {
-        new ProjectValidationResultSliElParam(singletonList("2"), null).asMap();
+    @Test
+    void testAsMapNullVals() {
+        assertThrows(IllegalStateException.class, () -> {
+            new ProjectValidationResultSliElParam(singletonList("2"), null).asMap();
+        });
     }
 
-    @Test(expectedExceptions = IllegalStateException.class)
-    public void testAsMapNotEqualIdsVals() throws Exception {
-        new ProjectValidationResultSliElParam(asList("2", "1"), singletonList("1234")).asMap();
+    @Test
+    void testAsMapNotEqualIdsVals() {
+        assertThrows(IllegalStateException.class, () -> {
+            new ProjectValidationResultSliElParam(asList("2", "1"), singletonList("1234")).asMap();
+        });
     }
 
     @Test

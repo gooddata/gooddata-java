@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.project;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.gooddata.sdk.model.project.ProjectValidationType.*;
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;

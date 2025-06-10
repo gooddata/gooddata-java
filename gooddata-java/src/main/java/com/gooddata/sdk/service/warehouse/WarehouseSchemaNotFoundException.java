@@ -20,6 +20,11 @@ public class WarehouseSchemaNotFoundException extends GoodDataException {
         this.warehouseSchemaUri = uri;
     }
 
+    public WarehouseSchemaNotFoundException(String uri, Throwable cause) {
+        super("Warehouse schema " + uri + " was not found", cause);
+        this.warehouseSchemaUri = uri;
+    }
+
     public String getWarehouseSchemaUri() {
         return warehouseSchemaUri;
     }

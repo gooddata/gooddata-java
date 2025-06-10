@@ -5,6 +5,7 @@
  */
 package com.gooddata.sdk.service.dataload.processes;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.common.GoodDataRestException;
 import com.gooddata.sdk.common.collections.CustomPageRequest;
@@ -41,10 +42,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriTemplate;
 
 import java.io.File;
@@ -61,10 +66,16 @@ import static com.gooddata.sdk.common.util.Validate.notNullState;
 import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.Validate.isTrue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 /**
  * Service to manage dataload processes and process executions.
  */
 public class ProcessService extends AbstractService {
+
+    private static final Logger log = LoggerFactory.getLogger(ProcessService.class);
 
     public static final UriTemplate SCHEDULE_TEMPLATE = new UriTemplate(Schedule.URI);
     public static final UriTemplate PROCESS_TEMPLATE = new UriTemplate(DataloadProcess.URI);
@@ -87,9 +98,9 @@ public class ProcessService extends AbstractService {
      * @param dataStoreService service for upload process data
      * @param settings settings
      */
-    public ProcessService(final RestTemplate restTemplate, final AccountService accountService,
+    public ProcessService(final WebClient webClient, final AccountService accountService,
                           final DataStoreService dataStoreService, final GoodDataSettings settings) {
-        super(restTemplate, settings);
+        super(webClient, settings);
         this.dataStoreService = dataStoreService;
         this.accountService = notNull(accountService, "accountService");
     }
@@ -183,17 +194,30 @@ public class ProcessService extends AbstractService {
     public DataloadProcess getProcessByUri(String uri) {
         notEmpty(uri, "uri");
         try {
-            return restTemplate.getForObject(uri, DataloadProcess.class);
-        } catch (GoodDataRestException e) {
-            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+            return webClient.get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(DataloadProcess.class)
+                    .block();
+        } catch (WebClientResponseException e) { 
+            if (e.getStatusCode().value() == HttpStatus.NOT_FOUND.value()) {
                 throw new ProcessNotFoundException(uri, e);
             } else {
                 throw e;
             }
-        } catch (RestClientException e) {
+        } catch (GoodDataRestException e) {
+            // Map 404 GoodDataRestException to ProcessNotFoundException
+            if (e.getStatusCode() == 404) {
+                throw new ProcessNotFoundException(uri, e);
+            } else {
+                throw new GoodDataException("Unable to get process " + uri, e);
+            }
+        } catch (Exception e) {
             throw new GoodDataException("Unable to get process " + uri, e);
         }
     }
+
+
 
     /**
      * Get process by given id and project.
@@ -233,8 +257,12 @@ public class ProcessService extends AbstractService {
     public void removeProcess(DataloadProcess process) {
         notNull(process, "process");
         try {
-            restTemplate.delete(process.getUri());
-        } catch (GoodDataException | RestClientException e) {
+            webClient.delete()
+                    .uri(process.getUri())
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+        } catch (WebClientResponseException | GoodDataException e) {
             throw new GoodDataException("Unable to remove process " + process.getUri(), e);
         }
     }
@@ -249,9 +277,15 @@ public class ProcessService extends AbstractService {
         notNull(process, "process");
         notNull(outputStream, "outputStream");
         try {
-            restTemplate.execute(process.getSourceUri(), HttpMethod.GET,
-                    null, new OutputStreamResponseExtractor(outputStream));
-        } catch (GoodDataException | RestClientException e) {
+            byte[] bytes = webClient.get()
+                    .uri(process.getSourceUri())
+                    .retrieve()
+                    .bodyToMono(byte[].class)
+                    .block();
+            if (bytes != null) {
+                outputStream.write(bytes);
+            }
+        } catch (WebClientResponseException | IOException e) {
             throw new GoodDataException("Unable to get process source " + process.getSourceUri(), e);
         }
     }
@@ -265,9 +299,15 @@ public class ProcessService extends AbstractService {
         notNull(executionDetail, "executionDetail");
         notNull(outputStream, "outputStream");
         try {
-            restTemplate.execute(executionDetail.getLogUri(), HttpMethod.GET,
-                    null, new OutputStreamResponseExtractor(outputStream));
-        } catch (GoodDataException | RestClientException e) {
+            byte[] bytes = webClient.get()
+                    .uri(executionDetail.getLogUri())
+                    .retrieve()
+                    .bodyToMono(byte[].class)
+                    .block();
+            if (bytes != null) {
+                outputStream.write(bytes);
+            }
+        } catch (WebClientResponseException | IOException e) {
             throw new GoodDataException("Unable to get process execution log " + executionDetail.getLogUri(), e);
         }
     }
@@ -283,8 +323,13 @@ public class ProcessService extends AbstractService {
         notNull(execution, "execution");
         ProcessExecutionTask executionTask;
         try {
-            executionTask = restTemplate.postForObject(execution.getExecutionsUri(), execution, ProcessExecutionTask.class);
-        } catch (GoodDataException | RestClientException e) {
+            executionTask = webClient.post()
+                    .uri(execution.getExecutionsUri())
+                    .bodyValue(execution)
+                    .retrieve()
+                    .bodyToMono(ProcessExecutionTask.class)
+                    .block();
+        } catch (WebClientResponseException | GoodDataException e) {
             throw new ProcessExecutionException("Cannot execute process", e);
         }
 
@@ -296,8 +341,8 @@ public class ProcessService extends AbstractService {
 
         return new PollResult<>(this, new AbstractPollHandler<Void, ProcessExecutionDetail>(executionTask.getPollUri(), Void.class, ProcessExecutionDetail.class) {
             @Override
-            public boolean isFinished(ClientHttpResponse response) throws IOException {
-                return HttpStatus.NO_CONTENT.equals(response.getStatusCode());
+            public boolean isFinished(ClientResponse response) {
+                return response.statusCode().equals(HttpStatus.NO_CONTENT);
             }
 
             @Override
@@ -321,8 +366,12 @@ public class ProcessService extends AbstractService {
 
             private ProcessExecutionDetail getProcessExecutionDetailByUri(final String uri) {
                 try {
-                    return restTemplate.getForObject(uri, ProcessExecutionDetail.class);
-                } catch (GoodDataException | RestClientException e) {
+                    return webClient.get()
+                            .uri(uri)
+                            .retrieve()
+                            .bodyToMono(ProcessExecutionDetail.class)
+                            .block();
+                } catch (WebClientResponseException | GoodDataException e) {
                     throw new ProcessExecutionException("Execution finished, but cannot get its result.", e, uri);
                 }
             }
@@ -357,21 +406,21 @@ public class ProcessService extends AbstractService {
 
         final String uri = schedule.getUri();
         try {
-            final ResponseEntity<Schedule> response = restTemplate
-                    .exchange(uri, HttpMethod.PUT, new HttpEntity<>(schedule), Schedule.class);
-            if (response == null) {
-                throw new GoodDataException("Unable to update schedule. No response returned from API.");
+                return webClient.put()
+                        .uri(uri)
+                        .bodyValue(schedule)
+                        .retrieve()
+                        .bodyToMono(Schedule.class)
+                        .block();
+            } catch (WebClientResponseException e) {
+                if (e.getStatusCode().value() == HttpStatus.NOT_FOUND.value()) {
+                    throw new ScheduleNotFoundException(uri, e);
+                } else {
+                    throw e;
+                }
+            } catch (Exception e) {
+                throw new GoodDataException("Unable to get schedule " + uri, e);
             }
-            return response.getBody();
-        } catch (GoodDataRestException e) {
-            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
-                throw new ScheduleNotFoundException(uri, e);
-            } else {
-                throw e;
-            }
-        } catch (RestClientException e) {
-            throw new GoodDataException("Unable to get schedule " + uri, e);
-        }
     }
 
     /**
@@ -384,14 +433,18 @@ public class ProcessService extends AbstractService {
     public Schedule getScheduleByUri(String uri) {
         notEmpty(uri, "uri");
         try {
-            return restTemplate.getForObject(uri, Schedule.class);
-        } catch (GoodDataRestException e) {
-            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+            return webClient.get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(Schedule.class)
+                    .block();
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode().value() == HttpStatus.NOT_FOUND.value()) {
                 throw new ScheduleNotFoundException(uri, e);
             } else {
                 throw e;
             }
-        } catch (RestClientException e) {
+        } catch (Exception e) {
             throw new GoodDataException("Unable to get schedule " + uri, e);
         }
     }
@@ -444,8 +497,12 @@ public class ProcessService extends AbstractService {
         notNull(schedule.getUri(), "schedule.uri");
 
         try {
-            restTemplate.delete(schedule.getUri());
-        } catch (GoodDataException | RestClientException e) {
+            webClient.delete()
+                    .uri(schedule.getUri())
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+        } catch (WebClientResponseException | GoodDataException e) {
             throw new GoodDataException("Unable to remove schedule " + schedule.getUri(), e);
         }
     }
@@ -462,8 +519,13 @@ public class ProcessService extends AbstractService {
 
         ScheduleExecution scheduleExecution;
         try {
-            scheduleExecution = restTemplate.postForObject(schedule.getExecutionsUri(), new ScheduleExecution(), ScheduleExecution.class);
-        } catch (GoodDataException | RestClientException e) {
+            scheduleExecution = webClient.post()
+                    .uri(schedule.getExecutionsUri())
+                    .bodyValue(new ScheduleExecution())
+                    .retrieve()
+                    .bodyToMono(ScheduleExecution.class)
+                    .block();
+        } catch (RuntimeException e) {
             throw new ScheduleExecutionException("Cannot execute schedule", e);
         }
 
@@ -471,8 +533,8 @@ public class ProcessService extends AbstractService {
                 notNullState(scheduleExecution, "created schedule execution").getUri(),
                 ScheduleExecution.class, ScheduleExecution.class) {
             @Override
-            public boolean isFinished(ClientHttpResponse response) throws IOException {
-                final ScheduleExecution pollResult = extractData(response, ScheduleExecution.class);
+            public boolean isFinished(ClientResponse response) {
+                final ScheduleExecution pollResult = extractData(response, ScheduleExecution.class); 
                 return pollResult.isFinished();
             }
 
@@ -490,12 +552,16 @@ public class ProcessService extends AbstractService {
 
     private Page<Schedule> listSchedules(URI uri) {
         try {
-            final Schedules schedules = restTemplate.getForObject(uri, Schedules.class);
+            final Schedules schedules = webClient.get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(Schedules.class)
+                    .block();
             if (schedules == null) {
                 return new Page<>();
             }
             return schedules;
-        } catch (GoodDataException | RestClientException e) {
+        } catch (WebClientResponseException | GoodDataException e) { 
             throw new GoodDataException("Unable to list schedules", e);
         }
     }
@@ -520,25 +586,35 @@ public class ProcessService extends AbstractService {
 
     private Schedule postSchedule(Schedule schedule, URI postUri) {
         try {
-            return restTemplate.postForObject(postUri, schedule, Schedule.class);
-        } catch (GoodDataException | RestClientException e) {
+            return webClient.post()
+                    .uri(postUri)
+                    .bodyValue(schedule)
+                    .retrieve()
+                    .bodyToMono(Schedule.class)
+                    .block();
+        } catch (WebClientResponseException | GoodDataException e) {
             throw new GoodDataException("Unable to post schedule.", e);
         }
     }
 
     private Collection<DataloadProcess> listProcesses(URI uri) {
         try {
-            final DataloadProcesses processes = restTemplate.getForObject(uri, DataloadProcesses.class);
+            final DataloadProcesses processes = webClient.get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(DataloadProcesses.class)
+                    .block();
             if (processes == null) {
                 throw new GoodDataException("empty response from API call");
             } else if (processes.getItems() == null) {
                 return emptyList();
             }
             return processes.getItems();
-        } catch (GoodDataException | RestClientException e) {
+        } catch (RuntimeException e) {
+            // Wrap any unexpected error in GoodDataException
             throw new GoodDataException("Unable to list processes", e);
         }
-    }
+        }
 
     private static URI getProcessUri(Project project, String id) {
         notNull(project, "project");
@@ -552,6 +628,7 @@ public class ProcessService extends AbstractService {
         return PROCESSES_TEMPLATE.expand(project.getId());
     }
 
+
     private DataloadProcess postProcess(DataloadProcess process, File processData, URI postUri) {
         File tempFile = createTempFile("process", ".zip");
 
@@ -561,82 +638,123 @@ public class ProcessService extends AbstractService {
             throw new GoodDataException("Unable to zip process data", e);
         }
 
-        Object processToSend;
-        HttpMethod method = HttpMethod.POST;
-        if (dataStoreService != null && tempFile.length() > MAX_MULTIPART_SIZE) {
-            try (final InputStream input = Files.newInputStream(tempFile.toPath())) {
-                process.setPath(dataStoreService.getUri(tempFile.getName()).getPath());
-                dataStoreService.upload(tempFile.getName(), input);
-                processToSend = process;
-                if (PROCESS_TEMPLATE.matches(postUri.toString())) {
-                    method = HttpMethod.PUT;
-                }
-            } catch (IOException e) {
-                throw new GoodDataException("Unable to access zipped process data at "
-                        + tempFile.getAbsolutePath(), e);
-            }
-        } else {
-            if (dataStoreService == null) { // we have no WebDAV support, so let's try send big file by multipart
-                if (logger.isInfoEnabled()) {
-                    logger.info("WebDAV calls not supported - sending huge file using multipart. " +
-                            "Consider adding com.github.lookfirst:sardine to dependencies.");
-                }
-            }
-            final MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>(2);
-            parts.add("process", process);
-            final HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MEDIA_TYPE_ZIP);
-            parts.add("data", new HttpEntity<>(new FileSystemResource(tempFile), headers));
-            processToSend = parts;
-        }
-
         try {
-            final ResponseEntity<DataloadProcess> response = restTemplate
-                    .exchange(postUri, method, new HttpEntity<>(processToSend), DataloadProcess.class);
-            if (response == null) {
-                throw new GoodDataException("Unable to post dataload process. No response returned from API.");
+            if (dataStoreService != null && tempFile.length() > MAX_MULTIPART_SIZE) {
+                try (final InputStream input = Files.newInputStream(tempFile.toPath())) {
+                    process.setPath(dataStoreService.getUri(tempFile.getName()).getPath());
+                    dataStoreService.upload(tempFile.getName(), input);
+
+                    // Log process details before sending
+                    log.debug("Process details: {}", process);
+
+                    // Check for null before sending the process object
+                    if (process == null) {
+                        throw new IllegalArgumentException("Request body for process POST must not be null");
+                    }
+
+                    DataloadProcess result = webClient.post()
+                            .uri(postUri)
+                            .bodyValue(process)
+                            .retrieve()
+                            .bodyToMono(DataloadProcess.class)
+                            .block();
+                    if (result == null) {
+                        throw new GoodDataException("No response from API (null result) when posting dataload process (large, via WebDAV).");
+                    }
+                    return result;
+                } catch (IOException e) {
+                    throw new GoodDataException("Unable to access zipped process data at " + tempFile.getAbsolutePath(), e);
+                }
+            } else {
+                MultipartBodyBuilder builder = new MultipartBodyBuilder();
+                builder.part("process", process);
+                builder.part("data", new FileSystemResource(tempFile))
+                        .header(HttpHeaders.CONTENT_TYPE, MEDIA_TYPE_ZIP.toString());
+
+                // Log process details before sending multipart request
+                log.debug("Process details: {}", process);
+
+                DataloadProcess result = webClient.post()
+                        .uri(postUri)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .body(BodyInserters.fromMultipartData(builder.build()))
+                        .retrieve()
+                        .bodyToMono(DataloadProcess.class)
+                        .block();
+                if (result == null) {
+                    throw new GoodDataException("No response from API (null result) when posting dataload process (multipart).");
+                }
+                return result;
             }
-            return response.getBody();
-        } catch (GoodDataException | RestClientException e) {
+        } catch (Exception e) {
             throw new GoodDataException("Unable to post dataload process.", e);
         } finally {
             deleteTempFile(tempFile);
         }
     }
 
+
+
+
     private FutureResult<DataloadProcess> postProcess(DataloadProcess process, URI postUri, HttpMethod method) {
         try {
-            ResponseEntity<String> exchange = restTemplate.exchange(postUri, method, new HttpEntity<>(process), String.class);
-            if (exchange.getStatusCode() == HttpStatus.ACCEPTED) { //deployment worker will create process
-                AsyncTask asyncTask = mapper.readValue(exchange.getBody(), AsyncTask.class);
-                return new PollResult<>(this, new SimplePollHandler<DataloadProcess>(asyncTask.getUri(), DataloadProcess.class) {
+            ClientResponse response;
+            if (method == HttpMethod.POST) {
+                response = webClient.post()
+                    .uri(postUri)
+                    .bodyValue(process)
+                    .exchange()
+                    .block();
+            } else if (method == HttpMethod.PUT) {
+                response = webClient.put()
+                    .uri(postUri)
+                    .bodyValue(process)
+                    .exchange()
+                    .block();
+            } else {
+                throw new IllegalStateException("Unsupported HTTP method: " + method);
+            }
 
+            if (response == null) {
+                throw new GoodDataException("No response received from API call");
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+            String body = response.bodyToMono(String.class).block();
+
+            if (response.statusCode().equals(HttpStatus.ACCEPTED)) {
+                AsyncTask asyncTask = mapper.readValue(body, AsyncTask.class);
+                return new PollResult<>(this, new SimplePollHandler<DataloadProcess>(asyncTask.getUri(), DataloadProcess.class) {
                     @Override
                     public void handlePollException(GoodDataRestException e) {
                         throw new GoodDataException("Creating process failed", e);
                     }
                 });
-            } else if (exchange.getStatusCode() == HttpStatus.OK) { //object has been found in package registry, deployment worker is not triggered
-                final DataloadProcess dataloadProcess = mapper.readValue(exchange.getBody(), DataloadProcess.class);
+            } else if (response.statusCode().equals(HttpStatus.OK)) {
+                final DataloadProcess dataloadProcess = mapper.readValue(body, DataloadProcess.class);
                 return new PollResult<>(this, new SimplePollHandler<DataloadProcess>(dataloadProcess.getUri(), DataloadProcess.class) {
-
                     @Override
                     public void handlePollException(GoodDataRestException e) {
                         throw new GoodDataException("Creating process failed", e);
                     }
                 });
             } else {
-                throw new IllegalStateException("Unexpected status code from resource: " + exchange.getStatusCode());
+                throw new IllegalStateException("Unexpected status code from resource: " + response.statusCode());
             }
-        } catch (RestClientException | IOException e) {
+        } catch (WebClientResponseException | IOException e) {
             throw new GoodDataException("Creating process failed", e);
         }
     }
 
     private DataloadProcess postProcess(DataloadProcess process, URI postUri) {
         try {
-            return restTemplate.postForObject(postUri, process, DataloadProcess.class);
-        } catch (GoodDataException | RestClientException e) {
+            return webClient.post()
+                    .uri(postUri)
+                    .bodyValue(process)
+                    .retrieve()
+                    .bodyToMono(DataloadProcess.class)
+                    .block();
+        } catch (WebClientResponseException | GoodDataException e) {
             throw new GoodDataException("Unable to create dataload process.", e);
         }
     }

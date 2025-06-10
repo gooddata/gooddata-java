@@ -24,8 +24,9 @@ import com.gooddata.sdk.model.project.User;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
 
 import org.hamcrest.core.Is;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll; 
+import org.junit.jupiter.api.Test; 
 
 import java.util.Collection;
 import java.util.List;
@@ -46,21 +47,22 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ProjectServiceIT extends AbstractGoodDataIT {
 
     private static final String PROJECT_ID = "PROJECT_ID";
     private static final String PROJECT_URI = "/gdc/projects/" + PROJECT_ID;
 
-    private Project loading;
-    private Project enabled;
-    private Project deleted;
+    private static Project loading;
+    private static Project enabled;
+    private static Project deleted;
 
-    private Account account;
-    private Role role;
+    private static Account account;
+    private static Role role;
 
-    @BeforeClass
-    public void setUp() throws Exception {
+    @BeforeAll
+    public static void setUp() throws Exception {
         loading = readObjectFromResource("/project/project-loading.json", Project.class);
         enabled = readObjectFromResource("/project/project.json", Project.class);
         deleted = readObjectFromResource("/project/project-deleted.json", Project.class);
@@ -97,7 +99,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         assertThat(project.getTitle(), is("TITLE"));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void shouldFailWhenPostFails() {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -105,10 +107,12 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
             .respond()
                 .withStatus(400)
         ;
-        gd.getProjectService().createProject(new Project("TITLE", "AUTH_TOKEN")).get();
+        assertThrows(GoodDataException.class, () -> {
+            gd.getProjectService().createProject(new Project("TITLE", "AUTH_TOKEN")).get();
+        });
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void shouldFailWhenPollFails() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -124,11 +128,13 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
                 .withStatus(400)
         ;
 
-        gd.getProjectService().createProject(new Project("TITLE", "AUTH_TOKEN")).get();
+        assertThrows(GoodDataException.class, () -> {
+            gd.getProjectService().createProject(new Project("TITLE", "AUTH_TOKEN")).get();
+        });
     }
 
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void shouldFailWhenCantCreateProject() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -145,7 +151,9 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
                 .withStatus(200)
         ;
 
-        gd.getProjectService().createProject(new Project("TITLE", "AUTH_TOKEN")).get();
+        assertThrows(GoodDataException.class, () -> {
+            gd.getProjectService().createProject(new Project("TITLE", "AUTH_TOKEN")).get();
+        });
     }
 
     @Test
@@ -382,7 +390,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         assertThat(user, notNullValue());
     }
 
-    @Test(expectedExceptions = ProjectUsersUpdateException.class)
+    @Test
     public void addUserToProjectFail() {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -391,7 +399,9 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         .respond()
                 .withBody(readFromResource("/project/projectUsersUpdateResultFail.json"));
 
-        gd.getProjectService().addUserToProject(enabled, account, role);
+        assertThrows(ProjectUsersUpdateException.class, () -> {
+            gd.getProjectService().addUserToProject(enabled, account, role);
+        });
     }
 
     @Test
@@ -422,7 +432,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         assertThat(user, notNullValue());
     }
 
-    @Test(expectedExceptions = UserInProjectNotFoundException.class)
+    @Test
     public void getUserInProjectNotFound() {
         onRequest()
                 .havingMethodEqualTo("GET")
@@ -430,7 +440,9 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
                 .respond()
         .withStatus(404);
 
-        gd.getProjectService().getUser(enabled, account);
+        assertThrows(UserInProjectNotFoundException.class, () -> {
+            gd.getProjectService().getUser(enabled, account);
+        });
     }
 
     @Test
@@ -444,7 +456,7 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
         gd.getProjectService().removeUserFromProject(enabled, account);
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void removeUserFromProjectNotFound() {
         onRequest()
             .havingMethodEqualTo("DELETE")
@@ -453,7 +465,9 @@ public class ProjectServiceIT extends AbstractGoodDataIT {
             .withStatus(404)
             .withBody("{\"error\":{\"parameters\":[\"1234\"],\"requestId\":\"req1\",\"component\":\"GDC::LWP::UserAgent\",\"message\":\"User uid %s doesn't exist.\",\"errorClass\":\"GDC::Exception::NotFound\"}}");
 
-        gd.getProjectService().removeUserFromProject(enabled, account);
+        assertThrows(GoodDataException.class, () -> {
+            gd.getProjectService().removeUserFromProject(enabled, account);
+        });
     }
 
 

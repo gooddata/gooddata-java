@@ -7,7 +7,8 @@ package com.gooddata.sdk.model.md.report;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 
@@ -31,14 +32,18 @@ public class GridElementDeserializerTest {
         assertThat(elems.get(1), instanceOf(MetricGroup.class));
     }
 
-    @Test(expectedExceptions = JsonMappingException.class)
-    public void testDeserializerWithInvalidMetricGroupString() throws Exception {
-        OBJECT_MAPPER.readValue("[\"meh\"]", GridElements.class);
+    @Test
+    void testDeserializerWithInvalidMetricGroupString() {
+        assertThrows(JsonMappingException.class, () -> {
+            OBJECT_MAPPER.readValue("[\"meh\"]", GridElements.class);
+        });
     }
 
-    @Test(expectedExceptions = JsonMappingException.class)
-    public void testDeserializerWithUnknownType() throws Exception {
-        OBJECT_MAPPER.readValue("[123]", GridElements.class);
+    @Test
+    void testDeserializerWithUnknownType() { 
+        assertThrows(JsonMappingException.class, () -> {
+            OBJECT_MAPPER.readValue("[123]", GridElements.class);
+        });
     }
 
     @JsonDeserialize(contentUsing = GridElementDeserializer.class)

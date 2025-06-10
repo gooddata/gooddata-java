@@ -10,7 +10,8 @@ import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PartialMdExportTest {
 
@@ -30,9 +31,9 @@ public class PartialMdExportTest {
         assertThat(partialMdExport, jsonEquals(resource("md/maintenance/partialMDExport-defaultVals.json")));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testEmptyUris() throws Exception {
-        new PartialMdExport();
+    @Test
+    void testEmptyUris() { 
+        assertThrows(IllegalArgumentException.class, PartialMdExport::new);
     }
 
     @Test

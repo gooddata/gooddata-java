@@ -6,7 +6,6 @@
 package com.gooddata.sdk.service.auditevent;
 
 import com.gooddata.sdk.common.GoodDataException;
-import com.gooddata.sdk.common.GoodDataRestException;
 import com.gooddata.sdk.common.collections.PageBrowser;
 import com.gooddata.sdk.common.collections.PageRequest;
 import com.gooddata.sdk.common.util.SpringMutableUri;
@@ -16,13 +15,14 @@ import com.gooddata.sdk.model.auditevent.AuditEvents;
 import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.service.account.AccountService;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriTemplate;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNull;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import org.springframework.http.HttpStatus;
 
 /**
  * List audit events.
@@ -36,12 +36,12 @@ public class AuditEventService extends AbstractService {
 
     /**
      * Service for audit events
-     * @param restTemplate rest template
+     * @param webClient web client 
      * @param accountService account service
      * @param settings settings
      */
-    public AuditEventService(final RestTemplate restTemplate, final AccountService accountService, final GoodDataSettings settings) {
-        super(restTemplate, settings);
+    public AuditEventService(final WebClient webClient, final AccountService accountService, final GoodDataSettings settings) {
+        super(webClient, settings);
         this.accountService = notNull(accountService, "account service");
     }
 
@@ -122,18 +122,22 @@ public class AuditEventService extends AbstractService {
     }
 
     private AuditEvents doListAuditEvents(final String uri) {
-        try {
-            return restTemplate.getForObject(uri, AuditEvents.class);
-        } catch (GoodDataRestException e) {
-            if (UNAUTHORIZED.value() == e.getStatusCode()) {
-                throw new AuditEventsForbiddenException(e);
-            } else {
-                throw e;
+            try {
+                return webClient.get()
+                        .uri(uri)
+                        .retrieve()
+                        .bodyToMono(AuditEvents.class) 
+                        .block(); 
+            } catch (WebClientResponseException e) { 
+                if (HttpStatus.UNAUTHORIZED.equals(e.getStatusCode())) {
+                    throw new AuditEventsForbiddenException(e);
+                } else {
+                    throw e;
+                }
+            } catch (Exception e) {
+                throw new GoodDataException("Unable to list audit events: " + uri, e);
             }
-        } catch (RestClientException e) {
-            throw new GoodDataException("Unable to list audit events: " + uri);
         }
-    }
 
     private String getAuditEventsUri(final PageRequest page, final String uri) {
         return page.updateWithPageParams(new SpringMutableUri(uri)).toUriString();

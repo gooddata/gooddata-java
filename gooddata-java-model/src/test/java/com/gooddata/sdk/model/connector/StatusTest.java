@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.connector;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test; 
 
 import static com.gooddata.sdk.model.connector.Status.Code.ERROR;
 import static com.gooddata.sdk.model.connector.Status.Code.SYNCHRONIZED;

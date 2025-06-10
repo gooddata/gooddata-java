@@ -11,8 +11,14 @@ import com.gooddata.sdk.model.hierarchicalconfig.ConfigItems;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.sdk.service.GoodDataSettings;
+
+import reactor.core.publisher.Mono;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriTemplate;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
@@ -27,8 +33,8 @@ public class HierarchicalConfigService extends AbstractService {
     public final static UriTemplate PROJECT_CONFIG_ITEMS_TEMPLATE = new UriTemplate(ConfigItems.PROJECT_CONFIG_ITEMS_URI);
     public final static UriTemplate PROJECT_CONFIG_ITEM_TEMPLATE = new UriTemplate(ConfigItem.PROJECT_CONFIG_ITEM_URI);
 
-    public HierarchicalConfigService(RestTemplate restTemplate, GoodDataSettings settings) {
-        super(restTemplate, settings);
+    public HierarchicalConfigService(WebClient webClient, GoodDataSettings settings) { 
+        super(webClient, settings);
     }
 
     /**
@@ -40,16 +46,23 @@ public class HierarchicalConfigService extends AbstractService {
     public ConfigItems listProjectConfigItems(final Project project) {
         notNull(project, "project");
         try {
-            ConfigItems configItems = restTemplate.getForObject(PROJECT_CONFIG_ITEMS_TEMPLATE.expand(project.getId()), ConfigItems.class);
+            ConfigItems configItems = webClient.get() 
+                .uri(PROJECT_CONFIG_ITEMS_TEMPLATE.expand(project.getId()))
+                .retrieve()
+                .bodyToMono(ConfigItems.class)
+                .block(); 
 
             if (configItems == null) {
                 throw new GoodDataException("empty response from API call");
             }
             return configItems;
-        } catch (GoodDataException | RestClientException e) {
+        } catch (WebClientResponseException | GoodDataException e) { 
+            throw new GoodDataException("Unable to list config items for project ID=" + project.getId(), e);
+        } catch (Exception e) {
             throw new GoodDataException("Unable to list config items for project ID=" + project.getId(), e);
         }
     }
+
 
     /**
      * Returns config item for given project (even if it's inherited from its hierarchy).
@@ -64,11 +77,14 @@ public class HierarchicalConfigService extends AbstractService {
 
         try {
             String configUri = PROJECT_CONFIG_ITEM_TEMPLATE.expand(project.getId(), configName).toString();
-            return getProjectConfigItem(configUri);
-        } catch (GoodDataException | RestClientException e) {
+            return getProjectConfigItem(configUri);  
+        } catch (WebClientResponseException | GoodDataException e) {   
+            throw new GoodDataException("Unable to get project config item: " + configName, e);
+        } catch (Exception e) {
             throw new GoodDataException("Unable to get project config item: " + configName, e);
         }
     }
+
 
     /**
      * Creates or updates config item for given project.
@@ -77,15 +93,20 @@ public class HierarchicalConfigService extends AbstractService {
      * @param configItem config item to be created/updated, cannot be null
      * @return created/updated project config item
      */
-    public ConfigItem setProjectConfigItem(final Project project, final ConfigItem configItem) {
+     public ConfigItem setProjectConfigItem(final Project project, final ConfigItem configItem) {
         notNull(project, "project");
         notNull(configItem, "configItem");
 
         try {
             String configUri = PROJECT_CONFIG_ITEM_TEMPLATE.expand(project.getId(), configItem.getName()).toString();
-            restTemplate.put(configUri, configItem);
-            return getProjectConfigItem(configUri);
-        } catch (GoodDataException | RestClientException e) {
+            webClient.put()  
+                .uri(configUri)
+                .bodyValue(configItem)
+                .retrieve()
+                .toBodilessEntity()
+                .block();  
+            return getProjectConfigItem(configUri);  
+        } catch (WebClientResponseException | GoodDataException e) {  
             throw new GoodDataException("Unable to set project config item: " + configItem.getKey(), e);
         }
     }
@@ -95,19 +116,26 @@ public class HierarchicalConfigService extends AbstractService {
      *
      * @param configItem existing project config item with links set properly, cannot be null
      */
-    public void removeProjectConfigItem(final ConfigItem configItem) {
+    public void removeProjectConfigItem(ConfigItem configItem) {
         notNull(configItem, "configItem");
-        notEmpty(configItem.getUri(), "config item URI");
-
         try {
-            restTemplate.delete(configItem.getUri());
-        } catch (RestClientException e) {
-            throw new GoodDataException("Unable to remove project config item: " + configItem.getKey(), e);
+            webClient.delete()
+                .uri(configItem.getUri())
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+        } catch (Exception e) {
+            throw new GoodDataException("Unable to remove project config item: " + configItem.getUri(), e);
         }
     }
 
+
     private ConfigItem getProjectConfigItem(String configUri) {
-        ConfigItem configItem = restTemplate.getForObject(configUri, ConfigItem.class);
+        ConfigItem configItem = webClient.get()  
+            .uri(configUri)
+            .retrieve()
+            .bodyToMono(ConfigItem.class)
+            .block();  
 
         if (configItem == null) {
             throw new GoodDataException("Project config item cannot be retrieved from URI " + configUri);

@@ -11,9 +11,9 @@ import com.gooddata.sdk.model.dataset.*;
 import com.gooddata.sdk.model.gdc.AboutLinks.Link;
 import com.gooddata.sdk.model.gdc.TaskStatus;
 import com.gooddata.sdk.model.project.Project;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeAll; 
+import org.junit.jupiter.api.BeforeEach;        
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -26,7 +26,7 @@ import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.testng.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class DatasetServiceIT extends AbstractGoodDataIT {
 
@@ -34,14 +34,14 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
 
     private static final String DML_MAQL = "DELETE FROM {attr.logs.phase_id} WHERE {created.date.yyyymmdd} < \"2015-01-18\"";
 
-    private Project project;
+    private static Project project;
 
-    @BeforeClass
-    public void setUpClass() throws Exception {
+    @BeforeAll
+    public static void setUpClass() throws Exception {
         project = readObjectFromResource("/project/project.json", Project.class);
     }
 
-    @BeforeMethod
+    @BeforeEach
     public void setUp() throws Exception {
         onRequest()
                 .havingMethodEqualTo("GET")
@@ -100,7 +100,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
 
     }
 
-    @Test(expectedExceptions = DatasetException.class, expectedExceptionsMessageRegExp = ".*dataset.person.*Unable to load.*")
+    @Test
     public void shouldFailPolling() throws Exception {
         onRequest()
                 .havingPathEqualTo("/gdc/md/PROJECT/tasks/task/ID/status")
@@ -108,7 +108,13 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
                 .withStatus(400);
 
         final DatasetManifest manifest = readObjectFromResource("/dataset/datasetManifest.json", DatasetManifest.class);
-        gd.getDatasetService().loadDataset(project, manifest, new ByteArrayInputStream(new byte[]{})).get();
+        try {
+            gd.getDatasetService().loadDataset(project, manifest, new ByteArrayInputStream(new byte[]{})).get();
+            fail("Exception should be thrown");         
+        } catch (DatasetException ex) {
+            assertThat(ex.getMessage(), containsString("dataset.person"));      
+            assertThat(ex.getMessage(), containsString("Unable to load"));      
+        }
     }
 
     @Test
@@ -176,7 +182,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
         gd.getDatasetService().optimizeSliHash(project).get();
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void shouldFailOptimizeSliHash() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -194,7 +200,12 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
                 .withStatus(200)
                 .withBody(OBJECT_MAPPER.writeValueAsString(new TaskStatus("ERROR", STATUS_URI)));
 
-        gd.getDatasetService().optimizeSliHash(project).get();
+        try {
+            gd.getDatasetService().optimizeSliHash(project).get();
+            fail("Exception should be thrown"); 
+        } catch (GoodDataException e) {
+            // expected
+        }
     }
 
     @Test
@@ -219,7 +230,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
         gd.getDatasetService().updateProjectData(project, DML_MAQL).get();
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void shouldFailUpdateProjectDataServerError() throws IOException {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -234,10 +245,15 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
                 .withStatus(500)
         ;
 
-        gd.getDatasetService().updateProjectData(project, DML_MAQL).get();
+        try {
+            gd.getDatasetService().updateProjectData(project, DML_MAQL).get();
+            fail("Exception should be thrown");
+        } catch (GoodDataException e) {
+            // expected
+        }
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void shouldFailUpdateProjectData() throws IOException {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -256,7 +272,12 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
                 .withBody(OBJECT_MAPPER.writeValueAsString(new TaskState("ERROR", STATUS_URI)))
         ;
 
-        gd.getDatasetService().updateProjectData(project, DML_MAQL).get();
+        try {
+            gd.getDatasetService().updateProjectData(project, DML_MAQL).get();
+            fail("Exception should be thrown");
+        } catch (GoodDataException e) {
+            // expected
+        }
     }
 
     @Test

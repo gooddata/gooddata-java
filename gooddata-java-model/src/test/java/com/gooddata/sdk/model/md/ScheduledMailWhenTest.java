@@ -7,7 +7,7 @@ package com.gooddata.sdk.model.md;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 public class ScheduledMailWhenTest {
 

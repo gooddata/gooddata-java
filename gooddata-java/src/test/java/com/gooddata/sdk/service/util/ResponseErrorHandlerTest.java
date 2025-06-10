@@ -12,8 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
@@ -30,7 +30,7 @@ public class ResponseErrorHandlerTest {
 
     private ResponseErrorHandler responseErrorHandler;
 
-    @BeforeMethod
+    @BeforeEach
     public void setUp() throws Exception {
         responseErrorHandler = new ResponseErrorHandler(singletonList(new MappingJackson2HttpMessageConverter(OBJECT_MAPPER)));
     }

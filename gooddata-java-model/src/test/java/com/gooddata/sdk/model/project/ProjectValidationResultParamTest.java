@@ -6,7 +6,7 @@
 package com.gooddata.sdk.model.project;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 

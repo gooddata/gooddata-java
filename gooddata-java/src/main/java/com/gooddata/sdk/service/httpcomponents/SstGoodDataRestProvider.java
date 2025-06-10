@@ -10,17 +10,15 @@ import com.gooddata.http.client.SSTRetrievalStrategy;
 import com.gooddata.http.client.SimpleSSTRetrievalStrategy;
 import com.gooddata.sdk.service.GoodDataEndpoint;
 import com.gooddata.sdk.service.GoodDataSettings;
-import org.apache.http.HttpHost;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.core5.http.HttpHost;
 
 import static com.gooddata.sdk.common.util.Validate.notNull;
 
-/**
- * The {@link com.gooddata.sdk.service.GoodDataRestProvider}, which
- * provides configured single endpoint REST connection using standard pre created SST to authenticate.
- */
 public final class SstGoodDataRestProvider extends SingleEndpointGoodDataRestProvider {
+
+    private final String sst;
 
     /**
      * Create SST REST provider
@@ -29,24 +27,21 @@ public final class SstGoodDataRestProvider extends SingleEndpointGoodDataRestPro
      * @param sst super secure token
      */
     public SstGoodDataRestProvider(final GoodDataEndpoint endpoint, final GoodDataSettings settings, final String sst) {
-        super(endpoint, settings, (b, e, s) -> createHttpClient(b, e, sst));
+        super(endpoint, settings);
+        this.sst = sst;
     }
 
-    /**
-     * Creates http client using given builder and endpoint, authenticating by sst.
-     * @param builder builder to build client from
-     * @param endpoint API endpoint to connect client to
-     * @param sst token used for authentication
-     * @return configured http client
-     */
-    public static HttpClient createHttpClient(HttpClientBuilder builder, GoodDataEndpoint endpoint, String sst) {
+
+    public static GoodDataHttpClient createGoodDataHttpClient(HttpClientBuilder builder, GoodDataEndpoint endpoint, String sst) {
         notNull(endpoint, "endpoint");
         notNull(builder, "builder");
         notNull(sst, "sst");
 
         final HttpClient httpClient = builder.build();
         final SSTRetrievalStrategy strategy = new SimpleSSTRetrievalStrategy(sst);
-        final HttpHost httpHost = new HttpHost(endpoint.getHostname(), endpoint.getPort(), endpoint.getProtocol());
+        final HttpHost httpHost = new HttpHost(endpoint.getProtocol(), endpoint.getHostname(), endpoint.getPort());
         return new GoodDataHttpClient(httpClient, httpHost, strategy);
     }
+
+
 }

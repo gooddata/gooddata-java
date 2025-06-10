@@ -10,8 +10,8 @@ import com.gooddata.sdk.model.gdc.AsyncTask;
 import com.gooddata.sdk.model.gdc.TaskStatus;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.model.project.model.ModelDiff;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeAll; 
+import org.junit.jupiter.api.Test;  
 
 import java.io.IOException;
 
@@ -22,6 +22,7 @@ import static java.lang.String.format;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ModelServiceIT extends AbstractGoodDataIT {
@@ -35,10 +36,10 @@ public class ModelServiceIT extends AbstractGoodDataIT {
             "synchronize {dataset.chunk1} preserve data",
             "synchronize {dataset.chunk2} preserve data");
 
-    private Project project;
+    private static Project project;
 
-    @BeforeClass
-    public void setUp() throws Exception {
+    @BeforeAll
+    public static void setUp() throws Exception {
         project = readObjectFromResource("/project/project.json", Project.class);
     }
 
@@ -67,7 +68,7 @@ public class ModelServiceIT extends AbstractGoodDataIT {
         assertThat(diff.getUpdateMaql().get(0), is("CREATE FOLDER {ffld.employee} VISUAL(TITLE \"Employee\") TYPE FACT;\nCREATE FACT {fact.employee.age} VISUAL(TITLE \"Employee Age\", FOLDER {ffld.employee}) AS {f_employee.f_age};\nALTER DATASET {dataset.employee} ADD {fact.employee.age};\nSYNCHRONIZE {dataset.employee} PRESERVE DATA;"));
     }
 
-    @Test(expectedExceptions = ModelException.class, expectedExceptionsMessageRegExp = "Unable to get project model diff")
+    @Test
     public void shouldFailCreateDiff() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -82,7 +83,10 @@ public class ModelServiceIT extends AbstractGoodDataIT {
                 .withStatus(400)
         ;
 
-        gd.getModelService().getProjectModelDiff(project, "xxx").get();
+                Exception exception = assertThrows(ModelException.class, () -> {
+            gd.getModelService().getProjectModelDiff(project, "xxx").get();
+        });
+        assertThat(exception.getMessage(), is("Unable to get project model diff"));
     }
 
     @Test
@@ -101,14 +105,13 @@ public class ModelServiceIT extends AbstractGoodDataIT {
                 .withBody(OBJECT_MAPPER.writeValueAsString(new TaskStatus("RUNNING", STATUS_URI)))
             .thenRespond()
                 .withStatus(200)
-                .withBody(OBJECT_MAPPER.writeValueAsString(new TaskStatus("OK", STATUS_URI)))
-        ;
+                .withBody(OBJECT_MAPPER.writeValueAsString(new TaskStatus("OK", STATUS_URI)));
 
         final ModelDiff diff = OBJECT_MAPPER.readValue(MODEL_DIFF_JSON, ModelDiff.class);
         gd.getModelService().updateProjectModel(project, diff).get();
     }
 
-    @Test(expectedExceptions = ModelException.class, expectedExceptionsMessageRegExp = "Unable to update project model")
+    @Test
     public void shouldFailUpdateModel() throws IOException {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -120,10 +123,12 @@ public class ModelServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(STATUS_URI)
             .respond()
-                .withStatus(400)
-        ;
+                .withStatus(400);
 
         final ModelDiff diff = OBJECT_MAPPER.readValue(MODEL_DIFF_JSON, ModelDiff.class);
-        gd.getModelService().updateProjectModel(project, diff).get();
+        Exception exception = assertThrows(ModelException.class, () -> {
+            gd.getModelService().updateProjectModel(project, diff).get();
+        });
+        assertThat(exception.getMessage(), is("Unable to update project model"));
     }
 }

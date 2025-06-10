@@ -6,7 +6,8 @@
 package com.gooddata.sdk.service;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.web.reactive.function.client.ClientResponse;
+
 
 import java.io.IOException;
 
@@ -59,8 +60,8 @@ public abstract class AbstractPollHandlerBase<P, R> implements PollHandler<P, R>
     }
 
     @Override
-    public boolean isFinished(final ClientHttpResponse response) throws IOException {
-        return HttpStatus.OK.equals(response.getStatusCode());
+    public boolean isFinished(final ClientResponse response) {
+        return response.statusCode().equals(HttpStatus.OK);
     }
 
     /**

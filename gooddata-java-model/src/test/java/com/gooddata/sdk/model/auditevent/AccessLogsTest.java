@@ -7,7 +7,7 @@ package com.gooddata.sdk.model.auditevent;
 
 import com.gooddata.sdk.common.collections.Paging;
 import org.springframework.web.util.UriTemplate;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;

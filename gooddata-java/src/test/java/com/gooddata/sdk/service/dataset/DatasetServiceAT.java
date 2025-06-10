@@ -9,7 +9,10 @@ import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.model.dataset.DatasetManifest;
 import com.gooddata.sdk.model.dataset.Upload;
 import com.gooddata.sdk.model.dataset.UploadStatistics;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.MethodOrderer;     
+import org.junit.jupiter.api.Order;     
+import org.junit.jupiter.api.Test;  
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.util.Collection;
 
@@ -18,17 +21,19 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;    
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Dataset acceptance tests.
  */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DatasetServiceAT extends AbstractGoodDataAT {
 
     private static final String FAILED_LOAD_PATTERN = "Number of columns does(n't| not) co[r]{1,2}espond (in dataset.person.csv at line 3|on line 3 in dataset.person.csv)";
 
-    @Test(groups = "dataset", dependsOnGroups = {"md", "datastore"})
+    @Test
+    @Order(1)
     public void loadDataset() throws Exception {
         final DatasetService datasetService = gd.getDatasetService();
 
@@ -36,7 +41,8 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
         datasetService.loadDataset(project, manifest, readFromResource("/person.csv")).get();
     }
 
-    @Test(groups = "dataset", dependsOnMethods = {"loadDataset"})
+    @Test
+    @Order(2)
     public void loadDatasetBatch() throws Exception {
         final DatasetService datasetService = gd.getDatasetService();
 
@@ -48,13 +54,15 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
         datasetService.loadDatasets(project, personManifest, cityManifest).get();
     }
 
-    @Test(groups = "dataset", dependsOnMethods = "loadDatasetBatch")
+    @Test
+    @Order(3)
     public void updateData() {
         final DatasetService datasetService = gd.getDatasetService();
         datasetService.updateProjectData(project, "DELETE FROM {attr.person.name} WHERE {label.person.name} = \"not exists\";");
     }
 
-    @Test(groups = "dataset", dependsOnGroups = {"md", "datastore"})
+    @Test
+    @Order(4)
     public void loadDatasetFail(){
         final DatasetService datasetService = gd.getDatasetService();
         final DatasetManifest manifest = datasetService.getDatasetManifest(project, "dataset.person");
@@ -66,7 +74,8 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
         }
     }
 
-    @Test(groups = "dataset", dependsOnMethods = {"loadDataset"})
+    @Test
+    @Order(5)
     public void loadDatasetBatchFail() throws Exception {
         final DatasetService datasetService = gd.getDatasetService();
 
@@ -83,7 +92,8 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
         }
     }
 
-    @Test(groups = "dataset", dependsOnMethods = {"loadDataset"})
+    @Test
+    @Order(6)
     public void listUploadsForDataset() throws Exception {
         final Collection<Upload> uploads = gd.getDatasetService().listUploadsForDataset(project, "dataset.person");
 
@@ -91,14 +101,16 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
         assertFalse(uploads.isEmpty());
     }
 
-    @Test(groups = "dataset", dependsOnMethods = {"loadDataset"})
+    @Test
+    @Order(7)
     public void getLastUploadForDataset() throws Exception {
         final Upload lastUpload = gd.getDatasetService().getLastUploadForDataset(project, "dataset.person");
 
         assertThat(lastUpload, notNullValue());
     }
 
-    @Test(groups = "dataset", dependsOnMethods = {"loadDataset", "loadDatasetFail"})
+    @Test
+    @Order(8)
     public void getUploadStatistics() throws Exception {
         final UploadStatistics uploadStatistics = gd.getDatasetService().getUploadStatistics(project);
 

@@ -6,14 +6,19 @@
 package com.gooddata.sdk.model.dataload.processes;
 
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.Collections;
+import java.util.stream.Stream;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
@@ -29,19 +34,21 @@ import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.mockito.hamcrest.MockitoHamcrest.argThat;
-import static org.testng.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+
 
 public class ScheduleTest {
 
     private static final String EXECUTABLE = "Twitter/graph/twitter.grf";
 
     @Mock
-    private DataloadProcess process;
+    private static DataloadProcess process;
 
     @Mock
     private Schedule triggerSchedule;
 
-    @BeforeMethod
+    @BeforeEach
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this).close();
 
@@ -110,32 +117,32 @@ public class ScheduleTest {
         assertThat(schedule, jsonEquals(resource("dataload/processes/schedule-input-all-fields.json")));
     }
 
-    @DataProvider(name = "scheduleParams")
-    public Object[][] scheduleParams() {
-        return new Object[][] {
-                new Object[] {null, EXECUTABLE, "0 0 * * *", "process"},
-                new Object[] {process, "garbage", "0 0 * * *", "wrong executable"},
-                new Object[] {process, EXECUTABLE, "", "cron can't be empty"}
-        };
+
+    static Stream<Arguments> scheduleParams() {
+
+        return Stream.of(
+                Arguments.of(null, EXECUTABLE, "0 0 * * *", "process can't be null"),
+                Arguments.of(process, "garbage", "0 0 * * *", "wrong executable"),
+                Arguments.of(process, EXECUTABLE, "", "cron can't be empty")
+        );
     }
 
-    @Test(dataProvider = "scheduleParams")
-    public void testIncorrectConstructorParams(final DataloadProcess process, final String executable,
-                                               final String cron, final String message) {
-        try {
-            new Schedule(process, executable, cron);
-            fail("IllegalArgumentException must be thrown");
-        } catch (IllegalArgumentException expected) {
-            assertThat(expected.getMessage(), containsString(message));
-        }
+    @ParameterizedTest
+    @MethodSource("scheduleParams")
+    void testIncorrectConstructorParams(DataloadProcess process, String executable, String cron, String message) {
+        IllegalArgumentException ex = Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new Schedule(process, executable, cron)
+        );
+        assertThat(ex.getMessage(), containsString(message));
     }
 
-    @Test(
-            expectedExceptions = IllegalArgumentException.class,
-            expectedExceptionsMessageRegExp = ".*cron can't be empty.*"
-    )
-    public void testSetCron() {
-        new Schedule(process, EXECUTABLE, "0 0 * * *").setCron("");
+    @Test 
+    void testSetCron() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Schedule(process, EXECUTABLE, "0 0 * * *").setCron("");
+        });
+        assertThat(exception.getMessage(), containsString("cron can't be empty"));
     }
 
     @Test
@@ -143,12 +150,12 @@ public class ScheduleTest {
         new Schedule(process, EXECUTABLE, "0 0 * * *").setTimezone("some nonsense garbage to prove a point");
     }
 
-    @Test(
-            expectedExceptions = IllegalArgumentException.class,
-            expectedExceptionsMessageRegExp = ".*timezone can't be null.*"
-    )
-    public void testSetTimezoneObject() {
-        new Schedule(process, EXECUTABLE, "0 0 * * *").setTimezone((ZonedDateTime) null);
+    @Test
+    void testSetTimezoneObject() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Schedule(process, EXECUTABLE, "0 0 * * *").setTimezone((ZonedDateTime) null);
+        });
+        assertThat(exception.getMessage(), containsString("timezone can't be null"));
     }
 
     @Test
@@ -160,16 +167,17 @@ public class ScheduleTest {
         assertThat(schedule.getProcessId(), is("other"));
     }
 
-    @Test(
-            expectedExceptions = IllegalArgumentException.class,
-            expectedExceptionsMessageRegExp = ".*wrong executable.*"
-    )
-    public void testSetExecutable() {
+
+    @Test
+    void testSetExecutable() {
         final Schedule schedule = new Schedule(process, EXECUTABLE, "0 0 * * *");
         assertThat(schedule.getExecutable(), is(EXECUTABLE));
         schedule.setExecutable(process, EXECUTABLE);
         assertThat(schedule.getExecutable(), is(EXECUTABLE));
-        schedule.setExecutable(process, "garbage");
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            schedule.setExecutable(process, "garbage");
+        });
+        assertThat(exception.getMessage(), containsString("wrong executable"));
     }
 
     @Test
@@ -207,10 +215,10 @@ public class ScheduleTest {
         assertThat(schedule.getReschedule(), is(equalTo(Duration.ZERO)));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testCreateTriggeredScheduleWithNotCreatedSchedule() {
+    @Test
+    void testCreateTriggeredScheduleWithNotCreatedSchedule() {
         final Schedule schedule = new Schedule(process, EXECUTABLE, "0 0 * * *");
-        new Schedule(process, EXECUTABLE, schedule);
+        assertThrows(IllegalArgumentException.class, () -> new Schedule(process, EXECUTABLE, schedule));
     }
 
     @Test

@@ -7,12 +7,13 @@ package com.gooddata.sdk.service.account;
 
 import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.model.account.Account;
-import com.gooddata.sdk.model.account.Accounts;
+
 import com.gooddata.sdk.model.account.SeparatorSettings;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
 
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
 
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +27,7 @@ import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AccountServiceIT extends AbstractGoodDataIT {
 
@@ -51,8 +53,8 @@ public class AccountServiceIT extends AbstractGoodDataIT {
     private static Account account;
     private static Account createAccount;
 
-    @BeforeClass
-    public void init() {
+    @BeforeAll
+    public static void init() {
         account = readObjectFromResource(ACCOUNT, Account.class);
         createAccount = readObjectFromResource(CREATE_ACCOUNT, Account.class);
     }
@@ -78,7 +80,7 @@ public class AccountServiceIT extends AbstractGoodDataIT {
         assertThat(created.getFirstName(), is("Blah"));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void shouldFailToCreateAccount() {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -87,7 +89,9 @@ public class AccountServiceIT extends AbstractGoodDataIT {
                 .withBody("")
                 .withStatus(400);
 
-        gd.getAccountService().createAccount(createAccount, DOMAIN);
+        assertThrows(GoodDataException.class, () -> {
+            gd.getAccountService().createAccount(createAccount, DOMAIN);
+        });
     }
 
     @Test
@@ -101,7 +105,7 @@ public class AccountServiceIT extends AbstractGoodDataIT {
         gd.getAccountService().removeAccount(account);
     }
 
-    @Test(expectedExceptions = AccountNotFoundException.class)
+    @Test
     public void shouldFailToFindAccountForRemoval() {
         onRequest()
                 .havingMethodEqualTo("DELETE")
@@ -109,7 +113,9 @@ public class AccountServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(404);
 
-        gd.getAccountService().removeAccount(account);
+        assertThrows(AccountNotFoundException.class, () -> {
+            gd.getAccountService().removeAccount(account);
+        });
     }
 
     @Test
@@ -127,7 +133,7 @@ public class AccountServiceIT extends AbstractGoodDataIT {
         assertThat(current.getFirstName(), is("Blah"));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void shouldFailToGetCurrentAccount() {
         onRequest()
                 .havingMethodEqualTo("GET")
@@ -135,10 +141,12 @@ public class AccountServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(400);
 
-        gd.getAccountService().getCurrent();
+        assertThrows(GoodDataException.class, () -> {
+            gd.getAccountService().getCurrent();
+        });
     }
 
-    @Test(expectedExceptions = AccountNotFoundException.class)
+    @Test
     public void shouldFailToFindCurrentAccount() {
         onRequest()
                 .havingMethodEqualTo("GET")
@@ -146,7 +154,9 @@ public class AccountServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(404);
 
-        gd.getAccountService().getCurrent();
+        assertThrows(AccountNotFoundException.class, () -> {
+            gd.getAccountService().getCurrent();
+        });
     }
 
     @Test
@@ -167,7 +177,7 @@ public class AccountServiceIT extends AbstractGoodDataIT {
         gd.getAccountService().logout();
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void shouldFailToLogout() {
         onRequest()
                 .havingMethodEqualTo("GET")
@@ -181,7 +191,9 @@ public class AccountServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(400);
 
-        gd.getAccountService().logout();
+        assertThrows(GoodDataException.class, () -> {
+            gd.getAccountService().logout();
+        });
     }
 
     @Test
@@ -213,7 +225,7 @@ public class AccountServiceIT extends AbstractGoodDataIT {
         assertThat(loaded.getFirstName(), is("John"));
     }
 
-    @Test(expectedExceptions = AccountNotFoundException.class)
+    @Test
     public void shouldGetEmptyPageWhenAccountByEmailDoesNotExist() {
         onRequest()
             .havingMethodEqualTo("GET")
@@ -223,10 +235,12 @@ public class AccountServiceIT extends AbstractGoodDataIT {
             .withBody(readFromResource(ACCOUNT_BY_EMAIL_EMPTY_RESPONSE))
             .withStatus(200);
 
-        gd.getAccountService().getAccountByLogin("wrong@email.com", DOMAIN);
+        assertThrows(AccountNotFoundException.class, () -> {
+            gd.getAccountService().getAccountByLogin("wrong@email.com", DOMAIN);
+        });
     }
 
-    @Test(expectedExceptions = AccountNotFoundException.class)
+    @Test
     public void shouldFailToFindAccount() {
         onRequest()
                 .havingMethodEqualTo("GET")
@@ -234,10 +248,12 @@ public class AccountServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(404);
 
-        gd.getAccountService().getAccountById(ACCOUNT_ID);
+        assertThrows(AccountNotFoundException.class, () -> {
+            gd.getAccountService().getAccountById(ACCOUNT_ID);
+        }); 
     }
 
-    @Test(expectedExceptions = AccountNotFoundException.class)
+    @Test
     public void shouldFailOnUpdateNonExistentAccount() {
         onRequest()
                 .havingMethodEqualTo("GET")
@@ -245,7 +261,9 @@ public class AccountServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(404);
 
-        gd.getAccountService().updateAccount(account);
+        assertThrows(AccountNotFoundException.class, () -> {
+            gd.getAccountService().updateAccount(account);
+        });
     }
 
     @Test
@@ -291,7 +309,7 @@ public class AccountServiceIT extends AbstractGoodDataIT {
         assertThat(separators, notNullValue());
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void shouldFailGetAccountSeparatorSettings() {
         onRequest()
                 .havingMethodEqualTo("GET")
@@ -301,6 +319,8 @@ public class AccountServiceIT extends AbstractGoodDataIT {
 
         final Account account = readObjectFromResource(ACCOUNT, Account.class);
 
-        gd.getAccountService().getSeparatorSettings(account);
+        assertThrows(GoodDataException.class, () -> {
+            gd.getAccountService().getSeparatorSettings(account);
+        });
     }
 }

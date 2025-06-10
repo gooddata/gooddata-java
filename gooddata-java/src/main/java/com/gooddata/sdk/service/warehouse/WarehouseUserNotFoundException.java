@@ -20,6 +20,11 @@ public class WarehouseUserNotFoundException extends GoodDataException {
         this.userUri = uri;
     }
 
+    public WarehouseUserNotFoundException(String uri, Throwable cause) {
+        super("Warehouse user " + uri + " was not found", cause);
+        this.userUri = uri;
+    }
+
     public String getUserUri() {
         return userUri;
     }

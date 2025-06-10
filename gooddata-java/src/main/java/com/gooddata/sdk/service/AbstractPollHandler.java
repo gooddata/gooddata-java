@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service;
 
-import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.web.reactive.function.client.ClientResponse;
 
 import java.net.URI;
 

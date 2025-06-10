@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.md.report;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 

@@ -6,9 +6,9 @@
 package com.gooddata.sdk.service;
 
 import com.gooddata.sdk.common.GoodDataRestException;
-import org.springframework.web.client.RestTemplate;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test; 
 
 import static net.jadler.Jadler.onRequest;
 
@@ -21,9 +21,9 @@ public class PollHandlerIT extends AbstractGoodDataIT {
 
     private PollingService service;
 
-    @BeforeMethod
+    @BeforeEach
     public void setUp() throws Exception {
-        service = new PollingService(gd.getRestTemplate());
+        service = new PollingService(gd.getWebClient());
 
         onRequest()
                 .havingMethodEqualTo("GET")
@@ -41,9 +41,10 @@ public class PollHandlerIT extends AbstractGoodDataIT {
 
     private static class PollingService extends AbstractService {
 
-        private PollingService(final RestTemplate restTemplate) {
-            super(restTemplate, new GoodDataSettings());
-        }
+            private PollingService(final WebClient webClient) {
+                super(webClient, new GoodDataSettings());
+            }
+
 
         FutureResult<Void> test(final String uri) {
             return new PollResult<>(this, new SimplePollHandler<Void>(uri, Void.class) {

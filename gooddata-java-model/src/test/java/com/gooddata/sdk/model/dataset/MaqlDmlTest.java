@@ -6,7 +6,7 @@
 package com.gooddata.sdk.model.dataset;
 
 import org.apache.commons.io.IOUtils;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;

@@ -4,7 +4,7 @@
 
     <artifactId>gooddata-java-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.12.1+api3-SNAPSHOT</version>
+    <version>3.13.0+api3-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>GoodData Java SDK</description>
     <url>https://github.com/gooddata/gooddata-java</url>
@@ -12,7 +12,7 @@
     <parent>
         <groupId>com.gooddata</groupId>
         <artifactId>gooddata-parent</artifactId>
-        <version>3.1.0</version>
+        <version>4.0.0</version>
     </parent>
 
     <licenses>
@@ -47,15 +47,17 @@
     </modules>
 
     <properties>
-        <httpclient.version>4.5.13</httpclient.version>
-        <httpcore.version>4.4.15</httpcore.version>
-        <jackson.version>2.13.4</jackson.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <httpclient.version>5.5</httpclient.version>
+        <httpcore.version>5.3.4</httpcore.version>
+        <jackson.version>2.15.3</jackson.version>
         <slf4j.version>2.0.3</slf4j.version>
-        <spring.version>5.3.23</spring.version>
+        <spring.version>6.0.13</spring.version>
         <jadler.version>1.3.1</jadler.version>
-        <json-unit.version>2.36.0</json-unit.version>
-        <surefire.version>3.0.0-M7</surefire.version>
-        <failsafe.version>3.0.0-M7</failsafe.version>
+        <json-unit.version>2.38.0</json-unit.version>
+        <surefire.version>3.5.1</surefire.version>
+        <failsafe.version>3.2.1</failsafe.version>
         <!-- Hardcoded value, so the license:check doesn't break builds at the New Year.
         Change to current year value together with headers in all source files and first license in LICENSE.txt. -->
         <currentYear>2023</currentYear>
@@ -81,40 +83,21 @@
         </pluginManagement>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+            <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${failsafe.version}</version>
                 <!-- config and dependencies below needed to make running both Spock and TestNG tests -->
                 <configuration>
                     <threadCount>1</threadCount>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-junit47</artifactId>
-                        <version>${surefire.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-testng</artifactId>
-                        <version>${surefire.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.5</version>
-                <configuration>
-                    <excludeFilterFile>findBugsFilter.xml</excludeFilterFile>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <phase>test</phase>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <!-- needed to make running both Spock and TestNG tests -->
@@ -122,26 +105,8 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.version}</version>
                 <configuration>
-                    <properties>
-                        <property>
-                            <name>junit</name>
-                            <value>false</value>
-                        </property>
-                    </properties>
                     <threadCount>1</threadCount>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-junit47</artifactId>
-                        <version>${surefire.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-testng</artifactId>
-                        <version>${surefire.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>
@@ -184,7 +149,7 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.8</version>
+                        <version>0.8.11</version>
                         <executions>
                             <execution>
                                 <id>jacoco-prepare-agent</id>
@@ -227,9 +192,21 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.junit.platform</groupId>
+                <artifactId>junit-platform-engine</artifactId>
+                <version>1.10.2</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.platform</groupId>
+                <artifactId>junit-platform-commons</artifactId>
+                <version>1.10.2</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>com.gooddata</groupId>
                 <artifactId>gooddata-rest-common</artifactId>
-                <version>2.0.1</version>
+                <version>3.0.0</version>
                 <exclusions>
                     <exclusion>
                         <groupId>joda-time</groupId>
@@ -248,22 +225,28 @@
             <dependency>
                 <groupId>com.gooddata</groupId>
                 <artifactId>gooddata-http-client</artifactId>
-                <version>1.0.0</version>
+                <version>2.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.12.0</version>
+                <version>3.13.0</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>${httpclient.version}</version>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>5.5</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpcore</artifactId>
-                <version>${httpcore.version}</version>
+                <groupId>org.apache.httpcomponents.core5</groupId>
+                <artifactId>httpcore5</artifactId>
+                <version>5.3.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.core5</groupId>
+                <artifactId>httpcore5-h2</artifactId>
+                <version>5.3.4</version>
+                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -274,6 +257,12 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-beans</artifactId>
                 <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>5.10.2</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -300,7 +289,7 @@
             <dependency>
                 <groupId>org.springframework.retry</groupId>
                 <artifactId>spring-retry</artifactId>
-                <version>1.3.4</version>
+                <version>2.0.12</version>
                 <optional>true</optional>
             </dependency>
             <dependency>
@@ -333,19 +322,13 @@
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>2.11.0</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.testng</groupId>
-                <artifactId>testng</artifactId>
-                <version>7.6.1</version>
+                <version>2.15.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>4.8.0</version>
+                <version>5.3.1</version>
                 <scope>test</scope>
                 <exclusions>
                     <exclusion>
@@ -411,13 +394,13 @@
             <dependency>
                 <groupId>org.spockframework</groupId>
                 <artifactId>spock-core</artifactId>
-                <version>1.3-groovy-2.5</version>
+                <version>2.4-M1-groovy-4.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.codehaus.groovy</groupId>
+                <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy</artifactId>
-                <version>2.5.7</version>
+                <version>4.0.22</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

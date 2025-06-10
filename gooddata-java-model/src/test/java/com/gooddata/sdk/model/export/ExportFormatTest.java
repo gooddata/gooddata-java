@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.export;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.gooddata.sdk.model.export.ExportFormat.arrayToStringArray;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;

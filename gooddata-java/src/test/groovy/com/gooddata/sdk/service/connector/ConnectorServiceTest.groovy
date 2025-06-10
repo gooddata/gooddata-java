@@ -9,7 +9,7 @@ package com.gooddata.sdk.service.connector
 import com.gooddata.sdk.model.connector.Reload
 import com.gooddata.sdk.service.GoodDataSettings
 import com.gooddata.sdk.service.project.ProjectService
-import org.springframework.web.client.RestTemplate
+import org.springframework.web.reactive.function.client.WebClient
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -18,7 +18,7 @@ import static java.util.Collections.emptyMap
 class ConnectorServiceTest extends Specification {
 
     @Subject
-    def service = new ConnectorService(Mock(RestTemplate), Mock(ProjectService), Mock(GoodDataSettings))
+    def service = new ConnectorService(Mock(WebClient), Mock(ProjectService), Mock(GoodDataSettings))
 
     def "getZendesk4Reload should throw when Reload is null"() {
         when:

@@ -7,7 +7,10 @@ package com.gooddata.sdk.model.hierarchicalconfig;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.testng.annotations.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
@@ -33,14 +36,15 @@ public class ConfigItemTest {
         assertThat(item.getUri(), is("/gdc/projects/PROJECT_ID/config/myCoolFeature"));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testEmptyValues() {
-        new ConfigItem("", "");
+    @Test
+    void testEmptyValues() {
+        assertThrows(IllegalArgumentException.class, () -> new ConfigItem("", ""));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testEmptyNameWithValues() {
-        new ConfigItem(" ", "false");
+
+    @Test
+    void testEmptyNameWithValues() { 
+        assertThrows(IllegalArgumentException.class, () -> new ConfigItem(" ", "false")); 
     }
 
     @Test

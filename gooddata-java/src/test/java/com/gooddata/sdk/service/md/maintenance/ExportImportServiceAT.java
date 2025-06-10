@@ -21,9 +21,9 @@ import com.gooddata.sdk.service.project.model.ModelService;
 import com.gooddata.sdk.model.project.model.ModelDiff;
 import com.gooddata.sdk.model.project.Environment;
 import com.gooddata.sdk.model.project.Project;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.AfterAll;  
+import org.junit.jupiter.api.BeforeAll; 
+import org.junit.jupiter.api.Test;
 
 import java.io.InputStreamReader;
 import java.util.Collection;
@@ -33,13 +33,13 @@ import java.util.Collection;
  */
 public class ExportImportServiceAT extends AbstractGoodDataAT {
 
-    private Project importProject;
-    private Project emptyProject;
+    private static Project importProject;
+    private static Project emptyProject;
     private PartialMdExportToken partialMdExportToken;
     private ExportProjectToken exportProjectToken;
 
-    @BeforeClass
-    public void setUp() throws Exception {
+    @BeforeAll
+    public static void setUp() throws Exception {
         final Project newProject = new Project(title + " - metadata import", projectToken);
         newProject.setEnvironment(Environment.TESTING);
         importProject = gd.getProjectService().createProject(newProject).get();
@@ -51,8 +51,8 @@ public class ExportImportServiceAT extends AbstractGoodDataAT {
         modelService.updateProjectModel(importProject, projectModelDiff).get();
     }
 
-    @AfterClass
-    public void tearDown() {
+    @AfterAll
+    public static void tearDown() {
         if (importProject != null) {
             gd.getProjectService().removeProject(importProject);
         }
@@ -61,7 +61,7 @@ public class ExportImportServiceAT extends AbstractGoodDataAT {
         }
     }
 
-    @Test(groups = "exportimport", dependsOnGroups = "md")
+    @Test
     public void partialExportMetric() {
         partialMdExportToken = gd.getExportImportService().partialExport(project, new PartialMdExport(metric.getUri())).get();
         assertThat(partialMdExportToken, notNullValue());
@@ -69,7 +69,7 @@ public class ExportImportServiceAT extends AbstractGoodDataAT {
         assertThat(partialMdExportToken.isImportAttributeProperties(), is(false));
     }
 
-    @Test(groups = "exportimport", dependsOnMethods = "partialExportMetric")
+    @Test
     public void partialImportMetric() {
         gd.getExportImportService().partialImport(importProject, partialMdExportToken).get();
 
@@ -81,14 +81,14 @@ public class ExportImportServiceAT extends AbstractGoodDataAT {
         assertThat(entry.getTitle(), is(metric.getTitle()));
     }
 
-    @Test(groups = "exportimport", dependsOnGroups = "md")
+    @Test
     public void exportProject() {
         exportProjectToken = gd.getExportImportService().exportProject(project, new ExportProject()).get();
         assertThat(exportProjectToken, notNullValue());
         assertThat(exportProjectToken.getToken(), not(is(emptyOrNullString())));
     }
 
-    @Test(groups = "exportimport", dependsOnMethods = "exportProject")
+    @Test
     public void importProject() {
         gd.getExportImportService().importProject(emptyProject, exportProjectToken).get();
 

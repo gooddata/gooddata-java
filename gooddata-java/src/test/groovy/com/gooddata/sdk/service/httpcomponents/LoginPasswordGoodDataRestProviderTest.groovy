@@ -5,41 +5,37 @@
  */
 package com.gooddata.sdk.service.httpcomponents
 
-import com.gooddata.http.client.GoodDataHttpClient
 import com.gooddata.sdk.service.GoodDataEndpoint
 import com.gooddata.sdk.service.GoodDataSettings
-import org.apache.http.impl.client.CloseableHttpClient
-import org.apache.http.impl.client.HttpClientBuilder
+import org.springframework.web.reactive.function.client.WebClient
 import spock.lang.Specification
-
-import static com.gooddata.sdk.service.httpcomponents.LoginPasswordGoodDataRestProvider.createHttpClient
-import static org.hamcrest.CoreMatchers.instanceOf
-import static org.hamcrest.CoreMatchers.is
-import static spock.util.matcher.HamcrestSupport.that
 
 class LoginPasswordGoodDataRestProviderTest extends Specification {
 
-    private static final String LOGIN = 'LOGIN'
-    private static final String PASSWORD = 'PASSWORD'
-
-    def "should create http client"() {
+    def "should use provided WebClient"() {
         given:
-        def builder = Stub(HttpClientBuilder) {
-            build() >> Stub(CloseableHttpClient)
-        }
+        def webClient = Mock(WebClient)
 
-        expect:
-        that createHttpClient(builder, new GoodDataEndpoint(), LOGIN, PASSWORD), is(instanceOf(GoodDataHttpClient))
-    }
-
-    def "should provide GoodDataHttpClient"() {
         when:
-        def provider = new LoginPasswordGoodDataRestProvider(new GoodDataEndpoint(), new GoodDataSettings(), LOGIN, PASSWORD)
+        def provider = new LoginPasswordGoodDataRestProvider(
+                new GoodDataEndpoint(), new GoodDataSettings(), "LOGIN", "PASSWORD", webClient
+        )
 
         then:
-        provider.restTemplate
-        provider.httpClient instanceof GoodDataHttpClient
+        provider.webClient == webClient
     }
 
+    def "should provide dataStoreService"() {
+        given:
+        def webClient = Mock(WebClient)
+        def provider = new LoginPasswordGoodDataRestProvider(
+                new GoodDataEndpoint(), new GoodDataSettings(), "LOGIN", "PASSWORD", webClient
+        )
 
+        when:
+        def dataStoreService = provider.getDataStoreService({ "stagingUri" })
+
+        then:
+        dataStoreService.isPresent()
+    }
 }

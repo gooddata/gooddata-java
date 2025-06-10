@@ -6,7 +6,7 @@
 package com.gooddata.sdk.model.dataset;
 
 import com.gooddata.sdk.model.gdc.AboutLinks;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 

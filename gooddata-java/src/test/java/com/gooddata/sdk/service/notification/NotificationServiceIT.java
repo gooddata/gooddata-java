@@ -9,8 +9,10 @@ import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.notification.*;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+
+import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll; 
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
@@ -27,13 +29,13 @@ public class NotificationServiceIT extends AbstractGoodDataIT {
 
     private static final String PROJECT_EVENT_PATH = "/gdc/projects/PROJECT_ID/notifications/events";
 
-    private Project project;
-    private Account account;
-    private Channel channel;
-    private Subscription subscription;
+    private static Project project;
+    private static Account account;
+    private static Channel channel;
+    private static Subscription subscription;
 
-    @BeforeClass
-    public void setUp() throws Exception {
+    @BeforeAll
+    public static void setUp() throws Exception {
         project = readObjectFromResource("/project/project.json", Project.class);
         account = readObjectFromResource("/account/account.json", Account.class);
         channel = readObjectFromResource("/notification/channel.json", Channel.class);

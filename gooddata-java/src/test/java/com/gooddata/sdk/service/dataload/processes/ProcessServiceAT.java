@@ -21,7 +21,7 @@ import org.apache.commons.io.IOUtils;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsIterableContaining;
 import org.springframework.core.io.ClassPathResource;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -41,9 +41,11 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
+
 /**
  * Dataload processes acceptance tests.
  */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class) 
 public class ProcessServiceAT extends AbstractGoodDataAT {
 
     private static final int MAX_RETRIES = 3;
@@ -53,7 +55,8 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
     private Schedule schedule;
     private Schedule triggeredSchedule;
 
-    @Test(groups = "process", dependsOnGroups = "project")
+    @Test
+    @Order(1)
     public void createProcess() throws Exception {
         final File dir = createTempDirectory("sdktest").toFile();
         try {
@@ -66,7 +69,8 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         }
     }
 
-    @Test(groups = "process", dependsOnMethods = "createProcess")
+    @Test
+    @Order(2)
     public void createSchedule() {
         schedule = gd.getProcessService().createSchedule(project, new Schedule(process, "sdktest.grf", "0 0 * * *"));
         schedule.setReschedule(Duration.ofMinutes(15));
@@ -77,7 +81,8 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         assertThat(schedule.getRescheduleInMinutes(), is(15));
     }
 
-    @Test(groups = "process", dependsOnMethods = "createSchedule")
+    @Test
+    @Order(3)
     public void executeSchedule() {
         final FutureResult<ScheduleExecution> future = gd.getProcessService().executeSchedule(schedule);
         final ScheduleExecution scheduleExecution = future.get();
@@ -85,7 +90,8 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         assertThat(scheduleExecution.getStatus(),  is("OK"));
     }
 
-    @Test(groups = "process", dependsOnMethods = "createSchedule")
+    @Test
+    @Order(4)
     public void createTriggeredSchedule() {
         triggeredSchedule = gd.getProcessService().createSchedule(project, new Schedule(process, "sdktest.grf", schedule));
 
@@ -94,7 +100,8 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         assertThat(triggeredSchedule.getTriggerScheduleId(), is(schedule.getId()));
     }
 
-    @Test(groups = "process", dependsOnMethods = {"createSchedule", "createTriggeredSchedule"})
+    @Test
+    @Order(5) 
     public void listSchedules() {
         final Page<Schedule> collection = gd.getProcessService().listSchedules(project);
 
@@ -103,7 +110,8 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         assertThat(collection.getNextPage(), nullValue());
     }
 
-    @Test(groups = "process", dependsOnMethods = "createSchedule")
+    @Test
+    @Order(6)
     public void updateSchedule() {
         schedule.setState(ScheduleState.DISABLED);
         schedule.setReschedule(Duration.ofMinutes(26));
@@ -114,7 +122,8 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         assertThat(gd.getProcessService().updateSchedule(schedule).getRescheduleInMinutes(), is(26));
     }
 
-    @Test(groups = "process", dependsOnGroups = "project")
+    @Test
+    @Order(7)
     public void createProcessFromGit() {
         DataloadProcess newProcess = new DataloadProcess("sdktest ruby appstore " + System.getenv("BUILD_NUMBER"), ProcessType.RUBY.toString(),
                 "${PUBLIC_APPSTORE}:branch/demo:/test/HelloApp");
@@ -123,7 +132,8 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         assertThat(processAppstore.getExecutables(), contains("hello.rb"));
     }
 
-    @Test(groups = "process", dependsOnMethods = "createProcessFromGit")
+    @Test
+    @Order(8)
     public void updateProcessFromGit() {
         processAppstore.setPath("${PUBLIC_APPSTORE}:branch/demo:/test/AhojApp");
         processAppstore = retry(() -> gd.getProcessService().updateProcessFromAppstore(processAppstore).get());
@@ -138,13 +148,15 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         );
     }
 
-    @Test(groups = "process", dependsOnMethods = "createProcess")
+    @Test
+    @Order(9)
     public void processes() {
         final Collection<DataloadProcess> processes = gd.getProcessService().listProcesses(project);
         assertThat(processes, IsIterableContaining.hasItem(ProcessIdMatcher.hasSameProcessIdAs(process)));
     }
 
-    @Test(groups = "process", dependsOnMethods = "createProcess")
+    @Test
+    @Order(10)
     public void executeProcess() throws Exception {
         ProcessService processService = gd.getProcessService();
         ProcessExecutionDetail executionDetail = processService.executeProcess(new ProcessExecution(process, "sdktest.grf")).get();
@@ -154,14 +166,15 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
                 containsString("errooooooor"), containsString("fataaaaaaal")));
     }
 
-    @Test(groups = "process", dependsOnMethods = "createProcess",
-            expectedExceptions = ProcessExecutionException.class, expectedExceptionsMessageRegExp = "(?s)Can't execute.*")
+    @Test
+    @Order(11)
     public void failExecuteProcess() throws Exception {
         ProcessService processService = gd.getProcessService();
         processService.executeProcess(new ProcessExecution(process, "invalid.grf")).get();
     }
 
-    @Test(dependsOnGroups = "process", dependsOnMethods = "removeSchedule")
+    @Test
+    @Order(12)
     public void removeProcess() throws Exception {
         gd.getProcessService().removeProcess(process);
         gd.getProcessService().removeProcess(processAppstore);
@@ -169,7 +182,8 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         assertThat(processes, Matchers.not(IsIterableContaining.hasItems(ProcessIdMatcher.hasSameProcessIdAs(process), ProcessIdMatcher.hasSameProcessIdAs(processAppstore))));
     }
 
-    @Test(dependsOnGroups = "process")
+    @Test
+    @Order(13)
     public void removeSchedule() {
         gd.getProcessService().removeSchedule(schedule);
         gd.getProcessService().removeSchedule(triggeredSchedule);

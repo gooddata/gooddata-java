@@ -5,32 +5,35 @@
  */
 package com.gooddata.sdk.service.dataload;
 
+
 import com.gooddata.sdk.service.GoodDataSettings;
-import org.springframework.web.client.RestTemplate;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach;    
+import org.junit.jupiter.api.Test;  
+import org.springframework.web.reactive.function.client.WebClient;  
+
+import static org.junit.jupiter.api.Assertions.assertThrows;    
 
 public class OutputStageServiceTest {
 
     private OutputStageService outputStageService;
 
-    @BeforeMethod
+    @BeforeEach     
     public void setUp() throws Exception {
-        outputStageService = new OutputStageService(new RestTemplate(), new GoodDataSettings());
+        outputStageService = new OutputStageService(WebClient.builder().build(), new GoodDataSettings());   
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test
     public void testGetOutputStageByNullUri() {
-        outputStageService.getOutputStageByUri(null);
+        assertThrows(IllegalArgumentException.class, () -> outputStageService.getOutputStageByUri(null));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test
     public void testGetOutputStageByNullProject() {
-        outputStageService.getOutputStage(null);
+        assertThrows(IllegalArgumentException.class, () -> outputStageService.getOutputStage(null));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test
     public void testUpdateOutputStageNullOutputStage() {
-        outputStageService.updateOutputStage(null);
+        assertThrows(IllegalArgumentException.class, () -> outputStageService.updateOutputStage(null));
     }
 }

@@ -10,15 +10,17 @@ import com.gooddata.sdk.common.util.MutableUri;
 import com.gooddata.sdk.common.util.SpringMutableUri;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;
 
 import static com.gooddata.sdk.common.collections.CustomPageRequest.DEFAULT_LIMIT;
-import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static java.time.ZoneOffset.UTC;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 public class AuditEventPageRequestTest {
 
@@ -27,6 +29,8 @@ public class AuditEventPageRequestTest {
     private static final Integer LIMIT = 10;
     private static final String OFFSET = "foo";
     public static final String EVENT_TYPE = "STANDARD_LOGIN";
+
+    
 
     @Test
     public void testCopy() {
@@ -39,12 +43,17 @@ public class AuditEventPageRequestTest {
 
         AuditEventPageRequest copy = AuditEventPageRequest.copy(request);
 
-        assertThat(request, is(sameBeanAs(copy)));
+        assertEquals(request.getFrom(), copy.getFrom(), "from");
+        assertEquals(request.getTo(), copy.getTo(), "to");
+        assertEquals(request.getLimit(), copy.getLimit(), "limit");
+        assertEquals(request.getOffset(), copy.getOffset(), "offset");
+        assertEquals(request.getType(), copy.getType(), "type");
     }
 
-    @Test(expectedExceptions = NullPointerException.class)
-    public void testCopyNull() {
-        AuditEventPageRequest.copy(null);
+
+    @Test
+    void testCopyNull() {
+        assertThrows(NullPointerException.class, () -> AuditEventPageRequest.copy(null));
     }
 
     @Test
@@ -58,11 +67,11 @@ public class AuditEventPageRequestTest {
 
         AuditEventPageRequest result = request.withIncrementedLimit();
 
-        assertThat(result.getFrom(), is(FROM));
-        assertThat(result.getTo(), is(TO));
-        assertThat(result.getSanitizedLimit(), is(LIMIT + 1));
-        assertThat(result.getOffset(), is(OFFSET));
-        assertThat(result.getType(), is(EVENT_TYPE));
+        assertEquals(request.getFrom(), result.getFrom(), "from");
+        assertEquals(request.getTo(), result.getTo(), "to");
+        assertEquals(LIMIT + 1, result.getSanitizedLimit(), "limit incremented");
+        assertEquals(request.getOffset(), result.getOffset(), "offset");
+        assertEquals(request.getType(), result.getType(), "type");
     }
 
     @Test

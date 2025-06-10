@@ -8,28 +8,28 @@ package com.gooddata.sdk.service.httpcomponents
 import com.gooddata.sdk.service.GoodDataEndpoint
 import com.gooddata.sdk.service.GoodDataSettings
 import com.gooddata.sdk.service.gdc.DataStoreService
-import org.apache.http.client.HttpClient
+import org.springframework.web.reactive.function.client.WebClient
 import spock.lang.Specification
 
 class SingleEndpointGoodDataRestProviderTest extends Specification {
 
     def "should use provided client"() {
         given:
-        def client = Mock(HttpClient)
-        def builder = Stub(GoodDataHttpClientBuilder) {
-            buildHttpClient(_, _, _) >> client
-        }
+        def webClient = Mock(WebClient)
 
         when:
-        def provider = new SingleEndpointGoodDataRestProvider(new GoodDataEndpoint(), new GoodDataSettings(), builder) {}
+        def provider = new SingleEndpointGoodDataRestProvider(new GoodDataEndpoint(), new GoodDataSettings(), webClient) {}
 
         then:
-        provider.httpClient == client
+        provider.webClient == webClient
     }
 
     def "should get dataStoreService"() {
+        given:
+        def webClient = Mock(WebClient)
+
         when:
-        def provider = new SingleEndpointGoodDataRestProvider(new GoodDataEndpoint(), new GoodDataSettings(), Stub(GoodDataHttpClientBuilder)) {}
+        def provider = new SingleEndpointGoodDataRestProvider(new GoodDataEndpoint(), new GoodDataSettings(), webClient) {}
         def dataStoreService = provider.getDataStoreService({ 'stagingUri' })
 
         then:

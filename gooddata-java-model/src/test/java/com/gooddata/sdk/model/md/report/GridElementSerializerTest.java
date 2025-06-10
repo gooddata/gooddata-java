@@ -6,7 +6,7 @@
 package com.gooddata.sdk.model.md.report;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
