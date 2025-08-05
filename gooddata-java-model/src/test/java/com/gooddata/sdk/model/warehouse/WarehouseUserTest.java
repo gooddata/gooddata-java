@@ -6,7 +6,7 @@
 package com.gooddata.sdk.model.warehouse;
 
 import com.gooddata.sdk.model.account.Account;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,6 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class WarehouseUserTest {
 
@@ -30,20 +31,26 @@ public class WarehouseUserTest {
         put("parent", "/gdc/datawarehouse/instances/{instance-id}/users");
     }};
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testCreateWithProfileIdWithNullRole() throws Exception {
-        WarehouseUser.createWithProfileUri(PROFILE, null);
+    @Test
+    void testCreateWithProfileIdWithNullRole() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            WarehouseUser.createWithProfileUri(PROFILE, null);
+        });
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testCreateWithProfileWithNullRole() throws Exception {
+    @Test
+    void testCreateWithProfileWithNullRole() {
         final Account account = readObjectFromResource("/account/account.json", Account.class);
-        WarehouseUser.createWithProfile(account, null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            WarehouseUser.createWithProfile(account, null);
+        });
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testCreateWithLoginWithNullRole() throws Exception {
-        WarehouseUser.createWithlogin(LOGIN, null);
+    @Test
+    void testCreateWithLoginWithNullRole() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            WarehouseUser.createWithlogin(LOGIN, null);
+        });
     }
 
     @Test

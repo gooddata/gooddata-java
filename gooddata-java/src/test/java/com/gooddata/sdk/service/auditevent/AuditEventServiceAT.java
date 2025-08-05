@@ -8,7 +8,8 @@ package com.gooddata.sdk.service.auditevent;
 import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.common.collections.Page;
 import com.gooddata.sdk.model.auditevent.AuditEvent;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -22,7 +23,8 @@ public class AuditEventServiceAT extends AbstractGoodDataAT {
         assertThat(events, is(notNullValue()));
     }
 
-    @Test(groups = "isolated_domain")
+    @Test
+    @Tag("isolated_domain")
     public void shouldListEventsForDomain() throws Exception {
         final Page<AuditEvent> events = AbstractGoodDataAT.gd.getAuditEventService().listAuditEvents("default");
         assertThat(events, is(notNullValue()));

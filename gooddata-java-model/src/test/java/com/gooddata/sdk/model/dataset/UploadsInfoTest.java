@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.dataset;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
@@ -14,6 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UploadsInfoTest {
 
@@ -31,9 +32,11 @@ public class UploadsInfoTest {
         assertThat(dataset.getLastUploadUri(), is("/gdc/md/PROJECT_ID/data/upload/1076"));
     }
 
-    @Test(expectedExceptions = DatasetNotFoundException.class)
-    public void getDatasetUploadInfoFails() throws Exception {
-        new UploadsInfo(Collections.emptyList()).getDataSet("dataset.non_existing_one");
+    @Test 
+    void getDatasetUploadInfoFails() { 
+        assertThrows(DatasetNotFoundException.class, () -> {
+            new UploadsInfo(Collections.emptyList()).getDataSet("dataset.non_existing_one");
+        });
     }
 
     @Test

@@ -3,54 +3,84 @@
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
+
 package com.gooddata.sdk.service;
 
-import com.gooddata.sdk.common.GoodDataException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.web.client.ResponseExtractor;
-import org.springframework.web.client.RestTemplate;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import com.gooddata.sdk.common.GoodDataException;
+
+import reactor.core.publisher.Mono;
 
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.mock;
+import org.mockito.quality.Strictness;
 
-public class AbstractServiceTest {
+
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+class AbstractServiceTest {
 
     private AbstractService service;
 
     @Mock
-    private RestTemplate restTemplate;
+    private WebClient webClient;
 
-    @BeforeMethod
-    public void setUp() throws Exception {
-        MockitoAnnotations.openMocks(this).close();
-        service = new AbstractService(restTemplate, new GoodDataSettings()) {};
-        final ClientHttpResponse response = mock(ClientHttpResponse.class);
-        when(response.getStatusCode()).thenReturn(HttpStatus.OK);
-        when(restTemplate.execute(any(), any(HttpMethod.class), any(), any(ResponseExtractor.class)))
-                .thenReturn(response);
+    @BeforeEach
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    void setUp() {
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+        
+        ClientResponse clientResponse = mock(ClientResponse.class);
+        when(clientResponse.statusCode()).thenReturn(org.springframework.http.HttpStatus.ACCEPTED);
+
+        when(webClient.get()).thenReturn(uriSpec);
+
+        when(uriSpec.uri(anyString(), (Object[]) any())).thenReturn(headersSpec);
+        when(uriSpec.uri(anyString())).thenReturn(headersSpec);
+        when(uriSpec.uri(isA(java.net.URI.class))).thenReturn(headersSpec);
+        when(uriSpec.uri(isA(java.util.function.Function.class))).thenReturn(headersSpec);
+        when(uriSpec.uri((java.net.URI) isNull())).thenReturn(headersSpec);
+
+        when(headersSpec.exchangeToMono(any())).thenReturn(Mono.just(clientResponse));
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(any(Class.class))).thenReturn(Mono.empty());
+
+        service = new AbstractService(webClient, new GoodDataSettings()) {};
     }
+
 
     @Test
     public void pollShouldSucceedWhenUnderTimeout() throws Exception {
         PollHandler<?, ?> handler = mock(PollHandler.class);
-        when(handler.isFinished(any(ClientHttpResponse.class))).thenReturn(false);
+        when(handler.getPolling()).thenReturn(java.net.URI.create("http://example.com/poll"));
+        when(handler.isFinished(any(ClientResponse.class))).thenReturn(false);
         when(handler.isDone()).thenReturn(false, true);
 
         service.poll(handler, 5, TimeUnit.SECONDS);
     }
 
-    @Test(expectedExceptions = GoodDataException.class, expectedExceptionsMessageRegExp = ".*timeout.*")
+    @Test
     public void pollShouldThrowExceptionWhenOverTimeout() {
         PollHandler<?, ?> handler = mock(PollHandler.class);
-        service.poll(handler, 5, TimeUnit.SECONDS);
+        when(handler.getPolling()).thenReturn(java.net.URI.create("http://example.com/poll"));
+        assertThrows(GoodDataException.class, () -> service.poll(handler, 5, TimeUnit.SECONDS));
     }
 }

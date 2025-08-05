@@ -9,16 +9,19 @@ import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.model.gdc.RootLinks;
 import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.sdk.service.GoodDataSettings;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Mono;
 
 /**
  * Service to work with GoodData API root.
  */
 public class GdcService extends AbstractService {
 
-    public GdcService(final RestTemplate restTemplate, final GoodDataSettings settings) {
-        super(restTemplate, settings);
+
+    // WebClient is injected instead of RestTemplate
+    public GdcService(final WebClient webClient, final GoodDataSettings settings) {
+        super(webClient, settings);
     }
 
     /**
@@ -28,10 +31,15 @@ public class GdcService extends AbstractService {
      */
     public RootLinks getRootLinks() {
         try {
-            return restTemplate.getForObject(RootLinks.URI, RootLinks.class);
-        } catch (GoodDataException | RestClientException e) {
+            // Blocking call for backward compatibility
+            return webClient.get()
+                    .uri(RootLinks.URI)
+                    .retrieve()
+                    .bodyToMono(RootLinks.class)
+                    .block();
+        } catch (WebClientResponseException e) {
+            // Exception handling for WebClient
             throw new GoodDataException("Unable to get gdc root links", e);
         }
     }
-
 }

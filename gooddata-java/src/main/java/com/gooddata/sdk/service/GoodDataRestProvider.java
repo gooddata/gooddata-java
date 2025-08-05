@@ -6,46 +6,31 @@
 package com.gooddata.sdk.service;
 
 import com.gooddata.sdk.service.gdc.DataStoreService;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
- * The main interface responsible for GoodData platform REST connection management.
- * Should provide completely configured {@link RestTemplate} capable to perform valid
- * communication with GoodData platform REST API. Mainly the following functionality should
- * be provided:
- * <ul>
- *     <li>prefixing the URI by API endpoint - services use only path part of URI</li>
- *     <li>authentication</li>
- *     <li>applying {@link GoodDataSettings} - especially user agent, headers and connection settings</li>
- *     <li>configuring proper error handler (i.e. {@link com.gooddata.sdk.service.util.ResponseErrorHandler})</li>
- * </ul>
- *
- * The default implementation (internally used by {@link GoodData} is {@link com.gooddata.sdk.service.httpcomponents.LoginPasswordGoodDataRestProvider}.
+ * Interface for managing REST connection to the GoodData platform using WebClient.
  */
 public interface GoodDataRestProvider {
 
     /**
-     * Settings used by the provider.
-     *
-     * @return used settings
+     * Returns the settings used by this provider.
      */
     GoodDataSettings getSettings();
 
     /**
-     * Configured RestTemplate instance.
-     *
-     * @return provided RestTemplate
+     * Returns the configured WebClient instance.
      */
-    RestTemplate getRestTemplate();
+    WebClient getWebClient();
 
     /**
-     * Configured DataStoreService if provided. By default empty.
+     * Returns the configured DataStoreService, if provided. By default, returns empty.
      *
      * @param stagingUriSupplier supplier of the data store endpoint
-     * @return dataStoreService (empty by default)
+     * @return DataStoreService (empty by default)
      */
     default Optional<DataStoreService> getDataStoreService(final Supplier<String> stagingUriSupplier) {
         return Optional.empty();

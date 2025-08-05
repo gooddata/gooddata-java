@@ -6,7 +6,10 @@
 package com.gooddata.sdk.model.md;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import org.testng.annotations.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -23,9 +26,9 @@ public class RestrictionTest {
         assertThat(id.getValue(), is("my id"));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testIdentifierWithNull() {
-        Restriction.identifier(null);
+    @Test
+    void testIdentifierWithNull() {
+        assertThrows(IllegalArgumentException.class, () -> Restriction.identifier(null)); //CHANGED
     }
 
     @Test
@@ -36,9 +39,9 @@ public class RestrictionTest {
         assertThat(id.getValue(), is("my title"));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testTitleWithNull() {
-        Restriction.title(null);
+    @Test
+    void testTitleWithNull() {
+        assertThrows(IllegalArgumentException.class, () -> Restriction.title(null)); 
     }
 
     @Test
@@ -49,9 +52,9 @@ public class RestrictionTest {
         assertThat(id.getValue(), is("my summary"));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testSummaryWithNull() {
-        Restriction.summary(null);
+    @Test
+    void testSummaryWithNull() {
+        assertThrows(IllegalArgumentException.class, () -> Restriction.summary(null));
     }
 
     @Test

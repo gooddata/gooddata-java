@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.dataload.processes;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;

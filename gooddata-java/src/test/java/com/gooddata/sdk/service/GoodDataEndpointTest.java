@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service;
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -19,7 +19,7 @@ public class GoodDataEndpointTest {
 
     private GoodDataEndpoint endpoint;
 
-    @BeforeMethod
+    @BeforeEach
     public void setUp() throws Exception {
         endpoint = new GoodDataEndpoint(HOST, PORT, PROTOCOL);
     }

@@ -7,7 +7,7 @@ package com.gooddata.sdk.model.md.report;
 
 import com.gooddata.sdk.model.md.Metric;
 import org.apache.commons.lang3.SerializationUtils;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;

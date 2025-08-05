@@ -6,17 +6,11 @@
 package com.gooddata.sdk.service.dataload;
 
 import com.gooddata.sdk.common.GoodDataException;
-import com.gooddata.sdk.common.GoodDataRestException;
 import com.gooddata.sdk.model.dataload.OutputStage;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.sdk.service.GoodDataSettings;
-import com.gooddata.sdk.service.dataload.processes.ProcessNotFoundException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriTemplate;
 
 import static com.gooddata.sdk.common.util.Validate.*;
@@ -29,36 +23,44 @@ public class OutputStageService extends AbstractService {
     public static final UriTemplate OUTPUT_STAGE_TEMPLATE = new UriTemplate(OutputStage.URI);
 
     /**
-     * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
-     * this abstract one.
-     * @param restTemplate RESTful HTTP Spring template
-     * @param settings settings
+     * Constructor accepting WebClient and settings.
+     * @param webClient WebClient for HTTP communication
+     * @param settings configuration settings
      */
-    public OutputStageService(final RestTemplate restTemplate, final GoodDataSettings settings) {
-        super(restTemplate, settings);
+    public OutputStageService(final WebClient webClient, final GoodDataSettings settings) {
+        super(webClient, settings);
     }
 
     /**
-     * Get output stage by given URI.
-     * @param uri output stage uri
+     * Get output stage by a given URI.
+     * @param uri output stage URI
      * @return output stage object
-     * @throws ProcessNotFoundException when the process doesn't exist
+     * @throws GoodDataException if the output stage does not exist or an error occurs
      */
     public OutputStage getOutputStageByUri(final String uri) {
         notEmpty(uri, "uri");
         isTrue(OUTPUT_STAGE_TEMPLATE.matches(uri), "uri does not match output stage pattern: " + OUTPUT_STAGE_TEMPLATE.toString());
         try {
-            return restTemplate.getForObject(uri, OutputStage.class);
-        } catch (RestClientException e) {
+            OutputStage outputStage = webClient.get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(OutputStage.class)
+                    .block();
+
+            if (outputStage == null) {
+                throw new GoodDataException("OutputStage not found: " + uri);
+            }
+            return outputStage;
+        } catch (Exception e) {
             throw new GoodDataException("Unable to get output stage " + uri, e);
         }
     }
 
     /**
-     * Get output stage by given project.
-     * @param project project to which the process belongs
-     * @return output stage
-     * @throws ProcessNotFoundException when the process doesn't exist
+     * Get output stage by project.
+     * @param project project for which to get the output stage
+     * @return output stage object
+     * @throws GoodDataException if the output stage does not exist or an error occurs
      */
     public OutputStage getOutputStage(final Project project) {
         notNull(project, "project");
@@ -68,24 +70,29 @@ public class OutputStageService extends AbstractService {
     }
 
     /**
-     * Update output stage.
-     *
-     * @param outputStage output stage
+     * Update the output stage.
+     * @param outputStage output stage to update
      * @return updated output stage
+     * @throws GoodDataException if update fails or the response is empty
      */
     public OutputStage updateOutputStage(final OutputStage outputStage) {
         notNull(outputStage, "outputStage");
         notNull(outputStage.getUri(), "outputStage.uri");
 
         try {
-            HttpEntity<OutputStage> outputStageHttpEntity = new HttpEntity<>(outputStage);
-            ResponseEntity<OutputStage> response = restTemplate.exchange(outputStage.getUri(), HttpMethod.PUT, outputStageHttpEntity, OutputStage.class);
-            if (response.getBody() == null) {
-                throw new RestClientException("unexpected response body");
+            OutputStage updated = webClient.put()
+                    .uri(outputStage.getUri())
+                    .bodyValue(outputStage)
+                    .retrieve()
+                    .bodyToMono(OutputStage.class)
+                    .block();
+
+            if (updated == null) {
+                throw new GoodDataException("Unexpected empty response body");
             }
-            return response.getBody();
-        } catch (GoodDataRestException | RestClientException e) {
-            throw new GoodDataException("Unable to update output stage, uri: " + outputStage.getUri());
+            return updated;
+        } catch (Exception e) {
+            throw new GoodDataException("Unable to update output stage, uri: " + outputStage.getUri(), e);
         }
     }
 }

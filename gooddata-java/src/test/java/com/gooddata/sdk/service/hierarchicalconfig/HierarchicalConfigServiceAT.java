@@ -10,21 +10,21 @@ import com.gooddata.sdk.model.hierarchicalconfig.ConfigItem;
 import com.gooddata.sdk.model.hierarchicalconfig.ConfigItems;
 import com.gooddata.sdk.model.hierarchicalconfig.SourceType;
 import com.gooddata.sdk.service.AbstractGoodDataAT;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.gooddata.sdk.service.hierarchicalconfig.HierarchicalConfigService.PROJECT_CONFIG_ITEM_TEMPLATE;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.is;
-import static org.testng.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class HierarchicalConfigServiceAT extends AbstractGoodDataAT {
 
     private static final String FIRST_CONFIG_ITEM = "flag1";
     private static final String SECOND_CONFIG_ITEM = "flag2";
 
-    @Test(groups = "projectConfigItems", dependsOnGroups = "project")
+    @Test
     public void createProjectConfigItem() {
         final ConfigItem configItem = gd.getHierarchicalConfigService()
                 .setProjectConfigItem(project, new ConfigItem(FIRST_CONFIG_ITEM, "true"));
@@ -39,7 +39,7 @@ public class HierarchicalConfigServiceAT extends AbstractGoodDataAT {
         );
     }
 
-    @Test(groups = "projectConfigItems", dependsOnMethods = "createProjectConfigItem")
+    @Test
     public void listProjectConfigItems() {
         final ConfigItems configItems = gd.getHierarchicalConfigService().listProjectConfigItems(project);
 
@@ -48,7 +48,7 @@ public class HierarchicalConfigServiceAT extends AbstractGoodDataAT {
                 new ConfigItem(FIRST_CONFIG_ITEM, "true")));
     }
 
-    @Test(groups = "projectConfigItems", dependsOnMethods = "listProjectConfigItems")
+    @Test
     public void getProjectConfigItem() {
         final ConfigItem configItem =
                 gd.getHierarchicalConfigService().getProjectConfigItem(project, SECOND_CONFIG_ITEM);
@@ -57,7 +57,7 @@ public class HierarchicalConfigServiceAT extends AbstractGoodDataAT {
         );
     }
 
-    @Test(groups = "projectConfigItems", dependsOnMethods = "getProjectConfigItem")
+    @Test
     public void updateProjectConfigItem() {
         final ConfigItem configItem = gd.getHierarchicalConfigService().getProjectConfigItem(project,
                 FIRST_CONFIG_ITEM);
@@ -77,7 +77,7 @@ public class HierarchicalConfigServiceAT extends AbstractGoodDataAT {
         );
     }
 
-    @Test(groups = "projectConfigItems", dependsOnMethods = "updateProjectConfigItem")
+    @Test
     public void removeProjectConfigItem() {
         ConfigItem flagItem = gd.getHierarchicalConfigService().getProjectConfigItem(project, FIRST_CONFIG_ITEM);
 

@@ -11,7 +11,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 public class WarehouseSchemasTest {
     private final WarehouseSchemas warehouseSchemas = readObjectFromResource("/warehouse/schemas.json", WarehouseSchemas.class);

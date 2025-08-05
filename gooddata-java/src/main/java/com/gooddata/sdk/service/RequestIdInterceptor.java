@@ -6,32 +6,27 @@
 package com.gooddata.sdk.service;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.http.Header;
-import org.apache.http.HttpException;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.annotation.Contract;
-import org.apache.http.annotation.ThreadingBehavior;
-import org.apache.http.protocol.HttpContext;
+import org.apache.hc.core5.http.HttpException;
+import org.apache.hc.core5.http.HttpRequest;
+import org.apache.hc.core5.http.protocol.HttpContext;
+import org.apache.hc.core5.http.HttpRequestInterceptor;
+import org.apache.hc.core5.http.EntityDetails;
+
 
 import java.io.IOException;
 
 import static com.gooddata.sdk.common.gdc.Header.GDC_REQUEST_ID;
 
-/**
- * Intercepts the client-side requests on low-level in order to be able to catch requests also from the Sardine,
- * that is working independently from Spring {@link org.springframework.web.client.RestTemplate} to set
- * the X-GDC-REQUEST header to them.
- */
-@Contract(threading = ThreadingBehavior.IMMUTABLE)
 public class RequestIdInterceptor implements HttpRequestInterceptor {
 
     @Override
-    public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
+    public void process(final HttpRequest request, final EntityDetails entity, final HttpContext context)
+            throws HttpException, IOException {
         final StringBuilder requestIdBuilder = new StringBuilder();
-        final Header requestIdHeader = request.getFirstHeader(GDC_REQUEST_ID);
+        final String requestIdHeader = request.getFirstHeader(GDC_REQUEST_ID) != null ?
+            request.getFirstHeader(GDC_REQUEST_ID).getValue() : null;
         if (requestIdHeader != null) {
-            requestIdBuilder.append(requestIdHeader.getValue()).append(":");
+            requestIdBuilder.append(requestIdHeader).append(":");
         }
         final String requestId = requestIdBuilder.append(RandomStringUtils.randomAlphanumeric(16)).toString();
         request.setHeader(GDC_REQUEST_ID, requestId);

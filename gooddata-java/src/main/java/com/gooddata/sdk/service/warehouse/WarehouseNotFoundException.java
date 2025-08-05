@@ -20,6 +20,11 @@ public class WarehouseNotFoundException extends GoodDataException {
         this.warehouseUri = uri;
     }
 
+    public WarehouseNotFoundException(String uri, Throwable cause) {
+        super("Warehouse instance " + uri + " was not found", cause);
+        this.warehouseUri = uri;
+    }
+
     public String getWarehouseUri() {
         return warehouseUri;
     }

@@ -28,7 +28,10 @@ import com.gooddata.sdk.model.md.visualization.VOSimpleMeasureDefinition;
 import com.gooddata.sdk.model.md.visualization.VisualizationAttribute;
 import com.gooddata.sdk.model.md.visualization.VisualizationClass;
 import com.gooddata.sdk.model.md.visualization.VisualizationObject;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.MethodOrderer; 
+import org.junit.jupiter.api.Order; 
+import org.junit.jupiter.api.Test;  
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.util.Collection;
 import java.util.List;
@@ -44,16 +47,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ExecuteAfmServiceAT extends AbstractGoodDataAT {
 
     private static final String GDC_TABLE_VISUALIZATION_CLASS_ID = "gdc.visualization.table";
     private static final String ATTRIBUTE_LOCAL_IDENTIFIER = "a1";
     private static final String MEASURE_LOCAL_IDENTIFIER = "m1";
 
-    private ExecutionResponse afmResponse;
-    private ExecutionResponse visResponse;
+    private static ExecutionResponse afmResponse;
+    private static ExecutionResponse visResponse;
 
-    @Test(groups = "executeAfm", dependsOnGroups = {"model", "md", "dataset"})
+    @Test
+    @Order(1)
     public void testExecuteAfm() {
         final Execution execution = new Execution(new Afm()
                 .addAttribute(new AttributeItem(new IdentifierObjQualifier(attr.getDefaultDisplayForm().getIdentifier()),
@@ -67,7 +72,8 @@ public class ExecuteAfmServiceAT extends AbstractGoodDataAT {
         checkExecutionResponse(afmResponse);
     }
 
-    @Test(groups = "executeAfm", dependsOnGroups = {"model", "md", "dataset"})
+    @Test
+    @Order(2)
     public void testExecuteVisualization() {
         final VisualizationObject vizObject = createVisualizationObject();
         final VisualizationExecution execution = new VisualizationExecution(vizObject.getUri());
@@ -77,13 +83,15 @@ public class ExecuteAfmServiceAT extends AbstractGoodDataAT {
         checkExecutionResponse(visResponse);
     }
 
-    @Test(groups = "executeAfm", dependsOnMethods = "testExecuteAfm")
+    @Test
+    @Order(3)
     public void testGetAfmExecutionResult() {
         final ExecutionResult afmResult = gd.getExecuteAfmService().getResult(afmResponse).get();
         checkExecutionResult(afmResult);
     }
 
-    @Test(groups = "executeAfm", dependsOnMethods = "testExecuteVisualization")
+    @Test
+    @Order(4)
     public void testGetVisualizationExecutionResult() {
         final ExecutionResult visResult = gd.getExecuteAfmService().getResult(visResponse).get();
         checkExecutionResult(visResult);

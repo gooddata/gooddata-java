@@ -6,7 +6,7 @@
 package com.gooddata.sdk.model.dataload.processes;
 
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;

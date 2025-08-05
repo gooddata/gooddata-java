@@ -10,8 +10,11 @@ import com.gooddata.sdk.model.dataload.OutputStage;
 import com.gooddata.sdk.model.project.Environment;
 import com.gooddata.sdk.model.warehouse.Warehouse;
 import com.gooddata.sdk.model.warehouse.WarehouseSchema;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.AfterAll;  
+import org.junit.jupiter.api.MethodOrderer;     
+import org.junit.jupiter.api.Order;     
+import org.junit.jupiter.api.Test;  
+import org.junit.jupiter.api.TestMethodOrder;   
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -20,30 +23,37 @@ import static org.hamcrest.core.Is.is;
 
 import java.util.concurrent.TimeUnit;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class OutputStageServiceAT extends AbstractGoodDataAT {
 
     private static final String CLIENT_ID = "clientId";
     private static final String PREFIX = "prefix";
 
-    private final Warehouse warehouse;
-    private final WarehouseSchema warehouseSchema;
+    private static Warehouse warehouse;
+    private static WarehouseSchema warehouseSchema;
 
     public OutputStageServiceAT() {
         final String warehouseToken = getProperty("warehouseToken");
         final Warehouse wh = new Warehouse(title, warehouseToken);
         wh.setEnvironment(Environment.TESTING);
-        warehouse = gd.getWarehouseService().createWarehouse(wh).get(60, TimeUnit.MINUTES);
-        warehouseSchema = gd.getWarehouseService().getDefaultWarehouseSchema(warehouse);
+        try {   
+            warehouse = gd.getWarehouseService().createWarehouse(wh).get(60, TimeUnit.MINUTES);
+            warehouseSchema = gd.getWarehouseService().getDefaultWarehouseSchema(warehouse);
+        } catch (Exception e) {     
+            throw new RuntimeException(e);  
+        }
     }
 
-    @Test(groups = "output_stage", dependsOnGroups = {"warehouse", "project"})
+    @Test
+    @Order(1)
     public void shouldReturnNullObjectWhenNoOutputStage() {
         final OutputStage outputStage = gd.getOutputStageService().getOutputStage(project);
 
         assertThat(outputStage.getSchemaUri(), is(nullValue()));
     }
 
-    @Test(groups = "output_stage", dependsOnMethods = "shouldReturnNullObjectWhenNoOutputStage")
+    @Test
+    @Order(2)
     public void shouldUpdateOutputStage() {
         final OutputStage outputStage = gd.getOutputStageService().getOutputStage(project);
         outputStage.setSchemaUri(warehouseSchema.getUri());
@@ -57,7 +67,8 @@ public class OutputStageServiceAT extends AbstractGoodDataAT {
         assertThat(updateOutputStage.getOutputStagePrefix(), is(equalTo(PREFIX)));
     }
 
-    @Test(groups = "output_stage", dependsOnMethods = "shouldUpdateOutputStage")
+    @Test
+    @Order(3)
     public void shouldUpdateOutputStageToNullValues() {
         final OutputStage outputStage = gd.getOutputStageService().getOutputStage(project);
         outputStage.setSchemaUri(null);
@@ -71,10 +82,12 @@ public class OutputStageServiceAT extends AbstractGoodDataAT {
         assertThat(updateOutputStage.getOutputStagePrefix(), is(nullValue()));
     }
 
-    @AfterClass
-    public void removeWarehouse() {
+    @AfterAll
+    public static void removeWarehouse() {
         if(warehouse != null) {
-            gd.getWarehouseService().removeWarehouse(warehouse);
-        }
+                        try {   
+                gd.getWarehouseService().removeWarehouse(warehouse);    
+            } catch (Exception ignored) {}  
+    }
     }
 }

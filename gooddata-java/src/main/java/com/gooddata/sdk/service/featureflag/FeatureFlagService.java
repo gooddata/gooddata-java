@@ -14,9 +14,9 @@ import com.gooddata.sdk.model.hierarchicalconfig.ConfigItem;
 import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.service.hierarchicalconfig.HierarchicalConfigService;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriTemplate;
+import reactor.core.publisher.Mono;
 
 import java.net.URI;
 
@@ -24,7 +24,7 @@ import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
- * Provides feature flag management. Feature flag is a boolean flag used for enabling / disabling some specific feature
+ * Provides feature flag management. Feature flag is a boolean flag used for enabling/disabling some specific feature
  * of GoodData platform. It can be used in various scopes (per project, per project group, per user, global etc.).
  * @deprecated Use {@link HierarchicalConfigService}.
  */
@@ -37,70 +37,60 @@ public class FeatureFlagService extends AbstractService {
 
     /**
      * Constructs service for GoodData feature flags management.
-     * @param restTemplate RESTful HTTP Spring template
+     * @param webClient WebClient for HTTP communication
      * @param settings settings
      */
-    public FeatureFlagService(final RestTemplate restTemplate, final GoodDataSettings settings) {
-        super(restTemplate, settings);
+    public FeatureFlagService(final WebClient webClient, final GoodDataSettings settings) {
+        super(webClient, settings);
     }
 
     /**
-     * Returns aggregated feature flags for given project and current user (aggregates global, project group, project
-     * and user feature flags).
-     * It doesn't matter whether feature flag is enabled or not, it'll be included in both cases.
-     *
-     * @param project project, cannot be null
-     * @return aggregated feature flags for given project and current user
+     * Returns aggregated feature flags for given project and current user.
      * @deprecated Use {@link HierarchicalConfigService#listProjectConfigItems(Project)}.
      */
     public FeatureFlags listFeatureFlags(final Project project) {
         notNull(project, "project");
         try {
-            final FeatureFlags featureFlags = restTemplate
-                    .getForObject(AGGREGATED_FEATURE_FLAGS_TEMPLATE.expand(project.getId()), FeatureFlags.class);
+            FeatureFlags featureFlags = webClient.get()
+                    .uri(AGGREGATED_FEATURE_FLAGS_TEMPLATE.expand(project.getId()).toString())
+                    .retrieve()
+                    .bodyToMono(FeatureFlags.class)
+                    .block();
 
             if (featureFlags == null) {
-                throw new GoodDataException("empty response from API call");
+                throw new GoodDataException("Empty response from API call");
             }
             return featureFlags;
-        } catch (GoodDataException | RestClientException e) {
+        } catch (Exception e) {
             throw new GoodDataException("Unable to list aggregated feature flags for project ID=" + project.getId(), e);
         }
     }
 
     /**
-     * Returns project feature flags (only project scoped flags, use {@link #listFeatureFlags(Project)} for aggregated
-     * flags from all scopes) for given project.
-     * It doesn't matter whether feature flag is enabled or not, it'll be included in both cases.
-     *
-     * @param project project, cannot be null
-     * @return list of all feature flags for given project
+     * Returns project feature flags for given project.
      * @deprecated Use {@link HierarchicalConfigService#listProjectConfigItems(Project)}.
      */
     public ProjectFeatureFlags listProjectFeatureFlags(final Project project) {
         notNull(project, "project");
         try {
-            final ProjectFeatureFlags projectFeatureFlags = restTemplate
-                    .getForObject(PROJECT_FEATURE_FLAGS_TEMPLATE.expand(project.getId()), ProjectFeatureFlags.class);
+            ProjectFeatureFlags projectFeatureFlags = webClient.get()
+                    .uri(PROJECT_FEATURE_FLAGS_TEMPLATE.expand(project.getId()).toString())
+                    .retrieve()
+                    .bodyToMono(ProjectFeatureFlags.class)
+                    .block();
 
             if (projectFeatureFlags == null) {
-                throw new GoodDataException("empty response from API call");
+                throw new GoodDataException("Empty response from API call");
             }
 
             return projectFeatureFlags;
-        } catch (GoodDataException | RestClientException e) {
+        } catch (Exception e) {
             throw new GoodDataException("Unable to list project feature flags for project ID=" + project.getId(), e);
         }
     }
 
     /**
-     * Returns project feature flag (only project scoped flags, use {@link #listFeatureFlags(Project)} for aggregated
-     * flags from all scopes) for given project by its unique name (aka "key").
-     * It doesn't matter whether feature flag is enabled or not, it'll be included in both cases.
-     *
-     * @param project project, cannot be null
-     * @param featureFlagName unique name (key) of feature flag, cannot be empty
-     * @return feature flag for given project with given name (key)
+     * Returns project feature flag for given project by its unique name (key).
      * @deprecated Use {@link HierarchicalConfigService#getProjectConfigItem(Project, String)}.
      */
     public ProjectFeatureFlag getProjectFeatureFlag(final Project project, final String featureFlagName) {
@@ -109,20 +99,13 @@ public class FeatureFlagService extends AbstractService {
 
         try {
             return getProjectFeatureFlag(getProjectFeatureFlagUri(project, featureFlagName));
-        } catch (GoodDataException | RestClientException e) {
+        } catch (Exception e) {
             throw new GoodDataException("Unable to get project feature flag: " + featureFlagName, e);
         }
     }
 
     /**
      * Creates new feature flag for given project.
-     * <p>
-     * Usually, it doesn't make sense to create feature flag that is disabled because
-     * this is the same as having no feature flag at all.
-     *
-     * @param project project for which the feature flag should be created, cannot be null
-     * @param flag feature flag to be created, cannot be null
-     * @return created feature flag
      * @deprecated Use {@link HierarchicalConfigService#setProjectConfigItem(Project, ConfigItem)}.
      */
     public ProjectFeatureFlag createProjectFeatureFlag(final Project project, final ProjectFeatureFlag flag) {
@@ -132,22 +115,25 @@ public class FeatureFlagService extends AbstractService {
         final String featureFlagsUri = PROJECT_FEATURE_FLAGS_TEMPLATE.expand(project.getId()).toString();
 
         try {
-            final URI featureFlagUri = restTemplate.postForLocation(featureFlagsUri, flag);
+            URI featureFlagUri = webClient.post()
+                    .uri(featureFlagsUri)
+                    .bodyValue(flag)
+                    .retrieve()
+                    .toBodilessEntity()
+                    .map(response -> response.getHeaders().getLocation())
+                    .block();
+
             if (featureFlagUri == null) {
                 throw new GoodDataException("URI of new project feature flag can't be null");
             }
             return getProjectFeatureFlag(featureFlagUri.toString());
-        } catch (GoodDataException | RestClientException e) {
+        } catch (Exception e) {
             throw new GoodDataException("Unable to create project feature flag: " + flag, e);
         }
     }
 
     /**
      * Updates existing project feature flag.
-     * Note that it doesn't make sense to update any other property than {@link ProjectFeatureFlag#isEnabled()}.
-     *
-     * @param flag feature flag to be updated, cannot be null and it has to contain URI
-     * @return updated feature flag
      * @deprecated Use {@link HierarchicalConfigService#setProjectConfigItem(Project, ConfigItem)}.
      */
     public ProjectFeatureFlag updateProjectFeatureFlag(final ProjectFeatureFlag flag) {
@@ -155,17 +141,21 @@ public class FeatureFlagService extends AbstractService {
         notEmpty(flag.getUri(), "flag.uri");
 
         try {
-            restTemplate.put(flag.getUri(), flag);
+            webClient.put()
+                    .uri(flag.getUri())
+                    .bodyValue(flag)
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+
             return getProjectFeatureFlag(flag.getUri());
-        } catch (GoodDataException | RestClientException e) {
+        } catch (Exception e) {
             throw new GoodDataException("Unable to update project feature flag: " + flag, e);
         }
     }
 
     /**
      * Deletes existing project feature flag.
-     *
-     * @param flag existing project feature flag with links set properly, cannot be null
      * @deprecated Use {@link HierarchicalConfigService#removeProjectConfigItem(ConfigItem)}.
      */
     public void deleteProjectFeatureFlag(final ProjectFeatureFlag flag) {
@@ -173,19 +163,27 @@ public class FeatureFlagService extends AbstractService {
         notEmpty(flag.getUri(), "flag URI");
 
         try {
-            restTemplate.delete(flag.getUri());
-        } catch (GoodDataException | RestClientException e) {
+            webClient.delete()
+                    .uri(flag.getUri())
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+        } catch (Exception e) {
             throw new GoodDataException("Unable to delete project feature flag: " + flag, e);
         }
     }
-
 
     String getProjectFeatureFlagUri(final Project project, final String flagName) {
         return PROJECT_FEATURE_FLAG_TEMPLATE.expand(project.getId(), flagName).toString();
     }
 
     private ProjectFeatureFlag getProjectFeatureFlag(final String flagUri) {
-        final ProjectFeatureFlag result = restTemplate.getForObject(flagUri, ProjectFeatureFlag.class);
+        ProjectFeatureFlag result = webClient.get()
+                .uri(flagUri)
+                .retrieve()
+                .bodyToMono(ProjectFeatureFlag.class)
+                .block();
+
         if (result == null) {
             throw new GoodDataException("Project feature flag cannot be retrieved from URI " + flagUri);
         }

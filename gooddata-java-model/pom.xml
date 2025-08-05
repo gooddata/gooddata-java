@@ -7,7 +7,7 @@
     <parent>
         <artifactId>gooddata-java-parent</artifactId>
         <groupId>com.gooddata</groupId>
-        <version>3.12.1+api3-SNAPSHOT</version>
+        <version>3.13.0+api3-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -32,11 +32,11 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <scope>test</scope>
-        </dependency>
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <scope>test</scope>
+    </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -78,7 +78,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.codehaus.groovy</groupId>
+            <groupId>org.apache.groovy</groupId>
             <artifactId>groovy</artifactId>
             <scope>test</scope>
         </dependency>
@@ -100,6 +100,11 @@
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+        </plugin>
         </plugins>
     </build>
 

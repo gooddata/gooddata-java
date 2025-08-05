@@ -10,7 +10,8 @@ import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
+
 
 public class PartialMdExportTokenTest {
 

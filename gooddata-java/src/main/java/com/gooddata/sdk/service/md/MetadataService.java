@@ -15,7 +15,8 @@ import com.gooddata.sdk.service.GoodDataSettings;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriTemplate;
 
 import java.util.*;
@@ -33,8 +34,8 @@ public class MetadataService extends AbstractService {
     public static final UriTemplate OBJ_TEMPLATE = new UriTemplate(Obj.OBJ_URI);
     private static final Set<String> IRREGULAR_PLURAL_WORD_SUFFIXES = new HashSet<>(asList("s", "ch", "sh", "x", "o"));
 
-    public MetadataService(final RestTemplate restTemplate, final GoodDataSettings settings) {
-        super(restTemplate, settings);
+    public MetadataService(final WebClient webClient, final GoodDataSettings settings) {
+        super(webClient, settings);
     }
 
     /**
@@ -58,8 +59,15 @@ public class MetadataService extends AbstractService {
 
         final T response;
         try {
-            response = restTemplate.postForObject(Obj.CREATE_WITH_ID_URI, obj, (Class<T>)obj.getClass(), project.getId());
-        } catch (GoodDataRestException | RestClientException e) {
+            response = webClient.post()
+                    .uri(uriBuilder -> uriBuilder.path(Obj.CREATE_WITH_ID_URI).build(project.getId()))
+                    .bodyValue(obj)
+                    .retrieve()
+                    .bodyToMono((Class<T>) obj.getClass())
+                    .block();
+        } catch (WebClientResponseException e) {
+            throw new ObjCreateException(obj, e);
+        } catch (Exception e) {
             throw new ObjCreateException(obj, e);
         }
 
@@ -80,27 +88,38 @@ public class MetadataService extends AbstractService {
      * @throws com.gooddata.sdk.common.GoodDataRestException   if GoodData REST API returns unexpected status code
      * @throws com.gooddata.sdk.common.GoodDataException       if no response from API or client-side HTTP error
      */
-    public <T extends Obj> T getObjByUri(String uri, Class<T> cls) {
-        notNull(uri, "uri");
+    public <T extends Obj> T getObjByUri(String uri, Class<T> cls) {    //CHANGED
+        notNull(uri, "uri");    
         notNull(cls, "cls");
         try {
-            final T result = restTemplate.getForObject(uri, cls);
+            final T result = webClient.get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(cls)
+                    .block();
 
             if (result != null) {
                 return result;
             } else {
                 throw new GoodDataException("Received empty response from API call.");
             }
-        } catch (GoodDataRestException e) {
-            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
                 throw new ObjNotFoundException(uri, cls, e);
             } else {
-                throw e;
+                throw new GoodDataException("Unable to get " + cls.getSimpleName().toLowerCase() + " " + uri, e);
             }
-        } catch (RestClientException e) {
+        } catch (GoodDataRestException e) {
+            if (e.getStatusCode() == 404) {
+                throw new ObjNotFoundException(uri, cls, e);
+            } else {
+                throw new GoodDataException("Unable to get " + cls.getSimpleName().toLowerCase() + " " + uri, e);
+            }
+        } catch (Exception e) {
             throw new GoodDataException("Unable to get " + cls.getSimpleName().toLowerCase() + " " + uri, e);
         }
     }
+
 
     /**
      * Retrieves a collection of objects corresponding to the supplied collection of URIs.
@@ -115,14 +134,21 @@ public class MetadataService extends AbstractService {
         notNull(uris, "uris");
 
         try {
-            final BulkGet result = restTemplate.postForObject(BulkGet.URI, new BulkGetUris(uris), BulkGet.class, project.getId());
+            final BulkGet result = webClient.post()
+                    .uri(uriBuilder -> uriBuilder.path(BulkGet.URI).build(project.getId()))
+                    .bodyValue(new BulkGetUris(uris))
+                    .retrieve()
+                    .bodyToMono(BulkGet.class)
+                    .block();
 
-            if (result != null) {
+           if (result != null) {
                 return result.getItems();
             } else {
                 throw new GoodDataException("Received empty response from API call.");
             }
-        } catch (RestClientException e) {
+        } catch (GoodDataRestException e) {
+            throw e;
+        } catch (Exception e) {
             throw new GoodDataException("Unable to get objects. Some of the supplied URIs may be malformed.", e);
         }
     }
@@ -140,9 +166,14 @@ public class MetadataService extends AbstractService {
         notNull(obj, "obj");
         notNull(obj.getUri(), "obj.uri");
         try {
-            restTemplate.put(obj.getUri(), obj);
+            webClient.put()
+                    .uri(obj.getUri())
+                    .bodyValue(obj)
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
             return getObjByUri(obj.getUri(), (Class<T>) obj.getClass());
-        } catch (GoodDataException | RestClientException e) {
+        } catch (Exception e) {
             throw new ObjUpdateException(obj, e);
         }
     }
@@ -159,14 +190,18 @@ public class MetadataService extends AbstractService {
         notNull(obj, "obj");
         notNull(obj.getUri(), "obj.uri");
         try {
-            restTemplate.delete(obj.getUri());
-        } catch (GoodDataRestException e) {
-            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+            webClient.delete()
+                    .uri(obj.getUri())
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+        } catch (WebClientResponseException e) { 
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
                 throw new ObjNotFoundException(obj);
             } else {
-                throw e;
+                throw new GoodDataException("Unable to remove " + obj.getClass().getSimpleName().toLowerCase() + " " + obj.getUri(), e);
             }
-        } catch (RestClientException e) {
+        } catch (Exception e) {
             throw new GoodDataException("Unable to remove " + obj.getClass().getSimpleName().toLowerCase() + " " + obj.getUri(), e);
         }
     }
@@ -182,14 +217,18 @@ public class MetadataService extends AbstractService {
     public void removeObjByUri(String uri) {
         notNull(uri, "uri");
         try {
-            restTemplate.delete(uri);
-        } catch (GoodDataRestException e) {
-            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+            webClient.delete()
+                    .uri(uri)
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+        } catch (WebClientResponseException e) { 
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
                 throw new ObjNotFoundException(uri);
             } else {
-                throw e;
+                throw new GoodDataException("Unable to remove " + uri, e);
             }
-        } catch (RestClientException e) {
+        } catch (Exception e) { 
             throw new GoodDataException("Unable to remove " + uri, e);
         }
     }
@@ -273,14 +312,19 @@ public class MetadataService extends AbstractService {
 
         final String type = getQueryType(cls);
         try {
-            final Query queryResult = restTemplate.getForObject(Query.URI, Query.class, project.getId(), type);
+
+            final Query queryResult = webClient.get()
+                    .uri(uriBuilder -> uriBuilder.path(Query.URI).build(project.getId(), type))
+                    .retrieve()
+                    .bodyToMono(Query.class)
+                    .block();
 
             if (queryResult != null && queryResult.getEntries() != null) {
                 return filterEntries(queryResult.getEntries(), restrictions);
             } else {
                 throw new GoodDataException("Received empty response from API call.");
             }
-        } catch (RestClientException e) {
+        } catch (Exception e) { 
             throw new GoodDataException("Unable to query metadata: " + type, e);
         }
     }
@@ -356,8 +400,13 @@ public class MetadataService extends AbstractService {
 
         final UseMany response;
         try {
-            response = restTemplate.postForObject(InUseMany.USEDBY_URI, new InUseMany(uris, nearest, types), UseMany.class, project.getId());
-        } catch (GoodDataRestException | RestClientException e) {
+            response = webClient.post()
+                    .uri(uriBuilder -> uriBuilder.path(InUseMany.USEDBY_URI).build(project.getId()))
+                    .bodyValue(new InUseMany(uris, nearest, types))
+                    .retrieve()
+                    .bodyToMono(UseMany.class)
+                    .block();
+        } catch (Exception e) { 
             throw new GoodDataException("Unable to find objects.", e);
         }
         final List<Usage> usages = new ArrayList<>(uris.size());
@@ -432,9 +481,14 @@ public class MetadataService extends AbstractService {
         }
 
         try {
-            final AttributeElements attributeElements = restTemplate.getForObject(elementsUri, AttributeElements.class);
+            // changed
+            final AttributeElements attributeElements = webClient.get()
+                    .uri(elementsUri)
+                    .retrieve()
+                    .bodyToMono(AttributeElements.class)
+                    .block();
             return notNullState(attributeElements, "attributeElements").getElements();
-        } catch (GoodDataRestException | RestClientException e) {
+        } catch (Exception e) { // changed
             throw new GoodDataException("Unable to get attribute elements from " + elementsUri + ".", e);
         }
     }
@@ -452,14 +506,18 @@ public class MetadataService extends AbstractService {
         notNull(project.getId(), "project.id");
 
         try {
-            final Service result = restTemplate.getForObject(TIMEZONE_URI, Service.class, project.getId());
+            final Service result = webClient.get()
+                    .uri(uriBuilder -> uriBuilder.path(TIMEZONE_URI).build(project.getId()))
+                    .retrieve()
+                    .bodyToMono(Service.class)
+                    .block();
 
             if (result != null) {
                 return result.getTimezone();
             } else {
                 throw new GoodDataException("Received empty response from API call.");
             }
-        } catch (RestClientException e) {
+        } catch (Exception e) { 
             throw new GoodDataException("Unable to get timezone of project/workspace " + project.getId(), e);
         }
     }
@@ -477,13 +535,17 @@ public class MetadataService extends AbstractService {
         notEmpty(timezone, "timezone");
 
         try {
-            final Service result = restTemplate.postForObject(TIMEZONE_URI, new Service(timezone), Service.class,
-                    project.getId());
+            final Service result = webClient.post()
+                    .uri(uriBuilder -> uriBuilder.path(TIMEZONE_URI).build(project.getId()))
+                    .bodyValue(new Service(timezone))
+                    .retrieve()
+                    .bodyToMono(Service.class)
+                    .block();
 
             if (result == null) {
                 throw new GoodDataException("Unexpected empty result from API call.");
             }
-        } catch (RestClientException e) {
+        } catch (Exception e) {
             throw new GoodDataException("Unable to set timezone of project/workspace " + project.getId(), e);
         }
     }
@@ -515,8 +577,13 @@ public class MetadataService extends AbstractService {
     private IdentifiersAndUris getUrisForIdentifiers(final Project project, final Collection<String> identifiers) {
         final IdentifiersAndUris response;
         try {
-            response = restTemplate.postForObject(IdentifiersAndUris.URI, new IdentifierToUri(identifiers), IdentifiersAndUris.class, project.getId());
-        } catch (GoodDataRestException | RestClientException e) {
+            response = webClient.post()
+                    .uri(uriBuilder -> uriBuilder.path(IdentifiersAndUris.URI).build(project.getId()))
+                    .bodyValue(new IdentifierToUri(identifiers))
+                    .retrieve()
+                    .bodyToMono(IdentifiersAndUris.class)
+                    .block();
+        } catch (Exception e) {
             throw new GoodDataException("Unable to get URIs from identifiers.", e);
         }
         return response;

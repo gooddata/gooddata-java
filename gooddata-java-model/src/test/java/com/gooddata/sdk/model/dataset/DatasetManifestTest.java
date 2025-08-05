@@ -5,7 +5,9 @@
  */
 package com.gooddata.sdk.model.dataset;
 
-import org.testng.annotations.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
@@ -86,24 +88,31 @@ public class DatasetManifestTest {
         assertThat(manifest.getParts().get(1).getColumnName(), is("c2"));
     }
 
-    @Test(expectedExceptions = IllegalStateException.class)
-    public void shouldFailOnMultiPopulates() throws Exception {
+
+    @Test
+    void shouldFailOnMultiPopulates() {
         final DatasetManifest manifest = new DatasetManifest("dataset", "file.csv", asList(
                 new DatasetManifest.Part("FULL", "col1", asList("attr1", "attr2"), true, null)
         ));
-        manifest.setMapping("col", "attr2");
+        assertThrows(IllegalStateException.class, () -> {
+            manifest.setMapping("col", "attr2");
+        });
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void shouldFailOnSetSourceNull() {
+    @Test
+    void shouldFailOnSetSourceNull() {
         final DatasetManifest manifest = new DatasetManifest("dataset.name");
-        manifest.setSource(null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            manifest.setSource(null);
+        });
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void shouldFailOnSetFileNull() {
+    @Test
+    void shouldFailOnSetFileNull() {
         final DatasetManifest manifest = new DatasetManifest("dataset.name");
-        manifest.setFile(null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            manifest.setFile(null);
+        });
     }
 
     @Test

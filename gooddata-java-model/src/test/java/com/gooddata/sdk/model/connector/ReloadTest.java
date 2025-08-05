@@ -6,16 +6,16 @@
 package com.gooddata.sdk.model.connector;
 
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.testng.Assert.assertFalse;
-import static org.testng.AssertJUnit.assertNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class ReloadTest {
 
@@ -33,7 +33,7 @@ public class ReloadTest {
     private Map<String, Long> startTimes;
     private Map<String, String> links;
 
-    @BeforeMethod
+    @BeforeEach
     public void setUp() {
         startTimes = new HashMap<>();
         startTimes.put(Reload.CHATS_START_TIME_PROPERTY, CHATS_START_TIME);

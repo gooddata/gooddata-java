@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.util;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;

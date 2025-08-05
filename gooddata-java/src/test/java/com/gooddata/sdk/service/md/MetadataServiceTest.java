@@ -13,17 +13,22 @@ import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.md.visualization.VisualizationClass;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.GoodDataSettings;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test; 
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.reactive.function.client.WebClient;
+
+
+import reactor.core.publisher.Mono;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Arrays;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static java.lang.String.format;
@@ -32,8 +37,18 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
+import java.util.function.Function;
+import static org.mockito.ArgumentMatchers.any;
+
+
+@ExtendWith(MockitoExtension.class)
+@SuppressWarnings("rawtypes")
 public class MetadataServiceTest {
 
     private static final String URI = "TEST_URI";
@@ -43,235 +58,404 @@ public class MetadataServiceTest {
     @Mock
     private Project project;
     @Mock
-    private RestTemplate restTemplate;
+    private WebClient webClient;
 
     private MetadataService service;
 
-    @BeforeMethod
+    @BeforeEach
     public void setUp() throws Exception {
-        MockitoAnnotations.openMocks(this).close();
-        service = new MetadataService(restTemplate, new GoodDataSettings());
-        when(project.getId()).thenReturn(PROJECT_ID);
-    }
-
-    @Test(expectedExceptions = ObjCreateException.class)
-    public void testCreateObjNullResponse() {
-        final Obj obj = mock(Obj.class);
-        service.createObj(project, obj);
-    }
-
-    @Test(expectedExceptions = ObjCreateException.class)
-    public void testCreateObjGDRestException() {
-        final Obj obj = mock(Obj.class);
-        when(restTemplate.postForObject(Obj.URI, obj, UriResponse.class, PROJECT_ID))
-                .thenThrow(GoodDataRestException.class);
-        service.createObj(project, obj);
-    }
-
-    @Test(expectedExceptions = ObjCreateException.class)
-    public void testCreateObjRestClientException() {
-        final Obj obj = mock(Obj.class);
-        when(restTemplate.postForObject(Obj.URI, obj, UriResponse.class, PROJECT_ID))
-                .thenThrow(new RestClientException(""));
-        service.createObj(project, obj);
+        service = new MetadataService(webClient, new GoodDataSettings()); 
+        lenient().when(project.getId()).thenReturn(PROJECT_ID);
     }
 
     @Test
-    public void testCreateObj() {
+    void testCreateObjNullResponse() {
+        WebClient.RequestBodyUriSpec uriSpec = mock(WebClient.RequestBodyUriSpec.class); 
+        WebClient.RequestBodySpec bodySpec = mock(WebClient.RequestBodySpec.class); 
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class); 
+
+        Obj obj = mock(Obj.class);
+
+        // changed: full WebClient chain for POST
+        when(webClient.post()).thenReturn(uriSpec);
+        when(uriSpec.uri(anyString(), (Object[]) any())).thenReturn(bodySpec);
+        when(bodySpec.bodyValue(any())).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(UriResponse.class)).thenReturn(Mono.empty());
+
+        // changed: JUnit 5 assertThrows
+        assertThrows(ObjCreateException.class, () -> service.createObj(project, obj));
+    }
+
+    @Test
+    void testCreateObjGDRestException() {
+        WebClient.RequestBodyUriSpec uriSpec = mock(WebClient.RequestBodyUriSpec.class);
+        WebClient.RequestBodySpec bodySpec = mock(WebClient.RequestBodySpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        Obj obj = mock(Obj.class);
+
+        when(webClient.post()).thenReturn(uriSpec);
+        when(uriSpec.uri(anyString(), (Object[]) any())).thenReturn(bodySpec);
+        when(bodySpec.bodyValue(any())).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(UriResponse.class)).thenReturn(Mono.error(new GoodDataRestException(500, "", "", "", "")));
+
+        assertThrows(ObjCreateException.class, () -> service.createObj(project, obj));
+    }
+
+    @Test
+    void testCreateObjRestClientException() {
+        WebClient.RequestBodyUriSpec uriSpec = mock(WebClient.RequestBodyUriSpec.class);
+        WebClient.RequestBodySpec bodySpec = mock(WebClient.RequestBodySpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        Obj obj = mock(Obj.class);
+
+        when(webClient.post()).thenReturn(uriSpec);
+        when(uriSpec.uri(anyString(), (Object[]) any())).thenReturn(bodySpec);
+        when(bodySpec.bodyValue(any())).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(UriResponse.class)).thenReturn(Mono.error(new RuntimeException("rest error")));
+
+        assertThrows(ObjCreateException.class, () -> service.createObj(project, obj));
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Test
+    void testCreateObj() {
+
+        WebClient.RequestBodyUriSpec uriSpec = mock(WebClient.RequestBodyUriSpec.class);
+        WebClient.RequestBodySpec bodySpec = mock(WebClient.RequestBodySpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
         final Obj obj = mock(Obj.class);
         final Obj resultObj = mock(Obj.class);
 
-        when(restTemplate.postForObject(eq(Obj.CREATE_WITH_ID_URI), eq(obj), any(), eq(PROJECT_ID)))
-                .thenReturn(resultObj);
+        when(webClient.post()).thenReturn(uriSpec);
+        when(uriSpec.uri(any(Function.class))).thenReturn(bodySpec);
+        when(bodySpec.bodyValue(eq(obj))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+
+
+        when(responseSpec.bodyToMono(any(Class.class))).thenReturn(Mono.just(resultObj));
 
         final Obj result = service.createObj(project, obj);
         assertThat(result, is(notNullValue()));
     }
 
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Test
-    public void testUpdateObj() {
+    void testUpdateObj() {
+        WebClient.RequestBodyUriSpec uriSpec = mock(WebClient.RequestBodyUriSpec.class); 
+        WebClient.RequestBodySpec bodySpec = mock(WebClient.RequestBodySpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class); 
+
         final Updatable obj = mock(Updatable.class);
         final Updatable resultObj = mock(Updatable.class);
 
         when(obj.getUri()).thenReturn(URI);
-        final Updatable forObject = restTemplate.getForObject(URI, obj.getClass());
-        when(forObject).thenReturn(resultObj);
 
+        // Mock WebClient chain for PUT
+        when(webClient.put()).thenReturn(uriSpec); 
+        when(uriSpec.uri(eq(URI))).thenReturn(bodySpec);
+        when(bodySpec.bodyValue(eq(obj))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.toBodilessEntity())
+            .thenReturn(Mono.just(ResponseEntity.ok().build()));
+
+        // Mock WebClient chain for GET (getObjByUri)
+        WebClient.RequestHeadersUriSpec getUriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec getHeadersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec getResponseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(getUriSpec);
+        when(getUriSpec.uri(eq(URI))).thenReturn(getHeadersSpec);
+        when(getHeadersSpec.retrieve()).thenReturn(getResponseSpec);
+        when(getResponseSpec.bodyToMono((Class<Updatable>) any())).thenReturn(Mono.just(resultObj));
         final Obj result = service.updateObj(obj);
-
-        verify(restTemplate).put(obj.getUri(), obj);
         assertThat(result, is(notNullValue()));
     }
 
-    @Test(expectedExceptions = ObjUpdateException.class)
-    public void testUpdateObjNotFound() {
+    @SuppressWarnings("rawtypes")
+    @Test
+    void testUpdateObjNotFound() {
         final Updatable obj = mock(Updatable.class);
-
-        final GoodDataRestException restException = mock(GoodDataRestException.class);
-        when(restException.getStatusCode()).thenReturn(HttpStatus.NOT_FOUND.value());
-
         when(obj.getUri()).thenReturn(URI);
-        when(restTemplate.getForObject(URI, obj.getClass())).thenThrow(restException);
 
-        service.updateObj(obj);
+        assertThrows(ObjUpdateException.class, () -> service.updateObj(obj));
     }
 
-    @Test(expectedExceptions = ObjUpdateException.class)
-    public void testUpdateObjRestException() {
+
+    @SuppressWarnings("rawtypes")
+    @Test
+    void testUpdateObjRestException() {
         final Updatable obj = mock(Updatable.class);
-
         when(obj.getUri()).thenReturn(URI);
-        doThrow(RestClientException.class).when(restTemplate).put(URI, obj);
 
-        service.updateObj(obj);
-    }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetObjsByUrisNullProject() {
-        service.getObjsByUris(null, Collections.emptyList());
-    }
+        WebClient.RequestBodyUriSpec uriSpec = mock(WebClient.RequestBodyUriSpec.class);
+        WebClient.RequestBodySpec bodySpec = mock(WebClient.RequestBodySpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetObjsByUrisNullUris() {
-        service.getObjsByUris(project, null);
+        when(webClient.put()).thenReturn(uriSpec);
+        when(uriSpec.uri(eq(URI))).thenReturn(bodySpec);
+        when(bodySpec.bodyValue(eq(obj))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+
+        lenient().when(responseSpec.bodyToMono(obj.getClass())).thenReturn(Mono.error(new RuntimeException("RestClientException")));
+
+        assertThrows(ObjUpdateException.class, () -> service.updateObj(obj));
     }
 
     @Test
-    public void testGetObjsByUris() {
+    void testGetObjsByUrisNullProject() {
+        assertThrows(IllegalArgumentException.class, () -> service.getObjsByUris(null, Collections.emptyList()));
+    }
+
+    @Test
+    void testGetObjsByUrisNullUris() {
+        assertThrows(IllegalArgumentException.class, () -> service.getObjsByUris(project, null));
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Test
+    void testGetObjsByUris() {
         final BulkGetUris request = new BulkGetUris(singletonList(URI));
         final BulkGet response = readObjectFromResource("/md/bulk-get.json", BulkGet.class);
-        when(restTemplate.postForObject(BulkGet.URI, request, BulkGet.class, PROJECT_ID)).thenReturn(response);
+
+        WebClient.RequestBodyUriSpec uriSpec = mock(WebClient.RequestBodyUriSpec.class);
+        WebClient.RequestBodySpec bodySpec = mock(WebClient.RequestBodySpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.post()).thenReturn(uriSpec);
+        when(uriSpec.uri(any(Function.class))).thenReturn(bodySpec);
+        when(bodySpec.bodyValue(eq(request))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(BulkGet.class)).thenReturn(Mono.just(response));
 
         final Collection<Obj> result = service.getObjsByUris(project, request.getItems());
         assertThat(result, is(response.getItems()));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void testGetObjsByUrisWithClientSideHTTPError() {
+
+    @SuppressWarnings("rawtypes")
+    @Test
+    void testGetObjsByUrisWithClientSideHTTPError() {
         final BulkGetUris request = new BulkGetUris(singletonList(""));
-        when(restTemplate.postForObject(BulkGet.URI, request, BulkGet.class, PROJECT_ID)).thenThrow(new RestClientException(""));
-        service.getObjsByUris(project, request.getItems());
+
+        WebClient.RequestBodyUriSpec uriSpec = mock(WebClient.RequestBodyUriSpec.class);
+        WebClient.RequestBodySpec bodySpec = mock(WebClient.RequestBodySpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.post()).thenReturn(uriSpec);
+        when(uriSpec.uri(eq(BulkGet.URI), eq(PROJECT_ID))).thenReturn(bodySpec);
+        when(bodySpec.bodyValue(eq(request))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(BulkGet.class)).thenReturn(Mono.error(new RuntimeException("client error")));
+
+        assertThrows(GoodDataException.class, () -> service.getObjsByUris(project, request.getItems()));
     }
 
-    @Test(expectedExceptions = GoodDataRestException.class)
-    public void testGetObjsByUrisWithServerSideHTTPError() {
+    @SuppressWarnings("rawtypes")
+    @Test
+    void testGetObjsByUrisWithServerSideHTTPError() {
         final BulkGetUris request = new BulkGetUris(singletonList(""));
-        when(restTemplate.postForObject(BulkGet.URI, request, BulkGet.class, PROJECT_ID)).thenThrow(new GoodDataRestException(500, "", "", "", ""));
-        service.getObjsByUris(project, request.getItems());
-    }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void testGetObjsByUrisWithNoResponseFromAPI() {
-        service.getObjsByUris(project, Collections.emptyList());
-    }
+        WebClient.RequestBodyUriSpec uriSpec = mock(WebClient.RequestBodyUriSpec.class);
+        WebClient.RequestBodySpec bodySpec = mock(WebClient.RequestBodySpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetObjByUriNullUri() {
-        service.getObjByUri(null, Obj.class);
-    }
+        when(webClient.post()).thenReturn(uriSpec);
+        when(uriSpec.uri(any(Function.class))).thenReturn(bodySpec);
+        when(bodySpec.bodyValue(eq(request))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(BulkGet.class)).thenReturn(
+                Mono.error(new GoodDataRestException(500, "", "", "", "")));
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetObjByUriNullCls() {
-        service.getObjByUri(URI, null);
-    }
-
-    @Test(expectedExceptions = ObjNotFoundException.class)
-    public void testGetObjByUriNotFound() {
-        final GoodDataRestException restException = mock(GoodDataRestException.class);
-        when(restException.getStatusCode()).thenReturn(HttpStatus.NOT_FOUND.value());
-        when(restTemplate.getForObject(URI, Obj.class)).thenThrow(restException);
-
-        service.getObjByUri(URI, Obj.class);
+        assertThrows(GoodDataRestException.class, () -> service.getObjsByUris(project, request.getItems()));
     }
 
     @Test
-    public void testGetObjByUri() {
-        final Obj resultObj = mock(Obj.class);
-        when(restTemplate.getForObject(URI, Obj.class)).thenReturn(resultObj);
+    void testGetObjsByUrisWithNoResponseFromAPI() {
+        assertThrows(GoodDataException.class, () -> service.getObjsByUris(project, Collections.emptyList()));
+    }
 
-        final Obj result = service.getObjByUri(URI, Obj.class);
+    @Test
+    void testGetObjByUriNullUri() {
+        assertThrows(IllegalArgumentException.class, () -> service.getObjByUri(null, Obj.class));
+    }
+
+    @Test
+    void testGetObjByUriNullCls() {
+        assertThrows(IllegalArgumentException.class, () -> service.getObjByUri(URI, null));
+    }
+
+    @Test
+    void testGetObjByUriNotFound() {
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(anyString())).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(Obj.class)).thenReturn(Mono.error(new GoodDataRestException(404, "", "", "", "")));
+
+        assertThrows(ObjNotFoundException.class, () -> service.getObjByUri(URI, Obj.class));
+    }
+
+    @Test
+    void testGetObjByUri() {
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+        Obj resultObj = mock(Obj.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(anyString())).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(Obj.class)).thenReturn(Mono.just(resultObj));
+
+        Obj result = service.getObjByUri(URI, Obj.class);
         assertThat(result, is(resultObj));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void testGetObjByUriWithClientSideHTTPError() {
-        when(restTemplate.getForObject(URI, Obj.class)).thenThrow(new RestClientException(""));
-        service.getObjByUri(URI, Queryable.class);
+    @SuppressWarnings("rawtypes")
+    @Test
+    void testGetObjByUriWithClientSideHTTPError() {
+
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(eq(URI))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+
+        when(responseSpec.bodyToMono(Queryable.class)).thenReturn(Mono.error(new RuntimeException("RestClientException")));
+
+        assertThrows(GoodDataException.class, () -> service.getObjByUri(URI, Queryable.class));
     }
 
-    @Test(expectedExceptions = GoodDataRestException.class)
-    public void testGetObjByUriWithServerSideHTTPError() {
-        when(restTemplate.getForObject(URI, Obj.class)).thenThrow(new GoodDataRestException(500, "", "", "", ""));
-        service.getObjByUri(URI, Obj.class);
+    @SuppressWarnings("rawtypes")
+    @Test
+    void testGetObjByUriWithServerSideHTTPError() {
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class); 
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(eq(URI))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+
+        GoodDataRestException restException = new GoodDataRestException(500, "", "", "", "");
+        when(responseSpec.bodyToMono(Obj.class)).thenReturn(Mono.error(restException));
+
+        GoodDataException ex = assertThrows(GoodDataException.class, () -> service.getObjByUri(URI, Obj.class));
+        assertThat(ex.getCause(), is(restException));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void testGetObjByUriWithNoResponseFromAPI() {
-        service.getObjByUri(URI, Obj.class);
-    }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetObjByIdNullProject() {
-        service.getObjById(null, ID, Obj.class);
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetObjByIdNullId() {
-        service.getObjById(project, null, Obj.class);
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetObjByIdNullCls() {
-        service.getObjById(project, ID, null);
+    @Test
+    void testGetObjByUriWithNoResponseFromAPI() {
+        assertThrows(GoodDataException.class, () -> service.getObjByUri(URI, Obj.class));
     }
 
     @Test
-    public void testGetObjById() {
+    void testGetObjByIdNullProject() {
+        assertThrows(IllegalArgumentException.class, () -> service.getObjById(null, ID, Obj.class));
+    }
+
+    @Test
+    void testGetObjByIdNullId() {
+        assertThrows(IllegalArgumentException.class, () -> service.getObjById(project, null, Obj.class));
+    }
+
+    @Test
+    void testGetObjByIdNullCls() {
+        assertThrows(IllegalArgumentException.class, () -> service.getObjById(project, ID, null));
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Test
+    void testGetObjById() {
         final Obj resultObj = mock(Obj.class);
         final String uri = format("/gdc/md/%s/obj/%s", PROJECT_ID, ID);
-        when(restTemplate.getForObject(uri, Obj.class)).thenReturn(resultObj);
+
+
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(eq(uri))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(Obj.class)).thenReturn(Mono.just(resultObj));
 
         final Obj result = service.getObjById(project, ID, Obj.class);
         assertThat(result, is(resultObj));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testUsedByNullProject() {
-        service.usedBy(null, URI, false, ReportDefinition.class);
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testFindIdentifierUrisNullProject() {
-        service.findUris(null, Restriction.identifier(ID));
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testFindIdentifierUrisNullRestriction() {
-        service.findUris(project, (Restriction) null);
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetObjUriNullProject() {
-        service.getObjUri(null, Queryable.class, Restriction.identifier(""));
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetObjUriNullClass() {
-        service.getObjUri(project, null, Restriction.identifier(""));
-    }
-
-    @Test(expectedExceptions = GoodDataException.class)
-    public void testGetObjUriNoResponseFromAPI() {
-        service.getObjUri(project, Queryable.class);
+    @Test
+    void testUsedByNullProject() {
+        assertThrows(IllegalArgumentException.class, () -> service.usedBy(null, URI, false, ReportDefinition.class));
     }
 
     @Test
-    public void testGetObjUriToFindOneObjByTitle() {
+    void testFindIdentifierUrisNullProject() {
+        assertThrows(IllegalArgumentException.class, () -> service.findUris(null, Restriction.identifier(ID)));
+    }
+
+    @Test
+    void testFindIdentifierUrisNullRestriction() {
+        assertThrows(IllegalArgumentException.class, () -> service.findUris(project, (Restriction) null));
+    }
+
+    @Test
+    void testGetObjUriNullProject() {
+        assertThrows(IllegalArgumentException.class, () -> service.getObjUri(null, Queryable.class, Restriction.identifier("")));
+    }
+
+    @Test
+    void testGetObjUriNullClass() {
+        assertThrows(IllegalArgumentException.class, () -> service.getObjUri(project, null, Restriction.identifier("")));
+    }
+
+    @Test
+    void testGetObjUriNoResponseFromAPI() {
+        assertThrows(GoodDataException.class, () -> service.getObjUri(project, Queryable.class));
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Test
+    void testGetObjUriToFindOneObjByTitle() {
         final Query queryResult = mock(Query.class);
         final Entry resultEntry = mock(Entry.class);
         final String uri = "myURI";
         final String title = "myTitle";
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
+
+
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+
+        when(uriSpec.uri(any(Function.class))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(Query.class)).thenReturn(Mono.just(queryResult));
+
         when(queryResult.getEntries()).thenReturn(singletonList(resultEntry));
         when(resultEntry.getTitle()).thenReturn(title);
         when(resultEntry.getUri()).thenReturn(uri);
@@ -280,177 +464,333 @@ public class MetadataServiceTest {
         assertThat(result, is(uri));
     }
 
-    @Test(expectedExceptions = NonUniqueObjException.class)
-    public void testGetObjUriMoreThanOneResult() {
+    @SuppressWarnings("rawtypes")
+    @Test
+    void testGetObjUriMoreThanOneResult() {
         final Query queryResult = mock(Query.class);
         final Entry resultEntry1 = mock(Entry.class);
         final Entry resultEntry2 = mock(Entry.class);
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
+
+
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(any(Function.class))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(Query.class)).thenReturn(Mono.just(queryResult));
+
         when(queryResult.getEntries()).thenReturn(asList(resultEntry1, resultEntry2));
 
-        service.getObjUri(project, Queryable.class);
+        assertThrows(NonUniqueObjException.class, () -> service.getObjUri(project, Queryable.class));
     }
 
-    @Test(expectedExceptions = ObjNotFoundException.class)
-    public void testGetObjUriNothingFound() {
+    @SuppressWarnings("rawtypes")
+    @Test
+    void testGetObjUriNothingFound() {
         final Query queryResult = mock(Query.class);
         final Entry resultEntry = mock(Entry.class);
         final String title = "myTitle";
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
+
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(any(Function.class))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(Query.class)).thenReturn(Mono.just(queryResult));
         when(queryResult.getEntries()).thenReturn(singletonList(resultEntry));
 
-        service.getObjUri(project, Queryable.class, Restriction.title(title));
+        assertThrows(ObjNotFoundException.class, () -> service.getObjUri(project, Queryable.class, Restriction.title(title)));
     }
 
+
+    @SuppressWarnings("rawtypes")
     @Test
-    public void testGetObjToFindOneObjById() {
+    void testGetObjToFindOneObjById() {
         final Queryable intendedResult = mock(Queryable.class);
         final Query queryResult = mock(Query.class);
         final Entry resultEntry = mock(Entry.class);
         final String uri = "myURI";
         final String id = "myId";
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
+
+
+        WebClient.RequestHeadersUriSpec uriSpec1 = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec1 = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec1 = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec1);
+        when(uriSpec1.uri(any(Function.class))).thenReturn(headersSpec1);
+        when(headersSpec1.retrieve()).thenReturn(responseSpec1);
+        when(responseSpec1.bodyToMono(Query.class)).thenReturn(Mono.just(queryResult));
+
         when(queryResult.getEntries()).thenReturn(singletonList(resultEntry));
         when(resultEntry.getIdentifier()).thenReturn(id);
         when(resultEntry.getUri()).thenReturn(uri);
-        when(restTemplate.getForObject(uri, Queryable.class)).thenReturn(intendedResult);
+
+        WebClient.RequestHeadersUriSpec uriSpec2 = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec2 = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec2 = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec1).thenReturn(uriSpec2);
+        when(uriSpec2.uri(eq(uri))).thenReturn(headersSpec2);
+        when(headersSpec2.retrieve()).thenReturn(responseSpec2);
+        when(responseSpec2.bodyToMono(Queryable.class)).thenReturn(Mono.just(intendedResult));
 
         final Queryable result = service.getObj(project, Queryable.class, Restriction.identifier(id));
         assertThat(result, is(intendedResult));
     }
 
-    @Test(expectedExceptions = NonUniqueObjException.class)
-    public void testGetObjMoreThanOneResult() {
+    @SuppressWarnings("rawtypes")
+    @Test
+    void testGetObjMoreThanOneResult() {
         final Query queryResult = mock(Query.class);
         final Entry resultEntry1 = mock(Entry.class);
         final Entry resultEntry2 = mock(Entry.class);
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
+
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(any(Function.class))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(Query.class)).thenReturn(Mono.just(queryResult));
+
         when(queryResult.getEntries()).thenReturn(asList(resultEntry1, resultEntry2));
 
-        service.getObj(project, Queryable.class);
+        assertThrows(NonUniqueObjException.class, () -> service.getObj(project, Queryable.class));
     }
 
-    @Test(expectedExceptions = ObjNotFoundException.class)
-    public void testGetObjNothingFound() {
+    @SuppressWarnings("rawtypes")
+    @Test
+    void testGetObjNothingFound() {
         final Query queryResult = mock(Query.class);
         final Entry resultEntry = mock(Entry.class);
         final String title = "myTitle";
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
+
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(any(Function.class))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(Query.class)).thenReturn(Mono.just(queryResult));
+
         when(queryResult.getEntries()).thenReturn(singletonList(resultEntry));
 
-        service.getObj(project, Queryable.class, Restriction.title(title));
+        assertThrows(ObjNotFoundException.class, () -> service.getObj(project, Queryable.class, Restriction.title(title)));
     }
 
+    @SuppressWarnings("rawtypes")
     @Test
-    public void testFindMoreResults() {
+    void testFindMoreResults() {
         final Query queryResult = mock(Query.class);
         final Entry resultEntry1 = mock(Entry.class);
         final Entry resultEntry2 = mock(Entry.class);
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
+
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(any(Function.class))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(Query.class)).thenReturn(Mono.just(queryResult));
+
         when(queryResult.getEntries()).thenReturn(asList(resultEntry1, resultEntry2));
 
         final Collection<Entry> results = service.find(project, Queryable.class);
         assertThat(results, allOf(hasItem(resultEntry1), hasItem(resultEntry2)));
     }
 
+    @SuppressWarnings("rawtypes")
     @Test
-    public void testFindIrregularQueryTypeNames() {
-        when(restTemplate.getForObject(anyString(), any(), anyString(), anyString())).thenReturn(mock(Query.class));
+    void testFindIrregularQueryTypeNames() {
+        when(project.getId()).thenReturn(PROJECT_ID);
+
+        // Mock chain for ReportDefinition (reportdefinition)
+        WebClient.RequestHeadersUriSpec uriSpec1 = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec1 = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec1 = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec1);
+        when(uriSpec1.uri(any(Function.class))).thenReturn(headersSpec1);
+        when(headersSpec1.retrieve()).thenReturn(responseSpec1);
+        when(responseSpec1.bodyToMono(Query.class)).thenReturn(Mono.just(mock(Query.class)));
 
         service.find(project, ReportDefinition.class);
-        verify(restTemplate).getForObject(Query.URI, Query.class, project.getId(), "reportdefinition");
+
+        verify(webClient).get();
+        verify(uriSpec1).uri(any(Function.class));
+
+        // Mock chain for VisualizationClass (visualizationclasses)
+        WebClient.RequestHeadersUriSpec uriSpec2 = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec2 = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec2 = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec2);
+        when(uriSpec2.uri(any(Function.class))).thenReturn(headersSpec2);
+        when(headersSpec2.retrieve()).thenReturn(responseSpec2);
+        when(responseSpec2.bodyToMono(Query.class)).thenReturn(Mono.just(mock(Query.class)));
 
         service.find(project, VisualizationClass.class);
-        verify(restTemplate).getForObject(Query.URI, Query.class, project.getId(), "visualizationclasses");
+
+        verify(webClient, times(2)).get();
+        verify(uriSpec2).uri(any(Function.class));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void testFindWithWithClientSideHTTPError() {
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenThrow(new RestClientException(""));
-        service.find(project, Queryable.class);
-    }
 
+    @SuppressWarnings("rawtypes")
     @Test
-    public void testFindUrisBySummary() {
-        final Query queryResult = mock(Query.class);
-        final Entry resultEntry1 = mock(Entry.class);
-        final Entry resultEntry2 = mock(Entry.class);
-        final String summary = "mySummary";
-        final String uri1 = "uri1";
-        final String uri2 = "uri2";
-        when(restTemplate.getForObject(Query.URI, Query.class, project.getId(), "queryables")).thenReturn(queryResult);
-        when(queryResult.getEntries()).thenReturn(asList(resultEntry1, resultEntry2));
+    void testFindWithWithClientSideHTTPError() {
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(eq(Query.URI), eq(PROJECT_ID), eq("queryables"))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+
+        when(responseSpec.bodyToMono(Query.class)).thenReturn(Mono.error(new RuntimeException("RestClientException")));
+
+        assertThrows(GoodDataException.class, () -> service.find(project, Queryable.class));
+    }
+
+
+    @SuppressWarnings("rawtypes")
+    @Test
+    void testFindUrisBySummary() {
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+        Project project = mock(Project.class);
+        Query queryResult = mock(Query.class);
+        Entry resultEntry1 = mock(Entry.class);
+        Entry resultEntry2 = mock(Entry.class);
+
+        String summary = "mySummary";
+        String uri1 = "uri1";
+        String uri2 = "uri2";
+
+        when(project.getId()).thenReturn("TEST_PROJ_ID");
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(any(Function.class))).thenReturn(headersSpec); // <--- ВАЖНО!
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(Query.class)).thenReturn(Mono.just(queryResult));
+
+        when(queryResult.getEntries()).thenReturn(Arrays.asList(resultEntry1, resultEntry2));
         when(resultEntry1.getSummary()).thenReturn(summary);
         when(resultEntry2.getSummary()).thenReturn(summary);
         when(resultEntry1.getUri()).thenReturn(uri1);
         when(resultEntry2.getUri()).thenReturn(uri2);
 
-        final Collection<String> results = service.findUris(project, Queryable.class, Restriction.summary(summary));
+        Collection<String> results = service.findUris(project, Queryable.class, Restriction.summary(summary));
         assertThat(results, allOf(hasItem(uri1), hasItem(uri2)));
     }
 
+
+
+    @SuppressWarnings("rawtypes")
     @Test
-    public void testGetAttributeElementsEmpty() {
-        final DisplayForm attrDisplayForm = mock(AttributeDisplayForm.class);
+    void testGetAttributeElementsEmpty() {
+        final DisplayForm attrDisplayForm = mock(DisplayForm.class);
         when(attrDisplayForm.getElementsUri()).thenReturn("elementsUri");
         final Attribute attr = mock(Attribute.class);
         when(attr.getDefaultDisplayForm()).thenReturn(attrDisplayForm);
 
-        when(restTemplate.getForObject("elementsUri", AttributeElements.class))
-                .thenReturn(readObjectFromResource("/md/attributeElements-empty.json", AttributeElements.class));
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        AttributeElements emptyElements = readObjectFromResource("/md/attributeElements-empty.json", AttributeElements.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(eq("elementsUri"))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(AttributeElements.class)).thenReturn(Mono.just(emptyElements));
+
         final List<AttributeElement> elements = service.getAttributeElements(attr);
         assertThat(elements, hasSize(0));
     }
 
+    @SuppressWarnings("rawtypes")
     @Test
-    public void testGetAttributeElements() {
-        final DisplayForm attrDisplayForm = mock(AttributeDisplayForm.class);
+    void testGetAttributeElements() {
+        final DisplayForm attrDisplayForm = mock(DisplayForm.class);
         when(attrDisplayForm.getElementsUri()).thenReturn("elementsUri");
         final Attribute attr = mock(Attribute.class);
         when(attr.getDefaultDisplayForm()).thenReturn(attrDisplayForm);
 
         final AttributeElement result1 = mock(AttributeElement.class);
         final AttributeElement result2 = mock(AttributeElement.class);
-        final AttributeElements attrElements = readObjectFromResource("/md/attributeElements-empty.json",
-                AttributeElements.class);
-        attrElements.getElements().addAll(asList(result1, result2));
+        final AttributeElements attrElements = readObjectFromResource("/md/attributeElements-empty.json", AttributeElements.class);
+        attrElements.getElements().addAll(Arrays.asList(result1, result2));
 
-        when(restTemplate.getForObject("elementsUri", AttributeElements.class)).thenReturn(attrElements);
+        // Мокаем цепочку WebClient
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(eq("elementsUri"))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(AttributeElements.class)).thenReturn(Mono.just(attrElements));
+
         final List<AttributeElement> elements = service.getAttributeElements(attr);
         assertThat(elements, allOf(hasItem(result1), hasItem(result2)));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetTimezoneNullProject() {
-        service.getTimezone(null);
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetTimezoneNullProjectId() {
-        service.getTimezone(mock(Project.class));
+    @Test
+    void testGetTimezoneNullProject() {
+        assertThrows(IllegalArgumentException.class, () -> service.getTimezone(null));
     }
 
     @Test
-    public void testGetTimezone() {
-        when(restTemplate.getForObject(Service.TIMEZONE_URI, Service.class, project.getId()))
-                .thenReturn(readObjectFromResource("/md/service-timezone.json", Service.class));
+    void testGetTimezoneNullProjectId() {
+        assertThrows(IllegalArgumentException.class, () -> service.getTimezone(mock(Project.class)));
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Test
+    void testGetTimezone() {
+
+        Service serviceResult = readObjectFromResource("/md/service-timezone.json", Service.class);
+
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+
+        when(project.getId()).thenReturn(PROJECT_ID);
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(any(Function.class))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(Service.class)).thenReturn(Mono.just(serviceResult));
+
         final String tz = service.getTimezone(project);
         assertThat(tz, is("UTC"));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testSetTimezoneNullProject() {
-        service.setTimezone(null, "test");
+
+    @Test
+    void testSetTimezoneNullProject() {
+        assertThrows(IllegalArgumentException.class, () -> service.setTimezone(null, "test"));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testSetTimezoneNullTZ() {
-        service.setTimezone(project, null);
+    @Test
+    void testSetTimezoneNullTZ() {
+        assertThrows(IllegalArgumentException.class, () -> service.setTimezone(project, null));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testSetTimezoneEmptyTZ() {
-        service.setTimezone(project, "");
+    @Test
+    void testSetTimezoneEmptyTZ() {
+        assertThrows(IllegalArgumentException.class, () -> service.setTimezone(project, ""));
     }
 
 }

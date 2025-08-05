@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.project.model;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
 import static org.hamcrest.MatcherAssert.assertThat;

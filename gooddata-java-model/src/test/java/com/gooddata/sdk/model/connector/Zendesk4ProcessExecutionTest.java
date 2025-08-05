@@ -6,7 +6,7 @@
 package com.gooddata.sdk.model.connector;
 
 import com.gooddata.sdk.model.connector.Zendesk4ProcessExecution.DownloadParams;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test; 
 
 import java.time.Instant;
 

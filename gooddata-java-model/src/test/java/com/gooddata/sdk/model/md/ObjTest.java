@@ -6,7 +6,7 @@
 package com.gooddata.sdk.model.md;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;

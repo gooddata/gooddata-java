@@ -7,7 +7,7 @@ package com.gooddata.sdk.service.project.model;
 
 import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.model.project.model.ModelDiff;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.InputStreamReader;
 
@@ -18,7 +18,7 @@ import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
  */
 public class ModelServiceAT extends AbstractGoodDataAT {
 
-    @Test(groups = "model", dependsOnGroups = "project")
+    @Test
     public void createModel() throws Exception {
         final ModelService modelService = gd.getModelService();
 

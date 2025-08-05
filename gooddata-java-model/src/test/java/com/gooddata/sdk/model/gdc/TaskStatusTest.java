@@ -6,7 +6,7 @@
 package com.gooddata.sdk.model.gdc;
 
 import com.gooddata.sdk.common.gdc.GdcError;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;

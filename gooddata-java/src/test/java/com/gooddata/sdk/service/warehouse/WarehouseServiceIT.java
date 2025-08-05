@@ -18,13 +18,12 @@ import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matchers;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
@@ -36,6 +35,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class WarehouseServiceIT extends AbstractGoodDataIT {
@@ -60,7 +60,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
     private Warehouse warehouse;
     private WarehouseSchema warehouseSchema;
 
-    @BeforeClass
+    @BeforeEach
     public void setUp() throws Exception {
         pollingTask = readObjectFromResource(TASK_POLL, WarehouseTask.class);
         finishedTask = readObjectFromResource(TASK_DONE, WarehouseTask.class);
@@ -97,7 +97,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         assertThat(created.getConnectionUrl(), is(CONNECTION_URL));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void shouldFailToCreateWarehouse() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -111,7 +111,9 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
             .respond()
                 .withStatus(400)
         ;
-        gd.getWarehouseService().createWarehouse(new Warehouse(TITLE, "{Token}", "Storage")).get();
+        assertThrows(GoodDataException.class, () -> {
+            gd.getWarehouseService().createWarehouse(new Warehouse(TITLE, "{Token}", "Storage")).get();
+        });
     }
 
     @Test
@@ -271,7 +273,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         assertThat(created.getProfile(), is("/gdc/account/profile/{profile-id}"));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void shouldFailToAddUserToWarehouse() throws Exception {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -284,8 +286,10 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .havingPathEqualTo(pollingTask.getPollUri())
                 .respond()
                 .withStatus(409);
-
-        gd.getWarehouseService().addUserToWarehouse(warehouse, new WarehouseUser("role", "profile", null)).get();
+    
+        assertThrows(GoodDataException.class, () -> {
+            gd.getWarehouseService().addUserToWarehouse(warehouse, new WarehouseUser("role", "profile", null)).get();
+        });
     }
 
     @Test
@@ -310,7 +314,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
           .get();
     }
 
-    @Test(expectedExceptions = WarehouseUserNotFoundException.class)
+    @Test
     public void shouldFailToFindUserForRemovalFromWarehouse() throws Exception {
         onRequest()
                 .havingMethodEqualTo("DELETE")
@@ -318,10 +322,13 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(404);
 
-        gd.getWarehouseService().removeUserFromWarehouse(new WarehouseUser("role", "profile", "login", Collections.singletonMap("self", WAREHOUSE_USER_URI)));
+        assertThrows(WarehouseUserNotFoundException.class, () -> {
+            gd.getWarehouseService().removeUserFromWarehouse(
+                    new WarehouseUser("role", "profile", "login", Collections.singletonMap("self", WAREHOUSE_USER_URI)));
+        });
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void shouldFailWhenRemoveUserTaskFails() throws Exception {
         onRequest()
                 .havingMethodEqualTo("DELETE")
@@ -335,9 +342,11 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(409);
 
-        gd.getWarehouseService()
-          .removeUserFromWarehouse(new WarehouseUser("role", "profile", "login", Collections.singletonMap("self", WAREHOUSE_USER_URI)))
-          .get();
+        assertThrows(GoodDataException.class, () -> {
+            gd.getWarehouseService()
+              .removeUserFromWarehouse(new WarehouseUser("role", "profile", "login", Collections.singletonMap("self", WAREHOUSE_USER_URI)))
+              .get();
+        });
     }
 
     @Test
@@ -398,7 +407,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         assertThat(pageItems.get(0).getName(), is(equalTo(SCHEMA_NAME)));
     }
 
-    @Test(expectedExceptions = WarehouseSchemaNotFoundException.class)
+    @Test
     public void shouldFailWarehouseSchemaByNameNotFound() throws Exception {
         onRequest()
                 .havingMethodEqualTo("GET")
@@ -406,9 +415,9 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .respond()
                 .withStatus(404);
 
-        final WarehouseSchema result = gd.getWarehouseService().getWarehouseSchemaByName(warehouse, SCHEMA_NAME);
-        assertThat(result, notNullValue());
-        assertThat(result.getName(), is(SCHEMA_NAME));
+        assertThrows(WarehouseSchemaNotFoundException.class, () -> {
+            gd.getWarehouseService().getWarehouseSchemaByName(warehouse, SCHEMA_NAME);
+        });
     }
 
 }

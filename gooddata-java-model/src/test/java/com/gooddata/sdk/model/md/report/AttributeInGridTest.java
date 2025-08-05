@@ -8,7 +8,7 @@ package com.gooddata.sdk.model.md.report;
 import com.gooddata.sdk.model.md.Attribute;
 import com.gooddata.sdk.model.md.DisplayForm;
 import org.apache.commons.lang3.SerializationUtils;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 import java.util.List;

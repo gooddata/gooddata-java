@@ -9,8 +9,8 @@ import com.gooddata.sdk.service.AbstractGoodDataIT;
 import com.gooddata.sdk.model.dataset.DatasetManifest;
 import com.gooddata.sdk.model.projecttemplate.Template;
 import com.gooddata.sdk.model.projecttemplate.Templates;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
@@ -28,7 +28,7 @@ public class ProjectTemplateServiceIT extends AbstractGoodDataIT {
 
     private Template template;
 
-    @BeforeMethod
+    @BeforeEach
     public void setUp() throws Exception {
         template = readObjectFromResource("/projecttemplate/template.json", Template.class);
     }

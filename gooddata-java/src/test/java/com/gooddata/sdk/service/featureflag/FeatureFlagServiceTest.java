@@ -9,20 +9,26 @@ import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.model.featureflag.FeatureFlags;
 import com.gooddata.sdk.model.featureflag.ProjectFeatureFlag;
 import com.gooddata.sdk.model.featureflag.ProjectFeatureFlags;
-import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.GoodDataSettings;
+import org.junit.jupiter.api.BeforeEach; 
+import org.junit.jupiter.api.Test; 
+import org.junit.jupiter.api.extension.ExtendWith; 
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.springframework.web.reactive.function.client.WebClient; 
+import reactor.core.publisher.Mono; 
 
 import java.net.URI;
 
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class FeatureFlagServiceTest {
 
     private static final String PROJECT_ID = "11";
@@ -36,129 +42,169 @@ public class FeatureFlagServiceTest {
     @Mock
     private ProjectFeatureFlag projectFeatureFlag;
     @Mock
-    private RestTemplate restTemplate;
+    private WebClient webClient; 
 
     private FeatureFlagService service;
 
-    @BeforeMethod
-    public void setUp() throws Exception {
-        MockitoAnnotations.openMocks(this).close();
-        service = new FeatureFlagService(restTemplate, new GoodDataSettings());
+    @BeforeEach 
+    public void setUp() {
+        service = new FeatureFlagService(webClient, new GoodDataSettings()); 
         when(project.getId()).thenReturn(PROJECT_ID);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullArgThenGetFeatureFlagsShouldThrow() throws Exception {
-        service.listFeatureFlags(null);
+    @Test
+    void whenNullArgThenGetFeatureFlagsShouldThrow() {
+        assertThrows(IllegalArgumentException.class, () -> service.listFeatureFlags(null));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenEmptyResponseThenGetFeatureFlagsShouldThrow() throws Exception {
-        when(restTemplate.getForObject(new URI(FEATURE_FLAGS_URI), FeatureFlags.class)).thenReturn(null);
-        service.listFeatureFlags(project);
+    @Test
+    void whenEmptyResponseThenGetFeatureFlagsShouldThrow() {
+        mockWebClientGet(FEATURE_FLAGS_URI, FeatureFlags.class, Mono.empty());
+        assertThrows(GoodDataException.class, () -> service.listFeatureFlags(project));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenClientErrorResponseThenGetFeatureFlagsShouldThrow() throws Exception {
-        when(restTemplate.getForObject(new URI(FEATURE_FLAGS_URI), FeatureFlags.class))
-                .thenThrow(new RestClientException(""));
-        service.listFeatureFlags(project);
+    @Test
+    void whenClientErrorResponseThenGetFeatureFlagsShouldThrow() {
+        mockWebClientGet(FEATURE_FLAGS_URI, FeatureFlags.class, Mono.error(new RuntimeException("")));
+        assertThrows(GoodDataException.class, () -> service.listFeatureFlags(project));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullArgThenGetProjectFeatureFlagsShouldThrow() throws Exception {
-        service.listProjectFeatureFlags(null);
+    @Test
+    void whenNullArgThenGetProjectFeatureFlagsShouldThrow() {
+        assertThrows(IllegalArgumentException.class, () -> service.listProjectFeatureFlags(null));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenEmptyResponseThenGetProjectFeatureFlagsShouldThrow() throws Exception {
-        when(restTemplate.getForObject(new URI(PROJECT_FEATURE_FLAGS_URI), ProjectFeatureFlags.class)).thenReturn(null);
-        service.listProjectFeatureFlags(project);
+    @Test
+    void whenEmptyResponseThenGetProjectFeatureFlagsShouldThrow() {
+        mockWebClientGet(PROJECT_FEATURE_FLAGS_URI, ProjectFeatureFlags.class, Mono.empty());
+        assertThrows(GoodDataException.class, () -> service.listProjectFeatureFlags(project));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenClientErrorResponseThenGetProjectFeatureFlagsShouldThrow() throws Exception {
-        when(restTemplate.getForObject(new URI(PROJECT_FEATURE_FLAGS_URI), ProjectFeatureFlags.class))
-                .thenThrow(new RestClientException(""));
-        service.listProjectFeatureFlags(project);
+    @Test
+    void whenClientErrorResponseThenGetProjectFeatureFlagsShouldThrow() {
+        mockWebClientGet(PROJECT_FEATURE_FLAGS_URI, ProjectFeatureFlags.class, Mono.error(new RuntimeException("")));
+        assertThrows(GoodDataException.class, () -> service.listProjectFeatureFlags(project));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullKeyThenCreateProjectFeatureFlagShouldThrow() throws Exception {
-        service.createProjectFeatureFlag(project, null);
+    @Test
+    void whenNullKeyThenCreateProjectFeatureFlagShouldThrow() {
+        assertThrows(IllegalArgumentException.class, () -> service.createProjectFeatureFlag(project, null));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullProjectThenCreateProjectFeatureFlagShouldThrow() throws Exception {
-        service.createProjectFeatureFlag(null, projectFeatureFlag);
+    @Test
+    void whenNullProjectThenCreateProjectFeatureFlagShouldThrow() {
+        assertThrows(IllegalArgumentException.class, () -> service.createProjectFeatureFlag(null, projectFeatureFlag));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenEmptyResponseThenCreateProjectFeatureFlagShouldThrow() throws Exception {
-        when(restTemplate.postForLocation(PROJECT_FEATURE_FLAG_URI, projectFeatureFlag)).thenReturn(null);
-        service.createProjectFeatureFlag(project, projectFeatureFlag);
+    @Test
+    void whenEmptyResponseThenCreateProjectFeatureFlagShouldThrow() {
+        mockWebClientPost(PROJECT_FEATURE_FLAG_URI, projectFeatureFlag, Mono.empty());
+        assertThrows(GoodDataException.class, () -> service.createProjectFeatureFlag(project, projectFeatureFlag));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenClientErrorResponseThenCreateProjectFeatureFlagShouldThrow() throws Exception {
-        when(restTemplate.postForLocation(PROJECT_FEATURE_FLAG_URI, projectFeatureFlag))
-                .thenThrow(new RestClientException(""));
-        service.createProjectFeatureFlag(project, projectFeatureFlag);
+    @Test
+    void whenClientErrorResponseThenCreateProjectFeatureFlagShouldThrow() {
+        mockWebClientPost(PROJECT_FEATURE_FLAG_URI, projectFeatureFlag, Mono.error(new RuntimeException("")));
+        assertThrows(GoodDataException.class, () -> service.createProjectFeatureFlag(project, projectFeatureFlag));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullKeyThenGetProjectFeatureFlagShouldThrow() throws Exception {
-        service.getProjectFeatureFlag(project, null);
+    @Test
+    void whenNullKeyThenGetProjectFeatureFlagShouldThrow() {
+        assertThrows(IllegalArgumentException.class, () -> service.getProjectFeatureFlag(project, null));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullProjectThenGetProjectFeatureFlagShouldThrow() throws Exception {
-        service.getProjectFeatureFlag(null, FLAG_NAME);
+    @Test
+    void whenNullProjectThenGetProjectFeatureFlagShouldThrow() {
+        assertThrows(IllegalArgumentException.class, () -> service.getProjectFeatureFlag(null, FLAG_NAME));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenEmptyResponseThenGetProjectFeatureFlagShouldThrow() throws Exception {
-        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class)).thenReturn(null);
-        service.getProjectFeatureFlag(project, FLAG_NAME);
+    @Test
+    void whenEmptyResponseThenGetProjectFeatureFlagShouldThrow() {
+        mockWebClientGet(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class, Mono.empty());
+        assertThrows(GoodDataException.class, () -> service.getProjectFeatureFlag(project, FLAG_NAME));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenClientErrorResponseThenGetProjectFeatureFlagShouldThrow() throws Exception {
-        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class))
-                .thenThrow(new RestClientException(""));
-        service.getProjectFeatureFlag(project, FLAG_NAME);
+    @Test
+    void whenClientErrorResponseThenGetProjectFeatureFlagShouldThrow() {
+        mockWebClientGet(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class, Mono.error(new RuntimeException("")));
+        assertThrows(GoodDataException.class, () -> service.getProjectFeatureFlag(project, FLAG_NAME));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullFlagThenUpdateProjectFeatureFlagShouldThrow() throws Exception {
-        service.updateProjectFeatureFlag(null);
+    @Test
+    void whenNullFlagThenUpdateProjectFeatureFlagShouldThrow() {
+        assertThrows(IllegalArgumentException.class, () -> service.updateProjectFeatureFlag(null));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenEmptyResponseThenUpdateProjectFeatureFlagShouldThrow() throws Exception {
+    @Test
+    void whenEmptyResponseThenUpdateProjectFeatureFlagShouldThrow() {
         when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
-        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class)).thenReturn(null);
-        service.updateProjectFeatureFlag(projectFeatureFlag);
+        mockWebClientPut(PROJECT_FEATURE_FLAG_URI, projectFeatureFlag, Mono.empty());
+        assertThrows(GoodDataException.class, () -> service.updateProjectFeatureFlag(projectFeatureFlag));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenClientErrorResponseThenUpdateProjectFeatureFlagShouldThrow() throws Exception {
+    @Test
+    void whenClientErrorResponseThenUpdateProjectFeatureFlagShouldThrow() {
         when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
-        when(restTemplate.getForObject(PROJECT_FEATURE_FLAG_URI, ProjectFeatureFlag.class))
-                .thenThrow(new RestClientException(""));
-        service.updateProjectFeatureFlag(projectFeatureFlag);
+        mockWebClientPut(PROJECT_FEATURE_FLAG_URI, projectFeatureFlag, Mono.error(new RuntimeException("")));
+        assertThrows(GoodDataException.class, () -> service.updateProjectFeatureFlag(projectFeatureFlag));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void whenNullFlagThenDeleteProjectFeatureFlagShouldThrow() throws Exception {
-        service.deleteProjectFeatureFlag(null);
+    @Test
+    void whenNullFlagThenDeleteProjectFeatureFlagShouldThrow() {
+        assertThrows(IllegalArgumentException.class, () -> service.deleteProjectFeatureFlag(null));
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
-    public void whenClientErrorResponseThenDeleteProjectFeatureFlagShouldThrow() throws Exception {
+    @Test
+    void whenClientErrorResponseThenDeleteProjectFeatureFlagShouldThrow() {
         when(projectFeatureFlag.getUri()).thenReturn(PROJECT_FEATURE_FLAG_URI);
-        doThrow(new RestClientException("")).when(restTemplate).delete(PROJECT_FEATURE_FLAG_URI);
-        service.deleteProjectFeatureFlag(projectFeatureFlag);
+        mockWebClientDelete(PROJECT_FEATURE_FLAG_URI, Mono.error(new RuntimeException("")));
+        assertThrows(GoodDataException.class, () -> service.deleteProjectFeatureFlag(projectFeatureFlag));
     }
 
+
+    private <T> void mockWebClientGet(String uri, Class<T> clazz, Mono<T> result) {
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class); 
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);   
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);              
+
+        when(webClient.get()).thenReturn(uriSpec);
+        when(uriSpec.uri(eq(uri))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(clazz)).thenReturn(result);
+    }
+
+    private <T> void mockWebClientPost(String uri, T body, Mono<Void> result) {
+        WebClient.RequestBodyUriSpec uriSpec = mock(WebClient.RequestBodyUriSpec.class); 
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);   
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);              
+
+        when(webClient.post()).thenReturn(uriSpec);
+        when(uriSpec.uri(eq(uri))).thenReturn(uriSpec);
+        when(uriSpec.bodyValue(eq(body))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(Void.class)).thenReturn(result);
+    }
+
+    private <T> void mockWebClientPut(String uri, T body, Mono<Void> result) {
+        WebClient.RequestBodyUriSpec uriSpec = mock(WebClient.RequestBodyUriSpec.class); 
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);   
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);              
+
+        when(webClient.put()).thenReturn(uriSpec);
+        when(uriSpec.uri(eq(uri))).thenReturn(uriSpec);
+        when(uriSpec.bodyValue(eq(body))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(Void.class)).thenReturn(result);
+    }
+
+    private void mockWebClientDelete(String uri, Mono<Void> result) {
+        WebClient.RequestHeadersUriSpec uriSpec = mock(WebClient.RequestHeadersUriSpec.class); 
+        WebClient.RequestHeadersSpec headersSpec = mock(WebClient.RequestHeadersSpec.class);   
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);              
+
+        when(webClient.delete()).thenReturn(uriSpec);
+        when(uriSpec.uri(eq(uri))).thenReturn(headersSpec);
+        when(headersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(Void.class)).thenReturn(result);
+    }
 }

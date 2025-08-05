@@ -14,21 +14,28 @@ import static org.hamcrest.core.Is.is;
 import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.notification.*;
-import org.testng.annotations.Test;
+
+import org.junit.jupiter.api.MethodOrderer; 
+import org.junit.jupiter.api.Order; 
+import org.junit.jupiter.api.Test;  
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.util.Arrays;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NotificationServiceAT extends AbstractGoodDataAT {
 
     private Channel channel;
     private Subscription subscription;
 
-    @Test(groups = "notification", dependsOnGroups = "project")
+    @Test
+    @Order(1)
     public void triggerProjectEvent() throws Exception {
         gd.getNotificationService().triggerEvent(project, new ProjectEvent("sdk.event.test", singletonMap("test", "map")));
     }
 
-    @Test(groups = "notification", dependsOnGroups = "project")
+    @Test
+    @Order(2)
     public void createChannel() throws Exception {
         final Account current = gd.getAccountService().getCurrent();
 
@@ -40,7 +47,8 @@ public class NotificationServiceAT extends AbstractGoodDataAT {
         assertThat(channel, is(notNullValue()));
     }
 
-    @Test(groups = "notification", dependsOnMethods = "createChannel")
+    @Test
+    @Order(3)
     public void createSubscription() throws Exception {
         subscription = gd.getNotificationService().createSubscription(project,
                 gd.getAccountService().getCurrent(),
@@ -54,12 +62,14 @@ public class NotificationServiceAT extends AbstractGoodDataAT {
         assertThat(subscription, is(notNullValue()));
     }
 
-    @Test(groups = "notification", dependsOnMethods = "createSubscription")
+    @Test
+    @Order(4)
     public void removeChannel() throws Exception {
         gd.getNotificationService().removeChannel(channel);
     }
 
-    @Test(groups = "notification", dependsOnMethods = "removeChannel")
+    @Test
+    @Order(5)
     public void removeSubscription() throws Exception {
         gd.getNotificationService().removeSubscription(subscription);
     }

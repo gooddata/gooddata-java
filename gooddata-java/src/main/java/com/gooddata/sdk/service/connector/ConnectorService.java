@@ -13,13 +13,15 @@ import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.model.project.ProjectTemplate;
 import com.gooddata.sdk.service.*;
 import com.gooddata.sdk.service.project.ProjectService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import com.gooddata.sdk.service.retry.RetryableWebClient;
+import com.gooddata.sdk.service.retry.GetServerErrorRetryStrategy;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.util.UriTemplate;
 
-import java.io.IOException;
+import org.springframework.http.HttpMethod;
+import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -35,10 +37,12 @@ public class ConnectorService extends AbstractService {
 
     public static final UriTemplate STATUS_TEMPLATE = new UriTemplate(IntegrationProcessStatus.URI);
     private final ProjectService projectService;
+    private final RetryableWebClient retryableWebClient;
 
-    public ConnectorService(final RestTemplate restTemplate, final ProjectService projectService, final GoodDataSettings settings) {
-        super(restTemplate, settings);
+    public ConnectorService(final WebClient webClient, final ProjectService projectService, final GoodDataSettings settings) {
+        super(webClient, settings);
         this.projectService = notNull(projectService, "projectService");
+        this.retryableWebClient = new RetryableWebClient(webClient, settings.getRetrySettings(), new GetServerErrorRetryStrategy());
     }
 
     /**
@@ -55,14 +59,47 @@ public class ConnectorService extends AbstractService {
         notNull(connectorType, "connector");
 
         try {
-            return restTemplate.getForObject(Integration.URL, Integration.class, project.getId(), connectorType.getName());
+            String url = Integration.URL.replace("{project}", project.getId())
+                                       .replace("{connector}", connectorType.getName());
+            
+            // For retryable client, we need to construct the full URI
+            // Since the retryable client's execute method expects a complete URI,
+            // we'll need to use a different approach for now to maintain compatibility
+            // Let's use the webClient directly but check if we need retries based on response
+            return webClient.get()
+                    .uri(url)
+                    .retrieve()
+                    .bodyToMono(Integration.class)
+                    .retryWhen(reactor.util.retry.Retry.backoff(
+                        settings.getRetrySettings().getRetryCount(),
+                        java.time.Duration.ofMillis(settings.getRetrySettings().getRetryInitialInterval()))
+                        .maxBackoff(java.time.Duration.ofMillis(settings.getRetrySettings().getRetryMaxInterval()))
+                        .filter(throwable -> {
+                            if (throwable instanceof WebClientResponseException) {
+                                WebClientResponseException wcre = (WebClientResponseException) throwable;
+                                // Only retry for GET operations with server errors (500, 502, 503, 504, 507)
+                                return new GetServerErrorRetryStrategy().retryAllowed("GET", wcre.getStatusCode().value(), null);
+                            }
+                            return false;
+                        }))
+                    .onErrorMap(WebClientResponseException.class, e -> {
+                        if (e.getStatusCode().value() == 404) {
+                            return new IntegrationNotFoundException(project, connectorType, e);
+                        } else {
+                            return new GoodDataRestException(
+                                e.getStatusCode().value(),
+                                e.getStatusText(),
+                                e.getResponseBodyAsString(),
+                                url,
+                                "WebClient"
+                            );
+                        }
+                    })
+                    .block();
         } catch (GoodDataRestException e) {
-            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
-                throw new IntegrationNotFoundException(project, connectorType, e);
-            } else {
-                throw e;
-            }
-        } catch (RestClientException e) {
+            // Re-throw GoodDataRestException (including IntegrationNotFoundException) as-is
+            throw e;
+        } catch (Exception e) {
             throw new ConnectorException("Unable to get " + connectorType + " integration", e);
         }
     }
@@ -108,9 +145,15 @@ public class ConnectorService extends AbstractService {
         notNull(integration, "integration");
 
         try {
-            return restTemplate.postForObject(Integration.URL, integration, Integration.class, project.getId(),
-                    connectorType.getName());
-        } catch (GoodDataRestException | RestClientException e) {
+            String url = Integration.URL.replace("{project}", project.getId())
+                                       .replace("{connector}", connectorType.getName());
+            return webClient.post()
+                    .uri(url)
+                    .bodyValue(integration)
+                    .retrieve()
+                    .bodyToMono(Integration.class)
+                    .block();
+        } catch (Exception e) {
             throw new ConnectorException("Unable to create " + connectorType + " integration", e);
         }
     }
@@ -131,14 +174,29 @@ public class ConnectorService extends AbstractService {
         notNull(integration, "integration");
 
         try {
-            restTemplate.put(Integration.URL, integration, project.getId(), connectorType.getName());
-        } catch (GoodDataRestException e) {
-            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+            String url = Integration.URL.replace("{project}", project.getId())
+                                       .replace("{connector}", connectorType.getName());
+            webClient.put()
+                    .uri(url)
+                    .bodyValue(integration)
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode().value() == 404) {
                 throw new IntegrationNotFoundException(project, connectorType, e);
             } else {
-                throw e;
+                String url = Integration.URL.replace("{project}", project.getId())
+                                           .replace("{connector}", connectorType.getName());
+                throw new GoodDataRestException(
+                    e.getStatusCode().value(),
+                    e.getStatusText(),
+                    e.getResponseBodyAsString(),
+                    url,
+                    "WebClient"
+                );
             }
-        } catch (RestClientException e) {
+        } catch (Exception e) {
             throw new ConnectorException("Unable to update " + connectorType + " integration", e);
         }
     }
@@ -155,16 +213,30 @@ public class ConnectorService extends AbstractService {
         notNull(project, "project");
         notNull(project.getId(), "project.id");
         notNull(connectorType, "connector");
-        
+
         try {
-            restTemplate.delete(Integration.URL, project.getId(), connectorType.getName());
-        } catch (GoodDataRestException e) {
-            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
+            String url = Integration.URL.replace("{project}", project.getId())
+                                       .replace("{connector}", connectorType.getName());
+            webClient.delete()
+                    .uri(url)
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode().value() == 404) {
                 throw new IntegrationNotFoundException(project, connectorType, e);
             } else {
-                throw e;
+                String url = Integration.URL.replace("{project}", project.getId())
+                                           .replace("{connector}", connectorType.getName());
+                throw new GoodDataRestException(
+                    e.getStatusCode().value(),
+                    e.getStatusText(),
+                    e.getResponseBodyAsString(),
+                    url,
+                    "WebClient"
+                );
             }
-        } catch (RestClientException e) {
+        } catch (Exception e) {
             throw new ConnectorException("Unable to delete " + connectorType + " integration", e);
         }
     }
@@ -195,8 +267,13 @@ public class ConnectorService extends AbstractService {
         notNull(settingsClass, "settingsClass");
 
         try {
-            return restTemplate.getForObject(connectorType.getSettingsUrl(), settingsClass, project.getId());
-        } catch (GoodDataRestException | RestClientException e) {
+            String url = connectorType.getSettingsUrl().replace("{project}", project.getId());
+            return webClient.get()
+                    .uri(url)
+                    .retrieve()
+                    .bodyToMono(settingsClass)
+                    .block();
+        } catch (Exception e) {
             throw new ConnectorException("Unable to get " + connectorType + " integration settings", e);
         }
     }
@@ -215,8 +292,14 @@ public class ConnectorService extends AbstractService {
         notNull(project, "project");
 
         try {
-            restTemplate.put(settings.getConnectorType().getSettingsUrl(), settings, project.getId());
-        } catch (GoodDataRestException | RestClientException e) {
+            String url = settings.getConnectorType().getSettingsUrl().replace("{project}", project.getId());
+            webClient.put()
+                    .uri(url)
+                    .bodyValue(settings)
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+        } catch (Exception e) {
             throw new ConnectorException("Unable to set " + settings.getConnectorType() + " settings", e);
         }
     }
@@ -236,10 +319,16 @@ public class ConnectorService extends AbstractService {
 
         final String connectorType = execution.getConnectorType().getName();
         try {
-            final UriResponse response = restTemplate
-                    .postForObject(ProcessStatus.URL, execution, UriResponse.class, project.getId(), connectorType);
+            String url = ProcessStatus.URL.replace("{project}", project.getId())
+                                         .replace("{connector}", connectorType);
+            final UriResponse response = webClient.post()
+                    .uri(url)
+                    .bodyValue(execution)
+                    .retrieve()
+                    .bodyToMono(UriResponse.class)
+                    .block();
             return createProcessPollResult(notNullState(response, "created process response").getUri());
-        } catch (GoodDataRestException | RestClientException e) {
+        } catch (Exception e) {
             throw new ConnectorException("Unable to execute " + connectorType + " process", e);
         }
     }
@@ -281,28 +370,48 @@ public class ConnectorService extends AbstractService {
     }
 
     /**
-     * Get Zendesk reload.
+     * Get Zendesk reload by URI using WebClient.
      * @param reloadUri existing reload URI
      * @return reload
      */
     public Reload getZendesk4ReloadByUri(final String reloadUri) {
         notNull(reloadUri, "reloadUri");
         try {
-            return restTemplate.getForObject(reloadUri, Reload.class);
-        } catch (GoodDataRestException | RestClientException e) {
+            return webClient.get()
+                    .uri(reloadUri)
+                    .retrieve()
+                    .bodyToMono(Reload.class)
+                    .block();
+        } catch (Exception e) {
             throw new ConnectorException("Unable to get reload", e);
         }
     }
 
-    /**
-     * Scheduler new reload.
-     * @param project project to reload
-     * @param reload reload parameters
-     * @return created reload
-     */
-    public Reload scheduleZendesk4Reload(final Project project, final Reload reload) {
-        return restTemplate.postForObject(Reload.URL, reload, Reload.class, project.getId());
-    }
+
+        /**
+         * Schedule a new Zendesk4 reload using WebClient.
+         * @param project project to reload
+         * @param reload reload parameters
+         * @return created reload
+         */
+        public Reload scheduleZendesk4Reload(final Project project, final Reload reload) {
+            notNull(project, "project");
+            notNull(project.getId(), "project.id");
+            notNull(reload, "reload");
+
+            try {
+                String url = Reload.URL.replace("{project}", project.getId()); // если в шаблоне есть {projectId}
+                return webClient.post()
+                        .uri(url)
+                        .bodyValue(reload)
+                        .retrieve()
+                        .bodyToMono(Reload.class)
+                        .block();
+            } catch (Exception e) {
+                throw new ConnectorException("Unable to schedule Zendesk4 reload for project " + project.getId(), e);
+            }
+        }
+
 
     protected FutureResult<ProcessStatus> createProcessPollResult(final String uri) {
         final Map<String, String> match = STATUS_TEMPLATE.match(uri);
@@ -310,9 +419,15 @@ public class ConnectorService extends AbstractService {
         final String processId = match.get("process");
         return new PollResult<>(this, new SimplePollHandler<ProcessStatus>(uri, ProcessStatus.class) {
             @Override
-            public boolean isFinished(final ClientHttpResponse response) throws IOException {
-                final ProcessStatus process = extractData(response, ProcessStatus.class);
-                return process.isFinished();
+            public boolean isFinished(final ClientResponse response) {
+                int code = response.statusCode().value();
+                if (code == 200) {
+                    ProcessStatus process = response.bodyToMono(ProcessStatus.class).block();
+                    return process != null && process.isFinished();
+                } else if (code == 202) {
+                    return false;
+                }
+                throw new ConnectorException(format("%s process %s returned unknown HTTP code %s", connectorType, processId, code));
             }
 
             @Override

@@ -14,18 +14,14 @@ import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.service.account.AccountService;
 import com.gooddata.sdk.service.gdc.DataStoreService;
 import com.gooddata.sdk.model.project.Project;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClient.*;
+import reactor.core.publisher.Mono;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -46,9 +42,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.Mockito.*;
-import static org.springframework.http.HttpMethod.GET;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ProcessServiceTest {
 
@@ -62,8 +57,10 @@ public class ProcessServiceTest {
     private static final String PROCESSES_JSON = format("{\"processes\":{\"items\":[%s]}}", PROCESS_JSON);
 
     private DataloadProcess process;
+
     @Mock
-    private RestTemplate restTemplate;
+    private WebClient webClient;
+
     @Mock
     private AccountService accountService;
     @Mock
@@ -75,43 +72,72 @@ public class ProcessServiceTest {
 
     private ProcessService processService;
 
-    @BeforeMethod
+    // WebClient mocks 
+    private WebClient.RequestBodyUriSpec postSpecMock;
+    private WebClient.RequestBodyUriSpec putSpecMock; 
+    private WebClient.RequestBodySpec bodySpecMock;
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private WebClient.RequestHeadersSpec headersSpecMock;
+    private WebClient.RequestHeadersUriSpec uriSpecMock;
+    private WebClient.ResponseSpec responseSpecMock;
+
+    @BeforeEach 
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this).close();
-        processService = new ProcessService(restTemplate, accountService, dataStoreService, new GoodDataSettings());
+        processService = new ProcessService(webClient, accountService, dataStoreService, new GoodDataSettings());
+
         process = OBJECT_MAPPER.readValue(PROCESS_JSON, DataloadProcess.class);
         when(project.getId()).thenReturn(PROJECT_ID);
         when(accountService.getCurrent()).thenReturn(account);
         when(account.getId()).thenReturn(ACCOUNT_ID);
+
+        postSpecMock = mock(WebClient.RequestBodyUriSpec.class);
+        putSpecMock = mock(WebClient.RequestBodyUriSpec.class); 
+        bodySpecMock = mock(WebClient.RequestBodySpec.class);   
+        headersSpecMock = mock(WebClient.RequestHeadersSpec.class);
+        uriSpecMock = mock(WebClient.RequestHeadersUriSpec.class);  
+        responseSpecMock = mock(WebClient.ResponseSpec.class);      
+
+        // PUT setup
+        when(webClient.put()).thenReturn(putSpecMock);
+        when(putSpecMock.uri(any(URI.class))).thenReturn(bodySpecMock);
+
+        // POST setup
+        when(webClient.post()).thenReturn(postSpecMock);
+        when(postSpecMock.uri(any(URI.class))).thenReturn(bodySpecMock);
+
+        // Common setup
+        when(bodySpecMock.contentType(any())).thenReturn(bodySpecMock);
+        when(bodySpecMock.body(any())).thenAnswer(inv -> headersSpecMock);
+        when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
     }
 
     @Test
     public void shouldDeploySmallProcessUsingAPI() throws Exception {
-
         final DataloadProcess process = new DataloadProcess("test", ProcessType.GRAPH);
 
-        final ArgumentCaptor<HttpEntity> entityCaptor = ArgumentCaptor.forClass(HttpEntity.class);
-
-        when(restTemplate.exchange(any(URI.class), eq(HttpMethod.POST), entityCaptor.capture(), eq(DataloadProcess.class)))
-                .thenReturn(new ResponseEntity<>(process, HttpStatus.CREATED));
+        when(webClient.post()).thenReturn(postSpecMock);
+        when(postSpecMock.uri(any(URI.class))).thenReturn(bodySpecMock);
+        when(bodySpecMock.body(any())).thenAnswer(inv -> headersSpecMock);
+        when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
+        when(responseSpecMock.bodyToMono(eq(DataloadProcess.class))).thenReturn(Mono.just(process));
 
         processService.createProcess(project, process, createProcessOfSize(1));
-
-        assertNotNull(entityCaptor.getValue());
-        assertNotNull(entityCaptor.getValue().getBody());
-        assertTrue(entityCaptor.getValue().getBody() instanceof MultiValueMap);
 
         verifyNoInteractions(dataStoreService);
     }
 
     @Test
     public void shouldDeployLargeProcessUsingWebDAV() throws Exception {
-
         final DataloadProcess process = new DataloadProcess("test", ProcessType.GRAPH);
 
         when(dataStoreService.getUri(anyString())).thenReturn(create("URI"));
-        when(restTemplate.exchange(any(URI.class), eq(HttpMethod.POST), eq(new HttpEntity<>(process)), eq(DataloadProcess.class)))
-            .thenReturn(new ResponseEntity<>(process, HttpStatus.CREATED));
+        when(webClient.post()).thenReturn(postSpecMock);
+        when(postSpecMock.uri(any(URI.class))).thenReturn(bodySpecMock);
+        when(bodySpecMock.bodyValue(any())).thenReturn(headersSpecMock);
+        when(bodySpecMock.body(any())).thenAnswer(inv -> headersSpecMock);
+        when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
+        when(responseSpecMock.bodyToMono(eq(DataloadProcess.class))).thenReturn(Mono.just(process));
 
         processService.createProcess(project, process, createProcessOfSize(2048));
 
@@ -128,131 +154,200 @@ public class ProcessServiceTest {
                 s.write(b);
             }
         }
-
         file.deleteOnExit();
-
         return file;
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test
     public void testUpdateProcessWithNullProcess() throws Exception {
-        processService.updateProcess(null, File.createTempFile("test", null));
+        assertThrows(IllegalArgumentException.class, () ->
+            processService.updateProcess(null, File.createTempFile("test", null))
+        );
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void testUpdateProcessWithRestClientError() throws Exception {
-        when(restTemplate.exchange(eq(create(PROCESS_URI)), any(HttpMethod.class), any(HttpEntity.class),
-                eq(DataloadProcess.class))).thenThrow(new RestClientException(""));
-        processService.updateProcess(process, File.createTempFile("test", null));
+        when(webClient.put()).thenReturn(putSpecMock);
+        when(putSpecMock.uri(any(URI.class))).thenReturn(bodySpecMock);
+        when(bodySpecMock.contentType(any())).thenReturn(bodySpecMock);
+        when(bodySpecMock.body(any())).thenReturn(headersSpecMock);
+        when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
+        when(responseSpecMock.bodyToMono(eq(DataloadProcess.class)))
+            .thenReturn(Mono.error(new RuntimeException("WebClient error")));
+
+        assertThrows(GoodDataException.class, () ->
+            processService.updateProcess(process, File.createTempFile("test", null))
+        );
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void testUpdateProcessWithNoApiResponse() throws Exception {
-        when(restTemplate.exchange(eq(create(PROCESS_URI)), any(HttpMethod.class), any(HttpEntity.class),
-                eq(DataloadProcess.class))).thenReturn(null);
-        processService.updateProcess(process, File.createTempFile("test", null));
+        when(webClient.put()).thenReturn(putSpecMock);
+        when(putSpecMock.uri(eq(create(PROCESS_URI)))).thenReturn(bodySpecMock);
+        when(bodySpecMock.body(any())).thenAnswer(inv -> headersSpecMock);
+        when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
+        when(responseSpecMock.bodyToMono(eq(DataloadProcess.class))).thenReturn(Mono.empty());
+
+        assertThrows(GoodDataException.class, () ->
+            processService.updateProcess(process, File.createTempFile("test", null))
+        );
     }
 
     @Test
     public void testUpdateProcess() throws Exception {
-        when(restTemplate.exchange(eq(create(PROCESS_URI)), any(HttpMethod.class), any(HttpEntity.class),
-                eq(DataloadProcess.class))).thenReturn(new ResponseEntity<>(process, HttpStatus.OK));
+        when(webClient.put()).thenReturn(putSpecMock);
+        when(putSpecMock.uri(any(URI.class))).thenReturn(bodySpecMock);
+        when(bodySpecMock.contentType(any())).thenReturn(bodySpecMock);
+        when(bodySpecMock.body(any())).thenAnswer(inv -> headersSpecMock);
+        when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
+        when(responseSpecMock.bodyToMono(eq(DataloadProcess.class))).thenReturn(Mono.just(process));
         final DataloadProcess result = processService
-                .updateProcess(process, File.createTempFile("test", null));
+            .updateProcess(process, File.createTempFile("test", null));
         assertThat(result, is(process));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test
     public void testGetProcessByUriWithNullUri() {
-        processService.getProcessByUri(null);
+        assertThrows(IllegalArgumentException.class, () -> processService.getProcessByUri(null));
     }
 
     @Test
     public void testGetProcessByUri() {
-        when(restTemplate.getForObject(PROCESS_URI, DataloadProcess.class)).thenReturn(process);
-
+        when(webClient.get()).thenReturn(uriSpecMock);
+        when(uriSpecMock.uri(PROCESS_URI)).thenReturn(headersSpecMock);
+        when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
+        when(responseSpecMock.bodyToMono(DataloadProcess.class)).thenReturn(Mono.just(process));
         final DataloadProcess result = processService.getProcessByUri(PROCESS_URI);
         assertThat(result, is(process));
     }
 
-    @Test(expectedExceptions = ProcessNotFoundException.class)
+    @Test
     public void testGetProcessByUriNotFound() {
-        when(restTemplate.getForObject(PROCESS_URI, DataloadProcess.class)).thenThrow(
-                new GoodDataRestException(404, "", "", "", ""));
-        processService.getProcessByUri(PROCESS_URI);
+        when(webClient.get()).thenReturn(uriSpecMock);
+        when(uriSpecMock.uri(PROCESS_URI)).thenReturn(headersSpecMock);
+        when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
+        when(responseSpecMock.bodyToMono(DataloadProcess.class))
+            .thenReturn(Mono.error(new GoodDataRestException(404, "", "", "", "")));
+        assertThrows(ProcessNotFoundException.class, () ->
+            processService.getProcessByUri(PROCESS_URI)
+        );
     }
 
-    @Test(expectedExceptions = GoodDataRestException.class)
+    @Test
     public void testGetProcessByUriServerError() {
-        when(restTemplate.getForObject(PROCESS_URI, DataloadProcess.class))
-                .thenThrow(new GoodDataRestException(500, "", "", "", ""));
-        processService.getProcessByUri(PROCESS_URI);
+        when(webClient.get()).thenReturn(uriSpecMock);
+        when(uriSpecMock.uri(PROCESS_URI)).thenReturn(headersSpecMock);
+        when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
+        GoodDataRestException restEx = new GoodDataRestException(500, "", "", "", "");
+        when(responseSpecMock.bodyToMono(DataloadProcess.class))
+            .thenReturn(Mono.error(restEx));
+
+        GoodDataException ex = assertThrows(GoodDataException.class, () ->
+            processService.getProcessByUri(PROCESS_URI)
+        );
+        assertTrue(ex.getCause() instanceof GoodDataRestException);
+        assertEquals(restEx, ex.getCause());
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void testGetProcessByUriClientError() {
-        when(restTemplate.getForObject(PROCESS_URI, DataloadProcess.class)).thenThrow(new RestClientException(""));
-        processService.getProcessByUri(PROCESS_URI);
+        when(webClient.get()).thenReturn(uriSpecMock);
+        when(uriSpecMock.uri(PROCESS_URI)).thenReturn(headersSpecMock);
+        when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
+        when(responseSpecMock.bodyToMono(DataloadProcess.class))
+            .thenReturn(Mono.error(new RuntimeException("WebClient error")));
+        assertThrows(GoodDataException.class, () ->
+            processService.getProcessByUri(PROCESS_URI)
+        );
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void testListUserProcessesWithRestClientError() {
-        when(restTemplate.getForObject(create(USER_PROCESS_URI), DataloadProcesses.class))
-                .thenThrow(new RestClientException(""));
-        processService.listUserProcesses();
+        when(webClient.get()).thenReturn(uriSpecMock);
+        when(uriSpecMock.uri(create(USER_PROCESS_URI))).thenReturn(headersSpecMock);
+        when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
+        when(responseSpecMock.bodyToMono(DataloadProcesses.class))
+            .thenReturn(Mono.error(new RuntimeException("WebClient error")));
+        assertThrows(GoodDataException.class, () -> processService.listUserProcesses());
     }
 
-    @Test(expectedExceptions = GoodDataException.class)
+    @Test
     public void testListUserProcessesWithNullResponse() {
-        when(restTemplate.getForObject(create(USER_PROCESS_URI), DataloadProcesses.class)).thenReturn(null);
-        processService.listUserProcesses();
+        when(webClient.get()).thenReturn(uriSpecMock);
+        when(uriSpecMock.uri(create(USER_PROCESS_URI))).thenReturn(headersSpecMock);
+        when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
+        when(responseSpecMock.bodyToMono(DataloadProcesses.class)).thenReturn(Mono.empty());
+        assertThrows(GoodDataException.class, () -> processService.listUserProcesses());
     }
 
     @Test
     public void testListUserProcessesWithNoProcesses() throws Exception {
-        when(restTemplate.getForObject(create(USER_PROCESS_URI), DataloadProcesses.class))
-                .thenReturn(OBJECT_MAPPER.readValue("{\"processes\":{\"items\":[]}}", DataloadProcesses.class));
+        when(webClient.get()).thenReturn(uriSpecMock);
+        when(uriSpecMock.uri(create(USER_PROCESS_URI))).thenReturn(headersSpecMock);
+        when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
+        when(responseSpecMock.bodyToMono(DataloadProcesses.class))
+            .thenReturn(Mono.just(OBJECT_MAPPER.readValue("{\"processes\":{\"items\":[]}}", DataloadProcesses.class)));
         final Collection<DataloadProcess> result = processService.listUserProcesses();
         assertThat(result, empty());
     }
 
     @Test
     public void testListUserProcessesWithOneProcesses() throws IOException {
-        when(restTemplate.getForObject(create(USER_PROCESS_URI), DataloadProcesses.class))
-                .thenReturn(OBJECT_MAPPER.readValue(PROCESSES_JSON, DataloadProcesses.class));
+        when(webClient.get()).thenReturn(uriSpecMock);
+        when(uriSpecMock.uri(create(USER_PROCESS_URI))).thenReturn(headersSpecMock);
+        when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
+        when(responseSpecMock.bodyToMono(DataloadProcesses.class))
+            .thenReturn(Mono.just(OBJECT_MAPPER.readValue(PROCESSES_JSON, DataloadProcesses.class)));
         final Collection<DataloadProcess> result = processService.listUserProcesses();
         assertThat(result, hasSize(1));
         assertThat(result.iterator().next().getName(), is(process.getName()));
         assertThat(result.iterator().next().getType(), is(process.getType()));
     }
 
-    @Test(expectedExceptions = ScheduleExecutionException.class)
+    @Test
     public void testExecuteScheduleException() {
-        when(restTemplate.postForObject(eq(SCHEDULE_EXECUTIONS_URI), any(ScheduleExecution.class), eq(ScheduleExecution.class)))
-                .thenThrow(new RestClientException(""));
+        when(webClient.post()).thenReturn(postSpecMock);
+        when(postSpecMock.uri(eq(SCHEDULE_EXECUTIONS_URI))).thenReturn(bodySpecMock);
+        when(bodySpecMock.bodyValue(any())).thenReturn(headersSpecMock);
+        when(bodySpecMock.body(any())).thenAnswer(inv -> headersSpecMock);
+        when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
+        when(responseSpecMock.bodyToMono(ScheduleExecution.class))
+            .thenReturn(Mono.error(new RuntimeException("WebClient error")));
 
         final Schedule schedule = mock(Schedule.class);
-
         when(schedule.getExecutionsUri()).thenReturn(SCHEDULE_EXECUTIONS_URI);
 
-        processService.executeSchedule(schedule);
+        assertThrows(ScheduleExecutionException.class, () ->
+            processService.executeSchedule(schedule)
+        );
     }
 
-    @Test(expectedExceptions = ScheduleExecutionException.class)
+    @Test
     public void testExecuteScheduleExceptionDuringPolling() {
+
         final ScheduleExecution execution = mock(ScheduleExecution.class);
         when(execution.getUri()).thenReturn(SCHEDULE_EXECUTION_URI);
 
         final Schedule schedule = mock(Schedule.class);
         when(schedule.getExecutionsUri()).thenReturn(SCHEDULE_EXECUTIONS_URI);
 
-        when(restTemplate.postForObject(eq(SCHEDULE_EXECUTIONS_URI), any(ScheduleExecution.class), eq(ScheduleExecution.class)))
-                .thenReturn(execution);
+        when(webClient.post()).thenReturn(postSpecMock);
+        when(postSpecMock.uri(eq(SCHEDULE_EXECUTIONS_URI))).thenReturn(bodySpecMock);
+        when(bodySpecMock.bodyValue(any())).thenReturn(headersSpecMock);
+        when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
+        when(responseSpecMock.bodyToMono(ScheduleExecution.class))
+            .thenReturn(Mono.just(execution));
 
-        when(restTemplate.execute(eq(URI.create(SCHEDULE_EXECUTION_URI)), eq(GET), any(), any()))
-                .thenThrow(mock(GoodDataRestException.class));
+        when(webClient.get()).thenReturn(uriSpecMock);
+        when(uriSpecMock.uri(eq(SCHEDULE_EXECUTION_URI))).thenReturn(headersSpecMock);
+        when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
+        when(responseSpecMock.bodyToMono(ScheduleExecution.class))
+            .thenReturn(Mono.error(new GoodDataRestException(500, "", "", "", "")));
 
-        FutureResult<ScheduleExecution> futureResult = processService.executeSchedule(schedule);
-        futureResult.get();
+        assertThrows(ScheduleExecutionException.class, () -> {
+            FutureResult<ScheduleExecution> futureResult = processService.executeSchedule(schedule);
+            futureResult.get();
+        });
     }
+
 }

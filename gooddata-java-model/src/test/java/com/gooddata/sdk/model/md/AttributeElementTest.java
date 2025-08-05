@@ -6,7 +6,7 @@
 package com.gooddata.sdk.model.md;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;

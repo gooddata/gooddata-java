@@ -6,7 +6,6 @@
 package com.gooddata.sdk.service.account;
 
 import com.gooddata.sdk.common.GoodDataException;
-import com.gooddata.sdk.common.GoodDataRestException;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.account.Accounts;
 import com.gooddata.sdk.model.account.SeparatorSettings;
@@ -14,20 +13,19 @@ import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.sdk.service.GoodDataSettings;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.json.MappingJacksonValue;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriTemplate;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNull;
 import static com.gooddata.sdk.common.util.Validate.notNullState;
 
+
 /**
  * Service to access and manipulate account.
  */
 public class AccountService extends AbstractService {
+
 
     public static final UriTemplate ACCOUNT_TEMPLATE = new UriTemplate(Account.URI);
     public static final UriTemplate ACCOUNTS_TEMPLATE = new UriTemplate(Account.ACCOUNTS_URI);
@@ -35,13 +33,9 @@ public class AccountService extends AbstractService {
     public static final UriTemplate LOGIN_TEMPLATE = new UriTemplate(Account.LOGIN_URI);
     public static final UriTemplate SEPARATORS_TEMPLATE = new UriTemplate(SeparatorSettings.URI);
 
-    /**
-     * Constructs service for GoodData account management.
-     * @param restTemplate RESTful HTTP Spring template
-     * @param settings settings
-     */
-    public AccountService(final RestTemplate restTemplate, final GoodDataSettings settings) {
-        super(restTemplate, settings);
+
+    public AccountService(WebClient webClient, GoodDataSettings settings) {     
+        super(webClient, settings); 
     }
 
     /**
@@ -62,11 +56,16 @@ public class AccountService extends AbstractService {
     public void logout() {
         try {
             final String id = getCurrent().getId();
-            restTemplate.delete(Account.LOGIN_URI, id);
-        } catch (GoodDataException | RestClientException e) {
+            webClient.delete()  
+                    .uri(Account.LOGIN_URI, id)  
+                    .retrieve()  
+                    .toBodilessEntity() 
+                    .block();  
+        } catch (Exception e) {
             throw new GoodDataException("Unable to logout", e);
         }
     }
+
 
     /**
      * Creates new account in given organization (domain).
@@ -81,9 +80,16 @@ public class AccountService extends AbstractService {
         notEmpty(organizationName, "organizationName");
 
         try {
-            final UriResponse uriResponse = restTemplate.postForObject(Account.ACCOUNTS_URI, account, UriResponse.class, organizationName);
+            UriResponse uriResponse = webClient.post()  
+                    .uri(uriBuilder -> uriBuilder
+                            .path(Account.ACCOUNTS_URI)
+                            .build(organizationName))   
+                    .bodyValue(account)
+                    .retrieve() 
+                    .bodyToMono(UriResponse.class)
+                    .block(); 
             return getAccountByUri(notNullState(uriResponse, "created account response").getUri());
-        } catch (GoodDataException | RestClientException e) {
+        } catch (Exception e) {
             throw new GoodDataException("Unable to create account", e);
         }
     }
@@ -99,39 +105,31 @@ public class AccountService extends AbstractService {
         notNull(account.getUri(), "account.uri");
 
         try {
-            restTemplate.delete(account.getUri());
-        } catch (GoodDataRestException e) {
-            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
-                throw new AccountNotFoundException(account.getUri(), e);
-            } else {
-                throw e;
-            }
-        } catch (GoodDataException e) {
+            webClient.delete()  
+                    .uri(account.getUri())  
+                    .retrieve()     
+                    .toBodilessEntity()     
+                    .block();   
+        } catch (Exception e) {
             throw new GoodDataException("Unable to remove account", e);
         }
     }
 
-    /**
-     * Get account for given account id
-     * @param id to search for
-     * @return account for id
-     * @throws AccountNotFoundException when account for given id can't be found
-     * @throws GoodDataException when different error occurs
-     */
     public Account getAccountById(final String id) {
         notNull(id, "id");
         try {
-            return restTemplate.getForObject(Account.URI, Account.class, id);
-        } catch (GoodDataRestException e) {
-            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
-                throw new AccountNotFoundException(ACCOUNT_TEMPLATE.expand(id).toString(), e);
-            } else {
-                throw e;
-            }
-        } catch (RestClientException e) {
+            return webClient.get()  
+                    .uri(uriBuilder -> uriBuilder
+                            .path(Account.URI)
+                            .build(id))     
+                    .retrieve()     
+                    .bodyToMono(Account.class)  
+                    .block();   
+        } catch (Exception e) {
             throw new GoodDataException("Unable to get account", e);
         }
     }
+
 
     /**
      * Get account by given login.
@@ -146,14 +144,19 @@ public class AccountService extends AbstractService {
         notNull(email, "email");
         notNull(organizationName, "organizationName");
         try {
-            final Accounts accounts = restTemplate.getForObject(
-                Account.ACCOUNT_BY_EMAIL_URI, Accounts.class, organizationName, email);
+            Accounts accounts = webClient.get()     
+                    .uri(uriBuilder -> uriBuilder
+                            .path(Account.ACCOUNT_BY_EMAIL_URI)
+                            .build(organizationName, email))    
+                    .retrieve() 
+                    .bodyToMono(Accounts.class)     
+                    .block();   
             if (accounts != null && !accounts.getPageItems().isEmpty()) {
                 return accounts.getPageItems().get(0);
             }
             throw new AccountNotFoundException("User was not found by email " +
-                email + " in organization " + organizationName, Account.ACCOUNT_BY_EMAIL_URI);
-        } catch (RestClientException e) {
+                    email + " in organization " + organizationName, Account.ACCOUNT_BY_EMAIL_URI);
+        } catch (Exception e) {
             throw new GoodDataException("Unable to get account", e);
         }
     }
@@ -180,16 +183,14 @@ public class AccountService extends AbstractService {
         notNull(account.getUri(), "account.uri");
 
         try {
-            final MappingJacksonValue jacksonValue = new MappingJacksonValue(account);
-            jacksonValue.setSerializationView(Account.UpdateView.class);
-            restTemplate.put(account.getUri(), jacksonValue);
-        } catch (GoodDataRestException e) {
-            if (HttpStatus.NOT_FOUND.value() == e.getStatusCode()) {
-                throw new AccountNotFoundException(account.getUri(), e);
-            } else {
-                throw e;
-            }
-        } catch (GoodDataException e) {
+            // Changed: .put() with WebClient; manual JSON view can be used if needed
+            webClient.put()
+                    .uri(account.getUri())
+                    .bodyValue(account)
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+        } catch (Exception e) {
             throw new GoodDataException("Unable to update account", e);
         }
     }
@@ -205,8 +206,12 @@ public class AccountService extends AbstractService {
         notEmpty(account.getUri(), "account.uri");
 
         try {
-            return restTemplate.getForObject(SEPARATORS_TEMPLATE.expand(account.getId()), SeparatorSettings.class);
-        } catch (RestClientException e) {
+            return webClient.get()  
+                    .uri(SEPARATORS_TEMPLATE.expand(account.getId()))   
+                    .retrieve()     
+                    .bodyToMono(SeparatorSettings.class)    
+                    .block();   
+        } catch (Exception e) {
             throw new GoodDataException("Unable to get separators for account=" + account.getUri(), e);
         }
     }

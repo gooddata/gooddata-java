@@ -7,7 +7,7 @@ package com.gooddata.sdk.service.gdc;
 
 import com.gooddata.sdk.service.AbstractGoodDataIT;
 import com.gooddata.sdk.model.gdc.RootLinks;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
 import static net.jadler.Jadler.onRequest;

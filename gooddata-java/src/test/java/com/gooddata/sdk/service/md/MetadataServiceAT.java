@@ -21,7 +21,7 @@ import com.gooddata.sdk.model.md.report.GridReportDefinitionContent;
 import com.gooddata.sdk.model.md.report.MetricElement;
 import com.gooddata.sdk.model.md.report.Report;
 import com.gooddata.sdk.service.AbstractGoodDataAT;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -45,14 +45,14 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Metadata acceptance tests.
  */
 public class MetadataServiceAT extends AbstractGoodDataAT {
 
-    @Test(groups = "md", dependsOnGroups = "model")
+    @Test
     public void getObjs() {
         final MetadataService md = gd.getMetadataService();
 
@@ -60,7 +60,7 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         attr = md.getObj(project, Attribute.class, identifier("attr.person.department"));
     }
 
-    @Test(groups = "md", dependsOnMethods = "getObjs")
+    @Test
     public void updateObj() {
         final MetadataService md = gd.getMetadataService();
 
@@ -70,7 +70,7 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         assertThat(attr.getSummary(), is("Changed person department"));
     }
 
-    @Test(groups = "md", dependsOnMethods = "getObjs")
+    @Test
     public void createMetric() {
         final MetadataService md = gd.getMetadataService();
         final Metric create = new Metric("Avg shoe size", "SELECT AVG([" + fact + "])", "#,##0");
@@ -79,7 +79,7 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         assertThat(metric.getIdentifier(), is("metric.avgshoesize"));
     }
 
-    @Test(groups = "md", dependsOnMethods = "createMetric")
+    @Test
     public void createReport() {
         final MetadataService md = gd.getMetadataService();
 
@@ -93,7 +93,7 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         report = md.createObj(project, new Report(reportDefinition.getTitle(), reportDefinition));
     }
 
-    @Test(groups = "md", dependsOnGroups = "model")
+    @Test
     public void createDashboardEmpty() {
         dashboard = gd.getMetadataService().createObj(project, new ProjectDashboard("My Dashboard", new Tab("My Tab")));
 
@@ -103,7 +103,7 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         assertThat(tab.getTitle(), is("My Tab"));
     }
 
-    @Test(groups = "md", dependsOnMethods = "createReport")
+    @Test
     public void usedBy() {
         final MetadataService metadataService = gd.getMetadataService();
         final String uri = metadataService.findUris(project, identifier("attr.person.department")).iterator().next();
@@ -112,14 +112,14 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         assertThat(usage, hasSize(5));
     }
 
-    @Test(groups = "md", dependsOnMethods = "createReport")
+    @Test
     public void usedByNotExists() {
         final MetadataService metadataService = gd.getMetadataService();
 
         assertThat(metadataService.usedBy(project, "/gdc/md/" + project.getId() + "/obj/1234567", false), empty());
     }
 
-    @Test(groups = "md", dependsOnMethods = "createReport")
+    @Test
     public void usedByBatch() {
         final MetadataService metadataService = gd.getMetadataService();
         final Map<String, String> uris =
@@ -139,7 +139,7 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         assertThat(usage2.getUsedBy(), hasSize(5));
     }
 
-    @Test(groups = "md", dependsOnGroups = "model")
+    @Test
     public void getObjsByUris() {
         final MetadataService md = gd.getMetadataService();
 
@@ -154,7 +154,7 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         assertThat(objects.stream().map(Obj::getUri).collect(Collectors.toSet()), is(new HashSet<>(uris.values())));
     }
 
-    @Test(groups = "md", dependsOnMethods = "createReport")
+    @Test
     public void createScheduledMail() {
         final MetadataService md = gd.getMetadataService();
 
@@ -172,7 +172,7 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
                                 PDF, XLS));
     }
 
-    @Test(groups = "md", dependsOnMethods = "createScheduledMail")
+    @Test
     public void retrieveScheduledMail() {
         final MetadataService md = gd.getMetadataService();
         Collection<Entry> result = md.find(project, ScheduledMail.class);
@@ -183,13 +183,13 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         }
     }
 
-    @Test(groups = "md", dependsOnMethods = "retrieveScheduledMail")
+    @Test
     public void removeScheduledMail() {
         final MetadataService metadataService = gd.getMetadataService();
         metadataService.removeObj(scheduledMail);
     }
 
-    @Test(groups = "md", dependsOnGroups = "model")
+    @Test
     public void identifiersToUri() {
         final MetadataService metadataService = gd.getMetadataService();
         final Map<String, String> idsToUris =
@@ -199,19 +199,19 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         assertThat(attribute.getIdentifier(), is("attr.person.department"));
     }
 
-    @Test(dependsOnGroups = "export", dependsOnMethods = {"usedBy", "usedByBatch"})
+    @Test
     public void removeReport() {
         final MetadataService metadataService = gd.getMetadataService();
         metadataService.removeObj(report);
     }
 
-    @Test(dependsOnMethods = {"removeReport", "removeScheduledMail"})
+    @Test
     public void removeDefinition() {
         final MetadataService metadataService = gd.getMetadataService();
         metadataService.removeObj(reportDefinition);
     }
 
-    @Test(groups = "mdAfterLoad", dependsOnGroups = {"model", "dataset"}, dependsOnMethods = "getObjs")
+    @Test
     public void getAttributeElements() {
         final List<AttributeElement> elements = gd.getMetadataService().getAttributeElements(attr);
         assertThat("there should be 2 elements", elements, hasSize(2));
@@ -220,7 +220,7 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         assertThat(titles, hasItems("DevOps", "HR"));
     }
 
-    @Test(groups = "md", dependsOnGroups = "project")
+    @Test
     public void getTimezone() {
         final MetadataService md = gd.getMetadataService();
 
@@ -228,7 +228,7 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
         assertThat(tz, is("America/Los_Angeles"));
     }
 
-    @Test(groups = "md", dependsOnMethods = "getTimezone")
+    @Test
     public void setTimezone() {
         final MetadataService md = gd.getMetadataService();
 

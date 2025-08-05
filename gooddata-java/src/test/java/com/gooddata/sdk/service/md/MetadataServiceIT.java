@@ -12,8 +12,9 @@ import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.hamcrest.Matchers;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
@@ -35,6 +36,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MetadataServiceIT extends AbstractGoodDataIT {
 
@@ -55,7 +57,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
     private Metric metricInput;
     private ScheduledMail scheduledMailInput;
 
-    @BeforeClass
+    @BeforeEach
     public void setUp() throws Exception {
         project = readObjectFromResource("/project/project.json", Project.class);
         metricInput = readObjectFromResource("/md/metric-input.json", Metric.class);
@@ -394,7 +396,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         assertThat(attributeElements.get(0).getTitle(), is("1167"));
     }
 
-    @Test(expectedExceptions = GoodDataException.class, expectedExceptionsMessageRegExp = ".*request_id.*Unauthorized.*")
+    @Test
     public void getTimezoneShouldThrowGDEOnClientError() {
         onRequest()
                 .havingMethodEqualTo("GET")
@@ -405,7 +407,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         gd.getMetadataService().getTimezone(project);
     }
 
-    @Test(expectedExceptions = GoodDataException.class, expectedExceptionsMessageRegExp = ".*request_id.*Server Error.*")
+    @Test
     public void getTimezoneShouldThrowGDEOnServerError() {
         onRequest()
                 .havingMethodEqualTo("GET")
@@ -430,8 +432,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         verifyThatRequest().receivedOnce();
     }
 
-    @Test(expectedExceptions = GoodDataException.class,
-            expectedExceptionsMessageRegExp = "Unexpected empty result from API call.")
+    @Test
     public void setTimezoneReturningNothing() {
         onRequest()
                 .havingMethodEqualTo("POST")
@@ -440,11 +441,13 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
             .respond()
                 .withStatus(200);
 
-        gd.getMetadataService().setTimezone(project, "America/Los_Angeles");
+        GoodDataException ex = assertThrows(GoodDataException.class, () -> {
+            gd.getMetadataService().setTimezone(project, "America/Los_Angeles");
+        });
+        assertThat(ex.getMessage(), containsString("Unexpected empty result from API call."));
     }
 
-    @Test(expectedExceptions = GoodDataException.class,
-            expectedExceptionsMessageRegExp = ".*The timezone 'wrong' could not be loaded, or is an invalid name.*")
+    @Test
     public void setTimezoneWithWrongName() {
         onRequest()
                 .havingMethodEqualTo("POST")

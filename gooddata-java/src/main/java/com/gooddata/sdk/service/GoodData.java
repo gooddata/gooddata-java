@@ -27,10 +27,11 @@ import com.gooddata.sdk.service.project.model.ModelService;
 import com.gooddata.sdk.service.projecttemplate.ProjectTemplateService;
 import com.gooddata.sdk.service.warehouse.WarehouseService;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import static com.gooddata.sdk.service.GoodDataEndpoint.*;
 import static com.gooddata.sdk.common.util.Validate.notNull;
+
 
 /**
  * Entry point for GoodData SDK usage.
@@ -153,8 +154,9 @@ public class GoodData {
     /**
      * @return underlying RestTemplate
      */
-    protected RestTemplate getRestTemplate() {
-        return services.getRestTemplate();
+
+    protected WebClient getWebClient() {
+        return services.getWebClient();
     }
 
     /**

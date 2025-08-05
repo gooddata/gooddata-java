@@ -37,7 +37,7 @@ class RetryableRestTemplateTest extends GoodDataITBase<ConnectorService> {
     protected GoodDataSettings createGoodDataSettings() {
         def retrySettings = new RetrySettings()
         retrySettings.retryCount = 3
-        retrySettings.retryInitialInterval = 1000
+        retrySettings.retryInitialInterval = 1400
         retrySettings.retryMaxInterval = 10000
         retrySettings.retryMultiplier = 2
 

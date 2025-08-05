@@ -11,8 +11,8 @@ import com.gooddata.sdk.model.featureflag.ProjectFeatureFlag;
 import com.gooddata.sdk.model.featureflag.ProjectFeatureFlags;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach; 
+import org.junit.jupiter.api.Test; 
 
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static com.gooddata.sdk.common.util.ResourceUtils.readStringFromResource;
@@ -32,7 +32,7 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
     private static final String PROJECT_FEATURE_FLAG_URI_STRING = FeatureFlagService.PROJECT_FEATURE_FLAG_TEMPLATE
             .expand(PROJECT_ID, FEATURE_FLAG_NAME).toString();
 
-    @BeforeMethod
+    @BeforeEach
     public void setUp() throws Exception {
         service = gd.getFeatureFlagService();
         project = readObjectFromResource("/project/project.json", Project.class);

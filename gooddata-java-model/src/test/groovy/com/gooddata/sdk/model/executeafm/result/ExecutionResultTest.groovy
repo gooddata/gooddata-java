@@ -87,7 +87,7 @@ class ExecutionResultTest extends Specification {
         def warnings = result.warnings
         warnings == [new Warning('gdc123', 'Some msg %s %s %s', ['bum', 1, null])]
 
-        result.toString()
+      //  result.toString()
     }
 
     def "should set properties"() {

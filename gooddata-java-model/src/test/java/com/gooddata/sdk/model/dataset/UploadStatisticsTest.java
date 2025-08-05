@@ -11,7 +11,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 public class UploadStatisticsTest {
 

@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.dataload.processes;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;

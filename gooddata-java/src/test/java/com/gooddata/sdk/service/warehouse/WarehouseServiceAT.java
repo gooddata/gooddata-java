@@ -17,9 +17,9 @@ import com.gooddata.sdk.model.warehouse.WarehouseUserRole;
 import com.gooddata.sdk.service.AbstractGoodDataAT;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsIterableContaining;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -45,39 +45,51 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
     private static final String LOGIN = "john.smith." + UUID.randomUUID() + "@gooddata.com";
     private static final String SCHEMA_NAME = "default";
 
-    private final String warehouseToken;
-    private final WarehouseService service;
+    private static String warehouseToken;
+    private static WarehouseService service;
 
-    private Warehouse warehouse;
-    private Warehouse warehouse2;
+    private static Warehouse warehouse;
+    private static Warehouse warehouse2;
 
-    private Account account;
-    private WarehouseUser warehouseUser;
+    private static Account account;
+    private static WarehouseUser warehouseUser;
 
-    public WarehouseServiceAT() {
+    private static String title;
+
+        
+    @BeforeAll 
+    public static void setUpAll() {
+        warehouseToken = AbstractGoodDataAT.getProperty("warehouseToken");
+        service = AbstractGoodDataAT.gd.getWarehouseService(); 
+        title = "Warehouse " + System.currentTimeMillis();
+    }
+
+/*     public WarehouseServiceAT() {
         warehouseToken = getProperty("warehouseToken");
         service = gd.getWarehouseService();
-    }
+    } */
 
-    @BeforeClass(groups = "isolated_domain")
+    @Test
     public void initIsolatedDomainGroup() {
-        account = gd.getAccountService().createAccount(new Account(LOGIN, "nnPvcGXU7f", "FirstName", "LastName"), getProperty("domain"));
+        account = AbstractGoodDataAT.gd.getAccountService() 
+            .createAccount(new Account(LOGIN, "nnPvcGXU7f", "FirstName", "LastName"),
+                AbstractGoodDataAT.getProperty("domain"));
     }
 
-    @Test(groups = "warehouse", dependsOnGroups = "account")
+    @Test
     public void createWarehouse() {
         final Warehouse wh = new Warehouse(title, warehouseToken);
         wh.setEnvironment(Environment.TESTING);
         warehouse = service.createWarehouse(wh).get(60, TimeUnit.MINUTES);
     }
 
-    @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
+    @Test
     public void getWarehouse() {
-        final Warehouse warehouse = service.getWarehouseById(this.warehouse.getId());
-        assertThat(warehouse, Matchers.is(hasSameIdAs(warehouse)));
+        final Warehouse warehouseGot = service.getWarehouseById(warehouse.getId()); 
+        assertThat(warehouseGot, Matchers.is(hasSameIdAs(warehouse)));
     }
 
-    @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
+    @Test
     public void listWarehouses() {
         final LinkedList<Warehouse> result = new LinkedList<>();
         PageRequest page = new CustomPageRequest(100);
@@ -92,10 +104,10 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         assertThat(result, IsIterableContaining.hasItem(hasSameIdAs(warehouse)));
     }
 
-    @Test(groups = "warehouse", dependsOnMethods = {"createWarehouse", "listWarehouses"})
+    @Test
     public void shouldPageList() {
-        final String title = this.title + " second";
-        final Warehouse wh = new Warehouse(title, warehouseToken);
+        final String newTitle = title + " second";
+        final Warehouse wh = new Warehouse(newTitle, warehouseToken);
         wh.setEnvironment(Environment.TESTING);
         warehouse2 = service.createWarehouse(wh).get();
 
@@ -106,7 +118,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         assertThat(page.getPageItems(), hasSize(1));
     }
 
-    @Test(groups = "warehouse", dependsOnMethods = "shouldPageList")
+    @Test
     public void shouldReturnNullOnEndOfPaging() {
         Page<Warehouse> page = service.listWarehouses();
         PageRequest nextPage;
@@ -115,7 +127,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         }
     }
 
-    @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
+    @Test
     public void shouldListUsers() {
         final Page<WarehouseUser> users = service.listWarehouseUsers(warehouse, new CustomPageRequest(1));
         final List<WarehouseUser> pageItems = users.getPageItems();
@@ -124,38 +136,38 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         assertThat(users.getNextPage(), is(nullValue()));
     }
 
-    @Test(groups = { "warehouse", "isolated_domain" }, dependsOnMethods = "shouldListUsers")
+    @Test
     public void shouldAddUserToWarehouse() {
         warehouseUser = service.addUserToWarehouse(warehouse, WarehouseUser.createWithlogin(LOGIN, WarehouseUserRole.ADMIN)).get(60, TimeUnit.SECONDS);
 
         assertThat(warehouseUser, is(notNullValue()));
     }
 
-    @Test(groups = { "warehouse", "isolated_domain" }, dependsOnMethods = "shouldAddUserToWarehouse")
+    @Test
     public void shouldRemoveUserFromWarehouse() {
         service.removeUserFromWarehouse(warehouseUser).get(60, TimeUnit.SECONDS);
         warehouseUser = null;
     }
 
-    @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
+    @Test
     public void listWarehouseSchemas() {
         Page<WarehouseSchema> warehouseSchemas = service.listWarehouseSchemas(warehouse);
         assertThat(warehouseSchemas.getPageItems(), contains(hasProperty("name", equalTo(SCHEMA_NAME))));
     }
 
-    @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
+    @Test
     public void getWarehouseSchema() {
         WarehouseSchema warehouseSchema = service.getWarehouseSchemaByName(warehouse, SCHEMA_NAME);
         assertThat(warehouseSchema, is(notNullValue()));
     }
 
-    @Test(groups = "warehouse", dependsOnMethods = "createWarehouse")
+    @Test
     public void getDefaultWarehouseSchema() {
         WarehouseSchema warehouseSchema = service.getDefaultWarehouseSchema(warehouse);
         assertThat(warehouseSchema, is(notNullValue()));
     }
 
-    @Test(dependsOnGroups = "warehouse")
+    @Test
     public void removeWarehouse() {
         service.removeWarehouse(warehouse);
         warehouse = null;
@@ -163,8 +175,8 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         warehouse2 = null;
     }
 
-    @AfterClass
-    public void tearDown() {
+    @AfterAll
+    public static void tearDown() {
         try {
             if (warehouse != null) {
                 service.removeWarehouse(warehouse);
@@ -177,8 +189,8 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         } catch (Exception ignored) {}
     }
 
-    @AfterClass(groups = "isolated_domain")
-    public void tearDownIsolatedDomainGroup() {
+    @AfterAll
+    public static void tearDownIsolatedDomainGroup() {
         try {
             if (warehouseUser != null) {
                 service.removeUserFromWarehouse(warehouseUser);
@@ -186,7 +198,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         }  catch (Exception ignored) {}
         try {
             if (account != null) {
-                gd.getAccountService().removeAccount(account);
+                AbstractGoodDataAT.gd.getAccountService().removeAccount(account);
             }
         } catch (Exception ignored) {}
     }

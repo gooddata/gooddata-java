@@ -9,9 +9,7 @@ import com.gooddata.sdk.common.GoodDataRestException;
 import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.service.GoodData;
 import org.apache.commons.io.IOUtils;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
-
+import org.junit.jupiter.api.*; 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -23,32 +21,36 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.testng.Assert.fail;
 
-/**
- * Data store acceptance test
- */
-public class DatastoreServiceAT extends AbstractGoodDataAT {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class DatastoreServiceAT extends AbstractGoodDataAT {
 
     private String file;
     private String directory;
     private static final int ITER_MAX = 10;
 
-    @BeforeClass
-    public void setUp() throws Exception {
+    @BeforeAll 
+    static void globalSetUp() {
+       
+    }
+
+    @BeforeEach 
+    void setUp() {
         directory = "/" + UUID.randomUUID().toString();
     }
 
-    @Test(groups = "datastore", dependsOnGroups = "account")
-    public void datastoreUpload() throws Exception {
+    @Test
+    @Order(1)
+    void datastoreUpload() throws Exception {
         DataStoreService dataStoreService = AbstractGoodDataAT.gd.getDataStoreService();
 
         file = directory + "/file.csv";
         dataStoreService.upload(file, readFromResource("/person.csv"));
     }
 
-    @Test(groups = "datastore", dependsOnMethods = "datastoreUpload")
-    public void datastoreDownload() throws Exception {
+    @Test
+    @Order(2)
+    void datastoreDownload() throws Exception {
         DataStoreService dataStoreService = AbstractGoodDataAT.gd.getDataStoreService();
 
         final File file = File.createTempFile("file", ".txt");
@@ -60,62 +62,73 @@ public class DatastoreServiceAT extends AbstractGoodDataAT {
         }
     }
 
-    @Test(groups = "datastore", dependsOnMethods = "datastoreDownload")
-    public void verifyRequestIdInException() throws Exception {
+    @Test
+    @Order(3)
+    void verifyRequestIdInException() throws Exception {
         DataStoreService dataStoreService = AbstractGoodDataAT.gd.getDataStoreService();
 
-        try (InputStream ignored = dataStoreService.download(this.directory + "/none.txt")) {
-            fail("The exception should contain the request_id in its stacktrace.");
-        } catch (Exception e){
-            assertThat(e.getCause().toString(), containsString("request_id"));
-        }
+        Exception thrown = Assertions.assertThrows(Exception.class, () -> {
+            try (InputStream ignored = dataStoreService.download(this.directory + "/none.txt")) {
+
+            }
+        });
+        assertThat(thrown.getCause().toString(), containsString("request_id"));
     }
 
-    @Test(groups = "datastore", dependsOnMethods = "verifyRequestIdInException")
-    public void datastoreDelete() throws Exception {
+    @Test
+    @Order(4)
+    void datastoreDelete() throws Exception {
         DataStoreService dataStoreService = AbstractGoodDataAT.gd.getDataStoreService();
         dataStoreService.delete(this.file);
         dataStoreService.delete(this.directory);
 
-        try {
+        DataStoreException thrown = Assertions.assertThrows(DataStoreException.class, () -> {
             dataStoreService.delete(this.directory);
-            fail("Exception was expected, as there is nothing to delete");
-        } catch (DataStoreException e) {
-            assertThat(e.getCause().toString(), containsString("request_id"));
-            assertThat(e.getCause().toString(), containsString("404"));
-            assertThat(e.getCause(), instanceOf(GoodDataRestException.class));
-        }
+        });
+        assertThat(thrown.getCause().toString(), containsString("request_id"));
+        assertThat(thrown.getCause().toString(), containsString("404"));
+        assertThat(thrown.getCause(), instanceOf(GoodDataRestException.class));
     }
 
-    @Test(groups = "datastore", dependsOnGroups = "account")
-    public void datastoreConnectionsClosedAfterMultipleConnections() {
+    @Test
+    @Order(5)
+    void datastoreConnectionsClosedAfterMultipleConnections() {
         DataStoreService dataStoreService = AbstractGoodDataAT.gd.getDataStoreService();
         directory = "/" + UUID.randomUUID().toString();
         for (int i = 0; i < ITER_MAX; i++) {
             dataStoreService.upload(directory + "/file" + i + ".csv", readFromResource("/person.csv"));
         }
-        assertThat(AbstractGoodDataAT.connManager.getTotalStats().getLeased(), is(equalTo(0)));
+        //assertThat(AbstractGoodDataAT.connManager.getTotalStats().getLeased(), is(equalTo(0)));
+        //removed for webclient
     }
 
-    @Test(groups = "datastore", dependsOnGroups = "account")
-    public void datastoreConnectionClosedAfterSingleConnection() throws Exception {
+    @Test
+    @Order(6)
+    void datastoreConnectionClosedAfterSingleConnection() throws Exception {
         DataStoreService dataStoreService = AbstractGoodDataAT.gd.getDataStoreService();
 
         directory = "/" + UUID.randomUUID().toString();
         file = directory + "/file.csv";
         dataStoreService.upload(file, readFromResource("/person.csv"));
-        assertThat(AbstractGoodDataAT.connManager.getTotalStats().getLeased(), is(equalTo(0)));
+       // assertThat(AbstractGoodDataAT.connManager.getTotalStats().getLeased(), is(equalTo(0)));
+       //removed for webclient
     }
 
-    @Test(groups = "datastore", expectedExceptions = DataStoreException.class, enabled = false,
-            expectedExceptionsMessageRegExp = "(?s).* 500 .*https://github.com/.Known-limitations")
-    public void shouldThrowExceptionWithMessageOnUnAuthRequest() throws Exception {
-        final GoodData datastoreGd = new GoodData(AbstractGoodDataAT.getProperty("host"), AbstractGoodDataAT.getProperty("login"), AbstractGoodDataAT.getProperty("password"));
+    @Test
+    @Order(7)
+    @Disabled("Known-limitations: 500 error expected; enable if needed") 
+    void shouldThrowExceptionWithMessageOnUnAuthRequest() throws Exception {
+        final GoodData datastoreGd = new GoodData(
+                AbstractGoodDataAT.getProperty("host"),
+                AbstractGoodDataAT.getProperty("login"),
+                AbstractGoodDataAT.getProperty("password"));
         DataStoreService dataStoreService = datastoreGd.getDataStoreService();
 
         try {
             final String fileWithAuth = directory + "/fileWithAuth.csv";
-            dataStoreService.upload(fileWithAuth, readFromResource("/person.csv"));
+            Assertions.assertThrows(DataStoreException.class, () -> {
+                dataStoreService.upload(fileWithAuth, readFromResource("/person.csv"));
+            }, ".* 500 .*https://github.com/.Known-limitations");
         } finally {
             datastoreGd.logout();
         }

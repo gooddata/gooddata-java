@@ -6,7 +6,8 @@
 package com.gooddata.sdk.service;
 
 import com.gooddata.sdk.common.GoodDataRestException;
-import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.web.reactive.function.client.ClientResponse;
+
 
 import java.io.IOException;
 import java.net.URI;
@@ -71,7 +72,7 @@ public interface PollHandler<P,R> {
      * @return true if polling should finish, false otherwise
      * @throws IOException when there's a problem extracting data from response
      */
-    boolean isFinished(ClientHttpResponse response) throws IOException;
+boolean isFinished(ClientResponse response) throws IOException;
 
     /**
      * Handle result of single polling request.

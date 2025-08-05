@@ -12,8 +12,7 @@ import com.gooddata.sdk.model.projecttemplate.Template;
 import com.gooddata.sdk.model.projecttemplate.Templates;
 import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.sdk.service.GoodDataSettings;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -33,13 +32,12 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
 public class ProjectTemplateService extends AbstractService {
 
     /**
-     * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
-     * this abstract one.
-     * @param restTemplate RESTful HTTP Spring template
+     * Sets WebClient. Should be called from constructor of concrete service extending this abstract one.
+     * @param webClient reactive WebClient
      * @param settings settings
      */
-    public ProjectTemplateService(final RestTemplate restTemplate, final GoodDataSettings settings) {
-        super(restTemplate, settings);
+    public ProjectTemplateService(final WebClient webClient, final GoodDataSettings settings) {
+        super(webClient, settings);
     }
 
     /**
@@ -48,9 +46,13 @@ public class ProjectTemplateService extends AbstractService {
      */
     public Collection<Template> getTemplates() {
         try {
-            final Templates templates = restTemplate.getForObject(Templates.URI, Templates.class);
+            final Templates templates = webClient.get()
+                    .uri(Templates.URI)
+                    .retrieve()
+                    .bodyToMono(Templates.class)
+                    .block();
             return templates != null ? templates.getTemplates() : Collections.emptyList();
-        } catch (GoodDataRestException | RestClientException e) {
+        } catch (Exception e) {
             throw new GoodDataException("Unable to get templates", e);
         }
     }
@@ -63,8 +65,12 @@ public class ProjectTemplateService extends AbstractService {
     public Template getTemplateByUri(String uri) {
         notEmpty(uri, "template uri");
         try {
-            return restTemplate.getForObject(uri, Template.class);
-        } catch (GoodDataRestException | RestClientException e) {
+            return webClient.get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(Template.class)
+                    .block();
+        } catch (Exception e) {
             throw new GoodDataException("Unable to get template of uri=" + uri, e);
         }
     }
@@ -79,9 +85,13 @@ public class ProjectTemplateService extends AbstractService {
         notNull(template.getManifestsUris(), "template.manifestsUris");
         try {
             return template.getManifestsUris().stream()
-                    .map(manifestUri -> restTemplate.getForObject(manifestUri, DatasetManifest.class))
+                    .map(manifestUri -> webClient.get()
+                            .uri(manifestUri)
+                            .retrieve()
+                            .bodyToMono(DatasetManifest.class)
+                            .block())
                     .collect(Collectors.toList());
-        } catch (GoodDataRestException | RestClientException e) {
+        } catch (Exception e) {
             throw new GoodDataException("Unable to get manifests for template of uri=" + template.getUri(), e);
         }
     }

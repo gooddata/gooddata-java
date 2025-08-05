@@ -7,8 +7,8 @@ package com.gooddata.sdk.service.gdc;
 
 import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.apache.commons.io.IOUtils;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -22,7 +22,7 @@ public class DataStoreServiceIT extends AbstractGoodDataIT {
 
     private InputStream content;
 
-    @BeforeMethod
+    @BeforeEach
     public void setUp() throws Exception {
         onRequest()
                 .havingMethodEqualTo("PUT")

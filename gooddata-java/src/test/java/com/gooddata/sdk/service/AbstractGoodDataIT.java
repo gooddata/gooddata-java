@@ -6,8 +6,8 @@
 package com.gooddata.sdk.service;
 
 import com.gooddata.sdk.service.httpcomponents.LoginPasswordGoodDataRestProvider;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import static net.jadler.Jadler.*;
 
@@ -16,7 +16,7 @@ public abstract class AbstractGoodDataIT {
     protected GoodData gd;
     protected GoodDataEndpoint endpoint;
 
-    @BeforeMethod
+    @BeforeEach
     public void commonSetUp() {
         initJadler().withDefaultResponseContentType("application/json");
         endpoint = new GoodDataEndpoint("localhost", port(), "http");
@@ -35,7 +35,7 @@ public abstract class AbstractGoodDataIT {
         return settings;
     }
 
-    @AfterMethod
+    @AfterEach
     public void tearDown() {
         closeJadler();
     }

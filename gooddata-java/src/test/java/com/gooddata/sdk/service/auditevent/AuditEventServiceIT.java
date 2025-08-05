@@ -11,8 +11,8 @@ import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.common.collections.Page;
 import com.gooddata.sdk.service.account.AccountServiceIT;
 import com.gooddata.sdk.model.auditevent.AuditEvent;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
@@ -20,6 +20,7 @@ import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -27,46 +28,51 @@ public class AuditEventServiceIT extends AbstractGoodDataIT {
 
     private AuditEventService service;
 
-    @BeforeMethod
+    @BeforeEach
     public void setUp() throws Exception {
         service = gd.getAuditEventService();
     }
 
-    @Test(expectedExceptions = AuditEventsForbiddenException.class)
+    @Test
     public void shouldThrowOnForbiddenDomain() {
         onRequest()
                 .havingPathEqualTo("/gdc/domains/DOMAIN/auditEvents")
             .respond()
-                .withStatus(SC_UNAUTHORIZED)
-        ;
+                .withStatus(SC_UNAUTHORIZED);
 
-        service.listAuditEvents("DOMAIN");
+        assertThrows(AuditEventsForbiddenException.class, () -> {
+            service.listAuditEvents("DOMAIN");
+        });
     }
 
-    @Test(expectedExceptions = AuditEventsForbiddenException.class)
+    @Test
     public void shouldThrowOnForbiddenAccount() {
         onRequest()
                 .havingPathEqualTo("/gdc/account/profile/ID/auditEvents")
             .respond()
-                .withStatus(SC_UNAUTHORIZED)
-        ;
+                .withStatus(SC_UNAUTHORIZED);
+
         final Account account = mock(Account.class);
         when(account.getId()).thenReturn("ID");
 
-        service.listAuditEvents(account);
+        assertThrows(AuditEventsForbiddenException.class, () -> {
+            service.listAuditEvents(account);
+        });
     }
 
-    @Test(expectedExceptions = GoodDataRestException.class)
+    @Test
     public void shouldThrowOnUnknownError() {
         onRequest()
-                .havingPathEqualTo("/gdc/account/profile/ID/auditEvents")
+            .havingPathEqualTo("/gdc/account/profile/ID/auditEvents")
             .respond()
-                .withStatus(SC_BAD_REQUEST)
-        ;
+            .withStatus(SC_BAD_REQUEST);
+
         final Account account = mock(Account.class);
         when(account.getId()).thenReturn("ID");
 
-        service.listAuditEvents(account);
+        assertThrows(GoodDataRestException.class, () -> {
+            service.listAuditEvents(account);
+        }); 
     }
 
     @Test

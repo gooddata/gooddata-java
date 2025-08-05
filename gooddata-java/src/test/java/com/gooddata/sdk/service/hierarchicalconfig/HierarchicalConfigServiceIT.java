@@ -10,8 +10,8 @@ import com.gooddata.sdk.model.hierarchicalconfig.ConfigItems;
 import com.gooddata.sdk.model.hierarchicalconfig.SourceType;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach; 
+import org.junit.jupiter.api.Test;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static com.gooddata.sdk.common.util.ResourceUtils.readStringFromResource;
@@ -20,7 +20,6 @@ import static com.gooddata.sdk.service.hierarchicalconfig.HierarchicalConfigServ
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.is;
 
 public class HierarchicalConfigServiceIT extends AbstractGoodDataIT {
 
@@ -33,7 +32,7 @@ public class HierarchicalConfigServiceIT extends AbstractGoodDataIT {
     private static final String PROJECT_CONFIG_ITEM_URI_STRING = PROJECT_CONFIG_ITEM_TEMPLATE
             .expand(PROJECT_ID, CONFIG_ITEM_NAME).toString();
 
-    @BeforeMethod
+    @BeforeEach
     public void setUp() throws Exception {
         service = gd.getHierarchicalConfigService();
         project = readObjectFromResource("/project/project.json", Project.class);

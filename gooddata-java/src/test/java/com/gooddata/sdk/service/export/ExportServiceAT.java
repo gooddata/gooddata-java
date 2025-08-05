@@ -7,8 +7,9 @@ package com.gooddata.sdk.service.export;
 
 import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.model.export.ExportFormat;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach;    
+import org.junit.jupiter.api.Order; 
+import org.junit.jupiter.api.Test;  
 
 import java.io.ByteArrayOutputStream;
 
@@ -20,24 +21,27 @@ public class ExportServiceAT extends AbstractGoodDataAT {
 
     private ExportService service;
 
-    @BeforeMethod
+    @BeforeEach
     public void setUp() throws Exception {
         service = gd.getExportService();
     }
 
-    @Test(groups = "export", dependsOnGroups = "dataset")
+    @Test
+    @Order(1)
     public void exportReportDefinition() throws Exception {
         service.export(reportDefinition, ExportFormat.CSV, System.out);
     }
 
-    @Test(groups = "export", dependsOnGroups = "dataset")
+    @Test
+    @Order(2)
     public void shouldExportDashboard() throws Exception {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         service.exportPdf(endpoint, dashboard, dashboard.getTabs().iterator().next(), output).get();
         assertThat(output, is(notNullValue()));
     }
 
-    @Test(groups = "export", dependsOnGroups = "dataset")
+    @Test
+    @Order(3)
     public void shouldReportDefinitionRaw() throws Exception {
         final ByteArrayOutputStream output = new ByteArrayOutputStream();
         service.exportCsv(reportDefinition, output).get();

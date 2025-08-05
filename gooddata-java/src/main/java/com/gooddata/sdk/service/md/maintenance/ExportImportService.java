@@ -12,9 +12,10 @@ import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.md.maintenance.*;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.*;
-import org.springframework.http.client.ClientHttpResponse;
+
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.ClientResponse; 
 
 import java.io.IOException;
 
@@ -27,8 +28,8 @@ import static java.lang.String.format;
  */
 public class ExportImportService extends AbstractService {
 
-    public ExportImportService(final RestTemplate restTemplate, final GoodDataSettings settings) {
-        super(restTemplate, settings);
+    public ExportImportService(final WebClient webClient, final GoodDataSettings settings) {
+        super(webClient, settings);
     }
 
     /**
@@ -46,8 +47,13 @@ public class ExportImportService extends AbstractService {
 
         final PartialMdArtifact partialMdArtifact;
         try {
-            partialMdArtifact = restTemplate.postForObject(PartialMdExport.URI, export, PartialMdArtifact.class, project.getId());
-        } catch (GoodDataRestException | RestClientException e) {
+            partialMdArtifact = webClient.post()
+                    .uri(PartialMdExport.URI.replace("{projectId}", project.getId()))
+                    .bodyValue(export)
+                    .retrieve()
+                    .bodyToMono(PartialMdArtifact.class)
+                    .block();
+        } catch (Exception e) {
             throw new ExportImportException("Unable to export metadata from objects " + export.getUris() + ".", e);
         }
 
@@ -84,8 +90,13 @@ public class ExportImportService extends AbstractService {
 
         final UriResponse importResponse;
         try {
-            importResponse = restTemplate.postForObject(PartialMdExportToken.URI, mdExportToken, UriResponse.class, project.getId());
-        } catch (GoodDataRestException | RestClientException e) {
+            importResponse = webClient.post() 
+                    .uri(PartialMdExportToken.URI.replace("{projectId}", project.getId()))
+                    .bodyValue(mdExportToken)
+                    .retrieve()
+                    .bodyToMono(UriResponse.class)
+                    .block();
+        } catch (Exception e) {
             throw new ExportImportException("Unable to import partial metadata to project '" + project.getId()
                     + "' with token '" + mdExportToken.getToken() + "'.", e);
         }
@@ -124,9 +135,13 @@ public class ExportImportService extends AbstractService {
         final ExportProjectArtifact exportProjectArtifact;
         final String errorMessage = format("Unable to export complete project '%s'", project.getId());
         try {
-            exportProjectArtifact = restTemplate
-                    .postForObject(ExportProject.URI, export, ExportProjectArtifact.class, project.getId());
-        } catch (GoodDataRestException | RestClientException e) {
+            exportProjectArtifact = webClient.post()
+                    .uri(ExportProject.URI.replace("{projectId}", project.getId()))
+                    .bodyValue(export)
+                    .retrieve()
+                    .bodyToMono(ExportProjectArtifact.class)
+                    .block();
+        } catch (Exception e) {
             throw new ExportImportException(errorMessage, e);
         }
 
@@ -143,14 +158,20 @@ public class ExportImportService extends AbstractService {
             }
 
             @Override
-            public boolean isFinished(final ClientHttpResponse response) throws IOException {
-                final TaskState taskState = extractData(response, TaskState.class);
-                if (taskState != null && taskState.isSuccess()) {
-                    return true;
-                } else if (taskState == null || !taskState.isFinished()) {
+            public boolean isFinished(final ClientResponse response) {
+                int code = response.statusCode().value();
+                if (code == 200) { // OK
+                    TaskState taskState = response.bodyToMono(TaskState.class).block();
+                    if (taskState != null && taskState.isSuccess()) {
+                        return true;
+                    } else if (taskState == null || !taskState.isFinished()) {
+                        return false;
+                    }
+                    throw new ExportImportException(errorMessage + ": " + (taskState != null ? taskState.getMessage() : "no message"));
+                } else if (code == 202) { // ACCEPTED
                     return false;
                 }
-                throw new ExportImportException(errorMessage + ": " + taskState.getMessage());
+                throw new ExportImportException(errorMessage + ": unknown HTTP response code: " + code);
             }
 
             @Override
@@ -177,8 +198,13 @@ public class ExportImportService extends AbstractService {
         final String errorMessage = format("Unable to import complete project into '%s' with token '%s'",
                 project.getId(), exportToken.getToken());
         try {
-            importResponse = restTemplate.postForObject(ExportProjectToken.URI, exportToken, UriResponse.class, project.getId());
-        } catch (GoodDataRestException | RestClientException e) {
+            importResponse = webClient.post()
+                    .uri(ExportProjectToken.URI.replace("{projectId}", project.getId()))
+                    .bodyValue(exportToken)
+                    .retrieve()
+                    .bodyToMono(UriResponse.class)
+                    .block();
+        } catch (Exception e) {
             throw new ExportImportException(errorMessage, e);
         }
 
@@ -193,16 +219,23 @@ public class ExportImportService extends AbstractService {
                 setResult(null);
             }
 
-            @Override
-            public boolean isFinished(final ClientHttpResponse response) throws IOException {
-                final TaskState taskState = extractData(response, TaskState.class);
+        @Override
+        public boolean isFinished(final ClientResponse response) {
+            int code = response.statusCode().value();
+            if (code == 200) { // OK
+                TaskState taskState = response.bodyToMono(TaskState.class).block();
                 if (taskState != null && taskState.isSuccess()) {
                     return true;
                 } else if (taskState == null || !taskState.isFinished()) {
                     return false;
                 }
-                throw new ExportImportException(errorMessage + ": " + taskState.getMessage());
+                throw new ExportImportException(errorMessage + ": " + (taskState != null ? taskState.getMessage() : "no message"));
+            } else if (code == 202) { // ACCEPTED
+                return false;
             }
+            throw new ExportImportException(errorMessage + ": unknown HTTP response code: " + code);
+        }
+
 
             @Override
             public void handlePollException(GoodDataRestException e) {

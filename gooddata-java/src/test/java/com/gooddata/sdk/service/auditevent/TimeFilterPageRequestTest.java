@@ -10,15 +10,16 @@ import com.gooddata.sdk.common.util.MutableUri;
 import com.gooddata.sdk.common.util.SpringMutableUri;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;
 
 import static com.gooddata.sdk.common.collections.CustomPageRequest.DEFAULT_LIMIT;
-import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static java.time.ZoneOffset.UTC;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TimeFilterPageRequestTest {
 
@@ -37,12 +38,15 @@ public class TimeFilterPageRequestTest {
 
         TimeFilterPageRequest copy = TimeFilterPageRequest.copy(request);
 
-        assertThat(request, is(sameBeanAs(copy)));
+        assertEquals(request.getFrom(), copy.getFrom(), "from");
+        assertEquals(request.getTo(), copy.getTo(), "to");
+        assertEquals(request.getLimit(), copy.getLimit(), "limit");
+        assertEquals(request.getOffset(), copy.getOffset(), "offset");
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testCopyNull() {
-        TimeFilterPageRequest.copy(null);
+    @Test
+    void testCopyNull() {
+        assertThrows(IllegalArgumentException.class, () -> TimeFilterPageRequest.copy(null));
     }
 
     @Test
@@ -54,10 +58,10 @@ public class TimeFilterPageRequestTest {
         request.setOffset(OFFSET);
         TimeFilterPageRequest result = request.withIncrementedLimit();
 
-        assertThat(result.getFrom(), is(FROM));
-        assertThat(result.getTo(), is(TO));
-        assertThat(result.getSanitizedLimit(), is(LIMIT + 1));
-        assertThat(result.getOffset(), is(OFFSET));
+        assertEquals(FROM, result.getFrom(), "from");
+        assertEquals(TO, result.getTo(), "to");
+        assertEquals(LIMIT + 1, result.getSanitizedLimit(), "limit incremented");
+        assertEquals(OFFSET, result.getOffset(), "offset");
     }
 
     @Test

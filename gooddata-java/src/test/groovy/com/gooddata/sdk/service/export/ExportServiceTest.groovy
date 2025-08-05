@@ -10,7 +10,8 @@ import com.gooddata.sdk.model.md.report.Report
 import com.gooddata.sdk.model.md.report.ReportDefinition
 import com.gooddata.sdk.service.GoodDataEndpoint
 import com.gooddata.sdk.service.GoodDataSettings
-import org.springframework.web.client.RestTemplate
+import org.springframework.web.reactive.function.client.WebClient
+import org.mockito.Mockito
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Subject
@@ -19,7 +20,8 @@ import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
 
 class ExportServiceTest extends Specification {
 
-    @Subject ExportService service = new ExportService(new RestTemplate(), new GoodDataSettings())
+    def webClient = Mock(WebClient)
+    @Subject ExportService service = new ExportService(webClient, new GoodDataSettings())
 
     @Shared ProjectDashboard dashboard = readObjectFromResource('/md/projectDashboard.json', ProjectDashboard)
     @Shared ProjectDashboard.Tab tab = dashboard.tabs.first()

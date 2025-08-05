@@ -7,7 +7,7 @@ package com.gooddata.sdk.model.md;
 
 import com.gooddata.sdk.model.export.ExportFormat;
 import org.apache.commons.lang3.SerializationUtils;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.Arrays;

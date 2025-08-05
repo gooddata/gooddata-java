@@ -6,7 +6,7 @@
 package com.gooddata.sdk.model.project;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 public class ProjectValidationResultGdcTimeElParamTest {
 
