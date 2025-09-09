@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -86,7 +86,7 @@ public abstract class AbstractService {
             if (handler.isFinished(response)) {
                 final P data = extractData(response, handler.getPollClass());
                 handler.handlePollResult(data);
-            } else if (HttpStatus.Series.CLIENT_ERROR.equals(response.getStatusCode().series())) {
+            } else if (HttpStatus.Series.CLIENT_ERROR.equals(HttpStatus.Series.resolve(response.getStatusCode().value()))) {
                 throw new GoodDataException(
                         format("Polling returned client error HTTP status %s", response.getStatusCode().value())
                 );
@@ -120,7 +120,7 @@ public abstract class AbstractService {
                 if (bodyStream != null) {
                     body = FileCopyUtils.copyToByteArray(bodyStream);
                 }
-                statusCode = response.getStatusCode();
+                statusCode = HttpStatus.resolve(response.getStatusCode().value());
                 rawStatusCode = response.getRawStatusCode();
                 statusText = response.getStatusText();
                 headers = response.getHeaders();
@@ -178,3 +178,4 @@ public abstract class AbstractService {
     }
 
 }
+

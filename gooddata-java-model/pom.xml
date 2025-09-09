@@ -7,7 +7,7 @@
     <parent>
         <artifactId>gooddata-java-parent</artifactId>
         <groupId>com.gooddata</groupId>
-        <version>3.12.1+api3-SNAPSHOT</version>
+        <version>4.0.0+api3-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -40,6 +40,11 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -78,7 +83,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.codehaus.groovy</groupId>
+            <groupId>org.apache.groovy</groupId>
             <artifactId>groovy</artifactId>
             <scope>test</scope>
         </dependency>
@@ -92,6 +97,11 @@
             <artifactId>spring-web</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -99,6 +109,18 @@
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <configuration>
+                    <failOnWarning>false</failOnWarning>
+                    <ignoredUnusedDeclaredDependencies>
+                        <ignoredUnusedDeclaredDependency>com.fasterxml.jackson.core:jackson-core</ignoredUnusedDeclaredDependency>
+                        <ignoredUnusedDeclaredDependency>org.apache.commons:commons-lang3</ignoredUnusedDeclaredDependency>
+                        <ignoredUnusedDeclaredDependency>com.gooddata:gooddata-rest-common</ignoredUnusedDeclaredDependency>
+                    </ignoredUnusedDeclaredDependencies>
+                </configuration>
             </plugin>
         </plugins>
     </build>

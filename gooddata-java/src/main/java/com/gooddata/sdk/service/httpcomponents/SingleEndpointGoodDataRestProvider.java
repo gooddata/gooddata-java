@@ -1,10 +1,11 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.httpcomponents;
 
+import com.gooddata.sdk.common.HttpClient4ComponentsClientHttpRequestFactory;
 import com.gooddata.sdk.common.UriPrefixingClientHttpRequestFactory;
 import com.gooddata.sdk.service.*;
 import com.gooddata.sdk.service.gdc.DataStoreService;
@@ -18,9 +19,9 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -114,8 +115,8 @@ public abstract class SingleEndpointGoodDataRestProvider implements GoodDataRest
         this.httpClient = notNull(httpClient, "httpClient");
 
         final UriPrefixingClientHttpRequestFactory factory = new UriPrefixingClientHttpRequestFactory(
-                new HttpComponentsClientHttpRequestFactory(httpClient),
-                endpoint.toUri()
+                new HttpClient4ComponentsClientHttpRequestFactory(httpClient),
+                URI.create(endpoint.toUri())
         );
 
         final RestTemplate restTemplate;
@@ -161,3 +162,4 @@ public abstract class SingleEndpointGoodDataRestProvider implements GoodDataRest
                 .setDefaultRequestConfig(requestConfig.build());
     }
 }
+

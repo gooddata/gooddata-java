@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -25,10 +25,11 @@ public class OutputStageServiceAT extends AbstractGoodDataAT {
     private static final String CLIENT_ID = "clientId";
     private static final String PREFIX = "prefix";
 
-    private final Warehouse warehouse;
-    private final WarehouseSchema warehouseSchema;
+    private Warehouse warehouse;
+    private WarehouseSchema warehouseSchema;
 
-    public OutputStageServiceAT() {
+    @Test(groups = "warehouse")
+    public void setupWarehouse() {
         final String warehouseToken = getProperty("warehouseToken");
         final Warehouse wh = new Warehouse(title, warehouseToken);
         wh.setEnvironment(Environment.TESTING);
@@ -78,3 +79,4 @@ public class OutputStageServiceAT extends AbstractGoodDataAT {
         }
     }
 }
+

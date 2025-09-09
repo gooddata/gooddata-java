@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -21,6 +21,7 @@ import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.*;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
@@ -101,15 +102,15 @@ public class ExportService extends AbstractService {
         return new PollResult<>(this, new SimplePollHandler<Void>(uri, Void.class) {
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
-                switch (response.getStatusCode()) {
-                    case OK:
-                        return true;
-                    case ACCEPTED:
-                        return false;
-                    case NO_CONTENT:
-                        throw new NoDataExportException();
-                    default:
-                        throw new ExportException("Unable to export report, unknown HTTP response code: " + response.getStatusCode());
+                HttpStatus status = HttpStatus.resolve(response.getStatusCode().value());
+                if (HttpStatus.OK.equals(status)) {
+                    return true;
+                } else if (HttpStatus.ACCEPTED.equals(status)) {
+                    return false;
+                } else if (HttpStatus.NO_CONTENT.equals(status)) {
+                    throw new NoDataExportException();
+                } else {
+                    throw new ExportException("Unable to export report, unknown HTTP response code: " + response.getStatusCode());
                 }
             }
 
@@ -189,14 +190,14 @@ public class ExportService extends AbstractService {
         return new PollResult<>(this, new SimplePollHandler<Void>(notNullState(task, "export pdf task").getUri(), Void.class) {
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
-                switch (response.getStatusCode()) {
-                    case OK:
-                        return true;
-                    case ACCEPTED:
-                        return false;
-                    default:
-                        throw new ExportException("Unable to export dashboard: " + dashboardUri +
-                                ", unknown HTTP response code: " + response.getStatusCode());
+                HttpStatus status = HttpStatus.resolve(response.getStatusCode().value());
+                if (HttpStatus.OK.equals(status)) {
+                    return true;
+                } else if (HttpStatus.ACCEPTED.equals(status)) {
+                    return false;
+                } else {
+                    throw new ExportException("Unable to export dashboard: " + dashboardUri +
+                            ", unknown HTTP response code: " + response.getStatusCode());
                 }
             }
 
@@ -261,16 +262,16 @@ public class ExportService extends AbstractService {
         return new PollResult<>(this, new SimplePollHandler<Void>(response.getUri(), Void.class) {
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
-                switch (response.getStatusCode()) {
-                    case OK:
-                        return true;
-                    case ACCEPTED:
-                        return false;
-                    case NO_CONTENT:
-                        throw new NoDataExportException();
-                    default:
-                        throw new ExportException("Unable to export: " + uri +
-                                ", unknown HTTP response code: " + response.getStatusCode());
+                HttpStatus status = HttpStatus.resolve(response.getStatusCode().value());
+                if (HttpStatus.OK.equals(status)) {
+                    return true;
+                } else if (HttpStatus.ACCEPTED.equals(status)) {
+                    return false;
+                } else if (HttpStatus.NO_CONTENT.equals(status)) {
+                    throw new NoDataExportException();
+                } else {
+                    throw new ExportException("Unable to export: " + uri +
+                            ", unknown HTTP response code: " + response.getStatusCode());
                 }
             }
 
@@ -299,3 +300,4 @@ public class ExportService extends AbstractService {
         return projectId;
     }
 }
+
