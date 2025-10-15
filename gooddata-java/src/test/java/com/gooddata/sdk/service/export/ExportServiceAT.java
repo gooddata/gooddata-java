@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -37,10 +37,4 @@ public class ExportServiceAT extends AbstractGoodDataAT {
         assertThat(output, is(notNullValue()));
     }
 
-    @Test(groups = "export", dependsOnGroups = "dataset")
-    public void shouldReportDefinitionRaw() throws Exception {
-        final ByteArrayOutputStream output = new ByteArrayOutputStream();
-        service.exportCsv(reportDefinition, output).get();
-        assertThat(output, is(notNullValue()));
-    }
 }

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -56,12 +56,20 @@ public abstract class AbstractGoodDataAT {
     protected static ProjectDashboard dashboard;
 
     public static String getProperty(String name) {
+        // First try system properties (from -D flags)
+        final String systemProperty = System.getProperty("gooddata." + name);
+        if (systemProperty != null) {
+            return systemProperty;
+        }
+        
+        // Then try environment variables
         final String value = System.getenv(name);
         if (value != null) {
             return value;
         }
-        throw new IllegalArgumentException("Environment variable " + name + " not found! Available variables: " +
-                System.getenv().keySet());
+        
+        throw new IllegalArgumentException("Neither system property 'gooddata." + name + "' nor environment variable '" + name + "' found! " +
+                "Available environment variables: " + System.getenv().keySet());
     }
 
     @AfterSuite
@@ -72,3 +80,4 @@ public abstract class AbstractGoodDataAT {
         gd.logout();
     }
 }
+

@@ -67,10 +67,10 @@ Since *GoodData Java SDK* version *2.32.0* API versioning is supported. The API 
 The *GoodData Java SDK* uses:
 * the [GoodData HTTP client](https://github.com/gooddata/gooddata-http-client) version 0.9.3 or later
 * the *Apache HTTP Client* version 4.5 or later (for white-labeled domains at least version 4.3.2 is required)
-* the *Spring Framework* version 5* (can be used with spring 4.3.* as well)
+* the *Spring Framework* version 6.x (compatible with Spring Boot 3.x)
 * the *Jackson JSON Processor* version 2.*
-* the *Slf4j API* version 1.7.*
-* the *Java Development Kit (JDK)* version 11 or later to build, can run on 8 and later
+* the *Slf4j API* version 2.0.*
+* the *Java Development Kit (JDK)* version 17 or later
 
 ##### Retry of failed API calls
 

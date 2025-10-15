@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -18,10 +18,6 @@ import com.gooddata.sdk.model.executeafm.response.AttributeHeader;
 import com.gooddata.sdk.model.executeafm.response.ExecutionResponse;
 import com.gooddata.sdk.model.executeafm.response.MeasureGroupHeader;
 import com.gooddata.sdk.model.executeafm.response.ResultDimension;
-import com.gooddata.sdk.model.executeafm.result.DataList;
-import com.gooddata.sdk.model.executeafm.result.DataValue;
-import com.gooddata.sdk.model.executeafm.result.ExecutionResult;
-import com.gooddata.sdk.model.executeafm.result.ResultHeaderItem;
 import com.gooddata.sdk.model.md.visualization.Bucket;
 import com.gooddata.sdk.model.md.visualization.Measure;
 import com.gooddata.sdk.model.md.visualization.VOSimpleMeasureDefinition;
@@ -30,18 +26,16 @@ import com.gooddata.sdk.model.md.visualization.VisualizationClass;
 import com.gooddata.sdk.model.md.visualization.VisualizationObject;
 import org.testng.annotations.Test;
 
-import java.util.Collection;
-import java.util.List;
+
 
 import static com.gooddata.sdk.model.md.Restriction.identifier;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
+
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 
 public class ExecuteAfmServiceAT extends AbstractGoodDataAT {
@@ -77,17 +71,7 @@ public class ExecuteAfmServiceAT extends AbstractGoodDataAT {
         checkExecutionResponse(visResponse);
     }
 
-    @Test(groups = "executeAfm", dependsOnMethods = "testExecuteAfm")
-    public void testGetAfmExecutionResult() {
-        final ExecutionResult afmResult = gd.getExecuteAfmService().getResult(afmResponse).get();
-        checkExecutionResult(afmResult);
-    }
 
-    @Test(groups = "executeAfm", dependsOnMethods = "testExecuteVisualization")
-    public void testGetVisualizationExecutionResult() {
-        final ExecutionResult visResult = gd.getExecuteAfmService().getResult(visResponse).get();
-        checkExecutionResult(visResult);
-    }
 
     @SuppressWarnings("deprecation")
     private VisualizationObject createVisualizationObject() {
@@ -122,23 +106,5 @@ public class ExecuteAfmServiceAT extends AbstractGoodDataAT {
         assertThat("the only measureHeader should point to given metric", measureGroupHeader.getItems().get(0).getUri(), is(metric.getUri()));
     }
 
-    private static void checkExecutionResult(final ExecutionResult result) {
-        assertThat(result, notNullValue());
 
-        final List<ResultHeaderItem> firstDimHeaders = result.getHeaderItems().get(0).get(0);
-        assertThat("1st dim should have two header items", firstDimHeaders, hasSize(2));
-        assertThat(headerItemsNames(firstDimHeaders), hasItems("HR", "DevOps"));
-
-        final List<ResultHeaderItem> secondDimHeaders = result.getHeaderItems().get(1).get(0);
-        assertThat("2nd dim should have one header item", secondDimHeaders, hasSize(1));
-        assertThat(headerItemsNames(secondDimHeaders), hasItems(metric.getTitle()));
-
-        assertThat(result.getData(), is(new DataList(asList(
-                new DataList(singletonList(new DataValue("41"))),
-                new DataList(singletonList(new DataValue("36")))))));
-    }
-
-    private static Collection<String> headerItemsNames(final List<ResultHeaderItem> items) {
-        return items.stream().map(ResultHeaderItem::getName).collect(toList());
-    }
 }

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -42,7 +42,7 @@ public class ResponseErrorHandler extends DefaultResponseErrorHandler {
         final String requestId = response.getHeaders().getFirst(Header.GDC_REQUEST_ID);
         int statusCode;
         try {
-            statusCode = response.getRawStatusCode();
+            statusCode = response.getStatusCode().value();
         } catch (IOException e) {
             statusCode = 0;
         }
@@ -56,3 +56,4 @@ public class ResponseErrorHandler extends DefaultResponseErrorHandler {
     }
 
 }
+

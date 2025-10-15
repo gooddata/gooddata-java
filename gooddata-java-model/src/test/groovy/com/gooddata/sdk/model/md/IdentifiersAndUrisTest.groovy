@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -31,3 +31,4 @@ class IdentifiersAndUrisTest extends Specification {
         identifiersAndUris.asUriToIdentifier() == [(URI_1): IDENTIFIER_1, (URI_2): IDENTIFIER_2]
     }
 }
+
