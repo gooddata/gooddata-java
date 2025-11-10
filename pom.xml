@@ -101,30 +101,20 @@
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${failsafe.version}</version>
+                <!-- config and dependencies below needed to make running both Spock and TestNG tests -->
                 <configuration>
                     <threadCount>1</threadCount>
-                    <!-- Re-enable IT tests with improved Jetty dependency management -->
-                    <includes>
-                        <include>**/*IT.java</include>
-                    </includes>
-                    <!-- Exclude problematic tests if any -->
-                    <excludes>
-                        <!-- Add specific problematic tests here if needed -->
-                        <!-- <exclude>**/ProblematicIT.java</exclude> -->
-                    </excludes>
-                    <!-- Enhanced system properties for Jetty compatibility -->
-                    <systemPropertyVariables>
-                        <jetty.version.forced>true</jetty.version.forced>
-                        <org.eclipse.jetty.util.log.class>org.eclipse.jetty.util.log.StdErrLog</org.eclipse.jetty.util.log.class>
-                        <org.eclipse.jetty.LEVEL>WARN</org.eclipse.jetty.LEVEL>
-                    </systemPropertyVariables>
                 </configuration>
                 <dependencies>
-                    <!-- Use TestNG for IT tests instead of JUnit -->
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>${surefire.version}</version>
+                    </dependency>
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-testng</artifactId>
-                        <version>${failsafe.version}</version>
+                        <version>${surefire.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -205,21 +195,33 @@ LICENSE.txt file in the root directory of this source tree.</inlineHeader>
                 </configuration>
             </plugin>
             <plugin>
-                <!-- needed to make running both Spock and JUnit5 tests -->
+                <!-- needed to make running both Spock and TestNG tests -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.version}</version>
                 <configuration>
+                    <properties>
+                        <property>
+                            <name>junit</name>
+                            <value>false</value>
+                        </property>
+                    </properties>
                     <threadCount>1</threadCount>
-                    <includes>
-                        <include>**/*Test.java</include>
-                        <include>**/*Spec.groovy</include>
-                    </includes>
-                    <excludes>
-                        <exclude>**/RetryableRestTemplateTest.java</exclude>
-                    </excludes>
-                    <argLine>--add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED</argLine>
+                    <!-- Java 17 module access for Shazamcrest library -->
+                    <argLine>--add-opens java.base/java.time=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED</argLine>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>${surefire.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-testng</artifactId>
+                        <version>${surefire.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

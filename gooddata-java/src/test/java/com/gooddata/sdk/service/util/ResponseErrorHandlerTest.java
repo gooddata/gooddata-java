@@ -86,6 +86,7 @@ public class ResponseErrorHandlerTest {
         final HttpHeaders headers = new HttpHeaders();
         when(response.getHeaders()).thenReturn(headers);
         when(response.getStatusText()).thenThrow(IOException.class);
+        when(response.getStatusCode()).thenThrow(IOException.class);
         when(response.getRawStatusCode()).thenThrow(IOException.class);
 
         final GoodDataRestException exc = assertException(response);
