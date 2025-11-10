@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service;
 
-import org.apache.http.HttpHost;
+import org.apache.hc.core5.http.HttpHost;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 
@@ -62,7 +62,7 @@ public class GoodDataEndpoint {
      * @return the host URI, as a string.
      */
     public String toUri() {
-        return new HttpHost(hostname, port, protocol).toURI();
+        return new HttpHost(protocol, hostname, port).toURI();
     }
 
     /**

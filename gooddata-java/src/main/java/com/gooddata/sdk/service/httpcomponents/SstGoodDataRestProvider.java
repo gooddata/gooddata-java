@@ -10,9 +10,9 @@ import com.gooddata.http.client.SSTRetrievalStrategy;
 import com.gooddata.http.client.SimpleSSTRetrievalStrategy;
 import com.gooddata.sdk.service.GoodDataEndpoint;
 import com.gooddata.sdk.service.GoodDataSettings;
-import org.apache.http.HttpHost;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 
 import static com.gooddata.sdk.common.util.Validate.notNull;
 
@@ -46,8 +46,9 @@ public final class SstGoodDataRestProvider extends SingleEndpointGoodDataRestPro
 
         final HttpClient httpClient = builder.build();
         final SSTRetrievalStrategy strategy = new SimpleSSTRetrievalStrategy(sst);
-        final HttpHost httpHost = new HttpHost(endpoint.getHostname(), endpoint.getPort(), endpoint.getProtocol());
-        return new GoodDataHttpClient(httpClient, httpHost, strategy);
+        final HttpHost httpHost = new HttpHost(endpoint.getProtocol(), endpoint.getHostname(), endpoint.getPort());
+        final GoodDataHttpClient goodDataClient = new GoodDataHttpClient(httpClient, httpHost, strategy);
+        return new GoodDataHttpClientAdapter(goodDataClient);
     }
 }
 

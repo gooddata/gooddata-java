@@ -8,7 +8,7 @@ package com.gooddata.sdk.service.httpcomponents
 import com.gooddata.sdk.service.GoodDataEndpoint
 import com.gooddata.sdk.service.GoodDataSettings
 import com.gooddata.sdk.service.gdc.DataStoreService
-import org.apache.http.client.HttpClient
+import org.apache.hc.client5.http.classic.HttpClient
 import spock.lang.Specification
 
 class SingleEndpointGoodDataRestProviderTest extends Specification {

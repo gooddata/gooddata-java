@@ -7,8 +7,8 @@ package com.gooddata.sdk.service.httpcomponents;
 
 import com.gooddata.sdk.service.GoodDataEndpoint;
 import com.gooddata.sdk.service.GoodDataSettings;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 
 /**
  * Custom GoodData http client builder providing custom functionality by descendants of

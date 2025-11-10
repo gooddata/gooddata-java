@@ -5,8 +5,9 @@
  */
 package com.gooddata.sdk.common;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
+import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -17,39 +18,39 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Spring 6 compatible {@link ClientHttpResponse} implementation that wraps Apache HttpComponents HttpClient 4.x response.
- * This bridges HttpClient 4.x responses with Spring 6's ClientHttpResponse interface.
+ * Spring 6 compatible {@link ClientHttpResponse} implementation that wraps Apache HttpComponents HttpClient 5.x response.
+ * This bridges HttpClient 5.x responses with Spring 6's ClientHttpResponse interface.
  * Package-private as it's only used internally within the common package.
  */
 class HttpClient4ComponentsClientHttpResponse implements ClientHttpResponse {
 
-    private final org.apache.http.HttpResponse httpResponse;
+    private final ClassicHttpResponse httpResponse;
     private HttpHeaders headers;
 
-    public HttpClient4ComponentsClientHttpResponse(org.apache.http.HttpResponse httpResponse) {
+    public HttpClient4ComponentsClientHttpResponse(ClassicHttpResponse httpResponse) {
         this.httpResponse = httpResponse;
     }
 
     @Override
     public HttpStatusCode getStatusCode() throws IOException {
-        return HttpStatusCode.valueOf(httpResponse.getStatusLine().getStatusCode());
+        return HttpStatusCode.valueOf(httpResponse.getCode());
     }
 
     @Override
     public int getRawStatusCode() throws IOException {
-        return httpResponse.getStatusLine().getStatusCode();
+        return httpResponse.getCode();
     }
 
     @Override
     public String getStatusText() throws IOException {
-        return httpResponse.getStatusLine().getReasonPhrase();
+        return httpResponse.getReasonPhrase();
     }
 
     @Override
     public HttpHeaders getHeaders() {
         if (headers == null) {
             headers = new HttpHeaders();
-            for (Header header : httpResponse.getAllHeaders()) {
+            for (Header header : httpResponse.getHeaders()) {
                 headers.add(header.getName(), header.getValue());
             }
         }
@@ -64,13 +65,9 @@ class HttpClient4ComponentsClientHttpResponse implements ClientHttpResponse {
 
     @Override
     public void close() {
-        // HttpClient 4.x doesn't require explicit connection closing in most cases
-        // The connection is managed by the connection manager
+        // HttpClient 5.x - close the response
         try {
-            HttpEntity entity = httpResponse.getEntity();
-            if (entity != null && entity.getContent() != null) {
-                entity.getContent().close();
-            }
+            httpResponse.close();
         } catch (IOException e) {
             // Ignore close exceptions
         }

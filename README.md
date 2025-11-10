@@ -65,8 +65,8 @@ Since *GoodData Java SDK* version *2.32.0* API versioning is supported. The API 
 ### Dependencies
 
 The *GoodData Java SDK* uses:
-* the [GoodData HTTP client](https://github.com/gooddata/gooddata-http-client) version 0.9.3 or later
-* the *Apache HTTP Client* version 4.5 or later (for white-labeled domains at least version 4.3.2 is required)
+* the [GoodData HTTP client](https://github.com/gooddata/gooddata-http-client) version 2.0.0 or later
+* the *Apache HTTP Client* version 5.2.x (for compatibility with older code, 4.5.x is also included for Sardine WebDAV library)
 * the *Spring Framework* version 6.x (compatible with Spring Boot 3.x)
 * the *Jackson JSON Processor* version 2.*
 * the *Slf4j API* version 2.0.*
@@ -105,6 +105,22 @@ Good SO thread about differences between various types in Java Date/Time API: ht
 
 Build the library with `mvn package`, see the
 [Testing](https://github.com/gooddata/gooddata-java/wiki/Testing) page for different testing methods.
+
+### Running Acceptance Tests
+
+To run acceptance tests against a real GoodData environment, use the following command:
+
+```bash
+# ⚠️ EXAMPLE ONLY - Replace with your actual credentials
+host=your-instance.gooddata.com \
+login=your.email@example.com \
+password=YOUR_PASSWORD_HERE \
+projectToken=YOUR_PROJECT_TOKEN \
+warehouseToken=YOUR_WAREHOUSE_TOKEN \
+mvn verify -P at
+```
+
+**Security Note:** Never commit real credentials to version control. Use environment variables or secure credential management systems in production.
 
 For releasing see [Releasing How-To](https://github.com/gooddata/gooddata-java/wiki/Releasing).
 
