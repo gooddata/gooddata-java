@@ -11,12 +11,16 @@ import com.gooddata.sdk.service.*;
 import com.gooddata.sdk.service.gdc.DataStoreService;
 import com.gooddata.sdk.service.retry.RetryableRestTemplate;
 import com.gooddata.sdk.service.util.ResponseErrorHandler;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.CookieSpecs;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.config.SocketConfig;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.cookie.BasicCookieStore;
+import org.apache.hc.client5.http.cookie.CookieStore;
+import org.apache.hc.client5.http.cookie.StandardCookieSpec;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.core5.http.io.SocketConfig;
+import org.apache.hc.core5.util.Timeout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
@@ -140,26 +144,34 @@ public abstract class SingleEndpointGoodDataRestProvider implements GoodDataRest
      * @return configured builder
      */
     protected HttpClientBuilder createHttpClientBuilder(final GoodDataSettings settings) {
-        final PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-        connectionManager.setDefaultMaxPerRoute(settings.getMaxConnections());
-        connectionManager.setMaxTotal(settings.getMaxConnections());
+        final SocketConfig socketConfig = SocketConfig.custom()
+                .setSoTimeout(Timeout.ofMilliseconds(settings.getSocketTimeout()))
+                .build();
 
-        final SocketConfig.Builder socketConfig = SocketConfig.copy(SocketConfig.DEFAULT);
-        socketConfig.setSoTimeout(settings.getSocketTimeout());
-        connectionManager.setDefaultSocketConfig(socketConfig.build());
+        final PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
+                .setMaxConnPerRoute(settings.getMaxConnections())
+                .setMaxConnTotal(settings.getMaxConnections())
+                .setDefaultSocketConfig(socketConfig)
+                .build();
 
-        final RequestConfig.Builder requestConfig = RequestConfig.copy(RequestConfig.DEFAULT);
-        requestConfig.setConnectTimeout(settings.getConnectionTimeout());
-        requestConfig.setConnectionRequestTimeout(settings.getConnectionRequestTimeout());
-        requestConfig.setSocketTimeout(settings.getSocketTimeout());
-        requestConfig.setCookieSpec(CookieSpecs.STANDARD);
+        final RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectTimeout(Timeout.ofMilliseconds(settings.getConnectionTimeout()))
+                .setConnectionRequestTimeout(Timeout.ofMilliseconds(settings.getConnectionRequestTimeout()))
+                .setResponseTimeout(Timeout.ofMilliseconds(settings.getSocketTimeout()))
+                .setCookieSpec(StandardCookieSpec.STRICT)
+                .build();
+
+        // CRITICAL: HttpClient 5.x requires explicit cookie store for session management
+        // Without this, authentication cookies won't be preserved between requests
+        final CookieStore cookieStore = new BasicCookieStore();
 
         return HttpClientBuilder.create()
                 .setUserAgent(settings.getGoodDataUserAgent())
                 .setConnectionManager(connectionManager)
-                .addInterceptorFirst(new RequestIdInterceptor())
-                .addInterceptorFirst(new ResponseMissingRequestIdInterceptor())
-                .setDefaultRequestConfig(requestConfig.build());
+                .setDefaultCookieStore(cookieStore)  // Enable cookie/session management
+                .addRequestInterceptorFirst(new RequestIdInterceptor())
+                .addResponseInterceptorFirst(new ResponseMissingRequestIdInterceptor())
+                .setDefaultRequestConfig(requestConfig);
     }
 }
 

@@ -9,8 +9,7 @@ import com.gooddata.sdk.common.gdc.Header;
 import com.gooddata.sdk.service.retry.RetrySettings;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.VersionInfo;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.util.StreamUtils;
 
@@ -22,7 +21,6 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static com.gooddata.sdk.common.util.Validate.notNull;
-import static org.apache.http.util.VersionInfo.loadVersionInfo;
 import static org.springframework.util.Assert.isTrue;
 
 /**
@@ -299,8 +297,10 @@ public class GoodDataSettings {
         final String clientVersion = pkg != null && pkg.getImplementationVersion() != null
                 ? pkg.getImplementationVersion() : UNKNOWN_VERSION;
 
-        final VersionInfo vi = loadVersionInfo("org.apache.http.client", HttpClientBuilder.class.getClassLoader());
-        final String apacheVersion = vi != null ? vi.getRelease() : UNKNOWN_VERSION;
+        // Get HttpClient 5.x version from package
+        final Package httpClientPkg = HttpClientBuilder.class.getPackage();
+        final String apacheVersion = httpClientPkg != null && httpClientPkg.getImplementationVersion() != null
+                ? httpClientPkg.getImplementationVersion() : UNKNOWN_VERSION;
 
         return String.format("%s/%s (%s; %s) %s/%s", "GoodData-Java-SDK", clientVersion,
                 System.getProperty("os.name"), System.getProperty("java.specification.version"),

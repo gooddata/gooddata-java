@@ -63,12 +63,12 @@ public class JettyCompatibleUrlEncoderTest {
         // Verify key transformations occurred
         assertFalse(jettyExpected.contains("%2B"), "Plus signs should be decoded");
         assertFalse(jettyExpected.contains("%2F"), "Forward slashes should be decoded");
-        assertFalse(jettyExpected.contains("%0A"), "Newlines should be decoded");
+        assertTrue(jettyExpected.contains("%0A"), "Newlines should remain encoded per Jetty 8.1 behavior");
         
-        // Should contain actual characters instead
+        // Should contain actual characters instead for selective decoding
         assertTrue(jettyExpected.contains("+"), "Should contain decoded plus signs");
         assertTrue(jettyExpected.contains("/"), "Should contain decoded forward slashes");
-        assertTrue(jettyExpected.contains("\n"), "Should contain decoded newlines");
+        assertFalse(jettyExpected.contains("\n"), "Should NOT contain decoded newlines (Jetty 8.1 leaves them encoded)");
     }
 
     @Test

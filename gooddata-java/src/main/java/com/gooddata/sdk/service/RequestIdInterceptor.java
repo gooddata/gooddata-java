@@ -6,13 +6,13 @@
 package com.gooddata.sdk.service;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.http.Header;
-import org.apache.http.HttpException;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.annotation.Contract;
-import org.apache.http.annotation.ThreadingBehavior;
-import org.apache.http.protocol.HttpContext;
+import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.HttpException;
+import org.apache.hc.core5.http.HttpRequest;
+import org.apache.hc.core5.http.HttpRequestInterceptor;
+import org.apache.hc.core5.http.protocol.HttpContext;
+import org.apache.hc.core5.annotation.Contract;
+import org.apache.hc.core5.annotation.ThreadingBehavior;
 
 import java.io.IOException;
 
@@ -27,7 +27,7 @@ import static com.gooddata.sdk.common.gdc.Header.GDC_REQUEST_ID;
 public class RequestIdInterceptor implements HttpRequestInterceptor {
 
     @Override
-    public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
+    public void process(final HttpRequest request, final org.apache.hc.core5.http.EntityDetails entity, final HttpContext context) throws HttpException, IOException {
         final StringBuilder requestIdBuilder = new StringBuilder();
         final Header requestIdHeader = request.getFirstHeader(GDC_REQUEST_ID);
         if (requestIdHeader != null) {

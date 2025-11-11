@@ -26,7 +26,18 @@
             <groupId>com.gooddata</groupId>
             <artifactId>gooddata-http-client</artifactId>
         </dependency>
-        <!-- HttpClient 4.x for backward compatibility -->
+
+        <!-- HttpClient 5.x - explicitly declared as we use it directly -->
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.core5</groupId>
+            <artifactId>httpcore5</artifactId>
+        </dependency>
+
+        <!-- HttpClient 4.x for Sardine library compatibility -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -95,6 +106,17 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- JUnit Jupiter (JUnit 5) - explicitly declared as we use it in tests -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

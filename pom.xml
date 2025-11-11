@@ -60,8 +60,11 @@
         <json-unit.version>2.38.0</json-unit.version>
         <surefire.version>3.1.2</surefire.version>
         <failsafe.version>3.1.2</failsafe.version>
-        <httpclient.version>4.5.14</httpclient.version>
-        <httpcore.version>4.4.16</httpcore.version>
+        <httpclient5.version>5.2.3</httpclient5.version>
+        <httpcore5.version>5.2.4</httpcore5.version>
+        <!-- HttpClient 4.x for Sardine compatibility -->
+        <httpclient4.version>4.5.14</httpclient4.version>
+        <httpcore4.version>4.4.16</httpcore4.version>
 
         <!-- Hardcoded value, so the license:check doesn't break builds at the New Year.
         Change to current year value together with headers in all source files and first license in LICENSE.txt. -->
@@ -98,30 +101,20 @@
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${failsafe.version}</version>
+                <!-- config and dependencies below needed to make running both Spock and TestNG tests -->
                 <configuration>
                     <threadCount>1</threadCount>
-                    <!-- Re-enable IT tests with improved Jetty dependency management -->
-                    <includes>
-                        <include>**/*IT.java</include>
-                    </includes>
-                    <!-- Exclude problematic tests if any -->
-                    <excludes>
-                        <!-- Add specific problematic tests here if needed -->
-                        <!-- <exclude>**/ProblematicIT.java</exclude> -->
-                    </excludes>
-                    <!-- Enhanced system properties for Jetty compatibility -->
-                    <systemPropertyVariables>
-                        <jetty.version.forced>true</jetty.version.forced>
-                        <org.eclipse.jetty.util.log.class>org.eclipse.jetty.util.log.StdErrLog</org.eclipse.jetty.util.log.class>
-                        <org.eclipse.jetty.LEVEL>WARN</org.eclipse.jetty.LEVEL>
-                    </systemPropertyVariables>
                 </configuration>
                 <dependencies>
-                    <!-- Use TestNG for IT tests instead of JUnit -->
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>${surefire.version}</version>
+                    </dependency>
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-testng</artifactId>
-                        <version>${failsafe.version}</version>
+                        <version>${surefire.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -202,21 +195,33 @@ LICENSE.txt file in the root directory of this source tree.</inlineHeader>
                 </configuration>
             </plugin>
             <plugin>
-                <!-- needed to make running both Spock and JUnit5 tests -->
+                <!-- needed to make running both Spock and TestNG tests -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.version}</version>
                 <configuration>
+                    <properties>
+                        <property>
+                            <name>junit</name>
+                            <value>false</value>
+                        </property>
+                    </properties>
                     <threadCount>1</threadCount>
-                    <includes>
-                        <include>**/*Test.java</include>
-                        <include>**/*Spec.groovy</include>
-                    </includes>
-                    <excludes>
-                        <exclude>**/RetryableRestTemplateTest.java</exclude>
-                    </excludes>
-                    <argLine>--add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED</argLine>
+                    <!-- Java 17 module access for Shazamcrest library -->
+                    <argLine>--add-opens java.base/java.time=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED</argLine>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>${surefire.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-testng</artifactId>
+                        <version>${surefire.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
@@ -320,16 +325,33 @@ LICENSE.txt file in the root directory of this source tree.</inlineHeader>
         </dependency>            <!-- Override specific versions where needed -->
             
 
-            <!-- Use HttpClient 4.x with Spring 6 compatibility layer -->
+            <!-- Use HttpClient 5.x -->
+            <dependency>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>${httpclient5.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.core5</groupId>
+                <artifactId>httpcore5</artifactId>
+                <version>${httpcore5.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.core5</groupId>
+                <artifactId>httpcore5-h2</artifactId>
+                <version>${httpcore5.version}</version>
+            </dependency>
+
+            <!-- HttpClient 4.x for Sardine library -->
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>${httpclient.version}</version>
+                <version>${httpclient4.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpcore</artifactId>
-                <version>${httpcore.version}</version>
+                <version>${httpcore4.version}</version>
             </dependency>
 
             
@@ -355,7 +377,7 @@ LICENSE.txt file in the root directory of this source tree.</inlineHeader>
             <dependency>
                 <groupId>com.gooddata</groupId>
                 <artifactId>gooddata-http-client</artifactId>
-                <version>1.0.0</version>
+                <version>2.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>

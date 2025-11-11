@@ -5,11 +5,10 @@
  */
 package com.gooddata.sdk.service.httpcomponents
 
-import com.gooddata.http.client.GoodDataHttpClient
 import com.gooddata.sdk.service.GoodDataEndpoint
 import com.gooddata.sdk.service.GoodDataSettings
-import org.apache.http.impl.client.CloseableHttpClient
-import org.apache.http.impl.client.HttpClientBuilder
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder
 import spock.lang.Specification
 
 import static com.gooddata.sdk.service.httpcomponents.LoginPasswordGoodDataRestProvider.createHttpClient
@@ -29,7 +28,7 @@ class LoginPasswordGoodDataRestProviderTest extends Specification {
         }
 
         expect:
-        that createHttpClient(builder, new GoodDataEndpoint(), LOGIN, PASSWORD), is(instanceOf(GoodDataHttpClient))
+        that createHttpClient(builder, new GoodDataEndpoint(), LOGIN, PASSWORD), is(instanceOf(GoodDataHttpClientAdapter))
     }
 
     def "should provide GoodDataHttpClient"() {
@@ -38,7 +37,7 @@ class LoginPasswordGoodDataRestProviderTest extends Specification {
 
         then:
         provider.restTemplate
-        provider.httpClient instanceof GoodDataHttpClient
+        provider.httpClient instanceof GoodDataHttpClientAdapter
     }
 
 

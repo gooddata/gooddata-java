@@ -13,8 +13,9 @@ import com.gooddata.sdk.model.md.report.Report;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.httpcomponents.SingleEndpointGoodDataRestProvider;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
 import org.testng.annotations.AfterSuite;
 
 import java.time.LocalDate;
@@ -34,7 +35,7 @@ public abstract class AbstractGoodDataAT {
     protected static final GoodData gd =
             new GoodData(
                     new SingleEndpointGoodDataRestProvider(endpoint, new GoodDataSettings(), (b, e, s) -> {
-                        PoolingHttpClientConnectionManager httpClientConnectionManager = new PoolingHttpClientConnectionManager();
+                        PoolingHttpClientConnectionManager httpClientConnectionManager = PoolingHttpClientConnectionManagerBuilder.create().build();
                         final HttpClientBuilder builderWithManager = b.setConnectionManager(httpClientConnectionManager);
                         connManager = httpClientConnectionManager;
 
