@@ -64,46 +64,54 @@ public class UriPrefixingClientHttpRequestFactory implements ClientHttpRequestFa
         }
         
         // Build complete URI with host information from baseUri
-        UriComponentsBuilder builder = UriComponentsBuilder.newInstance()
-                .scheme(baseUri.getScheme())
-                .host(baseUri.getHost())
-                .port(baseUri.getPort());
+        // For queries with edge-case encodings (%80, %FF), we need to avoid UriComponentsBuilder
+        // validation and construct the URI string manually to preserve invalid UTF-8 sequences
+        
+        String scheme = baseUri.getScheme();
+        String host = baseUri.getHost();
+        int port = baseUri.getPort();
         
         // Handle path - combine base path with request path
         String basePath = baseUri.getPath();
         String requestPath = uri.getPath();
+        String finalPath;
         
         if (requestPath != null) {
             if (requestPath.startsWith("/")) {
                 // Absolute path - use as-is
-                builder.path(requestPath);
+                finalPath = requestPath;
             } else {
                 // Relative path - append to base path
-                String combinedPath = (basePath != null && !basePath.endsWith("/")) ? basePath + "/" + requestPath : requestPath;
-                builder.path(combinedPath);
+                finalPath = (basePath != null && !basePath.endsWith("/")) ? basePath + "/" + requestPath : requestPath;
             }
         } else {
-            builder.path(basePath);
+            finalPath = basePath;
         }
         
-        // Add query and fragment if present
-        if (uri.getQuery() != null) {
-            builder.query(uri.getQuery());
+        try {
+            // Use multi-argument URI constructor to preserve exact encoding
+            // This avoids validation and re-encoding of the query string
+            URI result = new URI(
+                scheme,
+                null,  // userInfo
+                host,
+                port,
+                finalPath,
+                uri.getQuery(),
+                uri.getFragment()
+            );
+            
+            // Ensure the result has host information - this is critical!
+            if (result.getHost() == null) {
+                throw new IllegalStateException("Generated URI missing host information: " + result + 
+                    " (baseUri: " + baseUri + ", requestUri: " + uri + ")");
+            }
+            
+            return result;
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to create URI (scheme=" + scheme + ", host=" + host + 
+                ", port=" + port + ", path=" + finalPath + ", query=" + uri.getQuery() + ")", e);
         }
-        
-        if (uri.getFragment() != null) {
-            builder.fragment(uri.getFragment());
-        }
-        
-        URI result = builder.build().toUri();
-        
-        // Ensure the result has host information - this is critical!
-        if (result.getHost() == null) {
-            throw new IllegalStateException("Generated URI missing host information: " + result + 
-                " (baseUri: " + baseUri + ", requestUri: " + uri + ")");
-        }
-        
-        return result;
     }
 
     /**

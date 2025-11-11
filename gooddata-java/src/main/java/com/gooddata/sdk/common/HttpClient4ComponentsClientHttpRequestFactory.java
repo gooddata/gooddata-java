@@ -7,6 +7,7 @@ package com.gooddata.sdk.common;
 
 
 import org.apache.hc.core5.http.ClassicHttpRequest;
+import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
 import org.apache.hc.core5.http.io.support.ClassicRequestBuilder;
 import org.apache.hc.client5.http.classic.HttpClient;
@@ -139,12 +140,27 @@ public class HttpClient4ComponentsClientHttpRequestFactory implements ClientHttp
             // Set headers exactly like reference implementation
             addHeaders(httpRequest);
             
-            // Execute the request using HttpClient 5.x API
-            // The execute method with ResponseHandler automatically handles the response
-            return httpClient.execute(httpRequest, response -> {
-                // We need to consume and store the response since ResponseHandler closes it
+            // Extract HttpHost from the request URI for GoodDataHttpClient
+            // GoodDataHttpClient requires the target host to be explicitly provided
+            // to properly handle authentication and token management
+            try {
+                URI requestUri = httpRequest.getUri();
+                org.apache.hc.core5.http.HttpHost target = new org.apache.hc.core5.http.HttpHost(
+                    requestUri.getScheme(),
+                    requestUri.getHost(),
+                    requestUri.getPort()
+                );
+                
+                // CRITICAL: Call execute() WITHOUT ResponseHandler to ensure GoodDataHttpClient's
+                // authentication logic is invoked. The version with ResponseHandler bypasses auth!
+                // See: gooddata-http-client:2.0.0 GoodDataHttpClient.execute() implementation
+                ClassicHttpResponse response = httpClient.execute(target, httpRequest);
+                
+                // We need to consume and store the response immediately since the connection may be closed
                 return new HttpClient4ComponentsClientHttpResponse(response);
-            });
+            } catch (java.net.URISyntaxException e) {
+                throw new IOException("Failed to extract target host from request URI", e);
+            }
         }
 
         /**

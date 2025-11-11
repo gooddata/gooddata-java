@@ -13,6 +13,8 @@ import com.gooddata.sdk.service.retry.RetryableRestTemplate;
 import com.gooddata.sdk.service.util.ResponseErrorHandler;
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.cookie.BasicCookieStore;
+import org.apache.hc.client5.http.cookie.CookieStore;
 import org.apache.hc.client5.http.cookie.StandardCookieSpec;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
@@ -159,9 +161,14 @@ public abstract class SingleEndpointGoodDataRestProvider implements GoodDataRest
                 .setCookieSpec(StandardCookieSpec.STRICT)
                 .build();
 
+        // CRITICAL: HttpClient 5.x requires explicit cookie store for session management
+        // Without this, authentication cookies won't be preserved between requests
+        final CookieStore cookieStore = new BasicCookieStore();
+
         return HttpClientBuilder.create()
                 .setUserAgent(settings.getGoodDataUserAgent())
                 .setConnectionManager(connectionManager)
+                .setDefaultCookieStore(cookieStore)  // Enable cookie/session management
                 .addRequestInterceptorFirst(new RequestIdInterceptor())
                 .addResponseInterceptorFirst(new ResponseMissingRequestIdInterceptor())
                 .setDefaultRequestConfig(requestConfig);
