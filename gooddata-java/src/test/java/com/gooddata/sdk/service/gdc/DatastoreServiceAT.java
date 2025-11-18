@@ -94,7 +94,7 @@ public class DatastoreServiceAT extends AbstractGoodDataAT {
         for (int i = 0; i < ITER_MAX; i++) {
             dataStoreService.upload(directory + "/file" + i + ".csv", readFromResource("/person.csv"));
         }
-        assertThat(AbstractGoodDataAT.connManager.getTotalStats().getLeased(), is(equalTo(0)));
+        assertThat(AbstractGoodDataAT.getConnectionManager().getTotalStats().getLeased(), is(equalTo(0)));
     }
 
     @Test(groups = "datastore", dependsOnGroups = "account")
@@ -104,7 +104,7 @@ public class DatastoreServiceAT extends AbstractGoodDataAT {
         directory = "/" + UUID.randomUUID().toString();
         file = directory + "/file.csv";
         dataStoreService.upload(file, readFromResource("/person.csv"));
-        assertThat(AbstractGoodDataAT.connManager.getTotalStats().getLeased(), is(equalTo(0)));
+        assertThat(AbstractGoodDataAT.getConnectionManager().getTotalStats().getLeased(), is(equalTo(0)));
     }
 
     @Test(groups = "datastore", expectedExceptions = DataStoreException.class, enabled = false,

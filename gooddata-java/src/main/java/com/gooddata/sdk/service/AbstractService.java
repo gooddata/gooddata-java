@@ -16,7 +16,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
@@ -33,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 public abstract class AbstractService {
 
     protected final RestTemplate restTemplate;
+    protected final HttpClientAdapter httpClientAdapter;
 
     private final GoodDataSettings settings;
 
@@ -49,6 +49,21 @@ public abstract class AbstractService {
      */
     public AbstractService(final RestTemplate restTemplate, final GoodDataSettings settings) {
         this.restTemplate = notNull(restTemplate, "restTemplate");
+        this.httpClientAdapter = new RestTemplateHttpClientAdapter(restTemplate);
+        this.settings = notNull(settings, "settings");
+    }
+
+    /**
+     * Constructor using HttpClientAdapter for modern HTTP client support.
+     *
+     * @param httpClientAdapter HTTP client adapter
+     * @param settings settings
+     */
+    public AbstractService(final HttpClientAdapter httpClientAdapter, final GoodDataSettings settings) {
+        this.httpClientAdapter = notNull(httpClientAdapter, "httpClientAdapter");
+        this.restTemplate = httpClientAdapter instanceof RestTemplateHttpClientAdapter 
+            ? ((RestTemplateHttpClientAdapter) httpClientAdapter).getRestTemplate() 
+            : null;
         this.settings = notNull(settings, "settings");
     }
 
@@ -76,7 +91,7 @@ public abstract class AbstractService {
         notNull(handler, "handler");
         final ClientHttpResponse response;
         try {
-            response = restTemplate.execute(handler.getPolling(), GET, null, reusableResponseExtractor);
+            response = httpClientAdapter.execute(handler.getPolling(), GET, null, reusableResponseExtractor);
         } catch (GoodDataRestException e) {
             handler.handlePollException(e);
             throw new GoodDataException("Handler " + handler.getClass().getName() + " didn't handle exception", e);
@@ -121,7 +136,7 @@ public abstract class AbstractService {
                     body = FileCopyUtils.copyToByteArray(bodyStream);
                 }
                 statusCode = HttpStatus.resolve(response.getStatusCode().value());
-                rawStatusCode = response.getRawStatusCode();
+                rawStatusCode = response.getStatusCode().value();
                 statusText = response.getStatusText();
                 headers = response.getHeaders();
             } catch (IOException e) {
@@ -155,7 +170,7 @@ public abstract class AbstractService {
 
         @Override
         public InputStream getBody() {
-            return body != null ? new ByteArrayInputStream(body) : StreamUtils.emptyInput();
+            return body != null ? new ByteArrayInputStream(body) : new ByteArrayInputStream(new byte[0]);
         }
 
         @Override

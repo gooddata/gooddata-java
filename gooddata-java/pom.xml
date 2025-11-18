@@ -20,6 +20,12 @@
 
         <dependency>
             <groupId>com.gooddata</groupId>
+            <artifactId>gooddata-webdav-service</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gooddata</groupId>
             <artifactId>gooddata-rest-common</artifactId>
         </dependency>
         <dependency>

@@ -15,7 +15,7 @@ import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.cookie.BasicCookieStore;
 import org.apache.hc.client5.http.cookie.CookieStore;
-import org.apache.hc.client5.http.cookie.StandardCookieSpec;
+
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
@@ -84,10 +84,17 @@ public abstract class SingleEndpointGoodDataRestProvider implements GoodDataRest
     @Override
     public Optional<DataStoreService> getDataStoreService(Supplier<String> stagingUriSupplier) {
         try {
-            Class.forName("com.github.sardine.Sardine", false, getClass().getClassLoader());
-            return Optional.of(new DataStoreService(this, stagingUriSupplier));
+            Class.forName("com.gooddata.webdav.WebDavService", false, getClass().getClassLoader());
+            // Create WebDAV service with credentials from RestTemplate
+            com.gooddata.webdav.WebDavService webDavService = new com.gooddata.webdav.SardineWebDavService();
+            
+            // Create credential manager to share auth between RestTemplate and WebDAV
+            com.gooddata.sdk.service.auth.CredentialManager credentialManager = 
+                new com.gooddata.sdk.service.auth.CredentialManager();
+            
+            return Optional.of(new DataStoreService(this, stagingUriSupplier, webDavService, credentialManager));
         } catch (ClassNotFoundException e) {
-            logger.info("Optional dependency Sardine not found - WebDAV related operations are not supported");
+            logger.info("Optional dependency gooddata-webdav-service not found - WebDAV related operations are not supported");
             return Optional.empty();
         }
     }
@@ -140,38 +147,42 @@ public abstract class SingleEndpointGoodDataRestProvider implements GoodDataRest
 
     /**
      * Creates http client builder, applying given settings.
+     * Uses centralized HttpClientConfig for unified configuration management.
      * @param settings settings to apply
      * @return configured builder
      */
     protected HttpClientBuilder createHttpClientBuilder(final GoodDataSettings settings) {
+        final GoodDataSettings.HttpClientConfig httpConfig = settings.getHttpClientConfig();
+        
         final SocketConfig socketConfig = SocketConfig.custom()
-                .setSoTimeout(Timeout.ofMilliseconds(settings.getSocketTimeout()))
+                .setSoTimeout(Timeout.ofMilliseconds(httpConfig.getSocketTimeoutMs()))
                 .build();
 
         final PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
-                .setMaxConnPerRoute(settings.getMaxConnections())
-                .setMaxConnTotal(settings.getMaxConnections())
+                .setMaxConnPerRoute(httpConfig.getMaxConnectionsPerRoute())
+                .setMaxConnTotal(httpConfig.getMaxConnections())
                 .setDefaultSocketConfig(socketConfig)
                 .build();
 
         final RequestConfig requestConfig = RequestConfig.custom()
-                .setConnectTimeout(Timeout.ofMilliseconds(settings.getConnectionTimeout()))
-                .setConnectionRequestTimeout(Timeout.ofMilliseconds(settings.getConnectionRequestTimeout()))
-                .setResponseTimeout(Timeout.ofMilliseconds(settings.getSocketTimeout()))
-                .setCookieSpec(StandardCookieSpec.STRICT)
+                .setConnectionRequestTimeout(Timeout.ofMilliseconds(httpConfig.getConnectionRequestTimeoutMs()))
+                .setResponseTimeout(Timeout.ofMilliseconds(httpConfig.getSocketTimeoutMs()))
+                .setCookieSpec(httpConfig.isEnableCookies() ? httpConfig.getCookieSpec() : null)
                 .build();
 
-        // CRITICAL: HttpClient 5.x requires explicit cookie store for session management
-        // Without this, authentication cookies won't be preserved between requests
-        final CookieStore cookieStore = new BasicCookieStore();
-
-        return HttpClientBuilder.create()
+        final HttpClientBuilder builder = HttpClientBuilder.create()
                 .setUserAgent(settings.getGoodDataUserAgent())
                 .setConnectionManager(connectionManager)
-                .setDefaultCookieStore(cookieStore)  // Enable cookie/session management
                 .addRequestInterceptorFirst(new RequestIdInterceptor())
                 .addResponseInterceptorFirst(new ResponseMissingRequestIdInterceptor())
                 .setDefaultRequestConfig(requestConfig);
+
+        if (httpConfig.isEnableCookies()) {
+            final CookieStore cookieStore = new BasicCookieStore();
+            builder.setDefaultCookieStore(cookieStore);
+        }
+
+        return builder;
     }
 }
 

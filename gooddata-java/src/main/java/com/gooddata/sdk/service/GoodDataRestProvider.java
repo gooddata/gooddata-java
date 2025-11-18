@@ -42,6 +42,16 @@ public interface GoodDataRestProvider {
     RestTemplate getRestTemplate();
 
     /**
+     * Configured HttpClientAdapter instance for modern HTTP client operations.
+     * Default implementation wraps the RestTemplate for backward compatibility.
+     *
+     * @return HTTP client adapter
+     */
+    default HttpClientAdapter getHttpClientAdapter() {
+        return new RestTemplateHttpClientAdapter(getRestTemplate());
+    }
+
+    /**
      * Configured DataStoreService if provided. By default empty.
      *
      * @param stagingUriSupplier supplier of the data store endpoint

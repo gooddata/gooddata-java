@@ -27,12 +27,20 @@ import java.io.IOException;
  * 
  * @since 4.0.4
  */
-class GoodDataHttpClientAdapter implements HttpClient {
+public class GoodDataHttpClientAdapter implements HttpClient {
 
     private final GoodDataHttpClient goodDataHttpClient;
 
     public GoodDataHttpClientAdapter(GoodDataHttpClient goodDataHttpClient) {
         this.goodDataHttpClient = goodDataHttpClient;
+    }
+
+    /**
+     * Returns the wrapped GoodDataHttpClient for testing and access purposes.
+     * @return the wrapped GoodDataHttpClient
+     */
+    public GoodDataHttpClient getWrappedClient() {
+        return goodDataHttpClient;
     }
 
     @Override

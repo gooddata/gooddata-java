@@ -44,6 +44,7 @@
     <modules>
         <module>gooddata-java-model</module>
         <module>gooddata-java</module>
+        <module>gooddata-webdav-service</module>
     </modules>
 
     <properties>

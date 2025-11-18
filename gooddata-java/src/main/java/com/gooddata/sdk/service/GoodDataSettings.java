@@ -15,6 +15,7 @@ import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -40,6 +41,7 @@ public class GoodDataSettings {
     private String userAgent;
     private RetrySettings retrySettings;
     private Map<String, String> presetHeaders = new HashMap<>(2);
+    private HttpClientConfig httpClientConfig;
 
     private static final String UNKNOWN_VERSION = "UNKNOWN";
 
@@ -262,6 +264,119 @@ public class GoodDataSettings {
         return presetHeaders;
     }
 
+    /**
+     * Get HTTP client configuration. Creates default if not set.
+     * @return HTTP client configuration
+     */
+    public HttpClientConfig getHttpClientConfig() {
+        if (httpClientConfig == null) {
+            httpClientConfig = new HttpClientConfig();
+        }
+        return httpClientConfig;
+    }
+
+    /**
+     * Set HTTP client configuration
+     * @param httpClientConfig HTTP client configuration
+     */
+    public void setHttpClientConfig(HttpClientConfig httpClientConfig) {
+        this.httpClientConfig = httpClientConfig;
+    }
+
+    /**
+     * Centralized HTTP client configuration for HttpClient 5.x
+     */
+    public static class HttpClientConfig {
+        private int maxConnections = 20;
+        private int maxConnectionsPerRoute = 10;
+        private int connectionTimeoutMs = secondsToMillis(10);
+        private int socketTimeoutMs = secondsToMillis(60);
+        private int connectionRequestTimeoutMs = secondsToMillis(10);
+        private boolean enableCookies = true;
+        private String cookieSpec = "strict";
+
+        public int getMaxConnections() {
+            return maxConnections;
+        }
+
+        public void setMaxConnections(int maxConnections) {
+            isTrue(maxConnections > 0, "maxConnections must be greater than zero");
+            this.maxConnections = maxConnections;
+        }
+
+        public int getMaxConnectionsPerRoute() {
+            return maxConnectionsPerRoute;
+        }
+
+        public void setMaxConnectionsPerRoute(int maxConnectionsPerRoute) {
+            isTrue(maxConnectionsPerRoute > 0, "maxConnectionsPerRoute must be greater than zero");
+            this.maxConnectionsPerRoute = maxConnectionsPerRoute;
+        }
+
+        public int getConnectionTimeoutMs() {
+            return connectionTimeoutMs;
+        }
+
+        public void setConnectionTimeoutMs(int connectionTimeoutMs) {
+            isTrue(connectionTimeoutMs >= 0, "connectionTimeoutMs must not be negative");
+            this.connectionTimeoutMs = connectionTimeoutMs;
+        }
+
+        public int getSocketTimeoutMs() {
+            return socketTimeoutMs;
+        }
+
+        public void setSocketTimeoutMs(int socketTimeoutMs) {
+            isTrue(socketTimeoutMs >= 0, "socketTimeoutMs must not be negative");
+            this.socketTimeoutMs = socketTimeoutMs;
+        }
+
+        public int getConnectionRequestTimeoutMs() {
+            return connectionRequestTimeoutMs;
+        }
+
+        public void setConnectionRequestTimeoutMs(int connectionRequestTimeoutMs) {
+            isTrue(connectionRequestTimeoutMs >= 0, "connectionRequestTimeoutMs must not be negative");
+            this.connectionRequestTimeoutMs = connectionRequestTimeoutMs;
+        }
+
+        public boolean isEnableCookies() {
+            return enableCookies;
+        }
+
+        public void setEnableCookies(boolean enableCookies) {
+            this.enableCookies = enableCookies;
+        }
+
+        public String getCookieSpec() {
+            return cookieSpec;
+        }
+
+        public void setCookieSpec(String cookieSpec) {
+            this.cookieSpec = cookieSpec;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            HttpClientConfig that = (HttpClientConfig) o;
+            return maxConnections == that.maxConnections 
+                    && maxConnectionsPerRoute == that.maxConnectionsPerRoute
+                    && connectionTimeoutMs == that.connectionTimeoutMs
+                    && socketTimeoutMs == that.socketTimeoutMs
+                    && connectionRequestTimeoutMs == that.connectionRequestTimeoutMs
+                    && enableCookies == that.enableCookies
+                    && Objects.equals(cookieSpec, that.cookieSpec);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(maxConnections, maxConnectionsPerRoute, connectionTimeoutMs, 
+                    socketTimeoutMs, connectionRequestTimeoutMs, enableCookies, cookieSpec);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -274,13 +389,14 @@ public class GoodDataSettings {
                 && pollSleep == that.pollSleep
                 && Objects.equals(userAgent, that.userAgent)
                 && Objects.equals(retrySettings, that.retrySettings)
-                && Objects.equals(presetHeaders, that.presetHeaders);
+                && Objects.equals(presetHeaders, that.presetHeaders)
+                && Objects.equals(httpClientConfig, that.httpClientConfig);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(maxConnections, connectionTimeout, connectionRequestTimeout, socketTimeout, pollSleep,
-                userAgent, retrySettings, presetHeaders);
+                userAgent, retrySettings, presetHeaders, httpClientConfig);
     }
 
     @Override
