@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -18,13 +18,12 @@ import static com.gooddata.sdk.model.connector.ConnectorType.ZENDESK4;
 public class Zendesk4Settings implements Settings {
 
     public static final String URL = "/gdc/projects/{project}/connectors/zendesk4/integration/settings";
-
-    private String apiUrl;
-    private String zopimUrl;
-    private String account;
     private final String type;
     private final String syncTime;
     private final String syncTimeZone;
+    private String apiUrl;
+    private String zopimUrl;
+    private String account;
 
     public Zendesk4Settings(final String apiUrl) {
         this(apiUrl, null, null, null, null, null);
@@ -86,13 +85,13 @@ public class Zendesk4Settings implements Settings {
         return ZENDESK4;
     }
 
-    /**
-     * Type of Zendesk account.
-     */
-    public enum Zendesk4Type {plus, enterprise}
-
     @Override
     public String toString() {
         return GoodDataToStringBuilder.defaultToString(this);
     }
+
+    /**
+     * Type of Zendesk account.
+     */
+    public enum Zendesk4Type {plus, enterprise}
 }

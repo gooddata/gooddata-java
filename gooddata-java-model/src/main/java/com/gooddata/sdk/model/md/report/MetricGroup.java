@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -15,17 +15,11 @@ public final class MetricGroup implements GridElement, Serializable {
 
     private static final long serialVersionUID = -2971228185501817988L;
     private static final String JSON_VALUE = "metricGroup";
-
-    private final String value;
-
     public static final MetricGroup METRIC_GROUP = new MetricGroup(JSON_VALUE);
+    private final String value;
 
     private MetricGroup(String value) {
         this.value = value;
-    }
-
-    public String getValue() {
-        return value;
     }
 
     /**
@@ -34,6 +28,10 @@ public final class MetricGroup implements GridElement, Serializable {
      */
     public static boolean equals(String string) {
         return METRIC_GROUP.getValue().equals(string);
+    }
+
+    public String getValue() {
+        return value;
     }
 
     @Override

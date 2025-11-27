@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -7,13 +7,7 @@ package com.gooddata.sdk.model.md.visualization
 
 import com.gooddata.sdk.model.executeafm.LocalIdentifierQualifier
 import com.gooddata.sdk.model.executeafm.UriObjQualifier
-import com.gooddata.sdk.model.executeafm.afm.filter.AbsoluteDateFilter
-import com.gooddata.sdk.model.executeafm.afm.filter.ComparisonCondition
-import com.gooddata.sdk.model.executeafm.afm.filter.MeasureValueFilter
-import com.gooddata.sdk.model.executeafm.afm.filter.NegativeAttributeFilter
-import com.gooddata.sdk.model.executeafm.afm.filter.PositiveAttributeFilter
-import com.gooddata.sdk.model.executeafm.afm.filter.RankingFilter
-import com.gooddata.sdk.model.executeafm.afm.filter.RelativeDateFilter
+import com.gooddata.sdk.model.executeafm.afm.filter.*
 import org.apache.commons.lang3.SerializationUtils
 import spock.lang.Shared
 import spock.lang.Specification
@@ -21,8 +15,8 @@ import spock.lang.Unroll
 
 import java.time.LocalDate
 
-import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator.GREATER_THAN
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
+import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator.GREATER_THAN
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource
 import static spock.util.matcher.HamcrestSupport.that

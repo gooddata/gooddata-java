@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -14,8 +14,6 @@ import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
  */
 public class ProjectValidationType {
 
-    private final String value;
-
     public static final ProjectValidationType PDM_VS_DWH = new ProjectValidationType("pdm::pdm_vs_dwh");
     public static final ProjectValidationType METRIC_FILTER = new ProjectValidationType("metric_filter");
     public static final ProjectValidationType PDM_TRANSITIVITY = new ProjectValidationType("pdm::transitivity");
@@ -23,6 +21,7 @@ public class ProjectValidationType {
     public static final ProjectValidationType INVALID_OBJECTS = new ProjectValidationType("invalid_objects");
     public static final ProjectValidationType PDM_ELEM = new ProjectValidationType("pdm::elem_validation");
     public static final ProjectValidationType PDM_PK_FK_CONSISTENCY = new ProjectValidationType("pdm::pk_fk_consistency");
+    private final String value;
 
     @JsonCreator
     public ProjectValidationType(String value) {

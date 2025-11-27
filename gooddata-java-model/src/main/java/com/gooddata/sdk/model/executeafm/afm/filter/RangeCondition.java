@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -33,10 +33,10 @@ public class RangeCondition extends MeasureValueFilterCondition implements Seria
 
     @JsonCreator
     public RangeCondition(
-        @JsonProperty("operator") final String operator,
-        @JsonProperty("from") final BigDecimal from,
-        @JsonProperty("to") final BigDecimal to,
-        @JsonProperty("treatNullValuesAs") final BigDecimal treatNullValuesAs) {
+            @JsonProperty("operator") final String operator,
+            @JsonProperty("from") final BigDecimal from,
+            @JsonProperty("to") final BigDecimal to,
+            @JsonProperty("treatNullValuesAs") final BigDecimal treatNullValuesAs) {
         super(treatNullValuesAs);
         this.operator = notNull(operator, "operator");
         this.from = notNull(from, "from");
@@ -51,9 +51,9 @@ public class RangeCondition extends MeasureValueFilterCondition implements Seria
      * @param to       The right boundary value.
      */
     public RangeCondition(
-        final RangeConditionOperator operator,
-        final BigDecimal from,
-        final BigDecimal to) {
+            final RangeConditionOperator operator,
+            final BigDecimal from,
+            final BigDecimal to) {
         this(notNull(operator, "operator").toString(), from, to, null);
     }
 
@@ -66,10 +66,10 @@ public class RangeCondition extends MeasureValueFilterCondition implements Seria
      * @param treatNullValuesAs The number that will be used instead of compared values that are null.
      */
     public RangeCondition(
-        final RangeConditionOperator operator,
-        final BigDecimal from,
-        final BigDecimal to,
-        final BigDecimal treatNullValuesAs) {
+            final RangeConditionOperator operator,
+            final BigDecimal from,
+            final BigDecimal to,
+            final BigDecimal treatNullValuesAs) {
         this(notNull(operator, "operator").toString(), from, to, treatNullValuesAs);
     }
 
@@ -82,7 +82,9 @@ public class RangeCondition extends MeasureValueFilterCondition implements Seria
     }
 
     @JsonProperty("operator")
-    public String getStringOperator() { return this.operator; }
+    public String getStringOperator() {
+        return this.operator;
+    }
 
     /**
      * @return left boundary of the range
@@ -105,8 +107,8 @@ public class RangeCondition extends MeasureValueFilterCondition implements Seria
         if (!super.equals(o)) return false;
         final RangeCondition that = (RangeCondition) o;
         return Objects.equals(operator, that.operator) &&
-            Objects.equals(from, that.from) &&
-            Objects.equals(to, that.to);
+                Objects.equals(from, that.from) &&
+                Objects.equals(to, that.to);
     }
 
     @Override

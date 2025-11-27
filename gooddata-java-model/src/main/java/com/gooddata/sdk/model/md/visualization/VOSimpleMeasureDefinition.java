@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -11,9 +11,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.model.executeafm.afm.Aggregation;
-import com.gooddata.sdk.model.executeafm.afm.filter.FilterItem;
 import com.gooddata.sdk.model.executeafm.afm.MeasureDefinition;
 import com.gooddata.sdk.model.executeafm.afm.SimpleMeasureDefinition;
+import com.gooddata.sdk.model.executeafm.afm.filter.FilterItem;
 
 import java.util.List;
 
@@ -30,8 +30,8 @@ import static com.gooddata.sdk.model.md.visualization.VOSimpleMeasureDefinition.
 @JsonRootName(NAME)
 public class VOSimpleMeasureDefinition extends SimpleMeasureDefinition {
 
-    private static final long serialVersionUID = 8467311354259963694L;
     public static final String NAME = "measureDefinition";
+    private static final long serialVersionUID = 8467311354259963694L;
 
     /**
      * Creates instance of simple measure definition to be used in {@link VisualizationObject}

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -9,10 +9,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.gooddata.sdk.model.executeafm.ObjQualifier;
-import com.gooddata.sdk.model.executeafm.UriObjQualifier;
 import com.gooddata.sdk.common.util.GDLocalDate;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.executeafm.ObjQualifier;
+import com.gooddata.sdk.model.executeafm.UriObjQualifier;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -23,9 +23,8 @@ import java.util.Objects;
 @JsonRootName(AbsoluteDateFilter.NAME)
 public class AbsoluteDateFilter extends DateFilter {
 
-    private static final long serialVersionUID = -1857726227400504182L;
     static final String NAME = "absoluteDateFilter";
-
+    private static final long serialVersionUID = -1857726227400504182L;
     @GDLocalDate
     private final LocalDate from;
     @GDLocalDate
@@ -33,9 +32,10 @@ public class AbsoluteDateFilter extends DateFilter {
 
     /**
      * Creates new filter instance
+     *
      * @param dataSet qualifier of date dimension dataset
-     * @param from date from
-     * @param to date to
+     * @param from    date from
+     * @param to      date to
      */
     @JsonCreator
     public AbsoluteDateFilter(@JsonProperty("dataSet") final ObjQualifier dataSet,

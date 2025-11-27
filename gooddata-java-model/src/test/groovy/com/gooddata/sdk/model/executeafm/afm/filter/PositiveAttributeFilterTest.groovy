@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -44,8 +44,8 @@ class PositiveAttributeFilterTest extends Specification {
         then:
         with(filter) {
             displayForm == QUALIFIER
-            in.class == clazz
-            in.elements == ['a', 'b']
+                    in.class == clazz
+                    in.elements == ['a', 'b']
         }
         filter.toString()
 

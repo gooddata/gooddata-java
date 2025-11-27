@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -39,8 +39,8 @@ public class Template {
 
     @JsonCreator
     private Template(@JsonProperty("link") String uri, @JsonProperty("urn") String urn, @JsonProperty("version") String version,
-                    @JsonProperty("hidden") @JsonDeserialize(using = BooleanDeserializer.class) Boolean hidden,
-                    @JsonProperty("content") Content content, @JsonProperty("meta") Meta meta) {
+                     @JsonProperty("hidden") @JsonDeserialize(using = BooleanDeserializer.class) Boolean hidden,
+                     @JsonProperty("content") Content content, @JsonProperty("meta") Meta meta) {
         this.uri = uri;
         this.urn = urn;
         this.version = version;

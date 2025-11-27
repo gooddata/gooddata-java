@@ -1,11 +1,10 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.executeafm;
 
-import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.model.executeafm.Execution;
 import com.gooddata.sdk.model.executeafm.IdentifierObjQualifier;
 import com.gooddata.sdk.model.executeafm.UriObjQualifier;
@@ -28,6 +27,7 @@ import com.gooddata.sdk.model.md.visualization.VOSimpleMeasureDefinition;
 import com.gooddata.sdk.model.md.visualization.VisualizationAttribute;
 import com.gooddata.sdk.model.md.visualization.VisualizationClass;
 import com.gooddata.sdk.model.md.visualization.VisualizationObject;
+import com.gooddata.sdk.service.AbstractGoodDataAT;
 import org.testng.annotations.Test;
 
 import java.util.Collection;
@@ -52,6 +52,44 @@ public class ExecuteAfmServiceAT extends AbstractGoodDataAT {
 
     private ExecutionResponse afmResponse;
     private ExecutionResponse visResponse;
+
+    private static void checkExecutionResponse(final ExecutionResponse response) {
+        assertThat(response, notNullValue());
+        assertThat("should have 2 dimensions", response.getDimensions(), hasSize(2));
+
+        final ResultDimension firstDim = response.getDimensions().get(0);
+        assertThat("1st dim should have 1 header", firstDim.getHeaders(), hasSize(1));
+        assertThat("1st dim 1st header should be AttributeHeader", firstDim.getHeaders().get(0), instanceOf(AttributeHeader.class));
+        final AttributeHeader attrHeader = (AttributeHeader) firstDim.getHeaders().get(0);
+        assertThat("header's formOf should point to given attribute", attrHeader.getFormOf().getUri(), is(attr.getUri()));
+
+        final ResultDimension secondDim = response.getDimensions().get(1);
+        assertThat("2nd dim should have 1 header", secondDim.getHeaders(), hasSize(1));
+        assertThat("2nd dim 1st header should be MeasureGroupHeader", secondDim.getHeaders().get(0), instanceOf(MeasureGroupHeader.class));
+        final MeasureGroupHeader measureGroupHeader = (MeasureGroupHeader) secondDim.getHeaders().get(0);
+        assertThat(measureGroupHeader.getItems(), hasSize(1));
+        assertThat("the only measureHeader should point to given metric", measureGroupHeader.getItems().get(0).getUri(), is(metric.getUri()));
+    }
+
+    private static void checkExecutionResult(final ExecutionResult result) {
+        assertThat(result, notNullValue());
+
+        final List<ResultHeaderItem> firstDimHeaders = result.getHeaderItems().get(0).get(0);
+        assertThat("1st dim should have two header items", firstDimHeaders, hasSize(2));
+        assertThat(headerItemsNames(firstDimHeaders), hasItems("HR", "DevOps"));
+
+        final List<ResultHeaderItem> secondDimHeaders = result.getHeaderItems().get(1).get(0);
+        assertThat("2nd dim should have one header item", secondDimHeaders, hasSize(1));
+        assertThat(headerItemsNames(secondDimHeaders), hasItems(metric.getTitle()));
+
+        assertThat(result.getData(), is(new DataList(asList(
+                new DataList(singletonList(new DataValue("41"))),
+                new DataList(singletonList(new DataValue("36")))))));
+    }
+
+    private static Collection<String> headerItemsNames(final List<ResultHeaderItem> items) {
+        return items.stream().map(ResultHeaderItem::getName).collect(toList());
+    }
 
     @Test(groups = "executeAfm", dependsOnGroups = {"model", "md", "dataset"})
     public void testExecuteAfm() {
@@ -102,43 +140,5 @@ public class ExecuteAfmServiceAT extends AbstractGoodDataAT {
                         new VOSimpleMeasureDefinition(new UriObjQualifier(metric.getUri())), MEASURE_LOCAL_IDENTIFIER)))
         ));
         return gd.getMetadataService().createObj(project, vizObject);
-    }
-
-    private static void checkExecutionResponse(final ExecutionResponse response) {
-        assertThat(response, notNullValue());
-        assertThat("should have 2 dimensions", response.getDimensions(), hasSize(2));
-
-        final ResultDimension firstDim = response.getDimensions().get(0);
-        assertThat("1st dim should have 1 header", firstDim.getHeaders(), hasSize(1));
-        assertThat("1st dim 1st header should be AttributeHeader", firstDim.getHeaders().get(0), instanceOf(AttributeHeader.class));
-        final AttributeHeader attrHeader = (AttributeHeader) firstDim.getHeaders().get(0);
-        assertThat("header's formOf should point to given attribute", attrHeader.getFormOf().getUri(), is(attr.getUri()));
-
-        final ResultDimension secondDim = response.getDimensions().get(1);
-        assertThat("2nd dim should have 1 header", secondDim.getHeaders(), hasSize(1));
-        assertThat("2nd dim 1st header should be MeasureGroupHeader", secondDim.getHeaders().get(0), instanceOf(MeasureGroupHeader.class));
-        final MeasureGroupHeader measureGroupHeader = (MeasureGroupHeader) secondDim.getHeaders().get(0);
-        assertThat(measureGroupHeader.getItems(), hasSize(1));
-        assertThat("the only measureHeader should point to given metric", measureGroupHeader.getItems().get(0).getUri(), is(metric.getUri()));
-    }
-
-    private static void checkExecutionResult(final ExecutionResult result) {
-        assertThat(result, notNullValue());
-
-        final List<ResultHeaderItem> firstDimHeaders = result.getHeaderItems().get(0).get(0);
-        assertThat("1st dim should have two header items", firstDimHeaders, hasSize(2));
-        assertThat(headerItemsNames(firstDimHeaders), hasItems("HR", "DevOps"));
-
-        final List<ResultHeaderItem> secondDimHeaders = result.getHeaderItems().get(1).get(0);
-        assertThat("2nd dim should have one header item", secondDimHeaders, hasSize(1));
-        assertThat(headerItemsNames(secondDimHeaders), hasItems(metric.getTitle()));
-
-        assertThat(result.getData(), is(new DataList(asList(
-                new DataList(singletonList(new DataValue("41"))),
-                new DataList(singletonList(new DataValue("36")))))));
-    }
-
-    private static Collection<String> headerItemsNames(final List<ResultHeaderItem> items) {
-        return items.stream().map(ResultHeaderItem::getName).collect(toList());
     }
 }

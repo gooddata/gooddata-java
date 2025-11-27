@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -55,20 +55,12 @@ public enum SourceType {
     private final String apiUri;
 
     /**
-     * @param name source of config item
+     * @param name   source of config item
      * @param apiUri api uri in case that config item is manageable
      */
     SourceType(String name, String apiUri) {
         this.name = name;
         this.apiUri = apiUri;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getApiUri() {
-        return apiUri;
     }
 
     /**
@@ -79,6 +71,14 @@ public enum SourceType {
      */
     public static SourceType get(String source) {
         return lookup.get(source);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getApiUri() {
+        return apiUri;
     }
 
     @Override

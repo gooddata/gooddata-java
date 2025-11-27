@@ -1,8 +1,8 @@
 {
-  "dateFilter" : {
-    "from" : "2019-06-01",
-    "to" : "2019-06-30",
-    "type" : "absolute",
+  "dateFilter": {
+    "from": "2019-06-01",
+    "to": "2019-06-30",
+    "type": "absolute",
     "granularity": "GDC.time.date",
     "dataSet": "/ds/uri"
   }

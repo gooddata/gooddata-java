@@ -1,21 +1,21 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.model.dataset;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.gooddata.sdk.common.util.BooleanDeserializer;
-import com.gooddata.sdk.common.util.BooleanIntegerSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gooddata.sdk.common.util.BooleanDeserializer;
+import com.gooddata.sdk.common.util.BooleanIntegerSerializer;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.io.InputStream;
@@ -48,6 +48,7 @@ public class DatasetManifest {
 
     /**
      * Create dataset upload manifest.
+     *
      * @param dataSet dataset name
      * @param source  source CSV
      */
@@ -86,6 +87,7 @@ public class DatasetManifest {
 
     /**
      * Set upload mode for all parts of this dataset manifest
+     *
      * @param uploadMode upload mode
      */
     public void setUploadMode(final UploadMode uploadMode) {
@@ -97,8 +99,9 @@ public class DatasetManifest {
 
     /**
      * Map the given CSV column name to the dataset field
+     *
      * @param columnName column name
-     * @param populates dataset field
+     * @param populates  dataset field
      */
     public void setMapping(final String columnName, final String populates) {
         notNull(columnName, "columnName");
@@ -144,10 +147,10 @@ public class DatasetManifest {
 
         @JsonCreator
         public Part(@JsonProperty("mode") String uploadMode,
-             @JsonProperty("columnName") String columnName,
-             @JsonProperty("populates") List<String> populates,
-             @JsonProperty("referenceKey") @JsonDeserialize(using = BooleanDeserializer.class) Boolean referenceKey,
-             @JsonProperty("constraints") Map<String, String> constraints) {
+                    @JsonProperty("columnName") String columnName,
+                    @JsonProperty("populates") List<String> populates,
+                    @JsonProperty("referenceKey") @JsonDeserialize(using = BooleanDeserializer.class) Boolean referenceKey,
+                    @JsonProperty("constraints") Map<String, String> constraints) {
             this.uploadMode = uploadMode;
             this.columnName = columnName;
             this.populates = populates;

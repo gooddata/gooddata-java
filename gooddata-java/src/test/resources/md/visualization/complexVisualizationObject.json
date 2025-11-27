@@ -21,7 +21,8 @@
               }
             }
           ]
-        }, {
+        },
+        {
           "localIdentifier": "bucket2",
           "items": [
             {
@@ -36,7 +37,8 @@
                   }
                 }
               }
-            }, {
+            },
+            {
               "measure": {
                 "localIdentifier": "measure1",
                 "title": "Measure 1",
@@ -56,7 +58,8 @@
                           },
                           "in": []
                         }
-                      }, {
+                      },
+                      {
                         "negativeAttributeFilter": {
                           "displayForm": {
                             "uri": "/uri/to/displayForm/3"
@@ -66,13 +69,15 @@
                             "cd"
                           ]
                         }
-                      }, {
+                      },
+                      {
                         "absoluteDateFilter": {
                           "dataSet": {
                             "uri": "/uri/to/dataSet/1"
                           }
                         }
-                      }, {
+                      },
+                      {
                         "relativeDateFilter": {
                           "dataSet": {
                             "uri": "/uri/to/dataSet/2"
@@ -101,14 +106,16 @@
               "cd"
             ]
           }
-        }, {
+        },
+        {
           "negativeAttributeFilter": {
             "displayForm": {
               "uri": "/uri/to/displayForm/3"
             },
             "notIn": []
           }
-        }, {
+        },
+        {
           "absoluteDateFilter": {
             "dataSet": {
               "uri": "/uri/to/dataSet/1"
@@ -116,14 +123,16 @@
             "from": "2000-08-30",
             "to": "2017-08-07"
           }
-        }, {
+        },
+        {
           "relativeDateFilter": {
             "dataSet": {
               "uri": "/uri/to/dataSet/2"
             },
             "granularity": "month"
           }
-        }, {
+        },
+        {
           "measureValueFilter": {
             "measure": {
               "localIdentifier": "measure0"
@@ -135,13 +144,15 @@
               }
             }
           }
-        }, {
+        },
+        {
           "measureValueFilter": {
             "measure": {
               "localIdentifier": "measure1"
             }
           }
-        }, {
+        },
+        {
           "rankingFilter": {
             "measures": [
               {
@@ -154,7 +165,10 @@
         }
       ],
       "properties": "{\"key\":\"value\"}",
-      "references": { "key": "value", "foo": "bar" }
+      "references": {
+        "key": "value",
+        "foo": "bar"
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -19,13 +19,13 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class VisualizationAttribute extends AttributeItem implements BucketItem {
 
-    private static final long serialVersionUID = -5144496152695494774L;
     static final String NAME = "visualizationAttribute";
+    private static final long serialVersionUID = -5144496152695494774L;
 
     /**
      * Creates new instance of visualization attribute for use in {@link Bucket}
      *
-     * @param displayForm display form of attribute
+     * @param displayForm     display form of attribute
      * @param localIdentifier local identifier of attribute
      */
     public VisualizationAttribute(final UriObjQualifier displayForm, final String localIdentifier) {
@@ -35,9 +35,9 @@ public class VisualizationAttribute extends AttributeItem implements BucketItem 
     /**
      * Creates new instance of visualization attribute for use in {@link Bucket}
      *
-     * @param displayForm display form of attribute
+     * @param displayForm     display form of attribute
      * @param localIdentifier local identifier of attribute
-     * @param alias alias of attribute
+     * @param alias           alias of attribute
      */
     @JsonCreator
     public VisualizationAttribute(@JsonProperty("displayForm") final UriObjQualifier displayForm,

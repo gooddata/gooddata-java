@@ -3,7 +3,9 @@
     "messages": [
       {
         "error": {
-          "parameters": ["TOKEN123"],
+          "parameters": [
+            "TOKEN123"
+          ],
           "requestId": "REQUEST_ID",
           "component": "GDC::MAINTENANCE::PARTIAL_IMPORT",
           "errorClass": "GDC::Exception::User",

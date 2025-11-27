@@ -1,12 +1,18 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.notification;
 
 import com.gooddata.sdk.model.account.Account;
-import com.gooddata.sdk.model.notification.*;
+import com.gooddata.sdk.model.notification.Channel;
+import com.gooddata.sdk.model.notification.EmailConfiguration;
+import com.gooddata.sdk.model.notification.MessageTemplate;
+import com.gooddata.sdk.model.notification.ProjectEvent;
+import com.gooddata.sdk.model.notification.Subscription;
+import com.gooddata.sdk.model.notification.TimerEvent;
+import com.gooddata.sdk.model.notification.TriggerCondition;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.testng.annotations.BeforeClass;
@@ -14,7 +20,9 @@ import org.testng.annotations.Test;
 
 import java.util.Arrays;
 
-import static com.gooddata.sdk.common.util.ResourceUtils.*;
+import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readStringFromResource;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 import static net.jadler.Jadler.onRequest;
@@ -45,7 +53,7 @@ public class NotificationServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(PROJECT_EVENT_PATH)
-            .respond()
+                .respond()
                 .withStatus(204);
 
         gd.getNotificationService().triggerEvent(project, new ProjectEvent("type", singletonMap("key", "value")));
@@ -57,7 +65,7 @@ public class NotificationServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo("/gdc/account/profile/" + account.getId() + "/channelConfigurations")
                 .havingBody(jsonEquals(readStringFromResource("/notification/channelToCreate.json")))
-             .respond()
+                .respond()
                 .withStatus(201)
                 .withBody(readFromResource("/notification/channel.json"));
 
@@ -75,7 +83,7 @@ public class NotificationServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo("/gdc/projects/" + project.getId() + "/users/" + account.getId() + "/subscriptions")
                 .havingBody(jsonEquals(readStringFromResource("/notification/subscriptionToCreate.json")))
-            .respond()
+                .respond()
                 .withStatus(201)
                 .withBody(readFromResource("/notification/subscription.json"));
 
@@ -96,7 +104,7 @@ public class NotificationServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo(channel.getMeta().getUri())
-            .respond()
+                .respond()
                 .withStatus(204);
 
         gd.getNotificationService().removeChannel(channel);
@@ -107,7 +115,7 @@ public class NotificationServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo(subscription.getMeta().getUri())
-            .respond()
+                .respond()
                 .withStatus(204);
 
         gd.getNotificationService().removeSubscription(subscription);

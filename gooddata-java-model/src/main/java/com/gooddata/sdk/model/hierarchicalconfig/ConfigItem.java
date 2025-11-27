@@ -1,16 +1,27 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.model.hierarchicalconfig;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNullState;
-import static com.gooddata.sdk.model.hierarchicalconfig.SourceType.*;
+import static com.gooddata.sdk.model.hierarchicalconfig.SourceType.CLIENT;
+import static com.gooddata.sdk.model.hierarchicalconfig.SourceType.DATA_PRODUCT;
+import static com.gooddata.sdk.model.hierarchicalconfig.SourceType.DOMAIN;
+import static com.gooddata.sdk.model.hierarchicalconfig.SourceType.PROJECT;
+import static com.gooddata.sdk.model.hierarchicalconfig.SourceType.PROJECT_GROUP;
+import static com.gooddata.sdk.model.hierarchicalconfig.SourceType.SEGMENT;
 
 /**
  * Contains information about hierarchical configuration object aka platform setting aka feature flag.
@@ -30,14 +41,14 @@ public class ConfigItem {
     public static final String PROJECT_GROUP_CONFIG_ITEM_URI = PROJECT_GROUP.getApiUri() + "/{configName}";
 
     private final String key;
-    private String value;
     private final String source;
     private final Links links;
+    private String value;
 
     /**
      * Creates new config item with given key/name and value.
      *
-     * @param key unique key/name of config item
+     * @param key   unique key/name of config item
      * @param value value of config item
      */
     public ConfigItem(String key, String value) {
@@ -74,6 +85,10 @@ public class ConfigItem {
         return value;
     }
 
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     @JsonIgnore
     public String getSource() {
         return source;
@@ -84,12 +99,9 @@ public class ConfigItem {
         return links;
     }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
-
     /**
      * Conversion method from String to Boolean type.
+     *
      * @return returns converted value: true or false
      */
     @JsonIgnore
@@ -103,6 +115,7 @@ public class ConfigItem {
 
     /**
      * Conversion method from source to SourceType enum.
+     *
      * @return returns SourceType or null, if source is not recognized
      */
     @JsonIgnore

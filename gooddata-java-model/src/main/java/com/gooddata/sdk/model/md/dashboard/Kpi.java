@@ -1,13 +1,10 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 
 package com.gooddata.sdk.model.md.dashboard;
-
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
-import static com.gooddata.sdk.common.util.Validate.notNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,6 +23,9 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notNull;
+
 /**
  * Represents KPI (key performance indicator) for analytical dashboard.
  */
@@ -42,15 +42,16 @@ public class Kpi extends AbstractObj implements Queryable, Updatable {
 
     /**
      * Creates new KPI for a given metric with some date filter and comparison
-     * @param title title of KPI
-     * @param metricUri URI of the KPI metric
-     * @param comparisonType KPI comparison type (e.g. {@code "lastYear"})
-     * @param comparisonDirection KPI comparison direction (e.g. {@code "growIsGood"})
+     *
+     * @param title                  title of KPI
+     * @param metricUri              URI of the KPI metric
+     * @param comparisonType         KPI comparison type (e.g. {@code "lastYear"})
+     * @param comparisonDirection    KPI comparison direction (e.g. {@code "growIsGood"})
      * @param ignoreDashboardFilters list of filters which should be ignored for this KPI (can be empty)
-     * @param dateDatasetUri KPI date filter dataset URI (optional)
+     * @param dateDatasetUri         KPI date filter dataset URI (optional)
      */
     public Kpi(final String title, final String metricUri, final String comparisonType, final String comparisonDirection,
-            final List<FilterReference> ignoreDashboardFilters, final String dateDatasetUri) {
+               final List<FilterReference> ignoreDashboardFilters, final String dateDatasetUri) {
         this(new Meta(title), new Content(
                 notEmpty(metricUri, "metricUri"),
                 notEmpty(comparisonType, "comparisonType"),
@@ -60,18 +61,18 @@ public class Kpi extends AbstractObj implements Queryable, Updatable {
                 notNull(ignoreDashboardFilters, "ignoreDashboardFilters")));
     }
 
+    @JsonCreator
+    private Kpi(@JsonProperty("meta") final Meta meta, @JsonProperty("content") final Content content) {
+        super(meta);
+        this.content = content;
+    }
+
     private static String checkDirection(final String comparisonType, final String comparisonDirection) {
         if (NONE_COMPARISON_TYPE.equalsIgnoreCase(notEmpty(comparisonType, "comparisonType"))) {
             return notEmpty(comparisonDirection, "comparisonDirection");
         } else {
             return comparisonDirection;
         }
-    }
-
-    @JsonCreator
-    private Kpi(@JsonProperty("meta") final Meta meta, @JsonProperty("content") final Content content) {
-        super(meta);
-        this.content = content;
     }
 
     /**

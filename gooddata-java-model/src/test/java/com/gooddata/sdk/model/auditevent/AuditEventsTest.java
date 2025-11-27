@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -45,22 +45,19 @@ public class AuditEventsTest {
     private static final AuditEvent EVENT_2 = new AuditEvent("456", USER2_LOGIN, DATE, DATE, IP, SUCCESS, TYPE, emptyMap(), emptyMap());
 
     private static final String ADMIN_URI = new UriTemplate(AuditEvent.ADMIN_URI).expand(DOMAIN).toString();
-    private static final String USER_URI = new UriTemplate(AuditEvent.USER_URI).expand(USER1_ID).toString();
     private static final String ADMIN_NEXT_URI = ADMIN_URI + "?offset=456";
-    private static final String USER_NEXT_URI = USER_URI + "?offset=456&limit=1";
-
     private static final AuditEvents EVENTS = new AuditEvents(
             asList(EVENT_1, EVENT_2),
             new Paging(ADMIN_NEXT_URI),
             singletonMap("self", ADMIN_URI)
     );
-
     private static final AuditEvents EMPTY_EVENTS = new AuditEvents(
             Collections.emptyList(),
             new Paging(null),
             singletonMap("self", ADMIN_URI)
     );
-
+    private static final String USER_URI = new UriTemplate(AuditEvent.USER_URI).expand(USER1_ID).toString();
+    private static final String USER_NEXT_URI = USER_URI + "?offset=456&limit=1";
     private static final AuditEvents USER_EVENTS = new AuditEvents(
             singletonList(EVENT_1),
             new Paging(USER_NEXT_URI),

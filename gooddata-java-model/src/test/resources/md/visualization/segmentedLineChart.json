@@ -21,7 +21,8 @@
               }
             }
           ]
-        }, {
+        },
+        {
           "localIdentifier": "segment",
           "items": [
             {
@@ -60,7 +61,9 @@
       ],
       "filters": [],
       "properties": "{\"key\":\"value\"}",
-      "references": { "key": "value" }
+      "references": {
+        "key": "value"
+      }
     }
   }
 }

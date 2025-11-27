@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -33,7 +33,7 @@ public class NotificationService extends AbstractService {
      * Triggers given project event.
      *
      * @param project project of the event
-     * @param event event to trigger
+     * @param event   event to trigger
      */
     public void triggerEvent(final Project project, final ProjectEvent event) {
         notNull(project, "project");
@@ -84,8 +84,8 @@ public class NotificationService extends AbstractService {
     /**
      * Create subscription for notifications
      *
-     * @param project to create subscription on
-     * @param account to create subscription for
+     * @param project      to create subscription on
+     * @param account      to create subscription for
      * @param subscription to create
      * @return created subscription
      */

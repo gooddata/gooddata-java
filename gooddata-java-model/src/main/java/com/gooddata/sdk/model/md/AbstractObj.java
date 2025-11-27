@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -7,8 +7,8 @@ package com.gooddata.sdk.model.md;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.util.UriHelper;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -28,6 +28,23 @@ public abstract class AbstractObj implements Serializable {
 
     protected AbstractObj(@JsonProperty("meta") Meta meta) {
         this.meta = meta;
+    }
+
+    /**
+     * Get list of URIs of the given {@link Obj}s
+     *
+     * @param objs metadata objects
+     * @param <T>  Obj type
+     * @return list of URIs
+     */
+    @SafeVarargs
+    protected static <T extends Obj> String[] uris(T... objs) {
+        noNullElements(objs, "objs");
+        final String[] uris = new String[objs.length];
+        for (int i = 0; i < objs.length; i++) {
+            uris[i] = objs[i].getUri();
+        }
+        return uris;
     }
 
     /**
@@ -167,23 +184,6 @@ public abstract class AbstractObj implements Serializable {
 
     public void setFlags(final Set<String> flags) {
         meta.setFlags(flags);
-    }
-
-    /**
-     * Get list of URIs of the given {@link Obj}s
-     *
-     * @param objs metadata objects
-     * @param <T>  Obj type
-     * @return list of URIs
-     */
-    @SafeVarargs
-    protected static <T extends Obj> String[] uris(T... objs) {
-        noNullElements(objs, "objs");
-        final String[] uris = new String[objs.length];
-        for (int i = 0; i < objs.length; i++) {
-            uris[i] = objs[i].getUri();
-        }
-        return uris;
     }
 
     @Override

@@ -1,15 +1,15 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.project.model;
 
-import com.gooddata.sdk.service.AbstractGoodDataIT;
 import com.gooddata.sdk.model.gdc.AsyncTask;
 import com.gooddata.sdk.model.gdc.TaskStatus;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.model.project.model.ModelDiff;
+import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -47,16 +47,16 @@ public class ModelServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(DIFF_URI)
-            .respond()
+                .respond()
                 .withStatus(202)
                 .withBody(OBJECT_MAPPER.writeValueAsString(new AsyncTask(DIFF_POLL_URI)));
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(DIFF_POLL_URI)
-            .respond()
+                .respond()
                 .withStatus(202)
                 .withBody(OBJECT_MAPPER.writeValueAsString(new AsyncTask(DIFF_POLL_URI)))
-            .thenRespond()
+                .thenRespond()
                 .withStatus(200)
                 .withBody(readFromResource("/model/modelDiff.json"))
         ;
@@ -72,13 +72,13 @@ public class ModelServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(DIFF_URI)
-            .respond()
+                .respond()
                 .withStatus(202)
                 .withBody(OBJECT_MAPPER.writeValueAsString(new AsyncTask(DIFF_POLL_URI)));
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(DIFF_POLL_URI)
-            .respond()
+                .respond()
                 .withStatus(400)
         ;
 
@@ -90,16 +90,16 @@ public class ModelServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(LDM_MANAGE2)
-            .respond()
+                .respond()
                 .withStatus(202)
                 .withBody(readFromResource("/model/maqlDdlLinks.json"));
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(STATUS_URI)
-            .respond()
+                .respond()
                 .withStatus(202)
                 .withBody(OBJECT_MAPPER.writeValueAsString(new TaskStatus("RUNNING", STATUS_URI)))
-            .thenRespond()
+                .thenRespond()
                 .withStatus(200)
                 .withBody(OBJECT_MAPPER.writeValueAsString(new TaskStatus("OK", STATUS_URI)))
         ;
@@ -113,13 +113,13 @@ public class ModelServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(LDM_MANAGE2)
-            .respond()
+                .respond()
                 .withStatus(202)
                 .withBody(readFromResource("/model/maqlDdlLinks.json"));
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(STATUS_URI)
-            .respond()
+                .respond()
                 .withStatus(400)
         ;
 

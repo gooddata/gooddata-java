@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -14,13 +14,13 @@ public enum ExportFormat {
 
     PDF, XLS, PNG, CSV, HTML, XLSX;
 
-    public String getValue() {
-        return name().toLowerCase();
-    }
-
     public static String[] arrayToStringArray(final ExportFormat... formats) {
         return Stream.of(formats)
                 .map(ExportFormat::getValue)
                 .toArray(String[]::new);
+    }
+
+    public String getValue() {
+        return name().toLowerCase();
     }
 }

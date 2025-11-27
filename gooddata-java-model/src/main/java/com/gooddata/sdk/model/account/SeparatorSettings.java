@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -24,10 +24,8 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SeparatorSettings implements Serializable {
 
-    private static final long serialVersionUID = 446547615105910660L;
-
     public static final String URI = "/gdc/account/profile/{id}/settings/separators";
-
+    private static final long serialVersionUID = 446547615105910660L;
     private final String thousand;
     private final String decimal;
     private final Links links;
@@ -60,7 +58,7 @@ public class SeparatorSettings implements Serializable {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class Links implements Serializable{
+    private static class Links implements Serializable {
         private final String self;
 
         @JsonCreator

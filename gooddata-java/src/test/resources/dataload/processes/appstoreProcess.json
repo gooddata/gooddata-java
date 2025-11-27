@@ -1,16 +1,20 @@
 {
-  "process" : {
-    "type" : "RUBY",
-    "name" : "processname",
-    "path" : "${SOME_PLACEHOLDER}:someIdentifier:somePath",
-    "graphs" : [ "hello.rb" ],
-    "executables" : [ "hello.rb" ],
-    "lastDeployed" : "2016-08-17T11:28:07.419Z",
-    "ownerLogin" : "some@login.com",
-    "links" : {
-      "self" : "/gdc/projects/PROJECT_ID/dataload/processes/processId",
-      "executions" : "/gdc/projects/ProjectId/dataload/processes/ProcessId/executions",
-      "source" : "/gdc/projects/ProjectId/dataload/processes/ProcessId/source"
+  "process": {
+    "type": "RUBY",
+    "name": "processname",
+    "path": "${SOME_PLACEHOLDER}:someIdentifier:somePath",
+    "graphs": [
+      "hello.rb"
+    ],
+    "executables": [
+      "hello.rb"
+    ],
+    "lastDeployed": "2016-08-17T11:28:07.419Z",
+    "ownerLogin": "some@login.com",
+    "links": {
+      "self": "/gdc/projects/PROJECT_ID/dataload/processes/processId",
+      "executions": "/gdc/projects/ProjectId/dataload/processes/ProcessId/executions",
+      "source": "/gdc/projects/ProjectId/dataload/processes/ProcessId/source"
     }
   }
 }

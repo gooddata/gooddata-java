@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>gooddata-java-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.12.1+api3-SNAPSHOT</version>
+    <version>5.0.0+api3-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>GoodData Java SDK</description>
     <url>https://github.com/gooddata/gooddata-java</url>
@@ -12,13 +13,13 @@
     <parent>
         <groupId>com.gooddata</groupId>
         <artifactId>gooddata-parent</artifactId>
-        <version>3.1.0</version>
+        <version>4.0.3</version>
     </parent>
 
     <licenses>
         <license>
             <name>BSD License</name>
-            <url>http://opensource.org/licenses/BSD-3-Clause</url>
+            <url>https://opensource.org/licenses/BSD-3-Clause</url>
         </license>
     </licenses>
 
@@ -49,16 +50,36 @@
     <properties>
         <httpclient.version>4.5.13</httpclient.version>
         <httpcore.version>4.4.15</httpcore.version>
+        <httpclient5.version>5.5.1</httpclient5.version>
+        <httpcore5.version>5.3.6</httpcore5.version>
         <jackson.version>2.13.4</jackson.version>
-        <slf4j.version>2.0.3</slf4j.version>
-        <spring.version>5.3.23</spring.version>
+        <slf4j.version>2.0.17</slf4j.version>
+        <spring.version>6.0.15</spring.version>
+        <spring.retry.version>2.0.12</spring.retry.version>
+        <commons.lang3.version>3.20.0</commons.lang3.version>
+        <commons-io.version>2.21.0</commons-io.version>
+        <sardine.version>5.13</sardine.version>
         <jadler.version>1.3.1</jadler.version>
+        <tomcat.embed.core.version>10.1.39</tomcat.embed.core.version>
         <json-unit.version>2.36.0</json-unit.version>
-        <surefire.version>3.0.0-M7</surefire.version>
-        <failsafe.version>3.0.0-M7</failsafe.version>
+        <hamcrest.version>3.0</hamcrest.version>
+        <cglib.version>3.3.0</cglib.version>
+        <groovy.version>4.0.28</groovy.version>
+        <spok.core.version>2.4-M1-groovy-4.0</spok.core.version>
+        <equalsverifier.version>3.17.5</equalsverifier.version>
+        <shazamcrest.version>0.11</shazamcrest.version>
+        <mockito-core.version>5.14.2</mockito-core.version>
+        <testng.version>7.11.0</testng.version>
+        <surefire.plugin.version>3.1.2</surefire.plugin.version>
+        <failsafe.plugin.version>3.5.2</failsafe.plugin.version>
+        <spotbugs.plugin.version>4.9.8.0</spotbugs.plugin.version>
+        <gmaven.plugin.version>4.1.1</gmaven.plugin.version>
+        <jacoco.plugin.version>0.8.14</jacoco.plugin.version>
+        <gooddata.httpclient.version>3.0.0</gooddata.httpclient.version>
+        <gooddata.restcommon.version>3.0.0</gooddata.restcommon.version>
         <!-- Hardcoded value, so the license:check doesn't break builds at the New Year.
         Change to current year value together with headers in all source files and first license in LICENSE.txt. -->
-        <currentYear>2023</currentYear>
+        <currentYear>2025</currentYear>
     </properties>
 
     <build>
@@ -67,7 +88,7 @@
                 <plugin>
                     <groupId>org.codehaus.gmavenplus</groupId>
                     <artifactId>gmavenplus-plugin</artifactId>
-                    <version>2.0.0</version>
+                    <version>${gmaven.plugin.version}</version>
                     <executions>
                         <execution>
                             <goals>
@@ -82,7 +103,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${failsafe.version}</version>
+                <version>${failsafe.plugin.version}</version>
                 <!-- config and dependencies below needed to make running both Spock and TestNG tests -->
                 <configuration>
                     <threadCount>1</threadCount>
@@ -91,21 +112,22 @@
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-junit47</artifactId>
-                        <version>${surefire.version}</version>
+                        <version>${surefire.plugin.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-testng</artifactId>
-                        <version>${surefire.version}</version>
+                        <version>${surefire.plugin.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.5</version>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs.plugin.version}</version>
                 <configuration>
-                    <excludeFilterFile>findBugsFilter.xml</excludeFilterFile>
+                    <includeFilterFile>bugs-include.xml</includeFilterFile>
+                    <excludeFilterFile>bugs-exclude.xml</excludeFilterFile>
                 </configuration>
                 <executions>
                     <execution>
@@ -120,7 +142,7 @@
                 <!-- needed to make running both Spock and TestNG tests -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${surefire.version}</version>
+                <version>${surefire.plugin.version}</version>
                 <configuration>
                     <properties>
                         <property>
@@ -134,12 +156,12 @@
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-junit47</artifactId>
-                        <version>${surefire.version}</version>
+                        <version>${surefire.plugin.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-testng</artifactId>
-                        <version>${surefire.version}</version>
+                        <version>${surefire.plugin.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -184,7 +206,7 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.8</version>
+                        <version>${jacoco.plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>jacoco-prepare-agent</id>
@@ -214,7 +236,7 @@
                                     <goal>check</goal>
                                 </goals>
                                 <configuration>
-                                    <rules />
+                                    <rules/>
                                 </configuration>
                             </execution>
                         </executions>
@@ -229,7 +251,7 @@
             <dependency>
                 <groupId>com.gooddata</groupId>
                 <artifactId>gooddata-rest-common</artifactId>
-                <version>2.0.1</version>
+                <version>${gooddata.restcommon.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>joda-time</groupId>
@@ -248,12 +270,12 @@
             <dependency>
                 <groupId>com.gooddata</groupId>
                 <artifactId>gooddata-http-client</artifactId>
-                <version>1.0.0</version>
+                <version>${gooddata.httpclient.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.12.0</version>
+                <version>${commons.lang3.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
@@ -264,6 +286,16 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpcore</artifactId>
                 <version>${httpcore.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>${httpclient5.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.core5</groupId>
+                <artifactId>httpcore5</artifactId>
+                <version>${httpcore5.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -300,7 +332,7 @@
             <dependency>
                 <groupId>org.springframework.retry</groupId>
                 <artifactId>spring-retry</artifactId>
-                <version>1.3.4</version>
+                <version>${spring.retry.version}</version>
                 <optional>true</optional>
             </dependency>
             <dependency>
@@ -321,7 +353,7 @@
             <dependency>
                 <groupId>com.github.lookfirst</groupId>
                 <artifactId>sardine</artifactId>
-                <version>5.10</version>
+                <version>${sardine.version}</version>
                 <optional>true</optional>
             </dependency>
             <dependency>
@@ -333,19 +365,19 @@
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>2.11.0</version>
+                <version>${commons-io.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.testng</groupId>
                 <artifactId>testng</artifactId>
-                <version>7.6.1</version>
+                <version>${testng.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>4.8.0</version>
+                <version>${mockito-core.version}</version>
                 <scope>test</scope>
                 <exclusions>
                     <exclusion>
@@ -357,7 +389,7 @@
             <dependency>
                 <groupId>org.hamcrest</groupId>
                 <artifactId>hamcrest</artifactId>
-                <version>2.2</version>
+                <version>${hamcrest.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -399,34 +431,39 @@
             <dependency>
                 <groupId>com.shazam</groupId>
                 <artifactId>shazamcrest</artifactId>
-                <version>0.11</version>
+                <version>${shazamcrest.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>nl.jqno.equalsverifier</groupId>
                 <artifactId>equalsverifier</artifactId>
-                <version>3.10.1</version>
+                <version>${equalsverifier.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.spockframework</groupId>
                 <artifactId>spock-core</artifactId>
-                <version>1.3-groovy-2.5</version>
+                <version>${spok.core.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.codehaus.groovy</groupId>
+                <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy</artifactId>
-                <version>2.5.7</version>
+                <version>${groovy.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>cglib</groupId>
                 <artifactId>cglib-nodep</artifactId>
-                <version>3.3.0</version>
+                <version>${cglib.version}</version>
                 <scope>test</scope>
             </dependency>
-
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-core</artifactId>
+                <version>${tomcat.embed.core.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

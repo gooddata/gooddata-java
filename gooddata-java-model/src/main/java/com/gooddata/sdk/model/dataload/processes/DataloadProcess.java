@@ -1,19 +1,27 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.model.dataload.processes;
 
-import com.fasterxml.jackson.annotation.*;
-import com.gooddata.sdk.model.util.UriHelper;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.util.UriHelper;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import static com.gooddata.sdk.common.util.Validate.*;
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 
 /**
  * Dataload process.
@@ -32,7 +40,7 @@ public class DataloadProcess {
     private String name;
     private String type;
     private Set<String> executables;
-    private Map<String,String> links;
+    private Map<String, String> links;
     private String path;
 
     public DataloadProcess(String name, String type) {
@@ -43,8 +51,8 @@ public class DataloadProcess {
     /**
      * Use this constructor, when you want to deploy process from appstore.
      *
-     * @param name name
-     * @param type type
+     * @param name         name
+     * @param type         type
      * @param appstorePath valid path to brick in appstore
      */
     public DataloadProcess(String name, String type, String appstorePath) {
@@ -58,8 +66,8 @@ public class DataloadProcess {
 
     @JsonCreator
     private DataloadProcess(@JsonProperty("name") String name, @JsonProperty("type") String type,
-            @JsonProperty("executables") Set<String> executables,
-            @JsonProperty("links") Map<String, String> links) {
+                            @JsonProperty("executables") Set<String> executables,
+                            @JsonProperty("links") Map<String, String> links) {
         this(name, type);
         this.executables = executables != null ? Collections.unmodifiableSet(executables) : null;
         this.links = links;
@@ -69,12 +77,12 @@ public class DataloadProcess {
         return name;
     }
 
-    public String getType() {
-        return type;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public void setType(String type) {

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -27,12 +27,12 @@ public class DataStoreServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("PUT")
                 .havingPathEqualTo("/uploads/test")
-            .respond()
+                .respond()
                 .withStatus(201);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/gdc/gdc.json"))
                 .withStatus(200);
         content = new ByteArrayInputStream("test".getBytes());
@@ -55,7 +55,7 @@ public class DataStoreServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc")
-            .respond()
+                .respond()
                 .withBody(gdcBody)
                 .withStatus(200);
 

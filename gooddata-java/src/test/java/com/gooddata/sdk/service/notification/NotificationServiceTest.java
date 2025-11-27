@@ -1,16 +1,16 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.notification;
 
+import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.notification.Channel;
 import com.gooddata.sdk.model.notification.ProjectEvent;
 import com.gooddata.sdk.model.notification.Subscription;
-import com.gooddata.sdk.service.GoodDataSettings;
-import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.GoodDataSettings;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestTemplate;

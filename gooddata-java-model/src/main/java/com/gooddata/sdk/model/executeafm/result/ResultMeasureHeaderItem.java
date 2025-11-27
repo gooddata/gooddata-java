@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -23,7 +23,8 @@ public class ResultMeasureHeaderItem extends ResultHeaderItem {
 
     /**
      * Creates new instance of given header name and order
-     * @param name header name
+     *
+     * @param name  header name
      * @param order measure order within measureGroup
      */
     @JsonCreator

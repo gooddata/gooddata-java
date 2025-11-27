@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -15,7 +15,7 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
 /**
  * Structure with list of symbolic names (identifiers) to be expanded to list of URIs.
  * Serialization only.
- *
+ * <p>
  * See also {@link UriToIdentifier}.
  */
 public class IdentifierToUri {

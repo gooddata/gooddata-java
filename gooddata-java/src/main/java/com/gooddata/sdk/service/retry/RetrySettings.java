@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -14,10 +14,10 @@ import static org.springframework.util.Assert.isTrue;
  */
 public class RetrySettings {
 
-    public Integer DEFAULT_RETRY_COUNT =  6;
-    private Long DEFAULT_RETRY_INITIAL_INTERVAL = 1 * 1000l;  // 1s
-    private Long DEFAULT_RETRY_MAX_INTERVAL = 1 * 60 * 1000l; // 1min
-    private Double DEFAULT_RETRY_MULTIPLIER = 2d;
+    public Integer DEFAULT_RETRY_COUNT = 6;
+    private final Long DEFAULT_RETRY_INITIAL_INTERVAL = 1 * 1000l;  // 1s
+    private final Long DEFAULT_RETRY_MAX_INTERVAL = 1 * 60 * 1000l; // 1min
+    private final Double DEFAULT_RETRY_MULTIPLIER = 2d;
 
     private Integer retryCount = DEFAULT_RETRY_COUNT;
     private Long retryInitialInterval = DEFAULT_RETRY_INITIAL_INTERVAL;
@@ -26,6 +26,7 @@ public class RetrySettings {
 
     /**
      * Total retry count. Should be > 0. No retry if not set.
+     *
      * @return retry count
      */
     public Integer getRetryCount() {
@@ -66,6 +67,7 @@ public class RetrySettings {
     /**
      * If set, exponential strategy is used. Every next retry interval will be computed as previos interval multiplied
      * by this number.
+     *
      * @return retry multiplier
      */
     public Double getRetryMultiplier() {

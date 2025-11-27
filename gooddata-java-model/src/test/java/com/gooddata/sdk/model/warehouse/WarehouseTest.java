@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -27,7 +27,6 @@ public class WarehouseTest {
     public static final String TITLE = "Test";
     public static final String TOKEN = "{Token}";
     public static final String DESCRIPTION = "Storage";
-    private static final String ENVIRONMENT = "TESTING";
     public static final ZonedDateTime CREATED = LocalDateTime.of(2014, 5, 5, 8, 27, 33).atZone(UTC);
     public static final ZonedDateTime UPDATED = LocalDateTime.of(2014, 5, 5, 8, 27, 34).atZone(UTC);
     public static final String CREATED_BY = "/gdc/account/profile/createdBy";
@@ -41,6 +40,7 @@ public class WarehouseTest {
         put("users", "/gdc/datawarehouse/instances/instanceId/users");
         put("jdbc", "/gdc/datawarehouse/instances/instanceId/jdbc");
     }};
+    private static final String ENVIRONMENT = "TESTING";
 
     @Test
     public void testSerializationForInstanceCreation() throws Exception {

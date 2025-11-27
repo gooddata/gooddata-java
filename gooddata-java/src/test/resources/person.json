@@ -1,92 +1,92 @@
 {
-    "projectModel": {
-        "datasets": [
-            {
-                "dataset": {
-                    "identifier": "dataset.person",
-                    "title": "Person",
-                    "description": "Dataset with Person-related data",
-                    "anchor": {
-                        "attribute": {
-                            "identifier": "attr.person.name",
-                            "title": "Person Name",
-                            "labels": [
-                                {
-                                    "label": {
-                                        "identifier": "label.person.name",
-                                        "title": "Person Name"
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "attributes": [
-                        {
-                            "attribute": {
-                                "identifier": "attr.person.department",
-                                "title": "Department",
-                                "labels": [
-                                    {
-                                        "label": {
-                                            "identifier": "label.person.department",
-                                            "title": "Department"
-                                        }
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "attribute": {
-                                "identifier": "attr.person.role",
-                                "title": "Person Role",
-                                "labels": [
-                                    {
-                                        "label": {
-                                            "identifier": "label.person.role",
-                                            "title": "Person Role"
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "facts": [
-                        {
-                            "fact": {
-                                "identifier": "fact.person.age",
-                                "title": "Person Age"
-                            }
-                        },
-                        {
-                            "fact": {
-                                "identifier": "fact.person.shoesize",
-                                "title": "Person Shoe Size"
-                            }
-                        }
-                    ]
+  "projectModel": {
+    "datasets": [
+      {
+        "dataset": {
+          "identifier": "dataset.person",
+          "title": "Person",
+          "description": "Dataset with Person-related data",
+          "anchor": {
+            "attribute": {
+              "identifier": "attr.person.name",
+              "title": "Person Name",
+              "labels": [
+                {
+                  "label": {
+                    "identifier": "label.person.name",
+                    "title": "Person Name"
+                  }
                 }
+              ]
+            }
+          },
+          "attributes": [
+            {
+              "attribute": {
+                "identifier": "attr.person.department",
+                "title": "Department",
+                "labels": [
+                  {
+                    "label": {
+                      "identifier": "label.person.department",
+                      "title": "Department"
+                    }
+                  }
+                ]
+              }
             },
             {
-                "dataset": {
-                    "identifier": "dataset.city",
-                    "title": "Person",
-                    "description": "Dataset with City-related data",
-                    "anchor": {
-                        "attribute": {
-                            "identifier": "attr.city.name",
-                            "title": "City Name",
-                            "labels": [
-                                {
-                                    "label": {
-                                        "identifier": "label.city.name",
-                                        "title": "City Name"
-                                    }
-                                }
-                            ]
-                        }
+              "attribute": {
+                "identifier": "attr.person.role",
+                "title": "Person Role",
+                "labels": [
+                  {
+                    "label": {
+                      "identifier": "label.person.role",
+                      "title": "Person Role"
                     }
-                }
+                  }
+                ]
+              }
             }
-        ]
-    }
+          ],
+          "facts": [
+            {
+              "fact": {
+                "identifier": "fact.person.age",
+                "title": "Person Age"
+              }
+            },
+            {
+              "fact": {
+                "identifier": "fact.person.shoesize",
+                "title": "Person Shoe Size"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "dataset": {
+          "identifier": "dataset.city",
+          "title": "Person",
+          "description": "Dataset with City-related data",
+          "anchor": {
+            "attribute": {
+              "identifier": "attr.city.name",
+              "title": "City Name",
+              "labels": [
+                {
+                  "label": {
+                    "identifier": "label.city.name",
+                    "title": "City Name"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
 }

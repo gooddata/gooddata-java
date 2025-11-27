@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -76,7 +76,7 @@ public class Table extends AbstractObj implements Queryable {
 
         @JsonCreator
         private Content(@JsonProperty("tableDBName") String tableDBName, @JsonProperty("activeDataLoad") String activeDataLoad,
-                @JsonProperty("tableDataLoad") Collection<String> tableDataLoads, @JsonProperty("weight") Integer weight) {
+                        @JsonProperty("tableDataLoad") Collection<String> tableDataLoads, @JsonProperty("weight") Integer weight) {
             this.tableDBName = tableDBName;
             this.activeDataLoad = activeDataLoad;
             this.tableDataLoads = tableDataLoads;

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -9,8 +9,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.sdk.model.executeafm.afm.filter.CompatibilityFilter;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.executeafm.afm.filter.CompatibilityFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +45,15 @@ public class Afm {
     public Afm() {
     }
 
+    private static <T extends LocallyIdentifiable> T getIdentifiable(final List<T> toSearch, final String localIdentifier) {
+        return Optional.ofNullable(toSearch)
+                .flatMap(a -> a.stream().filter(i -> Objects.equals(localIdentifier, i.getLocalIdentifier())).findFirst())
+                .orElseThrow(() -> new IllegalArgumentException(format("Item of localIdentifier=%s not found", localIdentifier)));
+    }
+
     /**
      * Find {@link AttributeItem} within attributes by given localIdentifier
+     *
      * @param localIdentifier identifier used for search
      * @return found attribute or throws exception
      */
@@ -57,6 +64,7 @@ public class Afm {
 
     /**
      * Find {@link MeasureItem} within measures by given localIdentifier
+     *
      * @param localIdentifier identifier used for search
      * @return found measure or throws exception
      */
@@ -132,12 +140,6 @@ public class Afm {
     @Override
     public String toString() {
         return GoodDataToStringBuilder.defaultToString(this);
-    }
-
-    private static <T extends LocallyIdentifiable> T getIdentifiable(final List<T> toSearch, final String localIdentifier) {
-        return Optional.ofNullable(toSearch)
-                .flatMap(a -> a.stream().filter(i -> Objects.equals(localIdentifier, i.getLocalIdentifier())).findFirst())
-                .orElseThrow(() -> new IllegalArgumentException(format("Item of localIdentifier=%s not found", localIdentifier)));
     }
 
 }

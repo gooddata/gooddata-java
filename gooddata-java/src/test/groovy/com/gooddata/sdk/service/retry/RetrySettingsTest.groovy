@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -28,20 +28,20 @@ class RetrySettingsTest extends Specification {
         }
         where:
         value | correct | variable
-         1    | true    | "RetryCount"
-         0    | false   | "RetryCount"
+        1     | true    | "RetryCount"
+        0     | false   | "RetryCount"
         -1    | false   | "RetryCount"
         10    | true    | "RetryCount"
-         0    | false   | "RetryInitialInterval"
+        0     | false   | "RetryInitialInterval"
         -1    | false   | "RetryInitialInterval"
-         1    | true    | "RetryInitialInterval"
+        1     | true    | "RetryInitialInterval"
         10    | true    | "RetryInitialInterval"
-         0    | false   | "RetryMaxInterval"
+        0     | false   | "RetryMaxInterval"
         -1    | false   | "RetryMaxInterval"
-         1    | true    | "RetryMaxInterval"
+        1     | true    | "RetryMaxInterval"
         10    | true    | "RetryMaxInterval"
-         1    | false   | "RetryMultiplier"
-         0    | false   | "RetryMultiplier"
+        1     | false   | "RetryMultiplier"
+        0     | false   | "RetryMultiplier"
         1.1   | true    | "RetryMultiplier"
         0.9   | false   | "RetryMultiplier"
         10    | true    | "RetryMultiplier"

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -30,9 +30,9 @@ import static org.testng.Assert.fail;
  */
 public class DatastoreServiceAT extends AbstractGoodDataAT {
 
+    private static final int ITER_MAX = 10;
     private String file;
     private String directory;
-    private static final int ITER_MAX = 10;
 
     @BeforeClass
     public void setUp() throws Exception {
@@ -66,7 +66,7 @@ public class DatastoreServiceAT extends AbstractGoodDataAT {
 
         try (InputStream ignored = dataStoreService.download(this.directory + "/none.txt")) {
             fail("The exception should contain the request_id in its stacktrace.");
-        } catch (Exception e){
+        } catch (Exception e) {
             assertThat(e.getCause().toString(), containsString("request_id"));
         }
     }

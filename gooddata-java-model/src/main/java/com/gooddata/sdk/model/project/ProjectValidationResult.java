@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -19,14 +19,12 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProjectValidationResult {
 
+    private static final String LEVEL_WARNING = "WARN";
+    private static final String LEVEL_ERROR = "ERROR";
     private final String category;
     private final String level;
     private final String message;
     private final List<ProjectValidationResultParam> params;
-
-    private static final String LEVEL_WARNING = "WARN";
-    private static final String LEVEL_ERROR = "ERROR";
-
     private ProjectValidationType validation;
 
     @JsonCreator

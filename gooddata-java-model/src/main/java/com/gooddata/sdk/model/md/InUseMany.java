@@ -1,20 +1,20 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.model.md;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.gooddata.sdk.common.util.BooleanDeserializer;
-import com.gooddata.sdk.common.util.BooleanStringSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gooddata.sdk.common.util.BooleanDeserializer;
+import com.gooddata.sdk.common.util.BooleanStringSerializer;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.Collection;
@@ -45,8 +45,8 @@ public class InUseMany {
 
     @JsonCreator
     InUseMany(@JsonProperty("uris") Collection<String> uris,
-          @JsonProperty("nearest") @JsonDeserialize(using = BooleanDeserializer.class) boolean nearest,
-          @JsonProperty("types") Set<String> types) {
+              @JsonProperty("nearest") @JsonDeserialize(using = BooleanDeserializer.class) boolean nearest,
+              @JsonProperty("types") Set<String> types) {
 
         this.uris = notEmpty(uris, "uris");
         this.types = types;
@@ -58,7 +58,7 @@ public class InUseMany {
         this.uris = notNull(uris, "uris");
         noNullElements(type, "type");
         this.types = new HashSet<>();
-        for (Class<? extends Obj> t: type) {
+        for (Class<? extends Obj> t : type) {
             this.types.add(decapitalize(t.getSimpleName()));
         }
         this.nearest = nearest;

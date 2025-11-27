@@ -1,7 +1,7 @@
 {
-    "pull2Task" : {
-        "links" : {
-            "poll": "/gdc/md/PROJECT/tasks/task/ID/status"
-        }
+  "pull2Task": {
+    "links": {
+      "poll": "/gdc/md/PROJECT/tasks/task/ID/status"
     }
+  }
 }

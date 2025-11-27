@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -22,16 +22,15 @@ import java.io.Serializable;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 public class Column extends AbstractObj implements Queryable {
 
-    private static final long serialVersionUID = 8235010456787885263L;
     public static final String TYPE_PK = "pk";
     public static final String TYPE_INPUT_PK = "inputpk";
     public static final String TYPE_FK = "fk";
     public static final String TYPE_FACT = "fact";
     public static final String TYPE_DISPLAY_FORM = "displayForm";
-
+    private static final long serialVersionUID = 8235010456787885263L;
     private final Content content;
 
-    private Column(@JsonProperty("meta") Meta meta, @JsonProperty("content")Content content) {
+    private Column(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content) {
         super(meta);
         this.content = content;
     }
@@ -107,7 +106,7 @@ public class Column extends AbstractObj implements Queryable {
 
         @JsonCreator
         private Content(@JsonProperty("table") String table, @JsonProperty("columnDBName") String columnDBName,
-                @JsonProperty("columnType") String columnType) {
+                        @JsonProperty("columnType") String columnType) {
             this.table = table;
             this.columnDBName = columnDBName;
             this.columnType = columnType;

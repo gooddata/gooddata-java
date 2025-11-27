@@ -1,6 +1,6 @@
 {
-    "featureFlags": {
-        "testFeature": true,
-        "testFeature2": false
-    }
+  "featureFlags": {
+    "testFeature": true,
+    "testFeature2": false
+  }
 }

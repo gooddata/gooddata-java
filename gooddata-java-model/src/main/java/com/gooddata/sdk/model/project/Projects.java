@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -36,18 +36,6 @@ public class Projects extends Page<Project> {
 
     static final String ROOT_NODE = "projects";
 
-    static class Deserializer extends PageDeserializer<Projects, Project> {
-
-        protected Deserializer() {
-            super(Project.class);
-        }
-
-        @Override
-        protected Projects createPage(final List<Project> items, final Paging paging, final Map<String, String> links) {
-            return new Projects(items, paging);
-        }
-    }
-
     public Projects(List<Project> items, Paging paging) {
         super(items, paging);
     }
@@ -65,6 +53,18 @@ public class Projects extends Page<Project> {
     @Override
     public String toString() {
         return GoodDataToStringBuilder.defaultToString(this);
+    }
+
+    static class Deserializer extends PageDeserializer<Projects, Project> {
+
+        protected Deserializer() {
+            super(Project.class);
+        }
+
+        @Override
+        protected Projects createPage(final List<Project> items, final Paging paging, final Map<String, String> links) {
+            return new Projects(items, paging);
+        }
     }
 
 }

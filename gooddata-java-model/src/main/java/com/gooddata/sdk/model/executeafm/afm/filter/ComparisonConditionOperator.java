@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -24,12 +24,6 @@ public enum ComparisonConditionOperator {
     EQUAL_TO,
     NOT_EQUAL_TO;
 
-    @JsonValue
-    @Override
-    public String toString() {
-        return name();
-    }
-
     @JsonCreator
     public static ComparisonConditionOperator of(String operator) {
         notNull(operator, "operator");
@@ -37,9 +31,15 @@ public enum ComparisonConditionOperator {
             return ComparisonConditionOperator.valueOf(operator);
         } catch (IllegalArgumentException e) {
             throw new UnsupportedOperationException(
-                format("Unknown value for comparison condition operator: \"%s\", supported values are: [%s]",
-                    operator, stream(ComparisonConditionOperator.values()).map(Enum::name).collect(joining(","))),
-                e);
+                    format("Unknown value for comparison condition operator: \"%s\", supported values are: [%s]",
+                            operator, stream(ComparisonConditionOperator.values()).map(Enum::name).collect(joining(","))),
+                    e);
         }
+    }
+
+    @JsonValue
+    @Override
+    public String toString() {
+        return name();
     }
 }

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -10,9 +10,9 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.gooddata.sdk.model.executeafm.IdentifierObjQualifier;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
+import com.gooddata.sdk.model.md.Metric;
 import com.gooddata.sdk.model.md.visualization.VOPopMeasureDefinition;
 import com.gooddata.sdk.model.md.visualization.VOSimpleMeasureDefinition;
-import com.gooddata.sdk.model.md.Metric;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -59,16 +59,12 @@ public interface MeasureDefinition extends Serializable {
      * The provided converter must be able to handle the conversion for the qualifiers that are of the {@link IdentifierObjQualifier} type that are used by
      * this object or its encapsulated child objects.
      *
-     * @param objQualifierConverter
-     *         The function that converts identifier qualifiers to the matching URI qualifiers. In case when the object uses the identifier qualifiers, it
-     *         will return a new copy of itself or its encapsulated objects that used URI qualifiers, otherwise the original object is returned.
-     *         The parameter must not be null.
-     *
+     * @param objQualifierConverter The function that converts identifier qualifiers to the matching URI qualifiers. In case when the object uses the identifier qualifiers, it
+     *                              will return a new copy of itself or its encapsulated objects that used URI qualifiers, otherwise the original object is returned.
+     *                              The parameter must not be null.
      * @return copy of itself with replaced qualifiers in case when some {@link IdentifierObjQualifier} were used, otherwise original object is returned.
-     *
-     * @throws IllegalArgumentException
-     *         The exception is thrown when conversion for the identifier qualifier used by this measure definition could not be made by the provided
-     *         converter or when provided converter is null.
+     * @throws IllegalArgumentException The exception is thrown when conversion for the identifier qualifier used by this measure definition could not be made by the provided
+     *                                  converter or when provided converter is null.
      */
     MeasureDefinition withObjUriQualifiers(ObjQualifierConverter objQualifierConverter);
 

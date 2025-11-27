@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -12,24 +12,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.WRAPPER_OBJECT;
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.Validate.notEmpty;
-import static org.apache.commons.lang3.Validate.notNull;
-
+import com.gooddata.sdk.model.executeafm.Execution;
 import com.gooddata.sdk.model.executeafm.UriObjQualifier;
 import com.gooddata.sdk.model.executeafm.afm.Afm;
-import com.gooddata.sdk.model.executeafm.Execution;
 import com.gooddata.sdk.model.executeafm.afm.filter.ExtendedFilter;
 import com.gooddata.sdk.model.executeafm.resultspec.ResultSpec;
 import com.gooddata.sdk.model.executeafm.resultspec.TotalItem;
 import com.gooddata.sdk.model.md.AbstractObj;
 import com.gooddata.sdk.model.md.Meta;
+import com.gooddata.sdk.model.md.Obj;
 import com.gooddata.sdk.model.md.Queryable;
 import com.gooddata.sdk.model.md.Updatable;
-import com.gooddata.sdk.model.md.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,6 +30,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+
+import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.WRAPPER_OBJECT;
+import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.Validate.notEmpty;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Complete information about new visualization object that can be stored as MD object (see {@link Obj})
@@ -58,7 +58,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
     /**
      * Constructor.
      *
-     * @param title title of visualization object
+     * @param title                 title of visualization object
      * @param visualizationClassUri uri to the {@link VisualizationClass}
      */
     public VisualizationObject(final String title, final String visualizationClassUri) {
@@ -89,6 +89,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
 
     /**
      * Get measure by local identifier or null if not found
+     *
      * @param localIdentifier of measure
      * @return measure or null
      */
@@ -130,6 +131,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
     /**
      * Returns attribute from collection bucket, if and only if bucket contains exactly one item of type
      * {@link VisualizationAttribute}, null otherwise
+     *
      * @param type of collection which we want to get, stored as local identifier in each bucket
      * @return attribute from collection bucket
      */
@@ -157,6 +159,7 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
 
     /**
      * Method to get uri to requested local identifier from reference items
+     *
      * @param id of item
      * @return uri of requested item
      */
@@ -355,10 +358,10 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
 
         @JsonCreator
         private Content(@JsonProperty("visualizationClass") final UriObjQualifier visualizationClass,
-                       @JsonProperty("buckets") final List<Bucket> buckets,
-                       @JsonProperty("filters") final List<ExtendedFilter> filters,
-                       @JsonProperty("properties") final String properties,
-                       @JsonProperty("references") final Map<String, String> referenceItems) {
+                        @JsonProperty("buckets") final List<Bucket> buckets,
+                        @JsonProperty("filters") final List<ExtendedFilter> filters,
+                        @JsonProperty("properties") final String properties,
+                        @JsonProperty("references") final Map<String, String> referenceItems) {
 
             this.visualizationClass = notNull(visualizationClass);
             this.buckets = notNull(buckets);
@@ -371,6 +374,10 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
             return buckets;
         }
 
+        public void setBuckets(List<Bucket> buckets) {
+            this.buckets = buckets;
+        }
+
         @JsonIgnore
         public List<VisualizationAttribute> getAttributes() {
             return buckets.stream()
@@ -378,26 +385,6 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
                     .filter(VisualizationAttribute.class::isInstance)
                     .map(VisualizationAttribute.class::cast)
                     .collect(toList());
-        }
-
-        public void setVisualizationClass(UriObjQualifier visualizationClass) {
-            this.visualizationClass = visualizationClass;
-        }
-
-        public void setBuckets(List<Bucket> buckets) {
-            this.buckets = buckets;
-        }
-
-        public void setFilters(List<ExtendedFilter> filters) {
-            this.filters = filters;
-        }
-
-        public void setProperties(String properties) {
-            this.properties = properties;
-        }
-
-        public void setReferenceItems(Map<String, String> referenceItems) {
-            this.referenceItems = referenceItems;
         }
 
         @JsonIgnore
@@ -430,17 +417,33 @@ public class VisualizationObject extends AbstractObj implements Queryable, Updat
             return filters;
         }
 
+        public void setFilters(List<ExtendedFilter> filters) {
+            this.filters = filters;
+        }
+
         public String getProperties() {
             return properties;
+        }
+
+        public void setProperties(String properties) {
+            this.properties = properties;
         }
 
         public UriObjQualifier getVisualizationClass() {
             return visualizationClass;
         }
 
+        public void setVisualizationClass(UriObjQualifier visualizationClass) {
+            this.visualizationClass = visualizationClass;
+        }
+
         @JsonProperty("references")
         public Map<String, String> getReferenceItems() {
             return referenceItems;
+        }
+
+        public void setReferenceItems(Map<String, String> referenceItems) {
+            this.referenceItems = referenceItems;
         }
 
         /**

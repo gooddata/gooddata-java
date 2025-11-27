@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -54,6 +54,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.nio.file.Files;
 import java.util.Collection;
+import java.util.Objects;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNull;
@@ -82,10 +83,11 @@ public class ProcessService extends AbstractService {
     /**
      * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
      * this abstract one.
-     * @param restTemplate RESTful HTTP Spring template
-     * @param accountService service to access accounts
+     *
+     * @param restTemplate     RESTful HTTP Spring template
+     * @param accountService   service to access accounts
      * @param dataStoreService service for upload process data
-     * @param settings settings
+     * @param settings         settings
      */
     public ProcessService(final RestTemplate restTemplate, final AccountService accountService,
                           final DataStoreService dataStoreService, final GoodDataSettings settings) {
@@ -94,12 +96,42 @@ public class ProcessService extends AbstractService {
         this.accountService = notNull(accountService, "accountService");
     }
 
+    private static URI getScheduleUri(Project project, String id) {
+        notNull(project, "project");
+        notNull(project.getId(), "project.id");
+        notEmpty(id, "id");
+
+        return SCHEDULE_TEMPLATE.expand(project.getId(), id);
+    }
+
+    private static URI getSchedulesUri(final Project project) {
+        notNull(project, "project");
+        notNull(project.getId(), "project.id");
+        return SCHEDULES_TEMPLATE.expand(project.getId());
+    }
+
+    private static URI getSchedulesUri(final Project project, final PageRequest page) {
+        return page.getPageUri(new SpringMutableUri(getSchedulesUri(project)));
+    }
+
+    private static URI getProcessUri(Project project, String id) {
+        notNull(project, "project");
+        notNull(project.getId(), "project.id");
+        notEmpty(id, "id");
+
+        return PROCESS_TEMPLATE.expand(project.getId(), id);
+    }
+
+    private static URI getProcessesUri(Project project) {
+        return PROCESSES_TEMPLATE.expand(project.getId());
+    }
+
     /**
      * Create new process with given data by given project.
      * Process must have null path to prevent clashes with deploying from appstore.
      *
-     * @param project project to which the process belongs
-     * @param process to create
+     * @param project     project to which the process belongs
+     * @param process     to create
      * @param processData process data to upload
      * @return created process
      */
@@ -147,7 +179,7 @@ public class ProcessService extends AbstractService {
      * Update process with given data by given project.
      * Process must have null path to prevent clashes with deploying from appstore.
      *
-     * @param process to create
+     * @param process     to create
      * @param processData process data to upload
      * @return updated process
      */
@@ -176,6 +208,7 @@ public class ProcessService extends AbstractService {
 
     /**
      * Get process by given URI.
+     *
      * @param uri process uri
      * @return found process
      * @throws ProcessNotFoundException when the process doesn't exist
@@ -197,8 +230,9 @@ public class ProcessService extends AbstractService {
 
     /**
      * Get process by given id and project.
+     *
      * @param project project to which the process belongs
-     * @param id process id
+     * @param id      process id
      * @return found process
      * @throws ProcessNotFoundException when the process doesn't exist
      */
@@ -210,6 +244,7 @@ public class ProcessService extends AbstractService {
 
     /**
      * Get list of processes by given project.
+     *
      * @param project project of processes
      * @return list of found processes or empty list
      */
@@ -220,6 +255,7 @@ public class ProcessService extends AbstractService {
 
     /**
      * Get list of current user processes by given user account.
+     *
      * @return list of found processes or empty list
      */
     public Collection<DataloadProcess> listUserProcesses() {
@@ -228,6 +264,7 @@ public class ProcessService extends AbstractService {
 
     /**
      * Delete given process
+     *
      * @param process to delete
      */
     public void removeProcess(DataloadProcess process) {
@@ -242,7 +279,7 @@ public class ProcessService extends AbstractService {
     /**
      * Get process source data. Source data are fetched as zip and written to given stream.
      *
-     * @param process process to fetch data of
+     * @param process      process to fetch data of
      * @param outputStream stream where to write fetched data
      */
     public void getProcessSource(DataloadProcess process, OutputStream outputStream) {
@@ -258,8 +295,9 @@ public class ProcessService extends AbstractService {
 
     /**
      * Get process execution log
+     *
      * @param executionDetail execution to log of
-     * @param outputStream stream to write the log to
+     * @param outputStream    stream to write the log to
      */
     public void getExecutionLog(ProcessExecutionDetail executionDetail, OutputStream outputStream) {
         notNull(executionDetail, "executionDetail");
@@ -315,7 +353,8 @@ public class ProcessService extends AbstractService {
                 ProcessExecutionDetail detail = null;
                 try {
                     detail = getProcessExecutionDetailByUri(detailLink);
-                } catch (GoodDataException ignored) { }
+                } catch (GoodDataException ignored) {
+                }
                 throw new ProcessExecutionException("Can't execute " + e.getText(), detail, e);
             }
 
@@ -428,7 +467,7 @@ public class ProcessService extends AbstractService {
      * @return {@link PageBrowser} list of found schedules or empty list
      */
     public PageBrowser<Schedule> listSchedules(final Project project,
-                                                final PageRequest startPage) {
+                                               final PageRequest startPage) {
         notNull(project, "project");
         notNull(startPage, "startPage");
         return new PageBrowser<>(startPage, page -> listSchedules(getSchedulesUri(project, page)));
@@ -468,7 +507,7 @@ public class ProcessService extends AbstractService {
         }
 
         return new PollResult<>(this, new AbstractPollHandler<ScheduleExecution, ScheduleExecution>(
-                notNullState(scheduleExecution, "created schedule execution").getUri(),
+                notNullState(Objects.requireNonNull(scheduleExecution), "created schedule execution").getUri(),
                 ScheduleExecution.class, ScheduleExecution.class) {
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
@@ -500,24 +539,6 @@ public class ProcessService extends AbstractService {
         }
     }
 
-    private static URI getScheduleUri(Project project, String id) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
-        notEmpty(id, "id");
-
-        return SCHEDULE_TEMPLATE.expand(project.getId(), id);
-    }
-
-    private static URI getSchedulesUri(final Project project) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
-        return SCHEDULES_TEMPLATE.expand(project.getId());
-    }
-
-    private static URI getSchedulesUri(final Project project, final PageRequest page) {
-        return page.getPageUri(new SpringMutableUri(getSchedulesUri(project)));
-    }
-
     private Schedule postSchedule(Schedule schedule, URI postUri) {
         try {
             return restTemplate.postForObject(postUri, schedule, Schedule.class);
@@ -538,18 +559,6 @@ public class ProcessService extends AbstractService {
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to list processes", e);
         }
-    }
-
-    private static URI getProcessUri(Project project, String id) {
-        notNull(project, "project");
-        notNull(project.getId(), "project.id");
-        notEmpty(id, "id");
-
-        return PROCESS_TEMPLATE.expand(project.getId(), id);
-    }
-
-    private static URI getProcessesUri(Project project) {
-        return PROCESSES_TEMPLATE.expand(project.getId());
     }
 
     private DataloadProcess postProcess(DataloadProcess process, File processData, URI postUri) {

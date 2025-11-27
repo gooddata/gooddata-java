@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -7,7 +7,13 @@ package com.gooddata.sdk.service.dataset;
 
 import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.common.GoodDataRestException;
-import com.gooddata.sdk.model.dataset.*;
+import com.gooddata.sdk.model.dataset.DatasetLinks;
+import com.gooddata.sdk.model.dataset.DatasetManifest;
+import com.gooddata.sdk.model.dataset.DatasetNotFoundException;
+import com.gooddata.sdk.model.dataset.Upload;
+import com.gooddata.sdk.model.dataset.UploadStatistics;
+import com.gooddata.sdk.model.dataset.Uploads;
+import com.gooddata.sdk.model.dataset.UploadsInfo;
 import com.gooddata.sdk.model.gdc.AboutLinks.Link;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.GoodDataSettings;
@@ -37,7 +43,7 @@ public class DatasetServiceTest {
 
     private static final String PROJECT_ID = "17";
     private static final String DATASET_ID = "11";
-
+    private static final String DATASET_UPLOADS_URI = "uploads/uri";
     @Mock
     private RestTemplate restTemplate;
     @Mock
@@ -48,9 +54,7 @@ public class DatasetServiceTest {
     private DatasetManifest manifest;
     @Mock
     private InputStream stream;
-
     private DatasetService service;
-    private static final String DATASET_UPLOADS_URI = "uploads/uri";
 
     @BeforeMethod
     public void setUp() throws Exception {

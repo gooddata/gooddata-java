@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -17,9 +17,9 @@ import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static com.gooddata.sdk.model.connector.ConnectorType.ZENDESK4;
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.model.connector.ConnectorType.ZENDESK4;
 
 /**
  * Zendesk 4 (Insights) connector process execution (i.e. definition for single ETL run). Serialization only.
@@ -110,13 +110,13 @@ public class Zendesk4ProcessExecution implements ProcessExecution {
         return downloadParams;
     }
 
+    public void setDownloadParams(DownloadParams downloadParams) {
+        this.downloadParams = downloadParams;
+    }
+
     @JsonProperty("downloadParams")
     private DownloadParams getDownloadParamsPlain() {
         return downloadParams;
-    }
-
-    public void setDownloadParams(DownloadParams downloadParams) {
-        this.downloadParams = downloadParams;
     }
 
     @Override
@@ -144,7 +144,8 @@ public class Zendesk4ProcessExecution implements ProcessExecution {
             this(useBackup, null, null);
         }
 
-        private DownloadParams() {}
+        private DownloadParams() {
+        }
 
         @JsonProperty("useBackup")
         public Boolean getUseBackup() {

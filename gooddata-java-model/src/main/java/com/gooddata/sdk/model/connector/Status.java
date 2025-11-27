@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -67,6 +67,10 @@ public class Status {
         return ERROR.name().equalsIgnoreCase(code) || USER_ERROR.name().equalsIgnoreCase(code);
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
+    }
 
     /**
      * Enum of connector process status codes
@@ -74,10 +78,5 @@ public class Status {
     public enum Code {
         NEW, SCHEDULED, DOWNLOADING, DOWNLOADED, TRANSFORMING, TRANSFORMED, UPLOADING, UPLOADED, SYNCHRONIZED,
         ERROR, USER_ERROR
-    }
-
-    @Override
-    public String toString() {
-        return GoodDataToStringBuilder.defaultToString(this);
     }
 }

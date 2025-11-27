@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -23,14 +23,6 @@ public class Restriction {
     private Restriction(Type type, String value) {
         this.type = notNull(type, "type");
         this.value = notNull(value, "value");
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public String getValue() {
-        return value;
     }
 
     /**
@@ -61,6 +53,14 @@ public class Restriction {
      */
     public static Restriction summary(String value) {
         return new Restriction(Type.SUMMARY, value);
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public String getValue() {
+        return value;
     }
 
     @Override

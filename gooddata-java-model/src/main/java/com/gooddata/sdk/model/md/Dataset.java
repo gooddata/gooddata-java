@@ -1,28 +1,28 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.model.md;
 
-import static com.gooddata.sdk.common.util.Validate.notNullState;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.gooddata.sdk.common.util.BooleanDeserializer;
-import com.gooddata.sdk.common.util.BooleanStringSerializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gooddata.sdk.common.util.BooleanDeserializer;
+import com.gooddata.sdk.common.util.BooleanStringSerializer;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 
 /**
  * Represents metadata dataset
@@ -44,7 +44,7 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
 
     @JsonCreator
     private Dataset(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content,
-            @JsonProperty("links") Map<String, String> links) {
+                    @JsonProperty("links") Map<String, String> links) {
         super(meta);
         this.content = content;
         this.links = links;
@@ -114,11 +114,11 @@ public class Dataset extends AbstractObj implements Queryable, Updatable {
 
         @JsonCreator
         private Content(@JsonProperty("ties") List<String> ties,
-                @JsonProperty("mode") String mode,
-                @JsonProperty("facts") List<String> facts,
-                @JsonProperty("dataLoadingColumns") List<String> dataLoadingColumns,
-                @JsonProperty("attributes") List<String> attributes,
-                @JsonProperty("hasUploadConfiguration") @JsonDeserialize(using = BooleanDeserializer.class) Boolean hasUploadConfiguration) {
+                        @JsonProperty("mode") String mode,
+                        @JsonProperty("facts") List<String> facts,
+                        @JsonProperty("dataLoadingColumns") List<String> dataLoadingColumns,
+                        @JsonProperty("attributes") List<String> attributes,
+                        @JsonProperty("hasUploadConfiguration") @JsonDeserialize(using = BooleanDeserializer.class) Boolean hasUploadConfiguration) {
             this.ties = ties;
             this.mode = mode;
             this.facts = facts;

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -13,7 +13,12 @@ import com.gooddata.sdk.model.project.model.DiffRequest;
 import com.gooddata.sdk.model.project.model.MaqlDdl;
 import com.gooddata.sdk.model.project.model.MaqlDdlLinks;
 import com.gooddata.sdk.model.project.model.ModelDiff;
-import com.gooddata.sdk.service.*;
+import com.gooddata.sdk.service.AbstractPollHandlerBase;
+import com.gooddata.sdk.service.AbstractService;
+import com.gooddata.sdk.service.FutureResult;
+import com.gooddata.sdk.service.GoodDataSettings;
+import com.gooddata.sdk.service.PollResult;
+import com.gooddata.sdk.service.SimplePollHandler;
 import com.gooddata.sdk.service.dataset.DatasetService;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.FileCopyUtils;
@@ -25,10 +30,10 @@ import java.io.Reader;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import static com.gooddata.sdk.common.util.Validate.notNullState;
-import static com.gooddata.sdk.model.project.model.ModelDiff.UpdateScript;
 import static com.gooddata.sdk.common.util.Validate.noNullElements;
 import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNullState;
+import static com.gooddata.sdk.model.project.model.ModelDiff.UpdateScript;
 import static java.util.Arrays.asList;
 
 /**
@@ -106,7 +111,6 @@ public class ModelService extends AbstractService {
      * @param project project to be updated
      * @param maqlDdl update script to be executed in the project
      * @return poll result
-     *
      * @see DatasetService#updateProjectData
      */
     public FutureResult<Void> updateProjectModel(final Project project, final String... maqlDdl) {
@@ -119,7 +123,6 @@ public class ModelService extends AbstractService {
      * @param project project to be updated
      * @param maqlDdl update script to be executed in the project
      * @return poll result
-     *
      * @see DatasetService#updateProjectData
      */
     public FutureResult<Void> updateProjectModel(final Project project, final Collection<String> maqlDdl) {
@@ -148,7 +151,7 @@ public class ModelService extends AbstractService {
                 }
                 try {
                     final MaqlDdlLinks links = restTemplate.postForObject(MaqlDdl.URI, new MaqlDdl(maqlChunks.poll()),
-                        MaqlDdlLinks.class, projectId);
+                            MaqlDdlLinks.class, projectId);
                     this.pollUri = notNullState(links, "maqlDdlLinks").getStatusUri();
                 } catch (GoodDataRestException | RestClientException e) {
                     throw new ModelException("Unable to update project model", e);

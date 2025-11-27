@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -36,19 +36,19 @@ public class Grid implements Serializable {
 
     /**
      * Creates new instance.
-     * @param columns report's definition columns
-     * @param rows report's definition rows
-     * @param metrics report's definition metrics
-     * @param sort report's sort definition
-     * @param columnWidths report columns' widths definition
      *
+     * @param columns      report's definition columns
+     * @param rows         report's definition rows
+     * @param metrics      report's definition metrics
+     * @param sort         report's sort definition
+     * @param columnWidths report columns' widths definition
      * @since 2.0.0
      */
     @JsonCreator
     public Grid(@JsonProperty("columns") @JsonDeserialize(contentUsing = GridElementDeserializer.class)
-                        List<? extends GridElement> columns,
-                @JsonProperty("rows")  @JsonDeserialize(contentUsing = GridElementDeserializer.class)
-                        List<? extends GridElement> rows,
+                List<? extends GridElement> columns,
+                @JsonProperty("rows") @JsonDeserialize(contentUsing = GridElementDeserializer.class)
+                List<? extends GridElement> rows,
                 @JsonProperty("metrics") List<MetricElement> metrics,
                 @JsonProperty("sort") Map<String, List<String>> sort,
                 @JsonProperty("columnWidths") Collection<Map<String, Object>> columnWidths) {

@@ -1,12 +1,12 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.export;
 
-import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.model.export.ExportFormat;
+import com.gooddata.sdk.service.AbstractGoodDataAT;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 

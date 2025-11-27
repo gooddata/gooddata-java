@@ -1,12 +1,10 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 
 package com.gooddata.sdk.model.md.dashboard.filter;
-
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,6 +16,8 @@ import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.Collections;
 import java.util.List;
+
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
 
 /**
  * Attribute filter located on analytical dashboard.
@@ -37,8 +37,8 @@ public class DashboardAttributeFilter implements DashboardFilter {
     /**
      * Constructor.
      *
-     * @param displayForm display form of an attribute where this filter is applied
-     * @param negativeSelection if the negative selection of filter elements is applied
+     * @param displayForm          display form of an attribute where this filter is applied
+     * @param negativeSelection    if the negative selection of filter elements is applied
      * @param attributeElementUris list of attribute element URIs applied in filter
      */
     @JsonCreator
@@ -67,7 +67,6 @@ public class DashboardAttributeFilter implements DashboardFilter {
 
     /**
      * @return list of attribute element URI strings which should be included or excluded in filter
-     *
      * @see #isNegativeSelection()
      */
     @JsonIgnore

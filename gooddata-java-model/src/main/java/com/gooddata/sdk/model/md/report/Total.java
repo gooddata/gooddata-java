@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -27,12 +27,6 @@ public enum Total {
     NAT,
     MED;
 
-    @JsonValue
-    @Override
-    public String toString() {
-        return name().toLowerCase();
-    }
-
     @JsonCreator
     public static Total of(String total) {
         notNull(total, "total");
@@ -53,5 +47,11 @@ public enum Total {
      */
     public static List<Total> orderedValues() {
         return Arrays.asList(SUM, MAX, MIN, AVG, MED, NAT);
+    }
+
+    @JsonValue
+    @Override
+    public String toString() {
+        return name().toLowerCase();
     }
 }

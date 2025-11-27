@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -51,6 +51,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -80,14 +81,38 @@ public class ProjectService extends AbstractService {
 
     /**
      * Constructs service for GoodData project management (list projects, create a project, ...).
+     *
      * @param restTemplate   RESTful HTTP Spring template
      * @param accountService GoodData account service
-     * @param settings settings
+     * @param settings       settings
      */
     public ProjectService(final RestTemplate restTemplate, final AccountService accountService,
                           final GoodDataSettings settings) {
         super(restTemplate, settings);
         this.accountService = notNull(accountService, "accountService");
+    }
+
+    private static URI getProjectsUri(final String userId) {
+        notEmpty(userId, "userId");
+        return LIST_PROJECTS_TEMPLATE.expand(userId);
+    }
+
+    private static URI getProjectsUri(final String userId, final PageRequest page) {
+        return page.getPageUri(new SpringMutableUri(getProjectsUri(userId)));
+    }
+
+    private static URI getUsersUri(final Project project) {
+        notNull(project.getId(), "project.id");
+        return PROJECT_USERS_TEMPLATE.expand(project.getId());
+    }
+
+    private static URI getUsersUri(final Project project, final PageRequest page) {
+        return page.getPageUri(new SpringMutableUri(getUsersUri(project)));
+    }
+
+    private static URI getUserUri(final Project project, final Account account) {
+        notNull(account.getId(), "account.id");
+        return PROJECT_USER_TEMPLATE.expand(project.getId(), account.getId());
     }
 
     /**
@@ -128,7 +153,7 @@ public class ProjectService extends AbstractService {
     /**
      * Get defined page of paged list of projects that given user/account has access to.
      *
-     * @param account user whose projects will be returned
+     * @param account   user whose projects will be returned
      * @param startPage page to be retrieved
      * @return {@link PageBrowser} list of found projects for given user or empty list
      */
@@ -159,15 +184,6 @@ public class ProjectService extends AbstractService {
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to list projects", e);
         }
-    }
-
-    private static URI getProjectsUri(final String userId) {
-        notEmpty(userId, "userId");
-        return LIST_PROJECTS_TEMPLATE.expand(userId);
-    }
-
-    private static URI getProjectsUri(final String userId, final PageRequest page) {
-        return page.getPageUri(new SpringMutableUri(getProjectsUri(userId)));
     }
 
     /**
@@ -249,6 +265,7 @@ public class ProjectService extends AbstractService {
 
     /**
      * Removes given project
+     *
      * @param project project to be removed
      * @throws com.gooddata.sdk.common.GoodDataException when project can't be deleted
      */
@@ -306,7 +323,7 @@ public class ProjectService extends AbstractService {
     /**
      * Validate project with given validations
      *
-     * @param project project to validate
+     * @param project     project to validate
      * @param validations validations to use
      * @return results of validation
      */
@@ -317,7 +334,7 @@ public class ProjectService extends AbstractService {
     /**
      * Validate project with given validations
      *
-     * @param project project to validate
+     * @param project     project to validate
      * @param validations validations to use
      * @return results of validation
      */
@@ -334,7 +351,7 @@ public class ProjectService extends AbstractService {
         return new PollResult<>(this,
                 // PollHandler able to poll on different URIs (by the Location header)
                 // poll class is Void because the object returned varies between invocations (even on the same URI)
-                new AbstractPollHandler<Void, ProjectValidationResults>(notNullState(task, "project validation task").getUri(),
+                new AbstractPollHandler<Void, ProjectValidationResults>(notNullState(Objects.requireNonNull(task), "project validation task").getUri(),
                         Void.class, ProjectValidationResults.class) {
 
                     @Override
@@ -402,23 +419,9 @@ public class ProjectService extends AbstractService {
         }
     }
 
-    private static URI getUsersUri(final Project project) {
-        notNull(project.getId(), "project.id");
-        return PROJECT_USERS_TEMPLATE.expand(project.getId());
-    }
-
-    private static URI getUsersUri(final Project project, final PageRequest page) {
-        return page.getPageUri(new SpringMutableUri(getUsersUri(project)));
-    }
-
-    private static URI getUserUri(final Project project, final Account account) {
-        notNull(account.getId(), "account.id");
-        return PROJECT_USER_TEMPLATE.expand(project.getId(), account.getId());
-    }
-
     /**
      * Get set of user role by given project.
-     *
+     * <p>
      * Note: This makes n+1 API calls to retrieve all role details.
      *
      * @param project project of roles
@@ -468,7 +471,8 @@ public class ProjectService extends AbstractService {
 
     /**
      * Send project invitations to users
-     * @param project target project
+     *
+     * @param project     target project
      * @param invitations invitations
      * @return created invitation
      */
@@ -511,10 +515,11 @@ public class ProjectService extends AbstractService {
         }
     }
 
-    /** Add user in to the project
+    /**
+     * Add user in to the project
      *
-     * @param project where to add user
-     * @param account to be added
+     * @param project   where to add user
+     * @param account   to be added
      * @param userRoles list of user roles
      * @return user added to the project
      * @throws ProjectUsersUpdateException in case of failure
@@ -539,8 +544,8 @@ public class ProjectService extends AbstractService {
      */
     private void validateRoleURIs(final Role[] userRoles) {
         final List<String> invalidRoles = new ArrayList<>();
-        for(Role role: userRoles) {
-            if(role.getUri() == null) {
+        for (Role role : userRoles) {
+            if (role.getUri() == null) {
                 invalidRoles.add(role.getIdentifier());
             }
         }
@@ -553,7 +558,7 @@ public class ProjectService extends AbstractService {
      * Update user in the project
      *
      * @param project in which to update user
-     * @param users to update
+     * @param users   to update
      * @throws ProjectUsersUpdateException in case of failure
      */
     public void updateUserInProject(final Project project, final User... users) {
@@ -570,7 +575,7 @@ public class ProjectService extends AbstractService {
         try {
             final ProjectUsersUpdateResult projectUsersUpdateResult = restTemplate.postForObject(usersUri, new Users(users), ProjectUsersUpdateResult.class);
 
-            if (! notNullState(projectUsersUpdateResult, "projectUsersUpdateResult").getFailed().isEmpty()) {
+            if (!notNullState(projectUsersUpdateResult, "projectUsersUpdateResult").getFailed().isEmpty()) {
                 throw new ProjectUsersUpdateException("Unable to update users: " + projectUsersUpdateResult.getFailed());
             }
         } catch (RestClientException e) {
@@ -581,12 +586,13 @@ public class ProjectService extends AbstractService {
     /**
      * Removes given account from a project without checking if really account is in project.
      * <p>
-     *     You can:
+     * You can:
      *     <ul>
      *         <li>Remove yourself from a project (leave the project). You cannot leave the project if you are the only admin in the project.</li>
      *         <li>Remove another user from a project. You need to have the <code>canSuspendUser</code> permission in this project.</li>
      *     </ul>
      * </p>
+     *
      * @param account account to be removed
      * @param project project from user will be removed
      * @throws com.gooddata.sdk.common.GoodDataException when account can't be removed

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -19,13 +19,13 @@ import static java.util.Arrays.asList;
  */
 public final class UriAttributeFilterElements implements AttributeFilterElements, Serializable {
 
-    private static final long serialVersionUID = -588170788038973574L;
     static final String NAME = "uris";
-
+    private static final long serialVersionUID = -588170788038973574L;
     private final List<String> uris;
 
     /**
      * Creates new instance of given attribute elements' uris.
+     *
      * @param uris elements' uris.
      */
     @JsonCreator
@@ -35,6 +35,7 @@ public final class UriAttributeFilterElements implements AttributeFilterElements
 
     /**
      * Creates new instance of given attribute elements' uris.
+     *
      * @param uris elements' uris.
      */
     public UriAttributeFilterElements(String... uris) {

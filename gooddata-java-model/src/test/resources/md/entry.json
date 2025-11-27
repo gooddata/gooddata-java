@@ -1,15 +1,15 @@
 {
-    "link": "/gdc/md/PROJECT_ID/obj/ENTRY_ID",
-    "title": "Entry title",
-    "summary": "Entry summary",
-    "category": "ENTRY_CATEGORY",
-    "author": "/gdc/account/profile/AUTHOR_USER_ID",
-    "contributor": "/gdc/account/profile/CONTRIBUTOR_USER_ID",
-    "deprecated": "1",
-    "identifier": "ID",
-    "locked": 1,
-    "unlisted": 0,
-    "tags": "TAG",
-    "created": "2014-04-11 13:45:54",
-    "updated": "2014-04-11 13:45:55"
+  "link": "/gdc/md/PROJECT_ID/obj/ENTRY_ID",
+  "title": "Entry title",
+  "summary": "Entry summary",
+  "category": "ENTRY_CATEGORY",
+  "author": "/gdc/account/profile/AUTHOR_USER_ID",
+  "contributor": "/gdc/account/profile/CONTRIBUTOR_USER_ID",
+  "deprecated": "1",
+  "identifier": "ID",
+  "locked": 1,
+  "unlisted": 0,
+  "tags": "TAG",
+  "created": "2014-04-11 13:45:54",
+  "updated": "2014-04-11 13:45:55"
 }

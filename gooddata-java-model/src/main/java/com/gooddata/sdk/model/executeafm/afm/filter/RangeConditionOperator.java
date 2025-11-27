@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -20,12 +20,6 @@ public enum RangeConditionOperator {
     BETWEEN,
     NOT_BETWEEN;
 
-    @JsonValue
-    @Override
-    public String toString() {
-        return name();
-    }
-
     @JsonCreator
     public static RangeConditionOperator of(String operator) {
         notNull(operator, "operator");
@@ -33,9 +27,15 @@ public enum RangeConditionOperator {
             return RangeConditionOperator.valueOf(operator);
         } catch (IllegalArgumentException e) {
             throw new UnsupportedOperationException(
-                format("Unknown value for range condition operator: \"%s\", supported values are: [%s]",
-                    operator, stream(RangeConditionOperator.values()).map(Enum::name).collect(joining(","))),
-                e);
+                    format("Unknown value for range condition operator: \"%s\", supported values are: [%s]",
+                            operator, stream(RangeConditionOperator.values()).map(Enum::name).collect(joining(","))),
+                    e);
         }
+    }
+
+    @JsonValue
+    @Override
+    public String toString() {
+        return name();
     }
 }

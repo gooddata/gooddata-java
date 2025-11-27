@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -10,25 +10,26 @@ import com.gooddata.http.client.LoginSSTRetrievalStrategy;
 import com.gooddata.http.client.SSTRetrievalStrategy;
 import com.gooddata.sdk.service.GoodDataEndpoint;
 import com.gooddata.sdk.service.GoodDataSettings;
-import org.apache.http.HttpHost;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.core5.http.HttpHost;
 
 import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * The default {@link com.gooddata.sdk.service.GoodDataRestProvider} used internally by {@link com.gooddata.sdk.service.GoodData}.
  * Provides configured single endpoint REST connection using standard GoodData login and password authentication.
- *
- * See https://help.gooddata.com/display/API/API+Reference#/reference/authentication/log-in
+ * <p>
+ * See <a href="https://help.gooddata.com/display/API/API+Reference#/reference/authentication/log-in">...</a>
  */
 public final class LoginPasswordGoodDataRestProvider extends SingleEndpointGoodDataRestProvider {
 
     /**
      * Creates new instance.
+     *
      * @param endpoint endpoint of GoodData API
      * @param settings settings
-     * @param login API user login
+     * @param login    API user login
      * @param password API user password
      */
     public LoginPasswordGoodDataRestProvider(final GoodDataEndpoint endpoint, final GoodDataSettings settings,
@@ -38,9 +39,10 @@ public final class LoginPasswordGoodDataRestProvider extends SingleEndpointGoodD
 
     /**
      * Creates http client using given builder and endpoint, authenticating by login and password.
-     * @param builder builder to build client from
+     *
+     * @param builder  builder to build client from
      * @param endpoint API endpoint to connect client to
-     * @param login login
+     * @param login    login
      * @param password password
      * @return configured http client
      */
@@ -53,7 +55,7 @@ public final class LoginPasswordGoodDataRestProvider extends SingleEndpointGoodD
 
         final HttpClient httpClient = builder.build();
         final SSTRetrievalStrategy strategy = new LoginSSTRetrievalStrategy(login, password);
-        final HttpHost httpHost = new HttpHost(endpoint.getHostname(), endpoint.getPort(), endpoint.getProtocol());
+        final HttpHost httpHost = new HttpHost(endpoint.getProtocol(), endpoint.getHostname(), endpoint.getPort());
         return new GoodDataHttpClient(httpClient, httpHost, strategy);
     }
 }

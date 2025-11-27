@@ -1,38 +1,38 @@
 {
-    "sort": {
-        "columns": [],
-        "rows": []
-    },
-    "columnWidths": [
+  "sort": {
+    "columns": [],
+    "rows": []
+  },
+  "columnWidths": [
+    {
+      "width": 343,
+      "locator": [
         {
-            "width": 343,
-            "locator": [
-                {
-                    "metricLocator": {
-                        "uri": "/gdc/md/PROJECT_ID/obj/1493"
-                    }
-                }
-            ]
+          "metricLocator": {
+            "uri": "/gdc/md/PROJECT_ID/obj/1493"
+          }
         }
-    ],
-    "columns": [
-        "metricGroup"
-    ],
-    "metrics": [
-        {
-            "alias": "metr",
-            "uri": "/gdc/md/PROJECT_ID/obj/METR_ID"
-        }
-    ],
-    "rows": [
-        {
-            "attribute": {
-                "alias": "attr",
-                "totals": [
-                    []
-                ],
-                "uri": "/gdc/md/PROJECT_ID/obj/ATTR_ID"
-            }
-        }
-    ]
+      ]
+    }
+  ],
+  "columns": [
+    "metricGroup"
+  ],
+  "metrics": [
+    {
+      "alias": "metr",
+      "uri": "/gdc/md/PROJECT_ID/obj/METR_ID"
+    }
+  ],
+  "rows": [
+    {
+      "attribute": {
+        "alias": "attr",
+        "totals": [
+          []
+        ],
+        "uri": "/gdc/md/PROJECT_ID/obj/ATTR_ID"
+      }
+    }
+  ]
 }

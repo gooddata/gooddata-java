@@ -1,13 +1,10 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 
 package com.gooddata.sdk.model.md.dashboard.filter;
-
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
-import static com.gooddata.sdk.common.util.Validate.notNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,6 +17,9 @@ import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Date filter located on analytical dashboard.
@@ -34,11 +34,8 @@ public class DashboardDateFilter implements DashboardFilter {
     public static final String RELATIVE_FILTER_TYPE = "relative";
     public static final String ABSOLUTE_FILTER_TYPE = "absolute";
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
-
-    private static final String ABSOLUTE_DATE_FILTER_GRANULARITY = "GDC.time.date";
-
     static final String NAME = "dateFilter";
-
+    private static final String ABSOLUTE_DATE_FILTER_GRANULARITY = "GDC.time.date";
     private final String from;
     private final String to;
     private final String granularity;
@@ -62,10 +59,10 @@ public class DashboardDateFilter implements DashboardFilter {
     /**
      * Creates relative date filter with the given interval and granularity.
      *
-     * @param from interval from
-     * @param to interval to
+     * @param from        interval from
+     * @param to          interval to
      * @param granularity granularity (e.g. {@code GDC.time.year})
-     * @param datasetUri date dataset URI (optional)
+     * @param datasetUri  date dataset URI (optional)
      * @return created filter
      */
     @JsonIgnore
@@ -81,8 +78,8 @@ public class DashboardDateFilter implements DashboardFilter {
     /**
      * Creates absolute date filter with the given interval
      *
-     * @param from interval from
-     * @param to interval to
+     * @param from       interval from
+     * @param to         interval to
      * @param datasetUri date dataset URI (optional)
      * @return created filter
      */

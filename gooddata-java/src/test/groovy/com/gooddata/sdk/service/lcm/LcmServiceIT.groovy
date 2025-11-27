@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -18,8 +18,10 @@ import static net.jadler.Jadler.onRequest
 
 class LcmServiceIT extends GoodDataITBase<LcmService> {
 
-    @Shared Account account = readObjectFromResource('/account/account.json', Account)
-    @Shared LcmEntityFilter filter = new LcmEntityFilter().withDataProduct('dp').withSegment('seg').withClient('c')
+    @Shared
+    Account account = readObjectFromResource('/account/account.json', Account)
+    @Shared
+    LcmEntityFilter filter = new LcmEntityFilter().withDataProduct('dp').withSegment('seg').withClient('c')
 
     @Unroll
     def "should list #type"() {
@@ -43,7 +45,6 @@ class LcmServiceIT extends GoodDataITBase<LcmService> {
         'all'      | { it.listLcmEntities(account) }         || 'limit=100'
         'filtered' | { it.listLcmEntities(account, filter) } || 'dataProduct=dp&segment=seg&client=c&limit=100'
     }
-
 
 
     @Override

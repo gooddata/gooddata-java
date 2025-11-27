@@ -1,12 +1,10 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 
 package com.gooddata.sdk.model.md.dashboard.filter;
-
-import static com.gooddata.sdk.common.util.Validate.notNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,15 +12,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.model.md.AbstractObj;
 import com.gooddata.sdk.model.md.Meta;
 import com.gooddata.sdk.model.md.Queryable;
 import com.gooddata.sdk.model.md.Updatable;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Class encapsulates list of filters on analytical dashboard.
@@ -33,10 +33,8 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DashboardFilterContext extends AbstractObj implements Updatable, Queryable {
 
-    private static final long serialVersionUID = -4572881756272497057L;
-
     static final String NAME = "filterContext";
-
+    private static final long serialVersionUID = -4572881756272497057L;
     private final Content content;
 
     /**

@@ -1,32 +1,32 @@
 {
-  "users" : [
+  "users": [
     {
-      "user" : {
-        "content" : {
-          "email" : "ateam+ads-testing@gooddata.com",
-          "firstname" : "ateam",
-          "userRoles" : [
+      "user": {
+        "content": {
+          "email": "ateam+ads-testing@gooddata.com",
+          "firstname": "ateam",
+          "userRoles": [
             "/gdc/projects/PROJECT_ID/roles/ROLE1"
           ],
-          "phonenumber" : "123456789",
-          "status" : "ENABLED",
-          "lastname" : "ads-testing",
-          "login" : "ateam+ads-testing@gooddata.com"
+          "phonenumber": "123456789",
+          "status": "ENABLED",
+          "lastname": "ads-testing",
+          "login": "ateam+ads-testing@gooddata.com"
         },
-        "links" : {
-          "roles" : "/gdc/projects/PROJECT_ID/users/USER_ID/roles",
-          "permissions" : "/gdc/projects/PROJECT_ID/users/USER_ID/permissions",
-          "self" : "/gdc/account/profile/USER_ID",
-          "invitations" : "/gdc/account/profile/USER_ID/invitations",
-          "projects" : "/gdc/account/profile/USER_ID/projects",
-          "projectRelUri" : "/gdc/projects/PROJECT_ID/users/USER_ID"
+        "links": {
+          "roles": "/gdc/projects/PROJECT_ID/users/USER_ID/roles",
+          "permissions": "/gdc/projects/PROJECT_ID/users/USER_ID/permissions",
+          "self": "/gdc/account/profile/USER_ID",
+          "invitations": "/gdc/account/profile/USER_ID/invitations",
+          "projects": "/gdc/account/profile/USER_ID/projects",
+          "projectRelUri": "/gdc/projects/PROJECT_ID/users/USER_ID"
         },
-        "meta" : {
-          "created" : "2015-03-30 11:36:09",
-          "updated" : "2015-03-30 12:14:41",
-          "author" : "/gdc/account/profile/PROFILE_ID",
-          "title" : "ateam ads-testing",
-          "contributor" : "/gdc/account/profile/USER_ID"
+        "meta": {
+          "created": "2015-03-30 11:36:09",
+          "updated": "2015-03-30 12:14:41",
+          "author": "/gdc/account/profile/PROFILE_ID",
+          "title": "ateam ads-testing",
+          "contributor": "/gdc/account/profile/USER_ID"
         }
       }
     }

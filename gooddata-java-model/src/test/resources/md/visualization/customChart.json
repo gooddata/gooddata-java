@@ -11,7 +11,8 @@
         {
           "localIdentifier": "view",
           "items": []
-        }, {
+        },
+        {
           "localIdentifier": "stack",
           "items": [
             {
@@ -42,7 +43,9 @@
       ],
       "filters": [],
       "properties": "{\"key\":\"value\"}",
-      "references": { "key": "value" }
+      "references": {
+        "key": "value"
+      }
     }
   }
 }

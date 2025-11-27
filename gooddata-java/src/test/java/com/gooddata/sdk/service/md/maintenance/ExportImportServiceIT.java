@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -27,12 +27,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ExportImportServiceIT extends AbstractGoodDataIT {
 
-    private Project project;
-
     private static final UriTemplate PARTIAL_EXPORT_TEMPLATE = new UriTemplate(PartialMdExport.URI);
     private static final UriTemplate PARTIAL_TOKEN_TEMPLATE = new UriTemplate(PartialMdExportToken.URI);
     private static final UriTemplate FULL_EXPORT_TEMPLATE = new UriTemplate(ExportProject.URI);
     private static final UriTemplate FULL_TOKEN_TEMPLATE = new UriTemplate(ExportProjectToken.URI);
+    private Project project;
 
     @BeforeClass
     public void setUp() throws Exception {

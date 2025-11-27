@@ -1,22 +1,28 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.notification;
+
+import com.gooddata.sdk.model.account.Account;
+import com.gooddata.sdk.model.notification.Channel;
+import com.gooddata.sdk.model.notification.EmailConfiguration;
+import com.gooddata.sdk.model.notification.MessageTemplate;
+import com.gooddata.sdk.model.notification.ProjectEvent;
+import com.gooddata.sdk.model.notification.Subscription;
+import com.gooddata.sdk.model.notification.TimerEvent;
+import com.gooddata.sdk.model.notification.TriggerCondition;
+import com.gooddata.sdk.service.AbstractGoodDataAT;
+import org.testng.annotations.Test;
+
+import java.util.Arrays;
 
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-
-import com.gooddata.sdk.service.AbstractGoodDataAT;
-import com.gooddata.sdk.model.account.Account;
-import com.gooddata.sdk.model.notification.*;
-import org.testng.annotations.Test;
-
-import java.util.Arrays;
 
 public class NotificationServiceAT extends AbstractGoodDataAT {
 

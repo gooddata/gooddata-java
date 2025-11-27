@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -67,7 +67,7 @@ public class HierarchicalConfigServiceTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void whenNullKeyThenGetProjectConfigItemShouldThrow() {
-        hierarchicalConfigService.getProjectConfigItem(project,null);
+        hierarchicalConfigService.getProjectConfigItem(project, null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -90,7 +90,7 @@ public class HierarchicalConfigServiceTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void whenNullConfigItemThenSetProjectConfigItemShouldThrow() {
-        hierarchicalConfigService.setProjectConfigItem(project,null);
+        hierarchicalConfigService.setProjectConfigItem(project, null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)

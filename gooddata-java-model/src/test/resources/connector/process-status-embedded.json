@@ -1,12 +1,12 @@
 {
-    "status": {
-        "code": "ERROR",
-        "detail": "GDC-INTERNAL-ERROR",
-        "description": null
-    },
-    "started": "2014-05-30T07:50:15.000Z",
-    "finished": "2014-05-30T07:50:50.000Z",
-    "links": {
-        "self": "/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/FINISHED_PROCESS_ID"
-    }
+  "status": {
+    "code": "ERROR",
+    "detail": "GDC-INTERNAL-ERROR",
+    "description": null
+  },
+  "started": "2014-05-30T07:50:15.000Z",
+  "finished": "2014-05-30T07:50:50.000Z",
+  "links": {
+    "self": "/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/FINISHED_PROCESS_ID"
+  }
 }

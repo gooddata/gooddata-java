@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -11,9 +11,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.common.util.BooleanDeserializer;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.gdc.UriResponse;
 
 import java.io.Serializable;
 
@@ -81,15 +81,15 @@ public class DataLoadingColumn extends AbstractObj implements Queryable {
     }
 
     public String getSynchronizeType() {
-        return content.getColumnSynchronize() !=  null ? content.getColumnSynchronize().getType() : null;
+        return content.getColumnSynchronize() != null ? content.getColumnSynchronize().getType() : null;
     }
 
     public Integer getSynchronizeLength() {
-        return content.getColumnSynchronize() !=  null ? content.getColumnSynchronize().getLength() : null;
+        return content.getColumnSynchronize() != null ? content.getColumnSynchronize().getLength() : null;
     }
 
     public Integer getSynchronizePrecision() {
-        return content.getColumnSynchronize() !=  null ? content.getColumnSynchronize().getPrecision() : null;
+        return content.getColumnSynchronize() != null ? content.getColumnSynchronize().getPrecision() : null;
     }
 
     @Override
@@ -110,10 +110,10 @@ public class DataLoadingColumn extends AbstractObj implements Queryable {
         private final ColumnSynchronize columnSynchronize;
 
         private Content(@JsonProperty("column") UriResponse columnUri, @JsonProperty("columnName") String columnName, @JsonProperty("type") String columnType,
-                @JsonProperty("length") Integer columnLength, @JsonProperty("precision") Integer columnPrecision,
-                @JsonProperty("columnUnique") @JsonDeserialize(using = BooleanDeserializer.class) boolean columnUnique,
-                @JsonProperty("columnNull") @JsonDeserialize(using = BooleanDeserializer.class) boolean columnNull,
-                @JsonProperty("columnSynchronize") ColumnSynchronize columnSynchronize) {
+                        @JsonProperty("length") Integer columnLength, @JsonProperty("precision") Integer columnPrecision,
+                        @JsonProperty("columnUnique") @JsonDeserialize(using = BooleanDeserializer.class) boolean columnUnique,
+                        @JsonProperty("columnNull") @JsonDeserialize(using = BooleanDeserializer.class) boolean columnNull,
+                        @JsonProperty("columnSynchronize") ColumnSynchronize columnSynchronize) {
             this.columnUri = columnUri;
             this.columnName = columnName;
             this.columnType = columnType;
@@ -169,7 +169,7 @@ public class DataLoadingColumn extends AbstractObj implements Queryable {
 
         @JsonCreator
         private ColumnSynchronize(@JsonProperty("columnType") String type, @JsonProperty("columnLength") Integer length,
-                @JsonProperty("columnPrecision") Integer precision) {
+                                  @JsonProperty("columnPrecision") Integer precision) {
             this.type = type;
             this.length = length;
             this.precision = precision;

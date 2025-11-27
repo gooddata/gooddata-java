@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -25,6 +25,7 @@ public interface FilterItem extends CompatibilityFilter, ExtendedFilter {
 
     /**
      * Get qualifier of {@link Obj} to which the filter relates.
+     *
      * @return filtered object qualifier
      */
     @JsonIgnore
@@ -32,6 +33,7 @@ public interface FilterItem extends CompatibilityFilter, ExtendedFilter {
 
     /**
      * Copy itself using given uri qualifier
+     *
      * @param qualifier qualifier to use for the new filter
      * @return self copy with given qualifier
      */

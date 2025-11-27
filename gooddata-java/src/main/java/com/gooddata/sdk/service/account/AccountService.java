@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -13,7 +13,6 @@ import com.gooddata.sdk.model.account.SeparatorSettings;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.sdk.service.GoodDataSettings;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.client.RestClientException;
@@ -37,8 +36,9 @@ public class AccountService extends AbstractService {
 
     /**
      * Constructs service for GoodData account management.
+     *
      * @param restTemplate RESTful HTTP Spring template
-     * @param settings settings
+     * @param settings     settings
      */
     public AccountService(final RestTemplate restTemplate, final GoodDataSettings settings) {
         super(restTemplate, settings);
@@ -71,7 +71,8 @@ public class AccountService extends AbstractService {
     /**
      * Creates new account in given organization (domain).
      * Only domain admin is allowed create new accounts! This means rest request has to authorized as domain admin.
-     * @param account to create
+     *
+     * @param account          to create
      * @param organizationName (domain) in which account should be created
      * @return new account
      * @throws GoodDataException when account can't be created
@@ -90,9 +91,10 @@ public class AccountService extends AbstractService {
 
     /**
      * Delete given account
+     *
      * @param account to remove
      * @throws AccountNotFoundException when given account wasn't found
-     * @throws GoodDataException when account can't be removed for other reason
+     * @throws GoodDataException        when account can't be removed for other reason
      */
     public void removeAccount(final Account account) {
         notNull(account, "account");
@@ -113,10 +115,11 @@ public class AccountService extends AbstractService {
 
     /**
      * Get account for given account id
+     *
      * @param id to search for
      * @return account for id
      * @throws AccountNotFoundException when account for given id can't be found
-     * @throws GoodDataException when different error occurs
+     * @throws GoodDataException        when different error occurs
      */
     public Account getAccountById(final String id) {
         notNull(id, "id");
@@ -136,23 +139,24 @@ public class AccountService extends AbstractService {
     /**
      * Get account by given login.
      * Only domain admin is allowed to search users by login.
-     * @param email used as login
+     *
+     * @param email            used as login
      * @param organizationName (domain) in which account is present
      * @return account found by given login
      * @throws AccountNotFoundException when given account wasn't found
-     * @throws GoodDataException when different error occurs
+     * @throws GoodDataException        when different error occurs
      */
     public Account getAccountByLogin(final String email, final String organizationName) {
         notNull(email, "email");
         notNull(organizationName, "organizationName");
         try {
             final Accounts accounts = restTemplate.getForObject(
-                Account.ACCOUNT_BY_EMAIL_URI, Accounts.class, organizationName, email);
+                    Account.ACCOUNT_BY_EMAIL_URI, Accounts.class, organizationName, email);
             if (accounts != null && !accounts.getPageItems().isEmpty()) {
                 return accounts.getPageItems().get(0);
             }
             throw new AccountNotFoundException("User was not found by email " +
-                email + " in organization " + organizationName, Account.ACCOUNT_BY_EMAIL_URI);
+                    email + " in organization " + organizationName, Account.ACCOUNT_BY_EMAIL_URI);
         } catch (RestClientException e) {
             throw new GoodDataException("Unable to get account", e);
         }
@@ -160,10 +164,11 @@ public class AccountService extends AbstractService {
 
     /**
      * Get account for given account id
+     *
      * @param uri to search for
      * @return account for uri
      * @throws AccountNotFoundException when account for given uri can't be found
-     * @throws GoodDataException when different error occurs
+     * @throws GoodDataException        when different error occurs
      */
     public Account getAccountByUri(final String uri) {
         notEmpty(uri, "uri");
@@ -172,6 +177,7 @@ public class AccountService extends AbstractService {
 
     /**
      * Updates account
+     *
      * @param account to be updated
      * @throws AccountNotFoundException when account for given uri can't be found
      */

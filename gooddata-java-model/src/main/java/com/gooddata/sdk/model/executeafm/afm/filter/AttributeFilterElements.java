@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -38,6 +38,12 @@ public interface AttributeFilterElements {
 
     class Serializer extends JsonSerializer<AttributeFilterElements> {
 
+        private static void serializeWrapped(String name, AttributeFilterElements elements, JsonGenerator jg, SerializerProvider serializerProvider) throws IOException {
+            jg.writeStartObject();
+            serializerProvider.defaultSerializeField(name, elements.getElements(), jg);
+            jg.writeEndObject();
+        }
+
         @Override
         public void serialize(AttributeFilterElements elements, JsonGenerator jg, SerializerProvider serializerProvider) throws IOException {
             if (elements instanceof UriAttributeFilterElements) {
@@ -48,15 +54,13 @@ public interface AttributeFilterElements {
                 serializerProvider.defaultSerializeValue(elements.getElements(), jg);
             }
         }
-
-        private static void serializeWrapped(String name, AttributeFilterElements elements, JsonGenerator jg, SerializerProvider serializerProvider) throws IOException {
-            jg.writeStartObject();
-            serializerProvider.defaultSerializeField(name, elements.getElements(), jg);
-            jg.writeEndObject();
-        }
     }
 
     class Deserializer extends JsonDeserializer<AttributeFilterElements> {
+
+        private static List<String> nodeToElements(JsonNode node) {
+            return StreamSupport.stream(node.spliterator(), false).map(JsonNode::textValue).collect(Collectors.toList());
+        }
 
         @Override
         public AttributeFilterElements deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -77,10 +81,6 @@ public interface AttributeFilterElements {
                 default:
                     throw from(jp, "Unknown value of type: " + jp.currentToken());
             }
-        }
-
-        private static List<String> nodeToElements(JsonNode node) {
-            return StreamSupport.stream(node.spliterator(), false).map(JsonNode::textValue).collect(Collectors.toList());
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -22,7 +22,7 @@ import java.util.function.Supplier;
  *     <li>applying {@link GoodDataSettings} - especially user agent, headers and connection settings</li>
  *     <li>configuring proper error handler (i.e. {@link com.gooddata.sdk.service.util.ResponseErrorHandler})</li>
  * </ul>
- *
+ * <p>
  * The default implementation (internally used by {@link GoodData} is {@link com.gooddata.sdk.service.httpcomponents.LoginPasswordGoodDataRestProvider}.
  */
 public interface GoodDataRestProvider {

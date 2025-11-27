@@ -1,24 +1,13 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.model.executeafm
 
-import com.gooddata.sdk.model.executeafm.afm.Afm
-import com.gooddata.sdk.model.executeafm.afm.AttributeItem
+import com.gooddata.sdk.model.executeafm.afm.*
 import com.gooddata.sdk.model.executeafm.afm.filter.ExpressionFilter
-import com.gooddata.sdk.model.executeafm.afm.MeasureItem
-import com.gooddata.sdk.model.executeafm.afm.NativeTotalItem
-import com.gooddata.sdk.model.executeafm.afm.SimpleMeasureDefinition
-import com.gooddata.sdk.model.executeafm.resultspec.AttributeLocatorItem
-import com.gooddata.sdk.model.executeafm.resultspec.AttributeSortItem
-import com.gooddata.sdk.model.executeafm.resultspec.Dimension
-import com.gooddata.sdk.model.executeafm.resultspec.Direction
-import com.gooddata.sdk.model.executeafm.resultspec.MeasureLocatorItem
-import com.gooddata.sdk.model.executeafm.resultspec.MeasureSortItem
-import com.gooddata.sdk.model.executeafm.resultspec.ResultSpec
-import com.gooddata.sdk.model.executeafm.resultspec.TotalItem
+import com.gooddata.sdk.model.executeafm.resultspec.*
 import com.gooddata.sdk.model.md.report.Total
 import spock.lang.Specification
 

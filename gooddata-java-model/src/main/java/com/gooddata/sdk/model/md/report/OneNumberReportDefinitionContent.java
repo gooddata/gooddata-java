@@ -1,14 +1,14 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.model.md.report;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.gooddata.sdk.model.md.Meta;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.sdk.model.md.Meta;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -21,9 +21,8 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OneNumberReportDefinitionContent extends ReportDefinitionContent {
 
-    private static final long serialVersionUID = 5479509323034916986L;
     public static final String FORMAT = "oneNumber";
-
+    private static final long serialVersionUID = 5479509323034916986L;
     private final OneNumberVisualization oneNumber;
 
     @JsonCreator
@@ -38,6 +37,17 @@ public class OneNumberReportDefinitionContent extends ReportDefinitionContent {
     OneNumberReportDefinitionContent(Grid grid, String description, Collection<Filter> filters) {
         super(FORMAT, grid, filters);
         oneNumber = new OneNumberVisualization(new OneNumberLabels(description));
+    }
+
+    public static ReportDefinition create(String title, List<GridElement> columns, List<GridElement> rows,
+                                          List<MetricElement> metrics) {
+        return create(title, columns, rows, metrics, Collections.emptyList());
+    }
+
+    public static ReportDefinition create(String title, List<GridElement> columns, List<GridElement> rows,
+                                          List<MetricElement> metrics, Collection<Filter> filters) {
+        return new ReportDefinition(new Meta(title), new OneNumberReportDefinitionContent(
+                new Grid(columns, rows, metrics), title, filters));
     }
 
     public String getFormat() {
@@ -78,16 +88,5 @@ public class OneNumberReportDefinitionContent extends ReportDefinitionContent {
         public String getDescription() {
             return description;
         }
-    }
-
-    public static ReportDefinition create(String title, List<GridElement> columns, List<GridElement> rows,
-                                          List<MetricElement> metrics) {
-        return create(title, columns, rows, metrics, Collections.emptyList());
-    }
-
-    public static ReportDefinition create(String title, List<GridElement> columns, List<GridElement> rows,
-                                          List<MetricElement> metrics, Collection<Filter> filters) {
-        return new ReportDefinition(new Meta(title), new OneNumberReportDefinitionContent(
-                new Grid(columns, rows, metrics), title, filters));
     }
 }

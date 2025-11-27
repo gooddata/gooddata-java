@@ -1,22 +1,18 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service;
-
-import static com.gooddata.sdk.common.util.Validate.notNull;
-import static java.lang.String.format;
-import static org.springframework.http.HttpMethod.GET;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.common.GoodDataRestException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
@@ -25,7 +21,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
+import static com.gooddata.sdk.common.util.Validate.notNull;
+import static java.lang.String.format;
+import static org.springframework.http.HttpMethod.GET;
 
 /**
  * Parent for GoodData services providing helpers for REST API calls and polling.
@@ -33,11 +34,8 @@ import java.util.concurrent.TimeUnit;
 public abstract class AbstractService {
 
     protected final RestTemplate restTemplate;
-
-    private final GoodDataSettings settings;
-
     protected final ObjectMapper mapper = new ObjectMapper();
-
+    private final GoodDataSettings settings;
     private final ResponseExtractor<ClientHttpResponse> reusableResponseExtractor = ReusableClientHttpResponse::new;
 
     /**
@@ -45,14 +43,14 @@ public abstract class AbstractService {
      * this abstract one.
      *
      * @param restTemplate RESTful HTTP Spring template
-     * @param settings settings
+     * @param settings     settings
      */
     public AbstractService(final RestTemplate restTemplate, final GoodDataSettings settings) {
         this.restTemplate = notNull(restTemplate, "restTemplate");
         this.settings = notNull(settings, "settings");
     }
 
-    final <R> R poll(final PollHandler<?,R> handler, long timeout, final TimeUnit unit) {
+    final <R> R poll(final PollHandler<?, R> handler, long timeout, final TimeUnit unit) {
         notNull(handler, "handler");
         final long start = System.currentTimeMillis();
         while (true) {
@@ -72,7 +70,7 @@ public abstract class AbstractService {
         }
     }
 
-    final <P> boolean pollOnce(final PollHandler<P,?> handler) {
+    final <P> boolean pollOnce(final PollHandler<P, ?> handler) {
         notNull(handler, "handler");
         final ClientHttpResponse response;
         try {
@@ -86,7 +84,7 @@ public abstract class AbstractService {
             if (handler.isFinished(response)) {
                 final P data = extractData(response, handler.getPollClass());
                 handler.handlePollResult(data);
-            } else if (HttpStatus.Series.CLIENT_ERROR.equals(response.getStatusCode().series())) {
+            } else if (HttpStatus.Series.CLIENT_ERROR.equals(HttpStatus.Series.resolve(response.getStatusCode().value()))) {
                 throw new GoodDataException(
                         format("Polling returned client error HTTP status %s", response.getStatusCode().value())
                 );
@@ -108,20 +106,18 @@ public abstract class AbstractService {
 
     private static class ReusableClientHttpResponse implements ClientHttpResponse {
 
-        private byte[] body;
-        private final HttpStatus statusCode;
+        private final HttpStatusCode statusCode;
         private final int rawStatusCode;
         private final String statusText;
         private final HttpHeaders headers;
+        private final byte[] body;
 
         public ReusableClientHttpResponse(ClientHttpResponse response) {
             try {
                 final InputStream bodyStream = response.getBody();
-                if (bodyStream != null) {
-                    body = FileCopyUtils.copyToByteArray(bodyStream);
-                }
+                body = FileCopyUtils.copyToByteArray(bodyStream);
                 statusCode = response.getStatusCode();
-                rawStatusCode = response.getRawStatusCode();
+                rawStatusCode = response.getStatusCode().value();
                 statusText = response.getStatusText();
                 headers = response.getHeaders();
             } catch (IOException e) {
@@ -135,7 +131,7 @@ public abstract class AbstractService {
 
         @Override
         public HttpStatus getStatusCode() {
-            return statusCode;
+            return Objects.requireNonNull(HttpStatus.resolve(statusCode.value()));
         }
 
         @Override
@@ -155,7 +151,7 @@ public abstract class AbstractService {
 
         @Override
         public InputStream getBody() {
-            return body != null ? new ByteArrayInputStream(body) : StreamUtils.emptyInput();
+            return body != null ? new ByteArrayInputStream(body) : InputStream.nullInputStream();
         }
 
         @Override

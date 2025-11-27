@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -8,9 +8,9 @@ package com.gooddata.sdk.model.md;
 import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -39,7 +39,7 @@ public class DisplayFormTest {
     @Test
     public void testSerialization() throws Exception {
         final DisplayForm displayForm = new DisplayForm(new Meta("Person Name"),
-                new DisplayForm.Content(FORM_OF, EXPRESSION,  LDM_EXPRESSION, null), new DisplayForm.Links(ELEMENTS_LINK));
+                new DisplayForm.Content(FORM_OF, EXPRESSION, LDM_EXPRESSION, null), new DisplayForm.Links(ELEMENTS_LINK));
 
         assertThat(displayForm, jsonEquals(resource("md/displayForm-input.json")));
     }
@@ -47,7 +47,7 @@ public class DisplayFormTest {
     @Test
     public void testToStringFormat() {
         final DisplayForm displayForm = new DisplayForm(new Meta("Person Name"),
-                new DisplayForm.Content(FORM_OF, EXPRESSION,  LDM_EXPRESSION, null), new DisplayForm.Links(ELEMENTS_LINK));
+                new DisplayForm.Content(FORM_OF, EXPRESSION, LDM_EXPRESSION, null), new DisplayForm.Links(ELEMENTS_LINK));
 
         assertThat(displayForm.toString(), matchesPattern(DisplayForm.class.getSimpleName() + "\\[.*\\]"));
     }
@@ -55,7 +55,7 @@ public class DisplayFormTest {
     @Test
     public void testSerializable() throws Exception {
         final DisplayForm displayForm = new DisplayForm(new Meta("Person Name"),
-                new DisplayForm.Content(FORM_OF, EXPRESSION,  LDM_EXPRESSION, null), new DisplayForm.Links(ELEMENTS_LINK));
+                new DisplayForm.Content(FORM_OF, EXPRESSION, LDM_EXPRESSION, null), new DisplayForm.Links(ELEMENTS_LINK));
         final DisplayForm deserialized = SerializationUtils.roundtrip(displayForm);
 
         assertThat(deserialized, jsonEquals(displayForm));

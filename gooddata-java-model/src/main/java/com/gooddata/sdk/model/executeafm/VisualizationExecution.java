@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -40,14 +40,14 @@ public class VisualizationExecution {
     }
 
     /**
-     * @param reference reference uri to visualization object metadata
-     * @param filters additional filters which should be merged
+     * @param reference  reference uri to visualization object metadata
+     * @param filters    additional filters which should be merged
      * @param resultSpec result specification of executed viz. object
      */
     @JsonCreator
     VisualizationExecution(@JsonProperty("reference") final String reference,
-            @JsonProperty("filters") final List<CompatibilityFilter> filters,
-            @JsonProperty("resultSpec") final ResultSpec resultSpec) {
+                           @JsonProperty("filters") final List<CompatibilityFilter> filters,
+                           @JsonProperty("resultSpec") final ResultSpec resultSpec) {
         this.reference = reference;
         this.resultSpec = resultSpec;
         this.filters = filters;
@@ -65,13 +65,13 @@ public class VisualizationExecution {
     }
 
     /**
-     * Sets the result specification and returns this instance
+     * Sets additional filters to this execution.
      *
-     * @param resultSpec result specification of executed viz. object
+     * @param filters additional filters
      * @return updated execution
      */
-    public VisualizationExecution setResultSpec(final ResultSpec resultSpec) {
-        this.resultSpec = resultSpec;
+    public VisualizationExecution setFilters(final List<CompatibilityFilter> filters) {
+        this.filters = filters;
         return this;
     }
 
@@ -83,13 +83,13 @@ public class VisualizationExecution {
     }
 
     /**
-     * Sets additional filters to this execution.
+     * Sets the result specification and returns this instance
      *
-     * @param filters additional filters
+     * @param resultSpec result specification of executed viz. object
      * @return updated execution
      */
-    public VisualizationExecution setFilters(final List<CompatibilityFilter> filters) {
-        this.filters = filters;
+    public VisualizationExecution setResultSpec(final ResultSpec resultSpec) {
+        this.resultSpec = resultSpec;
         return this;
     }
 }

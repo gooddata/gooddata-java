@@ -1,22 +1,22 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.auditevent;
 
-import com.gooddata.sdk.service.AbstractGoodDataIT;
 import com.gooddata.sdk.common.GoodDataRestException;
-import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.common.collections.Page;
-import com.gooddata.sdk.service.account.AccountServiceIT;
+import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.auditevent.AuditEvent;
+import com.gooddata.sdk.service.AbstractGoodDataIT;
+import com.gooddata.sdk.service.account.AccountServiceIT;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
-import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
-import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
+import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -36,7 +36,7 @@ public class AuditEventServiceIT extends AbstractGoodDataIT {
     public void shouldThrowOnForbiddenDomain() {
         onRequest()
                 .havingPathEqualTo("/gdc/domains/DOMAIN/auditEvents")
-            .respond()
+                .respond()
                 .withStatus(SC_UNAUTHORIZED)
         ;
 
@@ -47,7 +47,7 @@ public class AuditEventServiceIT extends AbstractGoodDataIT {
     public void shouldThrowOnForbiddenAccount() {
         onRequest()
                 .havingPathEqualTo("/gdc/account/profile/ID/auditEvents")
-            .respond()
+                .respond()
                 .withStatus(SC_UNAUTHORIZED)
         ;
         final Account account = mock(Account.class);
@@ -60,7 +60,7 @@ public class AuditEventServiceIT extends AbstractGoodDataIT {
     public void shouldThrowOnUnknownError() {
         onRequest()
                 .havingPathEqualTo("/gdc/account/profile/ID/auditEvents")
-            .respond()
+                .respond()
                 .withStatus(SC_BAD_REQUEST)
         ;
         final Account account = mock(Account.class);
@@ -73,13 +73,13 @@ public class AuditEventServiceIT extends AbstractGoodDataIT {
     public void shouldReturnAuditEvents() throws Exception {
         onRequest()
                 .havingPathEqualTo("/gdc/domains/DOMAIN/auditEvents")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/auditevents/auditEvents.json"))
         ;
         onRequest()
                 .havingPathEqualTo("/gdc/domains/DOMAIN/auditEvents")
                 .havingParameterEqualTo("offset", "456")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/auditevents/auditEventsPage2.json"))
         ;
 
@@ -95,13 +95,13 @@ public class AuditEventServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(AccountServiceIT.CURRENT_ACCOUNT_URI)
-            .respond()
+                .respond()
                 .withBody(readFromResource(AccountServiceIT.ACCOUNT))
                 .withStatus(200);
 
         onRequest()
                 .havingPathEqualTo("/gdc/account/profile/ID/auditEvents")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/auditevents/auditEvents.json"))
         ;
 

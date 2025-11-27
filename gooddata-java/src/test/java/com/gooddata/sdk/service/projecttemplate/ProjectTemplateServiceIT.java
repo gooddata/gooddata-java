@@ -1,14 +1,14 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.projecttemplate;
 
-import com.gooddata.sdk.service.AbstractGoodDataIT;
 import com.gooddata.sdk.model.dataset.DatasetManifest;
 import com.gooddata.sdk.model.projecttemplate.Template;
 import com.gooddata.sdk.model.projecttemplate.Templates;
+import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -27,6 +27,15 @@ public class ProjectTemplateServiceIT extends AbstractGoodDataIT {
     private static final String TEMPLATE_URI = "/projectTemplates/ZendeskAnalytics/20";
 
     private Template template;
+
+    private static void onTemplateRequest() {
+        onRequest()
+                .havingMethodEqualTo("GET")
+                .havingPathEqualTo(TEMPLATE_URI)
+                .respond()
+                .withBody(readFromResource("/projecttemplate/template.json"))
+                .withStatus(200);
+    }
 
     @BeforeMethod
     public void setUp() throws Exception {
@@ -69,14 +78,5 @@ public class ProjectTemplateServiceIT extends AbstractGoodDataIT {
         final Collection<DatasetManifest> manifests = gd.getProjectTemplateService().getManifests(template);
         assertThat(manifests, hasSize(1));
         assertThat(manifests.iterator().next().getDataSet(), is("dataset.person"));
-    }
-
-    private static void onTemplateRequest() {
-        onRequest()
-                .havingMethodEqualTo("GET")
-                .havingPathEqualTo(TEMPLATE_URI)
-                .respond()
-                .withBody(readFromResource("/projecttemplate/template.json"))
-                .withStatus(200);
     }
 }

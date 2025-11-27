@@ -1,11 +1,11 @@
 {
-    "metric": {
-        "content": {
-            "expression": "SELECT SUM([/gdc/md/PROJECT_ID/obj/EXPR_ID])",
-            "format": "FORMAT"
-        },
-        "meta": {
-            "title": "Person Name"
-        }
+  "metric": {
+    "content": {
+      "expression": "SELECT SUM([/gdc/md/PROJECT_ID/obj/EXPR_ID])",
+      "format": "FORMAT"
+    },
+    "meta": {
+      "title": "Person Name"
     }
+  }
 }

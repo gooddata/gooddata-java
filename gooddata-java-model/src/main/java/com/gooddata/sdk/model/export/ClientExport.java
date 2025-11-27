@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -32,9 +32,9 @@ public class ClientExport {
                         final String tabId) {
         this(notEmpty(goodDataEndpointUri, "goodDataEndpointUri") +
                         String.format(DASHBOARD_EXPORT_URI,
-                                        notNull(projectUri, "projectUri"),
-                                        notNull(dashboardUri, "dashboardUri"),
-                                        notNull(tabId, "tabId")),
+                                notNull(projectUri, "projectUri"),
+                                notNull(dashboardUri, "dashboardUri"),
+                                notNull(tabId, "tabId")),
                 "export.pdf");
     }
 

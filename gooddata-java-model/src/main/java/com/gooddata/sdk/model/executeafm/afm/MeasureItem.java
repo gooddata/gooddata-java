@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -63,6 +63,7 @@ public class MeasureItem implements LocallyIdentifiable, Serializable {
 
     /**
      * Sets measure alias (will be used as header in result)
+     *
      * @param alias alias
      */
     public void setAlias(final String alias) {
@@ -78,6 +79,7 @@ public class MeasureItem implements LocallyIdentifiable, Serializable {
 
     /**
      * Sets measure format (used to format measure values in result)
+     *
      * @param format
      */
     public void setFormat(final String format) {
@@ -103,7 +105,7 @@ public class MeasureItem implements LocallyIdentifiable, Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         MeasureItem that = (MeasureItem) o;
         return Objects.equals(definition, that.definition) &&
-               Objects.equals(localIdentifier, that.localIdentifier);
+                Objects.equals(localIdentifier, that.localIdentifier);
     }
 
     @Override

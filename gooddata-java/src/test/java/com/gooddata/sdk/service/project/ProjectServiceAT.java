@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -17,7 +17,6 @@ import com.gooddata.sdk.model.project.Role;
 import com.gooddata.sdk.model.project.User;
 import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.service.account.AccountService;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.core.IsIterableContaining;
 import org.testng.annotations.AfterClass;
@@ -31,8 +30,6 @@ import java.util.UUID;
 
 import static com.gooddata.sdk.model.project.ProjectEnvironment.TESTING;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -46,12 +43,10 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
 
     private static final String LOGIN1 = "john.smith." + UUID.randomUUID() + "@gooddata.com";
     private static final String LOGIN2 = "john.doe." + UUID.randomUUID() + "@gooddata.com";
-
+    private static final String DISABLED_STATUS = "DISABLED";
     private User user;
     private Account account1;
     private Account account2;
-
-    private static final String DISABLED_STATUS = "DISABLED";
 
     public ProjectServiceAT() {
         projectToken = getProperty("projectToken");
@@ -206,7 +201,8 @@ public class ProjectServiceAT extends AbstractGoodDataAT {
             if (account2 != null) {
                 gd.getAccountService().removeAccount(account2);
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
 }

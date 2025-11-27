@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -7,9 +7,9 @@ package com.gooddata.sdk.model.connector;
 
 import org.testng.annotations.Test;
 
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static com.gooddata.sdk.model.connector.ConnectorType.ZENDESK4;
 import static com.gooddata.sdk.model.connector.Zendesk4Settings.Zendesk4Type.plus;
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;

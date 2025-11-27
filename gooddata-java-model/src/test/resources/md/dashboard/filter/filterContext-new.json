@@ -1,28 +1,28 @@
 {
-  "filterContext" : {
-    "content" : {
-      "filters" : [
+  "filterContext": {
+    "content": {
+      "filters": [
         {
-          "dateFilter" : {
-            "from" : "-1",
-            "granularity" : "GDC.time.year",
-            "to" : "-1",
-            "type" : "relative"
+          "dateFilter": {
+            "from": "-1",
+            "granularity": "GDC.time.year",
+            "to": "-1",
+            "type": "relative"
           }
         },
         {
-          "attributeFilter" : {
-            "attributeElements" : [
+          "attributeFilter": {
+            "attributeElements": [
               "/elem/1"
             ],
-            "displayForm" : "/df/1",
-            "negativeSelection" : false
+            "displayForm": "/df/1",
+            "negativeSelection": false
           }
         }
       ]
     },
-    "meta" : {
-      "title" : "filterContext"
+    "meta": {
+      "title": "filterContext"
     }
   }
 }

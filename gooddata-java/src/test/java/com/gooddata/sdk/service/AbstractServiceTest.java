@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -32,7 +32,8 @@ public class AbstractServiceTest {
     @BeforeMethod
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this).close();
-        service = new AbstractService(restTemplate, new GoodDataSettings()) {};
+        service = new AbstractService(restTemplate, new GoodDataSettings()) {
+        };
         final ClientHttpResponse response = mock(ClientHttpResponse.class);
         when(response.getStatusCode()).thenReturn(HttpStatus.OK);
         when(restTemplate.execute(any(), any(HttpMethod.class), any(), any(ResponseExtractor.class)))

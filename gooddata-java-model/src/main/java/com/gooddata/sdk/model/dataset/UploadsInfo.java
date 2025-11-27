@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -9,8 +9,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gooddata.sdk.model.md.Meta;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.md.Meta;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -70,7 +70,7 @@ public class UploadsInfo {
      *      <li>uri to all uploads for the given dataset</li>
      *      <li>last upload</li>
      * </ul>
-     *
+     * <p>
      * Deserialization only.
      */
     @JsonIgnoreProperties(ignoreUnknown = true)

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -35,11 +35,15 @@ public class AuditEvent {
 
     private final String userLogin;
 
-    /** the time the event occurred */
+    /**
+     * the time the event occurred
+     */
     @ISOZonedDateTime
     private final ZonedDateTime occurred;
 
-    /** the time event was recorded by audit system */
+    /**
+     * the time event was recorded by audit system
+     */
     @ISOZonedDateTime
     private final ZonedDateTime recorded;
 

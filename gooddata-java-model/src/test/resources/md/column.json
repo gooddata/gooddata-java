@@ -1,23 +1,23 @@
 {
-  "column" : {
-    "content" : {
-      "columnType" : "pk",
-      "table" : "/gdc/md/PROJECT_ID/obj/9538",
-      "columnDBName" : "id"
+  "column": {
+    "content": {
+      "columnType": "pk",
+      "table": "/gdc/md/PROJECT_ID/obj/9538",
+      "columnDBName": "id"
     },
-    "meta" : {
-      "author" : "/gdc/account/profile/PROFILE_ID",
-      "uri" : "/gdc/md/PROJECT_ID/obj/9539",
-      "tags" : "",
-      "created" : "2012-08-10 13:06:43",
-      "identifier" : "col.d_zendesktickets_vehicleview.id",
-      "deprecated" : "0",
-      "summary" : "",
-      "isProduction" : 1,
-      "title" : "col.d_zendesktickets_vehicleview.id",
-      "category" : "column",
-      "updated" : "2012-08-10 13:06:43",
-      "contributor" : "/gdc/account/profile/PROFILE_ID"
+    "meta": {
+      "author": "/gdc/account/profile/PROFILE_ID",
+      "uri": "/gdc/md/PROJECT_ID/obj/9539",
+      "tags": "",
+      "created": "2012-08-10 13:06:43",
+      "identifier": "col.d_zendesktickets_vehicleview.id",
+      "deprecated": "0",
+      "summary": "",
+      "isProduction": 1,
+      "title": "col.d_zendesktickets_vehicleview.id",
+      "category": "column",
+      "updated": "2012-08-10 13:06:43",
+      "contributor": "/gdc/account/profile/PROFILE_ID"
     }
   }
 }

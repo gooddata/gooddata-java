@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -18,7 +18,7 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Project event.
- *
+ * <p>
  * Serialization only.
  */
 @JsonTypeName("projectEvent")
@@ -43,7 +43,8 @@ public class ProjectEvent {
 
     /**
      * Set the parameter with given key and value, overwriting the preceding value of the same key (if any).
-     * @param key parameter key
+     *
+     * @param key   parameter key
      * @param value parameter value
      */
     public void setParameter(final String key, final String value) {

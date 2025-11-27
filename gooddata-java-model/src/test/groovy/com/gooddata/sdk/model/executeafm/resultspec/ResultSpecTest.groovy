@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -76,8 +76,8 @@ class ResultSpecTest extends Specification {
     def "should add items"() {
         when:
         def resultSpec = new ResultSpec()
-            .addDimension(new Dimension([]))
-            .addSort(new MeasureSortItem(Direction.ASC))
+                .addDimension(new Dimension([]))
+                .addSort(new MeasureSortItem(Direction.ASC))
 
         then:
         with(resultSpec) {

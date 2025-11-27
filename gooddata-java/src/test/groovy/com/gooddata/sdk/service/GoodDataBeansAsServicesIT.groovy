@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -12,7 +12,8 @@ import spock.lang.Unroll
 
 class GoodDataBeansAsServicesIT extends Specification {
 
-    @Shared ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext('spring/gd-annotationConfig.xml')
+    @Shared
+    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext('spring/gd-annotationConfig.xml')
 
     @Unroll
     def "should register service of type #clazzName from xml using annotation config"() {
@@ -21,8 +22,8 @@ class GoodDataBeansAsServicesIT extends Specification {
 
         where:
         clazz << GoodData.class.getDeclaredMethods()
-                .collect { m -> m.returnType}
-                .findAll {rt -> rt.name.endsWith('Service')}
+                .collect { m -> m.returnType }
+                .findAll { rt -> rt.name.endsWith('Service') }
         clazzName = clazz.simpleName
     }
 }

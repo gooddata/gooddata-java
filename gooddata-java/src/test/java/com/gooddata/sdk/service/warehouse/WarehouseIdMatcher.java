@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -17,13 +17,13 @@ class WarehouseIdMatcher extends TypeSafeMatcher<Warehouse> {
         this.warehouse = warehouse;
     }
 
+    public static WarehouseIdMatcher hasSameIdAs(final Warehouse warehouse) {
+        return new WarehouseIdMatcher(warehouse);
+    }
+
     @Override
     public void describeTo(final Description description) {
         description.appendText("Warehouse id " + warehouse.getId());
-    }
-
-    public static WarehouseIdMatcher hasSameIdAs(final Warehouse warehouse) {
-        return new WarehouseIdMatcher(warehouse);
     }
 
     @Override

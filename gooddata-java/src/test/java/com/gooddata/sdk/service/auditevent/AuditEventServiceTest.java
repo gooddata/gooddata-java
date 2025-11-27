@@ -1,15 +1,14 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.auditevent;
 
 import com.gooddata.sdk.common.collections.CustomPageRequest;
-import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.model.account.Account;
+import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.service.account.AccountService;
-import com.gooddata.sdk.common.collections.PageRequest;
 import org.springframework.web.client.RestTemplate;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

@@ -1,13 +1,13 @@
 {
-    "report" : {
-        "content" : {
-            "domains" : [],
-            "definitions" : [
-                "/gdc/md/PROJECT_ID/obj/DEF_ID"
-            ]
-        },
-        "meta" : {
-            "title" : "Beers Consumed This Week"
-        }
+  "report": {
+    "content": {
+      "domains": [],
+      "definitions": [
+        "/gdc/md/PROJECT_ID/obj/DEF_ID"
+      ]
+    },
+    "meta": {
+      "title": "Beers Consumed This Week"
     }
+  }
 }

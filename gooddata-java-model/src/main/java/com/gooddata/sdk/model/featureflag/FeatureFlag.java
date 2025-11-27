@@ -1,13 +1,13 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.model.featureflag;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
-
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Feature flag is a boolean flag used for enabling / disabling some specific feature of GoodData platform.

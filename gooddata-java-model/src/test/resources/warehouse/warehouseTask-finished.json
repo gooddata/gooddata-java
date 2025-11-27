@@ -1,9 +1,9 @@
 {
-    "asyncTask": {
-        "links": {
-            "instance": "/gdc/datawarehouse/instances/instanceId",
-            "user": "/gdc/datawarehouse/instances/instanceId/users/userId",
-            "users": "/gdc/datawarehouse/instances/instanceId/users"
-        }
+  "asyncTask": {
+    "links": {
+      "instance": "/gdc/datawarehouse/instances/instanceId",
+      "user": "/gdc/datawarehouse/instances/instanceId/users/userId",
+      "users": "/gdc/datawarehouse/instances/instanceId/users"
     }
+  }
 }

@@ -1,22 +1,22 @@
 {
-  "tableDataLoad" : {
-    "content" : {
-      "typeOfLoad" : "incremental",
-      "dataSourceLocation" : "d_zendesktickets_vehicleview_aaavxfdfgqamowg"
+  "tableDataLoad": {
+    "content": {
+      "typeOfLoad": "incremental",
+      "dataSourceLocation": "d_zendesktickets_vehicleview_aaavxfdfgqamowg"
     },
-    "meta" : {
-      "author" : "/gdc/account/profile/PROFILE_ID",
-      "uri" : "/gdc/md/PROJECT_ID/obj/625283",
-      "tags" : "",
-      "created" : "2016-03-10 06:53:21",
-      "identifier" : "atk7vrmubLP1",
-      "deprecated" : "0",
-      "summary" : "d_zendesktickets_vehicleview_aaavxfdfgqamowg",
-      "isProduction" : 1,
-      "title" : "d_zendesktickets_vehicleview_aaavxfdfgqamowg",
-      "category" : "tableDataLoad",
-      "updated" : "2016-03-10 08:06:38",
-      "contributor" : "/gdc/account/profile/PROFILE_ID"
+    "meta": {
+      "author": "/gdc/account/profile/PROFILE_ID",
+      "uri": "/gdc/md/PROJECT_ID/obj/625283",
+      "tags": "",
+      "created": "2016-03-10 06:53:21",
+      "identifier": "atk7vrmubLP1",
+      "deprecated": "0",
+      "summary": "d_zendesktickets_vehicleview_aaavxfdfgqamowg",
+      "isProduction": 1,
+      "title": "d_zendesktickets_vehicleview_aaavxfdfgqamowg",
+      "category": "tableDataLoad",
+      "updated": "2016-03-10 08:06:38",
+      "contributor": "/gdc/account/profile/PROFILE_ID"
     }
   }
 }

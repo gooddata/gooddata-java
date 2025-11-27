@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -20,8 +20,8 @@ public class ProcessExecutionTest {
 
     @Test
     public void testSerialization() throws Exception {
-        final Map<String,String> params = new HashMap<>();
-        final Map<String,String> hidden = new HashMap<>();
+        final Map<String, String> params = new HashMap<>();
+        final Map<String, String> hidden = new HashMap<>();
         params.put("PARAM1", "VALUE1");
         params.put("PARAM2", "VALUE2");
         hidden.put("HIDDEN_PARAM1", "SENSITIVE_VALUE1");

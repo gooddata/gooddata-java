@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -25,8 +25,9 @@ public class Warning {
 
     /**
      * Creates new instance
+     *
      * @param warningCode error code
-     * @param message message
+     * @param message     message
      */
     public Warning(final String warningCode, final String message) {
         this(warningCode, message, emptyList());
@@ -34,9 +35,10 @@ public class Warning {
 
     /**
      * Creates new instance
+     *
      * @param warningCode error code
-     * @param message message
-     * @param parameters message's parameters
+     * @param message     message
+     * @param parameters  message's parameters
      */
     @JsonCreator
     public Warning(@JsonProperty("warningCode") final String warningCode,

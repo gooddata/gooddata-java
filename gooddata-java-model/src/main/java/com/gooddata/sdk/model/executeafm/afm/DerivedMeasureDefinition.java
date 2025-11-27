@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -32,11 +32,8 @@ public abstract class DerivedMeasureDefinition implements MeasureDefinition {
     /**
      * Create a new instance of {@link DerivedMeasureDefinition}.
      *
-     * @param measureIdentifier
-     *         The local identifier of the master measure this derived measure refers to. The parameter must not be null.
-     *
-     * @throws IllegalArgumentException
-     *         Thrown when required parameter is null.
+     * @param measureIdentifier The local identifier of the master measure this derived measure refers to. The parameter must not be null.
+     * @throws IllegalArgumentException Thrown when required parameter is null.
      */
     DerivedMeasureDefinition(final String measureIdentifier) {
         this.measureIdentifier = notNull(measureIdentifier, "measureIdentifier");

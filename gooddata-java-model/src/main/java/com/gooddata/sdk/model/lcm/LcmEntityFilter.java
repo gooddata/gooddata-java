@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -33,6 +33,7 @@ public class LcmEntityFilter {
 
     /**
      * Adds given data product to this filter.
+     *
      * @param dataProduct data product id - must not be empty.
      * @return this filter
      */
@@ -45,6 +46,7 @@ public class LcmEntityFilter {
 
     /**
      * Adds given segment to this filter.
+     *
      * @param segment segment id - must not be empty.
      * @return this filter
      */
@@ -57,6 +59,7 @@ public class LcmEntityFilter {
 
     /**
      * Adds given client to this filter.
+     *
      * @param client client id - must not be empty.
      * @return this filter
      */
@@ -81,6 +84,7 @@ public class LcmEntityFilter {
 
     /**
      * This filter in the form of query parameters map.
+     *
      * @return filter as query params map
      */
     public Map<String, List<String>> asQueryParams() {

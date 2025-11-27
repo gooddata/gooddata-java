@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -24,8 +24,9 @@ public class AttributeHeaderItem extends ResultHeaderItem {
 
     /**
      * Creates new header item
+     *
      * @param name name of item (usually attribute element title)
-     * @param uri uri of item (usually attribute element uri)
+     * @param uri  uri of item (usually attribute element uri)
      */
     @JsonCreator
     public AttributeHeaderItem(@JsonProperty("name") final String name, @JsonProperty("uri") final String uri) {

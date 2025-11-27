@@ -1,19 +1,19 @@
 {
-    "dataSetSLIManifest": {
-        "parts": [
-            {
-                "columnName": "COLUMN",
-                "populates": [
-                    "POPULATES"
-                ],
-                "mode": "MODE",
-                "constraints": {
-                    "date": "CONSTRAINT"
-                },
-                "referenceKey": 1
-            }
+  "dataSetSLIManifest": {
+    "parts": [
+      {
+        "columnName": "COLUMN",
+        "populates": [
+          "POPULATES"
         ],
-        "file": "FILE",
-        "dataSet": "DATASET"
-    }
+        "mode": "MODE",
+        "constraints": {
+          "date": "CONSTRAINT"
+        },
+        "referenceKey": 1
+      }
+    ],
+    "file": "FILE",
+    "dataSet": "DATASET"
+  }
 }

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -7,8 +7,7 @@ package com.gooddata.sdk.service.httpcomponents
 
 import com.gooddata.sdk.service.GoodDataEndpoint
 import com.gooddata.sdk.service.GoodDataSettings
-import com.gooddata.sdk.service.gdc.DataStoreService
-import org.apache.http.client.HttpClient
+import org.apache.hc.client5.http.classic.HttpClient
 import spock.lang.Specification
 
 class SingleEndpointGoodDataRestProviderTest extends Specification {
@@ -21,7 +20,8 @@ class SingleEndpointGoodDataRestProviderTest extends Specification {
         }
 
         when:
-        def provider = new SingleEndpointGoodDataRestProvider(new GoodDataEndpoint(), new GoodDataSettings(), builder) {}
+        def provider = new SingleEndpointGoodDataRestProvider(new GoodDataEndpoint(), new GoodDataSettings(), builder) {
+        }
 
         then:
         provider.httpClient == client
@@ -29,7 +29,8 @@ class SingleEndpointGoodDataRestProviderTest extends Specification {
 
     def "should get dataStoreService"() {
         when:
-        def provider = new SingleEndpointGoodDataRestProvider(new GoodDataEndpoint(), new GoodDataSettings(), Stub(GoodDataHttpClientBuilder)) {}
+        def provider = new SingleEndpointGoodDataRestProvider(new GoodDataEndpoint(), new GoodDataSettings(), Stub(GoodDataHttpClientBuilder)) {
+        }
         def dataStoreService = provider.getDataStoreService({ 'stagingUri' })
 
         then:

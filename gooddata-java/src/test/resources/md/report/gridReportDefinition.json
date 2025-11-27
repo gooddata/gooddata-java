@@ -1,51 +1,51 @@
 {
-    "reportDefinition" : {
-        "content" : {
-            "grid" : {
-                "sort" : {
-                    "columns" : [],
-                    "rows" : []
-                },
-                "columnWidths" : [],
-                "columns" : [
-                    "metricGroup"
-                ],
-                "metrics" : [
-                    {
-                        "alias" : "",
-                        "uri" : "/gdc/md/PROJECT_ID/obj/1493"
-                    }
-                ],
-                "rows" : [
-                    {
-                        "attribute" : {
-                            "alias" : "",
-                            "totals" : [
-                                []
-                            ],
-                            "uri" : "/gdc/md/PROJECT_ID/obj/11786"
-                        }
-                    }
-                ]
-            },
-            "format" : "grid",
-            "filters" : []
+  "reportDefinition": {
+    "content": {
+      "grid": {
+        "sort": {
+          "columns": [],
+          "rows": []
         },
-        "links" : {
-            "explain2" : "/gdc/md/PROJECT_ID/obj/12132/explain2"
-        },
-        "meta" : {
-            "author" : "/gdc/account/profile/USER_ID",
-            "uri" : "/gdc/md/PROJECT_ID/obj/12132",
-            "tags" : "",
-            "created" : "2014-05-23 00:42:10",
-            "identifier" : "arWchBP3ioa0",
-            "deprecated" : "0",
-            "summary" : "",
-            "title" : "Untitled report definition",
-            "category" : "reportDefinition",
-            "updated" : "2014-05-23 00:42:10",
-            "contributor" : "/gdc/account/profile/USER_ID"
-        }
+        "columnWidths": [],
+        "columns": [
+          "metricGroup"
+        ],
+        "metrics": [
+          {
+            "alias": "",
+            "uri": "/gdc/md/PROJECT_ID/obj/1493"
+          }
+        ],
+        "rows": [
+          {
+            "attribute": {
+              "alias": "",
+              "totals": [
+                []
+              ],
+              "uri": "/gdc/md/PROJECT_ID/obj/11786"
+            }
+          }
+        ]
+      },
+      "format": "grid",
+      "filters": []
+    },
+    "links": {
+      "explain2": "/gdc/md/PROJECT_ID/obj/12132/explain2"
+    },
+    "meta": {
+      "author": "/gdc/account/profile/USER_ID",
+      "uri": "/gdc/md/PROJECT_ID/obj/12132",
+      "tags": "",
+      "created": "2014-05-23 00:42:10",
+      "identifier": "arWchBP3ioa0",
+      "deprecated": "0",
+      "summary": "",
+      "title": "Untitled report definition",
+      "category": "reportDefinition",
+      "updated": "2014-05-23 00:42:10",
+      "contributor": "/gdc/account/profile/USER_ID"
     }
+  }
 }

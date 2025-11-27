@@ -1,39 +1,39 @@
 {
-  "filterContext" : {
-    "content" : {
-      "filters" : [
+  "filterContext": {
+    "content": {
+      "filters": [
         {
-          "dateFilter" : {
-            "from" : "-1",
-            "granularity" : "GDC.time.year",
-            "to" : "-1",
-            "type" : "relative"
+          "dateFilter": {
+            "from": "-1",
+            "granularity": "GDC.time.year",
+            "to": "-1",
+            "type": "relative"
           }
         },
         {
-          "attributeFilter" : {
-            "attributeElements" : [
+          "attributeFilter": {
+            "attributeElements": [
               "/gdc/md/lkljlgpbqziy3mjjtczf5nbeu32ck1iz/obj/1023/elements?id=1225"
             ],
-            "displayForm" : "/gdc/md/lkljlgpbqziy3mjjtczf5nbeu32ck1iz/obj/1024",
-            "negativeSelection" : false
+            "displayForm": "/gdc/md/lkljlgpbqziy3mjjtczf5nbeu32ck1iz/obj/1024",
+            "negativeSelection": false
           }
         }
       ]
     },
-    "meta" : {
-      "author" : "/gdc/account/profile/9d6aac8f5372a21685ed663a082108c8",
-      "category" : "filterContext",
-      "contributor" : "/gdc/account/profile/9d6aac8f5372a21685ed663a082108c8",
-      "created" : "2019-05-23 13:25:16",
-      "deprecated" : "0",
-      "identifier" : "aadsk197gClX",
-      "isProduction" : 1,
-      "summary" : "",
-      "tags" : "",
-      "title" : "filterContext",
-      "updated" : "2019-06-06 10:19:22",
-      "uri" : "/gdc/md/lkljlgpbqziy3mjjtczf5nbeu32ck1iz/obj/75575"
+    "meta": {
+      "author": "/gdc/account/profile/9d6aac8f5372a21685ed663a082108c8",
+      "category": "filterContext",
+      "contributor": "/gdc/account/profile/9d6aac8f5372a21685ed663a082108c8",
+      "created": "2019-05-23 13:25:16",
+      "deprecated": "0",
+      "identifier": "aadsk197gClX",
+      "isProduction": 1,
+      "summary": "",
+      "tags": "",
+      "title": "filterContext",
+      "updated": "2019-06-06 10:19:22",
+      "uri": "/gdc/md/lkljlgpbqziy3mjjtczf5nbeu32ck1iz/obj/75575"
     }
   }
 }

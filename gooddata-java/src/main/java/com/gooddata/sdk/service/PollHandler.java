@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -13,12 +13,12 @@ import java.net.URI;
 
 /**
  * For internal use by services employing polling.<p>
+ *
  * @param <P> polling type
  * @param <R> result type
- *
  * @see FutureResult
  */
-public interface PollHandler<P,R> {
+public interface PollHandler<P, R> {
 
     /**
      * Get URI used for polling.
@@ -84,6 +84,7 @@ public interface PollHandler<P,R> {
      * Handle exception while polling.
      * The implementing class should throw instance of {@link com.gooddata.sdk.common.GoodDataException}
      * (or ancestor) with the given argument as cause.
+     *
      * @param e the exception
      */
     void handlePollException(GoodDataRestException e);

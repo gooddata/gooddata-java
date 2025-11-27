@@ -36,52 +36,54 @@
             "contributor": "/gdc/account/profile/PROFILE_ID"
           }
         }
-      }, {
-        "fact" : {
-          "content" : {
-            "expr" : [
+      },
+      {
+        "fact": {
+          "content": {
+            "expr": [
               {
-                "data" : "/gdc/md/PROJECT_ID/obj/COL_ID",
-                "type" : "col"
+                "data": "/gdc/md/PROJECT_ID/obj/COL_ID",
+                "type": "col"
               }
             ],
-            "folders" : [
+            "folders": [
               "/gdc/md/PROJECT_ID/obj/FOLDER_ID",
               "/gdc/md/PROJECT_ID/obj/FOLDER_ID2"
             ]
           },
-          "meta" : {
-            "author" : "/gdc/account/profile/AUTHOR_ID",
-            "uri" : "/gdc/md/PROJECT_ID/obj/FACT_ID",
-            "tags" : "",
-            "created" : "2014-04-11 13:45:53",
-            "identifier" : "fact.person.shoesize",
-            "deprecated" : "0",
-            "summary" : "",
-            "title" : "Person Shoe Size",
-            "category" : "fact",
-            "updated" : "2014-04-11 13:46:52",
-            "contributor" : "/gdc/account/profile/CONTRIBUTOR_ID"
+          "meta": {
+            "author": "/gdc/account/profile/AUTHOR_ID",
+            "uri": "/gdc/md/PROJECT_ID/obj/FACT_ID",
+            "tags": "",
+            "created": "2014-04-11 13:45:53",
+            "identifier": "fact.person.shoesize",
+            "deprecated": "0",
+            "summary": "",
+            "title": "Person Shoe Size",
+            "category": "fact",
+            "updated": "2014-04-11 13:46:52",
+            "contributor": "/gdc/account/profile/CONTRIBUTOR_ID"
           }
         }
-      }, {
-        "metric" : {
-          "content" : {
-            "expression" : "[/gdc/md/PROJECT_ID/obj/EXPR_ID]",
-            "format" : "FORMAT"
+      },
+      {
+        "metric": {
+          "content": {
+            "expression": "[/gdc/md/PROJECT_ID/obj/EXPR_ID]",
+            "format": "FORMAT"
           },
-          "meta" : {
-            "author" : "/gdc/account/profile/USER_ID",
-            "uri" : "/gdc/md/PROJECT_ID/obj/METRIC_ID",
-            "tags" : "",
-            "created" : "2014-04-11 13:45:56",
-            "identifier" : "attr.person.id.name",
-            "deprecated" : "0",
-            "summary" : "",
-            "title" : "Person Name",
-            "category" : "attributeDisplayForm",
-            "updated" : "2014-04-11 13:45:56",
-            "contributor" : "/gdc/account/profile/USER_ID"
+          "meta": {
+            "author": "/gdc/account/profile/USER_ID",
+            "uri": "/gdc/md/PROJECT_ID/obj/METRIC_ID",
+            "tags": "",
+            "created": "2014-04-11 13:45:56",
+            "identifier": "attr.person.id.name",
+            "deprecated": "0",
+            "summary": "",
+            "title": "Person Name",
+            "category": "attributeDisplayForm",
+            "updated": "2014-04-11 13:45:56",
+            "contributor": "/gdc/account/profile/USER_ID"
           }
         }
       }

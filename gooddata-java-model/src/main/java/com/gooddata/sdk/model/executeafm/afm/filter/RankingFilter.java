@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
-import com.gooddata.sdk.common.util.Validate;
 import com.gooddata.sdk.model.executeafm.IdentifierObjQualifier;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.model.executeafm.Qualifier;
@@ -47,11 +46,10 @@ public class RankingFilter implements ExtendedFilter, CompatibilityFilter, Seria
     /**
      * Creates a new {@link RankingFilter} instance.
      *
-     * @param measures measures on which is the ranking applied. Must not be null.
+     * @param measures   measures on which is the ranking applied. Must not be null.
      * @param attributes attributes that define ranking granularity. Optional, can be null.
-     * @param operator operator that defines the type of ranking.
-     * @param value number of requested ranked records.
-     *
+     * @param operator   operator that defines the type of ranking.
+     * @param value      number of requested ranked records.
      * @throws NullPointerException thrown when required parameter is not provided.
      */
     @JsonCreator
@@ -74,6 +72,10 @@ public class RankingFilter implements ExtendedFilter, CompatibilityFilter, Seria
         this(measures, attributes, notNull(operator, "operator must not be null!").name(), value);
     }
 
+    private static IllegalArgumentException buildExceptionForFailedConversion(final IdentifierObjQualifier qualifierFailedToConvert) {
+        return new IllegalArgumentException(format("Supplied converter does not provide conversion for '%s'!", qualifierFailedToConvert));
+    }
+
     /**
      * Returns all the qualifiers used by the ranking filter.
      * <p>
@@ -86,9 +88,9 @@ public class RankingFilter implements ExtendedFilter, CompatibilityFilter, Seria
     @JsonIgnore
     public Collection<ObjQualifier> getObjQualifiers() {
         return Stream.concat(
-                this.measures.stream(),
-                this.attributes == null ? Stream.empty() : this.attributes.stream()
-        )
+                        this.measures.stream(),
+                        this.attributes == null ? Stream.empty() : this.attributes.stream()
+                )
                 .filter(ObjQualifier.class::isInstance)
                 .map(ObjQualifier.class::cast)
                 .collect(Collectors.toSet());
@@ -102,15 +104,13 @@ public class RankingFilter implements ExtendedFilter, CompatibilityFilter, Seria
      * this object or its encapsulated child objects.
      *
      * @param objQualifierConverter The function that converts identifier qualifiers to the matching URI qualifiers. In case when the object uses the
-     *         identifier qualifiers, it
-     *         will return a new copy of itself or its encapsulated objects that used URI qualifiers, otherwise the original object is returned.
-     *         The parameter must not be null.
-     *
+     *                              identifier qualifiers, it
+     *                              will return a new copy of itself or its encapsulated objects that used URI qualifiers, otherwise the original object is returned.
+     *                              The parameter must not be null.
      * @return copy of itself with replaced qualifiers in case when some {@link IdentifierObjQualifier} were used, otherwise original object is returned.
-     *
      * @throws IllegalArgumentException The exception is thrown when conversion for the identifier qualifier used by this ranking filter could not be
-     *         made by the provided
-     *         converter or when provided converter is null.
+     *                                  made by the provided
+     *                                  converter or when provided converter is null.
      */
     public RankingFilter withObjUriQualifiers(final ObjQualifierConverter objQualifierConverter) {
         notNull(objQualifierConverter, "objQualifierConverter");
@@ -138,10 +138,6 @@ public class RankingFilter implements ExtendedFilter, CompatibilityFilter, Seria
         return qualifier;
     }
 
-    private static IllegalArgumentException buildExceptionForFailedConversion(final IdentifierObjQualifier qualifierFailedToConvert) {
-        return new IllegalArgumentException(format("Supplied converter does not provide conversion for '%s'!", qualifierFailedToConvert));
-    }
-
     /**
      * @return measures on which is the ranking applied
      */
@@ -158,6 +154,7 @@ public class RankingFilter implements ExtendedFilter, CompatibilityFilter, Seria
 
     /**
      * Get operator as an enum constant for easier programmatic access.
+     *
      * @return ranking operator constant
      */
     @JsonIgnore
@@ -167,6 +164,7 @@ public class RankingFilter implements ExtendedFilter, CompatibilityFilter, Seria
 
     /**
      * Get operator as a string representation of the {@link RankingFilterOperator} enum constant as it was parsed from the JSON.
+     *
      * @return string operator provided at the time of the filter instance creation
      */
     @JsonProperty("operator")

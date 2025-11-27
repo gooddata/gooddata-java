@@ -1,22 +1,22 @@
 {
-   "attribute" : {
-      "content" : {
-         "pk" : [
-            {
-               "data" : "/gdc/md/PROJECT_ID/obj/PK_ID",
-               "type" : "col"
-            }
-         ],
-         "displayForms" : [ ],
-          "fk" : [
-              {
-                  "data" : "/gdc/md/PROJECT_ID/obj/FK_ID",
-                  "type" : "col"
-              }
-          ]
-      },
-      "meta" : {
-         "title" : "Person ID"
-      }
-   }
+  "attribute": {
+    "content": {
+      "pk": [
+        {
+          "data": "/gdc/md/PROJECT_ID/obj/PK_ID",
+          "type": "col"
+        }
+      ],
+      "displayForms": [],
+      "fk": [
+        {
+          "data": "/gdc/md/PROJECT_ID/obj/FK_ID",
+          "type": "col"
+        }
+      ]
+    },
+    "meta": {
+      "title": "Person ID"
+    }
+  }
 }

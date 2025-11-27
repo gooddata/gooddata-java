@@ -1,29 +1,33 @@
 {
-  "featureFlags" : {
-    "items" : [ {
-      "featureFlag" : {
-        "key" : "myCoolFeature",
-        "value" : true,
-        "links" : {
-            "self" : "/gdc/projects/PROJECT_ID/projectFeatureFlags/myCoolFeature"
+  "featureFlags": {
+    "items": [
+      {
+        "featureFlag": {
+          "key": "myCoolFeature",
+          "value": true,
+          "links": {
+            "self": "/gdc/projects/PROJECT_ID/projectFeatureFlags/myCoolFeature"
+          }
         }
-    }
-    }, {
-      "featureFlag" : {
-        "key" : "mySuperCoolFeature",
-        "value" : true,
-        "links" : {
-            "self" : "/gdc/projects/PROJECT_ID/projectFeatureFlags/mySuperCoolFeature"
+      },
+      {
+        "featureFlag": {
+          "key": "mySuperCoolFeature",
+          "value": true,
+          "links": {
+            "self": "/gdc/projects/PROJECT_ID/projectFeatureFlags/mySuperCoolFeature"
+          }
         }
-    }
-    }, {
-    "featureFlag" : {
-        "key" : "mySuperSecretFeature",
-        "value" : false,
-        "links" : {
-            "self" : "/gdc/projects/PROJECT_ID/projectFeatureFlags/mySuperSecretFeature"
+      },
+      {
+        "featureFlag": {
+          "key": "mySuperSecretFeature",
+          "value": false,
+          "links": {
+            "self": "/gdc/projects/PROJECT_ID/projectFeatureFlags/mySuperSecretFeature"
+          }
         }
-    }
-    }]
+      }
+    ]
   }
 }

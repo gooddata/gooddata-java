@@ -1,13 +1,19 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.model.dataload;
 
-import com.fasterxml.jackson.annotation.*;
-import com.gooddata.sdk.model.warehouse.WarehouseSchema;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.warehouse.WarehouseSchema;
 
 import java.util.Map;
 
@@ -28,11 +34,10 @@ public class OutputStage {
     private static final String SELF_LINK = "self";
     private static final String OUTPUT_STAGE_DIFF = "outputStageDiff";
     private static final String DATALOAD_PROCESS = "dataloadProcess";
-
+    private final Map<String, String> links;
     private String schema;
     private String clientId;
     private String outputStagePrefix;
-    private final Map<String,String> links;
 
     @JsonCreator
     private OutputStage(@JsonProperty("schema") final String schema,

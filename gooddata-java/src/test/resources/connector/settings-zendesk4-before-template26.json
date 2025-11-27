@@ -1,8 +1,8 @@
 {
-  "settings" : {
-    "apiUrl" : "https://foo.com",
-    "type" : "plus",
-    "syncTime" : "12am",
-    "syncTimeZone" : "America/Los_Angeles"
+  "settings": {
+    "apiUrl": "https://foo.com",
+    "type": "plus",
+    "syncTime": "12am",
+    "syncTimeZone": "America/Los_Angeles"
   }
 }

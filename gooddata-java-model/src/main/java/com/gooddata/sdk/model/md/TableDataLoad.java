@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -22,10 +22,9 @@ import java.io.Serializable;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 public class TableDataLoad extends AbstractObj implements Queryable {
 
-    private static final long serialVersionUID = -5209417147612785042L;
     public static final String TYPE_FULL = "full";
     public static final String TYPE_INCREMENTAL = "incremental";
-
+    private static final long serialVersionUID = -5209417147612785042L;
     private final Content content;
 
     @JsonCreator

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -58,6 +58,7 @@ public class Metric extends AbstractObj implements Queryable, Updatable {
 
     /**
      * URIs of folders containing this object
+     *
      * @return collection of URIs or null
      */
     @JsonIgnore
@@ -75,14 +76,11 @@ public class Metric extends AbstractObj implements Queryable, Updatable {
 
         private static final long serialVersionUID = 7959588028233637749L;
         private final String expression;
-
+        private final Collection<String> folders;
         @JsonProperty("format")
         private String format;
-
         @JsonProperty("tree")
         private MaqlAst maqlAst;
-
-        private final Collection<String> folders;
 
         @JsonCreator
         public Content(@JsonProperty("expression") String expression, @JsonProperty("folders") Collection<String> folders) {
@@ -100,20 +98,20 @@ public class Metric extends AbstractObj implements Queryable, Updatable {
             return expression;
         }
 
-        public void setFormat(final String format) {
-            this.format = format;
-        }
-
         public String getFormat() {
             return format;
         }
 
-        public void setMaqlAst(final MaqlAst maqlAst) {
-            this.maqlAst = maqlAst;
+        public void setFormat(final String format) {
+            this.format = format;
         }
 
         public MaqlAst getMaqlAst() {
             return maqlAst;
+        }
+
+        public void setMaqlAst(final MaqlAst maqlAst) {
+            this.maqlAst = maqlAst;
         }
 
         public Collection<String> getFolders() {

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -26,12 +26,11 @@ import static com.gooddata.sdk.common.util.Validate.notEmpty;
 public class Integration {
 
     public static final String URL = "/gdc/projects/{project}/connectors/{connector}/integration";
-
-    private String projectTemplate;
-    private boolean active;
     private final IntegrationProcessStatus lastFinishedProcess;
     private final IntegrationProcessStatus lastSuccessfulProcess;
     private final IntegrationProcessStatus runningProcess;
+    private String projectTemplate;
+    private boolean active;
 
     public Integration(final String projectTemplate) {
         this(projectTemplate, true, null, null, null);

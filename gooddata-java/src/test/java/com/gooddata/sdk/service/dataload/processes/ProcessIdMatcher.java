@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -17,13 +17,13 @@ class ProcessIdMatcher extends TypeSafeMatcher<DataloadProcess> {
         this.process = process;
     }
 
+    public static ProcessIdMatcher hasSameProcessIdAs(final DataloadProcess process) {
+        return new ProcessIdMatcher(process);
+    }
+
     @Override
     public void describeTo(final Description description) {
         description.appendText("Process id " + process.getId());
-    }
-
-    public static ProcessIdMatcher hasSameProcessIdAs(final DataloadProcess process) {
-        return new ProcessIdMatcher(process);
     }
 
     @Override

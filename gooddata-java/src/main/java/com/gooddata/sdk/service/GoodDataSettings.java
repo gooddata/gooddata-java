@@ -1,16 +1,16 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service;
 
 import com.gooddata.sdk.common.gdc.Header;
-import com.gooddata.sdk.service.retry.RetrySettings;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.service.retry.RetrySettings;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.VersionInfo;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.core5.util.VersionInfo;
 import org.springframework.http.MediaType;
 import org.springframework.util.StreamUtils;
 
@@ -22,18 +22,20 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static com.gooddata.sdk.common.util.Validate.notNull;
-import static org.apache.http.util.VersionInfo.loadVersionInfo;
+import static org.apache.hc.core5.util.VersionInfo.loadVersionInfo;
 import static org.springframework.util.Assert.isTrue;
 
 /**
  * Gather various additional settings of {@link GoodData}. Can be passed to the {@link GoodData} constructor to tune up
- * it's behaviour.
+ * its behaviour.
  * <p>
  * Settings are applied only once at the beginning. Changing this bean after it's passed to {@link GoodData} has
  * no effect.
  */
 public class GoodDataSettings {
 
+    private static final String UNKNOWN_VERSION = "UNKNOWN";
+    private final Map<String, String> presetHeaders = new HashMap<>(2);
     private int maxConnections = 20;
     private int connectionTimeout = secondsToMillis(10);
     private int connectionRequestTimeout = secondsToMillis(10);
@@ -41,13 +43,31 @@ public class GoodDataSettings {
     private int pollSleep = secondsToMillis(5);
     private String userAgent;
     private RetrySettings retrySettings;
-    private Map<String, String> presetHeaders = new HashMap<>(2);
-
-    private static final String UNKNOWN_VERSION = "UNKNOWN";
 
     public GoodDataSettings() {
         presetHeaders.put("Accept", MediaType.APPLICATION_JSON_VALUE);
         presetHeaders.put(Header.GDC_VERSION, readApiVersion());
+    }
+
+    private static int secondsToMillis(int seconds) {
+        return (int) TimeUnit.SECONDS.toMillis(seconds);
+    }
+
+    private static String readApiVersion() {
+        try {
+            return StreamUtils.copyToString(GoodData.class.getResourceAsStream("/GoodDataApiVersion"), Charset.defaultCharset());
+        } catch (IOException e) {
+            throw new IllegalStateException("Cannot read GoodDataApiVersion from classpath", e);
+        }
+    }
+
+    /**
+     * Maximum number of connection used
+     *
+     * @return maximum number of connection used
+     */
+    public int getMaxConnections() {
+        return maxConnections;
     }
 
     /**
@@ -61,29 +81,6 @@ public class GoodDataSettings {
     public void setMaxConnections(int maxConnections) {
         isTrue(maxConnections > 0, "maxConnections must be greater than zero");
         this.maxConnections = maxConnections;
-    }
-
-    /**
-     * Maximum number of connection used
-     *
-     * @return maximum number of connection used
-     */
-    public int getMaxConnections() {
-        return maxConnections;
-    }
-
-    /**
-     * Set timeout milliseconds until connection established.
-     * <p>
-     * The default value is 10 seconds (10000 ms).
-     * <p>
-     * Set to 0 for infinite.
-     *
-     * @param connectionTimeout connection timeout milliseconds
-     */
-    public void setConnectionTimeout(int connectionTimeout) {
-        isTrue(connectionTimeout >= 0, "connectionTimeout must be not negative");
-        this.connectionTimeout = connectionTimeout;
     }
 
     /**
@@ -109,17 +106,17 @@ public class GoodDataSettings {
     }
 
     /**
-     * Set timeout in milliseconds used when requesting a connection from the connection manager.
+     * Set timeout milliseconds until connection established.
      * <p>
      * The default value is 10 seconds (10000 ms).
      * <p>
      * Set to 0 for infinite.
      *
-     * @param connectionRequestTimeout connection request timeout milliseconds
+     * @param connectionTimeout connection timeout milliseconds
      */
-    public void setConnectionRequestTimeout(final int connectionRequestTimeout) {
-        isTrue(connectionRequestTimeout >= 0, "connectionRequestTimeout must not be negative");
-        this.connectionRequestTimeout = connectionRequestTimeout;
+    public void setConnectionTimeout(int connectionTimeout) {
+        isTrue(connectionTimeout >= 0, "connectionTimeout must be not negative");
+        this.connectionTimeout = connectionTimeout;
     }
 
     /**
@@ -146,17 +143,17 @@ public class GoodDataSettings {
     }
 
     /**
-     * Set socket timeout (maximum period inactivity between two consecutive data packets) milliseconds.
+     * Set timeout in milliseconds used when requesting a connection from the connection manager.
      * <p>
-     * The default value is 60 seconds (60000 ms).
+     * The default value is 10 seconds (10000 ms).
      * <p>
      * Set to 0 for infinite.
      *
-     * @param socketTimeout socket timeout milliseconds
+     * @param connectionRequestTimeout connection request timeout milliseconds
      */
-    public void setSocketTimeout(int socketTimeout) {
-        isTrue(socketTimeout >= 0, "socketTimeout must be not negative");
-        this.socketTimeout = socketTimeout;
+    public void setConnectionRequestTimeout(final int connectionRequestTimeout) {
+        isTrue(connectionRequestTimeout >= 0, "connectionRequestTimeout must not be negative");
+        this.connectionRequestTimeout = connectionRequestTimeout;
     }
 
     /**
@@ -179,6 +176,20 @@ public class GoodDataSettings {
      */
     public int getSocketTimeout() {
         return socketTimeout;
+    }
+
+    /**
+     * Set socket timeout (maximum period inactivity between two consecutive data packets) milliseconds.
+     * <p>
+     * The default value is 60 seconds (60000 ms).
+     * <p>
+     * Set to 0 for infinite.
+     *
+     * @param socketTimeout socket timeout milliseconds
+     */
+    public void setSocketTimeout(int socketTimeout) {
+        isTrue(socketTimeout >= 0, "socketTimeout must be not negative");
+        this.socketTimeout = socketTimeout;
     }
 
     /**
@@ -213,6 +224,7 @@ public class GoodDataSettings {
 
     /**
      * GoodData User agent
+     *
      * @return user agent string formatted with default suffix (identifying the SDK)
      */
     public String getGoodDataUserAgent() {
@@ -221,6 +233,7 @@ public class GoodDataSettings {
 
     /**
      * User agent
+     *
      * @return user agent string
      */
     public String getUserAgent() {
@@ -229,6 +242,7 @@ public class GoodDataSettings {
 
     /**
      * Set custom user agent as prefix for default user agent
+     *
      * @param userAgent user agent string
      */
     public void setUserAgent(String userAgent) {
@@ -241,6 +255,7 @@ public class GoodDataSettings {
 
     /**
      * Set retry settings
+     *
      * @param retrySettings retry settings
      */
     public void setRetrySettings(RetrySettings retrySettings) {
@@ -249,8 +264,9 @@ public class GoodDataSettings {
 
     /**
      * Set preset header
+     *
      * @param header header name
-     * @param value header value
+     * @param value  header value
      */
     public void setPresetHeader(String header, String value) {
         presetHeaders.put(notNull(header, "header"), notNull(value, "value"));
@@ -258,6 +274,7 @@ public class GoodDataSettings {
 
     /**
      * Preset headers
+     *
      * @return preset headers set by SDK on each HTTP call
      */
     public Map<String, String> getPresetHeaders() {
@@ -290,31 +307,16 @@ public class GoodDataSettings {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 
-    private static int secondsToMillis(int seconds) {
-        return (int) TimeUnit.SECONDS.toMillis(seconds);
-    }
-
     private String getDefaultUserAgent() {
         final Package pkg = Package.getPackage("com.gooddata.sdk.service");
         final String clientVersion = pkg != null && pkg.getImplementationVersion() != null
                 ? pkg.getImplementationVersion() : UNKNOWN_VERSION;
 
-        final VersionInfo vi = loadVersionInfo("org.apache.http.client", HttpClientBuilder.class.getClassLoader());
+        final VersionInfo vi = loadVersionInfo("org.apache.hc.client5", HttpClientBuilder.class.getClassLoader());
         final String apacheVersion = vi != null ? vi.getRelease() : UNKNOWN_VERSION;
 
         return String.format("%s/%s (%s; %s) %s/%s", "GoodData-Java-SDK", clientVersion,
                 System.getProperty("os.name"), System.getProperty("java.specification.version"),
                 "Apache-HttpClient", apacheVersion);
     }
-
-    private static String readApiVersion() {
-        try {
-            return StreamUtils.copyToString(GoodData.class.getResourceAsStream("/GoodDataApiVersion"), Charset.defaultCharset());
-        } catch (IOException e) {
-            throw new IllegalStateException("Cannot read GoodDataApiVersion from classpath", e);
-        }
-    }
-
-
-
 }

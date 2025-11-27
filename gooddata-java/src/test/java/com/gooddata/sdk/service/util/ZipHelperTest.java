@@ -1,12 +1,9 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.util;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 
 import org.apache.commons.io.FileUtils;
 import org.testng.annotations.AfterClass;
@@ -23,12 +20,24 @@ import java.nio.file.Paths;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+
 public class ZipHelperTest {
 
     private static final String SOME_FILE = "someFile.txt";
     private static final String SOME_FILE_PATH = Paths.get("a", "b", SOME_FILE).toString();
 
     private Path temporaryFolder;
+
+    private static void verifyZipContent(ByteArrayOutputStream zip, String shouldContain) throws Exception {
+        try (ZipInputStream zipInputStream = new ZipInputStream(new ByteArrayInputStream(zip.toByteArray()))) {
+            ZipEntry entry = zipInputStream.getNextEntry();
+            assertThat(entry, notNullValue());
+            assertThat(entry.getName(), is(shouldContain));
+        }
+    }
 
     @BeforeClass
     public void setUp() throws Exception {
@@ -95,14 +104,6 @@ public class ZipHelperTest {
             ZipHelper.zip(zipped, output);
             output.close();
             verifyZipContent(output, SOME_FILE);
-        }
-    }
-
-    private static void verifyZipContent(ByteArrayOutputStream zip, String shouldContain) throws Exception {
-        try (ZipInputStream zipInputStream = new ZipInputStream(new ByteArrayInputStream(zip.toByteArray()))) {
-            ZipEntry entry = zipInputStream.getNextEntry();
-            assertThat(entry, notNullValue());
-            assertThat(entry.getName(), is(shouldContain));
         }
     }
 }

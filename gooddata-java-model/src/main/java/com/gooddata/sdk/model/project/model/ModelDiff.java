@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -124,7 +124,7 @@ public class ModelDiff {
          *
          * @param preserveData true if data should be preserved, false if they should be truncated
          * @param cascadeDrops true if related objects should be also dropped, false if not
-         * @param maqlChunks MAQL strings
+         * @param maqlChunks   MAQL strings
          */
         @JsonCreator
         UpdateScript(@JsonProperty("preserveData") Boolean preserveData,
@@ -140,7 +140,7 @@ public class ModelDiff {
          *
          * @param preserveData true if data should be preserved, false if they should be truncated
          * @param cascadeDrops true if related objects should be also dropped, false if not
-         * @param maqlChunks MAQL strings
+         * @param maqlChunks   MAQL strings
          */
         UpdateScript(boolean preserveData, boolean cascadeDrops, String... maqlChunks) {
             this(preserveData, cascadeDrops, asList(maqlChunks));

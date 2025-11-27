@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -14,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 /**
  * Class to encapsulate time filtering
@@ -23,6 +24,13 @@ public class TimeFilterPageRequest extends CustomPageRequest {
     protected ZonedDateTime to;
 
     public TimeFilterPageRequest() {
+    }
+
+    public static TimeFilterPageRequest copy(TimeFilterPageRequest source) {
+        Validate.notNull(source, "source cannot be null");
+        TimeFilterPageRequest copy = new TimeFilterPageRequest();
+        BeanUtils.copyProperties(source, copy);
+        return copy;
     }
 
     public ZonedDateTime getFrom() {
@@ -41,13 +49,6 @@ public class TimeFilterPageRequest extends CustomPageRequest {
         this.to = to;
     }
 
-    public static TimeFilterPageRequest copy(TimeFilterPageRequest source) {
-        Validate.notNull(source, "source cannot be null");
-        TimeFilterPageRequest copy = new TimeFilterPageRequest();
-        BeanUtils.copyProperties(source, copy);
-        return copy;
-    }
-
     public TimeFilterPageRequest withIncrementedLimit() {
         TimeFilterPageRequest copy = copy(this);
         copy.setLimit(this.getSanitizedLimit() + 1);
@@ -58,11 +59,11 @@ public class TimeFilterPageRequest extends CustomPageRequest {
     public MutableUri updateWithPageParams(MutableUri builder) {
         MutableUri builderWithPaging = super.updateWithPageParams(builder);
         if (this.from != null) {
-            builderWithPaging.replaceQueryParam("from", new Object[]{ISOZonedDateTime.FORMATTER.format(this.from.withZoneSameInstant(ZoneOffset.UTC))});
+            builderWithPaging.replaceQueryParam("from", ISOZonedDateTime.FORMATTER.format(this.from.withZoneSameInstant(ZoneOffset.UTC)));
         }
 
         if (this.to != null) {
-            builderWithPaging.replaceQueryParam("to", new Object[]{ISOZonedDateTime.FORMATTER.format(this.to.withZoneSameInstant(ZoneOffset.UTC))});
+            builderWithPaging.replaceQueryParam("to", ISOZonedDateTime.FORMATTER.format(this.to.withZoneSameInstant(ZoneOffset.UTC)));
         }
 
         return builderWithPaging;
@@ -76,15 +77,13 @@ public class TimeFilterPageRequest extends CustomPageRequest {
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
-        if (!(o instanceof TimeFilterPageRequest)) return false;
+        if (!(o instanceof TimeFilterPageRequest that)) return false;
         if (!super.equals(o)) return false;
 
-        final TimeFilterPageRequest that = (TimeFilterPageRequest) o;
         if (!that.canEqual(this)) return false;
 
-        if (from != null ? !from.equals(that.from) : that.from != null) return false;
-        if (to != null ? !to.equals(that.to) : that.to != null) return false;
-        return true;
+        if (!Objects.equals(from, that.from)) return false;
+        return Objects.equals(to, that.to);
     }
 
     @Override

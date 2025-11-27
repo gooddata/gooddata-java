@@ -1,25 +1,25 @@
 {
-    "report" : {
-        "content" : {
-            "domains" : [
-                "/gdc/md/PROJECT_ID/obj/DOM_ID"
-            ],
-            "definitions" : [
-                "/gdc/md/PROJECT_ID/obj/DEF_ID"
-            ]
-        },
-        "meta" : {
-            "author" : "/gdc/account/profile/USER_ID",
-            "uri" : "/gdc/md/PROJECT_ID/obj/2276",
-            "tags" : "",
-            "created" : "2012-08-07 17:56:33",
-            "identifier" : "muhehe",
-            "deprecated" : "0",
-            "summary" : "This number shows the beers consumed.",
-            "title" : "Beers Consumed This Week",
-            "category" : "report",
-            "updated" : "2012-08-07 17:56:33",
-            "contributor" : "/gdc/account/profile/USER_ID"
-        }
+  "report": {
+    "content": {
+      "domains": [
+        "/gdc/md/PROJECT_ID/obj/DOM_ID"
+      ],
+      "definitions": [
+        "/gdc/md/PROJECT_ID/obj/DEF_ID"
+      ]
+    },
+    "meta": {
+      "author": "/gdc/account/profile/USER_ID",
+      "uri": "/gdc/md/PROJECT_ID/obj/2276",
+      "tags": "",
+      "created": "2012-08-07 17:56:33",
+      "identifier": "muhehe",
+      "deprecated": "0",
+      "summary": "This number shows the beers consumed.",
+      "title": "Beers Consumed This Week",
+      "category": "report",
+      "updated": "2012-08-07 17:56:33",
+      "contributor": "/gdc/account/profile/USER_ID"
     }
+  }
 }

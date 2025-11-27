@@ -1,25 +1,29 @@
 {
-  "attributeElements" : {
-    "elements" : [ {
-      "uri" : "/gdc/md/PROJECT_ID/obj/1333/elements?id=6963",
-      "title" : "1167"
-    }, {
-      "uri" : "/gdc/md/PROJECT_ID/obj/1333/elements?id=6965",
-      "title" : "1168"
-    }, {
-      "uri" : "/gdc/md/PROJECT_ID/obj/1333/elements?id=13716",
-      "title" : "1169"
-    } ],
-    "elementsMeta" : {
-      "attribute" : "/gdc/md/PROJECT_ID/obj/1333",
-      "attributeDisplayForm" : "/gdc/md/PROJECT_ID/obj/1364",
-      "count" : 3,
-      "order" : "unsorted",
-      "filter" : "",
-      "mode" : "includeuris",
-      "prompt" : "",
-      "records" : "3",
-      "offset" : "0"
+  "attributeElements": {
+    "elements": [
+      {
+        "uri": "/gdc/md/PROJECT_ID/obj/1333/elements?id=6963",
+        "title": "1167"
+      },
+      {
+        "uri": "/gdc/md/PROJECT_ID/obj/1333/elements?id=6965",
+        "title": "1168"
+      },
+      {
+        "uri": "/gdc/md/PROJECT_ID/obj/1333/elements?id=13716",
+        "title": "1169"
+      }
+    ],
+    "elementsMeta": {
+      "attribute": "/gdc/md/PROJECT_ID/obj/1333",
+      "attributeDisplayForm": "/gdc/md/PROJECT_ID/obj/1364",
+      "count": 3,
+      "order": "unsorted",
+      "filter": "",
+      "mode": "includeuris",
+      "prompt": "",
+      "records": "3",
+      "offset": "0"
     }
   }
 }

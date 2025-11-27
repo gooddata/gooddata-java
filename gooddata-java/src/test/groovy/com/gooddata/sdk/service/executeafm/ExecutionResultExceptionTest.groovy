@@ -1,15 +1,13 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.executeafm
 
 import com.gooddata.sdk.common.GoodDataRestException
-import com.gooddata.sdk.service.executeafm.ExecutionResultException
 import spock.lang.Specification
 import spock.lang.Unroll
-
 
 class ExecutionResultExceptionTest extends Specification {
 
@@ -17,7 +15,7 @@ class ExecutionResultExceptionTest extends Specification {
     def "should create with status #code"() {
         expect:
         new ExecutionResultException(new GoodDataRestException(code, 'reqId', 'status', null))
-            .message ==~ msgPattern
+                .message ==~ msgPattern
 
         where:
         code | msgPattern

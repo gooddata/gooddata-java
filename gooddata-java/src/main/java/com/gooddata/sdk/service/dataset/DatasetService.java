@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -7,12 +7,30 @@ package com.gooddata.sdk.service.dataset;
 
 import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.common.GoodDataRestException;
-import com.gooddata.sdk.model.dataset.*;
+import com.gooddata.sdk.model.dataset.DatasetLinks;
+import com.gooddata.sdk.model.dataset.DatasetManifest;
+import com.gooddata.sdk.model.dataset.DatasetManifests;
+import com.gooddata.sdk.model.dataset.DatasetNotFoundException;
+import com.gooddata.sdk.model.dataset.EtlMode;
+import com.gooddata.sdk.model.dataset.EtlModeType;
+import com.gooddata.sdk.model.dataset.LookupMode;
+import com.gooddata.sdk.model.dataset.MaqlDml;
+import com.gooddata.sdk.model.dataset.Pull;
+import com.gooddata.sdk.model.dataset.PullTask;
+import com.gooddata.sdk.model.dataset.TaskState;
+import com.gooddata.sdk.model.dataset.Upload;
+import com.gooddata.sdk.model.dataset.UploadStatistics;
+import com.gooddata.sdk.model.dataset.Uploads;
+import com.gooddata.sdk.model.dataset.UploadsInfo;
 import com.gooddata.sdk.model.gdc.AboutLinks.Link;
 import com.gooddata.sdk.model.gdc.TaskStatus;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.project.Project;
-import com.gooddata.sdk.service.*;
+import com.gooddata.sdk.service.AbstractPollHandler;
+import com.gooddata.sdk.service.AbstractService;
+import com.gooddata.sdk.service.FutureResult;
+import com.gooddata.sdk.service.GoodDataSettings;
+import com.gooddata.sdk.service.PollResult;
 import com.gooddata.sdk.service.gdc.DataStoreException;
 import com.gooddata.sdk.service.gdc.DataStoreService;
 import com.gooddata.sdk.service.project.model.ModelService;
@@ -29,6 +47,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNull;
@@ -184,7 +203,7 @@ public class DatasetService extends AbstractService {
                 .postForObject(Pull.URI, new Pull(dirPath), PullTask.class, project.getId());
 
         return new PollResult<>(this, new AbstractPollHandler<TaskStatus, Void>(
-                notNullState(pullTask, "created pull task").getPollUri(), TaskStatus.class, Void.class) {
+                notNullState(Objects.requireNonNull(pullTask), "created pull task").getPollUri(), TaskStatus.class, Void.class) {
             @Override
             public void handlePollResult(TaskStatus pollResult) {
                 if (!pollResult.isSuccess()) {
@@ -250,34 +269,34 @@ public class DatasetService extends AbstractService {
 
         return new PollResult<>(this,
                 new AbstractPollHandler<TaskStatus, Void>(
-                        notNullState(uriResponse, "created optimize task").getUri(),
+                        notNullState(Objects.requireNonNull(uriResponse), "created optimize task").getUri(),
                         TaskStatus.class, Void.class) {
-            @Override
-            public void handlePollResult(final TaskStatus pollResult) {
-                if (!pollResult.isSuccess()) {
-                    throw new GoodDataException("Unable to optimize SLI hash for project " + project.getId());
-                }
-                setResult(null);
-            }
+                    @Override
+                    public void handlePollResult(final TaskStatus pollResult) {
+                        if (!pollResult.isSuccess()) {
+                            throw new GoodDataException("Unable to optimize SLI hash for project " + project.getId());
+                        }
+                        setResult(null);
+                    }
 
-            @Override
-            public boolean isFinished(final ClientHttpResponse response) throws IOException {
-                if (!super.isFinished(response)) {
-                    return false;
-                }
-                final TaskStatus maqlDdlTaskStatus = extractData(response, TaskStatus.class);
-                if (maqlDdlTaskStatus.isSuccess()) {
-                    return true;
-                }
-                throw new GoodDataException("Unable to optimize SLI hash: " + maqlDdlTaskStatus.getMessages());
-            }
+                    @Override
+                    public boolean isFinished(final ClientHttpResponse response) throws IOException {
+                        if (!super.isFinished(response)) {
+                            return false;
+                        }
+                        final TaskStatus maqlDdlTaskStatus = extractData(response, TaskStatus.class);
+                        if (maqlDdlTaskStatus.isSuccess()) {
+                            return true;
+                        }
+                        throw new GoodDataException("Unable to optimize SLI hash: " + maqlDdlTaskStatus.getMessages());
+                    }
 
-            @Override
-            public void handlePollException(final GoodDataRestException e) {
-                throw new GoodDataException("Unable to optimize SLI hash: " + getPollingUri(), e);
-            }
+                    @Override
+                    public void handlePollException(final GoodDataRestException e) {
+                        throw new GoodDataException("Unable to optimize SLI hash: " + getPollingUri(), e);
+                    }
 
-        });
+                });
 
     }
 
@@ -301,39 +320,39 @@ public class DatasetService extends AbstractService {
 
         return new PollResult<>(this,
                 new AbstractPollHandler<TaskState, Void>(
-                        notNullState(uriResponse, "created update project task").getUri(),
+                        notNullState(Objects.requireNonNull(uriResponse), "created update project task").getUri(),
                         TaskState.class, Void.class) {
-            @Override
-            public void handlePollResult(final TaskState pollResult) {
-                if (!pollResult.isSuccess()) {
-                    throw new GoodDataException(errorMessage);
-                }
-                setResult(null);
-            }
+                    @Override
+                    public void handlePollResult(final TaskState pollResult) {
+                        if (!pollResult.isSuccess()) {
+                            throw new GoodDataException(errorMessage);
+                        }
+                        setResult(null);
+                    }
 
-            @Override
-            public boolean isFinished(final ClientHttpResponse response) throws IOException {
-                final TaskState taskState = extractData(response, TaskState.class);
-                if (taskState.isSuccess()) {
-                    return true;
-                } else if (!taskState.isFinished()) {
-                    return false;
-                }
-                throw new GoodDataException(errorMessage + ": " + taskState.getMessage());
-            }
+                    @Override
+                    public boolean isFinished(final ClientHttpResponse response) throws IOException {
+                        final TaskState taskState = extractData(response, TaskState.class);
+                        if (taskState.isSuccess()) {
+                            return true;
+                        } else if (!taskState.isFinished()) {
+                            return false;
+                        }
+                        throw new GoodDataException(errorMessage + ": " + taskState.getMessage());
+                    }
 
-            @Override
-            public void handlePollException(final GoodDataRestException e) {
-                throw new GoodDataException(errorMessage + ": " + getPollingUri(), e);
-            }
-        });
+                    @Override
+                    public void handlePollException(final GoodDataRestException e) {
+                        throw new GoodDataException(errorMessage + ": " + getPollingUri(), e);
+                    }
+                });
     }
 
     /**
      * Lists all uploads for the dataset with the given identifier in the given project. Returns empty list if there
      * are no uploads for the given dataset.
      *
-     * @param project GoodData project
+     * @param project   GoodData project
      * @param datasetId dataset identifier
      * @return collection of {@link Upload} objects or empty list
      */
@@ -349,7 +368,7 @@ public class DatasetService extends AbstractService {
 
             if (result == null) {
                 throw new GoodDataException("Empty response from '" + dataSet.getUploadsUri() + "'.");
-            } else if (result.items() == null){
+            } else if (result.items() == null) {
                 return emptyList();
             }
 
@@ -363,7 +382,7 @@ public class DatasetService extends AbstractService {
      * Returns last upload for the dataset with given identifier in the given project. Returns null if the last upload
      * doesn't exist.
      *
-     * @param project GoodData project
+     * @param project   GoodData project
      * @param datasetId dataset identifier
      * @return last dataset upload or {@code null} if the upload doesn't exist
      */
@@ -400,7 +419,7 @@ public class DatasetService extends AbstractService {
 
     /**
      * Returns {@link UploadsInfo.DataSet} object containing upload information for the given dataset in the given project.
-     *
+     * <p>
      * Package-private for testing purposes.
      */
     UploadsInfo.DataSet getDataSetInfo(Project project, String datasetId) {

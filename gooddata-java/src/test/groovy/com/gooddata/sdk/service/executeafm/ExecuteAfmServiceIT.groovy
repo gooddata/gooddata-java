@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -14,12 +14,7 @@ import com.gooddata.sdk.model.executeafm.afm.Afm
 import com.gooddata.sdk.model.executeafm.afm.AttributeItem
 import com.gooddata.sdk.model.executeafm.afm.MeasureItem
 import com.gooddata.sdk.model.executeafm.afm.SimpleMeasureDefinition
-import com.gooddata.sdk.model.executeafm.response.AttributeHeader
-import com.gooddata.sdk.model.executeafm.response.AttributeInHeader
-import com.gooddata.sdk.model.executeafm.response.ExecutionResponse
-import com.gooddata.sdk.model.executeafm.response.MeasureGroupHeader
-import com.gooddata.sdk.model.executeafm.response.MeasureHeaderItem
-import com.gooddata.sdk.model.executeafm.response.ResultDimension
+import com.gooddata.sdk.model.executeafm.response.*
 import com.gooddata.sdk.model.executeafm.result.ExecutionResult
 import com.gooddata.sdk.model.executeafm.result.Paging
 import com.gooddata.sdk.model.project.Project
@@ -52,8 +47,8 @@ class ExecuteAfmServiceIT extends GoodDataITBase<ExecuteAfmService> {
 
     @Shared
     Execution afmExecution = new Execution(new Afm()
-                    .addAttribute(new AttributeItem(ATTR_QUALIFIER, 'a1'))
-                    .addMeasure(new MeasureItem(new SimpleMeasureDefinition(MEASURE_QUALIFIER), 'm1')))
+            .addAttribute(new AttributeItem(ATTR_QUALIFIER, 'a1'))
+            .addMeasure(new MeasureItem(new SimpleMeasureDefinition(MEASURE_QUALIFIER), 'm1')))
 
     @Shared
     VisualizationExecution visualizationExecution = new VisualizationExecution('/gdc/md/PROJECT_ID/obj/4')
@@ -70,7 +65,7 @@ class ExecuteAfmServiceIT extends GoodDataITBase<ExecuteAfmService> {
                 .havingMethodEqualTo('POST')
                 .havingPathEqualTo('/gdc/app/projects/PROJECT_ID/executeAfm')
                 .havingBody(jsonEquals(afmExecution))
-        .respond()
+                .respond()
                 .withBody(OBJECT_MAPPER.writeValueAsString(response))
                 .withStatus(200)
 
@@ -88,7 +83,7 @@ class ExecuteAfmServiceIT extends GoodDataITBase<ExecuteAfmService> {
                 .havingMethodEqualTo('POST')
                 .havingPathEqualTo('/gdc/app/projects/PROJECT_ID/executeAfm')
                 .havingBody(jsonEquals(afmExecution))
-        .respond()
+                .respond()
                 .withStatus(400)
 
         when:
@@ -107,7 +102,7 @@ class ExecuteAfmServiceIT extends GoodDataITBase<ExecuteAfmService> {
         onRequest()
                 .respond()
                 .withStatus(202)
-         .thenRespond()
+                .thenRespond()
                 .withBody(OBJECT_MAPPER.writeValueAsString(result))
                 .withStatus(200)
 
@@ -123,19 +118,19 @@ class ExecuteAfmServiceIT extends GoodDataITBase<ExecuteAfmService> {
 
         where:
         order | resultQuery                                     | getResult
-        '1st' | RESULT_QUERY                                    | {it.getResult(response)}
-        '2nd' | "$RESULT_QUERY_BASE&offset=1%2C0&limit=10%2C10" | {it.getResult(response, new ResultPage([1, 0], [10, 10]))}
+        '1st' | RESULT_QUERY                                    | { it.getResult(response) }
+        '2nd' | "$RESULT_QUERY_BASE&offset=1%2C0&limit=10%2C10" | { it.getResult(response, new ResultPage([1, 0], [10, 10])) }
     }
 
     @Unroll
     "should handle failed result with status #statusCode"() {
         given:
         onRequest()
-            .havingMethodEqualTo('GET')
-            .havingPathEqualTo(RESULT_PATH)
-            .havingQueryStringEqualTo(RESULT_QUERY)
-        .respond()
-            .withStatus(statusCode)
+                .havingMethodEqualTo('GET')
+                .havingPathEqualTo(RESULT_PATH)
+                .havingQueryStringEqualTo(RESULT_QUERY)
+                .respond()
+                .withStatus(statusCode)
 
         when:
         service.getResult(response).get()
@@ -159,7 +154,7 @@ class ExecuteAfmServiceIT extends GoodDataITBase<ExecuteAfmService> {
                 .havingMethodEqualTo('POST')
                 .havingPathEqualTo('/gdc/app/projects/PROJECT_ID/executeVisualization')
                 .havingBody(jsonEquals(visualizationExecution))
-        .respond()
+                .respond()
                 .withBody(OBJECT_MAPPER.writeValueAsString(response))
                 .withStatus(200)
 
@@ -177,7 +172,7 @@ class ExecuteAfmServiceIT extends GoodDataITBase<ExecuteAfmService> {
                 .havingMethodEqualTo('POST')
                 .havingPathEqualTo('/gdc/app/projects/PROJECT_ID/executeVisualization')
                 .havingBody(jsonEquals(visualizationExecution))
-        .respond()
+                .respond()
                 .withStatus(400)
 
         when:

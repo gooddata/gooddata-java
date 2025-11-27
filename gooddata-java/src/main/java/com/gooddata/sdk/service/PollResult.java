@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -16,7 +16,7 @@ public final class PollResult<T> implements FutureResult<T> {
 
     private final AbstractService service;
 
-    private final PollHandler<?,T> handler;
+    private final PollHandler<?, T> handler;
 
     /**
      * Creates a new instance of the result to be eventually retrieved by polling on the REST API.<p>

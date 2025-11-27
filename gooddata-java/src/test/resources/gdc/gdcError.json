@@ -1,12 +1,15 @@
 {
-    "error" : {
-        "errorClass" : "CLASS",
-        "trace" : "TRACE",
-        "message" : "MSG: %s, %s",
-        "component" : "COMPONENT",
-        "errorId" : "ID",
-        "errorCode" : "CODE",
-        "requestId" : "REQ",
-        "parameters" : [ "PARAM1", "PARAM2" ]
-    }
+  "error": {
+    "errorClass": "CLASS",
+    "trace": "TRACE",
+    "message": "MSG: %s, %s",
+    "component": "COMPONENT",
+    "errorId": "ID",
+    "errorCode": "CODE",
+    "requestId": "REQ",
+    "parameters": [
+      "PARAM1",
+      "PARAM2"
+    ]
+  }
 }

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -10,8 +10,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gooddata.sdk.model.executeafm.Execution;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.executeafm.Execution;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,8 @@ public class ExecutionResult {
 
     /**
      * Creates new result
-     * @param data result data
+     *
+     * @param data   result data
      * @param paging result paging
      */
     public ExecutionResult(final String[] data, final Paging paging) {
@@ -46,7 +47,8 @@ public class ExecutionResult {
 
     /**
      * Creates new result
-     * @param data result data
+     *
+     * @param data   result data
      * @param paging result paging
      */
     public ExecutionResult(final String[][] data, final Paging paging) {
@@ -56,10 +58,11 @@ public class ExecutionResult {
 
     /**
      * Creates new result
-     * @param data result data
-     * @param paging result paging
+     *
+     * @param data        result data
+     * @param paging      result paging
      * @param headerItems items for headers, for each header in each dimension, there is a list of header items
-     * @param totals data of totals, for each total in each dimension, there is a list of total's values
+     * @param totals      data of totals, for each total in each dimension, there is a list of total's values
      */
     @JsonCreator
     ExecutionResult(@JsonProperty("data") final DataList data,
@@ -99,6 +102,7 @@ public class ExecutionResult {
 
     /**
      * Sets header items, for each header in each dimension, there is a list of header items
+     *
      * @param headerItems header items
      */
     public void setHeaderItems(final List<List<List<ResultHeaderItem>>> headerItems) {
@@ -107,6 +111,7 @@ public class ExecutionResult {
 
     /**
      * Add header items for next dimension (this method will add dimension in header items)
+     *
      * @param items header items for one dimension
      */
     public void addHeaderItems(final List<List<ResultHeaderItem>> items) {
@@ -125,6 +130,7 @@ public class ExecutionResult {
 
     /**
      * Sets total data, for each total in each dimension, there is a list of total's values
+     *
      * @param totals totals data
      */
     public void setTotals(final List<List<List<String>>> totals) {
@@ -163,6 +169,7 @@ public class ExecutionResult {
 
     /**
      * Sets warnings for this result
+     *
      * @param warnings result's warning
      */
     public void setWarnings(final List<Warning> warnings) {

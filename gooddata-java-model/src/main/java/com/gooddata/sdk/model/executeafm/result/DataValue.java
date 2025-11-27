@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -19,6 +19,7 @@ public class DataValue implements Data {
 
     /**
      * Creates new instance of given value.
+     *
      * @param value textual value, can't be null
      */
     public DataValue(final String value) {

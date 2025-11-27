@@ -1,14 +1,14 @@
 {
-    "grid": {
-        "sort": {
-            "columns": [],
-            "rows": []
-        },
-        "columnWidths": [],
-        "columns": [],
-        "metrics": [],
-        "rows": []
+  "grid": {
+    "sort": {
+      "columns": [],
+      "rows": []
     },
-    "format": "grid",
-    "filters": []
+    "columnWidths": [],
+    "columns": [],
+    "metrics": [],
+    "rows": []
+  },
+  "format": "grid",
+  "filters": []
 }

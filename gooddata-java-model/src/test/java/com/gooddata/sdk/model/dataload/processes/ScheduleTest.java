@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -112,10 +112,10 @@ public class ScheduleTest {
 
     @DataProvider(name = "scheduleParams")
     public Object[][] scheduleParams() {
-        return new Object[][] {
-                new Object[] {null, EXECUTABLE, "0 0 * * *", "process"},
-                new Object[] {process, "garbage", "0 0 * * *", "wrong executable"},
-                new Object[] {process, EXECUTABLE, "", "cron can't be empty"}
+        return new Object[][]{
+                new Object[]{null, EXECUTABLE, "0 0 * * *", "process"},
+                new Object[]{process, "garbage", "0 0 * * *", "wrong executable"},
+                new Object[]{process, EXECUTABLE, "", "cron can't be empty"}
         };
     }
 

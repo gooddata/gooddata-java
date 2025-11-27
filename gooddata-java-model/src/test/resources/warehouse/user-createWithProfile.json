@@ -1,6 +1,6 @@
 {
-    "user" : {
-        "role" : "admin",
-        "profile" : "/gdc/account/profile/{profile-id}"
-    }
+  "user": {
+    "role": "admin",
+    "profile": "/gdc/account/profile/{profile-id}"
+  }
 }

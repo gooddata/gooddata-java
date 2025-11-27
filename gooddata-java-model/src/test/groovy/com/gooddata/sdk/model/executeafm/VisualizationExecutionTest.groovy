@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -41,7 +41,7 @@ class VisualizationExecutionTest extends Specification {
                 '/gdc/md/PROJECT/vizObjUri',
                 [new ExpressionFilter('some expression')],
                 new ResultSpec([new Dimension(['i1'], [new TotalItem('mId', Total.AVG, 'a1')].toSet())],
-                [new AttributeSortItem('asc', 'aId')])
+                        [new AttributeSortItem('asc', 'aId')])
         ), jsonEquals(resource(VIZ_EXECUTION_FULL_JSON))
     }
 

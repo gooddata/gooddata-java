@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -23,7 +23,8 @@ public class ProjectValidationResultParamTest {
     public void testDeser() throws Exception {
         final List<ProjectValidationResultParam> result = OBJECT_MAPPER
                 .readValue(readFromResource("/project/project-validationResultParam.json"),
-                        new TypeReference<List<ProjectValidationResultParam>>() { });
+                        new TypeReference<List<ProjectValidationResultParam>>() {
+                        });
 
         assertThat(result, hasItem(sameBeanAs(new ProjectValidationResultStringParam("report"))));
         assertThat(result, hasItem(sameBeanAs(new ProjectValidationResultObjectParam("Historical backlog", "/gdc/md/d45dlwq6fixqsgbukrlnir1qsw8y44q6/obj/41886"))));

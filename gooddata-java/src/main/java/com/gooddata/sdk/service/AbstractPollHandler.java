@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -18,17 +18,17 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
  *
  * @param <P> polling type
  * @param <R> result type
- *
  * @see FutureResult
  */
-public abstract class AbstractPollHandler<P,R> extends AbstractPollHandlerBase<P,R> {
+public abstract class AbstractPollHandler<P, R> extends AbstractPollHandlerBase<P, R> {
 
     private URI pollingUri;
 
     /**
      * Creates a new instance of polling handler
+     *
      * @param pollingUri  URI for polling
-     * @param pollClass class of the polling object (or {@link Void})
+     * @param pollClass   class of the polling object (or {@link Void})
      * @param resultClass class of the result (or {@link Void})
      */
     public AbstractPollHandler(final String pollingUri, final Class<P> pollClass, Class<R> resultClass) {
@@ -41,12 +41,12 @@ public abstract class AbstractPollHandler<P,R> extends AbstractPollHandlerBase<P
         return pollingUri.toString();
     }
 
+    protected void setPollingUri(final String pollingUri) {
+        this.pollingUri = URI.create(notNull(pollingUri, "pollingUri"));
+    }
+
     @Override
     public final URI getPolling() {
         return pollingUri;
-    }
-
-    protected void setPollingUri(final String pollingUri) {
-        this.pollingUri = URI.create(notNull(pollingUri, "pollingUri"));
     }
 }

@@ -1,16 +1,19 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.dataset;
 
-import com.gooddata.sdk.service.AbstractGoodDataIT;
 import com.gooddata.sdk.common.GoodDataException;
-import com.gooddata.sdk.model.dataset.*;
+import com.gooddata.sdk.model.dataset.DatasetManifest;
+import com.gooddata.sdk.model.dataset.TaskState;
+import com.gooddata.sdk.model.dataset.Upload;
+import com.gooddata.sdk.model.dataset.UploadStatistics;
 import com.gooddata.sdk.model.gdc.AboutLinks.Link;
 import com.gooddata.sdk.model.gdc.TaskStatus;
 import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -25,7 +28,10 @@ import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.startsWith;
 import static org.testng.Assert.fail;
 
 public class DatasetServiceIT extends AbstractGoodDataIT {
@@ -46,22 +52,22 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/gdc/gdc.json"));
         onRequest()
                 .havingPath(startsWith("/uploads/"))
                 .havingMethodEqualTo("PUT")
-            .respond()
+                .respond()
                 .withStatus(200);
         onRequest()
                 .havingPath(startsWith("/uploads/"))
                 .havingMethodEqualTo("DELETE")
-            .respond()
+                .respond()
                 .withStatus(200);
         onRequest()
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/etl/pull2")
                 .havingMethodEqualTo("POST")
-            .respond()
+                .respond()
                 .withStatus(201)
                 .withBody(readFromResource("/dataset/pullTask.json"));
     }
@@ -70,10 +76,10 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
     public void shouldLoadDataset() throws Exception {
         onRequest()
                 .havingPathEqualTo("/gdc/md/PROJECT/tasks/task/ID/status")
-            .respond()
+                .respond()
                 .withStatus(202)
                 .withBody(readFromResource("/dataset/pullTaskStatusRunning.json"))
-            .thenRespond()
+                .thenRespond()
                 .withStatus(200)
                 .withBody(readFromResource("/dataset/pullTaskStatusOk.json"));
 
@@ -85,10 +91,10 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
     public void shouldLoadDatasets() throws Exception {
         onRequest()
                 .havingPathEqualTo("/gdc/md/PROJECT/tasks/task/ID/status")
-            .respond()
+                .respond()
                 .withStatus(202)
                 .withBody(readFromResource("/dataset/pullTaskStatusRunning.json"))
-            .thenRespond()
+                .thenRespond()
                 .withStatus(200)
                 .withBody(readFromResource("/dataset/pullTaskStatusOk.json"));
 
@@ -115,7 +121,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
     public void shouldFailLoading() throws Exception {
         onRequest()
                 .havingPathEqualTo("/gdc/md/PROJECT/tasks/task/ID/status")
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/dataset/pullTaskStatusError.json"));
         final DatasetManifest manifest = readObjectFromResource("/dataset/datasetManifest.json", DatasetManifest.class);
@@ -132,7 +138,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/ldm/singleloadinterface/foo/manifest")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/dataset/datasetManifest.json"))
         ;
 
@@ -145,7 +151,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/ldm/singleloadinterface")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/dataset/datasetLinks.json"))
         ;
 
@@ -263,13 +269,13 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
     public void shouldListUploadsForDataset() throws Exception {
         onRequest()
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/data/sets")
-        .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/dataset/uploads/data-sets.json"));
 
         onRequest()
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/data/uploads/814")
-        .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/dataset/uploads/uploads.json"));
 
@@ -283,13 +289,13 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
     public void shouldGetLastUploadForDataset() throws Exception {
         onRequest()
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/data/sets")
-        .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/dataset/uploads/data-sets.json"));
 
         onRequest()
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/data/upload/1076")
-        .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/dataset/uploads/upload.json"));
 
@@ -303,7 +309,7 @@ public class DatasetServiceIT extends AbstractGoodDataIT {
     public void shouldGetUploadStatistics() throws Exception {
         onRequest()
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/data/uploads_info")
-        .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/dataset/uploads/data-uploads-info.json"));
 

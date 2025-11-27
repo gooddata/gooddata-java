@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -82,7 +82,7 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         final FutureResult<ScheduleExecution> future = gd.getProcessService().executeSchedule(schedule);
         final ScheduleExecution scheduleExecution = future.get();
 
-        assertThat(scheduleExecution.getStatus(),  is("OK"));
+        assertThat(scheduleExecution.getStatus(), is("OK"));
     }
 
     @Test(groups = "process", dependsOnMethods = "createSchedule")

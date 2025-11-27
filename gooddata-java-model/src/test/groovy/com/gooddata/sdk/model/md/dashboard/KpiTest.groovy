@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -27,12 +27,12 @@ class KpiTest extends Specification {
         kpi.comparisonType == 'lastYear'
         kpi.comparisonDirection == 'growIsGood'
         kpi.title == 'Avg. Salary (CSV)'
-        kpi.ignoreDashboardFilters*.datasetUri == [ '/date/dataset/1' ]
+        kpi.ignoreDashboardFilters*.datasetUri == ['/date/dataset/1']
     }
 
     def "creates new kpi and serializes to JSON"() {
         when:
-        def kpi = new Kpi('KPI 1', '/metric/1', 'lastYear', 'growIsGood', [ new DateFilterReference('/date/dataset/1') ], '/dateDs/1')
+        def kpi = new Kpi('KPI 1', '/metric/1', 'lastYear', 'growIsGood', [new DateFilterReference('/date/dataset/1')], '/dateDs/1')
 
         then:
         that kpi, jsonEquals(readStringFromResource('/md/dashboard/kpi-new.json'))

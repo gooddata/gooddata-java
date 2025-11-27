@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -9,8 +9,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.executeafm.ObjQualifier;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -29,20 +29,16 @@ import static com.gooddata.sdk.model.executeafm.afm.PopMeasureDefinition.NAME;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PopMeasureDefinition extends DerivedMeasureDefinition {
 
-    private static final long serialVersionUID = 1430640153994197345L;
-
     static final String NAME = "popMeasure";
-
+    private static final long serialVersionUID = 1430640153994197345L;
     private final ObjQualifier popAttribute;
 
     /**
      * Creates new definition from given measure identifier referencing another measure in {@link Afm} and given attribute qualifier (should qualify date
      * attribute)
      *
-     * @param measureIdentifier
-     *         measure identifier
-     * @param popAttribute
-     *         "period over period" date attribute
+     * @param measureIdentifier measure identifier
+     * @param popAttribute      "period over period" date attribute
      */
     @JsonCreator
     public PopMeasureDefinition(@JsonProperty("measureIdentifier") final String measureIdentifier,

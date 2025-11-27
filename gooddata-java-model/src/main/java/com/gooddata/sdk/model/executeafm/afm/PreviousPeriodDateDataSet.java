@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -7,9 +7,9 @@ package com.gooddata.sdk.model.executeafm.afm;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.model.executeafm.afm.filter.DateFilter;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -29,14 +29,10 @@ public class PreviousPeriodDateDataSet implements Serializable {
     /**
      * Create a new instance of {@link PreviousPeriodDateDataSet}.
      *
-     * @param dataSet
-     *         The {@link ObjQualifier} of the data set that match one of the {@link DateFilter} in the execution. The parameter must not be null.
-     * @param periodsAgo
-     *         The number of periods defined by the matching date filter which this period will be shifted about. The positive number shifts the period to
-     *         the past, the negative to the future. The parameter must not be null.
-     *
-     * @throws IllegalArgumentException
-     *         Thrown when one of the required parameter is null.
+     * @param dataSet    The {@link ObjQualifier} of the data set that match one of the {@link DateFilter} in the execution. The parameter must not be null.
+     * @param periodsAgo The number of periods defined by the matching date filter which this period will be shifted about. The positive number shifts the period to
+     *                   the past, the negative to the future. The parameter must not be null.
+     * @throws IllegalArgumentException Thrown when one of the required parameter is null.
      */
     @JsonCreator
     public PreviousPeriodDateDataSet(

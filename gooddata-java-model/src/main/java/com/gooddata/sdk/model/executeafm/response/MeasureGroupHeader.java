@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -24,6 +24,7 @@ public class MeasureGroupHeader implements Header {
 
     /**
      * Creates new header
+     *
      * @param items header items
      */
     @JsonCreator
@@ -33,6 +34,7 @@ public class MeasureGroupHeader implements Header {
 
     /**
      * Header items for particular measures
+     *
      * @return header items
      */
     public List<MeasureHeaderItem> getItems() {

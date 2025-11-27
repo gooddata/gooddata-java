@@ -1,11 +1,16 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.model.md;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gooddata.sdk.common.util.BooleanDeserializer;
@@ -27,7 +32,7 @@ public class AttributeDisplayForm extends DisplayForm implements Updatable {
 
     @JsonCreator
     private AttributeDisplayForm(@JsonProperty("meta") Meta meta, @JsonProperty("content") AttributeContent content,
-            @JsonProperty("links") Links links) {
+                                 @JsonProperty("links") Links links) {
         super(meta, content, links);
         this.attributeContent = content;
     }

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -28,9 +28,9 @@ class LcmEntityTest extends Specification {
         expect:
         that new LcmEntity('PROJECT_ID', 'PROJECT_TITLE', 'CLIENT', 'SEGMENT', 'DATA_PRODUCT',
                 [
-                        project: '/gdc/projects/PROJECT_ID',
-                        client: '/gdc/domains/default/dataproducts/DATA_PRODUCT/clients/CLIENT',
-                        segment: '/gdc/domains/default/dataproducts/DATA_PRODUCT/segments/SEGMENT',
+                        project    : '/gdc/projects/PROJECT_ID',
+                        client     : '/gdc/domains/default/dataproducts/DATA_PRODUCT/clients/CLIENT',
+                        segment    : '/gdc/domains/default/dataproducts/DATA_PRODUCT/segments/SEGMENT',
                         dataProduct: '/gdc/domains/default/dataproducts/DATA_PRODUCT'
                 ]),
                 jsonEquals(resource(LCM_ENTITY_FULL_JSON))

@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -10,9 +10,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.gooddata.sdk.model.md.report.Total;
 
-import static com.gooddata.sdk.model.executeafm.result.ResultTotalHeaderItem.NAME;
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.model.executeafm.result.ResultTotalHeaderItem.NAME;
 
 /**
  * Header item for total.
@@ -26,6 +26,7 @@ public class ResultTotalHeaderItem extends ResultHeaderItem {
 
     /**
      * Creates new instance of given total type, type is used for the name as well
+     *
      * @param type total type
      */
     public ResultTotalHeaderItem(final String type) {
@@ -34,6 +35,7 @@ public class ResultTotalHeaderItem extends ResultHeaderItem {
 
     /**
      * Creates new instance of given total type, type is used for the name as well
+     *
      * @param type total type
      */
     public ResultTotalHeaderItem(final Total type) {
@@ -42,6 +44,7 @@ public class ResultTotalHeaderItem extends ResultHeaderItem {
 
     /**
      * Creates new instance of given header name and total type
+     *
      * @param name header name
      * @param type total type
      */
@@ -53,6 +56,7 @@ public class ResultTotalHeaderItem extends ResultHeaderItem {
 
     /**
      * Creates new instance of given header name and total type
+     *
      * @param name header name
      * @param type total type
      */

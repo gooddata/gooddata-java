@@ -9,7 +9,8 @@
         },
         "alias": "attribute1Alias"
       }
-    }, {
+    },
+    {
       "visualizationAttribute": {
         "localIdentifier": "attribute2",
         "displayForm": {

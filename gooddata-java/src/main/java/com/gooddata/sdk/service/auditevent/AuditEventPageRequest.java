@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -8,6 +8,8 @@ package com.gooddata.sdk.service.auditevent;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.common.util.MutableUri;
 import org.springframework.beans.BeanUtils;
+
+import java.util.Objects;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
@@ -19,19 +21,6 @@ public final class AuditEventPageRequest extends TimeFilterPageRequest {
     private String type;
 
     public AuditEventPageRequest() {
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * Specify event type for filtering purposes
-     *
-     * @param type event type
-     */
-    public void setType(final String type) {
-        this.type = type;
     }
 
     /**
@@ -49,9 +38,22 @@ public final class AuditEventPageRequest extends TimeFilterPageRequest {
         return copy;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * Specify event type for filtering purposes
+     *
+     * @param type event type
+     */
+    public void setType(final String type) {
+        this.type = type;
+    }
+
     /**
      * Copy this request parameters and increment request parameter limit.
-     * If Limit is negative, than sanitized limit is taken and incremented.
+     * If Limit is negative, then sanitized limit is taken and incremented.
      *
      * @return new instance with incremented limit
      */
@@ -80,15 +82,14 @@ public final class AuditEventPageRequest extends TimeFilterPageRequest {
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
-        if (!(o instanceof AuditEventPageRequest)) return false;
+        if (!(o instanceof AuditEventPageRequest that)) return false;
         if (!super.equals(o)) return false;
 
-        final AuditEventPageRequest that = (AuditEventPageRequest) o;
         if (!that.canEqual(this)) return false;
 
-        if (from != null ? !from.equals(that.from) : that.from != null) return false;
-        if (to != null ? !to.equals(that.to) : that.to != null) return false;
-        return type != null ? type.equals(that.type) : that.type == null;
+        if (!Objects.equals(from, that.from)) return false;
+        if (!Objects.equals(to, that.to)) return false;
+        return Objects.equals(type, that.type);
     }
 
     @Override

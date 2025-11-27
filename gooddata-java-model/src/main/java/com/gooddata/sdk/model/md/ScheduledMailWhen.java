@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -40,13 +40,32 @@ public class ScheduledMailWhen implements Serializable {
         this.timeZone = timeZone;
     }
 
-    public ScheduledMailWhen() {}
+    public ScheduledMailWhen() {
+    }
 
-    public String getRecurrency() { return recurrency; }
+    public String getRecurrency() {
+        return recurrency;
+    }
 
-    public LocalDate getStartDate() { return startDate; }
+    public void setRecurrency(String recurrency) {
+        this.recurrency = recurrency;
+    }
 
-    public String getTimeZone() { return timeZone; }
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -55,8 +74,10 @@ public class ScheduledMailWhen implements Serializable {
 
         ScheduledMailWhen scheduledMailWhen = (ScheduledMailWhen) o;
 
-        if (recurrency != null ? !recurrency.equals(scheduledMailWhen.recurrency) : scheduledMailWhen.recurrency != null) return false;
-        if (startDate != null ? !startDate.equals(scheduledMailWhen.startDate) : scheduledMailWhen.startDate != null) return false;
+        if (recurrency != null ? !recurrency.equals(scheduledMailWhen.recurrency) : scheduledMailWhen.recurrency != null)
+            return false;
+        if (startDate != null ? !startDate.equals(scheduledMailWhen.startDate) : scheduledMailWhen.startDate != null)
+            return false;
         return !(timeZone != null ? !timeZone.equals(scheduledMailWhen.timeZone) : scheduledMailWhen.timeZone != null);
 
     }
@@ -67,18 +88,6 @@ public class ScheduledMailWhen implements Serializable {
         result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
         result = 31 * result + (timeZone != null ? timeZone.hashCode() : 0);
         return result;
-    }
-
-    public void setRecurrency(String recurrency) {
-        this.recurrency = recurrency;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public void setTimeZone(String timeZone) {
-        this.timeZone = timeZone;
     }
 
     @Override

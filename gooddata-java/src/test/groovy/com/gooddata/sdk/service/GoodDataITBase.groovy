@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -21,9 +21,9 @@ abstract class GoodDataITBase<T> extends Specification {
         endpoint = new GoodDataEndpoint('localhost', port(), 'http')
         gd = new GoodData(
                 new LoginPasswordGoodDataRestProvider(
-                    endpoint,
-                    createGoodDataSettings(),
-                    'sdk@gooddata.com', 'sdk'
+                        endpoint,
+                        createGoodDataSettings(),
+                        'sdk@gooddata.com', 'sdk'
                 ),
         )
     }

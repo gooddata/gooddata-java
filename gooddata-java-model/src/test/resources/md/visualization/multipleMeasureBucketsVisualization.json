@@ -28,7 +28,8 @@
               }
             }
           ]
-        }, {
+        },
+        {
           "localIdentifier": "measures 2",
           "items": [
             {
@@ -47,7 +48,8 @@
                   }
                 }
               }
-            }, {
+            },
+            {
               "measure": {
                 "localIdentifier": "measure2pop",
                 "title": "Measure 2 pop",
@@ -67,7 +69,9 @@
       ],
       "filters": [],
       "properties": "{\"key\":\"value\"}",
-      "references": { "key": "value" }
+      "references": {
+        "key": "value"
+      }
     }
   }
 }

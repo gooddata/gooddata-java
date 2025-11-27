@@ -1,10 +1,10 @@
 {
-  "dimension" : {
-    "content" : {
-      "attributes" : []
+  "dimension": {
+    "content": {
+      "attributes": []
     },
-    "meta" : {
-      "title" : "Dimension"
+    "meta": {
+      "title": "Dimension"
     }
   }
 }

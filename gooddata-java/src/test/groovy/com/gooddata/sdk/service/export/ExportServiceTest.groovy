@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -19,12 +19,17 @@ import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
 
 class ExportServiceTest extends Specification {
 
-    @Subject ExportService service = new ExportService(new RestTemplate(), new GoodDataSettings())
+    @Subject
+    ExportService service = new ExportService(new RestTemplate(), new GoodDataSettings())
 
-    @Shared ProjectDashboard dashboard = readObjectFromResource('/md/projectDashboard.json', ProjectDashboard)
-    @Shared ProjectDashboard.Tab tab = dashboard.tabs.first()
-    @Shared Report report = readObjectFromResource('/md/report/report.json', Report)
-    @Shared ReportDefinition reportDefinition = readObjectFromResource('/md/report/gridReportDefinition.json', ReportDefinition)
+    @Shared
+    ProjectDashboard dashboard = readObjectFromResource('/md/projectDashboard.json', ProjectDashboard)
+    @Shared
+    ProjectDashboard.Tab tab = dashboard.tabs.first()
+    @Shared
+    Report report = readObjectFromResource('/md/report/report.json', Report)
+    @Shared
+    ReportDefinition reportDefinition = readObjectFromResource('/md/report/gridReportDefinition.json', ReportDefinition)
 
     def "should not create"() {
         when:

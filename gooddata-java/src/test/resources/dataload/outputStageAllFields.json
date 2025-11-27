@@ -1,12 +1,12 @@
 {
-  "outputStage" : {
-    "schema" : "/gdc/datawarehouse/instances/instanceId/schemas/default",
-    "clientId" : "clientId",
-    "outputStagePrefix" : "outputStagePrefix",
-    "links" : {
-      "self" : "/gdc/dataload/projects/projectId/outputStage",
-      "outputStageDiff" : "/gdc/dataload/projects/projectId/outputStage/sqlDiff",
-      "dataloadProcess" : "/gdc/projects/projectId/dataload/processes/processId"
+  "outputStage": {
+    "schema": "/gdc/datawarehouse/instances/instanceId/schemas/default",
+    "clientId": "clientId",
+    "outputStagePrefix": "outputStagePrefix",
+    "links": {
+      "self": "/gdc/dataload/projects/projectId/outputStage",
+      "outputStageDiff": "/gdc/dataload/projects/projectId/outputStage/sqlDiff",
+      "dataloadProcess": "/gdc/projects/projectId/dataload/processes/processId"
     }
   }
 }

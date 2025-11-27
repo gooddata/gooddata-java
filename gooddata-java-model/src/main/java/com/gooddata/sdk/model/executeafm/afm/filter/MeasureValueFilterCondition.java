@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -16,7 +16,7 @@ import java.util.Objects;
 
 /**
  * Covers all the conditions that can be used within {@link MeasureValueFilter}.
- * 
+ * <p>
  * Contains shared functionality to set a custom value instead of {@code null} measure
  * values against the condition's value will be compared to.
  */

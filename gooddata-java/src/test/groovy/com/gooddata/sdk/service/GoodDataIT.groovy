@@ -1,19 +1,17 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service
 
-import com.gooddata.sdk.service.gdc.GdcService
 import com.gooddata.sdk.common.gdc.Header
-import org.apache.http.HttpHeaders
+import com.gooddata.sdk.service.gdc.GdcService
+import org.apache.hc.core5.http.HttpHeaders
 
 import static net.jadler.Jadler.onRequest
 import static net.jadler.Jadler.verifyThatRequest
-import static org.hamcrest.CoreMatchers.equalTo
-import static org.hamcrest.CoreMatchers.hasItem
-import static org.hamcrest.CoreMatchers.startsWith
+import static org.hamcrest.CoreMatchers.*
 
 class GoodDataIT extends GoodDataITBase<GdcService> {
 

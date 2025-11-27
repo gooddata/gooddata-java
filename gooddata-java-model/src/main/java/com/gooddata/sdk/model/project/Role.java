@@ -1,17 +1,23 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.model.project;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.gooddata.sdk.model.md.Meta;
 import com.gooddata.sdk.common.util.BooleanDeserializer;
 import com.gooddata.sdk.common.util.BooleanStringSerializer;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.md.Meta;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -85,6 +91,11 @@ public class Role {
         return meta.getIdentifier();
     }
 
+    @JsonIgnore
+    public String getUri() {
+        return links.get(SELF_LINK);
+    }
+
     /**
      * Allows service to set self link as it is not provided by REST API.
      * <p>
@@ -92,11 +103,6 @@ public class Role {
      */
     public void setUri(final String uri) {
         links.put(SELF_LINK, uri);
-    }
-
-    @JsonIgnore
-    public String getUri() {
-        return links.get(SELF_LINK);
     }
 
     @Override

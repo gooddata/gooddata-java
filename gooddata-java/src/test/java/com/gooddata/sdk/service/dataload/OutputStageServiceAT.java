@@ -1,24 +1,24 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.dataload;
 
-import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.model.dataload.OutputStage;
 import com.gooddata.sdk.model.project.Environment;
 import com.gooddata.sdk.model.warehouse.Warehouse;
 import com.gooddata.sdk.model.warehouse.WarehouseSchema;
+import com.gooddata.sdk.service.AbstractGoodDataAT;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
+
+import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-
-import java.util.concurrent.TimeUnit;
 
 public class OutputStageServiceAT extends AbstractGoodDataAT {
 
@@ -73,7 +73,7 @@ public class OutputStageServiceAT extends AbstractGoodDataAT {
 
     @AfterClass
     public void removeWarehouse() {
-        if(warehouse != null) {
+        if (warehouse != null) {
             gd.getWarehouseService().removeWarehouse(warehouse);
         }
     }

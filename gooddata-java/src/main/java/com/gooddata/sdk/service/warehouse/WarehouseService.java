@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -51,18 +51,22 @@ public class WarehouseService extends AbstractService {
     /**
      * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
      * this abstract one.
+     *
      * @param restTemplate RESTful HTTP Spring template
-     * @param settings settings
+     * @param settings     settings
      */
     public WarehouseService(final RestTemplate restTemplate, final GoodDataSettings settings) {
         super(restTemplate, settings);
+    }
+
+    private static String uriFromId(String id) {
+        return WAREHOUSE_TEMPLATE.expand(id).toString();
     }
 
     /**
      * Create new warehouse.
      *
      * @param warehouse warehouse to create
-     *
      * @return created warehouse
      */
     public FutureResult<Warehouse> createWarehouse(final Warehouse warehouse) {
@@ -78,7 +82,7 @@ public class WarehouseService extends AbstractService {
             throw new GoodDataException("Empty response when Warehouse POSTed to API");
         }
 
-        return new PollResult<>(this, new AbstractPollHandler<WarehouseTask,Warehouse>(task.getPollUri(), WarehouseTask.class, Warehouse.class) {
+        return new PollResult<>(this, new AbstractPollHandler<WarehouseTask, Warehouse>(task.getPollUri(), WarehouseTask.class, Warehouse.class) {
 
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
@@ -112,6 +116,7 @@ public class WarehouseService extends AbstractService {
 
     /**
      * Delete Warehouse.
+     *
      * @param warehouse to delete
      */
     public void removeWarehouse(final Warehouse warehouse) {
@@ -126,6 +131,7 @@ public class WarehouseService extends AbstractService {
 
     /**
      * Get Warehouse identified by given uri.
+     *
      * @param uri warehouse uri
      * @return Warehouse
      * @throws com.gooddata.sdk.common.GoodDataException when Warehouse can't be accessed
@@ -147,6 +153,7 @@ public class WarehouseService extends AbstractService {
 
     /**
      * Get Warehouse identified by given id.
+     *
      * @param id warehouse id
      * @return Warehouse
      * @throws com.gooddata.sdk.common.GoodDataException when Warehouse can't be accessed
@@ -154,10 +161,6 @@ public class WarehouseService extends AbstractService {
     public Warehouse getWarehouseById(String id) {
         notEmpty(id, "id");
         return getWarehouseByUri(uriFromId(id));
-    }
-
-    private static String uriFromId(String id) {
-        return WAREHOUSE_TEMPLATE.expand(id).toString();
     }
 
     /**
@@ -254,7 +257,7 @@ public class WarehouseService extends AbstractService {
      * Add given user to given warehouse.
      *
      * @param warehouse warehouse the user should be added to
-     * @param user user to be added
+     * @param user      user to be added
      * @return added user in warehouse
      */
     public FutureResult<WarehouseUser> addUserToWarehouse(final Warehouse warehouse, final WarehouseUser user) {
@@ -276,35 +279,36 @@ public class WarehouseService extends AbstractService {
                 new AbstractPollHandler<WarehouseTask, WarehouseUser>
                         (task.getPollUri(), WarehouseTask.class, WarehouseUser.class) {
 
-            @Override
-            public boolean isFinished(ClientHttpResponse response) throws IOException {
-                return HttpStatus.CREATED.equals(response.getStatusCode());
-            }
+                    @Override
+                    public boolean isFinished(ClientHttpResponse response) throws IOException {
+                        return HttpStatus.CREATED.equals(response.getStatusCode());
+                    }
 
-            @Override
-            public void handlePollResult(WarehouseTask pollResult) {
-                try {
-                    final WarehouseUser newUser = restTemplate.getForObject(pollResult.getWarehouseUserUri(), WarehouseUser.class);
-                    setResult(newUser);
-                } catch (GoodDataException | RestClientException e) {
-                    throw new GoodDataException("User added to warehouse, but can't get it back, uri: "
-                            + pollResult.getWarehouseUserUri(), e);
-                }
-            }
+                    @Override
+                    public void handlePollResult(WarehouseTask pollResult) {
+                        try {
+                            final WarehouseUser newUser = restTemplate.getForObject(pollResult.getWarehouseUserUri(), WarehouseUser.class);
+                            setResult(newUser);
+                        } catch (GoodDataException | RestClientException e) {
+                            throw new GoodDataException("User added to warehouse, but can't get it back, uri: "
+                                    + pollResult.getWarehouseUserUri(), e);
+                        }
+                    }
 
-            @Override
-            public void handlePollException(final GoodDataRestException e) {
-                throw new GoodDataException("Unable to add user to warehouse", e);
-            }
-        });
+                    @Override
+                    public void handlePollException(final GoodDataRestException e) {
+                        throw new GoodDataException("Unable to add user to warehouse", e);
+                    }
+                });
     }
 
     /**
      * Remove given user from warehouse instance
+     *
      * @param user to remove from warehouse
      * @return empty future result
      * @throws WarehouseUserNotFoundException when user for removal can't be found
-     * @throws GoodDataException any other reason
+     * @throws GoodDataException              any other reason
      */
     public FutureResult<Void> removeUserFromWarehouse(final WarehouseUser user) {
         notNull(user, "user");
@@ -330,21 +334,21 @@ public class WarehouseService extends AbstractService {
                 new AbstractPollHandler<WarehouseTask, Void>
                         (task.getPollUri(), WarehouseTask.class, Void.class) {
 
-                @Override
-                public boolean isFinished(ClientHttpResponse response) throws IOException {
-                    return HttpStatus.CREATED.equals(response.getStatusCode());
-                }
+                    @Override
+                    public boolean isFinished(ClientHttpResponse response) throws IOException {
+                        return HttpStatus.CREATED.equals(response.getStatusCode());
+                    }
 
-                @Override
-                public void handlePollResult(WarehouseTask pollResult) {
-                    setResult(null);
-                }
+                    @Override
+                    public void handlePollResult(WarehouseTask pollResult) {
+                        setResult(null);
+                    }
 
-                @Override
-                public void handlePollException(final GoodDataRestException e) {
-                    throw new GoodDataException("Unable to remove user from warehouse", e);
-                }
-        });
+                    @Override
+                    public void handlePollException(final GoodDataRestException e) {
+                        throw new GoodDataException("Unable to remove user from warehouse", e);
+                    }
+                });
     }
 
     /**
@@ -416,7 +420,7 @@ public class WarehouseService extends AbstractService {
      * get warehouse schema by name
      *
      * @param warehouse to get schema for
-     * @param name of schema
+     * @param name      of schema
      * @return warehouse schema
      */
     public WarehouseSchema getWarehouseSchemaByName(final Warehouse warehouse, final String name) {

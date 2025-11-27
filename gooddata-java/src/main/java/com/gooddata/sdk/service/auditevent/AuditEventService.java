@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -36,9 +36,10 @@ public class AuditEventService extends AbstractService {
 
     /**
      * Service for audit events
-     * @param restTemplate rest template
+     *
+     * @param restTemplate   rest template
      * @param accountService account service
-     * @param settings settings
+     * @param settings       settings
      */
     public AuditEventService(final RestTemplate restTemplate, final AccountService accountService, final GoodDataSettings settings) {
         super(restTemplate, settings);
@@ -47,6 +48,7 @@ public class AuditEventService extends AbstractService {
 
     /**
      * Get list of audit events for the given domain id
+     *
      * @param domainId domain id
      * @return non-null paged list of events
      * @throws AuditEventsForbiddenException if current user is not admin of the given domain
@@ -57,8 +59,9 @@ public class AuditEventService extends AbstractService {
 
     /**
      * Get list of audit events for the given domain id
+     *
      * @param domainId domain id
-     * @param page request parameters
+     * @param page     request parameters
      * @return non-null paged list of events
      * @throws AuditEventsForbiddenException if current user is not admin of the given domain
      */
@@ -72,10 +75,11 @@ public class AuditEventService extends AbstractService {
 
     /**
      * Get list of audit events for the given account
+     *
      * @param account account with valid id
      * @return non-null paged list of events
      * @throws AuditEventsForbiddenException if audit events are not enabled for the given user or the current user is
-     * not domain admin
+     *                                       not domain admin
      */
     public PageBrowser<AuditEvent> listAuditEvents(final Account account) {
         return listAuditEvents(account, new AuditEventPageRequest());
@@ -83,11 +87,12 @@ public class AuditEventService extends AbstractService {
 
     /**
      * Get list of audit events for the given account
+     *
      * @param account account with valid id
-     * @param page request parameters
+     * @param page    request parameters
      * @return non-null paged list of events
      * @throws AuditEventsForbiddenException if audit events are not enabled for the given user or the current user is
-     * not domain admin
+     *                                       not domain admin
      */
     public PageBrowser<AuditEvent> listAuditEvents(final Account account, final PageRequest page) {
         notNull(account, "account");
@@ -101,6 +106,7 @@ public class AuditEventService extends AbstractService {
 
     /**
      * Get list of audit events for current account
+     *
      * @return non-null paged list of events
      * @throws AuditEventsForbiddenException if audit events are not enabled for current user
      */
@@ -110,6 +116,7 @@ public class AuditEventService extends AbstractService {
 
     /**
      * Get list of audit events for current account
+     *
      * @param page request parameters
      * @return non-null paged list of events
      * @throws AuditEventsForbiddenException if audit events are not enabled for current user

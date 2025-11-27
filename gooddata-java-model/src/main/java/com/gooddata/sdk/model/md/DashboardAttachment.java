@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -27,18 +27,24 @@ public class DashboardAttachment extends Attachment {
             @JsonProperty("allTabs") Integer allTabs,
             @JsonProperty("executionContext") String executionContext,
             @JsonProperty("tabs") String... tabs
-            ) {
+    ) {
         super(uri);
         this.allTabs = allTabs;
         this.tabs = Arrays.asList(tabs);
         this.executionContext = executionContext;
     }
 
-    public Integer getAllTabs() { return allTabs; }
+    public Integer getAllTabs() {
+        return allTabs;
+    }
 
-    public Collection<String> getTabs() { return tabs; }
+    public Collection<String> getTabs() {
+        return tabs;
+    }
 
-    public String getExecutionContext() { return executionContext; }
+    public String getExecutionContext() {
+        return executionContext;
+    }
 
     @Override
     public boolean equals(final Object o) {

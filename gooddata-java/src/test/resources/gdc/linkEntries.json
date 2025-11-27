@@ -1,8 +1,8 @@
 {
-    "entries" : [
-        {
-            "link" : "URI",
-            "category" : "tasks-status"
-        }
-    ]
+  "entries": [
+    {
+      "link": "URI",
+      "category": "tasks-status"
+    }
+  ]
 }

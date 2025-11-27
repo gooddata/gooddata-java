@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -21,12 +21,6 @@ public enum RankingFilterOperator {
     TOP,
     BOTTOM;
 
-    @JsonValue
-    @Override
-    public String toString() {
-        return name();
-    }
-
     @JsonCreator
     public static RankingFilterOperator of(final String operator) {
         notNull(operator, "operator");
@@ -38,5 +32,11 @@ public enum RankingFilterOperator {
                             operator, stream(RankingFilterOperator.values()).map(Enum::name).collect(joining(","))),
                     e);
         }
+    }
+
+    @JsonValue
+    @Override
+    public String toString() {
+        return name();
     }
 }

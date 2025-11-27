@@ -1,29 +1,29 @@
 {
-    "sort": {
-        "columns": [],
-        "rows": []
-    },
-    "columnWidths": [
-        {
-            "width": 343
-        }
-    ],
-    "columns": [
-        "metricGroup"
-    ],
-    "metrics": [
-        {
-            "alias": "metr",
-            "uri": "/gdc/md/PROJECT_ID/obj/47"
-        }
-    ],
-    "rows": [
-        {
-            "attribute": {
-                "alias": "attr",
-                "totals": [],
-                "uri": "/gdc/md/PROJECT_ID/obj/ATTR_ID"
-            }
-        }
-    ]
+  "sort": {
+    "columns": [],
+    "rows": []
+  },
+  "columnWidths": [
+    {
+      "width": 343
+    }
+  ],
+  "columns": [
+    "metricGroup"
+  ],
+  "metrics": [
+    {
+      "alias": "metr",
+      "uri": "/gdc/md/PROJECT_ID/obj/47"
+    }
+  ],
+  "rows": [
+    {
+      "attribute": {
+        "alias": "attr",
+        "totals": [],
+        "uri": "/gdc/md/PROJECT_ID/obj/ATTR_ID"
+      }
+    }
+  ]
 }

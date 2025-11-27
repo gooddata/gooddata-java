@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -13,8 +13,8 @@ import com.gooddata.sdk.model.md.report.Report;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.httpcomponents.SingleEndpointGoodDataRestProvider;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.testng.annotations.AfterSuite;
 
 import java.time.LocalDate;
@@ -30,7 +30,7 @@ public abstract class AbstractGoodDataAT {
             "sdktest " + LocalDate.now() + " " + System.getenv("BUILD_NUMBER");
 
     protected static final GoodDataEndpoint endpoint = new GoodDataEndpoint(getProperty("host"));
-
+    protected static PoolingHttpClientConnectionManager connManager;
     protected static final GoodData gd =
             new GoodData(
                     new SingleEndpointGoodDataRestProvider(endpoint, new GoodDataSettings(), (b, e, s) -> {
@@ -39,11 +39,8 @@ public abstract class AbstractGoodDataAT {
                         connManager = httpClientConnectionManager;
 
                         return createHttpClient(builderWithManager, endpoint, getProperty("login"), getProperty("password"));
-                    }){});
-
-
-    protected static PoolingHttpClientConnectionManager connManager;
-
+                    }) {
+                    });
     protected static String projectToken;
     protected static Project project;
 

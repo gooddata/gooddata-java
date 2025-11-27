@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -41,10 +41,10 @@ class ExecutionResultTest extends Specification {
 
     def "should serialize full"() {
         expect:
-        that new ExecutionResult(new DataList(DATA.collect{
-                    def values = it.collect { new DataValue(it) }
-                    new DataList(values)
-                }),
+        that new ExecutionResult(new DataList(DATA.collect {
+            def values = it.collect { new DataValue(it) }
+            new DataList(values)
+        }),
                 new Paging([2, 4], [0, 0], [2, 4]),
                 [
                         [[new AttributeHeaderItem('Employee1', '/gdc/md/FoodMartDemo/obj/122/elements?id=123'),

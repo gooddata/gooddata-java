@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -7,12 +7,7 @@ package com.gooddata.sdk.model.md.report
 
 import spock.lang.Specification
 
-import static Total.AVG
-import static Total.MAX
-import static Total.MED
-import static Total.MIN
-import static Total.NAT
-import static Total.SUM
+import static Total.*
 
 class TotalTest extends Specification {
     def "should throw exception for invalid total name"() {

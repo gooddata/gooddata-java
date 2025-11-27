@@ -1,13 +1,13 @@
 {
-    "process":{
-        "type" : "GROOVY",
-        "name" : "testProcess",
-        "executables" : [
-            "test.groovy"
-        ],
-        "links" : {
-            "self" : "/gdc/projects/PROJECT_ID/dataload/processes/processId",
-            "executions" : "/gdc/projects/PROJECT_ID/dataload/processes/processId/executions"
-        }
+  "process": {
+    "type": "GROOVY",
+    "name": "testProcess",
+    "executables": [
+      "test.groovy"
+    ],
+    "links": {
+      "self": "/gdc/projects/PROJECT_ID/dataload/processes/processId",
+      "executions": "/gdc/projects/PROJECT_ID/dataload/processes/processId/executions"
     }
+  }
 }

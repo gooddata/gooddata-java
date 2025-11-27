@@ -1,19 +1,19 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.service.retry
 
 import com.gooddata.sdk.common.GoodDataException
-import com.gooddata.sdk.service.GoodDataITBase
 import com.gooddata.sdk.common.GoodDataRestException
-import com.gooddata.sdk.service.GoodDataSettings
-import com.gooddata.sdk.service.connector.ConnectorException
-import com.gooddata.sdk.service.connector.ConnectorService
 import com.gooddata.sdk.model.connector.ConnectorType
 import com.gooddata.sdk.model.connector.Integration
 import com.gooddata.sdk.model.project.Project
+import com.gooddata.sdk.service.GoodDataITBase
+import com.gooddata.sdk.service.GoodDataSettings
+import com.gooddata.sdk.service.connector.ConnectorException
+import com.gooddata.sdk.service.connector.ConnectorService
 import spock.lang.Unroll
 
 import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource
@@ -55,29 +55,29 @@ class RetryableRestTemplateTest extends GoodDataITBase<ConnectorService> {
                     .havingMethodEqualTo("DELETE")
                     .havingPathEqualTo("/gdc/projects/PROJECT_ID")
                     .respond()
-                        .withStatus(errorResponseStatus)
+                    .withStatus(errorResponseStatus)
                     .thenRespond()
-                        .withStatus(errorResponseStatus)
+                    .withStatus(errorResponseStatus)
                     .thenRespond()
-                        .withStatus(204)
+                    .withStatus(204)
         } else if (method == 'GET' && errorResponseStatus == 200) {
             onRequest()
                     .havingMethodEqualTo(method)
                     .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
                     .respond()
-                        .withBody(readFromResource("/connector/integration.json"))
+                    .withBody(readFromResource("/connector/integration.json"))
                     .thenRespond()
-                        .withStatus(500)
+                    .withStatus(500)
         } else {
             onRequest()
                     .havingMethodEqualTo(method)
                     .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
                     .respond()
-                        .withStatus(errorResponseStatus)
+                    .withStatus(errorResponseStatus)
                     .thenRespond()
-                        .withStatus(errorResponseStatus)
+                    .withStatus(errorResponseStatus)
                     .thenRespond()
-                        .withBody(readFromResource("/connector/integration.json"))
+                    .withBody(readFromResource("/connector/integration.json"))
         }
 
         when:

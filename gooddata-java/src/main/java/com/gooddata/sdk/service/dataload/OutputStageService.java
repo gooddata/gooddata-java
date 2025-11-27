@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -19,7 +19,9 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriTemplate;
 
-import static com.gooddata.sdk.common.util.Validate.*;
+import static com.gooddata.sdk.common.util.Validate.isTrue;
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Service to manage output stage.
@@ -31,8 +33,9 @@ public class OutputStageService extends AbstractService {
     /**
      * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
      * this abstract one.
+     *
      * @param restTemplate RESTful HTTP Spring template
-     * @param settings settings
+     * @param settings     settings
      */
     public OutputStageService(final RestTemplate restTemplate, final GoodDataSettings settings) {
         super(restTemplate, settings);
@@ -40,6 +43,7 @@ public class OutputStageService extends AbstractService {
 
     /**
      * Get output stage by given URI.
+     *
      * @param uri output stage uri
      * @return output stage object
      * @throws ProcessNotFoundException when the process doesn't exist
@@ -56,6 +60,7 @@ public class OutputStageService extends AbstractService {
 
     /**
      * Get output stage by given project.
+     *
      * @param project project to which the process belongs
      * @return output stage
      * @throws ProcessNotFoundException when the process doesn't exist

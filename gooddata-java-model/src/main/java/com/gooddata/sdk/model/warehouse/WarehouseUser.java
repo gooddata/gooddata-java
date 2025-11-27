@@ -1,14 +1,20 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
 package com.gooddata.sdk.model.warehouse;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.util.UriHelper;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.Map;
 
@@ -54,6 +60,13 @@ public class WarehouseUser {
         this.login = login;
     }
 
+    @JsonCreator
+    public WarehouseUser(@JsonProperty("role") String role, @JsonProperty("profile") String profile,
+                         @JsonProperty("login") String login, @JsonProperty("links") Map<String, String> links) {
+        this(role, profile, login);
+        this.links = links;
+    }
+
     /**
      * Creates a new {@link WarehouseUser} with <code>role</code> and <code>profileUri</code> set
      */
@@ -77,13 +90,6 @@ public class WarehouseUser {
     public static WarehouseUser createWithlogin(final String login, final WarehouseUserRole role) {
         notNull(role, "role cannot be null");
         return new WarehouseUser(role.getRoleName(), null, login);
-    }
-
-    @JsonCreator
-    public WarehouseUser(@JsonProperty("role") String role, @JsonProperty("profile") String profile,
-                         @JsonProperty("login") String login, @JsonProperty("links") Map<String, String> links) {
-        this(role, profile, login);
-        this.links = links;
     }
 
     public String getRole() {

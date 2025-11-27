@@ -1,5 +1,5 @@
 /*
- * (C) 2023 GoodData Corporation.
+ * (C) 2025 GoodData Corporation.
  * This source code is licensed under the BSD-style license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
@@ -73,7 +73,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(PROCESSES_PATH)
-            .respond()
+                .respond()
                 .withBody(readFromResource("/dataload/processes/process.json"))
                 .withStatus(201);
 
@@ -87,7 +87,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(PROCESSES_PATH)
-            .respond()
+                .respond()
                 .withBody(readFromResource("/dataload/processes/processWithoutData.json"))
                 .withStatus(201);
 
@@ -105,7 +105,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(PROCESSES_PATH)
-            .respond()
+                .respond()
                 .withBody(readFromResource("/dataload/processes/processes.json"))
                 .withStatus(200);
 
@@ -119,7 +119,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(PROCESS_PATH)
-            .respond()
+                .respond()
                 .withBody(readFromResource("/dataload/processes/process.json"))
                 .withStatus(200);
 
@@ -133,7 +133,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo(PROCESS_PATH)
-            .respond()
+                .respond()
                 .withStatus(204);
 
         gd.getProcessService().removeProcess(process);
@@ -147,13 +147,13 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(PROCESS_SOURCE_PATH)
-            .respond()
+                .respond()
                 .withHeader("Location", processDownloadLink)
                 .withStatus(303);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(processDownloadLink)
-            .respond()
+                .respond()
                 .withBody(processSource)
                 .withStatus(200);
 
@@ -170,7 +170,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(logDownloadLink)
-            .respond()
+                .respond()
                 .withBody(log)
                 .withStatus(200);
 
@@ -185,21 +185,21 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(EXECUTIONS_PATH)
-            .respond()
+                .respond()
                 .withBody(readFromResource("/dataload/processes/executionTask.json"))
                 .withHeader("Location", EXECUTION_PATH)
                 .withStatus(201);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(EXECUTION_PATH)
-            .respond()
+                .respond()
                 .withStatus(202)
-            .thenRespond()
+                .thenRespond()
                 .withStatus(204);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(EXECUTION_DETAIL_PATH)
-            .respond()
+                .respond()
                 .withBody(readFromResource("/dataload/processes/executionDetail-success.json"))
                 .withStatus(200);
 
@@ -214,20 +214,20 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(EXECUTIONS_PATH)
-            .respond()
+                .respond()
                 .withBody(readFromResource("/dataload/processes/executionTask.json"))
                 .withHeader("Location", EXECUTION_PATH)
                 .withStatus(201);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(EXECUTION_PATH)
-            .respond()
+                .respond()
                 .withStatus(410)
         ;
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(EXECUTION_DETAIL_PATH)
-            .respond()
+                .respond()
                 .withBody(readFromResource("/dataload/processes/executionDetail.json"))
                 .withStatus(200);
 
@@ -321,13 +321,13 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(PROCESSES_PATH)
-             .respond()
+                .respond()
                 .withBody(readFromResource("/dataload/processes/asyncTask.json"))
                 .withStatus(202);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(PROCESS_DEPLOYMENT_POLLING_URI)
-             .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/dataload/processes/appstoreProcess.json"));
         DataloadProcess process = gd.getProcessService().createProcessFromAppstore(project, new DataloadProcess("appstoreProcess", ProcessType.RUBY.toString(),
@@ -340,13 +340,13 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(PROCESSES_PATH)
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/dataload/processes/appstoreProcess.json"));
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(PROCESS_PATH)
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/dataload/processes/appstoreProcess.json"));
 
@@ -360,13 +360,13 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("PUT")
                 .havingPathEqualTo(PROCESS_PATH)
-             .respond()
+                .respond()
                 .withBody(readFromResource("/dataload/processes/asyncTask.json"))
                 .withStatus(202);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(PROCESS_DEPLOYMENT_POLLING_URI)
-             .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/dataload/processes/appstoreProcess.json"));
 
@@ -374,7 +374,7 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         DataloadProcess updatedProcess = gd.getProcessService().updateProcessFromAppstore(process).get();
         assertThat(updatedProcess, notNullValue());
         assertThat(updatedProcess.getType(), is(equalTo(ProcessType.RUBY.toString())));
-        assertThat(updatedProcess.getExecutables(), contains("hello.rb") );
+        assertThat(updatedProcess.getExecutables(), contains("hello.rb"));
     }
 
     @Test
@@ -382,14 +382,14 @@ public class ProcessServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(schedule.getExecutionsUri())
-             .respond()
+                .respond()
                 .withBody(readFromResource("/dataload/processes/scheduleExecution.json"))
                 .withStatus(200);
 
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/schedules/SCHEDULE_ID/executions/EXECUTION_ID")
-              .respond()
+                .respond()
                 .withBody(readFromResource("/dataload/processes/scheduleExecution.json"))
                 .withStatus(200);
 
