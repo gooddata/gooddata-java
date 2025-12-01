@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/badge/license-BSD-blue.svg)](LICENSE.txt)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgooddata%2Fgooddata-java.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgooddata%2Fgooddata-java?ref=badge_shield)
 
-[![Javadocs](http://javadoc.io/badge/com.gooddata/gooddata-java.svg)](http://javadoc.io/doc/com.gooddata/gooddata-java)
+[![Javadocs](https://javadoc.io/badge/com.gooddata/gooddata-java.svg)](https://javadoc.io/doc/com.gooddata/gooddata-java)
 [![Javadocs Model](https://javadoc.io/badge2/com.gooddata/gooddata-java-model/javadoc--model.svg)](https://javadoc.io/doc/com.gooddata/gooddata-java-model)
 [![Maven Central](https://img.shields.io/maven-central/v/com.gooddata/gooddata-java)](https://central.sonatype.com/artifact/com.gooddata/gooddata-java)
 [![Release](https://img.shields.io/github/v/release/gooddata/gooddata-java?sort=semver)](https://github.com/gooddata/gooddata-java/releases)
@@ -38,6 +38,18 @@ The most recent major will be supported in the following mode:
 
 Please follow the [upgrade instructions](https://github.com/gooddata/gooddata-java/wiki/Upgrading) to update to the
 newest version.
+
+### Version 5.0 Release Notes
+
+**Version 5.0.0** represents a major modernization release with the following key updates:
+
+- **Java 17**: Minimum runtime requirement upgraded from Java 11
+- **Spring 6**: Framework upgraded from Spring 5.x to Spring 6.0.15  
+- **Apache HTTP Client 5**: Primary HTTP client upgraded from version 4.5.x to 5.5.1
+- **Enhanced Compatibility**: Improved support for modern Java environments and cloud platforms
+
+This release maintains API compatibility while modernizing the underlying infrastructure for better performance, 
+security, and future extensibility.
 
 ## Modules
 
@@ -87,9 +99,110 @@ The *GoodData Java SDK* uses:
 * the *Slf4j API* version 2.0.17
 * the *Java Development Kit (JDK)* version 17 or later to build
 
+### Migration from version 4.x to 5.0
+
+**Version 5.0 introduces several significant upgrades that may require code changes in your application:**
+
+#### Breaking Changes
+
+1. **Java Runtime Requirement**: Minimum Java version is now **Java 17** (previously Java 11)
+2. **Spring Framework**: Upgraded from Spring 5.x to **Spring 6.0.15**
+3. **Apache HTTP Client**: Primary HTTP client upgraded from version 4.5.x to **version 5.5.1**
+4. **SLF4J**: Upgraded from version 1.7.x to **version 2.0.17**
+
+#### Migration Steps
+
+**1. Update Java Runtime**
+- Ensure your application runs on Java 17 or later
+- Update your build tools (Maven/Gradle) to use Java 17
+
+**2. Spring Framework Compatibility**
+- If your application uses Spring Framework, upgrade to Spring 6.x or later
+- Review Spring 6 migration guide for additional breaking changes: https://github.com/spring-projects/spring-framework/wiki/Upgrading-to-Spring-Framework-6.x
+- Update Spring Boot to version 3.0+ if applicable
+
+**3. Dependency Updates**
+Update your `pom.xml` or `build.gradle`:
+
+```xml
+<!-- Update GoodData Java SDK -->
+<dependency>
+    <groupId>com.gooddata</groupId>
+    <artifactId>gooddata-java</artifactId>
+    <version>5.0.0+api3</version>
+</dependency>
+
+<!-- If you use Spring, upgrade to 6.x -->
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-core</artifactId>
+    <version>6.0.15</version>
+</dependency>
+
+<!-- Update SLF4J if you use it directly -->
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-api</artifactId>
+    <version>2.0.17</version>
+</dependency>
+```
+
+**4. HTTP Client Configuration**
+- The SDK now internally uses Apache HTTP Client 5.x
+- If you customize HTTP client settings via `GoodDataSettings`, the API remains compatible
+- Custom HTTP interceptors or low-level HTTP client configurations may need updates
+
+**5. Testing**
+- Thoroughly test your application after upgrade
+- Pay special attention to HTTP client behavior, especially with authentication and connection pooling
+- Verify logging functionality works as expected with SLF4J 2.x
+
+#### Compatibility Notes
+
+- **API Compatibility**: The public SDK API remains largely backward compatible
+- **Internal Changes**: HTTP client implementation has been modernized but SDK interfaces are unchanged
+- **Jakarta EE**: Spring 6 uses Jakarta EE namespaces instead of Java EE (affects annotations if you use them directly)
+
+#### Known Migration Issues and Solutions
+
+**1. ClassNotFoundException for Apache HTTP Client classes**
+If you see errors like `ClassNotFoundException: org.apache.http.impl.client.HttpClientBuilder`:
+- Remove any direct dependencies on Apache HTTP Client 4.x from your project
+- The SDK now uses HTTP Client 5.x internally, which has different package names
+
+**2. Spring Boot Applications**
+- Ensure you're using Spring Boot 3.0+ which includes Spring 6
+- Update your `@SpringBootApplication` and other Spring annotations if needed
+- Check Spring Boot 3.0 migration guide for additional changes
+
+**3. Logging Configuration**
+- SLF4J 2.x has some configuration changes compared to 1.7.x
+- Update your `logback.xml` or `log4j2.xml` if you use advanced logging features
+- Basic logging configuration should work without changes
+
+**4. Build Tools**
+```xml
+<!-- Maven: Ensure Java 17 in your pom.xml -->
+<properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+</properties>
+```
+
+```gradle
+// Gradle: Ensure Java 17 in your build.gradle
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+```
+
+For additional help, please refer to the [upgrading wiki page](https://github.com/gooddata/gooddata-java/wiki/Upgrading) 
+or [create an issue](https://github.com/gooddata/gooddata-java/issues) if you encounter problems during migration.
+
 ##### Retry of failed API calls
 
-You can retry your failed requests since version *2.34.0*. Turn it on by configuring
+You can retry your failed requests since *GoodData Java SDK* version *2.34.0*. Turn it on by configuring
 [RetrySettings](https://github.com/gooddata/gooddata-java/blob/master/src/main/java/com/gooddata/retry/RetrySettings.java)
 and add [Spring retry](https://github.com/spring-projects/spring-retry) to your classpath:
 
@@ -100,6 +213,9 @@ and add [Spring retry](https://github.com/spring-projects/spring-retry) to your 
             <version>2.0.12</version>
         </dependency>
 ```
+
+**Note**: Spring Retry 2.0.12 is compatible with Spring 6. If you're upgrading from prior versions of the SDK, 
+ensure you also upgrade your Spring Retry dependency to version 2.x for compatibility.
 
 ### Logging
 
