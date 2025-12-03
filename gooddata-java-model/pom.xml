@@ -8,7 +8,7 @@
     <parent>
         <artifactId>gooddata-java-parent</artifactId>
         <groupId>com.gooddata</groupId>
-        <version>5.0.0+api3-SNAPSHOT</version>
+        <version>5.0.0+api3</version>
     </parent>
 
     <dependencies>
