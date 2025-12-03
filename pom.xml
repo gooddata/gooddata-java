@@ -64,7 +64,7 @@
         <hamcrest.version>3.0</hamcrest.version>
         <cglib.version>3.3.0</cglib.version>
         <groovy.version>4.0.28</groovy.version>
-        <spok.core.version>2.4-M1-groovy-4.0</spok.core.version>
+        <spok.core.version>2.4-M7-groovy-5.0</spok.core.version>
         <equalsverifier.version>3.17.5</equalsverifier.version>
         <shazamcrest.version>0.11</shazamcrest.version>
         <mockito-core.version>5.14.2</mockito-core.version>
