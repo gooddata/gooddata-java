@@ -67,7 +67,7 @@
         <spok.core.version>2.4-M1-groovy-4.0</spok.core.version>
         <equalsverifier.version>3.17.5</equalsverifier.version>
         <shazamcrest.version>0.11</shazamcrest.version>
-        <mockito-core.version>5.14.2</mockito-core.version>
+        <mockito-core.version>5.20.0</mockito-core.version>
         <testng.version>7.11.0</testng.version>
         <surefire.plugin.version>3.1.2</surefire.plugin.version>
         <failsafe.plugin.version>3.5.2</failsafe.plugin.version>
