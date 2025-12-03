@@ -4,7 +4,7 @@
 
     <artifactId>gooddata-java-parent</artifactId>
     <packaging>pom</packaging>
-    <version>5.0.1+api3-SNAPSHOT</version>
+    <version>5.0.0+api3-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>GoodData Java SDK</description>
     <url>https://github.com/gooddata/gooddata-java</url>
