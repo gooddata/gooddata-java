@@ -106,4 +106,3 @@ public class MetaTest {
         assertThat(deserialized, jsonEquals(meta));
     }
 }
-

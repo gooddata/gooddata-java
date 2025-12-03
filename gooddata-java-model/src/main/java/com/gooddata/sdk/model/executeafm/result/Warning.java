@@ -25,8 +25,9 @@ public class Warning {
 
     /**
      * Creates new instance
+     *
      * @param warningCode error code
-     * @param message message
+     * @param message     message
      */
     public Warning(final String warningCode, final String message) {
         this(warningCode, message, emptyList());
@@ -34,9 +35,10 @@ public class Warning {
 
     /**
      * Creates new instance
+     *
      * @param warningCode error code
-     * @param message message
-     * @param parameters message's parameters
+     * @param message     message
+     * @param parameters  message's parameters
      */
     @JsonCreator
     public Warning(@JsonProperty("warningCode") final String warningCode,
@@ -93,4 +95,3 @@ public class Warning {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

@@ -30,4 +30,3 @@ public class TaskStateTest {
         assertThat(taskState.toString(), matchesPattern(TaskState.class.getSimpleName() + "\\[.*\\]"));
     }
 }
-

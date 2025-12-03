@@ -25,8 +25,8 @@ import static com.gooddata.sdk.model.md.visualization.VOPopMeasureDefinition.NAM
 @JsonRootName(NAME)
 public class VOPopMeasureDefinition extends PopMeasureDefinition {
 
-    private static final long serialVersionUID = -2727004914980057124L;
     public static final String NAME = "popMeasureDefinition";
+    private static final long serialVersionUID = -2727004914980057124L;
 
     /**
      * Creates instance of Period over Period measure definition to be used in {@link VisualizationObject}
@@ -41,4 +41,3 @@ public class VOPopMeasureDefinition extends PopMeasureDefinition {
     }
 
 }
-

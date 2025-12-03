@@ -50,6 +50,7 @@ public class Fact extends AbstractObj implements Queryable, Updatable {
 
     /**
      * URIs of folders containing this object
+     *
      * @return collection of URIs or null
      */
     @JsonIgnore
@@ -93,4 +94,3 @@ public class Fact extends AbstractObj implements Queryable, Updatable {
         }
     }
 }
-

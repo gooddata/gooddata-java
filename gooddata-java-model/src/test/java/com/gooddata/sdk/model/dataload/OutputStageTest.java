@@ -10,9 +10,9 @@ import org.testng.annotations.Test;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,7 +23,7 @@ public class OutputStageTest {
 
     private static final String SCHEMA_URI = "/gdc/datawarehouse/instances/instanceId/schemas/default";
     private static final String SELF_LINK = "/gdc/dataload/projects/projectId/outputStage";
-    private static final String SQL_DIFF =  "/gdc/dataload/projects/projectId/outputStage/sqlDiff";
+    private static final String SQL_DIFF = "/gdc/dataload/projects/projectId/outputStage/sqlDiff";
     private static final String PROCESS_URI = "/gdc/projects/projectId/dataload/processes/processId";
     private static final String CLIENT_ID = "clientId";
     private static final String OUTPUT_STAGE_PREFIX = "outputStagePrefix";
@@ -82,4 +82,3 @@ public class OutputStageTest {
         assertThat(outputStage.toString(), matchesPattern(OutputStage.class.getSimpleName() + "\\[.*\\]"));
     }
 }
-

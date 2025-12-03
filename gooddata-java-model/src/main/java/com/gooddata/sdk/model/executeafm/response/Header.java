@@ -20,4 +20,3 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 })
 public interface Header {
 }
-

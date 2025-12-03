@@ -27,12 +27,6 @@ public enum Total {
     NAT,
     MED;
 
-    @JsonValue
-    @Override
-    public String toString() {
-        return name().toLowerCase();
-    }
-
     @JsonCreator
     public static Total of(String total) {
         notNull(total, "total");
@@ -54,5 +48,10 @@ public enum Total {
     public static List<Total> orderedValues() {
         return Arrays.asList(SUM, MAX, MIN, AVG, MED, NAT);
     }
-}
 
+    @JsonValue
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
+}

@@ -12,9 +12,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.model.md.Attribute;
 import com.gooddata.sdk.model.md.DisplayForm;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,7 +47,8 @@ public class AttributeInGrid implements GridElement, Serializable {
 
     /**
      * Creates new instance.
-     * @param uri uri of displayForm of attribute to be in grid
+     *
+     * @param uri   uri of displayForm of attribute to be in grid
      * @param alias alias used to label the attribute
      */
     public AttributeInGrid(String uri, String alias) {
@@ -56,8 +57,9 @@ public class AttributeInGrid implements GridElement, Serializable {
 
     /**
      * Creates new instance.
-     * @param uri uri of displayForm of attribute to be in grid
-     * @param alias alias used to label the attribute
+     *
+     * @param uri    uri of displayForm of attribute to be in grid
+     * @param alias  alias used to label the attribute
      * @param totals totals for metrics used in grid - for each {@link MetricElement} in grid, there can be list
      *               of totals. The totals are evaluated in given order.
      */
@@ -73,6 +75,7 @@ public class AttributeInGrid implements GridElement, Serializable {
 
     /**
      * Creates new AttributeInGrid using given DisplayForm's uri and it's title as alias.
+     *
      * @param displayForm displayForm to create AttributeInGrid from
      */
     public AttributeInGrid(final DisplayForm displayForm) {
@@ -81,8 +84,9 @@ public class AttributeInGrid implements GridElement, Serializable {
 
     /**
      * Creates new AttributeInGrid using given DisplayForm's uri and given alias.
+     *
      * @param displayForm displayForm to create AttributeInGrid from
-     * @param alias alias used to label the attribute
+     * @param alias       alias used to label the attribute
      */
     public AttributeInGrid(final DisplayForm displayForm, final String alias) {
         this(notNull(notNull(displayForm, "displayForm").getUri(), "uri"), alias);
@@ -90,6 +94,7 @@ public class AttributeInGrid implements GridElement, Serializable {
 
     /**
      * Creates new AttributeInGrid using given Attribute's default DisplayForm's uri and Attribute's title as alias.
+     *
      * @param attribute attribute to create AttributeInGrid from
      */
     public AttributeInGrid(final Attribute attribute) {
@@ -98,8 +103,9 @@ public class AttributeInGrid implements GridElement, Serializable {
 
     /**
      * Creates new AttributeInGrid using given Attribute's default DisplayForm's uri and given alias.
+     *
      * @param attribute attribute to create AttributeInGrid from
-     * @param alias alias used to label the attribute
+     * @param alias     alias used to label the attribute
      */
     public AttributeInGrid(final Attribute attribute, final String alias) {
         this(notNull(attribute, "attribute").getDefaultDisplayForm(), alias);
@@ -107,7 +113,7 @@ public class AttributeInGrid implements GridElement, Serializable {
 
     @JsonProperty("totals")
     public List<List<String>> getStringTotals() {
-       return totals;
+        return totals;
     }
 
     @JsonIgnore
@@ -134,4 +140,3 @@ public class AttributeInGrid implements GridElement, Serializable {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

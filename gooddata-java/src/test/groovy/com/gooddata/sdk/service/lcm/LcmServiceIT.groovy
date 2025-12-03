@@ -18,8 +18,10 @@ import static net.jadler.Jadler.onRequest
 
 class LcmServiceIT extends GoodDataITBase<LcmService> {
 
-    @Shared Account account = readObjectFromResource('/account/account.json', Account)
-    @Shared LcmEntityFilter filter = new LcmEntityFilter().withDataProduct('dp').withSegment('seg').withClient('c')
+    @Shared
+    Account account = readObjectFromResource('/account/account.json', Account)
+    @Shared
+    LcmEntityFilter filter = new LcmEntityFilter().withDataProduct('dp').withSegment('seg').withClient('c')
 
     @Unroll
     def "should list #type"() {
@@ -45,10 +47,8 @@ class LcmServiceIT extends GoodDataITBase<LcmService> {
     }
 
 
-
     @Override
     protected LcmService getService() {
         return gd.lcmService
     }
 }
-

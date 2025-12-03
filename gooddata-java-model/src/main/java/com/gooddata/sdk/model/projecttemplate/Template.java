@@ -39,8 +39,8 @@ public class Template {
 
     @JsonCreator
     private Template(@JsonProperty("link") String uri, @JsonProperty("urn") String urn, @JsonProperty("version") String version,
-                    @JsonProperty("hidden") @JsonDeserialize(using = BooleanDeserializer.class) Boolean hidden,
-                    @JsonProperty("content") Content content, @JsonProperty("meta") Meta meta) {
+                     @JsonProperty("hidden") @JsonDeserialize(using = BooleanDeserializer.class) Boolean hidden,
+                     @JsonProperty("content") Content content, @JsonProperty("meta") Meta meta) {
         this.uri = uri;
         this.urn = urn;
         this.version = version;
@@ -192,4 +192,3 @@ public class Template {
 
 
 }
-

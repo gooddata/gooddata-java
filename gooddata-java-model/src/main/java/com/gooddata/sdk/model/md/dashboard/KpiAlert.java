@@ -6,8 +6,6 @@
 
 package com.gooddata.sdk.model.md.dashboard;
 
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -20,6 +18,8 @@ import com.gooddata.sdk.model.md.Queryable;
 import com.gooddata.sdk.model.md.Updatable;
 
 import java.io.Serializable;
+
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
 
 /**
  * Represents KPI alert set for some KPI on analytical dashboard.
@@ -36,10 +36,10 @@ public class KpiAlert extends AbstractObj implements Queryable, Updatable {
     /**
      * Constructor.
      *
-     * @param title KPI alert title
-     * @param kpiUri URI of the KPI for which the alert is defined
-     * @param dashboardUri URI of the KPI where the KPI alert is located
-     * @param threshold KPI alert threshold
+     * @param title            KPI alert title
+     * @param kpiUri           URI of the KPI for which the alert is defined
+     * @param dashboardUri     URI of the KPI where the KPI alert is located
+     * @param threshold        KPI alert threshold
      * @param triggerCondition condition for triggering KPI alert
      * @param filterContextUri URI of filter context used for computation of KPI alert (optional)
      */
@@ -182,4 +182,3 @@ public class KpiAlert extends AbstractObj implements Queryable, Updatable {
         }
     }
 }
-

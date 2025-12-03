@@ -33,4 +33,3 @@ public class UploadsTest {
         assertThat(uploads.toString(), matchesPattern(Uploads.class.getSimpleName() + "\\[.*\\]"));
     }
 }
-

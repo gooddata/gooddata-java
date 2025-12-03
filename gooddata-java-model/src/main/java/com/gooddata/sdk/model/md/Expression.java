@@ -43,4 +43,3 @@ public class Expression implements Serializable {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

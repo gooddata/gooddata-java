@@ -84,4 +84,3 @@ public class FeatureFlagsTest {
         assertThat(flags.toString(), matchesPattern(FeatureFlags.class.getSimpleName() + "\\[.*\\]"));
     }
 }
-

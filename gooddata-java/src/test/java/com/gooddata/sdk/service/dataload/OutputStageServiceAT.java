@@ -5,31 +5,30 @@
  */
 package com.gooddata.sdk.service.dataload;
 
-import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.model.dataload.OutputStage;
 import com.gooddata.sdk.model.project.Environment;
 import com.gooddata.sdk.model.warehouse.Warehouse;
 import com.gooddata.sdk.model.warehouse.WarehouseSchema;
+import com.gooddata.sdk.service.AbstractGoodDataAT;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
+
+import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-import java.util.concurrent.TimeUnit;
-
 public class OutputStageServiceAT extends AbstractGoodDataAT {
 
     private static final String CLIENT_ID = "clientId";
     private static final String PREFIX = "prefix";
 
-    private Warehouse warehouse;
-    private WarehouseSchema warehouseSchema;
+    private final Warehouse warehouse;
+    private final WarehouseSchema warehouseSchema;
 
-    @Test(groups = "warehouse")
-    public void setupWarehouse() {
+    public OutputStageServiceAT() {
         final String warehouseToken = getProperty("warehouseToken");
         final Warehouse wh = new Warehouse(title, warehouseToken);
         wh.setEnvironment(Environment.TESTING);
@@ -74,9 +73,8 @@ public class OutputStageServiceAT extends AbstractGoodDataAT {
 
     @AfterClass
     public void removeWarehouse() {
-        if(warehouse != null) {
+        if (warehouse != null) {
             gd.getWarehouseService().removeWarehouse(warehouse);
         }
     }
 }
-

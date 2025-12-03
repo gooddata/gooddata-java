@@ -24,6 +24,7 @@ public class MeasureGroupHeader implements Header {
 
     /**
      * Creates new header
+     *
      * @param items header items
      */
     @JsonCreator
@@ -33,6 +34,7 @@ public class MeasureGroupHeader implements Header {
 
     /**
      * Header items for particular measures
+     *
      * @return header items
      */
     public List<MeasureHeaderItem> getItems() {
@@ -44,4 +46,3 @@ public class MeasureGroupHeader implements Header {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

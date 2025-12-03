@@ -27,4 +27,3 @@ public class PullTest {
         assertThat(pull.toString(), matchesPattern(Pull.class.getSimpleName() + "\\[.*\\]"));
     }
 }
-

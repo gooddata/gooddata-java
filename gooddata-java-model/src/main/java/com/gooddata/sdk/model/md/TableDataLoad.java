@@ -22,10 +22,9 @@ import java.io.Serializable;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 public class TableDataLoad extends AbstractObj implements Queryable {
 
-    private static final long serialVersionUID = -5209417147612785042L;
     public static final String TYPE_FULL = "full";
     public static final String TYPE_INCREMENTAL = "incremental";
-
+    private static final long serialVersionUID = -5209417147612785042L;
     private final Content content;
 
     @JsonCreator
@@ -94,4 +93,3 @@ public class TableDataLoad extends AbstractObj implements Queryable {
         }
     }
 }
-

@@ -56,4 +56,3 @@ public abstract class ReportDefinitionContent implements Serializable {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

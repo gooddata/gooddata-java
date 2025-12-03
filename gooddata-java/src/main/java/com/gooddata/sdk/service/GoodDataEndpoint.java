@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.service;
 
-import org.apache.http.HttpHost;
+import org.apache.hc.core5.http.HttpHost;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 
@@ -24,9 +24,10 @@ public class GoodDataEndpoint {
 
     /**
      * Create GoodData endpoint for given hostname, port and protocol
-     * @param hostname  GoodData Platform's host name (e.g. secure.gooddata.com)
-     * @param port      GoodData Platform's API port (e.g. 443)
-     * @param protocol  GoodData Platform's API protocol (e.g. https)
+     *
+     * @param hostname GoodData Platform's host name (e.g. secure.gooddata.com)
+     * @param port     GoodData Platform's API port (e.g. 443)
+     * @param protocol GoodData Platform's API protocol (e.g. https)
      */
     public GoodDataEndpoint(final String hostname, final int port, final String protocol) {
         this.hostname = notEmpty(hostname, "hostname");
@@ -36,8 +37,9 @@ public class GoodDataEndpoint {
 
     /**
      * Create GoodData endpoint for given hostname, port using HTTPS protocol
-     * @param hostname  GoodData Platform's host name (e.g. secure.gooddata.com)
-     * @param port      GoodData Platform's API port (e.g. 443)
+     *
+     * @param hostname GoodData Platform's host name (e.g. secure.gooddata.com)
+     * @param port     GoodData Platform's API port (e.g. 443)
      */
     public GoodDataEndpoint(String hostname, int port) {
         this(hostname, port, PROTOCOL);
@@ -45,6 +47,7 @@ public class GoodDataEndpoint {
 
     /**
      * Create GoodData endpoint for given hostname using 443 port and HTTPS protocol
+     *
      * @param hostname GoodData Platform's host name (e.g. secure.gooddata.com)
      */
     public GoodDataEndpoint(String hostname) {
@@ -62,7 +65,7 @@ public class GoodDataEndpoint {
      * @return the host URI, as a string.
      */
     public String toUri() {
-        return new HttpHost(hostname, port, protocol).toURI();
+        return new HttpHost(protocol, hostname, port).toURI();
     }
 
     /**
@@ -86,4 +89,3 @@ public class GoodDataEndpoint {
         return protocol;
     }
 }
-

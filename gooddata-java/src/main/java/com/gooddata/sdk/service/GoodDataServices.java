@@ -7,7 +7,6 @@ package com.gooddata.sdk.service;
 
 import com.gooddata.sdk.service.account.AccountService;
 import com.gooddata.sdk.service.auditevent.AuditEventService;
-import com.gooddata.sdk.service.hierarchicalconfig.HierarchicalConfigService;
 import com.gooddata.sdk.service.connector.ConnectorService;
 import com.gooddata.sdk.service.dataload.OutputStageService;
 import com.gooddata.sdk.service.dataload.processes.ProcessService;
@@ -17,6 +16,7 @@ import com.gooddata.sdk.service.export.ExportService;
 import com.gooddata.sdk.service.featureflag.FeatureFlagService;
 import com.gooddata.sdk.service.gdc.DataStoreService;
 import com.gooddata.sdk.service.gdc.GdcService;
+import com.gooddata.sdk.service.hierarchicalconfig.HierarchicalConfigService;
 import com.gooddata.sdk.service.lcm.LcmService;
 import com.gooddata.sdk.service.md.MetadataService;
 import com.gooddata.sdk.service.md.maintenance.ExportImportService;
@@ -185,4 +185,3 @@ class GoodDataServices {
         return hierarchicalConfigService;
     }
 }
-

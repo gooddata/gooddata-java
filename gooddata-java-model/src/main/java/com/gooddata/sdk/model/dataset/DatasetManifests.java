@@ -22,6 +22,7 @@ public class DatasetManifests {
 
     /**
      * Construct object.
+     *
      * @param manifests dataset upload manifests
      */
     @JsonCreator
@@ -39,4 +40,3 @@ public class DatasetManifests {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

@@ -35,4 +35,3 @@ class ValueAttributeFilterElementsTest extends Specification {
         EqualsVerifier.forClass(ValueAttributeFilterElements).verify()
     }
 }
-

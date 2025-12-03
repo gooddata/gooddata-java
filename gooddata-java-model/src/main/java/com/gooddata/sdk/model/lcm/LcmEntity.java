@@ -10,19 +10,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.project.Project;
 
 import java.util.Map;
 import java.util.Objects;
 
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 import static com.gooddata.sdk.model.lcm.LcmEntity.LinkCategory.CLIENT;
 import static com.gooddata.sdk.model.lcm.LcmEntity.LinkCategory.DATA_PRODUCT;
 import static com.gooddata.sdk.model.lcm.LcmEntity.LinkCategory.PROJECT;
 import static com.gooddata.sdk.model.lcm.LcmEntity.LinkCategory.SEGMENT;
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
-import static com.gooddata.sdk.common.util.Validate.notNull;
-import static com.gooddata.sdk.common.util.Validate.notNullState;
 
 /**
  * Single Life Cycle Management entity representing the relation between {@link Project},
@@ -41,9 +41,10 @@ public class LcmEntity {
 
     /**
      * Creates new instance of given project id and title
-     * @param projectId id of the project
+     *
+     * @param projectId    id of the project
      * @param projectTitle title of the project
-     * @param links links
+     * @param links        links
      */
     public LcmEntity(final String projectId, final String projectTitle, final Map<String, String> links) {
         this(projectId, projectTitle, null, null, null, links);
@@ -143,4 +144,3 @@ public class LcmEntity {
         public static final String DATA_PRODUCT = "dataProduct";
     }
 }
-

@@ -11,11 +11,16 @@ package com.gooddata.sdk.model.project;
  * Preffer {@link Environment} if possible.
  */
 public enum ProjectEnvironment {
-    /** Default value, projects are backed-up and archived. */
+    /**
+     * Default value, projects are backed-up and archived.
+     */
     PRODUCTION,
-    /** no meaning yet and behavior is the same as for {@link #PRODUCTION} projects*/
+    /**
+     * no meaning yet and behavior is the same as for {@link #PRODUCTION} projects
+     */
     DEVELOPMENT,
-    /** 'TESTING' projects are not backed-up and archived. */
+    /**
+     * 'TESTING' projects are not backed-up and archived.
+     */
     TESTING
 }
-

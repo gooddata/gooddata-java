@@ -9,9 +9,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.model.executeafm.afm.filter.FilterItem;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,8 +19,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static com.gooddata.sdk.model.executeafm.afm.SimpleMeasureDefinition.NAME;
 import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.model.executeafm.afm.SimpleMeasureDefinition.NAME;
 import static java.util.Arrays.asList;
 
 /**
@@ -30,9 +30,8 @@ import static java.util.Arrays.asList;
 @JsonRootName(NAME)
 public class SimpleMeasureDefinition implements MeasureDefinition {
 
-    private static final long serialVersionUID = -385490772711914776L;
     static final String NAME = "measure";
-
+    private static final long serialVersionUID = -385490772711914776L;
     private final ObjQualifier item;
     private String aggregation;
     private Boolean computeRatio;
@@ -45,14 +44,10 @@ public class SimpleMeasureDefinition implements MeasureDefinition {
     /**
      * Creates new definition
      *
-     * @param item
-     *         item which is measured, can be attribute, fact or another measure
-     * @param aggregation
-     *         additional aggregation applied
-     * @param computeRatio
-     *         whether should be shown as ratio
-     * @param filters
-     *         additional filters applied
+     * @param item         item which is measured, can be attribute, fact or another measure
+     * @param aggregation  additional aggregation applied
+     * @param computeRatio whether should be shown as ratio
+     * @param filters      additional filters applied
      */
     @JsonCreator
     public SimpleMeasureDefinition(@JsonProperty("item") final ObjQualifier item,
@@ -68,14 +63,10 @@ public class SimpleMeasureDefinition implements MeasureDefinition {
     /**
      * Creates new definition
      *
-     * @param item
-     *         item which is measured, can be attribute, fact or another measure
-     * @param aggregation
-     *         additional aggregation applied
-     * @param computeRatio
-     *         whether should be shown as ratio
-     * @param filters
-     *         additional filters applied
+     * @param item         item which is measured, can be attribute, fact or another measure
+     * @param aggregation  additional aggregation applied
+     * @param computeRatio whether should be shown as ratio
+     * @param filters      additional filters applied
      */
     public SimpleMeasureDefinition(final ObjQualifier item, final Aggregation aggregation, final Boolean computeRatio,
                                    final List<FilterItem> filters) {
@@ -85,14 +76,10 @@ public class SimpleMeasureDefinition implements MeasureDefinition {
     /**
      * Creates new definition
      *
-     * @param item
-     *         item which is measured, can be attribute, fact or another measure
-     * @param aggregation
-     *         additional aggregation applied
-     * @param computeRatio
-     *         whether should be shown as ratio
-     * @param filters
-     *         additional filters applied
+     * @param item         item which is measured, can be attribute, fact or another measure
+     * @param aggregation  additional aggregation applied
+     * @param computeRatio whether should be shown as ratio
+     * @param filters      additional filters applied
      */
     public SimpleMeasureDefinition(final ObjQualifier item, final Aggregation aggregation, final Boolean computeRatio, final FilterItem... filters) {
         this(item, aggregation, computeRatio, asList(filters));
@@ -142,8 +129,7 @@ public class SimpleMeasureDefinition implements MeasureDefinition {
     /**
      * Set additional aggregation applied
      *
-     * @param aggregation
-     *         additional aggregation applied
+     * @param aggregation additional aggregation applied
      */
     public void setAggregation(final String aggregation) {
         this.aggregation = aggregation;
@@ -152,8 +138,7 @@ public class SimpleMeasureDefinition implements MeasureDefinition {
     /**
      * Set additional aggregation applied
      *
-     * @param aggregation
-     *         additional aggregation applied
+     * @param aggregation additional aggregation applied
      */
     public void setAggregation(final Aggregation aggregation) {
         setAggregation(notNull(aggregation, "aggregation").toString());
@@ -169,8 +154,7 @@ public class SimpleMeasureDefinition implements MeasureDefinition {
     /**
      * Set whether should be shown as ratio
      *
-     * @param computeRatio
-     *         whether should be shown as ratio
+     * @param computeRatio whether should be shown as ratio
      */
     public void setComputeRatio(final Boolean computeRatio) {
         this.computeRatio = computeRatio;
@@ -186,8 +170,7 @@ public class SimpleMeasureDefinition implements MeasureDefinition {
     /**
      * Set additional filters applied
      *
-     * @param filters
-     *         additional filters applied
+     * @param filters additional filters applied
      */
     public void setFilters(final List<FilterItem> filters) {
         this.filters = filters;
@@ -196,8 +179,7 @@ public class SimpleMeasureDefinition implements MeasureDefinition {
     /**
      * Apply additional filter
      *
-     * @param filter
-     *         filter to be applied
+     * @param filter filter to be applied
      */
     public void addFilter(final FilterItem filter) {
         if (filters == null) {
@@ -248,5 +230,4 @@ public class SimpleMeasureDefinition implements MeasureDefinition {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-
 

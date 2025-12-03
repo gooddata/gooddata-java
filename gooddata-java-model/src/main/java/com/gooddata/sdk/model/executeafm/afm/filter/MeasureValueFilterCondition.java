@@ -16,7 +16,7 @@ import java.util.Objects;
 
 /**
  * Covers all the conditions that can be used within {@link MeasureValueFilter}.
- * 
+ * <p>
  * Contains shared functionality to set a custom value instead of {@code null} measure
  * values against the condition's value will be compared to.
  */
@@ -53,4 +53,3 @@ public abstract class MeasureValueFilterCondition implements Serializable {
         return Objects.hash(treatNullValuesAs);
     }
 }
-

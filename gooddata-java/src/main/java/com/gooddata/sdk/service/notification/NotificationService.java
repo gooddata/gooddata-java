@@ -33,7 +33,7 @@ public class NotificationService extends AbstractService {
      * Triggers given project event.
      *
      * @param project project of the event
-     * @param event event to trigger
+     * @param event   event to trigger
      */
     public void triggerEvent(final Project project, final ProjectEvent event) {
         notNull(project, "project");
@@ -84,8 +84,8 @@ public class NotificationService extends AbstractService {
     /**
      * Create subscription for notifications
      *
-     * @param project to create subscription on
-     * @param account to create subscription for
+     * @param project      to create subscription on
+     * @param account      to create subscription for
      * @param subscription to create
      * @return created subscription
      */
@@ -120,4 +120,3 @@ public class NotificationService extends AbstractService {
         }
     }
 }
-

@@ -39,4 +39,3 @@ public class Filter implements Serializable {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

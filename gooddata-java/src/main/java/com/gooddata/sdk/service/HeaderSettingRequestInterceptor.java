@@ -55,4 +55,3 @@ public class HeaderSettingRequestInterceptor implements ClientHttpRequestInterce
         return execution.execute(requestWrapper, body);
     }
 }
-

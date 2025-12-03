@@ -53,4 +53,3 @@ class RankingFilterOperatorTest extends Specification {
         RankingFilterOperator.BOTTOM | 'BOTTOM'
     }
 }
-

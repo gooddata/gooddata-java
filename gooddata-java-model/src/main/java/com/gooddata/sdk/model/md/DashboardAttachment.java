@@ -27,18 +27,24 @@ public class DashboardAttachment extends Attachment {
             @JsonProperty("allTabs") Integer allTabs,
             @JsonProperty("executionContext") String executionContext,
             @JsonProperty("tabs") String... tabs
-            ) {
+    ) {
         super(uri);
         this.allTabs = allTabs;
         this.tabs = Arrays.asList(tabs);
         this.executionContext = executionContext;
     }
 
-    public Integer getAllTabs() { return allTabs; }
+    public Integer getAllTabs() {
+        return allTabs;
+    }
 
-    public Collection<String> getTabs() { return tabs; }
+    public Collection<String> getTabs() {
+        return tabs;
+    }
 
-    public String getExecutionContext() { return executionContext; }
+    public String getExecutionContext() {
+        return executionContext;
+    }
 
     @Override
     public boolean equals(final Object o) {
@@ -69,4 +75,3 @@ public class DashboardAttachment extends Attachment {
         return new GoodDataToStringBuilder(this).append("uri", getUri()).toString();
     }
 }
-

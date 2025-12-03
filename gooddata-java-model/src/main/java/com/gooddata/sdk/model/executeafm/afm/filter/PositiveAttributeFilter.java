@@ -8,9 +8,9 @@ package com.gooddata.sdk.model.executeafm.afm.filter;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.model.executeafm.UriObjQualifier;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,9 +23,8 @@ import static java.util.Arrays.asList;
 @JsonRootName(PositiveAttributeFilter.NAME)
 public class PositiveAttributeFilter extends AttributeFilter {
 
-    private static final long serialVersionUID = 1934771670274345290L;
     static final String NAME = "positiveAttributeFilter";
-
+    private static final long serialVersionUID = 1934771670274345290L;
     private final AttributeFilterElements in;
 
     /**
@@ -91,4 +90,3 @@ public class PositiveAttributeFilter extends AttributeFilter {
         return Objects.hash(in, super.hashCode());
     }
 }
-

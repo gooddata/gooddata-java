@@ -38,6 +38,12 @@ public interface AttributeFilterElements {
 
     class Serializer extends JsonSerializer<AttributeFilterElements> {
 
+        private static void serializeWrapped(String name, AttributeFilterElements elements, JsonGenerator jg, SerializerProvider serializerProvider) throws IOException {
+            jg.writeStartObject();
+            serializerProvider.defaultSerializeField(name, elements.getElements(), jg);
+            jg.writeEndObject();
+        }
+
         @Override
         public void serialize(AttributeFilterElements elements, JsonGenerator jg, SerializerProvider serializerProvider) throws IOException {
             if (elements instanceof UriAttributeFilterElements) {
@@ -48,15 +54,13 @@ public interface AttributeFilterElements {
                 serializerProvider.defaultSerializeValue(elements.getElements(), jg);
             }
         }
-
-        private static void serializeWrapped(String name, AttributeFilterElements elements, JsonGenerator jg, SerializerProvider serializerProvider) throws IOException {
-            jg.writeStartObject();
-            serializerProvider.defaultSerializeField(name, elements.getElements(), jg);
-            jg.writeEndObject();
-        }
     }
 
     class Deserializer extends JsonDeserializer<AttributeFilterElements> {
+
+        private static List<String> nodeToElements(JsonNode node) {
+            return StreamSupport.stream(node.spliterator(), false).map(JsonNode::textValue).collect(Collectors.toList());
+        }
 
         @Override
         public AttributeFilterElements deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -78,12 +82,7 @@ public interface AttributeFilterElements {
                     throw from(jp, "Unknown value of type: " + jp.currentToken());
             }
         }
-
-        private static List<String> nodeToElements(JsonNode node) {
-            return StreamSupport.stream(node.spliterator(), false).map(JsonNode::textValue).collect(Collectors.toList());
-        }
     }
 
 
 }
-

@@ -3,6 +3,9 @@
     "displayForm": {
       "identifier": "df.bum.bac"
     },
-    "notIn": ["a", "b"]
+    "notIn": [
+      "a",
+      "b"
+    ]
   }
 }

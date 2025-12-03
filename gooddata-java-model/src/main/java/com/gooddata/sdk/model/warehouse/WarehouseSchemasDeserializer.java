@@ -25,4 +25,3 @@ class WarehouseSchemasDeserializer extends PageDeserializer<WarehouseSchemas, Wa
         return new WarehouseSchemas(items, paging, links);
     }
 }
-

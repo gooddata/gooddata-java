@@ -23,4 +23,3 @@ public class ProjectNotFoundException extends GoodDataException {
         return projectUri;
     }
 }
-

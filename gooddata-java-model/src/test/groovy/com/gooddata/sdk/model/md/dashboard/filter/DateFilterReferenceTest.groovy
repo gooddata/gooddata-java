@@ -31,4 +31,3 @@ class DateFilterReferenceTest extends Specification {
         that reference, jsonEquals(readStringFromResource('/md/dashboard/filter/dateFilterReference.json'))
     }
 }
-

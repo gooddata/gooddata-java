@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.export;
 
-import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.model.export.ExportFormat;
+import com.gooddata.sdk.service.AbstractGoodDataAT;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -37,4 +37,10 @@ public class ExportServiceAT extends AbstractGoodDataAT {
         assertThat(output, is(notNullValue()));
     }
 
+    @Test(groups = "export", dependsOnGroups = "dataset")
+    public void shouldReportDefinitionRaw() throws Exception {
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        service.exportCsv(reportDefinition, output).get();
+        assertThat(output, is(notNullValue()));
+    }
 }

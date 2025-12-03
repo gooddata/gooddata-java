@@ -43,4 +43,3 @@ public class Key implements Serializable {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

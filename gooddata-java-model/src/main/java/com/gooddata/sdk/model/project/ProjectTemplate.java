@@ -50,4 +50,3 @@ public class ProjectTemplate {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

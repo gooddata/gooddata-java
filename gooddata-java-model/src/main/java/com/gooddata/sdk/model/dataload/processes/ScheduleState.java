@@ -11,4 +11,3 @@ package com.gooddata.sdk.model.dataload.processes;
 public enum ScheduleState {
     ENABLED, DISABLED
 }
-

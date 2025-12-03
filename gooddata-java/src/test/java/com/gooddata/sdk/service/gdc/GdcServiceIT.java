@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.gdc;
 
-import com.gooddata.sdk.service.AbstractGoodDataIT;
 import com.gooddata.sdk.model.gdc.RootLinks;
+import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.testng.annotations.Test;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
@@ -22,7 +22,7 @@ public class GdcServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/gdc/gdc.json"))
                 .withStatus(200);
 
@@ -32,4 +32,3 @@ public class GdcServiceIT extends AbstractGoodDataIT {
     }
 
 }
-

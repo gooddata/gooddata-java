@@ -14,14 +14,13 @@ public enum ExportFormat {
 
     PDF, XLS, PNG, CSV, HTML, XLSX;
 
-    public String getValue() {
-        return name().toLowerCase();
-    }
-
     public static String[] arrayToStringArray(final ExportFormat... formats) {
         return Stream.of(formats)
                 .map(ExportFormat::getValue)
                 .toArray(String[]::new);
     }
-}
 
+    public String getValue() {
+        return name().toLowerCase();
+    }
+}

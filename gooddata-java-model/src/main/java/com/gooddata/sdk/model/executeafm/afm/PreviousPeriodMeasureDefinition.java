@@ -8,17 +8,17 @@ package com.gooddata.sdk.model.executeafm.afm;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.executeafm.ObjQualifier;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.gooddata.sdk.model.executeafm.afm.PreviousPeriodMeasureDefinition.NAME;
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.model.executeafm.afm.PreviousPeriodMeasureDefinition.NAME;
 
 /**
  * Definition of the period over period measure that is used for the Previous period comparison.
@@ -26,22 +26,16 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
 @JsonRootName(NAME)
 public class PreviousPeriodMeasureDefinition extends DerivedMeasureDefinition {
 
-    private static final long serialVersionUID = -4741355657671354062L;
-
     static final String NAME = "previousPeriodMeasure";
-
+    private static final long serialVersionUID = -4741355657671354062L;
     private final List<PreviousPeriodDateDataSet> dateDataSets;
 
     /**
      * Create a new instance of {@link PreviousPeriodMeasureDefinition}.
      *
-     * @param measureIdentifier
-     *         The local identifier of the measure this PoP measure refers to. The parameter must not be null.
-     * @param dateDataSets
-     *         The date data sets that defines how this measure will be shifted in time. The parameter must not be null.
-     *
-     * @throws IllegalArgumentException
-     *         Thrown when {@code attributes} list is empty or required parameter is null.
+     * @param measureIdentifier The local identifier of the measure this PoP measure refers to. The parameter must not be null.
+     * @param dateDataSets      The date data sets that defines how this measure will be shifted in time. The parameter must not be null.
+     * @throws IllegalArgumentException Thrown when {@code attributes} list is empty or required parameter is null.
      */
     @JsonCreator
     public PreviousPeriodMeasureDefinition(
@@ -117,4 +111,3 @@ public class PreviousPeriodMeasureDefinition extends DerivedMeasureDefinition {
         return dateDataSets;
     }
 }
-

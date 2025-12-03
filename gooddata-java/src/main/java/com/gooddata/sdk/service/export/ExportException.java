@@ -21,4 +21,3 @@ public class ExportException extends GoodDataException {
         super(message, cause);
     }
 }
-

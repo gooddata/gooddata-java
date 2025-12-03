@@ -51,7 +51,7 @@ public class PartialMdExportToken {
      *     <li>updateLDMObjects - default false</li>
      * </ul>
      *
-     * @param token token identifying metadata partially exported from another project
+     * @param token                     token identifying metadata partially exported from another project
      * @param importAttributeProperties see {@link #setImportAttributeProperties(boolean)}
      */
     public PartialMdExportToken(String token, boolean importAttributeProperties) {
@@ -69,14 +69,6 @@ public class PartialMdExportToken {
         return overwriteNewer;
     }
 
-    public boolean isUpdateLDMObjects() {
-        return updateLDMObjects;
-    }
-
-    public boolean isImportAttributeProperties() {
-        return importAttributeProperties;
-    }
-
     /**
      * Sets the flag {@code overwriteNewer}.
      * If {@code true}, UDM/ADM objects are overwritten without checking modification time.
@@ -87,6 +79,10 @@ public class PartialMdExportToken {
         this.overwriteNewer = overwriteNewer;
     }
 
+    public boolean isUpdateLDMObjects() {
+        return updateLDMObjects;
+    }
+
     /**
      * Sets the flag {@code updateLDMObjects}.
      * If {@code true}, related LDM objects name, description and tags are overwritten
@@ -95,6 +91,10 @@ public class PartialMdExportToken {
      */
     public void setUpdateLDMObjects(boolean updateLDMObjects) {
         this.updateLDMObjects = updateLDMObjects;
+    }
+
+    public boolean isImportAttributeProperties() {
+        return importAttributeProperties;
     }
 
     /**
@@ -118,4 +118,3 @@ public class PartialMdExportToken {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

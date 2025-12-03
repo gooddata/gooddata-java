@@ -23,7 +23,8 @@ public class ResultMeasureHeaderItem extends ResultHeaderItem {
 
     /**
      * Creates new instance of given header name and order
-     * @param name header name
+     *
+     * @param name  header name
      * @param order measure order within measureGroup
      */
     @JsonCreator
@@ -39,4 +40,3 @@ public class ResultMeasureHeaderItem extends ResultHeaderItem {
         return order;
     }
 }
-

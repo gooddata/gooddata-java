@@ -18,7 +18,7 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Project event.
- *
+ * <p>
  * Serialization only.
  */
 @JsonTypeName("projectEvent")
@@ -43,7 +43,8 @@ public class ProjectEvent {
 
     /**
      * Set the parameter with given key and value, overwriting the preceding value of the same key (if any).
-     * @param key parameter key
+     *
+     * @param key   parameter key
      * @param value parameter value
      */
     public void setParameter(final String key, final String value) {
@@ -85,4 +86,3 @@ public class ProjectEvent {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

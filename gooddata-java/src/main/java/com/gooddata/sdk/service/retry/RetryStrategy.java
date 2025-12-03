@@ -14,12 +14,12 @@ public interface RetryStrategy {
 
     /**
      * Method says if retry is allowed for given parameter combination.
-     * @param method HTTP method
+     *
+     * @param method     HTTP method
      * @param statusCode HTTP response code
-     * @param uri requested URL
+     * @param uri        requested URL
      * @return {@code true} it retry is allowed
      */
     boolean retryAllowed(String method, int statusCode, URI uri);
 
 }
-

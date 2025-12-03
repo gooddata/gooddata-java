@@ -5,9 +5,6 @@
  */
 package com.gooddata.sdk.model.dataload.processes;
 
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
-import static com.gooddata.sdk.common.util.Validate.notNull;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -16,6 +13,9 @@ import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Dataload process execution. Serialization only.
@@ -28,8 +28,8 @@ public class ProcessExecution {
     private final String executionsUri;
 
     private final String executable;
-    private final Map<String,String> params;
-    private final Map<String,String> hiddenParams;
+    private final Map<String, String> params;
+    private final Map<String, String> hiddenParams;
 
     public ProcessExecution(DataloadProcess process, String executable) {
         this(process, executable, new HashMap<>(), new HashMap<>());
@@ -71,4 +71,3 @@ public class ProcessExecution {
         return GoodDataToStringBuilder.defaultToString(this, "hiddenParams", "executionsUri");
     }
 }
-

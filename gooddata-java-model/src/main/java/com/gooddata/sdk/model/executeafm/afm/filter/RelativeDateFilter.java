@@ -9,9 +9,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.model.executeafm.UriObjQualifier;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.Objects;
 
@@ -24,19 +24,19 @@ import static com.gooddata.sdk.common.util.Validate.notEmpty;
 @JsonRootName(RelativeDateFilter.NAME)
 public class RelativeDateFilter extends DateFilter {
 
-    private static final long serialVersionUID = 7257627800833737063L;
     static final String NAME = "relativeDateFilter";
-
+    private static final long serialVersionUID = 7257627800833737063L;
     private final String granularity;
     private final Integer from;
     private final Integer to;
 
     /**
      * Creates new instance
-     * @param dataSet qualifier of date dimension dataSet
+     *
+     * @param dataSet     qualifier of date dimension dataSet
      * @param granularity granularity specified as type GDC date attribute type
-     * @param from from
-     * @param to to
+     * @param from        from
+     * @param to          to
      */
     @JsonCreator
     public RelativeDateFilter(@JsonProperty("dataSet") final ObjQualifier dataSet,
@@ -91,4 +91,3 @@ public class RelativeDateFilter extends DateFilter {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

@@ -7,7 +7,17 @@ package com.gooddata.sdk.service.md;
 
 import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.model.gdc.UriResponse;
-import com.gooddata.sdk.model.md.*;
+import com.gooddata.sdk.model.md.Attribute;
+import com.gooddata.sdk.model.md.AttributeElement;
+import com.gooddata.sdk.model.md.Dataset;
+import com.gooddata.sdk.model.md.Entry;
+import com.gooddata.sdk.model.md.Fact;
+import com.gooddata.sdk.model.md.Metric;
+import com.gooddata.sdk.model.md.Obj;
+import com.gooddata.sdk.model.md.Restriction;
+import com.gooddata.sdk.model.md.ScheduledMail;
+import com.gooddata.sdk.model.md.Usage;
+import com.gooddata.sdk.model.md.UseMany;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
@@ -15,7 +25,12 @@ import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
@@ -71,7 +86,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(USEDBY_URI)
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(OBJECT_MAPPER.writeValueAsString(useMany));
 
@@ -88,7 +103,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(BULK_GET_URI)
                 .havingBody(allOf(containsString(DATASET_URL), containsString(FACT_URL), containsString(METRIC_URL)))
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/bulk-get.json"));
 
@@ -136,7 +151,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(USEDBY_URI)
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(OBJECT_MAPPER.writeValueAsString(useMany));
 
@@ -163,7 +178,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(IDENTIFIERS_URI)
                 .havingBody(jsonEquals(readStringFromResource("/md/identifierToUri.json")))
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/identifiersAndUris.json"));
 
@@ -178,7 +193,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(IDENTIFIERS_URI)
                 .havingBody(jsonEquals(readStringFromResource("/md/identifierToUri.json")))
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/identifiersAndUris.json"));
 
@@ -193,7 +208,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(OBJ_URI)
                 .havingParameterEqualTo("createAndGet", "true")
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/metric-created.json"));
 
@@ -211,7 +226,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("PUT")
                 .havingBodyEqualTo(OBJECT_MAPPER.writeValueAsString(metricInput))
                 .havingPathEqualTo(SPECIFIC_OBJ_URI)
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse(SPECIFIC_OBJ_URI)));
         onRequest()
@@ -235,7 +250,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo(SPECIFIC_OBJ_URI)
-            .respond()
+                .respond()
                 .withStatus(204);
 
         gd.getMetadataService().removeObjByUri(SPECIFIC_OBJ_URI);
@@ -246,7 +261,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo(SPECIFIC_OBJ_URI)
-            .respond()
+                .respond()
                 .withStatus(204);
 
         gd.getMetadataService().removeObj(metricInput);
@@ -258,7 +273,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(OBJ_URI)
                 .havingParameterEqualTo("createAndGet", "true")
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/scheduledMail.json"));
 
@@ -275,7 +290,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(SPECIFIC_OBJ_URI)
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/metric.json"));
 
@@ -292,7 +307,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(SPECIFIC_OBJ_URI)
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/metric.json"));
 
@@ -310,7 +325,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/query/attributes")
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/query.json"));
 
@@ -325,13 +340,13 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/query/attributes")
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/query.json"));
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJ_ID/obj/118")
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/attribute.json"));
 
@@ -348,7 +363,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/query/attributes")
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/query.json"));
 
@@ -364,7 +379,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/query/attributes")
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/query.json"));
 
@@ -381,7 +396,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/obj/DF_ID/elements")
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody(readFromResource("/md/attributeElements.json"));
 
@@ -399,7 +414,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/service/timezone")
-            .respond()
+                .respond()
                 .withStatus(401);
 
         gd.getMetadataService().getTimezone(project);
@@ -410,7 +425,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/service/timezone")
-            .respond()
+                .respond()
                 .withStatus(500);
 
         gd.getMetadataService().getTimezone(project);
@@ -422,7 +437,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/service/timezone")
                 .havingBodyEqualTo("{\"service\":{\"timezone\":\"America/Los_Angeles\"}}")
-            .respond()
+                .respond()
                 .withStatus(200)
                 .withBody("{\"service\":{\"timezone\":\"America/Los_Angeles\"}}");
 
@@ -437,7 +452,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/service/timezone")
                 .havingBodyEqualTo("{\"service\":{\"timezone\":\"America/Los_Angeles\"}}")
-            .respond()
+                .respond()
                 .withStatus(200);
 
         gd.getMetadataService().setTimezone(project, "America/Los_Angeles");
@@ -450,7 +465,7 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/service/timezone")
                 .havingBodyEqualTo("{\"service\":{\"timezone\":\"wrong\"}}")
-            .respond()
+                .respond()
                 .withStatus(400)
                 .withBody("{\"error\":{\"parameters\":[\"wrong\"],\"requestId\":\"reqId\",\"component\":" +
                         "\"MD::Service::Timezone\",\"errorClass\":\"GDC::Exception::User\",\"message\":" +
@@ -459,4 +474,3 @@ public class MetadataServiceIT extends AbstractGoodDataIT {
         gd.getMetadataService().setTimezone(project, "wrong");
     }
 }
-

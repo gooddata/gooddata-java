@@ -5,9 +5,9 @@
  */
 package com.gooddata.sdk.model.featureflag;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
-
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Feature flag is a boolean flag used for enabling / disabling some specific feature of GoodData platform.
@@ -56,4 +56,3 @@ public class FeatureFlag {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

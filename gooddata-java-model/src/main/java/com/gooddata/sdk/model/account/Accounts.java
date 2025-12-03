@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.gooddata.sdk.common.collections.Page;
 import com.gooddata.sdk.common.collections.Paging;
 
@@ -33,4 +32,3 @@ public class Accounts extends Page<Account> {
         super(items, paging, links);
     }
 }
-

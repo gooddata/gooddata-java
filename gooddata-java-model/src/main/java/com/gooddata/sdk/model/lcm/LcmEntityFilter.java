@@ -33,6 +33,7 @@ public class LcmEntityFilter {
 
     /**
      * Adds given data product to this filter.
+     *
      * @param dataProduct data product id - must not be empty.
      * @return this filter
      */
@@ -45,6 +46,7 @@ public class LcmEntityFilter {
 
     /**
      * Adds given segment to this filter.
+     *
      * @param segment segment id - must not be empty.
      * @return this filter
      */
@@ -57,6 +59,7 @@ public class LcmEntityFilter {
 
     /**
      * Adds given client to this filter.
+     *
      * @param client client id - must not be empty.
      * @return this filter
      */
@@ -81,6 +84,7 @@ public class LcmEntityFilter {
 
     /**
      * This filter in the form of query parameters map.
+     *
      * @return filter as query params map
      */
     public Map<String, List<String>> asQueryParams() {
@@ -97,4 +101,3 @@ public class LcmEntityFilter {
         return params;
     }
 }
-

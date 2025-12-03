@@ -35,4 +35,3 @@ public class Templates {
         return templates;
     }
 }
-

@@ -22,4 +22,3 @@ class UsersDeserializer extends PageDeserializer<Users, User> {
         return new Users(items, paging);
     }
 }
-

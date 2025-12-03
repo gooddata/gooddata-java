@@ -14,7 +14,6 @@ import com.gooddata.sdk.model.executeafm.afm.LocallyIdentifiable;
 import com.gooddata.sdk.model.executeafm.resultspec.TotalItem;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,7 +36,7 @@ public class Bucket implements Serializable, LocallyIdentifiable {
      * @param items           list of {@link BucketItem}s for this bucket
      */
     public Bucket(@JsonProperty("localIdentifier") final String localIdentifier,
-            @JsonProperty("items") final List<BucketItem> items) {
+                  @JsonProperty("items") final List<BucketItem> items) {
         this(localIdentifier, items, null);
     }
 
@@ -50,8 +49,8 @@ public class Bucket implements Serializable, LocallyIdentifiable {
      */
     @JsonCreator
     public Bucket(@JsonProperty("localIdentifier") final String localIdentifier,
-            @JsonProperty("items") final List<BucketItem> items,
-            @JsonProperty("totals") List<TotalItem> totals) {
+                  @JsonProperty("items") final List<BucketItem> items,
+                  @JsonProperty("totals") List<TotalItem> totals) {
         this.localIdentifier = localIdentifier;
         this.items = items;
         this.totals = totals;
@@ -107,4 +106,3 @@ public class Bucket implements Serializable, LocallyIdentifiable {
         return Objects.hash(localIdentifier, items, totals);
     }
 }
-

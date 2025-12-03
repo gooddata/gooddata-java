@@ -42,4 +42,3 @@ public class BulkGet {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

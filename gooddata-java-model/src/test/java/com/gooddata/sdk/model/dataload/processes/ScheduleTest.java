@@ -112,10 +112,10 @@ public class ScheduleTest {
 
     @DataProvider(name = "scheduleParams")
     public Object[][] scheduleParams() {
-        return new Object[][] {
-                new Object[] {null, EXECUTABLE, "0 0 * * *", "process"},
-                new Object[] {process, "garbage", "0 0 * * *", "wrong executable"},
-                new Object[] {process, EXECUTABLE, "", "cron can't be empty"}
+        return new Object[][]{
+                new Object[]{null, EXECUTABLE, "0 0 * * *", "process"},
+                new Object[]{process, "garbage", "0 0 * * *", "wrong executable"},
+                new Object[]{process, EXECUTABLE, "", "cron can't be empty"}
         };
     }
 

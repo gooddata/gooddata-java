@@ -10,11 +10,16 @@ package com.gooddata.sdk.model.project;
  * Default value is {@link #PRODUCTION} which is also environment for all currently existing projects or warehouses.
  */
 public enum Environment {
-    /** Default value, projects or warehouses are backed-up and archived. */
+    /**
+     * Default value, projects or warehouses are backed-up and archived.
+     */
     PRODUCTION,
-    /** no meaning yet and behavior is the same as for {@link #PRODUCTION} projects or warehouses. */
+    /**
+     * no meaning yet and behavior is the same as for {@link #PRODUCTION} projects or warehouses.
+     */
     DEVELOPMENT,
-    /** 'TESTING' projects or warehouses are not backed-up and archived. */
+    /**
+     * 'TESTING' projects or warehouses are not backed-up and archived.
+     */
     TESTING
 }
-

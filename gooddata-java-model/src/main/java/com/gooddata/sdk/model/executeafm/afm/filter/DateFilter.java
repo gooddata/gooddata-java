@@ -25,6 +25,7 @@ public abstract class DateFilter implements FilterItem, Serializable {
 
     /**
      * Creates new filter
+     *
      * @param dataSet qualifier of date dimension dataSet
      */
     DateFilter(final ObjQualifier dataSet) {
@@ -62,4 +63,3 @@ public abstract class DateFilter implements FilterItem, Serializable {
         return Objects.hash(dataSet);
     }
 }
-

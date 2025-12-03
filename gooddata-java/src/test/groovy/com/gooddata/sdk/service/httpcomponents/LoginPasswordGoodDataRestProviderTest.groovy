@@ -43,4 +43,3 @@ class LoginPasswordGoodDataRestProviderTest extends Specification {
 
 
 }
-

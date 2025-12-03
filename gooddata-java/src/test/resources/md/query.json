@@ -1,35 +1,35 @@
 {
-    "query": {
-        "entries": [
-            {
-                "link": "/gdc/md/PROJ_ID/obj/127",
-                "author": "/gdc/account/profile/AUTHOR_ID",
-                "tags": "",
-                "created": "2009-10-07 19:27:39",
-                "deprecated": "0",
-                "summary": "",
-                "title": "Resource",
-                "category": "attribute",
-                "updated": "2009-10-07 19:27:40",
-                "contributor": "/gdc/account/profile/CONTRIB_ID"
-            },
-            {
-                "link": "/gdc/md/PROJ_ID/obj/118",
-                "author": "/gdc/account/profile/AUTHOR_ID",
-                "tags": "",
-                "created": "2009-10-07 19:27:45",
-                "deprecated": "0",
-                "summary": "",
-                "category": "attribute",
-                "title": "Name",
-                "updated": "2009-11-01 13:09:11",
-                "contributor": "/gdc/account/profile/CONTRIB_ID"
-            }
-        ],
-        "meta": {
-            "summary": "Metadata Query Resources for project 'PROJ_ID'",
-            "title": "List of allTypes",
-            "category": "MD::Query::Object"
-        }
+  "query": {
+    "entries": [
+      {
+        "link": "/gdc/md/PROJ_ID/obj/127",
+        "author": "/gdc/account/profile/AUTHOR_ID",
+        "tags": "",
+        "created": "2009-10-07 19:27:39",
+        "deprecated": "0",
+        "summary": "",
+        "title": "Resource",
+        "category": "attribute",
+        "updated": "2009-10-07 19:27:40",
+        "contributor": "/gdc/account/profile/CONTRIB_ID"
+      },
+      {
+        "link": "/gdc/md/PROJ_ID/obj/118",
+        "author": "/gdc/account/profile/AUTHOR_ID",
+        "tags": "",
+        "created": "2009-10-07 19:27:45",
+        "deprecated": "0",
+        "summary": "",
+        "category": "attribute",
+        "title": "Name",
+        "updated": "2009-11-01 13:09:11",
+        "contributor": "/gdc/account/profile/CONTRIB_ID"
+      }
+    ],
+    "meta": {
+      "summary": "Metadata Query Resources for project 'PROJ_ID'",
+      "title": "List of allTypes",
+      "category": "MD::Query::Object"
     }
+  }
 }

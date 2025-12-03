@@ -87,4 +87,3 @@ class MeasureItemTest extends Specification {
                 .verify()
     }
 }
-

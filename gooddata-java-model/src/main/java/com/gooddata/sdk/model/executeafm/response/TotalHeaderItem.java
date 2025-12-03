@@ -9,8 +9,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gooddata.sdk.model.md.report.Total;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.md.report.Total;
 
 import static com.gooddata.sdk.common.util.Validate.notNull;
 
@@ -25,6 +25,7 @@ public class TotalHeaderItem {
 
     /**
      * Creates new header
+     *
      * @param name total name
      */
     @JsonCreator
@@ -34,6 +35,7 @@ public class TotalHeaderItem {
 
     /**
      * Creates new header
+     *
      * @param total total value
      */
     public TotalHeaderItem(final Total total) {
@@ -52,4 +54,3 @@ public class TotalHeaderItem {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

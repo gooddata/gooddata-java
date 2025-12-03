@@ -38,4 +38,3 @@ public class AccountsTest {
         assertThat(account.getEmail(), is(EMAIL));
     }
 }
-

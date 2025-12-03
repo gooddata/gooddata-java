@@ -26,12 +26,11 @@ import static com.gooddata.sdk.common.util.Validate.notEmpty;
 public class Integration {
 
     public static final String URL = "/gdc/projects/{project}/connectors/{connector}/integration";
-
-    private String projectTemplate;
-    private boolean active;
     private final IntegrationProcessStatus lastFinishedProcess;
     private final IntegrationProcessStatus lastSuccessfulProcess;
     private final IntegrationProcessStatus runningProcess;
+    private String projectTemplate;
+    private boolean active;
 
     public Integration(final String projectTemplate) {
         this(projectTemplate, true, null, null, null);
@@ -85,4 +84,3 @@ public class Integration {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

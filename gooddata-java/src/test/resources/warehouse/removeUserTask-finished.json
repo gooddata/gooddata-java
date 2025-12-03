@@ -1,7 +1,7 @@
 {
-    "asyncTask": {
-        "links": {
-            "users": "/gdc/datawarehouse/instances/instanceId/users"
-        }
+  "asyncTask": {
+    "links": {
+      "users": "/gdc/datawarehouse/instances/instanceId/users"
     }
+  }
 }

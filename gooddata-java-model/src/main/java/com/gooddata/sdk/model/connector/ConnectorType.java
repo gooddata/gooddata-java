@@ -27,4 +27,3 @@ public enum ConnectorType {
         return settingsUrl;
     }
 }
-

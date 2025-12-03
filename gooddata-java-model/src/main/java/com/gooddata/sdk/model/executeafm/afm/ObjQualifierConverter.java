@@ -19,11 +19,8 @@ public interface ObjQualifierConverter {
     /**
      * Convert provided {@link IdentifierObjQualifier} to the matching {@link UriObjQualifier}.
      *
-     * @param identifierObjQualifier
-     *         The identifier that must be converted.
-     *
+     * @param identifierObjQualifier The identifier that must be converted.
      * @return The optional matching {@link UriObjQualifier} obtained by the conversion.
      */
     Optional<UriObjQualifier> convertToUriQualifier(IdentifierObjQualifier identifierObjQualifier);
 }
-

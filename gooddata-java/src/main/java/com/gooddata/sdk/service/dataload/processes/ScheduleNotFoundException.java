@@ -23,4 +23,3 @@ public class ScheduleNotFoundException extends GoodDataException {
         return uri;
     }
 }
-

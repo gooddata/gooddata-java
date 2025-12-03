@@ -13,7 +13,7 @@ class GoodDataServicesTest extends Specification {
     def "should init DataStoreService"() {
         expect:
         new GoodDataServices(new LoginPasswordGoodDataRestProvider(
-                new GoodDataEndpoint(), new GoodDataSettings(),"sdk@gooddata.com","sdk")).dataStoreService
+                new GoodDataEndpoint(), new GoodDataSettings(), "sdk@gooddata.com", "sdk")).dataStoreService
     }
 
     def "should not init DataStoreService using custom provider"() {
@@ -21,4 +21,3 @@ class GoodDataServicesTest extends Specification {
         new GoodDataServices(Stub(GoodDataRestProvider)).dataStoreService == null
     }
 }
-

@@ -18,4 +18,3 @@ public enum CollectionType {
         return name().toLowerCase().equals(type.toLowerCase());
     }
 }
-

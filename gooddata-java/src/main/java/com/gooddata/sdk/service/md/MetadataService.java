@@ -7,7 +7,25 @@ package com.gooddata.sdk.service.md;
 
 import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.common.GoodDataRestException;
-import com.gooddata.sdk.model.md.*;
+import com.gooddata.sdk.model.md.Attribute;
+import com.gooddata.sdk.model.md.AttributeElement;
+import com.gooddata.sdk.model.md.AttributeElements;
+import com.gooddata.sdk.model.md.BulkGet;
+import com.gooddata.sdk.model.md.BulkGetUris;
+import com.gooddata.sdk.model.md.DisplayForm;
+import com.gooddata.sdk.model.md.Entry;
+import com.gooddata.sdk.model.md.IdentifierToUri;
+import com.gooddata.sdk.model.md.IdentifiersAndUris;
+import com.gooddata.sdk.model.md.InUseMany;
+import com.gooddata.sdk.model.md.Obj;
+import com.gooddata.sdk.model.md.Query;
+import com.gooddata.sdk.model.md.Queryable;
+import com.gooddata.sdk.model.md.Restriction;
+import com.gooddata.sdk.model.md.Service;
+import com.gooddata.sdk.model.md.Updatable;
+import com.gooddata.sdk.model.md.Usage;
+import com.gooddata.sdk.model.md.UseMany;
+import com.gooddata.sdk.model.md.UseManyEntries;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.AbstractService;
@@ -18,10 +36,19 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriTemplate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.gooddata.sdk.common.util.Validate.*;
+import static com.gooddata.sdk.common.util.Validate.noNullElements;
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 import static com.gooddata.sdk.model.md.Service.TIMEZONE_URI;
 import static java.util.Arrays.asList;
 
@@ -44,11 +71,11 @@ public class MetadataService extends AbstractService {
      * @param obj     metadata object to be created
      * @param <T>     type of the object to be created
      * @return new metadata object
-     * @throws ObjCreateException   if creation failed
-     * @throws ObjNotFoundException if new metadata object not found after creation
-     * @throws com.gooddata.sdk.common.GoodDataRestException   if GoodData REST API returns unexpected status code when getting
-     *                                              the new object
-     * @throws com.gooddata.sdk.common.GoodDataException       if no response from API or client-side HTTP error when getting the new object
+     * @throws ObjCreateException                            if creation failed
+     * @throws ObjNotFoundException                          if new metadata object not found after creation
+     * @throws com.gooddata.sdk.common.GoodDataRestException if GoodData REST API returns unexpected status code when getting
+     *                                                       the new object
+     * @throws com.gooddata.sdk.common.GoodDataException     if no response from API or client-side HTTP error when getting the new object
      */
     @SuppressWarnings("unchecked")
     public <T extends Obj> T createObj(Project project, T obj) {
@@ -58,7 +85,7 @@ public class MetadataService extends AbstractService {
 
         final T response;
         try {
-            response = restTemplate.postForObject(Obj.CREATE_WITH_ID_URI, obj, (Class<T>)obj.getClass(), project.getId());
+            response = restTemplate.postForObject(Obj.CREATE_WITH_ID_URI, obj, (Class<T>) obj.getClass(), project.getId());
         } catch (GoodDataRestException | RestClientException e) {
             throw new ObjCreateException(obj, e);
         }
@@ -76,9 +103,9 @@ public class MetadataService extends AbstractService {
      * @param cls class of the resulting object
      * @param <T> type of the object to be returned
      * @return the metadata object
-     * @throws ObjNotFoundException if metadata object not found
-     * @throws com.gooddata.sdk.common.GoodDataRestException   if GoodData REST API returns unexpected status code
-     * @throws com.gooddata.sdk.common.GoodDataException       if no response from API or client-side HTTP error
+     * @throws ObjNotFoundException                          if metadata object not found
+     * @throws com.gooddata.sdk.common.GoodDataRestException if GoodData REST API returns unexpected status code
+     * @throws com.gooddata.sdk.common.GoodDataException     if no response from API or client-side HTTP error
      */
     public <T extends Obj> T getObjByUri(String uri, Class<T> cls) {
         notNull(uri, "uri");
@@ -106,7 +133,7 @@ public class MetadataService extends AbstractService {
      * Retrieves a collection of objects corresponding to the supplied collection of URIs.
      *
      * @param project project that contains the objects to be retrieved
-     * @param uris collection of URIs
+     * @param uris    collection of URIs
      * @return collection of metadata objects corresponding to the supplied URIs
      */
     public Collection<Obj> getObjsByUris(Project project, Collection<String> uris) {
@@ -151,9 +178,9 @@ public class MetadataService extends AbstractService {
      * Remove metadata object URI
      *
      * @param obj metadata object to remove
-     * @throws ObjNotFoundException if metadata object not found
-     * @throws com.gooddata.sdk.common.GoodDataRestException   if GoodData REST API returns unexpected status code
-     * @throws com.gooddata.sdk.common.GoodDataException       if no response from API or client-side HTTP error
+     * @throws ObjNotFoundException                          if metadata object not found
+     * @throws com.gooddata.sdk.common.GoodDataRestException if GoodData REST API returns unexpected status code
+     * @throws com.gooddata.sdk.common.GoodDataException     if no response from API or client-side HTTP error
      */
     public void removeObj(Obj obj) {
         notNull(obj, "obj");
@@ -175,9 +202,9 @@ public class MetadataService extends AbstractService {
      * Remove metadata object by URI (format is <code>/gdc/md/{PROJECT_ID}/obj/{OBJECT_ID}</code>)
      *
      * @param uri URI in format <code>/gdc/md/{PROJECT_ID}/obj/{OBJECT_ID}</code>
-     * @throws ObjNotFoundException if metadata object not found
-     * @throws com.gooddata.sdk.common.GoodDataRestException   if GoodData REST API returns unexpected status code
-     * @throws com.gooddata.sdk.common.GoodDataException       if no response from API or client-side HTTP error
+     * @throws ObjNotFoundException                          if metadata object not found
+     * @throws com.gooddata.sdk.common.GoodDataRestException if GoodData REST API returns unexpected status code
+     * @throws com.gooddata.sdk.common.GoodDataException     if no response from API or client-side HTTP error
      */
     public void removeObjByUri(String uri) {
         notNull(uri, "uri");
@@ -202,9 +229,9 @@ public class MetadataService extends AbstractService {
      * @param cls     class of the resulting object
      * @param <T>     type of the object to be returned
      * @return the metadata object
-     * @throws ObjNotFoundException if metadata object not found
-     * @throws com.gooddata.sdk.common.GoodDataRestException   if GoodData REST API returns unexpected status code
-     * @throws com.gooddata.sdk.common.GoodDataException       if no response from API or client-side HTTP error
+     * @throws ObjNotFoundException                          if metadata object not found
+     * @throws com.gooddata.sdk.common.GoodDataRestException if GoodData REST API returns unexpected status code
+     * @throws com.gooddata.sdk.common.GoodDataException     if no response from API or client-side HTTP error
      */
     public <T extends Obj> T getObjById(Project project, String id, Class<T> cls) {
         notNull(project, "project");
@@ -306,6 +333,7 @@ public class MetadataService extends AbstractService {
 
     /**
      * Find all objects which use the given object.
+     *
      * @param project project
      * @param obj     object to find using objects for
      * @param nearest find nearest objects only
@@ -321,6 +349,7 @@ public class MetadataService extends AbstractService {
 
     /**
      * Find all objects which use the given object.
+     *
      * @param project project
      * @param uri     URI of object to find using objects for
      * @param nearest find nearest objects only
@@ -334,12 +363,13 @@ public class MetadataService extends AbstractService {
         notNull(uri, "uri");
         notNull(project, "project");
 
-        final Collection<Usage> usages = usedBy(project, asList(uri), nearest, types);
-        return usages.size() > 0 ? usages.iterator().next().getUsedBy() : Collections.emptyList();
+        final Collection<Usage> usages = usedBy(project, List.of(uri), nearest, types);
+        return !usages.isEmpty() ? usages.iterator().next().getUsedBy() : Collections.emptyList();
     }
 
     /**
      * Find all objects which use the given objects. Batch alternative to {@link #usedBy(Project, String, boolean, Class[])}
+     *
      * @param project project
      * @param uris    URIs of object to find using objects for
      * @param nearest find nearest objects only
@@ -375,11 +405,11 @@ public class MetadataService extends AbstractService {
      * @throws com.gooddata.sdk.common.GoodDataException if unable to query metadata
      */
     public Collection<String> findUris(Project project, Restriction... restrictions) {
-        notNull(project, "project" );
+        notNull(project, "project");
         noNullElements(restrictions, "restrictions");
 
         final List<String> ids = new ArrayList<>(restrictions.length);
-        for (Restriction restriction: restrictions) {
+        for (Restriction restriction : restrictions) {
             if (!Restriction.Type.IDENTIFIER.equals(restriction.getType())) {
                 throw new IllegalArgumentException("All restrictions have to be of type " + Restriction.Type.IDENTIFIER);
             }
@@ -399,7 +429,7 @@ public class MetadataService extends AbstractService {
      * @see #findUris(Project, Restriction...)
      */
     public Map<String, String> identifiersToUris(Project project, Collection<String> identifiers) {
-        notNull(project, "project" );
+        notNull(project, "project");
         noNullElements(identifiers, "identifiers");
 
         return getUrisForIdentifiers(project, identifiers).asIdentifierToUri();
@@ -467,7 +497,7 @@ public class MetadataService extends AbstractService {
     /**
      * Set project/workspace timezone.
      *
-     * @param project the project/workspace where to set the timezone
+     * @param project  the project/workspace where to set the timezone
      * @param timezone the timezone to be set (see IANA/Olson tz database for possible values)
      */
     public void setTimezone(final Project project, final String timezone) {
@@ -536,4 +566,3 @@ public class MetadataService extends AbstractService {
         return typeBase + "s";
     }
 }
-

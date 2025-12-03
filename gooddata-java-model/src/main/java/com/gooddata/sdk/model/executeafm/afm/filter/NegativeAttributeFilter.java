@@ -9,9 +9,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.model.executeafm.UriObjQualifier;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,9 +24,8 @@ import static java.util.Arrays.asList;
 @JsonRootName(NegativeAttributeFilter.NAME)
 public class NegativeAttributeFilter extends AttributeFilter {
 
-    private static final long serialVersionUID = -6202625318104289333L;
     static final String NAME = "negativeAttributeFilter";
-
+    private static final long serialVersionUID = -6202625318104289333L;
     private final AttributeFilterElements notIn;
 
     /**
@@ -102,4 +101,3 @@ public class NegativeAttributeFilter extends AttributeFilter {
     }
 
 }
-

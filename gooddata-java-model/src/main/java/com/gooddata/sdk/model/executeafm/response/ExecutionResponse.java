@@ -11,9 +11,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.model.executeafm.Execution;
 import com.gooddata.sdk.model.executeafm.result.ExecutionResult;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,7 +22,6 @@ import java.util.Map;
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 import static com.gooddata.sdk.common.util.Validate.notNull;
 import static com.gooddata.sdk.common.util.Validate.notNullState;
-import static org.apache.commons.lang3.ArrayUtils.toObject;
 
 /**
  * Represents response on {@link Execution} request.
@@ -41,7 +40,8 @@ public class ExecutionResponse {
 
     /**
      * Creates new instance of given dimensions and execution result uri.
-     * @param dimensions dimensions
+     *
+     * @param dimensions         dimensions
      * @param executionResultUri execution result uri
      */
     public ExecutionResponse(final List<ResultDimension> dimensions, final String executionResultUri) {
@@ -58,6 +58,7 @@ public class ExecutionResponse {
 
     /**
      * List of dimensions describing the result.
+     *
      * @return dimensions
      */
     public List<ResultDimension> getDimensions() {
@@ -66,6 +67,7 @@ public class ExecutionResponse {
 
     /**
      * Map of response's links.
+     *
      * @return links
      */
     public Map<String, String> getLinks() {
@@ -74,6 +76,7 @@ public class ExecutionResponse {
 
     /**
      * Uri referencing the data result location.
+     *
      * @return execution result uri or throws exception in case the link doesn't exist
      */
     @JsonIgnore
@@ -87,4 +90,3 @@ public class ExecutionResponse {
     }
 
 }
-

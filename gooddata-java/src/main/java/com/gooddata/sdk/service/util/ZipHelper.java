@@ -5,8 +5,6 @@
  */
 package com.gooddata.sdk.service.util;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
-
 import org.springframework.util.StreamUtils;
 
 import java.io.File;
@@ -15,9 +13,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Utility class for manipulating zip archives.
@@ -29,7 +30,7 @@ public abstract class ZipHelper {
      * packs the directory into the output. Not including given directory itself.
      * If the given file is already zipped, simply copies it into the output.
      *
-     * @param file file to be zipped
+     * @param file   file to be zipped
      * @param output stream where the output will be written
      * @throws IOException if zip creation fails
      */
@@ -41,8 +42,8 @@ public abstract class ZipHelper {
      * This method compresses the input file to zip format. If the given file is a directory, it recursively
      * packs the directory into the output. If the given file is already zipped, simply copies it into the output.
      *
-     * @param file file to be zipped
-     * @param output stream where the output will be written
+     * @param file        file to be zipped
+     * @param output      stream where the output will be written
      * @param includeRoot if root dir should be included
      * @throws IOException if zip creation fails
      */
@@ -66,7 +67,7 @@ public abstract class ZipHelper {
     }
 
     private static void zipDir(Path rootPath, File dir, ZipOutputStream zos) throws IOException {
-        for (File file : notNull(dir.listFiles(), "listed files")) {
+        for (File file : notNull(Objects.requireNonNull(dir.listFiles()), "listed files")) {
             if (file.isDirectory()) {
                 zipDir(rootPath, file, zos);
             } else {
@@ -93,4 +94,3 @@ public abstract class ZipHelper {
         }
     }
 }
-

@@ -5,28 +5,32 @@
  */
 package com.gooddata.sdk.service.md.maintenance;
 
-import static com.gooddata.sdk.model.md.Restriction.identifier;
-import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-
-import com.gooddata.sdk.model.md.maintenance.ExportProject;
-import com.gooddata.sdk.model.md.maintenance.ExportProjectToken;
-import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.model.md.Entry;
 import com.gooddata.sdk.model.md.Metric;
+import com.gooddata.sdk.model.md.maintenance.ExportProject;
+import com.gooddata.sdk.model.md.maintenance.ExportProjectToken;
 import com.gooddata.sdk.model.md.maintenance.PartialMdExport;
 import com.gooddata.sdk.model.md.maintenance.PartialMdExportToken;
-import com.gooddata.sdk.service.project.model.ModelService;
-import com.gooddata.sdk.model.project.model.ModelDiff;
 import com.gooddata.sdk.model.project.Environment;
 import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.model.project.model.ModelDiff;
+import com.gooddata.sdk.service.AbstractGoodDataAT;
+import com.gooddata.sdk.service.project.model.ModelService;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.InputStreamReader;
 import java.util.Collection;
+
+import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
+import static com.gooddata.sdk.model.md.Restriction.identifier;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyOrNullString;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * Metadata export/import acceptance tests.
@@ -100,4 +104,3 @@ public class ExportImportServiceAT extends AbstractGoodDataAT {
         assertThat(entry.getTitle(), is(metric.getTitle()));
     }
 }
-

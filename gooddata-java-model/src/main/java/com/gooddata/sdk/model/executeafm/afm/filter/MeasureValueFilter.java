@@ -9,10 +9,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.model.executeafm.Qualifier;
 import com.gooddata.sdk.model.executeafm.UriObjQualifier;
-import com.gooddata.sdk.model.md.visualization.Measure;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -46,7 +45,7 @@ public class MeasureValueFilter implements ExtendedFilter, CompatibilityFilter, 
     /**
      * Creates a new {@link MeasureValueFilter} instance.
      *
-     * @param measure The qualifier of referenced measure.
+     * @param measure   The qualifier of referenced measure.
      * @param condition The condition applied to a sliced measure value. (Optional)
      */
     @JsonCreator
@@ -61,7 +60,6 @@ public class MeasureValueFilter implements ExtendedFilter, CompatibilityFilter, 
      * Copy itself using given uri qualifier
      *
      * @param qualifier qualifier to use for the new filter
-     *
      * @return self copy with given qualifier
      */
     public MeasureValueFilter withUriObjQualifier(final UriObjQualifier qualifier) {
@@ -101,4 +99,3 @@ public class MeasureValueFilter implements ExtendedFilter, CompatibilityFilter, 
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

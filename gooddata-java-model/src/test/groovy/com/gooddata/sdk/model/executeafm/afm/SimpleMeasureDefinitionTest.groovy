@@ -162,4 +162,3 @@ class SimpleMeasureDefinitionTest extends Specification {
         qualifiers.size() == 0
     }
 }
-

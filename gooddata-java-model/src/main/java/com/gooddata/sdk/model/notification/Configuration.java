@@ -11,11 +11,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 /**
  * Interface for configurations of channel
  */
-@JsonTypeInfo(use=JsonTypeInfo.Id.NAME,
-        include=JsonTypeInfo.As.WRAPPER_OBJECT)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.WRAPPER_OBJECT)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value=EmailConfiguration.class, name="emailConfiguration"),
+        @JsonSubTypes.Type(value = EmailConfiguration.class, name = "emailConfiguration"),
 })
 public interface Configuration {
 }
-

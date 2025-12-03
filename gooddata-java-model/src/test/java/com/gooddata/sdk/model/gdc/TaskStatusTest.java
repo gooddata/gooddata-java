@@ -10,8 +10,9 @@ import org.testng.annotations.Test;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 
 public class TaskStatusTest {
 

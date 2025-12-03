@@ -3,6 +3,9 @@
     "displayForm": {
       "identifier": "df.bum.bac"
     },
-    "in": ["a", "b"]
+    "in": [
+      "a",
+      "b"
+    ]
   }
 }

@@ -1,10 +1,10 @@
 {
-    "process":{
-        "type" : "DATALOAD",
-        "name" : "dataloadProcess",
-        "links" : {
-            "self" : "/gdc/projects/PROJECT_ID/dataload/processes/processId",
-            "executions" : "/gdc/projects/PROJECT_ID/dataload/processes/processId/executions"
-        }
+  "process": {
+    "type": "DATALOAD",
+    "name": "dataloadProcess",
+    "links": {
+      "self": "/gdc/projects/PROJECT_ID/dataload/processes/processId",
+      "executions": "/gdc/projects/PROJECT_ID/dataload/processes/processId/executions"
     }
+  }
 }

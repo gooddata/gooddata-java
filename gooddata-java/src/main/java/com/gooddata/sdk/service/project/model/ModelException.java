@@ -19,4 +19,3 @@ public class ModelException extends GoodDataException {
         super(message, cause);
     }
 }
-

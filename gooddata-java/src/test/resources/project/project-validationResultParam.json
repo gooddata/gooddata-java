@@ -11,13 +11,19 @@
   },
   {
     "sli_el": {
-      "ids": ["4761"],
-      "vals": ["Deleted"]
+      "ids": [
+        "4761"
+      ],
+      "vals": [
+        "Deleted"
+      ]
     }
   },
   {
     "gdctime_el": {
-      "ids": ["4762"]
+      "ids": [
+        "4762"
+      ]
     }
   }
 ]

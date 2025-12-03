@@ -10,7 +10,9 @@
       "buckets": [],
       "filters": [],
       "properties": "{\"nokey\":\"novalue\"}",
-      "references": { "key": "novalue" }
+      "references": {
+        "key": "novalue"
+      }
     }
   }
 }

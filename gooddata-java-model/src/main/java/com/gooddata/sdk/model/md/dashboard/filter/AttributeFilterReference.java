@@ -6,13 +6,13 @@
 
 package com.gooddata.sdk.model.md.dashboard.filter;
 
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
 
 /**
  * Reference for attribute filter for ignoring particular filter in {@link com.gooddata.sdk.model.md.dashboard.Kpi}.
@@ -23,14 +23,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AttributeFilterReference implements FilterReference {
 
-    private static final long serialVersionUID = -7882622280867466659L;
-
     static final String NAME = "attributeFilterReference";
-
+    private static final long serialVersionUID = -7882622280867466659L;
     private final String displayFormUri;
 
     /**
      * Constructor.
+     *
      * @param displayFormUri display form URI of filter
      */
     @JsonCreator
@@ -46,4 +45,3 @@ public class AttributeFilterReference implements FilterReference {
         return displayFormUri;
     }
 }
-

@@ -10,10 +10,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.model.executeafm.afm.Afm;
 import com.gooddata.sdk.model.executeafm.afm.LocallyIdentifiable;
 import com.gooddata.sdk.model.executeafm.afm.MeasureItem;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
 
@@ -52,6 +52,7 @@ public class MeasureHeaderItem implements LocallyIdentifiable {
 
     /**
      * Header name, can be measure title, or specified alias
+     *
      * @return name
      */
     public String getName() {
@@ -68,6 +69,7 @@ public class MeasureHeaderItem implements LocallyIdentifiable {
     /**
      * Local identifier, referencing the {@link MeasureItem}
      * in {@link Afm}
+     *
      * @return local identifier
      */
     @Override
@@ -83,14 +85,8 @@ public class MeasureHeaderItem implements LocallyIdentifiable {
     }
 
     /**
-     * @return Measure metadata identifier
-     */
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    /**
      * Set measure uri
+     *
      * @param uri measure uri
      */
     public void setUri(final String uri) {
@@ -98,7 +94,15 @@ public class MeasureHeaderItem implements LocallyIdentifiable {
     }
 
     /**
+     * @return Measure metadata identifier
+     */
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    /**
      * Set measure metadata identifier
+     *
      * @param identifier
      */
     public void setIdentifier(final String identifier) {
@@ -110,4 +114,3 @@ public class MeasureHeaderItem implements LocallyIdentifiable {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

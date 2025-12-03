@@ -82,4 +82,3 @@ class AttributeHeaderTest extends Specification {
         header.toString()
     }
 }
-

@@ -24,8 +24,9 @@ public class AttributeHeaderItem extends ResultHeaderItem {
 
     /**
      * Creates new header item
+     *
      * @param name name of item (usually attribute element title)
-     * @param uri uri of item (usually attribute element uri)
+     * @param uri  uri of item (usually attribute element uri)
      */
     @JsonCreator
     public AttributeHeaderItem(@JsonProperty("name") final String name, @JsonProperty("uri") final String uri) {
@@ -45,4 +46,3 @@ public class AttributeHeaderItem extends ResultHeaderItem {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

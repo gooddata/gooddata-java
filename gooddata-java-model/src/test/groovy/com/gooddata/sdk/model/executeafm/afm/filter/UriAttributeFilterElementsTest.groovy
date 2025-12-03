@@ -35,4 +35,3 @@ class UriAttributeFilterElementsTest extends Specification {
         EqualsVerifier.forClass(UriAttributeFilterElements).verify()
     }
 }
-

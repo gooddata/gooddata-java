@@ -36,30 +36,22 @@ public class Account {
     public static final String CURRENT_ID = "current";
 
     private final String login;
-
-    @JsonView(UpdateView.class)
-    private String email;
-
-    @JsonView(UpdateView.class)
-    private String password;
-
-    @JsonView(UpdateView.class)
-    private String verifyPassword;
-
-    @JsonView(UpdateView.class)
-    private String firstName;
-
-    @JsonView(UpdateView.class)
-    private String lastName;
-
-    @JsonView(UpdateView.class)
-    private List<String> ipWhitelist;
-
-    @JsonView(UpdateView.class)
-    private List<String> authenticationModes;
-
     @JsonIgnore
     private final Links links;
+    @JsonView(UpdateView.class)
+    private String email;
+    @JsonView(UpdateView.class)
+    private String password;
+    @JsonView(UpdateView.class)
+    private String verifyPassword;
+    @JsonView(UpdateView.class)
+    private String firstName;
+    @JsonView(UpdateView.class)
+    private String lastName;
+    @JsonView(UpdateView.class)
+    private List<String> ipWhitelist;
+    @JsonView(UpdateView.class)
+    private List<String> authenticationModes;
 
     @JsonCreator
     private Account(
@@ -100,13 +92,24 @@ public class Account {
 
     /**
      * Account creation constructor
-     * @param email email
+     *
+     * @param email     email
      * @param firstName first name
-     * @param lastName last name
-     * @param password password
+     * @param lastName  last name
+     * @param password  password
      */
     public Account(String email, String password, String firstName, String lastName) {
         this(email, email, password, password, firstName, lastName, null, null, null);
+    }
+
+    /**
+     * Extract Account's ID from Account's URI
+     *
+     * @param uri Account's URI
+     * @return Account's ID extracted from URI
+     */
+    public static String getId(String uri) {
+        return UriHelper.getLastUriPart(uri);
     }
 
     public String getLogin() {
@@ -117,20 +120,40 @@ public class Account {
         return email;
     }
 
+    public void setEmail(final String email) {
+        this.email = email;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(final String password) {
+        this.password = password;
     }
 
     public String getVerifyPassword() {
         return verifyPassword;
     }
 
+    public void setVerifyPassword(final String verifyPassword) {
+        this.verifyPassword = verifyPassword;
+    }
+
     public String getFirstName() {
         return firstName;
     }
 
+    public void setFirstName(final String firstName) {
+        this.firstName = firstName;
+    }
+
     public String getLastName() {
         return lastName;
+    }
+
+    public void setLastName(final String lastName) {
+        this.lastName = lastName;
     }
 
     @JsonIgnore
@@ -152,36 +175,35 @@ public class Account {
         return ipWhitelist;
     }
 
-    public List<String> getAuthenticationModes() {
-        return authenticationModes;
-    }
-
-    public void setEmail(final String email) {
-        this.email = email;
-    }
-
-    public void setPassword(final String password) {
-        this.password = password;
-    }
-
-    public void setVerifyPassword(final String verifyPassword) {
-        this.verifyPassword = verifyPassword;
-    }
-
-    public void setFirstName(final String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(final String lastName) {
-        this.lastName = lastName;
-    }
-
     public void setIpWhitelist(final List<String> ipWhitelist) {
         this.ipWhitelist = ipWhitelist;
     }
 
+    public List<String> getAuthenticationModes() {
+        return authenticationModes;
+    }
+
     public void setAuthenticationModes(final List<String> authenticationModes) {
         this.authenticationModes = authenticationModes;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this, "password", "verifyPassword");
+    }
+
+    /**
+     * Enumeration type representing GoodData authentication mode.
+     */
+    public enum AuthenticationMode {
+        /**
+         * User can be authenticated using password
+         */
+        PASSWORD,
+        /**
+         * User can be authenticated via SSO
+         */
+        SSO
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -205,37 +227,8 @@ public class Account {
     }
 
     /**
-     * Extract Account's ID from Account's URI
-     * @param uri Account's URI
-     * @return Account's ID extracted from URI
-     */
-    public static String getId(String uri) {
-        return UriHelper.getLastUriPart(uri);
-    }
-
-    @Override
-    public String toString() {
-        return GoodDataToStringBuilder.defaultToString(this, "password", "verifyPassword");
-    }
-
-    /**
      * Class representing update view of account
      */
     public static class UpdateView {
     }
-
-    /**
-     * Enumeration type representing GoodData authentication mode.
-     */
-    public enum AuthenticationMode {
-        /**
-         * User can be authenticated using password
-         */
-        PASSWORD,
-        /**
-         * User can be authenticated via SSO
-         */
-        SSO
-    }
 }
-

@@ -10,7 +10,6 @@ package com.gooddata.sdk.service;
  * A simple poll handler using same type for polling and result.
  *
  * @param <T> polling and result type
- *
  * @see FutureResult
  */
 public abstract class SimplePollHandler<T> extends AbstractPollHandler<T, T> {
@@ -30,4 +29,3 @@ public abstract class SimplePollHandler<T> extends AbstractPollHandler<T, T> {
         setResult(pollResult);
     }
 }
-

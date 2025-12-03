@@ -45,4 +45,3 @@ public class WarehouseSchemaTest {
         assertThat(warehouseSchema.toString(), matchesPattern(WarehouseSchema.class.getSimpleName() + "\\[.*\\]"));
     }
 }
-

@@ -9,7 +9,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.common.GoodDataRestException;
-import com.gooddata.sdk.model.export.*;
+import com.gooddata.sdk.model.export.ClientExport;
+import com.gooddata.sdk.model.export.ExecuteReport;
+import com.gooddata.sdk.model.export.ExecuteReportDefinition;
+import com.gooddata.sdk.model.export.ExportFormat;
+import com.gooddata.sdk.model.export.ReportRequest;
 import com.gooddata.sdk.model.gdc.AsyncTask;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.md.AbstractObj;
@@ -19,7 +23,12 @@ import com.gooddata.sdk.model.md.ProjectDashboard.Tab;
 import com.gooddata.sdk.model.md.report.Report;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.project.Project;
-import com.gooddata.sdk.service.*;
+import com.gooddata.sdk.service.AbstractService;
+import com.gooddata.sdk.service.FutureResult;
+import com.gooddata.sdk.service.GoodDataEndpoint;
+import com.gooddata.sdk.service.GoodDataSettings;
+import com.gooddata.sdk.service.PollResult;
+import com.gooddata.sdk.service.SimplePollHandler;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +39,7 @@ import org.springframework.web.util.UriTemplate;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
 
 import static com.gooddata.sdk.common.util.Validate.notNull;
 import static com.gooddata.sdk.common.util.Validate.notNullState;
@@ -43,21 +53,28 @@ import static org.springframework.http.HttpMethod.POST;
 public class ExportService extends AbstractService {
 
     public static final String EXPORTING_URI = "/gdc/exporter/executor";
-
-    private static final String CLIENT_EXPORT_URI = "/gdc/projects/{projectId}/clientexport";
-
-    private static final String RAW_EXPORT_URI = "/gdc/projects/{projectId}/execute/raw";
-
     public static final UriTemplate OBJ_TEMPLATE = new UriTemplate(Obj.OBJ_URI);
     public static final UriTemplate PROJECT_TEMPLATE = new UriTemplate(Project.URI);
+    private static final String CLIENT_EXPORT_URI = "/gdc/projects/{projectId}/clientexport";
+    private static final String RAW_EXPORT_URI = "/gdc/projects/{projectId}/execute/raw";
 
     /**
      * Service for data export
+     *
      * @param restTemplate REST template
-     * @param settings settings
+     * @param settings     settings
      */
     public ExportService(final RestTemplate restTemplate, final GoodDataSettings settings) {
         super(restTemplate, settings);
+    }
+
+    static String extractProjectId(final AbstractObj obj) {
+        notNull(obj, "obj");
+        notNull(obj.getUri(), "obj.uri");
+
+        final String projectId = OBJ_TEMPLATE.match(obj.getUri()).get("projectId");
+        notNull(projectId, "obj uri - project id");
+        return projectId;
     }
 
     /**
@@ -103,15 +120,13 @@ public class ExportService extends AbstractService {
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
                 HttpStatus status = HttpStatus.resolve(response.getStatusCode().value());
-                if (HttpStatus.OK.equals(status)) {
-                    return true;
-                } else if (HttpStatus.ACCEPTED.equals(status)) {
-                    return false;
-                } else if (HttpStatus.NO_CONTENT.equals(status)) {
-                    throw new NoDataExportException();
-                } else {
-                    throw new ExportException("Unable to export report, unknown HTTP response code: " + response.getStatusCode());
-                }
+                return switch (status) {
+                    case OK -> true;
+                    case ACCEPTED -> false;
+                    case NO_CONTENT -> throw new NoDataExportException();
+                    default ->
+                            throw new ExportException("Unable to export report, unknown HTTP response code: " + response.getStatusCode());
+                };
             }
 
             @Override
@@ -153,7 +168,7 @@ public class ExportService extends AbstractService {
         root.set("result_req", child);
 
         try {
-            return notNullState(restTemplate.postForObject(EXPORTING_URI, root, UriResponse.class), "exported report").getUri();
+            return notNullState(Objects.requireNonNull(restTemplate.postForObject(EXPORTING_URI, root, UriResponse.class)), "exported report").getUri();
         } catch (GoodDataException | RestClientException e) {
             throw new ExportException("Unable to export report", e);
         }
@@ -191,13 +206,14 @@ public class ExportService extends AbstractService {
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
                 HttpStatus status = HttpStatus.resolve(response.getStatusCode().value());
-                if (HttpStatus.OK.equals(status)) {
-                    return true;
-                } else if (HttpStatus.ACCEPTED.equals(status)) {
-                    return false;
-                } else {
-                    throw new ExportException("Unable to export dashboard: " + dashboardUri +
-                            ", unknown HTTP response code: " + response.getStatusCode());
+                switch (status) {
+                    case OK:
+                        return true;
+                    case ACCEPTED:
+                        return false;
+                    default:
+                        throw new ExportException("Unable to export dashboard: " + dashboardUri +
+                                ", unknown HTTP response code: " + response.getStatusCode());
                 }
             }
 
@@ -219,6 +235,7 @@ public class ExportService extends AbstractService {
 
     /**
      * Export the given Report using the raw export (without columns/rows limitations)
+     *
      * @param report report
      * @param output output
      * @return polling result
@@ -231,8 +248,9 @@ public class ExportService extends AbstractService {
 
     /**
      * Export the given Report Definition using the raw export (without columns/rows limitations)
+     *
      * @param definition report definition
-     * @param output output
+     * @param output     output
      * @return polling result
      * @throws ExportException in case export fails
      */
@@ -263,16 +281,13 @@ public class ExportService extends AbstractService {
             @Override
             public boolean isFinished(ClientHttpResponse response) throws IOException {
                 HttpStatus status = HttpStatus.resolve(response.getStatusCode().value());
-                if (HttpStatus.OK.equals(status)) {
-                    return true;
-                } else if (HttpStatus.ACCEPTED.equals(status)) {
-                    return false;
-                } else if (HttpStatus.NO_CONTENT.equals(status)) {
-                    throw new NoDataExportException();
-                } else {
-                    throw new ExportException("Unable to export: " + uri +
+                return switch (status) {
+                    case OK -> true;
+                    case ACCEPTED -> false;
+                    case NO_CONTENT -> throw new NoDataExportException();
+                    default -> throw new ExportException("Unable to export: " + uri +
                             ", unknown HTTP response code: " + response.getStatusCode());
-                }
+                };
             }
 
             @Override
@@ -290,14 +305,4 @@ public class ExportService extends AbstractService {
             }
         });
     }
-
-    static String extractProjectId(final AbstractObj obj) {
-        notNull(obj, "obj");
-        notNull(obj.getUri(), "obj.uri");
-
-        final String projectId = OBJ_TEMPLATE.match(obj.getUri()).get("projectId");
-        notNull(projectId, "obj uri - project id");
-        return projectId;
-    }
 }
-

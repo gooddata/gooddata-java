@@ -47,4 +47,3 @@ public interface FutureResult<T> {
      */
     String getPollingUri();
 }
-

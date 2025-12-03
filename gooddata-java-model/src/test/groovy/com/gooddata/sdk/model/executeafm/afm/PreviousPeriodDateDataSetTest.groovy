@@ -64,4 +64,3 @@ class PreviousPeriodDateDataSetTest extends Specification {
                 .verify()
     }
 }
-

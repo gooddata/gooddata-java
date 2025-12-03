@@ -11,9 +11,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.model.export.ExportFormat;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -62,7 +62,7 @@ public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
     /**
      * Creates an almost empty instance of the object. It's up to the user's responsibility to call all the necessary setters.
      *
-     * @param title the title of the MD object
+     * @param title   the title of the MD object
      * @param summary the summary of the MD object
      */
     public ScheduledMail(String title, String summary) {
@@ -74,22 +74,125 @@ public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
     /**
      * Creates full, safe mail schedule object.
      *
-     * @param title the title of the MD object
-     * @param summary the summary of the MD object
-     * @param recurrency schedule in format defined in <a href="http://search.cpan.org/~sbeck/Date-Manip-6.49/lib/Date/Manip/Recur.pod">schedule</a>
-     * @param startDate schedule starting date
-     * @param timeZone time zone of the starting date
-     * @param toAddresses collection of email addresses to send the mail to
+     * @param title        the title of the MD object
+     * @param summary      the summary of the MD object
+     * @param recurrency   schedule in format defined in <a href="http://search.cpan.org/~sbeck/Date-Manip-6.49/lib/Date/Manip/Recur.pod">schedule</a>
+     * @param startDate    schedule starting date
+     * @param timeZone     time zone of the starting date
+     * @param toAddresses  collection of email addresses to send the mail to
      * @param bccAddresses collection of blind copy addresses to send the mail to
-     * @param subject the subject of the scheduled mail
-     * @param body the text body of the scheduled mail
-     * @param attachments reports and dashboards to send in the scheduled email
+     * @param subject      the subject of the scheduled mail
+     * @param body         the text body of the scheduled mail
+     * @param attachments  reports and dashboards to send in the scheduled email
      */
     public ScheduledMail(String title, String summary, String recurrency, LocalDate startDate, String timeZone,
                          Collection<String> toAddresses, Collection<String> bccAddresses, String subject, String body,
                          List<Attachment> attachments) {
         this(title, summary, Collections.emptySet(), false, recurrency, startDate, timeZone, toAddresses,
                 bccAddresses, subject, body, attachments);
+    }
+
+    @JsonIgnore
+    public ScheduledMailWhen getWhen() {
+        return content.getScheduledMailWhen();
+    }
+
+    @JsonIgnore
+    public Collection<String> getToAddresses() {
+        return content.getToAddresses();
+    }
+
+    @JsonIgnore
+    public Collection<String> getBccAddresses() {
+        return content.getBccAddresses();
+    }
+
+    @JsonIgnore
+    public String getSubject() {
+        return content.getSubject();
+    }
+
+    public ScheduledMail setSubject(String subject) {
+        this.content.setSubject(subject);
+        return this;
+    }
+
+    @JsonIgnore
+    public String getBody() {
+        return content.getBody();
+    }
+
+    public ScheduledMail setBody(String body) {
+        this.content.setBody(body);
+        return this;
+    }
+
+    @JsonIgnore
+    public Collection<? extends Attachment> getAttachments() {
+        return content.getAttachments();
+    }
+
+    public ScheduledMail setAttachments(List<Attachment> attachments) {
+        this.content.setAttachments(attachments);
+        return this;
+    }
+
+    public ScheduledMail setRecurrency(String recurrency) {
+        this.content.getScheduledMailWhen().setRecurrency(recurrency);
+        return this;
+    }
+
+    public ScheduledMail setStartDate(LocalDate startDate) {
+        this.content.getScheduledMailWhen().setStartDate(startDate);
+        return this;
+    }
+
+    public ScheduledMail setTimeZone(String timeZone) {
+        this.content.getScheduledMailWhen().setTimeZone(timeZone);
+        return this;
+    }
+
+    public ScheduledMail setTo(Collection<String> toAddresses) {
+        this.content.setToAddress(toAddresses);
+        return this;
+    }
+
+    public ScheduledMail setBcc(Collection<String> bccAddresses) {
+        this.content.setBccAddress(bccAddresses);
+        return this;
+    }
+
+    public ScheduledMail addToAddress(String toAdd) {
+        this.content.getToAddresses().add(toAdd);
+        return this;
+    }
+
+    public ScheduledMail addBccAddress(String bccAdd) {
+        this.content.getBccAddresses().add(bccAdd);
+        return this;
+    }
+
+    public ScheduledMail addReportAttachment(ReportDefinition reportDefinition, Map<String, String> exportOptions, String... formats) {
+        notNull(formats, "formats");
+        ReportAttachment ra = new ReportAttachment(reportDefinition.getUri(), exportOptions, formats);
+        this.content.getAttachments().add(ra);
+        return this;
+    }
+
+    public ScheduledMail addReportAttachment(ReportDefinition reportDefinition, Map<String, String> exportOptions, ExportFormat... formats) {
+        return addReportAttachment(reportDefinition, exportOptions, ExportFormat.arrayToStringArray(formats));
+    }
+
+    public ScheduledMail addDashboardAttachment(String uri, Integer allTabs, String executionContext, String... tabs) {
+        notNull(tabs, "tabs");
+        DashboardAttachment da = new DashboardAttachment(uri, allTabs, executionContext, tabs);
+        this.content.getAttachments().add(da);
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
     }
 
     /**
@@ -142,22 +245,46 @@ public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
         }
 
         @JsonIgnore
-        public ScheduledMailWhen getScheduledMailWhen() { return scheduledMailWhen; }
-
-        @JsonIgnore
-        public Collection<String> getToAddresses() { return toAddress; }
-
-        @JsonIgnore
-        public Collection<String> getBccAddresses() { return bccAddress; }
-
-        public String getSubject() { return subject; }
-
-        public String getBody() { return body; }
-
-        public Collection<Attachment> getAttachments() { return attachments; }
+        public ScheduledMailWhen getScheduledMailWhen() {
+            return scheduledMailWhen;
+        }
 
         public void setScheduledMailWhen(ScheduledMailWhen scheduledMailWhen) {
             this.scheduledMailWhen = scheduledMailWhen;
+        }
+
+        @JsonIgnore
+        public Collection<String> getToAddresses() {
+            return toAddress;
+        }
+
+        @JsonIgnore
+        public Collection<String> getBccAddresses() {
+            return bccAddress;
+        }
+
+        public String getSubject() {
+            return subject;
+        }
+
+        public void setSubject(String subject) {
+            this.subject = subject;
+        }
+
+        public String getBody() {
+            return body;
+        }
+
+        public void setBody(String body) {
+            this.body = body;
+        }
+
+        public Collection<Attachment> getAttachments() {
+            return attachments;
+        }
+
+        public void setAttachments(Collection<Attachment> attachments) {
+            this.attachments = attachments;
         }
 
         public void setToAddress(Collection<String> toAddress) {
@@ -168,113 +295,9 @@ public class ScheduledMail extends AbstractObj implements Queryable, Updatable {
             this.bccAddress = bccAddress;
         }
 
-        public void setSubject(String subject) {
-            this.subject = subject;
-        }
-
-        public void setBody(String body) {
-            this.body = body;
-        }
-
-        public void setAttachments(Collection<Attachment> attachments) {
-            this.attachments = attachments;
-        }
-
         @Override
         public String toString() {
             return GoodDataToStringBuilder.defaultToString(this);
         }
     }
-
-    @JsonIgnore
-    public ScheduledMailWhen getWhen() { return content.getScheduledMailWhen(); }
-
-    @JsonIgnore
-    public Collection<String> getToAddresses() { return content.getToAddresses(); }
-
-    @JsonIgnore
-    public Collection<String> getBccAddresses() { return content.getBccAddresses(); }
-
-    @JsonIgnore
-    public String getSubject() { return content.getSubject(); }
-
-    @JsonIgnore
-    public String getBody() { return content.getBody(); }
-
-    @JsonIgnore
-    public Collection<? extends Attachment> getAttachments() { return content.getAttachments(); }
-
-    public ScheduledMail setRecurrency(String recurrency) {
-        this.content.getScheduledMailWhen().setRecurrency(recurrency);
-        return this;
-    }
-
-    public ScheduledMail setStartDate(LocalDate startDate) {
-        this.content.getScheduledMailWhen().setStartDate(startDate);
-        return this;
-    }
-
-    public ScheduledMail setTimeZone(String timeZone) {
-        this.content.getScheduledMailWhen().setTimeZone(timeZone);
-        return this;
-    }
-
-    public ScheduledMail setTo(Collection<String> toAddresses) {
-        this.content.setToAddress(toAddresses);
-        return this;
-    }
-
-    public ScheduledMail setBcc(Collection<String> bccAddresses) {
-        this.content.setBccAddress(bccAddresses);
-        return this;
-    }
-
-    public ScheduledMail setSubject(String subject) {
-        this.content.setSubject(subject);
-        return this;
-    }
-
-    public ScheduledMail setBody(String body) {
-        this.content.setBody(body);
-        return this;
-    }
-
-    public ScheduledMail setAttachments(List<Attachment> attachments) {
-        this.content.setAttachments(attachments);
-        return this;
-    }
-
-    public ScheduledMail addToAddress(String toAdd) {
-        this.content.getToAddresses().add(toAdd);
-        return this;
-    }
-
-    public ScheduledMail addBccAddress(String bccAdd) {
-        this.content.getBccAddresses().add(bccAdd);
-        return this;
-    }
-
-    public ScheduledMail addReportAttachment(ReportDefinition reportDefinition, Map<String, String> exportOptions, String... formats) {
-        notNull(formats, "formats");
-        ReportAttachment ra = new ReportAttachment(reportDefinition.getUri(), exportOptions, formats);
-        this.content.getAttachments().add(ra);
-        return this;
-    }
-
-    public ScheduledMail addReportAttachment(ReportDefinition reportDefinition, Map<String, String> exportOptions, ExportFormat... formats) {
-        return addReportAttachment(reportDefinition, exportOptions, ExportFormat.arrayToStringArray(formats));
-    }
-
-    public ScheduledMail addDashboardAttachment(String uri, Integer allTabs, String executionContext, String... tabs) {
-        notNull(tabs, "tabs");
-        DashboardAttachment da = new DashboardAttachment(uri, allTabs, executionContext, tabs);
-        this.content.getAttachments().add(da);
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return GoodDataToStringBuilder.defaultToString(this);
-    }
 }
-

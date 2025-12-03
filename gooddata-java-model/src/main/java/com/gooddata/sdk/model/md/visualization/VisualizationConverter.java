@@ -11,16 +11,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gooddata.sdk.model.executeafm.Execution;
 import com.gooddata.sdk.model.executeafm.afm.Afm;
 import com.gooddata.sdk.model.executeafm.afm.AttributeItem;
+import com.gooddata.sdk.model.executeafm.afm.MeasureItem;
 import com.gooddata.sdk.model.executeafm.afm.NativeTotalItem;
+import com.gooddata.sdk.model.executeafm.afm.SimpleMeasureDefinition;
 import com.gooddata.sdk.model.executeafm.afm.filter.CompatibilityFilter;
 import com.gooddata.sdk.model.executeafm.afm.filter.DateFilter;
 import com.gooddata.sdk.model.executeafm.afm.filter.ExtendedFilter;
 import com.gooddata.sdk.model.executeafm.afm.filter.FilterItem;
-import com.gooddata.sdk.model.executeafm.afm.MeasureItem;
 import com.gooddata.sdk.model.executeafm.afm.filter.MeasureValueFilter;
 import com.gooddata.sdk.model.executeafm.afm.filter.NegativeAttributeFilter;
 import com.gooddata.sdk.model.executeafm.afm.filter.PositiveAttributeFilter;
-import com.gooddata.sdk.model.executeafm.afm.SimpleMeasureDefinition;
 import com.gooddata.sdk.model.executeafm.afm.filter.RankingFilter;
 import com.gooddata.sdk.model.executeafm.resultspec.Dimension;
 import com.gooddata.sdk.model.executeafm.resultspec.ResultSpec;
@@ -34,9 +34,9 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.gooddata.sdk.model.executeafm.resultspec.Dimension.MEASURE_GROUP;
 import static com.gooddata.sdk.common.util.Validate.isTrue;
 import static com.gooddata.sdk.common.util.Validate.notNull;
+import static com.gooddata.sdk.model.executeafm.resultspec.Dimension.MEASURE_GROUP;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -50,14 +50,14 @@ public abstract class VisualizationConverter {
      * <p>
      * <b>NOTE: totals are not included in this conversion</b>
      *
-     * @param visualizationObject which will be converted to {@link Execution}
+     * @param visualizationObject      which will be converted to {@link Execution}
      * @param visualizationClassGetter {@link Function} for fetching VisualizationClass,
      *                                 which is necessary for correct generation of {@link ResultSpec}
      * @return {@link Execution} object
      * @see #convertToExecution(VisualizationObject, VisualizationClass)
      */
     public static Execution convertToExecution(final VisualizationObject visualizationObject,
-            final Function<String, VisualizationClass> visualizationClassGetter) {
+                                               final Function<String, VisualizationClass> visualizationClassGetter) {
         notNull(visualizationObject, "visualizationObject");
         notNull(visualizationClassGetter, "visualizationClassGetter");
         return convertToExecution(visualizationObject,
@@ -70,13 +70,13 @@ public abstract class VisualizationConverter {
      * <b>NOTE: totals are not included in this conversion</b>
      *
      * @param visualizationObject which will be converted to {@link Execution}
-     * @param visualizationClass visualizationClass, which is necessary for correct generation of {@link ResultSpec}
+     * @param visualizationClass  visualizationClass, which is necessary for correct generation of {@link ResultSpec}
      * @return {@link Execution} object
      * @see #convertToAfm(VisualizationObject)
      * @see #convertToResultSpec(VisualizationObject, VisualizationClass)
      */
     public static Execution convertToExecution(final VisualizationObject visualizationObject,
-            final VisualizationClass visualizationClass) {
+                                               final VisualizationClass visualizationClass) {
         notNull(visualizationObject, "visualizationObject");
         notNull(visualizationClass, "visualizationClass");
         ResultSpec resultSpec = convertToResultSpec(visualizationObject, visualizationClass);
@@ -87,14 +87,14 @@ public abstract class VisualizationConverter {
     /**
      * Generate Execution from Visualization object with totals included.
      *
-     * @param visualizationObject which will be converted to {@link Execution}
+     * @param visualizationObject      which will be converted to {@link Execution}
      * @param visualizationClassGetter {@link Function} for fetching VisualizationClass,
      *                                 which is necessary for correct generation of {@link ResultSpec}
      * @return {@link Execution} object
      * @see #convertToExecutionWithTotals(VisualizationObject, VisualizationClass)
      */
     public static Execution convertToExecutionWithTotals(final VisualizationObject visualizationObject,
-            final Function<String, VisualizationClass> visualizationClassGetter) {
+                                                         final Function<String, VisualizationClass> visualizationClassGetter) {
         notNull(visualizationObject, "visualizationObject");
         notNull(visualizationClassGetter, "visualizationClassGetter");
         return convertToExecutionWithTotals(visualizationObject,
@@ -105,13 +105,13 @@ public abstract class VisualizationConverter {
      * Generate Execution from Visualization object with totals included.
      *
      * @param visualizationObject which will be converted to {@link Execution}
-     * @param visualizationClass visualizationClass, which is necessary for correct generation of {@link ResultSpec}
+     * @param visualizationClass  visualizationClass, which is necessary for correct generation of {@link ResultSpec}
      * @return {@link Execution} object
      * @see #convertToAfmWithNativeTotals(VisualizationObject)
      * @see #convertToResultSpecWithTotals(VisualizationObject, VisualizationClass)
      */
     public static Execution convertToExecutionWithTotals(final VisualizationObject visualizationObject,
-            final VisualizationClass visualizationClass) {
+                                                         final VisualizationClass visualizationClass) {
         notNull(visualizationObject, "visualizationObject");
         notNull(visualizationClass, "visualizationClass");
         ResultSpec resultSpec = convertToResultSpecWithTotals(visualizationObject, visualizationClass);
@@ -155,13 +155,13 @@ public abstract class VisualizationConverter {
      * <p>
      * <b>NOTE: totals are not included in this conversion</b>
      *
-     * @param visualizationObject which will be converted to {@link Execution}
+     * @param visualizationObject      which will be converted to {@link Execution}
      * @param visualizationClassGetter {@link Function} for fetching VisualizationClass,
      *                                 which is necessary for correct generation of {@link ResultSpec}
      * @return {@link Execution} object
      */
     public static ResultSpec convertToResultSpec(final VisualizationObject visualizationObject,
-            final Function<String, VisualizationClass> visualizationClassGetter) {
+                                                 final Function<String, VisualizationClass> visualizationClassGetter) {
         notNull(visualizationObject, "visualizationObject");
         notNull(visualizationClassGetter, "visualizationClassGetter");
         return convertToResultSpec(visualizationObject,
@@ -175,11 +175,11 @@ public abstract class VisualizationConverter {
      * <b>NOTE: totals are not included in this conversion</b>
      *
      * @param visualizationObject which will be converted to {@link Execution}
-     * @param visualizationClass VisualizationClass, which is necessary for correct generation of {@link ResultSpec}
+     * @param visualizationClass  VisualizationClass, which is necessary for correct generation of {@link ResultSpec}
      * @return {@link Execution} object
      */
     public static ResultSpec convertToResultSpec(final VisualizationObject visualizationObject,
-            final VisualizationClass visualizationClass) {
+                                                 final VisualizationClass visualizationClass) {
         notNull(visualizationObject, "visualizationObject");
         notNull(visualizationClass, "visualizationClass");
         final VisualizationObject visualizationObjectWithoutTotals = removeTotals(visualizationObject);
@@ -190,13 +190,13 @@ public abstract class VisualizationConverter {
      * Generate ResultSpec from Visualization object with totals included. Currently {@link ResultSpec}'s {@link Dimension}s
      * can be generated for table and four types of chart: bar, column, line and pie.
      *
-     * @param visualizationObject which will be converted to {@link Execution}
+     * @param visualizationObject      which will be converted to {@link Execution}
      * @param visualizationClassGetter {@link Function} for fetching VisualizationClass,
      *                                 which is necessary for correct generation of {@link ResultSpec}
      * @return {@link Execution} object
      */
     public static ResultSpec convertToResultSpecWithTotals(final VisualizationObject visualizationObject,
-            final Function<String, VisualizationClass> visualizationClassGetter) {
+                                                           final Function<String, VisualizationClass> visualizationClassGetter) {
         notNull(visualizationObject, "visualizationObject");
         notNull(visualizationClassGetter, "visualizationClassGetter");
         return convertToResultSpecWithTotals(visualizationObject,
@@ -208,11 +208,11 @@ public abstract class VisualizationConverter {
      * can be generated for table and four types of chart: bar, column, line and pie.
      *
      * @param visualizationObject which will be converted to {@link Execution}
-     * @param visualizationClass VisualizationClass, which is necessary for correct generation of {@link ResultSpec}
+     * @param visualizationClass  VisualizationClass, which is necessary for correct generation of {@link ResultSpec}
      * @return {@link Execution} object
      */
     public static ResultSpec convertToResultSpecWithTotals(final VisualizationObject visualizationObject,
-            final VisualizationClass visualizationClass) {
+                                                           final VisualizationClass visualizationClass) {
         notNull(visualizationObject, "visualizationObject");
         notNull(visualizationClass, "visualizationClass");
         isTrue(visualizationObject.getVisualizationClassUri().equals(visualizationClass.getUri()),
@@ -225,11 +225,12 @@ public abstract class VisualizationConverter {
 
     static List<SortItem> getSorting(final VisualizationObject visualizationObject) {
         try {
-             List<SortItem> sorts = parseSorting(visualizationObject.getProperties());
-             if (sorts != null) {
-                 return sorts;
-             }
-        } catch (Exception ignored) {}
+            List<SortItem> sorts = parseSorting(visualizationObject.getProperties());
+            if (sorts != null) {
+                return sorts;
+            }
+        } catch (Exception ignored) {
+        }
 
         return null;
     }
@@ -237,7 +238,8 @@ public abstract class VisualizationConverter {
     static List<SortItem> parseSorting(final String properties) throws Exception {
         JsonNode jsonProperties = parseProperties(properties);
         JsonNode nodeSortItems = jsonProperties.get("sortItems");
-        TypeReference<List<SortItem>> mapType = new TypeReference<List<SortItem>>() {};
+        TypeReference<List<SortItem>> mapType = new TypeReference<List<SortItem>>() {
+        };
         return MAPPER.convertValue(nodeSortItems, mapType);
     }
 
@@ -387,7 +389,7 @@ public abstract class VisualizationConverter {
     private static MeasureItem getAfmMeasure(final Measure measure) {
         String alias = measure.getAlias();
         String usedTitle = alias;
-        if(alias == null || alias.isEmpty()) {
+        if (alias == null || alias.isEmpty()) {
             if (measure.getTitle() != null) {
                 usedTitle = measure.getTitle();
             }
@@ -414,8 +416,8 @@ public abstract class VisualizationConverter {
 
     private static List<CompatibilityFilter> getCompatibilityFilters(final List<ExtendedFilter> filters) {
         return filters.stream()
-            .map(CompatibilityFilter.class::cast)
-            .collect(toList());
+                .map(CompatibilityFilter.class::cast)
+                .collect(toList());
     }
 
     private static <T> List<T> removeIrrelevantFilters(final List<T> filters) {
@@ -472,4 +474,3 @@ public abstract class VisualizationConverter {
         return totalItem.getType() != null && Total.NAT.name().equals(totalItem.getType().toUpperCase());
     }
 }
-

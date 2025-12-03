@@ -114,4 +114,3 @@ public class WarehouseUserTest {
         assertThat(user.toString(), matchesPattern(WarehouseUser.class.getSimpleName() + "\\[.*\\]"));
     }
 }
-

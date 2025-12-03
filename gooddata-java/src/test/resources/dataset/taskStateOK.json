@@ -1,6 +1,6 @@
 {
-  "taskState" : {
-    "msg" : "ok message",
-    "status" : "OK"
+  "taskState": {
+    "msg": "ok message",
+    "status": "OK"
   }
 }

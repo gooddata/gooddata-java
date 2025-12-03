@@ -28,4 +28,3 @@ class GridElementSerializer extends JsonSerializer<GridElement> {
         }
     }
 }
-

@@ -28,4 +28,3 @@ public class Schedules extends Page<Schedule> {
         super(items, paging);
     }
 }
-

@@ -53,4 +53,3 @@ public class ObjNotFoundException extends GoodDataException {
         super(cls.getSimpleName() + " not found");
     }
 }
-

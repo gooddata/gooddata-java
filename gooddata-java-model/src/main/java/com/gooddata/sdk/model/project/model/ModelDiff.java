@@ -124,7 +124,7 @@ public class ModelDiff {
          *
          * @param preserveData true if data should be preserved, false if they should be truncated
          * @param cascadeDrops true if related objects should be also dropped, false if not
-         * @param maqlChunks MAQL strings
+         * @param maqlChunks   MAQL strings
          */
         @JsonCreator
         UpdateScript(@JsonProperty("preserveData") Boolean preserveData,
@@ -140,7 +140,7 @@ public class ModelDiff {
          *
          * @param preserveData true if data should be preserved, false if they should be truncated
          * @param cascadeDrops true if related objects should be also dropped, false if not
-         * @param maqlChunks MAQL strings
+         * @param maqlChunks   MAQL strings
          */
         UpdateScript(boolean preserveData, boolean cascadeDrops, String... maqlChunks) {
             this(preserveData, cascadeDrops, asList(maqlChunks));
@@ -179,4 +179,3 @@ public class ModelDiff {
         }
     }
 }
-

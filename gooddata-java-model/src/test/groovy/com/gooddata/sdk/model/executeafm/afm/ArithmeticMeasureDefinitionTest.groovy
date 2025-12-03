@@ -5,7 +5,7 @@
  */
 package com.gooddata.sdk.model.executeafm.afm
 
-import com.gooddata.sdk.model.executeafm.UriObjQualifier
+
 import net.javacrumbs.jsonunit.JsonMatchers
 import spock.lang.Specification
 
@@ -45,4 +45,3 @@ class ArithmeticMeasureDefinitionTest extends Specification {
 
     }
 }
-

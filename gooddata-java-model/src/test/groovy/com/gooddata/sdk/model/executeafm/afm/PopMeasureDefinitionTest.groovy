@@ -96,4 +96,3 @@ class PopMeasureDefinitionTest extends Specification {
         qualifiers.size() == 0
     }
 }
-

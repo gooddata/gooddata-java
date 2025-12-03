@@ -9,7 +9,9 @@ import com.gooddata.sdk.service.httpcomponents.LoginPasswordGoodDataRestProvider
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-import static net.jadler.Jadler.*;
+import static net.jadler.Jadler.closeJadler;
+import static net.jadler.Jadler.initJadler;
+import static net.jadler.Jadler.port;
 
 public abstract class AbstractGoodDataIT {
 
@@ -40,4 +42,3 @@ public abstract class AbstractGoodDataIT {
         closeJadler();
     }
 }
-

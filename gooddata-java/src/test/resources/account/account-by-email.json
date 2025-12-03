@@ -1,34 +1,32 @@
 {
-    "accountSettings": {
-        "items": [
-            {
-                "accountSetting": {
-                    "companyName": null,
-                    "country": null,
-                    "created": "2014-02-24 18:51:53",
-                    "firstName": "John",
-                    "lastName": "Doe",
-                    "login": "example@company.com",
-                    "phoneNumber": null,
-                    "position": null,
-                    "timezone": null,
-                    "updated": "2014-02-24 18:51:53",
-                    "email": "example@company.com",
-                    "language": "language",
-                    "ipWhitelist": null,
-                    "effectiveIpWhitelist": null,
-                    "links": {
-                        "projects": "/gdc/account/profile/{profile_id}/projects",
-                        "self": "/gdc/account/profile/{profile_id}"
-                    }
-                }
-            }
-        ],
-        "paging": {
-            "offset": 0,
-            "count": 1
+  "accountSettings": {
+    "items": [
+      {
+        "accountSetting": {
+          "companyName": null,
+          "country": null,
+          "created": "2014-02-24 18:51:53",
+          "firstName": "John",
+          "lastName": "Doe",
+          "login": "example@company.com",
+          "phoneNumber": null,
+          "position": null,
+          "timezone": null,
+          "updated": "2014-02-24 18:51:53",
+          "email": "example@company.com",
+          "language": "language",
+          "ipWhitelist": null,
+          "effectiveIpWhitelist": null,
+          "links": {
+            "projects": "/gdc/account/profile/{profile_id}/projects",
+            "self": "/gdc/account/profile/{profile_id}"
+          }
         }
-
+      }
+    ],
+    "paging": {
+      "offset": 0,
+      "count": 1
     }
-
+  }
 }

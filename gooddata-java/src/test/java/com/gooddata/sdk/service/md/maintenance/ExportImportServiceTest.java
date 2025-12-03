@@ -5,22 +5,22 @@
  */
 package com.gooddata.sdk.service.md.maintenance;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-
 import com.gooddata.sdk.common.GoodDataRestException;
+import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.md.maintenance.PartialMdArtifact;
 import com.gooddata.sdk.model.md.maintenance.PartialMdExport;
 import com.gooddata.sdk.model.md.maintenance.PartialMdExportToken;
-import com.gooddata.sdk.service.GoodDataSettings;
-import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.GoodDataSettings;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestTemplate;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 
 public class ExportImportServiceTest {
 

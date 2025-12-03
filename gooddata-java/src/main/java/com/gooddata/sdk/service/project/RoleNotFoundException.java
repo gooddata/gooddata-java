@@ -23,4 +23,3 @@ public class RoleNotFoundException extends GoodDataException {
         return uri;
     }
 }
-

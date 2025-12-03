@@ -32,7 +32,8 @@ public class AbstractServiceTest {
     @BeforeMethod
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this).close();
-        service = new AbstractService(restTemplate, new GoodDataSettings()) {};
+        service = new AbstractService(restTemplate, new GoodDataSettings()) {
+        };
         final ClientHttpResponse response = mock(ClientHttpResponse.class);
         when(response.getStatusCode()).thenReturn(HttpStatus.OK);
         when(restTemplate.execute(any(), any(HttpMethod.class), any(), any(ResponseExtractor.class)))
@@ -54,4 +55,3 @@ public class AbstractServiceTest {
         service.poll(handler, 5, TimeUnit.SECONDS);
     }
 }
-

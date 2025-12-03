@@ -25,7 +25,7 @@ class MeasureHeaderItemTest extends Specification {
 
     def "should serialize"() {
         expect:
-        that  new MeasureHeaderItem('Name', '#,##0.00', 'm1'),
+        that new MeasureHeaderItem('Name', '#,##0.00', 'm1'),
                 jsonEquals(resource(MEASURE_HEADER_ITEM_JSON))
     }
 
@@ -63,4 +63,3 @@ class MeasureHeaderItemTest extends Specification {
         item.identifier == "identifier"
     }
 }
-

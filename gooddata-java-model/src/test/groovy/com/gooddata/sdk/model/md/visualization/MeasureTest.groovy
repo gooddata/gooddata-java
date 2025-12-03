@@ -81,4 +81,3 @@ class MeasureTest extends Specification {
                 .verify()
     }
 }
-

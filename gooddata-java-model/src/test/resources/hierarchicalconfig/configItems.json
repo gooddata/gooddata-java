@@ -1,32 +1,36 @@
 {
-  "settings" : {
-    "items" : [ {
-      "settingItem" : {
-        "key" : "myCoolFeature",
-        "value" : "true",
-        "source" : "catalog",
-        "links" : {
-          "self" : "/gdc/projects/PROJECT_ID/config/myCoolFeature"
+  "settings": {
+    "items": [
+      {
+        "settingItem": {
+          "key": "myCoolFeature",
+          "value": "true",
+          "source": "catalog",
+          "links": {
+            "self": "/gdc/projects/PROJECT_ID/config/myCoolFeature"
+          }
+        }
+      },
+      {
+        "settingItem": {
+          "key": "mySuperCoolFeature",
+          "value": "true",
+          "source": "catalog",
+          "links": {
+            "self": "/gdc/projects/PROJECT_ID/config/mySuperCoolFeature"
+          }
+        }
+      },
+      {
+        "settingItem": {
+          "key": "mySuperSecretFeature",
+          "value": "false",
+          "source": "catalog",
+          "links": {
+            "self": "/gdc/projects/PROJECT_ID/config/mySuperSecretFeature"
+          }
         }
       }
-    }, {
-      "settingItem" : {
-        "key" : "mySuperCoolFeature",
-        "value" : "true",
-        "source" : "catalog",
-        "links" : {
-          "self" : "/gdc/projects/PROJECT_ID/config/mySuperCoolFeature"
-        }
-      }
-    }, {
-      "settingItem" : {
-        "key" : "mySuperSecretFeature",
-        "value" : "false",
-        "source" : "catalog",
-        "links" : {
-          "self" : "/gdc/projects/PROJECT_ID/config/mySuperSecretFeature"
-        }
-      }
-    }]
+    ]
   }
 }

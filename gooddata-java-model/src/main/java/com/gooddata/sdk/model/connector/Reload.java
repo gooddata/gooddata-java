@@ -146,4 +146,3 @@ public class Reload {
         return links != null ? Optional.ofNullable(links.get(linkName)) : Optional.empty();
     }
 }
-

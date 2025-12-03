@@ -58,4 +58,3 @@ public class AttributeElement {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

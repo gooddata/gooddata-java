@@ -41,4 +41,3 @@ public class UseManyEntries {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

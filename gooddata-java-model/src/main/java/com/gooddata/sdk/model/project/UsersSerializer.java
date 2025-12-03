@@ -25,7 +25,7 @@ class UsersSerializer extends JsonSerializer<Users> {
 
         jgen.writeStartArray();
         final ObjectCodec codec = jgen.getCodec();
-        for (Object item: users.getPageItems()) {
+        for (Object item : users.getPageItems()) {
             codec.writeValue(jgen, item);
         }
         jgen.writeEndArray();
@@ -33,4 +33,3 @@ class UsersSerializer extends JsonSerializer<Users> {
         jgen.writeEndObject();
     }
 }
-

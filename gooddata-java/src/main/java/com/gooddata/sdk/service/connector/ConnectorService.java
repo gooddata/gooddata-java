@@ -7,11 +7,22 @@ package com.gooddata.sdk.service.connector;
 
 import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.common.GoodDataRestException;
-import com.gooddata.sdk.model.connector.*;
+import com.gooddata.sdk.model.connector.ConnectorType;
+import com.gooddata.sdk.model.connector.Integration;
+import com.gooddata.sdk.model.connector.IntegrationProcessStatus;
+import com.gooddata.sdk.model.connector.ProcessExecution;
+import com.gooddata.sdk.model.connector.ProcessStatus;
+import com.gooddata.sdk.model.connector.Reload;
+import com.gooddata.sdk.model.connector.Settings;
+import com.gooddata.sdk.model.connector.Zendesk4Settings;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.model.project.ProjectTemplate;
-import com.gooddata.sdk.service.*;
+import com.gooddata.sdk.service.AbstractService;
+import com.gooddata.sdk.service.FutureResult;
+import com.gooddata.sdk.service.GoodDataSettings;
+import com.gooddata.sdk.service.PollResult;
+import com.gooddata.sdk.service.SimplePollHandler;
 import com.gooddata.sdk.service.project.ProjectService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
@@ -46,7 +57,7 @@ public class ConnectorService extends AbstractService {
      *
      * @param project       project
      * @param connectorType connector type
-     * @return              integration
+     * @return integration
      * @throws ConnectorException if integration can't be retrieved
      */
     public Integration getIntegration(final Project project, final ConnectorType connectorType) {
@@ -155,7 +166,7 @@ public class ConnectorService extends AbstractService {
         notNull(project, "project");
         notNull(project.getId(), "project.id");
         notNull(connectorType, "connector");
-        
+
         try {
             restTemplate.delete(Integration.URL, project.getId(), connectorType.getName());
         } catch (GoodDataRestException e) {
@@ -171,6 +182,7 @@ public class ConnectorService extends AbstractService {
 
     /**
      * Get settings for zendesk4 connector.
+     *
      * @param project project
      * @return settings for zendesk4 connector
      */
@@ -181,10 +193,10 @@ public class ConnectorService extends AbstractService {
     /**
      * Get settings for given connector of given class.
      *
-     * @param project project
+     * @param project       project
      * @param connectorType type of connector to fetch settings ofr
      * @param settingsClass class of settings fetched
-     * @param <T> type of fetched settings
+     * @param <T>           type of fetched settings
      * @return settings of connector
      */
     public <T extends Settings> T getSettings(final Project project, final ConnectorType connectorType,
@@ -263,7 +275,7 @@ public class ConnectorService extends AbstractService {
 
     /**
      * Get Zendesk reload.
-     *
+     * <p>
      * You should use the result of {@link #scheduleZendesk4Reload} to see changes in {@link Reload#getStatus()} and
      * {@link Reload#getProcessId()} or retrieve process URI {@link Reload#getProcessUri()}.
      *
@@ -282,6 +294,7 @@ public class ConnectorService extends AbstractService {
 
     /**
      * Get Zendesk reload.
+     *
      * @param reloadUri existing reload URI
      * @return reload
      */
@@ -296,8 +309,9 @@ public class ConnectorService extends AbstractService {
 
     /**
      * Scheduler new reload.
+     *
      * @param project project to reload
-     * @param reload reload parameters
+     * @param reload  reload parameters
      * @return created reload
      */
     public Reload scheduleZendesk4Reload(final Project project, final Reload reload) {
@@ -333,4 +347,3 @@ public class ConnectorService extends AbstractService {
     }
 
 }
-

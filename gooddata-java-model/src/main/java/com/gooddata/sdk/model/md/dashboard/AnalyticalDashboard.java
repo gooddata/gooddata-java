@@ -6,8 +6,6 @@
 
 package com.gooddata.sdk.model.md.dashboard;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -22,6 +20,8 @@ import com.gooddata.sdk.model.md.Updatable;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Represents analytical dashboard configuration.
@@ -38,8 +38,8 @@ public class AnalyticalDashboard extends AbstractObj implements Queryable, Updat
     /**
      * Constructor.
      *
-     * @param title dashboard title
-     * @param widgetUris URIs of widgets located on dashboard
+     * @param title             dashboard title
+     * @param widgetUris        URIs of widgets located on dashboard
      * @param filtersContextUri URI of filters context applied to this dashboard (optional)
      */
     public AnalyticalDashboard(final String title, final List<String> widgetUris, final String filtersContextUri) {
@@ -100,4 +100,3 @@ public class AnalyticalDashboard extends AbstractObj implements Queryable, Updat
         }
     }
 }
-

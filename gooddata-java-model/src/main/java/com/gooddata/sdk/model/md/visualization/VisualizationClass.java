@@ -32,12 +32,11 @@ import static org.apache.commons.lang3.Validate.notNull;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class VisualizationClass extends AbstractObj implements Queryable, Updatable {
 
-    private static final long serialVersionUID = -72785788784079208L;
     static final String NAME = "visualizationClass";
-
+    private static final long serialVersionUID = -72785788784079208L;
     private Content content;
 
-    private VisualizationClass(@JsonProperty("content") final Content content, @JsonProperty("meta") final Meta meta ) {
+    private VisualizationClass(@JsonProperty("content") final Content content, @JsonProperty("meta") final Meta meta) {
         super(meta);
         this.content = notNull(content);
     }
@@ -92,7 +91,7 @@ public class VisualizationClass extends AbstractObj implements Queryable, Updata
         String uriParts[] = getContent().getUrl().split(":");
 
         if (uriParts.length > 0 && isLocal()) {
-            String derivedType = uriParts[uriParts.length-1];
+            String derivedType = uriParts[uriParts.length - 1];
 
             visualizationType = VisualizationType.of(derivedType);
         }
@@ -105,7 +104,7 @@ public class VisualizationClass extends AbstractObj implements Queryable, Updata
         return getContent().getChecksum().equals("local");
     }
 
-    private Content getContent()  {
+    private Content getContent() {
         return content;
     }
 
@@ -118,10 +117,10 @@ public class VisualizationClass extends AbstractObj implements Queryable, Updata
 
         @JsonCreator
         private Content(@JsonProperty("url") String url,
-                @JsonProperty("icon") String icon,
-                @JsonProperty("iconSelected") String iconSelected,
-                @JsonProperty("checksum") String checksum,
-                @JsonProperty("orderIndex") Float orderIndex) {
+                        @JsonProperty("icon") String icon,
+                        @JsonProperty("iconSelected") String iconSelected,
+                        @JsonProperty("checksum") String checksum,
+                        @JsonProperty("orderIndex") Float orderIndex) {
             this.url = notNull(url);
             this.icon = notNull(icon);
             this.iconSelected = notNull(iconSelected);
@@ -150,4 +149,3 @@ public class VisualizationClass extends AbstractObj implements Queryable, Updata
         }
     }
 }
-

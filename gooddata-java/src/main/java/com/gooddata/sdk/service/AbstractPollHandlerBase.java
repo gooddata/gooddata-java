@@ -17,7 +17,6 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
  *
  * @param <P> polling type
  * @param <R> result type
- *
  * @see FutureResult
  */
 public abstract class AbstractPollHandlerBase<P, R> implements PollHandler<P, R> {
@@ -69,4 +68,3 @@ public abstract class AbstractPollHandlerBase<P, R> implements PollHandler<P, R>
     protected void onFinish() {
     }
 }
-

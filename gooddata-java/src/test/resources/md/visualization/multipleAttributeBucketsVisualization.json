@@ -19,7 +19,8 @@
                 },
                 "alias": "attribute1Alias"
               }
-            }, {
+            },
+            {
               "visualizationAttribute": {
                 "localIdentifier": "attribute2",
                 "displayForm": {
@@ -29,7 +30,8 @@
               }
             }
           ]
-        }, {
+        },
+        {
           "localIdentifier": "attributeBucket",
           "items": [
             {
@@ -46,7 +48,9 @@
       ],
       "filters": [],
       "properties": "{\"key\":\"value\"}",
-      "references": { "key": "value" }
+      "references": {
+        "key": "value"
+      }
     }
   }
 }

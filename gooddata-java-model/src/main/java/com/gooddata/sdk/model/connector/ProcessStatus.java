@@ -36,4 +36,3 @@ public class ProcessStatus extends IntegrationProcessStatus {
     }
 
 }
-

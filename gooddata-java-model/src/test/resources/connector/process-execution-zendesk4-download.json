@@ -1,9 +1,9 @@
 {
-    "process": {
-        "downloadParams": {
-            "useBackup": true,
-            "parallelWorkers": 5,
-            "parallelBatchSeconds": 3600
-        }
+  "process": {
+    "downloadParams": {
+      "useBackup": true,
+      "parallelWorkers": 5,
+      "parallelBatchSeconds": 3600
     }
+  }
 }

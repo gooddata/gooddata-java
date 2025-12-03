@@ -12,4 +12,3 @@ package com.gooddata.sdk.model.md.report;
  */
 public interface GridElement {
 }
-

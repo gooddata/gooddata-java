@@ -32,9 +32,9 @@ public class ClientExport {
                         final String tabId) {
         this(notEmpty(goodDataEndpointUri, "goodDataEndpointUri") +
                         String.format(DASHBOARD_EXPORT_URI,
-                                        notNull(projectUri, "projectUri"),
-                                        notNull(dashboardUri, "dashboardUri"),
-                                        notNull(tabId, "tabId")),
+                                notNull(projectUri, "projectUri"),
+                                notNull(dashboardUri, "dashboardUri"),
+                                notNull(tabId, "tabId")),
                 "export.pdf");
     }
 
@@ -51,4 +51,3 @@ public class ClientExport {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

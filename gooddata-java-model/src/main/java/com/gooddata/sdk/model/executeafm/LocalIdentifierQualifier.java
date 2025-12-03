@@ -59,4 +59,3 @@ public final class LocalIdentifierQualifier implements Qualifier, Serializable {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

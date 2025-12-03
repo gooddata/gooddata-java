@@ -15,4 +15,3 @@ public enum ProcessType {
     GROOVY,
     DATALOAD
 }
-

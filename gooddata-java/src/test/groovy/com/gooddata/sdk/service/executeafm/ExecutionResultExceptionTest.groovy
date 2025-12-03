@@ -6,10 +6,8 @@
 package com.gooddata.sdk.service.executeafm
 
 import com.gooddata.sdk.common.GoodDataRestException
-import com.gooddata.sdk.service.executeafm.ExecutionResultException
 import spock.lang.Specification
 import spock.lang.Unroll
-
 
 class ExecutionResultExceptionTest extends Specification {
 
@@ -17,7 +15,7 @@ class ExecutionResultExceptionTest extends Specification {
     def "should create with status #code"() {
         expect:
         new ExecutionResultException(new GoodDataRestException(code, 'reqId', 'status', null))
-            .message ==~ msgPattern
+                .message ==~ msgPattern
 
         where:
         code | msgPattern
@@ -27,4 +25,3 @@ class ExecutionResultExceptionTest extends Specification {
         500  | /.*failed.*unknown.*reason.*/
     }
 }
-

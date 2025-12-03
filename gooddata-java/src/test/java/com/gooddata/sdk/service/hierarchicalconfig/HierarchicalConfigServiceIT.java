@@ -19,19 +19,19 @@ import static com.gooddata.sdk.service.hierarchicalconfig.HierarchicalConfigServ
 import static com.gooddata.sdk.service.hierarchicalconfig.HierarchicalConfigService.PROJECT_CONFIG_ITEM_TEMPLATE;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class HierarchicalConfigServiceIT extends AbstractGoodDataIT {
-
-    private HierarchicalConfigService service;
-    private Project project;
 
     private static final String PROJECT_ID = "PROJECT_ID";
     private static final String PROJECT_CONFIG_ITEMS_URI_STRING = PROJECT_CONFIG_ITEMS_TEMPLATE.expand(PROJECT_ID).toString();
     private static final String CONFIG_ITEM_NAME = "myCoolFeature";
     private static final String PROJECT_CONFIG_ITEM_URI_STRING = PROJECT_CONFIG_ITEM_TEMPLATE
             .expand(PROJECT_ID, CONFIG_ITEM_NAME).toString();
+    private HierarchicalConfigService service;
+    private Project project;
 
     @BeforeMethod
     public void setUp() throws Exception {
@@ -110,4 +110,3 @@ public class HierarchicalConfigServiceIT extends AbstractGoodDataIT {
         service.removeProjectConfigItem(item);
     }
 }
-

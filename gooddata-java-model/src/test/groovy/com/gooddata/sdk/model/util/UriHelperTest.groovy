@@ -25,4 +25,3 @@ class UriHelperTest extends Specification {
         '123'             || '123'
     }
 }
-

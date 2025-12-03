@@ -27,8 +27,7 @@ class GdcSardineResponseHandler implements ResponseHandler<Void> {
     public Void handleResponse(final HttpResponse response) throws IOException {
         final StatusLine statusLine = response.getStatusLine();
         final int statusCode = statusLine.getStatusCode();
-        if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES)
-        {
+        if (statusCode >= HttpStatus.SC_OK && statusCode < HttpStatus.SC_MULTIPLE_CHOICES) {
             return null;
         }
         final Header requestIdHeader = response.getFirstHeader(GDC_REQUEST_ID);
@@ -41,4 +40,3 @@ class GdcSardineResponseHandler implements ResponseHandler<Void> {
         }
     }
 }
-

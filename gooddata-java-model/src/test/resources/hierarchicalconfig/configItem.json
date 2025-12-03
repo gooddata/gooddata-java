@@ -1,10 +1,10 @@
 {
-  "settingItem" : {
-    "key" : "myCoolFeature",
-    "value" : "true",
-    "source" : "catalog",
-    "links" : {
-      "self" : "/gdc/projects/PROJECT_ID/config/myCoolFeature"
+  "settingItem": {
+    "key": "myCoolFeature",
+    "value": "true",
+    "source": "catalog",
+    "links": {
+      "self": "/gdc/projects/PROJECT_ID/config/myCoolFeature"
     }
   }
 }

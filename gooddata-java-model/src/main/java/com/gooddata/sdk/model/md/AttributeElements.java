@@ -5,7 +5,12 @@
  */
 package com.gooddata.sdk.model.md;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.List;
@@ -58,4 +63,3 @@ public class AttributeElements {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

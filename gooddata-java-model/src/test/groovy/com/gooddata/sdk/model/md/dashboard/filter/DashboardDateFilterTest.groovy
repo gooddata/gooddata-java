@@ -11,12 +11,9 @@ import spock.lang.Unroll
 
 import java.time.LocalDate
 
-import static com.gooddata.sdk.model.md.dashboard.filter.DashboardDateFilter.ABSOLUTE_FILTER_TYPE
-import static com.gooddata.sdk.model.md.dashboard.filter.DashboardDateFilter.RELATIVE_FILTER_TYPE
-import static com.gooddata.sdk.model.md.dashboard.filter.DashboardDateFilter.absoluteDateFilter
-import static com.gooddata.sdk.model.md.dashboard.filter.DashboardDateFilter.relativeDateFilter
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
 import static com.gooddata.sdk.common.util.ResourceUtils.readStringFromResource
+import static com.gooddata.sdk.model.md.dashboard.filter.DashboardDateFilter.*
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static spock.util.matcher.HamcrestSupport.that
 
@@ -53,4 +50,3 @@ class DashboardDateFilterTest extends Specification {
         "/md/dashboard/filter/dashboardDateFilter-${filterType}.json"
     }
 }
-

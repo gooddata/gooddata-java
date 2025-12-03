@@ -19,6 +19,7 @@ public class DataValue implements Data {
 
     /**
      * Creates new instance of given value.
+     *
      * @param value textual value, can't be null
      */
     public DataValue(final String value) {
@@ -65,4 +66,3 @@ public class DataValue implements Data {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

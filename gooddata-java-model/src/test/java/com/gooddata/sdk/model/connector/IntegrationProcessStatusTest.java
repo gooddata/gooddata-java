@@ -10,11 +10,11 @@ import org.testng.annotations.Test;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static com.gooddata.sdk.model.connector.Status.Code.ERROR;
 import static com.gooddata.sdk.model.connector.Status.Code.SYNCHRONIZED;
 import static com.gooddata.sdk.model.connector.Status.Code.UPLOADING;
 import static com.gooddata.sdk.model.connector.Status.Code.USER_ERROR;
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static java.time.ZoneOffset.UTC;
 import static java.time.ZonedDateTime.now;
 import static org.hamcrest.CoreMatchers.is;
@@ -104,8 +104,7 @@ public class IntegrationProcessStatusTest {
     public void testToStringFormat() {
         final IntegrationProcessStatus process = new IntegrationProcessStatus(new Status("unknown code", "", ""), now(), now(), Collections.emptyMap());
 
-        assertThat(process.toString(),  matchesPattern(IntegrationProcessStatus.class.getSimpleName() + "\\[.*\\]"));
+        assertThat(process.toString(), matchesPattern(IntegrationProcessStatus.class.getSimpleName() + "\\[.*\\]"));
     }
 
 }
-

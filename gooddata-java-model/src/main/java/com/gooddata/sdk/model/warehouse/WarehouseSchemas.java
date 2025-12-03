@@ -37,4 +37,3 @@ public class WarehouseSchemas extends Page<WarehouseSchema> {
         super(items, paging, links);
     }
 }
-

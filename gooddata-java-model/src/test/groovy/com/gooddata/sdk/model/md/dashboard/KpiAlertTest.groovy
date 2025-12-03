@@ -49,4 +49,3 @@ class KpiAlertTest extends Specification {
         that kpiAlert, jsonEquals(readStringFromResource('/md/dashboard/kpiAlert-new.json'))
     }
 }
-

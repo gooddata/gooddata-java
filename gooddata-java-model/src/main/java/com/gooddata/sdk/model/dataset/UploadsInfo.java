@@ -9,8 +9,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gooddata.sdk.model.md.Meta;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.md.Meta;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -70,7 +70,7 @@ public class UploadsInfo {
      *      <li>uri to all uploads for the given dataset</li>
      *      <li>last upload</li>
      * </ul>
-     *
+     * <p>
      * Deserialization only.
      */
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -137,4 +137,3 @@ public class UploadsInfo {
         }
     }
 }
-

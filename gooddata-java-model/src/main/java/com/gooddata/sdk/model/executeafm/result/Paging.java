@@ -31,9 +31,10 @@ public class Paging {
 
     /**
      * Creates new paging
-     * @param count multiple dimensions count
+     *
+     * @param count  multiple dimensions count
      * @param offset multiple dimensions offset
-     * @param total multiple dimensions total
+     * @param total  multiple dimensions total
      */
     @JsonCreator
     public Paging(@JsonProperty("count") final List<Integer> count,
@@ -67,6 +68,7 @@ public class Paging {
 
     /**
      * Sets count compound of given elements, each element per dimension
+     *
      * @param count count elements
      * @return this
      */
@@ -77,6 +79,7 @@ public class Paging {
 
     /**
      * Sets size compound of given elements, each element per dimension
+     *
      * @param total size elements
      * @return this
      */
@@ -87,6 +90,7 @@ public class Paging {
 
     /**
      * Sets size compound of given elements, each element per dimension
+     *
      * @param offset size elements
      * @return this
      */
@@ -100,4 +104,3 @@ public class Paging {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

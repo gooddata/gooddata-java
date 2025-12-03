@@ -1,139 +1,139 @@
 {
-  "dimension" : {
-    "content" : {
-      "attributes" : [
+  "dimension": {
+    "content": {
+      "attributes": [
         {
-          "content" : {
-            "direction" : "asc",
-            "sort" : "pk",
-            "pk" : [
+          "content": {
+            "direction": "asc",
+            "sort": "pk",
+            "pk": [
               {
-                "data" : "/gdc/md/PROJECT_ID/obj/4",
-                "type" : "col"
+                "data": "/gdc/md/PROJECT_ID/obj/4",
+                "type": "col"
               }
             ],
-            "dimension" : "/gdc/md/PROJECT_ID/obj/2",
-            "type" : "GDC.time.date",
-            "displayForms" : [
+            "dimension": "/gdc/md/PROJECT_ID/obj/2",
+            "type": "GDC.time.date",
+            "displayForms": [
               {
-                "content" : {
-                  "formOf" : "/gdc/md/PROJECT_ID/obj/28",
-                  "expression" : "[/gdc/md/PROJECT_ID/obj/24]",
-                  "type" : "GDC.time.day_us",
-                  "ldmexpression" : ""
+                "content": {
+                  "formOf": "/gdc/md/PROJECT_ID/obj/28",
+                  "expression": "[/gdc/md/PROJECT_ID/obj/24]",
+                  "type": "GDC.time.day_us",
+                  "ldmexpression": ""
                 },
-                "links" : {
-                  "elements" : "/gdc/md/PROJECT_ID/obj/31/elements"
+                "links": {
+                  "elements": "/gdc/md/PROJECT_ID/obj/31/elements"
                 },
-                "meta" : {
-                  "author" : "/gdc/account/profile/USER_ID",
-                  "uri" : "/gdc/md/PROJECT_ID/obj/31",
-                  "tags" : "",
-                  "created" : "2015-05-19 11:54:05",
-                  "identifier" : "created.date.mmddyyyy",
-                  "deprecated" : "0",
-                  "summary" : "DisplayForm mm/dd/yyyy.",
-                  "title" : "mm/dd/yyyy (Ticket Created)",
-                  "category" : "attributeDisplayForm",
-                  "updated" : "2015-05-19 11:54:05",
-                  "contributor" : "/gdc/account/profile/USER_ID"
+                "meta": {
+                  "author": "/gdc/account/profile/USER_ID",
+                  "uri": "/gdc/md/PROJECT_ID/obj/31",
+                  "tags": "",
+                  "created": "2015-05-19 11:54:05",
+                  "identifier": "created.date.mmddyyyy",
+                  "deprecated": "0",
+                  "summary": "DisplayForm mm/dd/yyyy.",
+                  "title": "mm/dd/yyyy (Ticket Created)",
+                  "category": "attributeDisplayForm",
+                  "updated": "2015-05-19 11:54:05",
+                  "contributor": "/gdc/account/profile/USER_ID"
                 }
               }
             ],
-            "fk" : [
+            "fk": [
               {
-                "data" : "/gdc/md/PROJECT_ID/obj/1177",
-                "type" : "col"
+                "data": "/gdc/md/PROJECT_ID/obj/1177",
+                "type": "col"
               }
             ]
           },
-          "meta" : {
-            "author" : "/gdc/account/profile/USER_ID",
-            "uri" : "/gdc/md/PROJECT_ID/obj/28",
-            "tags" : "date",
-            "created" : "2015-05-19 11:54:05",
-            "identifier" : "created.date",
-            "deprecated" : "0",
-            "summary" : "Date ticket created",
-            "title" : "Date (Ticket Created)",
-            "category" : "attribute",
-            "updated" : "2015-05-19 11:54:05",
-            "contributor" : "/gdc/account/profile/USER_ID"
+          "meta": {
+            "author": "/gdc/account/profile/USER_ID",
+            "uri": "/gdc/md/PROJECT_ID/obj/28",
+            "tags": "date",
+            "created": "2015-05-19 11:54:05",
+            "identifier": "created.date",
+            "deprecated": "0",
+            "summary": "Date ticket created",
+            "title": "Date (Ticket Created)",
+            "category": "attribute",
+            "updated": "2015-05-19 11:54:05",
+            "contributor": "/gdc/account/profile/USER_ID"
           }
         },
         {
-          "content" : {
-            "pk" : [
+          "content": {
+            "pk": [
               {
-                "data" : "/gdc/md/PROJECT_ID/obj/36",
-                "type" : "col"
+                "data": "/gdc/md/PROJECT_ID/obj/36",
+                "type": "col"
               }
             ],
-            "displayForms" : [
+            "displayForms": [
               {
-                "content" : {
-                  "formOf" : "/gdc/md/PROJECT_ID/obj/40",
-                  "expression" : "[/gdc/md/PROJECT_ID/obj/39]",
-                  "ldmexpression" : ""
+                "content": {
+                  "formOf": "/gdc/md/PROJECT_ID/obj/40",
+                  "expression": "[/gdc/md/PROJECT_ID/obj/39]",
+                  "ldmexpression": ""
                 },
-                "links" : {
-                  "elements" : "/gdc/md/PROJECT_ID/obj/43/elements"
+                "links": {
+                  "elements": "/gdc/md/PROJECT_ID/obj/43/elements"
                 },
-                "meta" : {
-                  "author" : "/gdc/account/profile/USER_ID",
-                  "uri" : "/gdc/md/PROJECT_ID/obj/43",
-                  "tags" : "",
-                  "created" : "2015-05-19 11:54:05",
-                  "identifier" : "created.abY81lMifn6q",
-                  "deprecated" : "0",
-                  "summary" : "DisplayForm Long (Monday).",
-                  "title" : "Long (Monday) (Ticket Created)",
-                  "category" : "attributeDisplayForm",
-                  "updated" : "2015-05-19 11:54:05",
-                  "contributor" : "/gdc/account/profile/USER_ID"
+                "meta": {
+                  "author": "/gdc/account/profile/USER_ID",
+                  "uri": "/gdc/md/PROJECT_ID/obj/43",
+                  "tags": "",
+                  "created": "2015-05-19 11:54:05",
+                  "identifier": "created.abY81lMifn6q",
+                  "deprecated": "0",
+                  "summary": "DisplayForm Long (Monday).",
+                  "title": "Long (Monday) (Ticket Created)",
+                  "category": "attributeDisplayForm",
+                  "updated": "2015-05-19 11:54:05",
+                  "contributor": "/gdc/account/profile/USER_ID"
                 }
               }
             ],
-            "direction" : "asc",
-            "drillDownStepAttributeDF" : "/gdc/md/PROJECT_ID/obj/31",
-            "sort" : "pk",
-            "dimension" : "/gdc/md/PROJECT_ID/obj/2",
-            "type" : "GDC.time.day_in_euweek",
-            "fk" : [
+            "direction": "asc",
+            "drillDownStepAttributeDF": "/gdc/md/PROJECT_ID/obj/31",
+            "sort": "pk",
+            "dimension": "/gdc/md/PROJECT_ID/obj/2",
+            "type": "GDC.time.day_in_euweek",
+            "fk": [
               {
-                "data" : "/gdc/md/PROJECT_ID/obj/8",
-                "type" : "col"
+                "data": "/gdc/md/PROJECT_ID/obj/8",
+                "type": "col"
               }
             ]
           },
-          "meta" : {
-            "author" : "/gdc/account/profile/USER_ID",
-            "uri" : "/gdc/md/PROJECT_ID/obj/40",
-            "tags" : "date day eu week",
-            "created" : "2015-05-19 11:54:05",
-            "identifier" : "created.day.in.euweek",
-            "deprecated" : "0",
-            "summary" : "Generic Day based on EU Week (Mon-Sun)",
-            "title" : "Day of Week (Mon-Sun) (Ticket Created)",
-            "category" : "attribute",
-            "updated" : "2015-05-19 11:54:05",
-            "contributor" : "/gdc/account/profile/USER_ID"
+          "meta": {
+            "author": "/gdc/account/profile/USER_ID",
+            "uri": "/gdc/md/PROJECT_ID/obj/40",
+            "tags": "date day eu week",
+            "created": "2015-05-19 11:54:05",
+            "identifier": "created.day.in.euweek",
+            "deprecated": "0",
+            "summary": "Generic Day based on EU Week (Mon-Sun)",
+            "title": "Day of Week (Mon-Sun) (Ticket Created)",
+            "category": "attribute",
+            "updated": "2015-05-19 11:54:05",
+            "contributor": "/gdc/account/profile/USER_ID"
           }
         }
       ]
     },
-    "meta" : {
-      "author" : "/gdc/account/profile/USER_ID",
-      "uri" : "/gdc/md/PROJECT_ID/obj/2",
-      "tags" : "",
-      "created" : "2015-05-19 11:54:05",
-      "identifier" : "created.dim_date",
-      "deprecated" : "0",
-      "summary" : "",
-      "title" : "Date (Ticket Created)",
-      "category" : "dimension",
-      "updated" : "2015-05-19 11:54:05",
-      "contributor" : "/gdc/account/profile/USER_ID"
+    "meta": {
+      "author": "/gdc/account/profile/USER_ID",
+      "uri": "/gdc/md/PROJECT_ID/obj/2",
+      "tags": "",
+      "created": "2015-05-19 11:54:05",
+      "identifier": "created.dim_date",
+      "deprecated": "0",
+      "summary": "",
+      "title": "Date (Ticket Created)",
+      "category": "dimension",
+      "updated": "2015-05-19 11:54:05",
+      "contributor": "/gdc/account/profile/USER_ID"
     }
   }
 }

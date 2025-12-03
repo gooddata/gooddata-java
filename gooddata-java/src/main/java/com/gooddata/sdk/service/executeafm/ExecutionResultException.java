@@ -17,6 +17,7 @@ public class ExecutionResultException extends GoodDataException {
 
     /**
      * Creates new instance
+     *
      * @param cause cause
      */
     ExecutionResultException(GoodDataRestException cause) {
@@ -36,4 +37,3 @@ public class ExecutionResultException extends GoodDataException {
         }
     }
 }
-

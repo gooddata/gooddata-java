@@ -35,4 +35,3 @@ public class LinkEntriesTest {
         assertThat(linkEntries.toString(), matchesPattern(LinkEntries.class.getSimpleName() + "\\[.*\\]"));
     }
 }
-

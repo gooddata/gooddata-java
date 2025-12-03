@@ -8,8 +8,8 @@ package com.gooddata.sdk.model.executeafm.afm;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.executeafm.ObjQualifier;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -21,17 +21,16 @@ import java.util.List;
 @JsonRootName(PreviousPeriodMeasureDefinition.NAME)
 public class ArithmeticMeasureDefinition implements MeasureDefinition {
 
-    private static final long serialVersionUID = -2597112924341600780L;
-
     static final String NAME = "arithmeticMeasure";
-
+    private static final long serialVersionUID = -2597112924341600780L;
     private final List<String> measureIdentifiers;
     private final String operator;
 
     /**
      * Constructor of {@link ArithmeticMeasureDefinition}
+     *
      * @param measureIdentifiers local identifiers of measures
-     * @param operator operator used for aggregation, for example sum, difference, multiplication, ratio, growth
+     * @param operator           operator used for aggregation, for example sum, difference, multiplication, ratio, growth
      */
     @JsonCreator
     public ArithmeticMeasureDefinition(
@@ -43,6 +42,7 @@ public class ArithmeticMeasureDefinition implements MeasureDefinition {
 
     /**
      * no qualifiers are used, only local identifiers are used see {@link ArithmeticMeasureDefinition#getOperator()}
+     *
      * @return empty set
      */
     @Override
@@ -52,6 +52,7 @@ public class ArithmeticMeasureDefinition implements MeasureDefinition {
 
     /**
      * no conversion is done, because this definition uses only local identifiers
+     *
      * @return this instance
      */
     @Override
@@ -66,6 +67,7 @@ public class ArithmeticMeasureDefinition implements MeasureDefinition {
 
     /**
      * get local identifiers of used measures
+     *
      * @return local identifiers of measure
      */
     public List<String> getMeasureIdentifiers() {
@@ -74,6 +76,7 @@ public class ArithmeticMeasureDefinition implements MeasureDefinition {
 
     /**
      * get used operator
+     *
      * @return used operator
      */
     public String getOperator() {
@@ -85,4 +88,3 @@ public class ArithmeticMeasureDefinition implements MeasureDefinition {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

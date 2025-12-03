@@ -31,7 +31,7 @@ public class DisplayForm extends AbstractObj {
 
     @JsonCreator
     protected DisplayForm(@JsonProperty("meta") Meta meta, @JsonProperty("content") Content content,
-            @JsonProperty("links") Links links) {
+                          @JsonProperty("links") Links links) {
         super(meta);
         this.content = content;
         this.links = links;
@@ -131,4 +131,3 @@ public class DisplayForm extends AbstractObj {
     }
 
 }
-

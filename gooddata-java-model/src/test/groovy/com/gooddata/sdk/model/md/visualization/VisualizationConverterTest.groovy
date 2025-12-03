@@ -6,44 +6,24 @@
 package com.gooddata.sdk.model.md.visualization
 
 import com.fasterxml.jackson.core.JsonParseException
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.gooddata.sdk.model.executeafm.Execution
 import com.gooddata.sdk.model.executeafm.LocalIdentifierQualifier
 import com.gooddata.sdk.model.executeafm.UriObjQualifier
-import com.gooddata.sdk.model.executeafm.afm.filter.AbsoluteDateFilter
 import com.gooddata.sdk.model.executeafm.afm.Afm
 import com.gooddata.sdk.model.executeafm.afm.AttributeItem
-import com.gooddata.sdk.model.executeafm.afm.filter.ComparisonCondition
-import com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator
 import com.gooddata.sdk.model.executeafm.afm.MeasureItem
-import com.gooddata.sdk.model.executeafm.afm.filter.MeasureValueFilter
-import com.gooddata.sdk.model.executeafm.afm.filter.NegativeAttributeFilter
-import com.gooddata.sdk.model.executeafm.afm.filter.PositiveAttributeFilter
-import com.gooddata.sdk.model.executeafm.afm.filter.RankingFilter
-import com.gooddata.sdk.model.executeafm.afm.filter.RelativeDateFilter
-import com.gooddata.sdk.model.executeafm.afm.filter.UriAttributeFilterElements
-import com.gooddata.sdk.model.executeafm.resultspec.AttributeSortItem
-import com.gooddata.sdk.model.executeafm.resultspec.Dimension
-import com.gooddata.sdk.model.executeafm.resultspec.MeasureLocatorItem
-import com.gooddata.sdk.model.executeafm.resultspec.MeasureSortItem
-import com.gooddata.sdk.model.executeafm.resultspec.ResultSpec
-import com.gooddata.sdk.model.executeafm.resultspec.SortItem
-import com.gooddata.sdk.model.executeafm.resultspec.TotalItem
+import com.gooddata.sdk.model.executeafm.afm.filter.*
+import com.gooddata.sdk.model.executeafm.resultspec.*
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import java.time.LocalDate
 import java.util.function.Function
 
-import static VisualizationConverter.convertToAfm
-import static VisualizationConverter.convertToResultSpec
-import static VisualizationConverter.parseSorting
-import static com.gooddata.sdk.model.md.visualization.VisualizationConverter.convertToAfmWithNativeTotals
-import static com.gooddata.sdk.model.md.visualization.VisualizationConverter.convertToExecution
+import static VisualizationConverter.*
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
-import static com.gooddata.sdk.model.md.visualization.VisualizationConverter.convertToResultSpecWithTotals
+import static com.gooddata.sdk.model.md.visualization.VisualizationConverter.*
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
-import static spock.util.matcher.HamcrestSupport.expect
 import static spock.util.matcher.HamcrestSupport.that
 
 class VisualizationConverterTest extends Specification {
@@ -228,7 +208,7 @@ class VisualizationConverterTest extends Specification {
         that sorts, jsonEquals(expectedSorts)
 
         where:
-        value << [ "attribute sorting", "measure sorting"]
+        value << ["attribute sorting", "measure sorting"]
         properties << [
                 '{"sortItems":[{"attributeSortItem":{"direction":"desc","attributeIdentifier":"id"}}]}',
                 '{"sortItems":[{"measureSortItem":{"direction":"desc","locators":[{"measureLocatorItem":{"measureIdentifier":"id"}}]}}]}'
@@ -254,8 +234,8 @@ class VisualizationConverterTest extends Specification {
     def "should fail when incorrect visualization class is provided"() {
         when:
         convertToResultSpec(
-                Stub(VisualizationObject) { getVisualizationClassUri() >> 'visClassUri'},
-                Stub(VisualizationClass) { getUri() >> 'nonMatchingVisClassUri'}
+                Stub(VisualizationObject) { getVisualizationClassUri() >> 'visClassUri' },
+                Stub(VisualizationClass) { getUri() >> 'nonMatchingVisClassUri' }
         )
 
         then:
@@ -314,4 +294,3 @@ class VisualizationConverterTest extends Specification {
         vcg << [null, null, Stub(Function)]
     }
 }
-

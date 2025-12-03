@@ -49,4 +49,3 @@ public class ProcessExecutionException extends GoodDataException {
         return executionDetailUri;
     }
 }
-

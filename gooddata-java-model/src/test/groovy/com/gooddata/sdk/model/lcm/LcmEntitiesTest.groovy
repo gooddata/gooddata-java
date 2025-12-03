@@ -47,4 +47,3 @@ class LcmEntitiesTest extends Specification {
         lcmEntities.paging
     }
 }
-

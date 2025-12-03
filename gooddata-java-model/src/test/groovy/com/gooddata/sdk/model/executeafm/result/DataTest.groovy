@@ -23,4 +23,3 @@ class DataTest extends Specification {
     }
 
 }
-

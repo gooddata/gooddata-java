@@ -35,4 +35,3 @@ public class ObjCreateException extends GoodDataException {
         super("Can't create metadata object: " + obj.getClass().getSimpleName() + "; Cause: " + message);
     }
 }
-

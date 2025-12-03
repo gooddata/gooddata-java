@@ -11,13 +11,8 @@ import org.apache.commons.lang3.SerializationUtils
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator.EQUAL_TO
-import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator.GREATER_THAN
-import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator.GREATER_THAN_OR_EQUAL_TO
-import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator.LESS_THAN
-import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator.LESS_THAN_OR_EQUAL_TO
-import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator.NOT_EQUAL_TO
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
+import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator.*
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource
 import static spock.util.matcher.HamcrestSupport.that
@@ -128,4 +123,3 @@ class ComparisonConditionTest extends Specification {
         EqualsVerifier.forClass(ComparisonCondition).usingGetClass().suppress(Warning.BIGDECIMAL_EQUALITY).verify()
     }
 }
-

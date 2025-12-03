@@ -9,7 +9,8 @@
         },
         "alias": "Attribute Alias"
       }
-    }, {
+    },
+    {
       "measure": {
         "localIdentifier": "measure",
         "title": "Measure",

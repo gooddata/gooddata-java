@@ -1,6 +1,6 @@
 {
-    "user" : {
-        "role" : "admin",
-        "login" : "foo@bar.com"
-    }
+  "user": {
+    "role": "admin",
+    "login": "foo@bar.com"
+  }
 }

@@ -7,8 +7,8 @@ package com.gooddata.sdk.service.httpcomponents;
 
 import com.gooddata.sdk.service.GoodDataEndpoint;
 import com.gooddata.sdk.service.GoodDataSettings;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 
 /**
  * Custom GoodData http client builder providing custom functionality by descendants of
@@ -20,11 +20,10 @@ public interface GoodDataHttpClientBuilder {
     /**
      * Builds {@link HttpClient} from given builder, configured to connect to given endpoint applying given settings.
      *
-     * @param builder pre-configured builder
+     * @param builder  pre-configured builder
      * @param endpoint endpoint of GoodData API
      * @param settings settings
      * @return configured http client.
      */
     HttpClient buildHttpClient(final HttpClientBuilder builder, final GoodDataEndpoint endpoint, final GoodDataSettings settings);
 }
-

@@ -15,18 +15,17 @@ import org.testng.annotations.Test;
 import java.time.ZonedDateTime;
 
 import static com.gooddata.sdk.common.collections.CustomPageRequest.DEFAULT_LIMIT;
-import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static java.time.ZoneOffset.UTC;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class AuditEventPageRequestTest {
 
+    public static final String EVENT_TYPE = "STANDARD_LOGIN";
     private static final ZonedDateTime FROM = ZonedDateTime.of(2019, 10, 28, 15, 30, 12, 0, UTC);
     private static final ZonedDateTime TO = ZonedDateTime.of(2019, 11, 25, 8, 5, 58, 125000000, UTC);
     private static final Integer LIMIT = 10;
     private static final String OFFSET = "foo";
-    public static final String EVENT_TYPE = "STANDARD_LOGIN";
 
     @Test
     public void testCopy() {
@@ -39,7 +38,11 @@ public class AuditEventPageRequestTest {
 
         AuditEventPageRequest copy = AuditEventPageRequest.copy(request);
 
-        assertThat(request, is(sameBeanAs(copy)));
+        assertThat(copy.getFrom(), is(request.getFrom()));
+        assertThat(copy.getTo(), is(request.getTo()));
+        assertThat(copy.getLimit(), is(request.getLimit()));
+        assertThat(copy.getOffset(), is(request.getOffset()));
+        assertThat(copy.getType(), is(request.getType()));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -112,4 +115,3 @@ public class AuditEventPageRequestTest {
                 .verify();
     }
 }
-

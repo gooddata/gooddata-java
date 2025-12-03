@@ -24,8 +24,9 @@ public class ResultPage {
 
     /**
      * Creates new instance
+     *
      * @param offsets list of page offsets
-     * @param limits list of page limits
+     * @param limits  list of page limits
      */
     public ResultPage(final List<Integer> offsets, final List<Integer> limits) {
         this.offsets = notEmpty(offsets, "offsets");
@@ -33,6 +34,10 @@ public class ResultPage {
         if (offsets.size() != limits.size()) {
             throw new IllegalArgumentException("Offsets and limits can't have different size.");
         }
+    }
+
+    private static String toQueryParam(final List<Integer> list) {
+        return list.stream().map(String::valueOf).collect(joining("%2C"));
     }
 
     /**
@@ -48,9 +53,4 @@ public class ResultPage {
     public String getLimitsQueryParam() {
         return toQueryParam(limits);
     }
-
-    private static String toQueryParam(final List<Integer> list) {
-        return list.stream().map(String::valueOf).collect(joining("%2C"));
-    }
 }
-

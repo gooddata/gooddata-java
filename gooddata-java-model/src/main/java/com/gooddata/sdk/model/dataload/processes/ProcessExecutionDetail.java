@@ -47,7 +47,7 @@ public class ProcessExecutionDetail {
     private final ZonedDateTime finished;
 
     private final ErrorStructure error;
-    private final Map<String,String> links;
+    private final Map<String, String> links;
 
     @JsonCreator
     private ProcessExecutionDetail(@JsonProperty("status") String status,
@@ -64,6 +64,10 @@ public class ProcessExecutionDetail {
         this.finished = finished;
         this.error = error;
         this.links = links;
+    }
+
+    public static URI uriFromExecutionUri(URI executionUri) {
+        return URI.create(executionUri.toString() + "/detail");
     }
 
     public String getStatus() {
@@ -110,14 +114,8 @@ public class ProcessExecutionDetail {
         return STATUS_OK.equals(status);
     }
 
-
-    public static URI uriFromExecutionUri(URI executionUri) {
-        return URI.create(executionUri.toString() + "/detail");
-    }
-
     @Override
     public String toString() {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

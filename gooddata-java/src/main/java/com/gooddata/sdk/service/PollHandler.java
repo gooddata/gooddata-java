@@ -13,12 +13,12 @@ import java.net.URI;
 
 /**
  * For internal use by services employing polling.<p>
+ *
  * @param <P> polling type
  * @param <R> result type
- *
  * @see FutureResult
  */
-public interface PollHandler<P,R> {
+public interface PollHandler<P, R> {
 
     /**
      * Get URI used for polling.
@@ -84,8 +84,8 @@ public interface PollHandler<P,R> {
      * Handle exception while polling.
      * The implementing class should throw instance of {@link com.gooddata.sdk.common.GoodDataException}
      * (or ancestor) with the given argument as cause.
+     *
      * @param e the exception
      */
     void handlePollException(GoodDataRestException e);
 }
-

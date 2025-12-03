@@ -130,4 +130,3 @@ class PreviousPeriodMeasureDefinitionTest extends Specification {
                 .verify()
     }
 }
-

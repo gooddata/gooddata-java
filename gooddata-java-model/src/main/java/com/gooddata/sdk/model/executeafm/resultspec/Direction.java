@@ -17,4 +17,3 @@ public enum Direction {
         return name().toLowerCase();
     }
 }
-

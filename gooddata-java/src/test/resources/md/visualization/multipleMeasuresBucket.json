@@ -17,7 +17,8 @@
           }
         }
       }
-    },{
+    },
+    {
       "measure": {
         "localIdentifier": "measure2",
         "title": "Measure 2",
@@ -33,7 +34,8 @@
           }
         }
       }
-    }, {
+    },
+    {
       "measure": {
         "localIdentifier": "pop measure",
         "title": "Pop Measure",

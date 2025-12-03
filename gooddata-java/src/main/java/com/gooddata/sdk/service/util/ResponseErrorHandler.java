@@ -42,7 +42,7 @@ public class ResponseErrorHandler extends DefaultResponseErrorHandler {
         final String requestId = response.getHeaders().getFirst(Header.GDC_REQUEST_ID);
         int statusCode;
         try {
-            statusCode = response.getStatusCode().value();
+            statusCode = response.getRawStatusCode();
         } catch (IOException e) {
             statusCode = 0;
         }
@@ -56,4 +56,3 @@ public class ResponseErrorHandler extends DefaultResponseErrorHandler {
     }
 
 }
-

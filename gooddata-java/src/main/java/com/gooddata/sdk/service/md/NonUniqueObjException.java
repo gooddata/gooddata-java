@@ -26,4 +26,3 @@ public class NonUniqueObjException extends GoodDataException {
         super("Expected a single instance of " + cls.getSimpleName().toLowerCase() + " but found " + results);
     }
 }
-

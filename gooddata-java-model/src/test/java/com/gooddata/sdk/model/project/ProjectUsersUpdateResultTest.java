@@ -5,15 +5,14 @@
  */
 package com.gooddata.sdk.model.project;
 
-import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
-
-import static java.util.Collections.emptyList;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
+import static java.util.Collections.emptyList;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ProjectUsersUpdateResultTest {
 
@@ -26,4 +25,3 @@ public class ProjectUsersUpdateResultTest {
     }
 
 }
-

@@ -40,4 +40,3 @@ public class Uploads {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

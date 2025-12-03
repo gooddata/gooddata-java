@@ -13,7 +13,11 @@ import com.gooddata.sdk.model.executeafm.VisualizationExecution;
 import com.gooddata.sdk.model.executeafm.response.ExecutionResponse;
 import com.gooddata.sdk.model.executeafm.result.ExecutionResult;
 import com.gooddata.sdk.model.project.Project;
-import com.gooddata.sdk.service.*;
+import com.gooddata.sdk.service.AbstractService;
+import com.gooddata.sdk.service.FutureResult;
+import com.gooddata.sdk.service.GoodDataSettings;
+import com.gooddata.sdk.service.PollResult;
+import com.gooddata.sdk.service.SimplePollHandler;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -51,6 +55,7 @@ public class ExecuteAfmService extends AbstractService {
 
     /**
      * Constructor.
+     *
      * @param restTemplate rest template
      * @param settings     settings
      */
@@ -60,7 +65,8 @@ public class ExecuteAfmService extends AbstractService {
 
     /**
      * Executes the given AFM execution returning the execution response
-     * @param project project of the execution
+     *
+     * @param project   project of the execution
      * @param execution execution
      * @return response of the submitted execution
      */
@@ -86,7 +92,8 @@ public class ExecuteAfmService extends AbstractService {
 
     /**
      * Executes the given execution returning the execution response
-     * @param project project of the execution
+     *
+     * @param project   project of the execution
      * @param execution execution
      * @return response of the submitted execution
      */
@@ -112,6 +119,7 @@ public class ExecuteAfmService extends AbstractService {
 
     /**
      * Get for result of given response.
+     *
      * @param executionResponse response to get the result
      * @return future of execution result
      */
@@ -121,8 +129,9 @@ public class ExecuteAfmService extends AbstractService {
 
     /**
      * Get for page of result of given response.
+     *
      * @param executionResponse response to get the result
-     * @param page desired result page specification
+     * @param page              desired result page specification
      * @return future of execution result
      */
     public FutureResult<ExecutionResult> getResult(final ExecutionResponse executionResponse, final ResultPage page) {
@@ -149,4 +158,3 @@ public class ExecuteAfmService extends AbstractService {
         }
     }
 }
-

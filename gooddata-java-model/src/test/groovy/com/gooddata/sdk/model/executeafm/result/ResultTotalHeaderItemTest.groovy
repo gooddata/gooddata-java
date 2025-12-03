@@ -45,4 +45,3 @@ class ResultTotalHeaderItemTest extends Specification {
         }
     }
 }
-

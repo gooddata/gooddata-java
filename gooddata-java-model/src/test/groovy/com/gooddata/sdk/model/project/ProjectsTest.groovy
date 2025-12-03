@@ -21,4 +21,3 @@ class ProjectsTest extends Specification {
         projects.paging
     }
 }
-

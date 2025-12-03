@@ -56,4 +56,3 @@ public class BulkGetUris {
         return items.hashCode();
     }
 }
-

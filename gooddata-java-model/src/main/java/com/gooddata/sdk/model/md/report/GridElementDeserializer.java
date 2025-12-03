@@ -37,4 +37,3 @@ class GridElementDeserializer extends JsonDeserializer<GridElement> {
         }
     }
 }
-

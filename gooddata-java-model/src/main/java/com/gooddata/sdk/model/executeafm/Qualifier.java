@@ -20,4 +20,3 @@ import com.gooddata.sdk.model.md.Obj;
 public interface Qualifier {
 
 }
-

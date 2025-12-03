@@ -12,7 +12,8 @@ import spock.lang.Unroll
 
 class GoodDataBeansAsServicesIT extends Specification {
 
-    @Shared ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext('spring/gd-annotationConfig.xml')
+    @Shared
+    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext('spring/gd-annotationConfig.xml')
 
     @Unroll
     def "should register service of type #clazzName from xml using annotation config"() {
@@ -21,9 +22,8 @@ class GoodDataBeansAsServicesIT extends Specification {
 
         where:
         clazz << GoodData.class.getDeclaredMethods()
-                .collect { m -> m.returnType}
-                .findAll {rt -> rt.name.endsWith('Service')}
+                .collect { m -> m.returnType }
+                .findAll { rt -> rt.name.endsWith('Service') }
         clazzName = clazz.simpleName
     }
 }
-

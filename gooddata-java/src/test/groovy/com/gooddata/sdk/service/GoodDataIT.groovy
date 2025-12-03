@@ -5,15 +5,13 @@
  */
 package com.gooddata.sdk.service
 
-import com.gooddata.sdk.service.gdc.GdcService
 import com.gooddata.sdk.common.gdc.Header
-import org.apache.http.HttpHeaders
+import com.gooddata.sdk.service.gdc.GdcService
+import org.apache.hc.core5.http.HttpHeaders
 
 import static net.jadler.Jadler.onRequest
 import static net.jadler.Jadler.verifyThatRequest
-import static org.hamcrest.CoreMatchers.equalTo
-import static org.hamcrest.CoreMatchers.hasItem
-import static org.hamcrest.CoreMatchers.startsWith
+import static org.hamcrest.CoreMatchers.*
 
 class GoodDataIT extends GoodDataITBase<GdcService> {
 
@@ -64,4 +62,3 @@ class GoodDataIT extends GoodDataITBase<GdcService> {
                 .receivedOnce()
     }
 }
-

@@ -8,10 +8,10 @@ package com.gooddata.sdk.model.executeafm.response;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.gooddata.sdk.model.executeafm.afm.Afm;
-import com.gooddata.sdk.model.executeafm.afm.LocallyIdentifiable;
-import com.gooddata.sdk.model.executeafm.afm.AttributeItem;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.executeafm.afm.Afm;
+import com.gooddata.sdk.model.executeafm.afm.AttributeItem;
+import com.gooddata.sdk.model.executeafm.afm.LocallyIdentifiable;
 
 import java.util.List;
 
@@ -37,11 +37,12 @@ public class AttributeHeader implements Header, LocallyIdentifiable {
 
     /**
      * Creates new header
-     * @param name name
+     *
+     * @param name            name
      * @param localIdentifier local identifier
-     * @param uri uri
-     * @param identifier identifier
-     * @param formOf info about attribute which this header's display form is form of
+     * @param uri             uri
+     * @param identifier      identifier
+     * @param formOf          info about attribute which this header's display form is form of
      */
     public AttributeHeader(final String name, final String localIdentifier, final String uri, final String identifier, final AttributeInHeader formOf) {
         this(name, localIdentifier, uri, identifier, formOf, null);
@@ -49,11 +50,12 @@ public class AttributeHeader implements Header, LocallyIdentifiable {
 
     /**
      * Creates new header
-     * @param name name
-     * @param localIdentifier local identifier
-     * @param uri uri
-     * @param identifier identifier
-     * @param formOf info about attribute which this header's display form is form of
+     *
+     * @param name             name
+     * @param localIdentifier  local identifier
+     * @param uri              uri
+     * @param identifier       identifier
+     * @param formOf           info about attribute which this header's display form is form of
      * @param totalHeaderItems total header items
      */
     public AttributeHeader(@JsonProperty("name") final String name,
@@ -67,12 +69,13 @@ public class AttributeHeader implements Header, LocallyIdentifiable {
 
     /**
      * Creates new header
-     * @param name name
-     * @param localIdentifier local identifier
-     * @param uri uri
-     * @param identifier identifier
-     * @param type type
-     * @param formOf info about attribute which this header's display form is form of
+     *
+     * @param name             name
+     * @param localIdentifier  local identifier
+     * @param uri              uri
+     * @param identifier       identifier
+     * @param type             type
+     * @param formOf           info about attribute which this header's display form is form of
      * @param totalHeaderItems total header items
      */
     @JsonCreator
@@ -94,6 +97,7 @@ public class AttributeHeader implements Header, LocallyIdentifiable {
 
     /**
      * Header name, an attribute's display form title, or specified alias.
+     *
      * @return header name
      */
     public String getName() {
@@ -102,7 +106,8 @@ public class AttributeHeader implements Header, LocallyIdentifiable {
 
     /**
      * Local identifier referencing header's {@link AttributeItem}
-     *  within {@link Afm}
+     * within {@link Afm}
+     *
      * @return attribute's local identifier
      */
     @Override
@@ -112,6 +117,7 @@ public class AttributeHeader implements Header, LocallyIdentifiable {
 
     /**
      * Uri of attribute's display form
+     *
      * @return uri
      */
     public String getUri() {
@@ -120,6 +126,7 @@ public class AttributeHeader implements Header, LocallyIdentifiable {
 
     /**
      * Metadata identifier of attribute's display form
+     *
      * @return identifier
      */
     public String getIdentifier() {
@@ -128,6 +135,7 @@ public class AttributeHeader implements Header, LocallyIdentifiable {
 
     /**
      * Metadata type of attribute's display form
+     *
      * @return type
      */
     public String getType() {
@@ -140,6 +148,7 @@ public class AttributeHeader implements Header, LocallyIdentifiable {
 
     /**
      * Totals' headers belonging to the same level as this header.
+     *
      * @return lists of totals' header
      */
     public List<TotalHeaderItem> getTotalItems() {
@@ -152,4 +161,3 @@ public class AttributeHeader implements Header, LocallyIdentifiable {
     }
 
 }
-

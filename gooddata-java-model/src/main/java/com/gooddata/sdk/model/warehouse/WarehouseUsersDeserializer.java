@@ -25,4 +25,3 @@ class WarehouseUsersDeserializer extends PageDeserializer<WarehouseUsers, Wareho
         return new WarehouseUsers(items, paging, links);
     }
 }
-

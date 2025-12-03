@@ -40,13 +40,32 @@ public class ScheduledMailWhen implements Serializable {
         this.timeZone = timeZone;
     }
 
-    public ScheduledMailWhen() {}
+    public ScheduledMailWhen() {
+    }
 
-    public String getRecurrency() { return recurrency; }
+    public String getRecurrency() {
+        return recurrency;
+    }
 
-    public LocalDate getStartDate() { return startDate; }
+    public void setRecurrency(String recurrency) {
+        this.recurrency = recurrency;
+    }
 
-    public String getTimeZone() { return timeZone; }
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -55,8 +74,10 @@ public class ScheduledMailWhen implements Serializable {
 
         ScheduledMailWhen scheduledMailWhen = (ScheduledMailWhen) o;
 
-        if (recurrency != null ? !recurrency.equals(scheduledMailWhen.recurrency) : scheduledMailWhen.recurrency != null) return false;
-        if (startDate != null ? !startDate.equals(scheduledMailWhen.startDate) : scheduledMailWhen.startDate != null) return false;
+        if (recurrency != null ? !recurrency.equals(scheduledMailWhen.recurrency) : scheduledMailWhen.recurrency != null)
+            return false;
+        if (startDate != null ? !startDate.equals(scheduledMailWhen.startDate) : scheduledMailWhen.startDate != null)
+            return false;
         return !(timeZone != null ? !timeZone.equals(scheduledMailWhen.timeZone) : scheduledMailWhen.timeZone != null);
 
     }
@@ -69,21 +90,8 @@ public class ScheduledMailWhen implements Serializable {
         return result;
     }
 
-    public void setRecurrency(String recurrency) {
-        this.recurrency = recurrency;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public void setTimeZone(String timeZone) {
-        this.timeZone = timeZone;
-    }
-
     @Override
     public String toString() {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

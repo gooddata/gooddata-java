@@ -19,14 +19,12 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProjectValidationResult {
 
+    private static final String LEVEL_WARNING = "WARN";
+    private static final String LEVEL_ERROR = "ERROR";
     private final String category;
     private final String level;
     private final String message;
     private final List<ProjectValidationResultParam> params;
-
-    private static final String LEVEL_WARNING = "WARN";
-    private static final String LEVEL_ERROR = "ERROR";
-
     private ProjectValidationType validation;
 
     @JsonCreator
@@ -101,4 +99,3 @@ public class ProjectValidationResult {
     }
 
 }
-

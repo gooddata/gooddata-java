@@ -26,4 +26,3 @@ class FilterItemTest extends Specification {
         type = typeClass.simpleName.uncapitalize()
     }
 }
-

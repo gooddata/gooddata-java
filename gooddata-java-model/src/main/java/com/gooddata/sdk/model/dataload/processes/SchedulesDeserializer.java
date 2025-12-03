@@ -22,4 +22,3 @@ class SchedulesDeserializer extends PageDeserializer<Schedules, Schedule> {
         return new Schedules(items, paging);
     }
 }
-

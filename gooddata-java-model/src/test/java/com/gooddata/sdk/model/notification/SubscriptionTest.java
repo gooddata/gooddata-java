@@ -5,6 +5,11 @@
  */
 package com.gooddata.sdk.model.notification;
 
+import com.gooddata.sdk.model.md.Meta;
+import org.testng.annotations.Test;
+
+import java.util.Arrays;
+
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static java.util.Collections.singletonList;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
@@ -14,11 +19,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-
-import com.gooddata.sdk.model.md.Meta;
-import org.testng.annotations.Test;
-
-import java.util.Arrays;
 
 public class SubscriptionTest {
 
@@ -69,10 +69,10 @@ public class SubscriptionTest {
         assertThat(subscription.getTemplate().getExpression(), is("test message"));
         assertThat(subscription.getCondition().getExpression(), is("true"));
         assertThat(subscription.getChannels().get(0), is("/gdc/account/profile/876ec68f5630b38de65852ed5d6236ff/channelConfigurations/59dca62e60b2c601f3c72e18"));
-        assertThat(subscription.getMeta().getTitle(), is ("test subscription"));
+        assertThat(subscription.getMeta().getTitle(), is("test subscription"));
 
         Trigger trigger = subscription.getTriggers().get(0);
         assertThat(trigger, instanceOf(TimerEvent.class));
-        assertThat(((TimerEvent)trigger).getCronExpression(), is("0 * * * * *"));
+        assertThat(((TimerEvent) trigger).getCronExpression(), is("0 * * * * *"));
     }
 }

@@ -21,9 +21,9 @@ abstract class GoodDataITBase<T> extends Specification {
         endpoint = new GoodDataEndpoint('localhost', port(), 'http')
         gd = new GoodData(
                 new LoginPasswordGoodDataRestProvider(
-                    endpoint,
-                    createGoodDataSettings(),
-                    'sdk@gooddata.com', 'sdk'
+                        endpoint,
+                        createGoodDataSettings(),
+                        'sdk@gooddata.com', 'sdk'
                 ),
         )
     }
@@ -40,4 +40,3 @@ abstract class GoodDataITBase<T> extends Specification {
         closeJadler()
     }
 }
-

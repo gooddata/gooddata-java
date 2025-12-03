@@ -1,10 +1,10 @@
 {
-    "accountSetting" : {
-        "login": "fake@gooddata.com",
-        "email": "fake@gooddata.com",
-        "password": "password",
-        "verifyPassword": "password",
-        "firstName" : "Blah",
-        "lastName" : "Muhehe"
-    }
+  "accountSetting": {
+    "login": "fake@gooddata.com",
+    "email": "fake@gooddata.com",
+    "password": "password",
+    "verifyPassword": "password",
+    "firstName": "Blah",
+    "lastName": "Muhehe"
+  }
 }

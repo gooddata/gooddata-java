@@ -5,14 +5,14 @@
  */
 package com.gooddata.sdk.model.notification;
 
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
 
 /**
  * Time based trigger
@@ -38,4 +38,3 @@ public class TimerEvent implements Trigger {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

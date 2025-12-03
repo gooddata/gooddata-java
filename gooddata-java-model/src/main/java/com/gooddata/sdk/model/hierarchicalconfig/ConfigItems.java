@@ -5,7 +5,11 @@
  */
 package com.gooddata.sdk.model.hierarchicalconfig;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.ArrayList;
@@ -13,7 +17,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
-import static com.gooddata.sdk.model.hierarchicalconfig.SourceType.*;
+import static com.gooddata.sdk.model.hierarchicalconfig.SourceType.CLIENT;
+import static com.gooddata.sdk.model.hierarchicalconfig.SourceType.DATA_PRODUCT;
+import static com.gooddata.sdk.model.hierarchicalconfig.SourceType.DOMAIN;
+import static com.gooddata.sdk.model.hierarchicalconfig.SourceType.PROJECT;
+import static com.gooddata.sdk.model.hierarchicalconfig.SourceType.PROJECT_GROUP;
+import static com.gooddata.sdk.model.hierarchicalconfig.SourceType.SEGMENT;
 
 /**
  * Contains collection of config items aka feature flags aka hierarchical config.
@@ -82,4 +91,3 @@ public class ConfigItems implements Iterable<ConfigItem> {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

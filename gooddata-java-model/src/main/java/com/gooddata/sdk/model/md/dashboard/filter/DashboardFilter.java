@@ -21,4 +21,3 @@ import java.io.Serializable;
 })
 public interface DashboardFilter extends Serializable {
 }
-

@@ -22,6 +22,7 @@ public final class ExpressionFilter implements CompatibilityFilter {
 
     /**
      * Creates new instance
+     *
      * @param value expression value
      */
     @JsonCreator
@@ -53,4 +54,3 @@ public final class ExpressionFilter implements CompatibilityFilter {
         return Objects.hash(value);
     }
 }
-

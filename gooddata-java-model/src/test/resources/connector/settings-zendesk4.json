@@ -1,10 +1,10 @@
 {
-  "settings" : {
-    "apiUrl" : "https://foo.com",
-    "zopimUrl" : "zopim.com",
-    "account" : "testAccount",
-    "type" : "plus",
-    "syncTime" : "12am",
-    "syncTimeZone" : "America/Los_Angeles"
+  "settings": {
+    "apiUrl": "https://foo.com",
+    "zopimUrl": "zopim.com",
+    "account": "testAccount",
+    "type": "plus",
+    "syncTime": "12am",
+    "syncTimeZone": "America/Los_Angeles"
   }
 }

@@ -5,12 +5,12 @@
  */
 package com.gooddata.sdk.model.md.maintenance;
 
+import org.testng.annotations.Test;
+
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
-
-import org.testng.annotations.Test;
 
 public class PartialMdExportTest {
 

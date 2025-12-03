@@ -5,9 +5,6 @@
  */
 package com.gooddata.sdk.model.md;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
-import static java.util.Arrays.asList;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -21,6 +18,9 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
+
+import static com.gooddata.sdk.common.util.Validate.notNull;
+import static java.util.Arrays.asList;
 
 /**
  * Project Dashboard of GoodData project.<br>
@@ -55,8 +55,7 @@ public class ProjectDashboard extends AbstractObj implements Queryable {
      * If tab with such name doesn't exist, returns {@code null}.
      *
      * @param name tab name
-     * @return
-     * <ul>
+     * @return <ul>
      *     <li>dashboard tab with the given name</li>
      *     <li>{@code null} if tab doesn't exist</li>
      * </ul>
@@ -140,4 +139,3 @@ public class ProjectDashboard extends AbstractObj implements Queryable {
         }
     }
 }
-

@@ -41,4 +41,3 @@ public class ExportProjectToken {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

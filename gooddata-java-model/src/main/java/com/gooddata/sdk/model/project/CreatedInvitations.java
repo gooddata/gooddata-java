@@ -38,6 +38,7 @@ public class CreatedInvitations {
 
     /**
      * List of successful invitations
+     *
      * @return list of URIs (never null)
      */
     public List<String> getInvitationUris() {
@@ -46,6 +47,7 @@ public class CreatedInvitations {
 
     /**
      * List of emails which can't be invited to the project because their users belongs to a different domain
+     *
      * @return list of emails (never null)
      */
     public List<String> getDomainMismatchEmails() {
@@ -54,6 +56,7 @@ public class CreatedInvitations {
 
     /**
      * List of emails which can't be invited to the project because they are already members of the project
+     *
      * @return list of emails (never null)
      */
     public List<String> getAlreadyInProjectEmails() {
@@ -66,4 +69,3 @@ public class CreatedInvitations {
     }
 
 }
-

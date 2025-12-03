@@ -1,7 +1,7 @@
 {
-  "coupaInstance" : {
-    "name" : "instance 01",
-    "apiUrl" : "https://gooddata-demo.coupacloud.com/api",
-    "apiKey" : "apikey123"
+  "coupaInstance": {
+    "name": "instance 01",
+    "apiUrl": "https://gooddata-demo.coupacloud.com/api",
+    "apiKey": "apikey123"
   }
 }

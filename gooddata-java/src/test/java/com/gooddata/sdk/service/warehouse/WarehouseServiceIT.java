@@ -24,7 +24,6 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
 import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
@@ -73,13 +72,13 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(Warehouses.URI)
-            .respond()
+                .respond()
                 .withBody(readFromResource(TASK_POLL))
                 .withStatus(202);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(pollingTask.getPollUri())
-            .respond()
+                .respond()
                 .withStatus(202)
                 .thenRespond()
                 .withBody(readFromResource(TASK_DONE))
@@ -87,7 +86,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(finishedTask.getWarehouseUri())
-            .respond()
+                .respond()
                 .withBody(readFromResource(WAREHOUSE))
                 .withStatus(200);
 
@@ -102,13 +101,13 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo(Warehouses.URI)
-            .respond()
+                .respond()
                 .withBody(readFromResource(TASK_POLL))
                 .withStatus(202);
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(pollingTask.getPollUri())
-            .respond()
+                .respond()
                 .withStatus(400)
         ;
         gd.getWarehouseService().createWarehouse(new Warehouse(TITLE, "{Token}", "Storage")).get();
@@ -119,7 +118,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo(Warehouses.URI)
-            .respond()
+                .respond()
                 .withBody(readFromResource("/warehouse/warehouses.json"))
                 .withStatus(200);
 
@@ -136,7 +135,7 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo(WAREHOUSE_URI)
-            .respond()
+                .respond()
                 .withStatus(204);
 
         gd.getWarehouseService().removeWarehouse(warehouse);
@@ -306,8 +305,8 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withStatus(201);
 
         gd.getWarehouseService()
-          .removeUserFromWarehouse(new WarehouseUser("role", "profile", "login", Collections.singletonMap("self", WAREHOUSE_USER_URI)))
-          .get();
+                .removeUserFromWarehouse(new WarehouseUser("role", "profile", "login", Collections.singletonMap("self", WAREHOUSE_USER_URI)))
+                .get();
     }
 
     @Test(expectedExceptions = WarehouseUserNotFoundException.class)
@@ -336,8 +335,8 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
                 .withStatus(409);
 
         gd.getWarehouseService()
-          .removeUserFromWarehouse(new WarehouseUser("role", "profile", "login", Collections.singletonMap("self", WAREHOUSE_USER_URI)))
-          .get();
+                .removeUserFromWarehouse(new WarehouseUser("role", "profile", "login", Collections.singletonMap("self", WAREHOUSE_USER_URI)))
+                .get();
     }
 
     @Test
@@ -412,4 +411,3 @@ public class WarehouseServiceIT extends AbstractGoodDataIT {
     }
 
 }
-

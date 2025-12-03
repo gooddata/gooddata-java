@@ -1,7 +1,7 @@
 {
-    "asyncTask": {
-        "link": {
-            "poll": "POLL-URI"
-        }
+  "asyncTask": {
+    "link": {
+      "poll": "POLL-URI"
     }
+  }
 }

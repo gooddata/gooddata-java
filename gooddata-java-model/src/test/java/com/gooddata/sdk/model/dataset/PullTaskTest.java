@@ -20,4 +20,3 @@ public class PullTaskTest {
         assertThat(task.getPollUri(), is("/gdc/md/PROJECT/tasks/task/ID/status"));
     }
 }
-

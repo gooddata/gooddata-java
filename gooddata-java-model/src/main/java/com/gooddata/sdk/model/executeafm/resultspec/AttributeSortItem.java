@@ -97,4 +97,3 @@ public class AttributeSortItem implements SortItem {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

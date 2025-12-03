@@ -240,4 +240,3 @@ class RankingFilterTest extends Specification {
         RankingFilterOperator.BOTTOM | 'BOTTOM'
     }
 }
-

@@ -25,4 +25,3 @@ public class GetServerErrorRetryStrategy implements RetryStrategy {
     }
 
 }
-

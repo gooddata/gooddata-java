@@ -63,4 +63,3 @@ class RelativeDateFilterTest extends Specification {
         EqualsVerifier.forClass(RelativeDateFilter).usingGetClass().verify()
     }
 }
-

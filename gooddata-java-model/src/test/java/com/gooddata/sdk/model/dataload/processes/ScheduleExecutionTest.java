@@ -43,4 +43,3 @@ public class ScheduleExecutionTest {
         assertThat(scheduleExecution.getCreated(), is(ZonedDateTime.of(2017, 5, 9, 21, 54, 50, 924000000, UTC)));
     }
 }
-

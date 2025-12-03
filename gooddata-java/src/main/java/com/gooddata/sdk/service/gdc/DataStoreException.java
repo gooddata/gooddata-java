@@ -15,4 +15,3 @@ public class DataStoreException extends GoodDataException {
         super(message, cause);
     }
 }
-

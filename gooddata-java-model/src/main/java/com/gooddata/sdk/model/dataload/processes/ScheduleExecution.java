@@ -40,9 +40,10 @@ public class ScheduleExecution {
     private String trigger;
     private String processLastDeployedBy;
 
-    private Map<String,String> links;
+    private Map<String, String> links;
 
-    public ScheduleExecution() {}
+    public ScheduleExecution() {
+    }
 
     @JsonCreator
     private ScheduleExecution(@JsonProperty("createdTime") @JsonDeserialize(using = ISOZonedDateTimeDeserializer.class) ZonedDateTime created,
@@ -91,4 +92,3 @@ public class ScheduleExecution {
         return FINISHED_STATUSES.contains(getStatus());
     }
 }
-

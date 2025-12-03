@@ -21,4 +21,3 @@ import java.io.Serializable;
 })
 public interface FilterReference extends Serializable {
 }
-

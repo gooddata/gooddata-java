@@ -10,9 +10,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.common.util.ISOZonedDateTime;
+import com.gooddata.sdk.model.util.UriHelper;
 
 import java.time.ZonedDateTime;
 import java.util.Map;
@@ -96,4 +96,3 @@ public class IntegrationProcessStatus {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

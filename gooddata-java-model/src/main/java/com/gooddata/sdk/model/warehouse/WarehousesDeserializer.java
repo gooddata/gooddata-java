@@ -22,4 +22,3 @@ class WarehousesDeserializer extends PageDeserializer<Warehouses, Warehouse> {
         return new Warehouses(items, paging, links);
     }
 }
-

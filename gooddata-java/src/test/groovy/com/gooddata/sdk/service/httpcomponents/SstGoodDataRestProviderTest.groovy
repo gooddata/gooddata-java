@@ -40,4 +40,3 @@ class SstGoodDataRestProviderTest extends Specification {
         provider.httpClient instanceof GoodDataHttpClient
     }
 }
-

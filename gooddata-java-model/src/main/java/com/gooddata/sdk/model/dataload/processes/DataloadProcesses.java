@@ -5,9 +5,13 @@
  */
 package com.gooddata.sdk.model.dataload.processes;
 
-import com.fasterxml.jackson.annotation.*;
-import com.gooddata.sdk.model.account.Account;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.account.Account;
 
 import java.util.Collection;
 import java.util.List;
@@ -39,4 +43,3 @@ public class DataloadProcesses {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

@@ -20,4 +20,3 @@ public class ConnectorException extends GoodDataException {
         super(message, cause);
     }
 }
-

@@ -5,9 +5,9 @@
  */
 package com.gooddata.sdk.service.dataload;
 
-import com.gooddata.sdk.service.AbstractGoodDataIT;
 import com.gooddata.sdk.model.dataload.OutputStage;
 import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.AbstractGoodDataIT;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -30,8 +30,8 @@ public class OutputStageServiceIT extends AbstractGoodDataIT {
     private static final String OUTPUT_STAGE = "/dataload/outputStage.json";
 
     private static final String OUTPUT_STAGE_SCHEMA_URI = "/gdc/datawarehouse/instances/instanceId/schemas/default";
-    private static final String CLIENT_ID =  "clientId";
-    private static final String OUTPUT_STAGE_PREFIX =  "outputStagePrefix";
+    private static final String CLIENT_ID = "clientId";
+    private static final String OUTPUT_STAGE_PREFIX = "outputStagePrefix";
     private static final String PROJECT_ID = "projectId";
 
     private OutputStage outputStage;
@@ -53,10 +53,10 @@ public class OutputStageServiceIT extends AbstractGoodDataIT {
                 .withBody(readFromResource(OUTPUT_STAGE_ALL_FIELDS))
                 .withStatus(200);
 
-       final OutputStage result = gd.getOutputStageService().getOutputStageByUri(outputStage.getUri());
+        final OutputStage result = gd.getOutputStageService().getOutputStageByUri(outputStage.getUri());
 
-       assertThat(result, is(notNullValue()));
-       assertThat(result.getSchemaUri(), is(equalTo(OUTPUT_STAGE_SCHEMA_URI)));
+        assertThat(result, is(notNullValue()));
+        assertThat(result.getSchemaUri(), is(equalTo(OUTPUT_STAGE_SCHEMA_URI)));
     }
 
     @Test
@@ -96,4 +96,3 @@ public class OutputStageServiceIT extends AbstractGoodDataIT {
         assertThat(result.getOutputStagePrefix(), is(equalTo(OUTPUT_STAGE_PREFIX)));
     }
 }
-

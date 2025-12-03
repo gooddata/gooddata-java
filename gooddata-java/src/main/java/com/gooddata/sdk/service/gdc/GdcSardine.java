@@ -5,8 +5,6 @@
  */
 package com.gooddata.sdk.service.gdc;
 
-import static com.gooddata.sdk.common.util.Validate.notNull;
-
 import com.github.sardine.impl.SardineImpl;
 import com.github.sardine.impl.io.ContentLengthInputStream;
 import com.github.sardine.impl.io.HttpMethodReleaseInputStream;
@@ -20,6 +18,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * This class extends SardineImpl, connections were not correctly closed by parent
@@ -73,4 +73,3 @@ class GdcSardine extends SardineImpl {
         }
     }
 }
-

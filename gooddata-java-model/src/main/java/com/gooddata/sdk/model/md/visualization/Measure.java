@@ -20,14 +20,14 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Measure extends MeasureItem implements BucketItem {
 
-    private static final long serialVersionUID = -6311373783004640731L;
     static final String NAME = "measure";
-
+    private static final long serialVersionUID = -6311373783004640731L;
     private String title;
 
     /**
      * Creates new instance of measure for use in {@link VisualizationObject}
-     * @param definition measure definition
+     *
+     * @param definition      measure definition
      * @param localIdentifier local identifier
      */
     public Measure(final MeasureDefinition definition, final String localIdentifier) {
@@ -36,11 +36,12 @@ public class Measure extends MeasureItem implements BucketItem {
 
     /**
      * Creates new instance of measure for use in {@link VisualizationObject}
-     * @param definition measure definition
+     *
+     * @param definition      measure definition
      * @param localIdentifier local identifier
-     * @param alias alias for measure title
-     * @param title default name given to measure
-     * @param format format of measure to be computed
+     * @param alias           alias for measure title
+     * @param title           default name given to measure
+     * @param format          format of measure to be computed
      */
     @JsonCreator
     public Measure(@JsonProperty("definition") final MeasureDefinition definition,
@@ -97,4 +98,3 @@ public class Measure extends MeasureItem implements BucketItem {
         return Objects.hash(super.hashCode());
     }
 }
-

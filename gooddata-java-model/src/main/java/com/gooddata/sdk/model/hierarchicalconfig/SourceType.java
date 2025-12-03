@@ -55,20 +55,12 @@ public enum SourceType {
     private final String apiUri;
 
     /**
-     * @param name source of config item
+     * @param name   source of config item
      * @param apiUri api uri in case that config item is manageable
      */
     SourceType(String name, String apiUri) {
         this.name = name;
         this.apiUri = apiUri;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getApiUri() {
-        return apiUri;
     }
 
     /**
@@ -81,9 +73,16 @@ public enum SourceType {
         return lookup.get(source);
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getApiUri() {
+        return apiUri;
+    }
+
     @Override
     public String toString() {
         return this.name;
     }
 }
-

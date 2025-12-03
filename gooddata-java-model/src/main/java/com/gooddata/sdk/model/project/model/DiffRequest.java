@@ -40,6 +40,7 @@ public class DiffRequest {
 
     /**
      * Returns desired target state of project model
+     *
      * @return desired target state of project model
      */
     public String getTargetModel() {
@@ -51,4 +52,3 @@ public class DiffRequest {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

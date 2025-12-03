@@ -63,8 +63,8 @@ public class ProjectFeatureFlagsTest {
     @Test
     public void isEnabledShouldReturnCorrectBoolean() throws Exception {
         final ProjectFeatureFlags flags = new ProjectFeatureFlags(asList(
-            new ProjectFeatureFlag("enabledFlag", true),
-            new ProjectFeatureFlag("disabledFlag", false)
+                new ProjectFeatureFlag("enabledFlag", true),
+                new ProjectFeatureFlag("disabledFlag", false)
         ));
 
         assertThat(flags.isEnabled("enabledFlag"), is(true));

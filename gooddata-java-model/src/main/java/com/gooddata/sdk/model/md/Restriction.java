@@ -25,14 +25,6 @@ public class Restriction {
         this.value = notNull(value, "value");
     }
 
-    public Type getType() {
-        return type;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
     /**
      * Construct a new instance with restriction type identifier and given value.
      *
@@ -63,6 +55,14 @@ public class Restriction {
         return new Restriction(Type.SUMMARY, value);
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
@@ -86,4 +86,3 @@ public class Restriction {
         IDENTIFIER, TITLE, SUMMARY
     }
 }
-

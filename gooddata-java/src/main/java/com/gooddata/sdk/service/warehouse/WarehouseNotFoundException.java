@@ -24,4 +24,3 @@ public class WarehouseNotFoundException extends GoodDataException {
         return warehouseUri;
     }
 }
-

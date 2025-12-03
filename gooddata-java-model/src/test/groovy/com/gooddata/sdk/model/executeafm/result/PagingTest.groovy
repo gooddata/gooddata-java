@@ -46,4 +46,3 @@ class PagingTest extends Specification {
         paging.total == [5, 6]
     }
 }
-

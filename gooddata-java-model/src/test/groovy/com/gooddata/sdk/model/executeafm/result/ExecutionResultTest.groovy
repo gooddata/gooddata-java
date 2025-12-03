@@ -41,10 +41,10 @@ class ExecutionResultTest extends Specification {
 
     def "should serialize full"() {
         expect:
-        that new ExecutionResult(new DataList(DATA.collect{
-                    def values = it.collect { new DataValue(it) }
-                    new DataList(values)
-                }),
+        that new ExecutionResult(new DataList(DATA.collect {
+            def values = it.collect { new DataValue(it) }
+            new DataList(values)
+        }),
                 new Paging([2, 4], [0, 0], [2, 4]),
                 [
                         [[new AttributeHeaderItem('Employee1', '/gdc/md/FoodMartDemo/obj/122/elements?id=123'),
@@ -106,4 +106,3 @@ class ExecutionResultTest extends Specification {
         result.getWarnings() == [new Warning('gdc123', 'Some msg %s %s %s', ['bum', 1, null])]
     }
 }
-

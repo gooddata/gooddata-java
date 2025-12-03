@@ -28,9 +28,9 @@ class LcmEntityTest extends Specification {
         expect:
         that new LcmEntity('PROJECT_ID', 'PROJECT_TITLE', 'CLIENT', 'SEGMENT', 'DATA_PRODUCT',
                 [
-                        project: '/gdc/projects/PROJECT_ID',
-                        client: '/gdc/domains/default/dataproducts/DATA_PRODUCT/clients/CLIENT',
-                        segment: '/gdc/domains/default/dataproducts/DATA_PRODUCT/segments/SEGMENT',
+                        project    : '/gdc/projects/PROJECT_ID',
+                        client     : '/gdc/domains/default/dataproducts/DATA_PRODUCT/clients/CLIENT',
+                        segment    : '/gdc/domains/default/dataproducts/DATA_PRODUCT/segments/SEGMENT',
                         dataProduct: '/gdc/domains/default/dataproducts/DATA_PRODUCT'
                 ]),
                 jsonEquals(resource(LCM_ENTITY_FULL_JSON))
@@ -70,4 +70,3 @@ class LcmEntityTest extends Specification {
         EqualsVerifier.forClass(LcmEntity).usingGetClass().verify()
     }
 }
-

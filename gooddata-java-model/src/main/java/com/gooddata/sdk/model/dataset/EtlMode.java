@@ -45,4 +45,3 @@ public class EtlMode {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

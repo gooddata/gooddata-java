@@ -45,4 +45,3 @@ class IdentifierObjQualifierTest extends Specification {
         that deserialized, jsonEquals(qualifier)
     }
 }
-

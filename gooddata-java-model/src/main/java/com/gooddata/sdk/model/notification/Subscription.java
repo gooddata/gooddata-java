@@ -5,21 +5,21 @@
  */
 package com.gooddata.sdk.model.notification;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
-import static org.apache.commons.lang3.Validate.notEmpty;
-import static org.apache.commons.lang3.Validate.notNull;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gooddata.sdk.model.md.Meta;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.md.Meta;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static org.apache.commons.lang3.Validate.notEmpty;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Subscription for notifications
@@ -43,11 +43,11 @@ public class Subscription {
     /**
      * Creates Subscription
      *
-     * @param triggers triggers of subscription
-     * @param channels list of {@link Channel}
-     * @param condition condition under which this subscription activates
+     * @param triggers        triggers of subscription
+     * @param channels        list of {@link Channel}
+     * @param condition       condition under which this subscription activates
      * @param messageTemplate of message
-     * @param title name of subscription
+     * @param title           name of subscription
      */
     public Subscription(final List<Trigger> triggers,
                         final List<Channel> channels,
@@ -60,12 +60,12 @@ public class Subscription {
     /**
      * Creates Subscription
      *
-     * @param triggers triggers of subscription
-     * @param channels list of {@link Channel}
-     * @param condition condition under which this subscription activates
+     * @param triggers        triggers of subscription
+     * @param channels        list of {@link Channel}
+     * @param condition       condition under which this subscription activates
      * @param messageTemplate of message
      * @param subjectTemplate of message
-     * @param title name of subscription
+     * @param title           name of subscription
      */
     public Subscription(final List<Trigger> triggers,
                         final List<Channel> channels,
@@ -130,4 +130,3 @@ public class Subscription {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

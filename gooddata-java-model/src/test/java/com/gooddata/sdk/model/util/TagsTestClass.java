@@ -26,4 +26,3 @@ class TagsTestClass {
         return tags;
     }
 }
-

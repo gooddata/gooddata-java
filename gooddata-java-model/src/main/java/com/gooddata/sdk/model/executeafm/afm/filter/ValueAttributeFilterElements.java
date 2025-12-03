@@ -19,13 +19,13 @@ import static java.util.Arrays.asList;
  */
 public final class ValueAttributeFilterElements implements AttributeFilterElements, Serializable {
 
-    private static final long serialVersionUID = 8162844914489089022L;
     static final String NAME = "values";
-
+    private static final long serialVersionUID = 8162844914489089022L;
     private final List<String> values;
 
     /**
      * Creates new instance of given attribute elements' values.
+     *
      * @param values elements' values.
      */
     @JsonCreator
@@ -35,6 +35,7 @@ public final class ValueAttributeFilterElements implements AttributeFilterElemen
 
     /**
      * Creates new instance of given attribute elements' values.
+     *
      * @param values elements' values.
      */
     public ValueAttributeFilterElements(String... values) {
@@ -68,4 +69,3 @@ public final class ValueAttributeFilterElements implements AttributeFilterElemen
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

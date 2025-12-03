@@ -5,9 +5,15 @@
  */
 package com.gooddata.sdk.model.project;
 
-import com.fasterxml.jackson.annotation.*;
-import com.gooddata.sdk.model.account.Account;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.account.Account;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +21,7 @@ import java.util.stream.Collectors;
 
 /**
  * User in project
+ *
  * @see Account
  */
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
@@ -55,6 +62,10 @@ public class User {
         return content.getStatus();
     }
 
+    public void setStatus(final String status) {
+        this.content.status = status;
+    }
+
     @JsonIgnore
     public String getLastName() {
         return content.getLastName();
@@ -82,10 +93,6 @@ public class User {
 
     public Links getLinks() {
         return links;
-    }
-
-    public void setStatus(final String status) {
-        this.content.status = status;
     }
 
     @Override
@@ -189,4 +196,3 @@ public class User {
         }
     }
 }
-

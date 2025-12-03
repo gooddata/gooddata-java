@@ -36,4 +36,3 @@ class ExpressionFilterTest extends Specification {
         EqualsVerifier.forClass(ExpressionFilter).verify()
     }
 }
-

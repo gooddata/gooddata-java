@@ -41,7 +41,7 @@ class VisualizationExecutionTest extends Specification {
                 '/gdc/md/PROJECT/vizObjUri',
                 [new ExpressionFilter('some expression')],
                 new ResultSpec([new Dimension(['i1'], [new TotalItem('mId', Total.AVG, 'a1')].toSet())],
-                [new AttributeSortItem('asc', 'aId')])
+                        [new AttributeSortItem('asc', 'aId')])
         ), jsonEquals(resource(VIZ_EXECUTION_FULL_JSON))
     }
 
@@ -56,4 +56,3 @@ class VisualizationExecutionTest extends Specification {
         execution?.resultSpec?.dimensions?.every { it.itemIdentifiers == ['i1'] && it.totals*.measureIdentifier == ['mId'] }
     }
 }
-

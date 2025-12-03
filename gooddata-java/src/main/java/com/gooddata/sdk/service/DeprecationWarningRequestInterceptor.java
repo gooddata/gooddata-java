@@ -38,4 +38,3 @@ public class DeprecationWarningRequestInterceptor implements ClientHttpRequestIn
         return response;
     }
 }
-

@@ -28,14 +28,11 @@ import static org.hamcrest.Matchers.hasSize;
 public class AccessLogsTest {
 
     private static final ZonedDateTime DATE = ZonedDateTime.of(LocalDate.of(1993, 3, 9).atStartOfDay(), UTC);
-
-    private final AccessLog ACCESS_LOG_1 = new AccessLog("123", "visa.gooddata.com", "/gdc/ping", "GET", "200", "2231", "127.0.0.1", DATE, DATE);
-    private final AccessLog ACCESS_LOG_2 = new AccessLog("456", "mastercard.gooddata.com", "/gdc/ping", "GET", "200", "2231", "127.0.0.1", DATE, DATE);
-
     private static final String DOMAIN = "default";
     private static final String RESOURCE_URI = new UriTemplate(AccessLog.RESOURCE_URI).expand(DOMAIN).toString();
     private static final String RESOURCE_NEXT_URI = RESOURCE_URI + "?offset=456";
-
+    private final AccessLog ACCESS_LOG_1 = new AccessLog("123", "visa.gooddata.com", "/gdc/ping", "GET", "200", "2231", "127.0.0.1", DATE, DATE);
+    private final AccessLog ACCESS_LOG_2 = new AccessLog("456", "mastercard.gooddata.com", "/gdc/ping", "GET", "200", "2231", "127.0.0.1", DATE, DATE);
     private final AccessLogs ACCESS_LOGS = new AccessLogs(
             asList(ACCESS_LOG_1, ACCESS_LOG_2),
             new Paging(RESOURCE_NEXT_URI),
@@ -76,4 +73,3 @@ public class AccessLogsTest {
     }
 
 }
-

@@ -39,4 +39,3 @@ public class UriResponse implements Serializable {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

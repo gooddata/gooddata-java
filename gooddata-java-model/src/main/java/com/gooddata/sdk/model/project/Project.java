@@ -13,11 +13,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.gooddata.sdk.model.md.Meta;
-import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.sdk.common.util.BooleanDeserializer;
 import com.gooddata.sdk.common.util.GDZonedDateTimeDeserializer;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.md.Meta;
+import com.gooddata.sdk.model.util.UriHelper;
 
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -89,6 +89,16 @@ public class Project {
     @JsonIgnore
     public String getDriver() {
         return content.getDriver();
+    }
+
+    public void setDriver(String driver) {
+        notEmpty(driver, "driver");
+        content.setDriver(driver);
+    }
+
+    public void setDriver(ProjectDriver driver) {
+        notNull(driver, "driver");
+        setDriver(driver.getValue());
     }
 
     @JsonIgnore
@@ -235,16 +245,6 @@ public class Project {
         return "ENABLED".equals(getState());
     }
 
-    public void setDriver(String driver) {
-        notEmpty(driver, "driver");
-        content.setDriver(driver);
-    }
-
-    public void setDriver(ProjectDriver driver) {
-        notNull(driver, "driver");
-        setDriver(driver.getValue());
-    }
-
     @JsonIgnore
     public String getEnvironment() {
         return content.getEnvironment();
@@ -276,13 +276,10 @@ public class Project {
 
         @JsonProperty("authorizationToken")
         private final String authorizationToken;
-
-        @JsonProperty("driver")
-        private String driver;
-
         @JsonProperty("guidedNavigation")
         private final String guidedNavigation;
-
+        @JsonProperty("driver")
+        private String driver;
         @JsonIgnore
         private String cluster;
 
@@ -330,6 +327,10 @@ public class Project {
             return driver;
         }
 
+        public void setDriver(String driver) {
+            this.driver = driver;
+        }
+
         public String getGuidedNavigation() {
             return guidedNavigation;
         }
@@ -340,10 +341,6 @@ public class Project {
 
         public String getIsPublic() {
             return isPublic;
-        }
-
-        public void setDriver(String driver) {
-            this.driver = driver;
         }
 
         public String getEnvironment() {
@@ -538,4 +535,3 @@ public class Project {
         }
     }
 }
-

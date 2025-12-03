@@ -69,4 +69,3 @@ class AttributeItemTest extends Specification {
                 .verify()
     }
 }
-

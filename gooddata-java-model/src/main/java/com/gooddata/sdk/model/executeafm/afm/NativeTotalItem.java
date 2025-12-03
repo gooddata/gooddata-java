@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
-import static java.util.Arrays.asList;
 
 /**
  * Native total definition
@@ -24,7 +23,8 @@ public class NativeTotalItem {
 
     /**
      * Native total definition
-     * @param measureIdentifier measure on which is total defined
+     *
+     * @param measureIdentifier    measure on which is total defined
      * @param attributeIdentifiers subset of internal attribute identifiers in AFM defining total placement
      */
     @JsonCreator
@@ -37,6 +37,7 @@ public class NativeTotalItem {
 
     /**
      * internal identifier of measure in AFM, on which is total defined
+     *
      * @return measure
      */
     public String getMeasureIdentifier() {
@@ -45,6 +46,7 @@ public class NativeTotalItem {
 
     /**
      * subset of internal attribute identifiers in AFM defining total placement
+     *
      * @return list of identifiers (never null)
      */
     public List<String> getAttributeIdentifiers() {
@@ -56,4 +58,3 @@ public class NativeTotalItem {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

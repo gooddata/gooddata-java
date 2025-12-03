@@ -32,9 +32,9 @@ public class ComparisonCondition extends MeasureValueFilterCondition implements 
 
     @JsonCreator
     public ComparisonCondition(
-        @JsonProperty("operator") final String operator,
-        @JsonProperty("value") final BigDecimal value,
-        @JsonProperty("treatNullValuesAs") final BigDecimal treatNullValuesAs
+            @JsonProperty("operator") final String operator,
+            @JsonProperty("value") final BigDecimal value,
+            @JsonProperty("treatNullValuesAs") final BigDecimal treatNullValuesAs
     ) {
         super(treatNullValuesAs);
         this.operator = notNull(operator, "operator");
@@ -48,8 +48,8 @@ public class ComparisonCondition extends MeasureValueFilterCondition implements 
      * @param value    The value of the condition.
      */
     public ComparisonCondition(
-        final ComparisonConditionOperator operator,
-        final BigDecimal value
+            final ComparisonConditionOperator operator,
+            final BigDecimal value
     ) {
         this(notNull(operator, "operator").toString(), value, null);
     }
@@ -62,9 +62,9 @@ public class ComparisonCondition extends MeasureValueFilterCondition implements 
      * @param treatNullValuesAs The number that will be used instead of compared values that are null.
      */
     public ComparisonCondition(
-        final ComparisonConditionOperator operator,
-        final BigDecimal value,
-        final BigDecimal treatNullValuesAs
+            final ComparisonConditionOperator operator,
+            final BigDecimal value,
+            final BigDecimal treatNullValuesAs
     ) {
         this(notNull(operator, "operator").toString(), value, treatNullValuesAs);
     }
@@ -96,7 +96,7 @@ public class ComparisonCondition extends MeasureValueFilterCondition implements 
         if (!super.equals(o)) return false;
         final ComparisonCondition that = (ComparisonCondition) o;
         return Objects.equals(operator, that.operator) &&
-            Objects.equals(value, that.value);
+                Objects.equals(value, that.value);
     }
 
     @Override
@@ -109,4 +109,3 @@ public class ComparisonCondition extends MeasureValueFilterCondition implements 
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

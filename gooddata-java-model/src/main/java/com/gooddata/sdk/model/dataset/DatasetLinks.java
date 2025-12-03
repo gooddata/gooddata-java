@@ -5,7 +5,8 @@
  */
 package com.gooddata.sdk.model.dataset;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.sdk.model.gdc.AboutLinks;
 
 import java.util.List;
@@ -25,4 +26,3 @@ public class DatasetLinks extends AboutLinks {
     }
 
 }
-

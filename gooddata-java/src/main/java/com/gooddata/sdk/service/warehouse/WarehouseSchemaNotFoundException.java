@@ -24,4 +24,3 @@ public class WarehouseSchemaNotFoundException extends GoodDataException {
         return warehouseSchemaUri;
     }
 }
-

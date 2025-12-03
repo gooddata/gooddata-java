@@ -1,7 +1,7 @@
 {
-    "asyncTask" : {
-        "links" : {
-            "poll" : "/gdc/datawarehouse/executions/executionId"
-        }
+  "asyncTask": {
+    "links": {
+      "poll": "/gdc/datawarehouse/executions/executionId"
     }
+  }
 }

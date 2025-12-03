@@ -7,8 +7,8 @@ package com.gooddata.sdk.model.executeafm.resultspec;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.sdk.model.md.report.Total;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.md.report.Total;
 
 import java.util.Objects;
 
@@ -25,8 +25,9 @@ public class TotalItem {
 
     /**
      * Total definition
-     * @param measureIdentifier measure on which is total defined
-     * @param type total type
+     *
+     * @param measureIdentifier   measure on which is total defined
+     * @param type                total type
      * @param attributeIdentifier internal attribute identifier in AFM defining total placement
      */
     @JsonCreator
@@ -44,6 +45,7 @@ public class TotalItem {
 
     /**
      * total type
+     *
      * @return total type
      */
     public String getType() {
@@ -52,6 +54,7 @@ public class TotalItem {
 
     /**
      * internal measure identifier in AFM, on which is total defined
+     *
      * @return measure
      */
     public String getMeasureIdentifier() {
@@ -60,6 +63,7 @@ public class TotalItem {
 
     /**
      * internal attribute identifier in AFM defining total placement
+     *
      * @return identifier (never null)
      */
     public String getAttributeIdentifier() {
@@ -86,4 +90,3 @@ public class TotalItem {
         return Objects.hash(measureIdentifier, type, attributeIdentifier);
     }
 }
-

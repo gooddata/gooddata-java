@@ -25,4 +25,3 @@ class HeaderTest extends Specification {
         type = typeClass.simpleName.uncapitalize()
     }
 }
-

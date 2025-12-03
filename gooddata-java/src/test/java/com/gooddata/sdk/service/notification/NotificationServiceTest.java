@@ -5,12 +5,12 @@
  */
 package com.gooddata.sdk.service.notification;
 
+import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.notification.Channel;
 import com.gooddata.sdk.model.notification.ProjectEvent;
 import com.gooddata.sdk.model.notification.Subscription;
-import com.gooddata.sdk.service.GoodDataSettings;
-import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.GoodDataSettings;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestTemplate;

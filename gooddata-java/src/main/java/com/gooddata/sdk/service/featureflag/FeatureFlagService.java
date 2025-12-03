@@ -9,8 +9,8 @@ import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.model.featureflag.FeatureFlags;
 import com.gooddata.sdk.model.featureflag.ProjectFeatureFlag;
 import com.gooddata.sdk.model.featureflag.ProjectFeatureFlags;
-import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.model.hierarchicalconfig.ConfigItem;
+import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.service.hierarchicalconfig.HierarchicalConfigService;
@@ -26,6 +26,7 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
 /**
  * Provides feature flag management. Feature flag is a boolean flag used for enabling / disabling some specific feature
  * of GoodData platform. It can be used in various scopes (per project, per project group, per user, global etc.).
+ *
  * @deprecated Use {@link HierarchicalConfigService}.
  */
 @Deprecated
@@ -37,8 +38,9 @@ public class FeatureFlagService extends AbstractService {
 
     /**
      * Constructs service for GoodData feature flags management.
+     *
      * @param restTemplate RESTful HTTP Spring template
-     * @param settings settings
+     * @param settings     settings
      */
     public FeatureFlagService(final RestTemplate restTemplate, final GoodDataSettings settings) {
         super(restTemplate, settings);
@@ -98,7 +100,7 @@ public class FeatureFlagService extends AbstractService {
      * flags from all scopes) for given project by its unique name (aka "key").
      * It doesn't matter whether feature flag is enabled or not, it'll be included in both cases.
      *
-     * @param project project, cannot be null
+     * @param project         project, cannot be null
      * @param featureFlagName unique name (key) of feature flag, cannot be empty
      * @return feature flag for given project with given name (key)
      * @deprecated Use {@link HierarchicalConfigService#getProjectConfigItem(Project, String)}.
@@ -121,7 +123,7 @@ public class FeatureFlagService extends AbstractService {
      * this is the same as having no feature flag at all.
      *
      * @param project project for which the feature flag should be created, cannot be null
-     * @param flag feature flag to be created, cannot be null
+     * @param flag    feature flag to be created, cannot be null
      * @return created feature flag
      * @deprecated Use {@link HierarchicalConfigService#setProjectConfigItem(Project, ConfigItem)}.
      */
@@ -193,4 +195,3 @@ public class FeatureFlagService extends AbstractService {
     }
 
 }
-

@@ -76,7 +76,7 @@ public class Table extends AbstractObj implements Queryable {
 
         @JsonCreator
         private Content(@JsonProperty("tableDBName") String tableDBName, @JsonProperty("activeDataLoad") String activeDataLoad,
-                @JsonProperty("tableDataLoad") Collection<String> tableDataLoads, @JsonProperty("weight") Integer weight) {
+                        @JsonProperty("tableDataLoad") Collection<String> tableDataLoads, @JsonProperty("weight") Integer weight) {
             this.tableDBName = tableDBName;
             this.activeDataLoad = activeDataLoad;
             this.tableDataLoads = tableDataLoads;
@@ -105,4 +105,3 @@ public class Table extends AbstractObj implements Queryable {
         }
     }
 }
-

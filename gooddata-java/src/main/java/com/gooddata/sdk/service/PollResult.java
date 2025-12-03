@@ -16,7 +16,7 @@ public final class PollResult<T> implements FutureResult<T> {
 
     private final AbstractService service;
 
-    private final PollHandler<?,T> handler;
+    private final PollHandler<?, T> handler;
 
     /**
      * Creates a new instance of the result to be eventually retrieved by polling on the REST API.<p>
@@ -58,4 +58,3 @@ public final class PollResult<T> implements FutureResult<T> {
         return handler.getPollingUri();
     }
 }
-

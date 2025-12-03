@@ -34,4 +34,3 @@ public class IntegrationNotFoundException extends GoodDataException {
         return connectorType;
     }
 }
-

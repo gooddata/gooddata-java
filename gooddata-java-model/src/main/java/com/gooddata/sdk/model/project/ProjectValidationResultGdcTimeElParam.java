@@ -52,4 +52,3 @@ public class ProjectValidationResultGdcTimeElParam extends ProjectValidationResu
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

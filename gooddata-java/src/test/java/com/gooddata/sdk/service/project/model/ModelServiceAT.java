@@ -5,8 +5,8 @@
  */
 package com.gooddata.sdk.service.project.model;
 
-import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.model.project.model.ModelDiff;
+import com.gooddata.sdk.service.AbstractGoodDataAT;
 import org.testng.annotations.Test;
 
 import java.io.InputStreamReader;
@@ -29,4 +29,3 @@ public class ModelServiceAT extends AbstractGoodDataAT {
 
 
 }
-

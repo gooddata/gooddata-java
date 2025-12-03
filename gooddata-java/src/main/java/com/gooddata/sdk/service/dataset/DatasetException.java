@@ -37,6 +37,7 @@ public class DatasetException extends GoodDataException {
 
     /**
      * Get datasets.
+     *
      * @return dataset names
      */
     public Collection<String> getDatasets() {
@@ -44,4 +45,3 @@ public class DatasetException extends GoodDataException {
     }
 
 }
-

@@ -75,4 +75,3 @@ class AbsoluteDateFilterTest extends Specification {
         EqualsVerifier.forClass(AbsoluteDateFilter).usingGetClass().verify()
     }
 }
-

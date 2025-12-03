@@ -36,18 +36,6 @@ public class Projects extends Page<Project> {
 
     static final String ROOT_NODE = "projects";
 
-    static class Deserializer extends PageDeserializer<Projects, Project> {
-
-        protected Deserializer() {
-            super(Project.class);
-        }
-
-        @Override
-        protected Projects createPage(final List<Project> items, final Paging paging, final Map<String, String> links) {
-            return new Projects(items, paging);
-        }
-    }
-
     public Projects(List<Project> items, Paging paging) {
         super(items, paging);
     }
@@ -67,5 +55,16 @@ public class Projects extends Page<Project> {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 
-}
+    static class Deserializer extends PageDeserializer<Projects, Project> {
 
+        protected Deserializer() {
+            super(Project.class);
+        }
+
+        @Override
+        protected Projects createPage(final List<Project> items, final Paging paging, final Map<String, String> links) {
+            return new Projects(items, paging);
+        }
+    }
+
+}

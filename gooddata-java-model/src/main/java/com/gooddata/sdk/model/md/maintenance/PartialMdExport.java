@@ -55,8 +55,8 @@ public class PartialMdExport {
      * Creates new PartialMdExport. At least one uri should be given.
      *
      * @param exportAttributeProperties whether to add necessary data to be able to clone attribute properties
-     * @param crossDataCenterExport whether export should be usable in any Data Center
-     * @param mdObjectsUris list of uris to metadata objects which should be exported
+     * @param crossDataCenterExport     whether export should be usable in any Data Center
+     * @param mdObjectsUris             list of uris to metadata objects which should be exported
      */
     public PartialMdExport(boolean exportAttributeProperties, boolean crossDataCenterExport, String... mdObjectsUris) {
         this(exportAttributeProperties, crossDataCenterExport, new HashSet<>(asList(mdObjectsUris)));
@@ -66,8 +66,8 @@ public class PartialMdExport {
      * Creates new PartialMdExport.  At least one uri should be given.
      *
      * @param exportAttributeProperties whether to add necessary data to be able to clone attribute properties
-     * @param crossDataCenterExport whether export should be usable in any Data Center
-     * @param mdObjectsUris list of uris to metadata objects which should be exported
+     * @param crossDataCenterExport     whether export should be usable in any Data Center
+     * @param mdObjectsUris             list of uris to metadata objects which should be exported
      */
     public PartialMdExport(boolean exportAttributeProperties, boolean crossDataCenterExport, Collection<String> mdObjectsUris) {
         notEmpty(mdObjectsUris, "uris");
@@ -93,4 +93,3 @@ public class PartialMdExport {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

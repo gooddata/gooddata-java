@@ -1,32 +1,32 @@
 {
-  "dataUploads" : {
-    "uploads" : [
+  "dataUploads": {
+    "uploads": [
       {
-        "dataUpload" : {
-          "msg" : "some upload message 1",
-          "etlInterface" : "/gdc/md/project/obj/123",
-          "progress" : "0.500",
-          "status" : "RUNNING",
-          "file" : "upload_info.json",
-          "fullUpload" : 0,
-          "uri" : "/gdc/md/project/data/upload/234",
-          "createdAt" : "2016-04-08 13:55:21",
-          "fileSize" : 131501,
-          "processedAt" : "2016-04-08 13:55:25"
+        "dataUpload": {
+          "msg": "some upload message 1",
+          "etlInterface": "/gdc/md/project/obj/123",
+          "progress": "0.500",
+          "status": "RUNNING",
+          "file": "upload_info.json",
+          "fullUpload": 0,
+          "uri": "/gdc/md/project/data/upload/234",
+          "createdAt": "2016-04-08 13:55:21",
+          "fileSize": 131501,
+          "processedAt": "2016-04-08 13:55:25"
         }
       },
       {
-        "dataUpload" : {
-          "msg" : "some upload message",
-          "etlInterface" : "/gdc/md/project/obj/123",
-          "progress" : "1.000",
-          "status" : "OK",
-          "file" : "upload_info.json",
-          "fullUpload" : 0,
-          "uri" : "/gdc/md/project/data/upload/123",
-          "createdAt" : "2016-04-08 12:55:21",
-          "fileSize" : 130501,
-          "processedAt" : "2016-04-08 12:55:25"
+        "dataUpload": {
+          "msg": "some upload message",
+          "etlInterface": "/gdc/md/project/obj/123",
+          "progress": "1.000",
+          "status": "OK",
+          "file": "upload_info.json",
+          "fullUpload": 0,
+          "uri": "/gdc/md/project/data/upload/123",
+          "createdAt": "2016-04-08 12:55:21",
+          "fileSize": 130501,
+          "processedAt": "2016-04-08 12:55:25"
         }
       }
     ]

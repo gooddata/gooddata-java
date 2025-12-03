@@ -22,13 +22,13 @@ class DashboardFilterContextTest extends Specification {
         then:
         context
         context.title == 'filterContext'
-        context.filters*.class == [ DashboardDateFilter, DashboardAttributeFilter ]
+        context.filters*.class == [DashboardDateFilter, DashboardAttributeFilter]
     }
 
     def "creates new and serializes to JSON"() {
         given:
         def dateFilter = DashboardDateFilter.relativeDateFilter(-1, -1, 'GDC.time.year', null)
-        def attributeFilter = new DashboardAttributeFilter('/df/1', false, [ '/elem/1' ])
+        def attributeFilter = new DashboardAttributeFilter('/df/1', false, ['/elem/1'])
 
         when:
         def context = new DashboardFilterContext([dateFilter, attributeFilter])
@@ -37,4 +37,3 @@ class DashboardFilterContextTest extends Specification {
         that context, jsonEquals(readStringFromResource('/md/dashboard/filter/filterContext-new.json'))
     }
 }
-

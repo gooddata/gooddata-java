@@ -3,7 +3,7 @@
     "attribute": {
       "uri": "/uriValue",
       "alias": "aliasValue",
-      "totals" : []
+      "totals": []
     }
   },
   "metricGroup"

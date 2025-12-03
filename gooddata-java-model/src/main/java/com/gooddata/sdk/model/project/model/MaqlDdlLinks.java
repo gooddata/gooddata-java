@@ -5,11 +5,11 @@
  */
 package com.gooddata.sdk.model.project.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.gooddata.sdk.model.gdc.LinkEntries;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.sdk.model.gdc.LinkEntries;
 
 import java.util.List;
 
@@ -38,4 +38,3 @@ class MaqlDdlLinks extends LinkEntries {
         return null;
     }
 }
-

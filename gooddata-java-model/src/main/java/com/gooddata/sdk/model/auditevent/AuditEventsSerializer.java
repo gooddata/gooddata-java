@@ -13,4 +13,3 @@ class AuditEventsSerializer extends PageSerializer {
         super(AuditEvents.ROOT_NODE);
     }
 }
-

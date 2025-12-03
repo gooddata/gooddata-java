@@ -5,13 +5,13 @@
  */
 package com.gooddata.sdk.model.project;
 
-import com.gooddata.sdk.common.util.BooleanDeserializer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.gooddata.sdk.common.util.BooleanDeserializer;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.LinkedList;
@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Results of project validation.
- *
+ * <p>
  * Deserialization only.
  */
 @JsonTypeName("projectValidateResult")
@@ -57,6 +57,7 @@ public class ProjectValidationResults {
 
     /**
      * True if validation found some error
+     *
      * @return true in case of validation error, false otherwise
      */
     public boolean isError() {
@@ -65,6 +66,7 @@ public class ProjectValidationResults {
 
     /**
      * True in case some part of validation crashed (not executed at all)
+     *
      * @return true if validation crashed, false otherwise
      */
     public boolean isFatalError() {
@@ -73,6 +75,7 @@ public class ProjectValidationResults {
 
     /**
      * True if some warning was found during validation.
+     *
      * @return true if some warning was found during validation, false otherwise
      */
     public boolean isWarning() {
@@ -81,15 +84,17 @@ public class ProjectValidationResults {
 
     /**
      * True if no warning or error is in the validation results.
+     *
      * @return true if no warning or error is in the validation results, false otherwise
      */
     public boolean isValid() {
-        return ! (error || fatalError || warning);
+        return !(error || fatalError || warning);
     }
 
     /**
      * Get validation results, describing output of all validations executed.
      * Can return empty list, in case the validation had no error or warning (is valid)-
+     *
      * @return validation results list
      */
     public List<ProjectValidationResult> getResults() {
@@ -101,4 +106,3 @@ public class ProjectValidationResults {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

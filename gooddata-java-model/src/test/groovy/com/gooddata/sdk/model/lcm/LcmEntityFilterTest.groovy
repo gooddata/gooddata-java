@@ -23,4 +23,3 @@ class LcmEntityFilterTest extends Specification {
                 .asQueryParams() == [dataProduct: ['dp'], segment: ['seg'], client: ['c']]
     }
 }
-

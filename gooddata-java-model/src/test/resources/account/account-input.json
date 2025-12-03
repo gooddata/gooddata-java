@@ -1,8 +1,12 @@
 {
-    "accountSetting" : {
-        "firstName" : "Blah",
-        "lastName" : "Muhehe",
-        "ipWhitelist" : ["1.2.3.4/32"],
-        "authenticationModes" : ["SSO"]
-    }
+  "accountSetting": {
+    "firstName": "Blah",
+    "lastName": "Muhehe",
+    "ipWhitelist": [
+      "1.2.3.4/32"
+    ],
+    "authenticationModes": [
+      "SSO"
+    ]
+  }
 }

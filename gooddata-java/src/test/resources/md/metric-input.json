@@ -1,15 +1,15 @@
 {
-    "metric" : {
-        "content" : {
-            "expression" : "SELECT SUM([/gdc/md/PROJECT_ID/obj/EXPR_ID])",
-            "format" : "FORMAT"
-        },
-        "meta" : {
-            "title" : "Person Name",
-	        "deprecated" : "0",
-	        "locked": 0,
-	        "unlisted": 0,
-            "uri": "/gdc/md/PROJECT_ID/obj/ID"
-        }
+  "metric": {
+    "content": {
+      "expression": "SELECT SUM([/gdc/md/PROJECT_ID/obj/EXPR_ID])",
+      "format": "FORMAT"
+    },
+    "meta": {
+      "title": "Person Name",
+      "deprecated": "0",
+      "locked": 0,
+      "unlisted": 0,
+      "uri": "/gdc/md/PROJECT_ID/obj/ID"
     }
+  }
 }

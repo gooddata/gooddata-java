@@ -41,7 +41,7 @@ class GoodDataSettingsTest extends Specification {
         settings."$name" == 53000
 
         where:
-        name << [ 'connectionTimeout', 'connectionRequestTimeout', 'socketTimeout', 'pollSleep' ]
+        name << ['connectionTimeout', 'connectionRequestTimeout', 'socketTimeout', 'pollSleep']
     }
 
     @Unroll
@@ -90,4 +90,3 @@ class GoodDataSettingsTest extends Specification {
                 .verify()
     }
 }
-

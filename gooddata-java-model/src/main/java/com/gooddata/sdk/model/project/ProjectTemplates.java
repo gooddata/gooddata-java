@@ -37,4 +37,3 @@ public class ProjectTemplates {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

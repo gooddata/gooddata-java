@@ -61,4 +61,3 @@ public class LcmEntities extends Page<LcmEntity> {
         }
     }
 }
-

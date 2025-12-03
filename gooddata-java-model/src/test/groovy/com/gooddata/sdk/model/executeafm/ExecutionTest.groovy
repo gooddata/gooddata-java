@@ -5,20 +5,9 @@
  */
 package com.gooddata.sdk.model.executeafm
 
-import com.gooddata.sdk.model.executeafm.afm.Afm
-import com.gooddata.sdk.model.executeafm.afm.AttributeItem
+import com.gooddata.sdk.model.executeafm.afm.*
 import com.gooddata.sdk.model.executeafm.afm.filter.ExpressionFilter
-import com.gooddata.sdk.model.executeafm.afm.MeasureItem
-import com.gooddata.sdk.model.executeafm.afm.NativeTotalItem
-import com.gooddata.sdk.model.executeafm.afm.SimpleMeasureDefinition
-import com.gooddata.sdk.model.executeafm.resultspec.AttributeLocatorItem
-import com.gooddata.sdk.model.executeafm.resultspec.AttributeSortItem
-import com.gooddata.sdk.model.executeafm.resultspec.Dimension
-import com.gooddata.sdk.model.executeafm.resultspec.Direction
-import com.gooddata.sdk.model.executeafm.resultspec.MeasureLocatorItem
-import com.gooddata.sdk.model.executeafm.resultspec.MeasureSortItem
-import com.gooddata.sdk.model.executeafm.resultspec.ResultSpec
-import com.gooddata.sdk.model.executeafm.resultspec.TotalItem
+import com.gooddata.sdk.model.executeafm.resultspec.*
 import com.gooddata.sdk.model.md.report.Total
 import spock.lang.Specification
 
@@ -100,4 +89,3 @@ class ExecutionTest extends Specification {
         computation.resultSpec == spec
     }
 }
-

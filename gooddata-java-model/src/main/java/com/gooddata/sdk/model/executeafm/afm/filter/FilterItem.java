@@ -25,6 +25,7 @@ public interface FilterItem extends CompatibilityFilter, ExtendedFilter {
 
     /**
      * Get qualifier of {@link Obj} to which the filter relates.
+     *
      * @return filtered object qualifier
      */
     @JsonIgnore
@@ -32,9 +33,9 @@ public interface FilterItem extends CompatibilityFilter, ExtendedFilter {
 
     /**
      * Copy itself using given uri qualifier
+     *
      * @param qualifier qualifier to use for the new filter
      * @return self copy with given qualifier
      */
     FilterItem withObjUriQualifier(UriObjQualifier qualifier);
 }
-

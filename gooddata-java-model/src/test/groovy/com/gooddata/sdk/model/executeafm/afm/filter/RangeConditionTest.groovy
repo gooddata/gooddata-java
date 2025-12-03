@@ -116,4 +116,3 @@ class RangeConditionTest extends Specification {
         EqualsVerifier.forClass(RangeCondition).usingGetClass().suppress(Warning.BIGDECIMAL_EQUALITY).verify()
     }
 }
-

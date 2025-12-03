@@ -76,8 +76,8 @@ class ResultSpecTest extends Specification {
     def "should add items"() {
         when:
         def resultSpec = new ResultSpec()
-            .addDimension(new Dimension([]))
-            .addSort(new MeasureSortItem(Direction.ASC))
+                .addDimension(new Dimension([]))
+                .addSort(new MeasureSortItem(Direction.ASC))
 
         then:
         with(resultSpec) {
@@ -85,4 +85,3 @@ class ResultSpecTest extends Specification {
         }
     }
 }
-

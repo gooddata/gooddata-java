@@ -37,13 +37,13 @@ public class Upload {
     private final ZonedDateTime processedAt;
 
     Upload(@JsonProperty("msg") String message,
-            @JsonProperty("progress") Double progress,
-            @JsonProperty("status") String status,
-            @JsonProperty("fullUpload") @JsonDeserialize(using = BooleanDeserializer.class) Boolean fullUpload,
-            @JsonProperty("uri") String uri,
-            @JsonProperty("createdAt") @JsonDeserialize(using = GDZonedDateTimeDeserializer.class) ZonedDateTime createdAt,
-            @JsonProperty("fileSize") Integer size,
-            @JsonProperty("processedAt") @JsonDeserialize(using = GDZonedDateTimeDeserializer.class) ZonedDateTime processedAt) {
+           @JsonProperty("progress") Double progress,
+           @JsonProperty("status") String status,
+           @JsonProperty("fullUpload") @JsonDeserialize(using = BooleanDeserializer.class) Boolean fullUpload,
+           @JsonProperty("uri") String uri,
+           @JsonProperty("createdAt") @JsonDeserialize(using = GDZonedDateTimeDeserializer.class) ZonedDateTime createdAt,
+           @JsonProperty("fileSize") Integer size,
+           @JsonProperty("processedAt") @JsonDeserialize(using = GDZonedDateTimeDeserializer.class) ZonedDateTime processedAt) {
 
         this.uri = uri;
         this.status = status;
@@ -127,4 +127,3 @@ public class Upload {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

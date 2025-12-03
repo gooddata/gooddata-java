@@ -40,4 +40,3 @@ class TotalItemTest extends Specification {
         EqualsVerifier.forClass(TotalItem).usingGetClass().verify()
     }
 }
-

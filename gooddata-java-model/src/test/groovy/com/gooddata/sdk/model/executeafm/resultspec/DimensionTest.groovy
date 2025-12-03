@@ -30,7 +30,7 @@ class DimensionTest extends Specification {
         expect:
         that new Dimension('i1', 'i2')
                 .addTotal(TOTAL),
-                    jsonEquals(resource(DIMENSION_FULL_JSON))
+                jsonEquals(resource(DIMENSION_FULL_JSON))
     }
 
     def "should deserialize"() {
@@ -59,7 +59,7 @@ class DimensionTest extends Specification {
 
         when:
         dimension.addTotal(TOTAL)
-            .addTotal(new TotalItem('m1', Total.AVG, 'i2'))
+                .addTotal(new TotalItem('m1', Total.AVG, 'i2'))
 
         then:
         dimension.totals.size() == 2
@@ -74,4 +74,3 @@ class DimensionTest extends Specification {
     }
 
 }
-

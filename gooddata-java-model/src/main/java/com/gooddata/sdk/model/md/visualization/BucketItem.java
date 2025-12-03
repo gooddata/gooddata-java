@@ -20,6 +20,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public interface BucketItem {}
-
+public interface BucketItem {
+}
 

@@ -20,4 +20,3 @@ public enum Aggregation {
         return name().toLowerCase();
     }
 }
-

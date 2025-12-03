@@ -31,4 +31,3 @@ class AttributeFilterReferenceTest extends Specification {
         that reference, jsonEquals(readStringFromResource('/md/dashboard/filter/attributeFilterReference.json'))
     }
 }
-

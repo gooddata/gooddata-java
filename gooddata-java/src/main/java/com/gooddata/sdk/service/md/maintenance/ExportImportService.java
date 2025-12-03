@@ -9,14 +9,24 @@ import com.gooddata.sdk.common.GoodDataRestException;
 import com.gooddata.sdk.model.dataset.TaskState;
 import com.gooddata.sdk.model.gdc.TaskStatus;
 import com.gooddata.sdk.model.gdc.UriResponse;
-import com.gooddata.sdk.model.md.maintenance.*;
+import com.gooddata.sdk.model.md.maintenance.ExportProject;
+import com.gooddata.sdk.model.md.maintenance.ExportProjectArtifact;
+import com.gooddata.sdk.model.md.maintenance.ExportProjectToken;
+import com.gooddata.sdk.model.md.maintenance.PartialMdArtifact;
+import com.gooddata.sdk.model.md.maintenance.PartialMdExport;
+import com.gooddata.sdk.model.md.maintenance.PartialMdExportToken;
 import com.gooddata.sdk.model.project.Project;
-import com.gooddata.sdk.service.*;
+import com.gooddata.sdk.service.AbstractPollHandler;
+import com.gooddata.sdk.service.AbstractService;
+import com.gooddata.sdk.service.FutureResult;
+import com.gooddata.sdk.service.GoodDataSettings;
+import com.gooddata.sdk.service.PollResult;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static com.gooddata.sdk.common.util.Validate.notNull;
 import static com.gooddata.sdk.common.util.Validate.notNullState;
@@ -35,7 +45,7 @@ public class ExportImportService extends AbstractService {
      * Exports partial metadata from project and returns token identifying this export
      *
      * @param project project from which metadata should be exported
-     * @param export export configuration to execute
+     * @param export  export configuration to execute
      * @return {@link FutureResult} of the task containing token identifying partial export after the task is completed
      * @throws ExportImportException when export resource call fails, polling on export status fails or export status is ERROR
      */
@@ -52,7 +62,7 @@ public class ExportImportService extends AbstractService {
         }
 
         return new PollResult<>(this, new AbstractPollHandler<TaskStatus, PartialMdExportToken>(
-                notNullState(partialMdArtifact, "partial export response").getStatusUri(),
+                notNullState(Objects.requireNonNull(partialMdArtifact), "partial export response").getStatusUri(),
                 TaskStatus.class, PartialMdExportToken.class) {
             @Override
             public void handlePollResult(TaskStatus pollResult) {
@@ -72,7 +82,7 @@ public class ExportImportService extends AbstractService {
     /**
      * Imports partial metadata to project based on given token
      *
-     * @param project project to which metadata should be imported
+     * @param project       project to which metadata should be imported
      * @param mdExportToken export token to be imported
      * @return {@link FutureResult} of the task
      * @throws ExportImportException when import resource call fails, polling on import status fails or import status is ERROR
@@ -90,7 +100,7 @@ public class ExportImportService extends AbstractService {
                     + "' with token '" + mdExportToken.getToken() + "'.", e);
         }
 
-        return new PollResult<>(this, new AbstractPollHandler<TaskStatus, Void>(notNullState(importResponse, "partial import response").getUri(),
+        return new PollResult<>(this, new AbstractPollHandler<TaskStatus, Void>(notNullState(Objects.requireNonNull(importResponse), "partial import response").getUri(),
                 TaskStatus.class, Void.class) {
             @Override
             public void handlePollResult(TaskStatus pollResult) {
@@ -131,7 +141,7 @@ public class ExportImportService extends AbstractService {
         }
 
         return new PollResult<>(this, new AbstractPollHandler<TaskState, ExportProjectToken>(
-                notNullState(exportProjectArtifact, "export response").getStatusUri(),
+                notNullState(Objects.requireNonNull(exportProjectArtifact), "export response").getStatusUri(),
                 TaskState.class, ExportProjectToken.class) {
 
             @Override
@@ -163,7 +173,7 @@ public class ExportImportService extends AbstractService {
     /**
      * Imports complete project based on given token
      *
-     * @param project project to which metadata should be imported
+     * @param project     project to which metadata should be imported
      * @param exportToken export token to be imported
      * @return {@link FutureResult} of the task
      * @throws ExportImportException when import resource call fails, polling on import status fails or import status is ERROR
@@ -183,7 +193,7 @@ public class ExportImportService extends AbstractService {
         }
 
         return new PollResult<>(this, new AbstractPollHandler<TaskState, Void>(
-                notNullState(importResponse, "project import response").getUri(),
+                notNullState(Objects.requireNonNull(importResponse), "project import response").getUri(),
                 TaskState.class, Void.class) {
             @Override
             public void handlePollResult(TaskState pollResult) {
@@ -211,4 +221,3 @@ public class ExportImportService extends AbstractService {
         });
     }
 }
-

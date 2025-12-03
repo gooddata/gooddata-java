@@ -35,4 +35,3 @@ public class MeasureLocatorItem implements LocatorItem {
         return measureIdentifier;
     }
 }
-

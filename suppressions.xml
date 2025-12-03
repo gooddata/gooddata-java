@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-   <suppress>
-      <notes><![CDATA[
+    <suppress>
+        <notes><![CDATA[
       Exclude **/target/surefire-reports/**,**/target/failsafe-reports/** from dependency check
       ]]></notes>
-      <filePath regex="true">^\/gooddata-java\/[^\/]+\/target\/(failsafe|surefire)-reports\/.+$</filePath>
-      <vulnerabilityName regex="true">.*</vulnerabilityName>
-   </suppress>
+        <filePath regex="true">^\/gooddata-java\/[^\/]+\/target\/(failsafe|surefire)-reports\/.+$</filePath>
+        <vulnerabilityName regex="true">.*</vulnerabilityName>
+    </suppress>
 </suppressions>
 

@@ -39,4 +39,3 @@ class AttributeInHeaderTest extends Specification {
         EqualsVerifier.forClass(AttributeInHeader).usingGetClass().verify()
     }
 }
-

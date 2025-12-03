@@ -24,4 +24,3 @@ public class WarehouseUserNotFoundException extends GoodDataException {
         return userUri;
     }
 }
-

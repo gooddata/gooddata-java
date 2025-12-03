@@ -32,11 +32,8 @@ public abstract class DerivedMeasureDefinition implements MeasureDefinition {
     /**
      * Create a new instance of {@link DerivedMeasureDefinition}.
      *
-     * @param measureIdentifier
-     *         The local identifier of the master measure this derived measure refers to. The parameter must not be null.
-     *
-     * @throws IllegalArgumentException
-     *         Thrown when required parameter is null.
+     * @param measureIdentifier The local identifier of the master measure this derived measure refers to. The parameter must not be null.
+     * @throws IllegalArgumentException Thrown when required parameter is null.
      */
     DerivedMeasureDefinition(final String measureIdentifier) {
         this.measureIdentifier = notNull(measureIdentifier, "measureIdentifier");
@@ -65,4 +62,3 @@ public abstract class DerivedMeasureDefinition implements MeasureDefinition {
         return Objects.hash(measureIdentifier);
     }
 }
-

@@ -21,10 +21,10 @@ public interface ObjQualifier extends Qualifier {
 
     /**
      * Returns the qualifier in the form of uri. Default implementation throws {@link UnsupportedOperationException}
+     *
      * @return uri qualifier
      */
     default String getUri() {
         throw new UnsupportedOperationException("This qualifier has no URI");
     }
 }
-

@@ -23,4 +23,3 @@ public class ExportProjectArtifact extends PartialMdArtifact {
         super(status, token);
     }
 }
-

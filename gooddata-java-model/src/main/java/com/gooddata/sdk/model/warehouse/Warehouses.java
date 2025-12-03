@@ -5,13 +5,13 @@
  */
 package com.gooddata.sdk.model.warehouse;
 
-import com.gooddata.sdk.common.collections.Page;
-import com.gooddata.sdk.common.collections.Paging;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gooddata.sdk.common.collections.Page;
+import com.gooddata.sdk.common.collections.Paging;
 
 import java.util.List;
 import java.util.Map;
@@ -39,4 +39,3 @@ public class Warehouses extends Page<Warehouse> {
     }
 
 }
-

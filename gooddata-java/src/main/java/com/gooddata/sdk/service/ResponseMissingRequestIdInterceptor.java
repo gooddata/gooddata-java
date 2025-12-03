@@ -5,14 +5,15 @@
  */
 package com.gooddata.sdk.service;
 
-import org.apache.http.Header;
-import org.apache.http.HttpException;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpResponseInterceptor;
-import org.apache.http.annotation.Contract;
-import org.apache.http.annotation.ThreadingBehavior;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.protocol.HttpCoreContext;
+import org.apache.hc.core5.annotation.Contract;
+import org.apache.hc.core5.annotation.ThreadingBehavior;
+import org.apache.hc.core5.http.EntityDetails;
+import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.HttpException;
+import org.apache.hc.core5.http.HttpResponse;
+import org.apache.hc.core5.http.HttpResponseInterceptor;
+import org.apache.hc.core5.http.protocol.HttpContext;
+import org.apache.hc.core5.http.protocol.HttpCoreContext;
 
 import java.io.IOException;
 
@@ -26,13 +27,12 @@ import static com.gooddata.sdk.common.gdc.Header.GDC_REQUEST_ID;
 public class ResponseMissingRequestIdInterceptor implements HttpResponseInterceptor {
 
     @Override
-    public void process(final HttpResponse response, final HttpContext context) throws HttpException, IOException {
+    public void process(final HttpResponse response, final EntityDetails entityDetails, final HttpContext context) throws HttpException, IOException {
 
         if (response.getFirstHeader(GDC_REQUEST_ID) == null) {
-            final HttpCoreContext coreContext = HttpCoreContext.adapt(context);
+            final HttpCoreContext coreContext = HttpCoreContext.cast(context);
             final Header requestIdHeader = coreContext.getRequest().getFirstHeader(GDC_REQUEST_ID);
             response.setHeader(GDC_REQUEST_ID, requestIdHeader.getValue());
         }
     }
 }
-

@@ -73,4 +73,3 @@ public class IdentifiersAndUris {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

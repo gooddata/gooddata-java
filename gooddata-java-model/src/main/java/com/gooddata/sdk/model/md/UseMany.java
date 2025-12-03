@@ -38,4 +38,3 @@ public class UseMany {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

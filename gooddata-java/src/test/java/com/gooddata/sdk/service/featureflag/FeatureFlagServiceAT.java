@@ -78,7 +78,7 @@ public class FeatureFlagServiceAT extends AbstractGoodDataAT {
         // enable again
         featureFlag.setEnabled(true);
         final ProjectFeatureFlag enabledFlag = gd.getFeatureFlagService().updateProjectFeatureFlag(featureFlag);
-        checkProjectFeatureFlag(enabledFlag, PROJECT_FEATURE_FLAG , true);
+        checkProjectFeatureFlag(enabledFlag, PROJECT_FEATURE_FLAG, true);
     }
 
     @Test(groups = "featureFlag", dependsOnMethods = "createProjectFeatureFlag")
@@ -114,4 +114,3 @@ public class FeatureFlagServiceAT extends AbstractGoodDataAT {
     }
 
 }
-

@@ -1,14 +1,14 @@
 {
-  "dataSet" : {
-    "content" : {
+  "dataSet": {
+    "content": {
       "ties": [],
       "facts": [],
       "dataLoadingColumns": [],
       "attributes": [],
       "hasUploadConfiguration": "0"
     },
-    "meta" : {
-      "title" : "Dataset"
+    "meta": {
+      "title": "Dataset"
     }
   }
 }

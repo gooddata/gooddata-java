@@ -27,12 +27,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ExportImportServiceIT extends AbstractGoodDataIT {
 
-    private Project project;
-
     private static final UriTemplate PARTIAL_EXPORT_TEMPLATE = new UriTemplate(PartialMdExport.URI);
     private static final UriTemplate PARTIAL_TOKEN_TEMPLATE = new UriTemplate(PartialMdExportToken.URI);
     private static final UriTemplate FULL_EXPORT_TEMPLATE = new UriTemplate(ExportProject.URI);
     private static final UriTemplate FULL_TOKEN_TEMPLATE = new UriTemplate(ExportProjectToken.URI);
+    private Project project;
 
     @BeforeClass
     public void setUp() throws Exception {

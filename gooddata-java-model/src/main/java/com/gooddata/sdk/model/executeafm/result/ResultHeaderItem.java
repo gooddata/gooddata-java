@@ -40,4 +40,3 @@ public abstract class ResultHeaderItem {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

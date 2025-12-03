@@ -5,9 +5,6 @@
  */
 package com.gooddata.sdk.model.md;
 
-import static com.gooddata.sdk.common.util.Validate.notEmpty;
-import static com.gooddata.sdk.common.util.Validate.notNull;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -22,6 +19,9 @@ import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import java.io.IOException;
 import java.io.Serializable;
 
+import static com.gooddata.sdk.common.util.Validate.notEmpty;
+import static com.gooddata.sdk.common.util.Validate.notNull;
+
 /**
  * Internal representation of attribute sort field. Which can be either plain text value or structure pointing to display form.
  */
@@ -29,10 +29,9 @@ import java.io.Serializable;
 @JsonSerialize(using = AttributeSort.Serializer.class)
 class AttributeSort implements Serializable {
 
-    private static final long serialVersionUID = -7415504020870223701L;
     static final String PK = "pk";
     static final String BY_USED_DF = "byUsedDF";
-
+    private static final long serialVersionUID = -7415504020870223701L;
     private final String value;
     private final boolean linkType;
 
@@ -91,4 +90,3 @@ class AttributeSort implements Serializable {
         }
     }
 }
-

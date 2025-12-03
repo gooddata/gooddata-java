@@ -71,4 +71,3 @@ public class TaskStatus {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

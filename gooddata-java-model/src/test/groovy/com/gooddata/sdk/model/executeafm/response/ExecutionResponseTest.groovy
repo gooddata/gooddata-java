@@ -74,4 +74,3 @@ class ExecutionResponseTest extends Specification {
     }
 
 }
-

@@ -20,7 +20,8 @@ public class Usage {
 
     /**
      * Constructs object.
-     * @param uri object URI
+     *
+     * @param uri    object URI
      * @param usedBy using objects
      */
     public Usage(final String uri, final Collection<Entry> usedBy) {
@@ -41,4 +42,3 @@ public class Usage {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

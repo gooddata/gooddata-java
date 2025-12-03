@@ -20,8 +20,8 @@ public class ProcessExecutionTest {
 
     @Test
     public void testSerialization() throws Exception {
-        final Map<String,String> params = new HashMap<>();
-        final Map<String,String> hidden = new HashMap<>();
+        final Map<String, String> params = new HashMap<>();
+        final Map<String, String> hidden = new HashMap<>();
         params.put("PARAM1", "VALUE1");
         params.put("PARAM2", "VALUE2");
         hidden.put("HIDDEN_PARAM1", "SENSITIVE_VALUE1");

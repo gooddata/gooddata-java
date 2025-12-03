@@ -15,8 +15,9 @@ import org.testng.annotations.Test;
 import static com.gooddata.sdk.service.hierarchicalconfig.HierarchicalConfigService.PROJECT_CONFIG_ITEM_TEMPLATE;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.testng.Assert.fail;
 
 public class HierarchicalConfigServiceAT extends AbstractGoodDataAT {
@@ -101,4 +102,3 @@ public class HierarchicalConfigServiceAT extends AbstractGoodDataAT {
     }
 
 }
-

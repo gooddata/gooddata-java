@@ -5,9 +5,9 @@
  */
 package com.gooddata.sdk.service.account;
 
+import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.account.SeparatorSettings;
 import com.gooddata.sdk.service.AbstractGoodDataAT;
-import com.gooddata.sdk.model.account.Account;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
@@ -17,7 +17,9 @@ import static com.gooddata.sdk.model.account.Account.AuthenticationMode.PASSWORD
 import static com.gooddata.sdk.model.account.Account.AuthenticationMode.SSO;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * Account acceptance tests.
@@ -103,9 +105,9 @@ public class AccountServiceAT extends AbstractGoodDataAT {
         if (account != null) {
             try {
                 accountService.removeAccount(account);
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
     }
 
 }
-

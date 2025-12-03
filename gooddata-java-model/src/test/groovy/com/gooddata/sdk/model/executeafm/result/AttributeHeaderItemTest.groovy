@@ -32,4 +32,3 @@ class AttributeHeaderItemTest extends Specification {
         item.uri == '/gdc/md/FoodMartDemo/obj/124/elements?id=3200'
     }
 }
-

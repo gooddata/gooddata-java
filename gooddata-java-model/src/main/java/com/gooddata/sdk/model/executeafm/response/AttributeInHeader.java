@@ -23,8 +23,9 @@ public class AttributeInHeader {
 
     /**
      * Creates new instance
-     * @param name attribute's title
-     * @param uri attribute's uri
+     *
+     * @param name       attribute's title
+     * @param uri        attribute's uri
      * @param identifier attribute's identifier
      */
     @JsonCreator
@@ -82,4 +83,3 @@ public class AttributeInHeader {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

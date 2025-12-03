@@ -19,4 +19,3 @@ public class DiffRequestTest {
         assertThat(valueAsString, is("{\"diffRequest\":{\"targetModel\":{\"projectModel\":\"xxx\"}}}"));
     }
 }
-

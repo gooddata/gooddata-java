@@ -44,4 +44,3 @@ class LocalIdentifierQualifierTest extends Specification {
         that deserialized, jsonEquals(qualifier)
     }
 }
-

@@ -35,56 +35,59 @@ class ExportServiceIT extends GoodDataITBase<ExportService> {
 
     private static final String RESPONSE = "abc";
 
-    @Shared ReportDefinition DEFINITION = readObjectFromResource('/md/report/gridReportDefinition.json', ReportDefinition)
-    @Shared Report REPORT = readObjectFromResource('/md/report/report.json', Report)
-    @Shared ProjectDashboard DASHBOARD = readObjectFromResource('/md/projectDashboard.json', ProjectDashboard)
+    @Shared
+    ReportDefinition DEFINITION = readObjectFromResource('/md/report/gridReportDefinition.json', ReportDefinition)
+    @Shared
+    Report REPORT = readObjectFromResource('/md/report/report.json', Report)
+    @Shared
+    ProjectDashboard DASHBOARD = readObjectFromResource('/md/projectDashboard.json', ProjectDashboard)
 
     def setup() {
         onRequest()
                 .havingPathEqualTo(ReportRequest.URI)
                 .havingMethodEqualTo('POST')
-            .respond()
+                .respond()
                 .withBody('{}')
         onRequest()
                 .havingPathEqualTo(ExportService.EXPORTING_URI)
                 .havingMethodEqualTo('POST')
-            .respond()
+                .respond()
                 .withStatus(202)
                 .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse("http://localhost:${port()}$EXPORT_POLL_URI")))
         onRequest()
                 .havingPathEqualTo(EXPORT_POLL_URI)
                 .havingMethodEqualTo('GET')
-            .respond()
+                .respond()
                 .withStatus(202)
-            .thenRespond()
+                .thenRespond()
                 .withStatus(200)
                 .withBody(RESPONSE)
         ;
         onRequest()
                 .havingPathEqualTo(CLIENT_EXPORT)
                 .havingMethodEqualTo('POST')
-            .respond()
+                .respond()
                 .withBody(OBJECT_MAPPER.writeValueAsString(new AsyncTask("http://localhost:${port()}$CLIENT_EXPORT_POLL")))
         onRequest()
                 .havingPathEqualTo(CLIENT_EXPORT_POLL)
                 .havingMethodEqualTo('GET')
-            .respond()
+                .respond()
                 .withStatus(202)
-            .thenRespond()
+                .thenRespond()
                 .withStatus(200)
                 .withBody(RESPONSE)
         ;
         onRequest()
                 .havingPathEqualTo(RAW_EXPORT)
                 .havingMethodEqualTo('POST')
-            .respond()
+                .respond()
                 .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse("http://localhost:${port()}$RAW_EXPORT_POLL")))
         onRequest()
                 .havingPathEqualTo(RAW_EXPORT_POLL)
                 .havingMethodEqualTo('GET')
                 .respond()
                 .withStatus(202)
-            .thenRespond()
+                .thenRespond()
                 .withStatus(200)
                 .withBody(RESPONSE)
     }
@@ -109,7 +112,7 @@ class ExportServiceIT extends GoodDataITBase<ExportService> {
         onRequest()
                 .havingPathEqualTo(EXPORT_POLL_URI)
                 .havingMethodEqualTo('GET')
-            .respond()
+                .respond()
                 .withStatus(status)
 
         when:
@@ -139,7 +142,7 @@ class ExportServiceIT extends GoodDataITBase<ExportService> {
         onRequest()
                 .havingPathEqualTo(path)
                 .havingMethodEqualTo(method)
-            .respond()
+                .respond()
                 .withStatus(400)
 
         when:
@@ -168,7 +171,7 @@ class ExportServiceIT extends GoodDataITBase<ExportService> {
         onRequest()
                 .havingPathEqualTo(path)
                 .havingMethodEqualTo(method)
-            .respond()
+                .respond()
                 .withStatus(status)
 
         when:
@@ -190,4 +193,3 @@ class ExportServiceIT extends GoodDataITBase<ExportService> {
         return gd.exportService
     }
 }
-

@@ -26,8 +26,8 @@ public class TableTest {
         assertThat(table.getDBName(), is("d_zendesktickets_vehicleview"));
         assertThat(table.getActiveDataLoad(), is("/gdc/md/PROJECT_ID/obj/625412"));
         assertThat(table.getDataLoads(), hasItems(
-                                            "/gdc/md/PROJECT_ID/obj/625283",
-                                            "/gdc/md/PROJECT_ID/obj/625412"));
+                "/gdc/md/PROJECT_ID/obj/625283",
+                "/gdc/md/PROJECT_ID/obj/625412"));
     }
 
     @Test

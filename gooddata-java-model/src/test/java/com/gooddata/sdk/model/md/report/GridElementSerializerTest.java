@@ -26,6 +26,7 @@ public class GridElementSerializerTest {
     }
 
     @JsonSerialize(contentUsing = GridElementSerializer.class)
-    private static class GridElements extends ArrayList<GridElement> {}
+    private static class GridElements extends ArrayList<GridElement> {
+    }
 
 }

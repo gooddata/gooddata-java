@@ -5,9 +5,9 @@
  */
 package com.gooddata.sdk.service.auditevent;
 
-import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.common.collections.Page;
 import com.gooddata.sdk.model.auditevent.AuditEvent;
+import com.gooddata.sdk.service.AbstractGoodDataAT;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

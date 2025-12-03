@@ -100,4 +100,3 @@ class BucketTest extends Specification {
         EqualsVerifier.forClass(Bucket).usingGetClass().verify()
     }
 }
-

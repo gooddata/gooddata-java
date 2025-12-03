@@ -35,9 +35,10 @@ public class RetryableRestTemplate extends RestTemplate {
 
     /**
      * Create a new instance of the {@link RetryableRestTemplate}.
+     *
      * @param requestFactory HTTP request factory to use
-     * @param retryTemplate retry template
-     * @param retryStrategy retry strategy
+     * @param retryTemplate  retry template
+     * @param retryStrategy  retry strategy
      */
     public RetryableRestTemplate(ClientHttpRequestFactory requestFactory, RetryTemplate retryTemplate, RetryStrategy retryStrategy) {
         super(requestFactory);
@@ -46,28 +47,11 @@ public class RetryableRestTemplate extends RestTemplate {
         this.retryStrategy = retryStrategy;
     }
 
-    @Override
-    protected <T> T doExecute(URI url, HttpMethod method, RequestCallback requestCallback,
-                              ResponseExtractor<T> responseExtractor) throws RestClientException {
-        return retryTemplate.execute(context -> {
-            try {
-                return super.doExecute(url, method, requestCallback, responseExtractor);
-            } catch (GoodDataRestException e) {
-                if (!retryStrategy.retryAllowed(method.toString(), e.getStatusCode(), url)) {
-                    context.setExhaustedOnly();
-                } else {
-                    final int retryCount = context.getRetryCount();
-                    logger.info("{}call of {} {} failed, HTTP {} and will be retried, {} ", retryCount == 0 ? "" : retryCount + " ", method, url, e.getStatusCode(), e.getMessage());
-                }
-                throw e;
-            }
-        });
-    }
-
     /**
      * Creates new retryable REST template.
+     *
      * @param retrySettings retry settings
-     * @param factory request factory
+     * @param factory       request factory
      * @return retryable rest template
      */
     public static RestTemplate create(RetrySettings retrySettings, ClientHttpRequestFactory factory) {
@@ -93,5 +77,22 @@ public class RetryableRestTemplate extends RestTemplate {
 
         return new RetryableRestTemplate(factory, retryTemplate, new GetServerErrorRetryStrategy());
     }
-}
 
+    @Override
+    protected <T> T doExecute(URI url, HttpMethod method, RequestCallback requestCallback,
+                              ResponseExtractor<T> responseExtractor) throws RestClientException {
+        return retryTemplate.execute(context -> {
+            try {
+                return super.doExecute(url, method, requestCallback, responseExtractor);
+            } catch (GoodDataRestException e) {
+                if (!retryStrategy.retryAllowed(method.toString(), e.getStatusCode(), url)) {
+                    context.setExhaustedOnly();
+                } else {
+                    final int retryCount = context.getRetryCount();
+                    logger.info("{}call of {} {} failed, HTTP {} and will be retried, {} ", retryCount == 0 ? "" : retryCount + " ", method, url, e.getStatusCode(), e.getMessage());
+                }
+                throw e;
+            }
+        });
+    }
+}

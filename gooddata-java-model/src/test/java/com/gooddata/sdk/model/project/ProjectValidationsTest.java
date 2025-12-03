@@ -7,13 +7,21 @@ package com.gooddata.sdk.model.project;
 
 import org.testng.annotations.Test;
 
-import static com.gooddata.sdk.model.project.ProjectValidationType.*;
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.model.project.ProjectValidationType.INVALID_OBJECTS;
+import static com.gooddata.sdk.model.project.ProjectValidationType.LDM;
+import static com.gooddata.sdk.model.project.ProjectValidationType.METRIC_FILTER;
+import static com.gooddata.sdk.model.project.ProjectValidationType.PDM_ELEM;
+import static com.gooddata.sdk.model.project.ProjectValidationType.PDM_PK_FK_CONSISTENCY;
+import static com.gooddata.sdk.model.project.ProjectValidationType.PDM_TRANSITIVITY;
+import static com.gooddata.sdk.model.project.ProjectValidationType.PDM_VS_DWH;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class ProjectValidationsTest {
 

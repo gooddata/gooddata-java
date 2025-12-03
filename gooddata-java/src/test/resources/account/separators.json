@@ -1,9 +1,9 @@
 {
-  "separators" : {
-    "thousand" : "::",
-    "decimal" : "||",
-    "links" : {
-      "self" : "/gdc/account/profile/ID/settings/separators"
+  "separators": {
+    "thousand": "::",
+    "decimal": "||",
+    "links": {
+      "self": "/gdc/account/profile/ID/settings/separators"
     }
   }
 }

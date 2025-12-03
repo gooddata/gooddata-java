@@ -43,4 +43,3 @@ class CompatibilityFilterTest extends Specification {
         type = typeClass.simpleName
     }
 }
-

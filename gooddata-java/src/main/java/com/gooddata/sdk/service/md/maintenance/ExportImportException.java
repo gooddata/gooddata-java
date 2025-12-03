@@ -19,4 +19,3 @@ public class ExportImportException extends GoodDataException {
         super(message, cause);
     }
 }
-

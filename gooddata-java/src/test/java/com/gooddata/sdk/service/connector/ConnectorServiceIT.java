@@ -7,7 +7,13 @@ package com.gooddata.sdk.service.connector;
 
 import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.common.GoodDataRestException;
-import com.gooddata.sdk.model.connector.*;
+import com.gooddata.sdk.model.connector.ConnectorType;
+import com.gooddata.sdk.model.connector.Integration;
+import com.gooddata.sdk.model.connector.IntegrationProcessStatus;
+import com.gooddata.sdk.model.connector.ProcessStatus;
+import com.gooddata.sdk.model.connector.Reload;
+import com.gooddata.sdk.model.connector.Zendesk4ProcessExecution;
+import com.gooddata.sdk.model.connector.Zendesk4Settings;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.AbstractGoodDataIT;
@@ -17,13 +23,17 @@ import org.testng.annotations.Test;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.gooddata.sdk.common.util.ResourceUtils.OBJECT_MAPPER;
+import static com.gooddata.sdk.common.util.ResourceUtils.readFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
+import static com.gooddata.sdk.common.util.ResourceUtils.readStringFromResource;
 import static com.gooddata.sdk.model.connector.Status.Code.ERROR;
 import static com.gooddata.sdk.model.connector.Status.Code.SYNCHRONIZED;
-import static com.gooddata.sdk.common.util.ResourceUtils.*;
 import static net.jadler.Jadler.onRequest;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ConnectorServiceIT extends AbstractGoodDataIT {
@@ -43,19 +53,19 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     public void shouldCreateIntegration() {
         onRequest()
                 .havingPathEqualTo("/gdc/md/PROJECT_ID/templates")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/project/project-templates.json"));
 
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/connector/integration.json"));
 
         onRequest()
                 .havingMethodEqualTo("PUT")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/settings")
-            .respond()
+                .respond()
                 .withStatus(200);
 
         final Zendesk4Settings settings = new Zendesk4Settings("http://zendesk");
@@ -68,7 +78,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/connector/integration.json"));
 
         final Integration integration = connectors.getIntegration(project, ConnectorType.ZENDESK4);
@@ -80,7 +90,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
-            .respond()
+                .respond()
                 .withStatus(404);
 
         connectors.getIntegration(project, ConnectorType.ZENDESK4);
@@ -91,7 +101,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
-            .respond()
+                .respond()
                 .withStatus(500);
 
         connectors.getIntegration(project, ConnectorType.ZENDESK4);
@@ -102,7 +112,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("PUT")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/connector/integration.json"));
 
         final Integration integration = new Integration("/projectTemplates/template");
@@ -114,30 +124,30 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("PUT")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
-            .respond()
+                .respond()
                 .withStatus(404);
 
         final Integration integration = new Integration("/projectTemplates/template");
         connectors.updateIntegration(project, ConnectorType.ZENDESK4, integration);
     }
-    
+
     @Test
     public void shouldDeleteIntegration() {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
-           .respond()
+                .respond()
                 .withStatus(204);
-        
+
         connectors.deleteIntegration(project, ConnectorType.ZENDESK4);
     }
-    
+
     @Test(expectedExceptions = IntegrationNotFoundException.class)
     public void shouldFailDeleteIntegrationNotFound() {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
-          .respond()
+                .respond()
                 .withStatus(404);
 
         connectors.deleteIntegration(project, ConnectorType.ZENDESK4);
@@ -148,7 +158,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("DELETE")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration")
-            .respond()
+                .respond()
                 .withStatus(500);
 
         connectors.deleteIntegration(project, ConnectorType.ZENDESK4);
@@ -159,13 +169,13 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes")
-            .respond()
+                .respond()
                 .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")));
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/connector/process-status-scheduled.json"))
-            .thenRespond()
+                .thenRespond()
                 .withBody(readFromResource("/connector/process-status-finished.json"))
         ;
 
@@ -178,11 +188,11 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes")
-            .respond()
+                .respond()
                 .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")));
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")
-            .respond()
+                .respond()
                 .withStatus(400)
         ;
         connectors.executeProcess(project, new Zendesk4ProcessExecution()).get();
@@ -193,11 +203,11 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("POST")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes")
-            .respond()
+                .respond()
                 .withBody(OBJECT_MAPPER.writeValueAsString(new UriResponse("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")));
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/connector/process-status-error.json"));
 
         final ProcessStatus process = connectors.executeProcess(project, new Zendesk4ProcessExecution()).get();
@@ -208,9 +218,9 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     public void shouldGetProcessStatus() {
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/connector/process-status-scheduled.json"))
-            .thenRespond()
+                .thenRespond()
                 .withBody(readFromResource("/connector/process-status-finished.json"));
 
         final ProcessStatus process = connectors.getProcessStatus(runningProcess).get();
@@ -221,7 +231,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     public void shouldFailGetProcessStatusPolling() {
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID")
-            .respond()
+                .respond()
                 .withStatus(400);
 
         connectors.getProcessStatus(runningProcess).get();
@@ -231,7 +241,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     public void shouldFailGetProcessStatus() {
         onRequest()
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/connector/process-status-error.json"));
 
         final ProcessStatus process = connectors.getProcessStatus(runningProcess).get();
@@ -243,7 +253,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/settings")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/connector/settings-zendesk4.json"));
 
         final Zendesk4Settings zendesk4Settings = connectors.getZendesk4Settings(project);
@@ -254,7 +264,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     public void shouldGetSettingsNotFound() {
         onRequest()
                 .havingMethodEqualTo("GET")
-            .respond()
+                .respond()
                 .withStatus(404);
 
         connectors.getSettings(project, ConnectorType.ZENDESK4, Zendesk4Settings.class);
@@ -264,7 +274,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
     public void shouldUpdateSettingsNotFound() {
         onRequest()
                 .havingMethodEqualTo("GET")
-             .respond()
+                .respond()
                 .withStatus(404);
 
         connectors.updateSettings(project, new Zendesk4Settings("http://zendesk"));
@@ -313,7 +323,7 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
         onRequest()
                 .havingMethodEqualTo("GET")
                 .havingPathEqualTo("/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/reloads/21")
-            .respond()
+                .respond()
                 .withBody(readFromResource("/connector/reload.json"))
                 .withStatus(httpStatus);
 
@@ -341,4 +351,3 @@ public class ConnectorServiceIT extends AbstractGoodDataIT {
 
 
 }
-

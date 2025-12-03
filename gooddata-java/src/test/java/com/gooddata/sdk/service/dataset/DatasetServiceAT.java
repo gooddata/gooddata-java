@@ -5,10 +5,10 @@
  */
 package com.gooddata.sdk.service.dataset;
 
-import com.gooddata.sdk.service.AbstractGoodDataAT;
 import com.gooddata.sdk.model.dataset.DatasetManifest;
 import com.gooddata.sdk.model.dataset.Upload;
 import com.gooddata.sdk.model.dataset.UploadStatistics;
+import com.gooddata.sdk.service.AbstractGoodDataAT;
 import org.testng.annotations.Test;
 
 import java.util.Collection;
@@ -55,13 +55,13 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
     }
 
     @Test(groups = "dataset", dependsOnGroups = {"md", "datastore"})
-    public void loadDatasetFail(){
+    public void loadDatasetFail() {
         final DatasetService datasetService = gd.getDatasetService();
         final DatasetManifest manifest = datasetService.getDatasetManifest(project, "dataset.person");
         try {
             datasetService.loadDataset(project, manifest, readFromResource("/corruptedPerson.csv")).get();
             fail();
-        } catch (DatasetException ex){
+        } catch (DatasetException ex) {
             assertThat(ex.getMessage(), matchesPattern("Load datasets \\[dataset.person\\] failed: \\[" + FAILED_LOAD_PATTERN + "\\]"));
         }
     }
@@ -78,7 +78,7 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
         try {
             datasetService.loadDatasets(project, personManifest, cityManifest).get();
             fail();
-        } catch (DatasetException ex){
+        } catch (DatasetException ex) {
             assertThat(ex.getMessage(), matchesPattern("Load datasets \\[dataset.person, dataset.city\\] failed: \\[" + FAILED_LOAD_PATTERN + "\\]"));
         }
     }
@@ -107,4 +107,3 @@ public class DatasetServiceAT extends AbstractGoodDataAT {
         assertThat(uploadStatistics.getUploadsCount("ERROR"), greaterThan(0));
     }
 }
-

@@ -12,10 +12,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.gooddata.sdk.model.project.Environment;
-import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.common.util.ISOZonedDateTime;
+import com.gooddata.sdk.model.project.Environment;
+import com.gooddata.sdk.model.util.UriHelper;
 
 import java.time.ZonedDateTime;
 import java.util.Map;
@@ -37,11 +37,9 @@ public class Warehouse {
 
     private static final String SELF_LINK = "self";
     private static final String STATUS_ENABLED = "ENABLED";
-
+    private final String authorizationToken;
     private String title;
     private String description;
-
-    private final String authorizationToken;
     @ISOZonedDateTime
     private ZonedDateTime created;
     @ISOZonedDateTime
@@ -89,12 +87,16 @@ public class Warehouse {
                      @JsonProperty("links") Map<String, String> links,
                      @JsonProperty("license") String license) {
         this(title, authToken, description, created, updated, createdBy, updatedBy, status, environment, connectionUrl,
-            links);
+                links);
         this.license = license;
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getAuthorizationToken() {
@@ -105,19 +107,17 @@ public class Warehouse {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     /**
      * Gets the JDBC connection string.
      *
      * @return JDBC connection string
      */
-    public String getConnectionUrl() { return connectionUrl; }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public String getConnectionUrl() {
+        return connectionUrl;
     }
 
     public ZonedDateTime getCreated() {
@@ -148,12 +148,14 @@ public class Warehouse {
         this.environment = environment;
     }
 
-    public String getLicense() { return license; }
-
     @JsonIgnore
     public void setEnvironment(final Environment environment) {
         notNull(environment, "environment");
         setEnvironment(environment.name());
+    }
+
+    public String getLicense() {
+        return license;
     }
 
     public Map<String, String> getLinks() {
@@ -180,4 +182,3 @@ public class Warehouse {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

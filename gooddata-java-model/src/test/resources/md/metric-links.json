@@ -1,61 +1,61 @@
 {
-    "metric": {
-        "content": {
-            "format": "#,##0",
-            "tree": {
+  "metric": {
+    "content": {
+      "format": "#,##0",
+      "tree": {
+        "content": [
+          {
+            "content": [
+              {
+                "value": "AVG",
                 "content": [
-                    {
-                        "content": [
-                            {
-                                "value": "AVG",
-                                "content": [
-                                    {
-                                        "value": "/gdc/md/PROJECT_ID/obj/EXPR_ID",
-                                        "position": {
-                                            "column": 12,
-                                            "line": 2
-                                        },
-                                        "type": "fact object"
-                                    }
-                                ],
-                                "position": {
-                                    "column": 8,
-                                    "line": 2
-                                },
-                                "type": "function"
-                            }
-                        ],
-                        "position": {
-                            "column": 8,
-                            "line": 2
-                        },
-                        "type": "expression"
-                    }
+                  {
+                    "value": "/gdc/md/PROJECT_ID/obj/EXPR_ID",
+                    "position": {
+                      "column": 12,
+                      "line": 2
+                    },
+                    "type": "fact object"
+                  }
                 ],
                 "position": {
-                    "column": 1,
-                    "line": 2
+                  "column": 8,
+                  "line": 2
                 },
-                "type": "metric"
+                "type": "function"
+              }
+            ],
+            "position": {
+              "column": 8,
+              "line": 2
             },
-            "expression": "SELECT AVG([/gdc/md/PROJECT_ID/obj/EXPR_ID])"
+            "type": "expression"
+          }
+        ],
+        "position": {
+          "column": 1,
+          "line": 2
         },
-        "links": {
-            "explain2": "/gdc/md/cpn1dbltx3at2wrmfl79inlxs76oxb7h/obj/47/explain2"
-        },
-        "meta": {
-            "author": "/gdc/account/profile/PROFILE_ID",
-            "uri": "/gdc/md/PROJECT_ID/obj/47",
-            "tags": "",
-            "created": "2015-10-10 12:56:13",
-            "identifier": "MY_ID",
-            "deprecated": "0",
-            "summary": "",
-            "isProduction": 1,
-            "title": "Avg shoe size",
-            "category": "metric",
-            "updated": "2015-10-10 12:56:13",
-            "contributor": "/gdc/account/profile/PROFILE_ID"
-        }
+        "type": "metric"
+      },
+      "expression": "SELECT AVG([/gdc/md/PROJECT_ID/obj/EXPR_ID])"
+    },
+    "links": {
+      "explain2": "/gdc/md/cpn1dbltx3at2wrmfl79inlxs76oxb7h/obj/47/explain2"
+    },
+    "meta": {
+      "author": "/gdc/account/profile/PROFILE_ID",
+      "uri": "/gdc/md/PROJECT_ID/obj/47",
+      "tags": "",
+      "created": "2015-10-10 12:56:13",
+      "identifier": "MY_ID",
+      "deprecated": "0",
+      "summary": "",
+      "isProduction": 1,
+      "title": "Avg shoe size",
+      "category": "metric",
+      "updated": "2015-10-10 12:56:13",
+      "contributor": "/gdc/account/profile/PROFILE_ID"
     }
+  }
 }

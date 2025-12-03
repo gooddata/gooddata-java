@@ -29,4 +29,3 @@ public class AsyncTaskTest {
         assertThat(asyncTask.getUri(), is("foo"));
     }
 }
-

@@ -1,8 +1,8 @@
 {
-    "entries" : [
-        {
-            "link" : "/gdc/md/PROJECT_ID/tasks/123/status",
-            "category" : "tasks-status"
-        }
-    ]
+  "entries": [
+    {
+      "link": "/gdc/md/PROJECT_ID/tasks/123/status",
+      "category": "tasks-status"
+    }
+  ]
 }

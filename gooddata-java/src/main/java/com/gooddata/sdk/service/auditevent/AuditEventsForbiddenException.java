@@ -13,4 +13,3 @@ public class AuditEventsForbiddenException extends GoodDataException {
         super("Unable to list audit events", cause);
     }
 }
-

@@ -27,15 +27,14 @@ class KpiTest extends Specification {
         kpi.comparisonType == 'lastYear'
         kpi.comparisonDirection == 'growIsGood'
         kpi.title == 'Avg. Salary (CSV)'
-        kpi.ignoreDashboardFilters*.datasetUri == [ '/date/dataset/1' ]
+        kpi.ignoreDashboardFilters*.datasetUri == ['/date/dataset/1']
     }
 
     def "creates new kpi and serializes to JSON"() {
         when:
-        def kpi = new Kpi('KPI 1', '/metric/1', 'lastYear', 'growIsGood', [ new DateFilterReference('/date/dataset/1') ], '/dateDs/1')
+        def kpi = new Kpi('KPI 1', '/metric/1', 'lastYear', 'growIsGood', [new DateFilterReference('/date/dataset/1')], '/dateDs/1')
 
         then:
         that kpi, jsonEquals(readStringFromResource('/md/dashboard/kpi-new.json'))
     }
 }
-

@@ -34,4 +34,3 @@ class TotalLocatorItemTest extends Specification {
         item.toString()
     }
 }
-

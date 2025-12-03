@@ -23,26 +23,18 @@ abstract class ObjIdentifierUtilities {
      * Copy {@code objectToBeCopied} via provided {@code objectCopyFactory} in case when {@code qualifierForPossibleConversion} is of {@link
      * IdentifierObjQualifier} type. Otherwise the original object is returned.
      *
-     * @param objectToBeCopied
-     *         The object that should be copied in case {@code qualifierForPossibleConversion} is of {@link IdentifierObjQualifier} type. The parameter must
-     *         not be null.
-     * @param qualifierForPossibleConversion
-     *         The qualifier that defines if {@code objectToBeCopied} will be copied or not. In case when it is of the {@link IdentifierObjQualifier} type,
-     *         it will be converted via {@code qualifierConverter} and used in copy of the {@code objectToBeCopied}. The parameter must not be null.
-     * @param objectCopyFactory
-     *         The factory method that accepts the result of the {@code qualifierForPossibleConversion} conversion in form of {@link UriObjQualifier} and
-     *         returns new copy of the {@code objectToBeCopied}. The parameter must not be null.
-     * @param qualifierConverter
-     *         The convert that can convert {@code qualifierForPossibleConversion} into its matching {@link UriObjQualifier} form. The parameter must not be
-     *         null.
-     * @param <R>
-     *         The type of the object that should be copied.
-     *
+     * @param objectToBeCopied               The object that should be copied in case {@code qualifierForPossibleConversion} is of {@link IdentifierObjQualifier} type. The parameter must
+     *                                       not be null.
+     * @param qualifierForPossibleConversion The qualifier that defines if {@code objectToBeCopied} will be copied or not. In case when it is of the {@link IdentifierObjQualifier} type,
+     *                                       it will be converted via {@code qualifierConverter} and used in copy of the {@code objectToBeCopied}. The parameter must not be null.
+     * @param objectCopyFactory              The factory method that accepts the result of the {@code qualifierForPossibleConversion} conversion in form of {@link UriObjQualifier} and
+     *                                       returns new copy of the {@code objectToBeCopied}. The parameter must not be null.
+     * @param qualifierConverter             The convert that can convert {@code qualifierForPossibleConversion} into its matching {@link UriObjQualifier} form. The parameter must not be
+     *                                       null.
+     * @param <R>                            The type of the object that should be copied.
      * @return Copy of the {@code objectToBeCopied} in case when {@code qualifierForPossibleConversion} was of {@link IdentifierObjQualifier} type. Otherwise
      * the original object is returned.
-     *
-     * @throws IllegalArgumentException
-     *         The exception is thrown when required parameter is null.
+     * @throws IllegalArgumentException The exception is thrown when required parameter is null.
      */
     static <R> R copyIfNecessary(final R objectToBeCopied,
                                  final ObjQualifier qualifierForPossibleConversion,
@@ -73,4 +65,3 @@ abstract class ObjIdentifierUtilities {
     }
 
 }
-

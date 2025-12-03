@@ -11,7 +11,7 @@ import com.gooddata.sdk.common.collections.Paging;
 import java.util.List;
 import java.util.Map;
 
-class AuditEventsDeserializer extends PageDeserializer<AuditEvents, AuditEvent>{
+class AuditEventsDeserializer extends PageDeserializer<AuditEvents, AuditEvent> {
 
     protected AuditEventsDeserializer() {
         super(AuditEvent.class);
@@ -22,4 +22,3 @@ class AuditEventsDeserializer extends PageDeserializer<AuditEvents, AuditEvent>{
         return new AuditEvents(items, paging, links);
     }
 }
-

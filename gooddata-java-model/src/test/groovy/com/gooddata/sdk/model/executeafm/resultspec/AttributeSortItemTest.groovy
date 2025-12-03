@@ -41,4 +41,3 @@ class AttributeSortItemTest extends Specification {
         item.toString()
     }
 }
-

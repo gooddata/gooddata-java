@@ -44,4 +44,3 @@ class UriObjQualifierTest extends Specification {
         that deserialized, jsonEquals(uriObjQualifier)
     }
 }
-

@@ -39,4 +39,3 @@ class ResultHeaderItemTest extends Specification {
         thrown(IllegalArgumentException)
     }
 }
-

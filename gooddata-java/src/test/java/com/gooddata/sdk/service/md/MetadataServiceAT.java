@@ -239,4 +239,3 @@ public class MetadataServiceAT extends AbstractGoodDataAT {
     }
 
 }
-

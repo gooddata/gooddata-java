@@ -19,4 +19,3 @@ public class MaqlDml extends AbstractMaql {
         super(maql);
     }
 }
-

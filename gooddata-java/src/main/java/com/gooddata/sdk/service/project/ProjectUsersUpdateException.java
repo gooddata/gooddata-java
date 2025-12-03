@@ -20,4 +20,3 @@ public class ProjectUsersUpdateException extends GoodDataException {
         super(message);
     }
 }
-

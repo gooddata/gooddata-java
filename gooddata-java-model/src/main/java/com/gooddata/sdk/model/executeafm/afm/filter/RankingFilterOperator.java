@@ -21,12 +21,6 @@ public enum RankingFilterOperator {
     TOP,
     BOTTOM;
 
-    @JsonValue
-    @Override
-    public String toString() {
-        return name();
-    }
-
     @JsonCreator
     public static RankingFilterOperator of(final String operator) {
         notNull(operator, "operator");
@@ -39,5 +33,10 @@ public enum RankingFilterOperator {
                     e);
         }
     }
-}
 
+    @JsonValue
+    @Override
+    public String toString() {
+        return name();
+    }
+}

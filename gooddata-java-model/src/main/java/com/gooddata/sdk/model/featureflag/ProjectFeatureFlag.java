@@ -5,7 +5,13 @@
  */
 package com.gooddata.sdk.model.featureflag;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import static com.gooddata.sdk.common.util.Validate.notEmpty;
@@ -25,10 +31,9 @@ public class ProjectFeatureFlag {
     public static final String PROJECT_FEATURE_FLAG_URI = ProjectFeatureFlags.PROJECT_FEATURE_FLAGS_URI + "/{featureFlag}";
 
     private final String name;
-    private boolean enabled;
-
     @JsonIgnore
     private final Links links;
+    private boolean enabled;
 
     /**
      * Creates new project feature flag which is by default enabled (true).
@@ -42,7 +47,7 @@ public class ProjectFeatureFlag {
     /**
      * Creates new project feature flag with given value.
      *
-     * @param name unique name of feature flag
+     * @param name    unique name of feature flag
      * @param enabled true (flag enabled) or false (flag disabled)
      */
     public ProjectFeatureFlag(String name, boolean enabled) {
@@ -126,4 +131,3 @@ public class ProjectFeatureFlag {
         }
     }
 }
-

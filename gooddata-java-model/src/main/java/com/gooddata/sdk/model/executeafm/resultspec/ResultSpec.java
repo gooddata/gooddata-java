@@ -8,8 +8,8 @@ package com.gooddata.sdk.model.executeafm.resultspec;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.sdk.model.executeafm.afm.Afm;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.executeafm.afm.Afm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +39,12 @@ public class ResultSpec {
         return dimensions;
     }
 
-    public List<SortItem> getSorts() {
-        return sorts;
-    }
-
     public void setDimensions(final List<Dimension> dimensions) {
         this.dimensions = dimensions;
+    }
+
+    public List<SortItem> getSorts() {
+        return sorts;
     }
 
     public void setSorts(final List<SortItem> sorts) {
@@ -73,4 +73,3 @@ public class ResultSpec {
     }
 
 }
-

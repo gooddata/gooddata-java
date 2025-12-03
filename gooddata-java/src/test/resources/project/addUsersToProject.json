@@ -1,15 +1,15 @@
 {
-  "users" : [
+  "users": [
     {
-      "user" : {
-        "content" : {
-          "userRoles" : [
+      "user": {
+        "content": {
+          "userRoles": [
             "/gdc/projects/PROJECT_ID/roles/ROLE1"
           ],
-          "status" : "ENABLED"
+          "status": "ENABLED"
         },
-        "links" : {
-          "self" : "/gdc/account/profile/USER_ID"
+        "links": {
+          "self": "/gdc/account/profile/USER_ID"
         }
       }
     }

@@ -24,10 +24,8 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SeparatorSettings implements Serializable {
 
-    private static final long serialVersionUID = 446547615105910660L;
-
     public static final String URI = "/gdc/account/profile/{id}/settings/separators";
-
+    private static final long serialVersionUID = 446547615105910660L;
     private final String thousand;
     private final String decimal;
     private final Links links;
@@ -60,7 +58,7 @@ public class SeparatorSettings implements Serializable {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class Links implements Serializable{
+    private static class Links implements Serializable {
         private final String self;
 
         @JsonCreator
@@ -74,4 +72,3 @@ public class SeparatorSettings implements Serializable {
         }
     }
 }
-

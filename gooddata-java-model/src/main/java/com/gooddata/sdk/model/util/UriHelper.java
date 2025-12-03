@@ -12,6 +12,7 @@ public abstract class UriHelper {
 
     /**
      * Parses the last part of the URI (substring after last '/' sign).
+     *
      * @param uri uri to get the last part form
      * @return last part of the uri
      */
@@ -19,4 +20,3 @@ public abstract class UriHelper {
         return uri == null ? null : uri.substring(uri.lastIndexOf("/") + 1);
     }
 }
-

@@ -7,11 +7,11 @@
     "userIp": "127.0.0.1",
     "success": true,
     "type": "login",
-    "params" : {
-      "KEY" : "VALUE"
+    "params": {
+      "KEY": "VALUE"
     },
-    "links" : {
-      "LINK_KEY" : "LINK_VALUE"
+    "links": {
+      "LINK_KEY": "LINK_VALUE"
     }
   }
 }

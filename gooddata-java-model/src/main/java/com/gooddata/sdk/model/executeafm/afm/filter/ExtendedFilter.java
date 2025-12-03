@@ -16,4 +16,3 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 })
 public interface ExtendedFilter {
 }
-

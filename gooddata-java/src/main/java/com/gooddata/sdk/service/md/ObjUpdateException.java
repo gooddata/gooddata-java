@@ -35,4 +35,3 @@ public class ObjUpdateException extends GoodDataException {
         super("Can't update metadata object: " + obj.getClass().getSimpleName() + "; Cause: " + message);
     }
 }
-

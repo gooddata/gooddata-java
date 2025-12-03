@@ -23,4 +23,3 @@ public enum WarehouseUserRole {
         return roleName;
     }
 }
-

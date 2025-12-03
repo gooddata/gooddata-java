@@ -43,4 +43,3 @@ public interface Obj {
 
     String getUri();
 }
-

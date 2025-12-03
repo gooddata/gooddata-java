@@ -40,4 +40,3 @@ public class Users extends Page<User> {
         this(asList(users), null);
     }
 }
-

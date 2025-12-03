@@ -5,7 +5,12 @@
  */
 package com.gooddata.sdk.model.warehouse;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.util.Map;
@@ -21,11 +26,9 @@ import static com.gooddata.sdk.common.util.Validate.notNullState;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WarehouseSchema {
 
+    public static final String URI = WarehouseSchemas.URI + "/{name}";
     private static final String SELF_LINK = "self";
     private static final String INSTANCE_LINK = "instance";
-
-    public static final String URI = WarehouseSchemas.URI + "/{name}";
-
     private final String name;
 
     private final String description;
@@ -68,4 +71,3 @@ public class WarehouseSchema {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

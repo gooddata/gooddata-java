@@ -23,4 +23,3 @@ class SeparatorSettingsTest extends Specification {
         separators.selfLink == '/gdc/account/profile/ID/settings/separators'
     }
 }
-

@@ -82,7 +82,7 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         final FutureResult<ScheduleExecution> future = gd.getProcessService().executeSchedule(schedule);
         final ScheduleExecution scheduleExecution = future.get();
 
-        assertThat(scheduleExecution.getStatus(),  is("OK"));
+        assertThat(scheduleExecution.getStatus(), is("OK"));
     }
 
     @Test(groups = "process", dependsOnMethods = "createSchedule")
@@ -203,4 +203,3 @@ public class ProcessServiceAT extends AbstractGoodDataAT {
         return result;
     }
 }
-

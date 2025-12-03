@@ -55,4 +55,3 @@ public class MeasureSortItem implements SortItem {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

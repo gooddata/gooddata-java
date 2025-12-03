@@ -21,6 +21,7 @@ public class DataList extends ArrayList<Data> implements Data {
 
     /**
      * Creates new instance of given list of data
+     *
      * @param values list to use as values, can't be null
      */
     public DataList(final List<Data> values) {
@@ -29,6 +30,7 @@ public class DataList extends ArrayList<Data> implements Data {
 
     /**
      * Creates new instance by transforming the given array to list of simple or null values
+     *
      * @param array array of values
      */
     DataList(final String[] array) {
@@ -37,6 +39,7 @@ public class DataList extends ArrayList<Data> implements Data {
 
     /**
      * Creates new instance by transforming the given array to list of data lists of simple or null values
+     *
      * @param array array of values
      */
     DataList(final String[][] array) {
@@ -73,4 +76,3 @@ public class DataList extends ArrayList<Data> implements Data {
     }
 
 }
-

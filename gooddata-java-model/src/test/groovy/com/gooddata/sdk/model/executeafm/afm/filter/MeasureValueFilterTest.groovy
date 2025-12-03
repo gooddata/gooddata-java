@@ -12,8 +12,8 @@ import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator.GREATER_THAN
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource
+import static com.gooddata.sdk.model.executeafm.afm.filter.ComparisonConditionOperator.GREATER_THAN
 
 class MeasureValueFilterTest extends Specification {
 
@@ -53,4 +53,3 @@ class MeasureValueFilterTest extends Specification {
         EqualsVerifier.forClass(MeasureValueFilter).usingGetClass().verify()
     }
 }
-

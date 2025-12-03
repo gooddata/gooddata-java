@@ -15,7 +15,6 @@ import org.testng.annotations.Test;
 import java.time.ZonedDateTime;
 
 import static com.gooddata.sdk.common.collections.CustomPageRequest.DEFAULT_LIMIT;
-import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static java.time.ZoneOffset.UTC;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -37,7 +36,10 @@ public class TimeFilterPageRequestTest {
 
         TimeFilterPageRequest copy = TimeFilterPageRequest.copy(request);
 
-        assertThat(request, is(sameBeanAs(copy)));
+        assertThat(copy.getFrom(), is(request.getFrom()));
+        assertThat(copy.getTo(), is(request.getTo()));
+        assertThat(copy.getLimit(), is(request.getLimit()));
+        assertThat(copy.getOffset(), is(request.getOffset()));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -107,4 +109,3 @@ public class TimeFilterPageRequestTest {
     }
 
 }
-

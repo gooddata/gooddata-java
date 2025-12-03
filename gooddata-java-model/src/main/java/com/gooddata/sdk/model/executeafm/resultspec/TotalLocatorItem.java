@@ -40,4 +40,3 @@ public class TotalLocatorItem implements LocatorItem {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

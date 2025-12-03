@@ -13,11 +13,12 @@ import java.util.Map;
 
 public class AccessLogsDeserializer extends PageDeserializer<AccessLogs, AccessLog> {
 
-    public AccessLogsDeserializer() { super(AccessLog.class); }
+    public AccessLogsDeserializer() {
+        super(AccessLog.class);
+    }
 
     @Override
     protected AccessLogs createPage(List<AccessLog> items, Paging paging, Map<String, String> links) {
         return new AccessLogs(items, paging, links);
     }
 }
-

@@ -130,4 +130,3 @@ class OverPeriodMeasureDefinitionTest extends Specification {
                 .verify()
     }
 }
-

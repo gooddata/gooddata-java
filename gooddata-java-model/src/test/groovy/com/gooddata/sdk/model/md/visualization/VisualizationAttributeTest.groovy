@@ -40,4 +40,3 @@ class VisualizationAttributeTest extends Specification {
         vizAttribute?.alias == 'Some alias'
     }
 }
-

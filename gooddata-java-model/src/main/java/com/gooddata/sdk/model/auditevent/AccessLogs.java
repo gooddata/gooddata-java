@@ -37,4 +37,3 @@ public class AccessLogs extends Page<AccessLog> {
         super(items, paging, links);
     }
 }
-

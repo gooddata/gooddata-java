@@ -10,9 +10,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.model.executeafm.afm.Afm;
 import com.gooddata.sdk.model.executeafm.resultspec.ResultSpec;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 /**
  * Represents structure for triggering execution of contained AFM (Attributes Filters Metrics).
@@ -53,4 +53,3 @@ public class Execution {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

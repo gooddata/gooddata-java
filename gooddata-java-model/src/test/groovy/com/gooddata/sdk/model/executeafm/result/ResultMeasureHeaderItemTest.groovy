@@ -31,4 +31,3 @@ class ResultMeasureHeaderItemTest extends Specification {
         item.order == 1
     }
 }
-

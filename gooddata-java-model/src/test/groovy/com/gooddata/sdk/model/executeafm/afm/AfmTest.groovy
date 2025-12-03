@@ -101,4 +101,3 @@ class AfmTest extends Specification {
         !afm.getNativeTotals().isEmpty()
     }
 }
-

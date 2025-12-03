@@ -35,11 +35,15 @@ public class AuditEvent {
 
     private final String userLogin;
 
-    /** the time the event occurred */
+    /**
+     * the time the event occurred
+     */
     @ISOZonedDateTime
     private final ZonedDateTime occurred;
 
-    /** the time event was recorded by audit system */
+    /**
+     * the time event was recorded by audit system
+     */
     @ISOZonedDateTime
     private final ZonedDateTime recorded;
 
@@ -124,4 +128,3 @@ public class AuditEvent {
     }
 
 }
-

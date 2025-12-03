@@ -8,8 +8,8 @@ package com.gooddata.sdk.model.md;
 import org.apache.commons.lang3.SerializationUtils;
 import org.testng.annotations.Test;
 
-import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
+import static net.javacrumbs.jsonunit.JsonMatchers.jsonEquals;
 import static net.javacrumbs.jsonunit.JsonMatchers.jsonNodeAbsent;
 import static net.javacrumbs.jsonunit.core.util.ResourceUtils.resource;
 import static org.hamcrest.CoreMatchers.is;

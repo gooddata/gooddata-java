@@ -124,14 +124,14 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         assertThat(users.getNextPage(), is(nullValue()));
     }
 
-    @Test(groups = { "warehouse", "isolated_domain" }, dependsOnMethods = "shouldListUsers")
+    @Test(groups = {"warehouse", "isolated_domain"}, dependsOnMethods = "shouldListUsers")
     public void shouldAddUserToWarehouse() {
         warehouseUser = service.addUserToWarehouse(warehouse, WarehouseUser.createWithlogin(LOGIN, WarehouseUserRole.ADMIN)).get(60, TimeUnit.SECONDS);
 
         assertThat(warehouseUser, is(notNullValue()));
     }
 
-    @Test(groups = { "warehouse", "isolated_domain" }, dependsOnMethods = "shouldAddUserToWarehouse")
+    @Test(groups = {"warehouse", "isolated_domain"}, dependsOnMethods = "shouldAddUserToWarehouse")
     public void shouldRemoveUserFromWarehouse() {
         service.removeUserFromWarehouse(warehouseUser).get(60, TimeUnit.SECONDS);
         warehouseUser = null;
@@ -169,12 +169,14 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
             if (warehouse != null) {
                 service.removeWarehouse(warehouse);
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         try {
             if (warehouse2 != null) {
                 service.removeWarehouse(warehouse2);
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     @AfterClass(groups = "isolated_domain")
@@ -183,12 +185,13 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
             if (warehouseUser != null) {
                 service.removeUserFromWarehouse(warehouseUser);
             }
-        }  catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         try {
             if (account != null) {
                 gd.getAccountService().removeAccount(account);
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 }
-

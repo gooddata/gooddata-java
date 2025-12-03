@@ -72,4 +72,3 @@ class VisualizationClassTest extends Specification {
         that deserialized, jsonEquals(tableVisualizationClass)
     }
 }
-

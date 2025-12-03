@@ -22,4 +22,3 @@ class AccountsDeserializer extends PageDeserializer<Accounts, Account> {
         return new Accounts(items, paging, links);
     }
 }
-

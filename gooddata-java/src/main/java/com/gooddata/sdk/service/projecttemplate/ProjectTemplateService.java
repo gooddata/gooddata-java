@@ -35,8 +35,9 @@ public class ProjectTemplateService extends AbstractService {
     /**
      * Sets RESTful HTTP Spring template. Should be called from constructor of concrete service extending
      * this abstract one.
+     *
      * @param restTemplate RESTful HTTP Spring template
-     * @param settings settings
+     * @param settings     settings
      */
     public ProjectTemplateService(final RestTemplate restTemplate, final GoodDataSettings settings) {
         super(restTemplate, settings);
@@ -44,6 +45,7 @@ public class ProjectTemplateService extends AbstractService {
 
     /**
      * List of all projects' templates
+     *
      * @return list of templates
      */
     public Collection<Template> getTemplates() {
@@ -57,6 +59,7 @@ public class ProjectTemplateService extends AbstractService {
 
     /**
      * Get project template by given uri.
+     *
      * @param uri uri of the template
      * @return project template
      */
@@ -71,6 +74,7 @@ public class ProjectTemplateService extends AbstractService {
 
     /**
      * Get manifests of given template
+     *
      * @param template template
      * @return manifests linked from project template
      */
@@ -86,4 +90,3 @@ public class ProjectTemplateService extends AbstractService {
         }
     }
 }
-

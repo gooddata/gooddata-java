@@ -9,8 +9,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.sdk.model.md.Metric;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.md.Metric;
 
 import java.io.Serializable;
 
@@ -81,4 +81,3 @@ public class MetricElement implements Serializable {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

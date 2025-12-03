@@ -13,9 +13,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.common.util.ISOZonedDateTimeDeserializer;
+import com.gooddata.sdk.model.util.UriHelper;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -46,16 +46,16 @@ public class Schedule {
     private static final String EXECUTABLE = "EXECUTABLE";
 
     private final String type;
+    private final ZonedDateTime nextExecutionTime;
+    private final int consecutiveFailedExecutionCount;
+    private final Map<String, String> params;
+    private final Map<String, String> links;
     private String state;
     private String cron;
     private String timezone;
     private Integer reschedule;
     private String triggerScheduleId;
     private String name;
-    private final ZonedDateTime nextExecutionTime;
-    private final int consecutiveFailedExecutionCount;
-    private final Map<String, String> params;
-    private final Map<String, String> links;
 
     public Schedule(final DataloadProcess process, final String executable, final String cron) {
         this(process, executable);
@@ -187,6 +187,11 @@ public class Schedule {
         this.timezone = timezone;
     }
 
+    @JsonIgnore
+    public void setTimezone(final ZonedDateTime timezone) {
+        this.timezone = notNull(timezone, "timezone").getZone().getId();
+    }
+
     /**
      * Duration after a failed execution of the schedule is executed again
      *
@@ -233,11 +238,6 @@ public class Schedule {
     }
 
     @JsonIgnore
-    public void setTimezone(final ZonedDateTime timezone) {
-        this.timezone = notNull(timezone, "timezone").getZone().getId();
-    }
-
-    @JsonIgnore
     public ZonedDateTime getNextExecutionTime() {
         return nextExecutionTime;
     }
@@ -267,4 +267,3 @@ public class Schedule {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

@@ -31,4 +31,3 @@ class MeasureGroupHeaderTest extends Specification {
         header.items.first().localIdentifier == 'm1'
     }
 }
-

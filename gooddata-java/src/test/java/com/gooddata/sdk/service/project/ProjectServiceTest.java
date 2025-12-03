@@ -120,7 +120,7 @@ public class ProjectServiceTest {
     @Test
     public void testListProjectsForUserWithPage() throws Exception {
         doReturn(new Projects(singletonList(project), new Paging(""))).when(restTemplate)
-            .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?offset=1&limit=100"), Projects.class);
+                .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?offset=1&limit=100"), Projects.class);
         final Collection<Project> result = service.listProjects(account, new CustomPageRequest(1, 100)).getPageItems();
 
         assertThat(result, hasSize(1));
@@ -130,7 +130,7 @@ public class ProjectServiceTest {
     @Test
     public void testListProjectsForUser() throws Exception {
         doReturn(new Projects(singletonList(project), new Paging(""))).when(restTemplate)
-            .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?limit=100"), Projects.class);
+                .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?limit=100"), Projects.class);
         final Collection<Project> result = service.listProjects(account).getPageItems();
 
         assertThat(result, hasSize(1));
@@ -140,7 +140,7 @@ public class ProjectServiceTest {
     @Test(expectedExceptions = GoodDataException.class)
     public void testListProjectsForuserWithClientException() throws Exception {
         doThrow(new GoodDataException("")).when(restTemplate)
-            .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?limit=100"), Projects.class);
+                .getForObject(new URI(LIST_PROJECTS_TEMPLATE.expand(ACCOUNT_ID) + "?limit=100"), Projects.class);
         service.listProjects();
     }
 
@@ -234,12 +234,12 @@ public class ProjectServiceTest {
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void removeUserFromProjectInvalidProject(){
+    public void removeUserFromProjectInvalidProject() {
         service.removeUserFromProject(project, null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void removeUserFromProjectInvalidAccount(){
+    public void removeUserFromProjectInvalidAccount() {
         service.removeUserFromProject(null, account);
     }
 
@@ -259,34 +259,34 @@ public class ProjectServiceTest {
     }
 
     @Test(expectedExceptions = GoodDataException.class,
-          expectedExceptionsMessageRegExp= "You cannot leave the project 1 if you are the " +
-              "only admin in it. You can make another user an admin in this project, and then re-issue the call.")
+            expectedExceptionsMessageRegExp = "You cannot leave the project 1 if you are the " +
+                    "only admin in it. You can make another user an admin in this project, and then re-issue the call.")
     public void removeUserProjectFailForbidden() throws URISyntaxException {
         when(project.getId()).thenReturn("1");
         when(account.getId()).thenReturn("1");
         final GoodDataRestException goodDataRestException = new GoodDataRestException(
-            HttpStatus.FORBIDDEN.value(),
-            "r1",
-            "forbidden",
-            "component",
-            "errorClass");
+                HttpStatus.FORBIDDEN.value(),
+                "r1",
+                "forbidden",
+                "component",
+                "errorClass");
         doThrow(goodDataRestException).when(restTemplate).delete(new URI("/gdc/projects/1/users/1"));
         service.removeUserFromProject(project, account);
     }
 
     @Test(expectedExceptions = GoodDataException.class,
-          expectedExceptionsMessageRegExp= "You either misspelled your user ID or tried to remove another user but " +
-              "did not have the canSuspendUser permission in this project. Check your ID in the request and your " +
-              "permissions in the project 1, then re-issue the call.")
+            expectedExceptionsMessageRegExp = "You either misspelled your user ID or tried to remove another user but " +
+                    "did not have the canSuspendUser permission in this project. Check your ID in the request and your " +
+                    "permissions in the project 1, then re-issue the call.")
     public void removeUserProjectFailNotAllowed() throws URISyntaxException {
         when(project.getId()).thenReturn("1");
         when(account.getId()).thenReturn("1");
         final GoodDataRestException goodDataRestException = new GoodDataRestException(
-            HttpStatus.METHOD_NOT_ALLOWED.value() ,
-            "r1",
-            "not allowed",
-            "component",
-            "errorClass");
+                HttpStatus.METHOD_NOT_ALLOWED.value(),
+                "r1",
+                "not allowed",
+                "component",
+                "errorClass");
         doThrow(goodDataRestException).when(restTemplate).delete(new URI("/gdc/projects/1/users/1"));
         service.removeUserFromProject(project, account);
     }

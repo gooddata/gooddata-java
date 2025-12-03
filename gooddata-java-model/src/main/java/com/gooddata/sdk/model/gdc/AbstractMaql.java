@@ -37,4 +37,3 @@ public abstract class AbstractMaql {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

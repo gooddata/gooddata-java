@@ -25,15 +25,14 @@ class DashboardAttributeFilterTest extends Specification {
         filter
         filter.displayForm == '/df/1'
         filter.negativeSelection
-        filter.attributeElementUris == [ '/elem/1', '/elem/2' ]
+        filter.attributeElementUris == ['/elem/1', '/elem/2']
     }
 
     def "creates new and serializes to JSON"() {
         when:
-        def filter = new DashboardAttributeFilter('/df/1', true, [ '/elem/1', '/elem/2' ])
+        def filter = new DashboardAttributeFilter('/df/1', true, ['/elem/1', '/elem/2'])
 
         then:
         that filter, jsonEquals(readStringFromResource(FILTER_JSON))
     }
 }
-

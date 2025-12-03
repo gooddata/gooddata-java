@@ -106,4 +106,3 @@ public class ConfigItemsTest {
         assertThat(items.isEnabled("nonexistentFlag"), is(false));
     }
 }
-

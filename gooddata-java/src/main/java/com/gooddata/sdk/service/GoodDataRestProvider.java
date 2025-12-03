@@ -22,7 +22,7 @@ import java.util.function.Supplier;
  *     <li>applying {@link GoodDataSettings} - especially user agent, headers and connection settings</li>
  *     <li>configuring proper error handler (i.e. {@link com.gooddata.sdk.service.util.ResponseErrorHandler})</li>
  * </ul>
- *
+ * <p>
  * The default implementation (internally used by {@link GoodData} is {@link com.gooddata.sdk.service.httpcomponents.LoginPasswordGoodDataRestProvider}.
  */
 public interface GoodDataRestProvider {
@@ -51,4 +51,3 @@ public interface GoodDataRestProvider {
         return Optional.empty();
     }
 }
-

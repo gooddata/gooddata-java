@@ -37,4 +37,3 @@ class IdentifierAndUri {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

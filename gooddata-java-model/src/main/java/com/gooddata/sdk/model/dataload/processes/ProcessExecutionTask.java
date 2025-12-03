@@ -5,8 +5,6 @@
  */
 package com.gooddata.sdk.model.dataload.processes;
 
-import static com.gooddata.sdk.common.util.Validate.notNullState;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import java.util.Map;
+
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 
 /**
  * Process execution task. Deserialization only
@@ -26,7 +26,7 @@ public class ProcessExecutionTask {
     private static final String POLL_LINK = "poll";
     private static final String DETAIL_LINK = "detail";
 
-    private final Map<String,String> links;
+    private final Map<String, String> links;
 
     @JsonCreator
     private ProcessExecutionTask(@JsonProperty("links") Map<String, String> links) {
@@ -41,4 +41,3 @@ public class ProcessExecutionTask {
         return notNullState(links, "links").get(DETAIL_LINK);
     }
 }
-

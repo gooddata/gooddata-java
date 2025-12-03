@@ -8,8 +8,8 @@ package com.gooddata.sdk.service.lcm;
 import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.common.collections.CustomPageRequest;
 import com.gooddata.sdk.common.collections.Page;
-import com.gooddata.sdk.common.collections.PageRequest;
 import com.gooddata.sdk.common.collections.PageBrowser;
+import com.gooddata.sdk.common.collections.PageRequest;
 import com.gooddata.sdk.common.util.SpringMutableUri;
 import com.gooddata.sdk.model.account.Account;
 import com.gooddata.sdk.model.lcm.LcmEntities;
@@ -35,8 +35,9 @@ public class LcmService extends AbstractService {
 
     /**
      * Constructs service for GoodData Life Cycle Management.
+     *
      * @param restTemplate RESTful HTTP Spring template
-     * @param settings settings
+     * @param settings     settings
      */
     public LcmService(final RestTemplate restTemplate, final GoodDataSettings settings) {
         super(restTemplate, settings);
@@ -62,7 +63,7 @@ public class LcmService extends AbstractService {
      * over all pages, or {@link PageBrowser#getAllItems()} to load the entire list.
      *
      * @param account account to list LCM entities for
-     * @param filter filter of the entities
+     * @param filter  filter of the entities
      * @return {@link PageBrowser} first page of list of lcm entitiesor empty list
      */
     public PageBrowser<LcmEntity> listLcmEntities(final Account account, final LcmEntityFilter filter) {
@@ -74,7 +75,7 @@ public class LcmService extends AbstractService {
      * Returns empty list in case there is no {@link LcmEntity}.
      * Returns requested page (by page limit and offset). Use {@link #listLcmEntities(Account)} to get first page with default setting.
      *
-     * @param account account to list LCM entities for
+     * @param account   account to list LCM entities for
      * @param startPage page to be listed
      * @return {@link PageBrowser} requested page of list of lcm entities or empty list
      */
@@ -87,8 +88,8 @@ public class LcmService extends AbstractService {
      * Returns empty list in case there is no {@link LcmEntity}.
      * Returns requested page (by page limit and offset). Use {@link #listLcmEntities(Account)} to get first page with default setting.
      *
-     * @param account account to list LCM entities for
-     * @param filter filter of the entities
+     * @param account   account to list LCM entities for
+     * @param filter    filter of the entities
      * @param startPage page to be listed
      * @return {@link PageBrowser} requested page of list of lcm entities or empty list
      */
@@ -121,4 +122,3 @@ public class LcmService extends AbstractService {
         }
     }
 }
-

@@ -17,4 +17,3 @@ class WarehousesSerializer extends PageSerializer {
     }
 
 }
-

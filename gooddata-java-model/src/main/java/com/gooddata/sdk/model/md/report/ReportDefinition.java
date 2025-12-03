@@ -5,21 +5,21 @@
  */
 package com.gooddata.sdk.model.md.report;
 
-import static com.gooddata.sdk.common.util.Validate.notNullState;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.gooddata.sdk.model.md.AbstractObj;
-import com.gooddata.sdk.model.md.Meta;
-import com.gooddata.sdk.model.md.Queryable;
-import com.gooddata.sdk.model.md.Updatable;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.md.AbstractObj;
+import com.gooddata.sdk.model.md.Meta;
+import com.gooddata.sdk.model.md.Queryable;
+import com.gooddata.sdk.model.md.Updatable;
 
 import java.util.Map;
+
+import static com.gooddata.sdk.common.util.Validate.notNullState;
 
 /**
  * Report definition
@@ -76,4 +76,3 @@ public class ReportDefinition extends AbstractObj implements Queryable, Updatabl
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

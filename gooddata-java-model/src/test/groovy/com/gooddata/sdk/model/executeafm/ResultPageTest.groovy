@@ -37,4 +37,3 @@ class ResultPageTest extends Specification {
         page.limitsQueryParam == '7%2C8'
     }
 }
-

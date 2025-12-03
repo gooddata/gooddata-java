@@ -18,12 +18,11 @@ import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static com.gooddata.sdk.common.util.ResourceUtils.readStringFromResource;
 import static net.jadler.Jadler.onRequest;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class FeatureFlagServiceIT extends AbstractGoodDataIT {
-
-    private FeatureFlagService service;
-    private Project project;
 
     private static final String PROJECT_ID = "PROJECT_ID";
     private static final String PROJECT_FEATURE_FLAGS_URI_STRING = FeatureFlagService.PROJECT_FEATURE_FLAGS_TEMPLATE.expand(PROJECT_ID)
@@ -31,6 +30,8 @@ public class FeatureFlagServiceIT extends AbstractGoodDataIT {
     private static final String FEATURE_FLAG_NAME = "myCoolFeature";
     private static final String PROJECT_FEATURE_FLAG_URI_STRING = FeatureFlagService.PROJECT_FEATURE_FLAG_TEMPLATE
             .expand(PROJECT_ID, FEATURE_FLAG_NAME).toString();
+    private FeatureFlagService service;
+    private Project project;
 
     @BeforeMethod
     public void setUp() throws Exception {

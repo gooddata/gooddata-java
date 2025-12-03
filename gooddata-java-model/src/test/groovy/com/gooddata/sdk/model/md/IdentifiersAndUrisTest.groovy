@@ -31,4 +31,3 @@ class IdentifiersAndUrisTest extends Specification {
         identifiersAndUris.asUriToIdentifier() == [(URI_1): IDENTIFIER_1, (URI_2): IDENTIFIER_2]
     }
 }
-

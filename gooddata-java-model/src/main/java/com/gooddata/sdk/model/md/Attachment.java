@@ -35,7 +35,9 @@ public class Attachment implements Serializable {
         this.uri = uri;
     }
 
-    public String getUri() { return uri; }
+    public String getUri() {
+        return uri;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -57,4 +59,3 @@ public class Attachment implements Serializable {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

@@ -17,13 +17,13 @@ class WarehouseIdMatcher extends TypeSafeMatcher<Warehouse> {
         this.warehouse = warehouse;
     }
 
+    public static WarehouseIdMatcher hasSameIdAs(final Warehouse warehouse) {
+        return new WarehouseIdMatcher(warehouse);
+    }
+
     @Override
     public void describeTo(final Description description) {
         description.appendText("Warehouse id " + warehouse.getId());
-    }
-
-    public static WarehouseIdMatcher hasSameIdAs(final Warehouse warehouse) {
-        return new WarehouseIdMatcher(warehouse);
     }
 
     @Override
@@ -31,4 +31,3 @@ class WarehouseIdMatcher extends TypeSafeMatcher<Warehouse> {
         return warehouse.getId().equals(item.getId());
     }
 }
-

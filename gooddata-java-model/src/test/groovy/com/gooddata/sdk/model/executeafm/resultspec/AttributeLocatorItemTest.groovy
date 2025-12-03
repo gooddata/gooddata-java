@@ -32,4 +32,3 @@ class AttributeLocatorItemTest extends Specification {
         item.toString()
     }
 }
-

@@ -5,8 +5,6 @@
  */
 package com.gooddata.sdk.model.project;
 
-import static java.lang.String.format;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,6 +14,8 @@ import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import static java.lang.String.format;
 
 @JsonTypeName("sli_el")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -43,7 +43,6 @@ public class ProjectValidationResultSliElParam extends ProjectValidationResultPa
 
     /**
      * @return list of values. Values have only informative character and are connected to IDs.
-     *
      * @see #getIds()
      */
     public List<String> getVals() {
@@ -58,14 +57,13 @@ public class ProjectValidationResultSliElParam extends ProjectValidationResultPa
      *     <li>ID and it's corresponding value are on the same index.</li>
      * </ul>
      *
-     * @see #getIds()
-     * @see #getVals()
-     *
      * @return {@code null} when ids are {@code null} or map of tuples
      * @throws IllegalStateException <ul>
-     *     <li>when ids are not {@code null} and vals are {@code null}</li>
-     *     <li>when sizes of ids and vals lists are not equal</li>
-     * </ul>
+     *                                   <li>when ids are not {@code null} and vals are {@code null}</li>
+     *                                   <li>when sizes of ids and vals lists are not equal</li>
+     *                               </ul>
+     * @see #getIds()
+     * @see #getVals()
      */
     public Map<String, String> asMap() {
         if (ids == null) {
@@ -111,4 +109,3 @@ public class ProjectValidationResultSliElParam extends ProjectValidationResultPa
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

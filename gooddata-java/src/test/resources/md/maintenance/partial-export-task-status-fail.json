@@ -3,7 +3,9 @@
     "messages": [
       {
         "error": {
-          "parameters": ["/gdc/md/PROJECT_ID/obj/123"],
+          "parameters": [
+            "/gdc/md/PROJECT_ID/obj/123"
+          ],
           "requestId": "REQUEST_ID",
           "component": "GDC::MAINTENANCE::PARTIAL_EXPORT",
           "errorClass": "GDC::Exception::User",

@@ -5,15 +5,19 @@
  */
 package com.gooddata.sdk.service.dataload.processes;
 
-import com.gooddata.sdk.model.dataload.processes.*;
-import com.gooddata.sdk.service.FutureResult;
 import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.common.GoodDataRestException;
-import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.model.account.Account;
+import com.gooddata.sdk.model.dataload.processes.DataloadProcess;
+import com.gooddata.sdk.model.dataload.processes.DataloadProcesses;
+import com.gooddata.sdk.model.dataload.processes.ProcessType;
+import com.gooddata.sdk.model.dataload.processes.Schedule;
+import com.gooddata.sdk.model.dataload.processes.ScheduleExecution;
+import com.gooddata.sdk.model.project.Project;
+import com.gooddata.sdk.service.FutureResult;
+import com.gooddata.sdk.service.GoodDataSettings;
 import com.gooddata.sdk.service.account.AccountService;
 import com.gooddata.sdk.service.gdc.DataStoreService;
-import com.gooddata.sdk.model.project.Project;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -45,7 +49,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.notNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpMethod.GET;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
@@ -74,6 +81,22 @@ public class ProcessServiceTest {
     private Project project;
 
     private ProcessService processService;
+
+    private static File createProcessOfSize(int size) throws Exception {
+        final Random r = new Random();
+        final File file = File.createTempFile("process", ".txt");
+        try (FileOutputStream s = new FileOutputStream(file)) {
+            for (int i = 0; i < size; i++) {
+                final byte[] b = new byte[1024];
+                r.nextBytes(b);
+                s.write(b);
+            }
+        }
+
+        file.deleteOnExit();
+
+        return file;
+    }
 
     @BeforeMethod
     public void setUp() throws Exception {
@@ -111,27 +134,11 @@ public class ProcessServiceTest {
 
         when(dataStoreService.getUri(anyString())).thenReturn(create("URI"));
         when(restTemplate.exchange(any(URI.class), eq(HttpMethod.POST), eq(new HttpEntity<>(process)), eq(DataloadProcess.class)))
-            .thenReturn(new ResponseEntity<>(process, HttpStatus.CREATED));
+                .thenReturn(new ResponseEntity<>(process, HttpStatus.CREATED));
 
         processService.createProcess(project, process, createProcessOfSize(2048));
 
         verify(dataStoreService).upload(anyString(), notNull());
-    }
-
-    private static File createProcessOfSize(int size) throws Exception {
-        final Random r = new Random();
-        final File file = File.createTempFile("process", ".txt");
-        try (FileOutputStream s = new FileOutputStream(file)) {
-            for (int i = 0; i < size; i++) {
-                final byte[] b = new byte[1024];
-                r.nextBytes(b);
-                s.write(b);
-            }
-        }
-
-        file.deleteOnExit();
-
-        return file;
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -256,4 +263,3 @@ public class ProcessServiceTest {
         futureResult.get();
     }
 }
-

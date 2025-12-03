@@ -49,4 +49,3 @@ public class ProjectValidationResultStringParam extends ProjectValidationResultP
         return value != null ? value.hashCode() : 0;
     }
 }
-

@@ -31,4 +31,3 @@ class MeasureLocatorItemTest extends Specification {
         item.toString()
     }
 }
-

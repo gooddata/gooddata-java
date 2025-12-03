@@ -42,4 +42,3 @@ class QualifierTest extends Specification {
         exception.message == "This qualifier has no URI"
     }
 }
-

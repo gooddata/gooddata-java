@@ -35,4 +35,3 @@ public class Pull {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

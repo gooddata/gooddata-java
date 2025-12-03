@@ -40,4 +40,3 @@ class WarningTest extends Specification {
         EqualsVerifier.forClass(Warning).usingGetClass().verify()
     }
 }
-

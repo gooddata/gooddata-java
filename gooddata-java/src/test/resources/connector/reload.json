@@ -7,8 +7,8 @@
     },
     "status": "RUNNING",
     "processId": "PROCESS_ID",
-    "links" : {
-      "self" : "/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/reloads/21",
+    "links": {
+      "self": "/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/reloads/21",
       "integration": "/gdc/projects/PROJECT_ID/connectors/zendesk4/integration",
       "process": "/gdc/projects/PROJECT_ID/connectors/zendesk4/integration/processes/PROCESS_ID"
     }

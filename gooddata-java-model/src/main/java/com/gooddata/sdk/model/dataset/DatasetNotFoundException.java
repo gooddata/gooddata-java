@@ -5,9 +5,9 @@
  */
 package com.gooddata.sdk.model.dataset;
 
-import static java.lang.String.format;
-
 import com.gooddata.sdk.common.GoodDataException;
+
+import static java.lang.String.format;
 
 /**
  * Represents error when dataset of the given id was not found
@@ -24,4 +24,3 @@ public class DatasetNotFoundException extends GoodDataException {
         super(format(MESSAGE, dataset), cause);
     }
 }
-

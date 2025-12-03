@@ -39,4 +39,3 @@ class ResultDimensionTest extends Specification {
         dimension.toString()
     }
 }
-

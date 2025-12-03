@@ -20,7 +20,7 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
 
 /**
  * Provides hierarchical configuration management a.k.a. platform settings a.k.a. feature flags.
- * For more detailed description, see this documentation https://help.gooddata.com/api#/reference/hierarchical-configuration
+ * For more detailed description, see this documentation <a href="https://help.gooddata.com/api#/reference/hierarchical-configuration">...</a>
  */
 public class HierarchicalConfigService extends AbstractService {
 
@@ -54,7 +54,7 @@ public class HierarchicalConfigService extends AbstractService {
     /**
      * Returns config item for given project (even if it's inherited from its hierarchy).
      *
-     * @param project project, cannot be null
+     * @param project    project, cannot be null
      * @param configName unique name (key) of config item, cannot be empty
      * @return config item for given project with given name (key)
      */
@@ -73,7 +73,7 @@ public class HierarchicalConfigService extends AbstractService {
     /**
      * Creates or updates config item for given project.
      *
-     * @param project project for which the config item should be created/updated, cannot be null
+     * @param project    project for which the config item should be created/updated, cannot be null
      * @param configItem config item to be created/updated, cannot be null
      * @return created/updated project config item
      */
@@ -115,4 +115,3 @@ public class HierarchicalConfigService extends AbstractService {
         return configItem;
     }
 }
-

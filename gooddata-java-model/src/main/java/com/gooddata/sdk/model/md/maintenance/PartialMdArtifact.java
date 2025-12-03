@@ -5,9 +5,14 @@
  */
 package com.gooddata.sdk.model.md.maintenance;
 
-import com.fasterxml.jackson.annotation.*;
-import com.gooddata.sdk.model.gdc.UriResponse;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.gdc.UriResponse;
 
 /**
  * Partial metadata export result structure.
@@ -46,4 +51,3 @@ public class PartialMdArtifact {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

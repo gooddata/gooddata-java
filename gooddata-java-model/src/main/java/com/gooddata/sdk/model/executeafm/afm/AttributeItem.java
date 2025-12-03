@@ -8,9 +8,9 @@ package com.gooddata.sdk.model.executeafm.afm;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 import com.gooddata.sdk.model.executeafm.ObjQualifier;
 import com.gooddata.sdk.model.md.AttributeDisplayForm;
-import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -29,9 +29,10 @@ public class AttributeItem implements LocallyIdentifiable, Serializable {
 
     /**
      * Creates new instance
-     * @param displayForm qualifier of {@link AttributeDisplayForm} representing the attribute
+     *
+     * @param displayForm     qualifier of {@link AttributeDisplayForm} representing the attribute
      * @param localIdentifier local identifier, unique within {@link Afm}
-     * @param alias attribute alias
+     * @param alias           attribute alias
      */
     @JsonCreator
     public AttributeItem(@JsonProperty("displayForm") final ObjQualifier displayForm,
@@ -44,7 +45,8 @@ public class AttributeItem implements LocallyIdentifiable, Serializable {
 
     /**
      * Creates new instance
-     * @param displayForm qualifier of {@link AttributeDisplayForm} representing the attribute
+     *
+     * @param displayForm     qualifier of {@link AttributeDisplayForm} representing the attribute
      * @param localIdentifier local identifier, unique within {@link Afm}
      */
     public AttributeItem(final ObjQualifier displayForm, final String localIdentifier) {
@@ -73,6 +75,7 @@ public class AttributeItem implements LocallyIdentifiable, Serializable {
 
     /**
      * Sets attribute alias (used as header in result)
+     *
      * @param alias alias
      */
     public void setAlias(final String alias) {
@@ -98,5 +101,4 @@ public class AttributeItem implements LocallyIdentifiable, Serializable {
         return Objects.hash(localIdentifier, displayForm);
     }
 }
-
 

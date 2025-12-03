@@ -73,4 +73,3 @@ class DataListTest extends Specification {
         thrown(UnsupportedOperationException)
     }
 }
-

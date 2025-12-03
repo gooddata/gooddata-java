@@ -13,8 +13,8 @@ import com.gooddata.sdk.model.md.report.Report;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.project.Project;
 import com.gooddata.sdk.service.httpcomponents.SingleEndpointGoodDataRestProvider;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.testng.annotations.AfterSuite;
 
 import java.time.LocalDate;
@@ -30,7 +30,7 @@ public abstract class AbstractGoodDataAT {
             "sdktest " + LocalDate.now() + " " + System.getenv("BUILD_NUMBER");
 
     protected static final GoodDataEndpoint endpoint = new GoodDataEndpoint(getProperty("host"));
-
+    protected static PoolingHttpClientConnectionManager connManager;
     protected static final GoodData gd =
             new GoodData(
                     new SingleEndpointGoodDataRestProvider(endpoint, new GoodDataSettings(), (b, e, s) -> {
@@ -39,11 +39,8 @@ public abstract class AbstractGoodDataAT {
                         connManager = httpClientConnectionManager;
 
                         return createHttpClient(builderWithManager, endpoint, getProperty("login"), getProperty("password"));
-                    }){});
-
-
-    protected static PoolingHttpClientConnectionManager connManager;
-
+                    }) {
+                    });
     protected static String projectToken;
     protected static Project project;
 
@@ -56,20 +53,12 @@ public abstract class AbstractGoodDataAT {
     protected static ProjectDashboard dashboard;
 
     public static String getProperty(String name) {
-        // First try system properties (from -D flags)
-        final String systemProperty = System.getProperty("gooddata." + name);
-        if (systemProperty != null) {
-            return systemProperty;
-        }
-        
-        // Then try environment variables
         final String value = System.getenv(name);
         if (value != null) {
             return value;
         }
-        
-        throw new IllegalArgumentException("Neither system property 'gooddata." + name + "' nor environment variable '" + name + "' found! " +
-                "Available environment variables: " + System.getenv().keySet());
+        throw new IllegalArgumentException("Environment variable " + name + " not found! Available variables: " +
+                System.getenv().keySet());
     }
 
     @AfterSuite
@@ -80,4 +69,3 @@ public abstract class AbstractGoodDataAT {
         gd.logout();
     }
 }
-

@@ -12,14 +12,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.gooddata.sdk.model.util.TagsDeserializer;
-import com.gooddata.sdk.model.util.TagsSerializer;
-import com.gooddata.sdk.model.util.UriHelper;
 import com.gooddata.sdk.common.util.BooleanDeserializer;
 import com.gooddata.sdk.common.util.BooleanIntegerSerializer;
 import com.gooddata.sdk.common.util.BooleanStringSerializer;
 import com.gooddata.sdk.common.util.GDZonedDateTime;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.util.TagsDeserializer;
+import com.gooddata.sdk.model.util.TagsSerializer;
+import com.gooddata.sdk.model.util.UriHelper;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -78,6 +78,7 @@ public class Entry {
 
     /**
      * Returns internally generated ID of the object (that's part of the object URI).
+     *
      * @return internal ID of the object
      */
     @JsonIgnore
@@ -125,6 +126,7 @@ public class Entry {
 
     /**
      * Returns user-specified identifier of the object.
+     *
      * @return user-specified object identifier
      */
     public String getIdentifier() {
@@ -175,4 +177,3 @@ public class Entry {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

@@ -40,4 +40,3 @@ class MeasureDefinitionTest extends Specification {
         exception.message == "This definition has no URI"
     }
 }
-

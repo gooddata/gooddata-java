@@ -67,6 +67,10 @@ public class Status {
         return ERROR.name().equalsIgnoreCase(code) || USER_ERROR.name().equalsIgnoreCase(code);
     }
 
+    @Override
+    public String toString() {
+        return GoodDataToStringBuilder.defaultToString(this);
+    }
 
     /**
      * Enum of connector process status codes
@@ -75,10 +79,4 @@ public class Status {
         NEW, SCHEDULED, DOWNLOADING, DOWNLOADED, TRANSFORMING, TRANSFORMED, UPLOADING, UPLOADED, SYNCHRONIZED,
         ERROR, USER_ERROR
     }
-
-    @Override
-    public String toString() {
-        return GoodDataToStringBuilder.defaultToString(this);
-    }
 }
-

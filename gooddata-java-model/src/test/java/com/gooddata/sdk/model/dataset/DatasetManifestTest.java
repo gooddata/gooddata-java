@@ -113,4 +113,3 @@ public class DatasetManifestTest {
         assertThat(manifest.toString(), matchesPattern(DatasetManifest.class.getSimpleName() + "\\[.*\\]"));
     }
 }
-

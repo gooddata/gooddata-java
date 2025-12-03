@@ -1,6 +1,6 @@
 {
-    "wTaskStatus": {
-        "status": "OK",
-        "poll": "/gdc/md/PROJECT_ID/tasks/TASK_ID/status"
-    }
+  "wTaskStatus": {
+    "status": "OK",
+    "poll": "/gdc/md/PROJECT_ID/tasks/TASK_ID/status"
+  }
 }

@@ -1,46 +1,49 @@
 {
-    "instances" : {
-        "items" : [ {
-            "instance" : {
-                "title" : "Storage",
-                "description" : "Testing Storage",
-                "status" : "ENABLED",
-                "authorizationToken" : "token",
-                "created" : "2014-03-17T13:02:39.000Z",
-                "updated" : "2014-03-17T13:02:41.000Z",
-                "createdBy" : "/gdc/account/profile/{profile-id}",
-                "updatedBy" : "/gdc/account/profile/{profile-id}",
-                "connectionUrl" : "test",
-                "links" : {
-                    "self" : "/gdc/datawarehouse/instances/{instance-id}",
-                    "parent" : "/gdc/datawarehouse/instances",
-                    "users" : "/gdc/datawarehouse/instances/{instance-id}/users",
-                    "jdbc" : "/gdc/datawarehouse/instances/{instance-id}/jdbc"
-                }
-            }
-        }, {
-            "instance" : {
-                "title" : "Salesforce",
-                "description" : "Test",
-                "status" : "ENABLED",
-                "authorizationToken" : "token",
-                "created" : "2014-04-09T22:10:26.000Z",
-                "updated" : "2014-04-09T22:10:26.000Z",
-                "createdBy" : "/gdc/account/profile/{profile-id}",
-                "updatedBy" : "/gdc/account/profile/{profile-id}",
-                "connectionUrl" : "test",
-                "links" : {
-                    "self" : "/gdc/datawarehouse/instances/{instance-id}",
-                    "parent" : "/gdc/datawarehouse/instances",
-                    "users" : "/gdc/datawarehouse/instances/{instance-id}/users",
-                    "jdbc" : "/gdc/datawarehouse/instances/{instance-id}/jdbc"
-                }
-            }
-        } ],
-        "paging" : {},
-        "links" : {
-            "parent" : "/gdc/datawarehouse",
-            "self" : "/gdc/datawarehouse/instances"
+  "instances": {
+    "items": [
+      {
+        "instance": {
+          "title": "Storage",
+          "description": "Testing Storage",
+          "status": "ENABLED",
+          "authorizationToken": "token",
+          "created": "2014-03-17T13:02:39.000Z",
+          "updated": "2014-03-17T13:02:41.000Z",
+          "createdBy": "/gdc/account/profile/{profile-id}",
+          "updatedBy": "/gdc/account/profile/{profile-id}",
+          "connectionUrl": "test",
+          "links": {
+            "self": "/gdc/datawarehouse/instances/{instance-id}",
+            "parent": "/gdc/datawarehouse/instances",
+            "users": "/gdc/datawarehouse/instances/{instance-id}/users",
+            "jdbc": "/gdc/datawarehouse/instances/{instance-id}/jdbc"
+          }
         }
+      },
+      {
+        "instance": {
+          "title": "Salesforce",
+          "description": "Test",
+          "status": "ENABLED",
+          "authorizationToken": "token",
+          "created": "2014-04-09T22:10:26.000Z",
+          "updated": "2014-04-09T22:10:26.000Z",
+          "createdBy": "/gdc/account/profile/{profile-id}",
+          "updatedBy": "/gdc/account/profile/{profile-id}",
+          "connectionUrl": "test",
+          "links": {
+            "self": "/gdc/datawarehouse/instances/{instance-id}",
+            "parent": "/gdc/datawarehouse/instances",
+            "users": "/gdc/datawarehouse/instances/{instance-id}/users",
+            "jdbc": "/gdc/datawarehouse/instances/{instance-id}/jdbc"
+          }
+        }
+      }
+    ],
+    "paging": {},
+    "links": {
+      "parent": "/gdc/datawarehouse",
+      "self": "/gdc/datawarehouse/instances"
     }
+  }
 }

@@ -32,4 +32,3 @@ class TotalHeaderItemTest extends Specification {
         item.toString()
     }
 }
-

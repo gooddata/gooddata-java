@@ -10,4 +10,3 @@ package com.gooddata.sdk.model.md;
  */
 public interface Updatable extends Obj {
 }
-

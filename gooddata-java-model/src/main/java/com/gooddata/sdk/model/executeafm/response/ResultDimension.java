@@ -8,8 +8,8 @@ package com.gooddata.sdk.model.executeafm.response;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gooddata.sdk.model.executeafm.result.ExecutionResult;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
+import com.gooddata.sdk.model.executeafm.result.ExecutionResult;
 
 import java.util.List;
 
@@ -24,6 +24,7 @@ public class ResultDimension {
 
     /**
      * Creates the result dimension of given headers
+     *
      * @param headers headers
      */
     @JsonCreator
@@ -33,6 +34,7 @@ public class ResultDimension {
 
     /**
      * Creates the result dimension of given headers
+     *
      * @param headers headers
      */
     public ResultDimension(final Header... headers) {
@@ -51,4 +53,3 @@ public class ResultDimension {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

@@ -22,4 +22,3 @@ public enum AttributeSortAggregation {
         return name().toLowerCase();
     }
 }
-

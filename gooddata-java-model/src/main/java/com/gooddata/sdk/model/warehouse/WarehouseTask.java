@@ -25,7 +25,7 @@ public class WarehouseTask {
     private static final String WAREHOUSE_LINK = "instance";
     private static final String WAREHOUSE_USER_LINK = "user";
 
-    private final Map<String,String> links;
+    private final Map<String, String> links;
 
     @JsonCreator
     private WarehouseTask(@JsonProperty("links") Map<String, String> links) {
@@ -45,4 +45,3 @@ public class WarehouseTask {
     }
 
 }
-

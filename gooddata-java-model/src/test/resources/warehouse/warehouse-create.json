@@ -1,8 +1,8 @@
 {
-    "instance": {
-        "title": "New ADS",
-        "authorizationToken": "Your-ADS-Token",
-        "description": "ADS Description",
-        "environment": "TESTING"
-    }
+  "instance": {
+    "title": "New ADS",
+    "authorizationToken": "Your-ADS-Token",
+    "description": "ADS Description",
+    "environment": "TESTING"
+  }
 }

@@ -38,4 +38,3 @@ class DataValueTest extends Specification {
         data
     }
 }
-

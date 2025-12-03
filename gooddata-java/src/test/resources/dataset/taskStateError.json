@@ -1,6 +1,6 @@
 {
-  "taskState" : {
-    "msg" : "Error message",
-    "status" : "ERROR"
+  "taskState": {
+    "msg": "Error message",
+    "status": "ERROR"
   }
 }

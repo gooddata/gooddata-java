@@ -12,4 +12,3 @@ public class AccessLogsSerializer extends PageSerializer {
         super(AccessLogs.ROOT_NODE);
     }
 }
-

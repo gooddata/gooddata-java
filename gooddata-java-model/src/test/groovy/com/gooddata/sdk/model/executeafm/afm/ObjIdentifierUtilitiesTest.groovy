@@ -103,4 +103,3 @@ class ObjIdentifierUtilitiesTest extends Specification {
         }
     }
 }
-

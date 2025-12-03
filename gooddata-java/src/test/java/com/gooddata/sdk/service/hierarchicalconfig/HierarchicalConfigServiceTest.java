@@ -67,7 +67,7 @@ public class HierarchicalConfigServiceTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void whenNullKeyThenGetProjectConfigItemShouldThrow() {
-        hierarchicalConfigService.getProjectConfigItem(project,null);
+        hierarchicalConfigService.getProjectConfigItem(project, null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -90,7 +90,7 @@ public class HierarchicalConfigServiceTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void whenNullConfigItemThenSetProjectConfigItemShouldThrow() {
-        hierarchicalConfigService.setProjectConfigItem(project,null);
+        hierarchicalConfigService.setProjectConfigItem(project, null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -126,4 +126,3 @@ public class HierarchicalConfigServiceTest {
     }
 
 }
-

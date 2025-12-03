@@ -15,7 +15,7 @@ import static com.gooddata.sdk.common.util.Validate.notNull;
 /**
  * Structure with list of symbolic names (identifiers) to be expanded to list of URIs.
  * Serialization only.
- *
+ * <p>
  * See also {@link UriToIdentifier}.
  */
 public class IdentifierToUri {
@@ -54,4 +54,3 @@ public class IdentifierToUri {
         return GoodDataToStringBuilder.defaultToString(this);
     }
 }
-

@@ -20,4 +20,3 @@ public class UserInProjectNotFoundException extends GoodDataException {
         super(message, cause);
     }
 }
-

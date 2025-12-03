@@ -16,13 +16,13 @@ class ScheduleIdMatcher extends TypeSafeMatcher<Schedule> {
         this.schedule = schedule;
     }
 
+    public static ScheduleIdMatcher hasSameScheduleIdAs(final Schedule schedule) {
+        return new ScheduleIdMatcher(schedule);
+    }
+
     @Override
     public void describeTo(final Description description) {
         description.appendText("Schedule id " + schedule.getId());
-    }
-
-    public static ScheduleIdMatcher hasSameScheduleIdAs(final Schedule schedule) {
-        return new ScheduleIdMatcher(schedule);
     }
 
     @Override

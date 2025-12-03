@@ -44,8 +44,8 @@ class PositiveAttributeFilterTest extends Specification {
         then:
         with(filter) {
             displayForm == QUALIFIER
-            in.class == clazz
-            in.elements == ['a', 'b']
+                    in.class == clazz
+                    in.elements == ['a', 'b']
         }
         filter.toString()
 
@@ -85,4 +85,3 @@ class PositiveAttributeFilterTest extends Specification {
         EqualsVerifier.forClass(PositiveAttributeFilter).usingGetClass().verify()
     }
 }
-

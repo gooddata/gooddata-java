@@ -22,6 +22,7 @@ public abstract class AttributeFilter implements FilterItem, Serializable {
 
     /**
      * Creates new filter
+     *
      * @param displayForm qualifier of attribute's display form to be filtered
      */
     AttributeFilter(final ObjQualifier displayForm) {
@@ -54,4 +55,3 @@ public abstract class AttributeFilter implements FilterItem, Serializable {
     }
 
 }
-

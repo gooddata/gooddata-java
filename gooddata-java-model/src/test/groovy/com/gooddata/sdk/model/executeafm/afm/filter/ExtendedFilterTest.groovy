@@ -41,4 +41,3 @@ class ExtendedFilterTest extends Specification {
         type = typeClass.simpleName
     }
 }
-

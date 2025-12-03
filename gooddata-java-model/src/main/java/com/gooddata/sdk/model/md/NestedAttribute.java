@@ -5,7 +5,11 @@
  */
 package com.gooddata.sdk.model.md;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gooddata.sdk.common.util.GoodDataToStringBuilder;
 
 import java.io.Serializable;
@@ -131,6 +135,7 @@ public class NestedAttribute extends AbstractObj {
 
     /**
      * URIs of folders containing this object
+     *
      * @return collection of URIs or null
      */
     @JsonIgnore
@@ -265,4 +270,3 @@ public class NestedAttribute extends AbstractObj {
     }
 
 }
-

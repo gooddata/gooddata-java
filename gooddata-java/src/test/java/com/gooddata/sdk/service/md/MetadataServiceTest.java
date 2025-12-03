@@ -8,7 +8,20 @@ package com.gooddata.sdk.service.md;
 import com.gooddata.sdk.common.GoodDataException;
 import com.gooddata.sdk.common.GoodDataRestException;
 import com.gooddata.sdk.model.gdc.UriResponse;
-import com.gooddata.sdk.model.md.*;
+import com.gooddata.sdk.model.md.Attribute;
+import com.gooddata.sdk.model.md.AttributeDisplayForm;
+import com.gooddata.sdk.model.md.AttributeElement;
+import com.gooddata.sdk.model.md.AttributeElements;
+import com.gooddata.sdk.model.md.BulkGet;
+import com.gooddata.sdk.model.md.BulkGetUris;
+import com.gooddata.sdk.model.md.DisplayForm;
+import com.gooddata.sdk.model.md.Entry;
+import com.gooddata.sdk.model.md.Obj;
+import com.gooddata.sdk.model.md.Query;
+import com.gooddata.sdk.model.md.Queryable;
+import com.gooddata.sdk.model.md.Restriction;
+import com.gooddata.sdk.model.md.Service;
+import com.gooddata.sdk.model.md.Updatable;
 import com.gooddata.sdk.model.md.report.ReportDefinition;
 import com.gooddata.sdk.model.md.visualization.VisualizationClass;
 import com.gooddata.sdk.model.project.Project;
@@ -29,10 +42,19 @@ import static com.gooddata.sdk.common.util.ResourceUtils.readObjectFromResource;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class MetadataServiceTest {
 
@@ -454,4 +476,3 @@ public class MetadataServiceTest {
     }
 
 }
-

@@ -85,4 +85,3 @@ class NegativeAttributeFilterTest extends Specification {
         EqualsVerifier.forClass(NegativeAttributeFilter).usingGetClass().verify()
     }
 }
-

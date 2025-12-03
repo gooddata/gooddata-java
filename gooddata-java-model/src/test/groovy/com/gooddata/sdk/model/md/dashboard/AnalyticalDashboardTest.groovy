@@ -34,4 +34,3 @@ class AnalyticalDashboardTest extends Specification {
         that dashboard, jsonEquals(readStringFromResource('/md/dashboard/analyticalDashboard-new.json'))
     }
 }
-

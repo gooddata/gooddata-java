@@ -19,4 +19,3 @@ public enum EtlModeType {
         return name();
     }
 }
-
