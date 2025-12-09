@@ -5,6 +5,7 @@
  */
 package com.gooddata.sdk.common;
 
+import com.gooddata.http.client.GoodDataHttpClient;
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.classic.methods.HttpDelete;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -14,13 +15,13 @@ import org.apache.hc.client5.http.classic.methods.HttpPatch;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.classic.methods.HttpPut;
 import org.apache.hc.client5.http.classic.methods.HttpTrace;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.core5.http.ClassicHttpRequest;
 import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.HttpEntityContainer;
 import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
-import org.apache.hc.core5.http.protocol.HttpContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -40,39 +41,26 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Spring 6 compatible {@link ClientHttpRequestFactory} implementation that uses Apache HttpComponents HttpClient 5.x Classic API.
- * This implementation bridges the gap between Spring 6 and HttpClient 5.x, supporting the Classic API pattern
- * used by gooddata-http-client.
+ * Spring {@link ClientHttpRequestFactory} backed by Apache HttpClient 5 Classic API.
  */
 public class HttpClient5ComponentsClientHttpRequestFactory implements ClientHttpRequestFactory {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpClient5ComponentsClientHttpRequestFactory.class);
+
     private final HttpClient httpClient;
 
-    /**
-     * Create a factory with the given HttpClient 5.x instance.
-     *
-     * @param httpClient the HttpClient 5.x instance to use
-     */
-    public HttpClient5ComponentsClientHttpRequestFactory(HttpClient httpClient) {
+    public HttpClient5ComponentsClientHttpRequestFactory(final HttpClient httpClient) {
         Assert.notNull(httpClient, "HttpClient must not be null");
         this.httpClient = httpClient;
     }
 
     @Override
-    public ClientHttpRequest createRequest(URI uri, HttpMethod httpMethod) throws IOException {
-        ClassicHttpRequest httpRequest = createHttpRequest(httpMethod, uri);
+    public ClientHttpRequest createRequest(final URI uri, final HttpMethod httpMethod) throws IOException {
+        final ClassicHttpRequest httpRequest = createHttpRequest(httpMethod, uri);
         return new HttpClient5ComponentsClientHttpRequest(httpClient, httpRequest);
     }
 
-    /**
-     * Create an Apache HttpComponents ClassicHttpRequest object for the given HTTP method and URI.
-     *
-     * @param httpMethod the HTTP method
-     * @param uri        the URI
-     * @return the ClassicHttpRequest
-     */
-    private ClassicHttpRequest createHttpRequest(HttpMethod httpMethod, URI uri) {
+    private ClassicHttpRequest createHttpRequest(final HttpMethod httpMethod, final URI uri) {
         if (HttpMethod.GET.equals(httpMethod)) {
             return new HttpGet(uri);
         } else if (HttpMethod.HEAD.equals(httpMethod)) {
@@ -95,7 +83,7 @@ public class HttpClient5ComponentsClientHttpRequestFactory implements ClientHttp
     }
 
     /**
-     * {@link ClientHttpRequest} implementation based on Apache HttpComponents HttpClient 5.x Classic API.
+     * {@link ClientHttpRequest} implementation using Apache HttpClient 5 Classic API.
      */
     private static class HttpClient5ComponentsClientHttpRequest implements ClientHttpRequest {
 
@@ -104,7 +92,7 @@ public class HttpClient5ComponentsClientHttpRequestFactory implements ClientHttp
         private final HttpHeaders headers;
         private final ByteArrayOutputStream bufferedOutput = new ByteArrayOutputStream(1024);
 
-        public HttpClient5ComponentsClientHttpRequest(HttpClient httpClient, ClassicHttpRequest httpRequest) {
+        HttpClient5ComponentsClientHttpRequest(final HttpClient httpClient, final ClassicHttpRequest httpRequest) {
             this.httpClient = httpClient;
             this.httpRequest = httpRequest;
             this.headers = new HttpHeaders();
@@ -135,85 +123,94 @@ public class HttpClient5ComponentsClientHttpRequestFactory implements ClientHttp
         }
 
         @Override
-        public OutputStream getBody() throws IOException {
+        public OutputStream getBody() {
             return bufferedOutput;
         }
 
         @Override
         public ClientHttpResponse execute() throws IOException {
-            // Create entity first (matching reference implementation exactly)
-            byte[] bytes = bufferedOutput.toByteArray();
-            if (bytes.length > 0) {
-                if (httpRequest != null) {
-
-                    // Ensure proper UTF-8 encoding before creating entity
-                    // This is crucial for @JsonTypeInfo annotated classes like Execution
-                    ContentType contentType = ContentType.APPLICATION_JSON;
-
-                    if (logger.isDebugEnabled()) {
-                        // Check if Content-Type is already set in headers
-                        boolean hasContentType = false;
-                        for (org.apache.hc.core5.http.Header header : httpRequest.getHeaders()) {
-                            if ("Content-Type".equalsIgnoreCase(header.getName())) {
-                                hasContentType = true;
-                                contentType = ContentType.parse(header.getValue());
-                                break;
-                            }
-                        }
-
-                        if (!hasContentType) {
-                            logger.debug("No Content-Type header found, using application/json as default");
-                        }
+            final byte[] bytes = bufferedOutput.toByteArray();
+            if (bytes.length > 0 && httpRequest instanceof HttpEntityContainer) {
+                // Determine content type from Spring headers first, then fallback to default
+                ContentType contentType = ContentType.APPLICATION_JSON;
+                final String contentTypeHeader = headers.getFirst(org.springframework.http.HttpHeaders.CONTENT_TYPE);
+                if (contentTypeHeader != null) {
+                    try {
+                        contentType = ContentType.parse(contentTypeHeader);
+                    } catch (Exception e) {
+                        logger.warn("Failed to parse Content-Type header '{}', using default", contentTypeHeader, e);
                     }
-
-                    ByteArrayEntity requestEntity = new ByteArrayEntity(bytes, contentType);
-                    ((HttpEntityContainer) httpRequest).setEntity(requestEntity);
                 }
+
+                final ByteArrayEntity requestEntity = new ByteArrayEntity(bytes, contentType);
+                ((HttpEntityContainer) httpRequest).setEntity(requestEntity);
             }
 
-            // Add headers to request, excluding Content-Length as HttpClient 5.x manages it internally
+            // Add headers after setting entity to avoid conflicts
             addHeaders(httpRequest);
 
-            // Execute request
-            ClassicHttpResponse httpResponse;
-            if (httpClient.getClass().getName().contains("GoodDataHttpClient")) {
-                // Use reflection to call the execute method on GoodDataHttpClient
-                try {
-                    // Try the single parameter execute method first
-                    java.lang.reflect.Method executeMethod = httpClient.getClass().getMethod("execute",
-                            ClassicHttpRequest.class);
-                    httpResponse = (ClassicHttpResponse) executeMethod.invoke(httpClient, httpRequest);
-                } catch (NoSuchMethodException e) {
-                    // If that doesn't work, try the two parameter version with HttpContext
-                    try {
-                        java.lang.reflect.Method executeMethod = httpClient.getClass().getMethod("execute",
-                                ClassicHttpRequest.class, HttpContext.class);
-                        httpResponse = (ClassicHttpResponse) executeMethod.invoke(httpClient, httpRequest, null);
-                    } catch (Exception e2) {
-                        throw new IOException("Failed to execute request with GoodDataHttpClient", e2);
-                    }
-                } catch (Exception e) {
-                    throw new IOException("Failed to execute request with GoodDataHttpClient", e);
-                }
-            } else {
-                httpResponse = httpClient.execute(httpRequest, (ClassicHttpResponse response) -> response);
-            }
+            final ClassicHttpResponse httpResponse = executeClassic(httpClient, httpRequest);
             return new HttpClient5ComponentsClientHttpResponse(httpResponse);
         }
 
         /**
-         * Add the headers from the HttpHeaders to the HttpRequest.
-         * Excludes Content-Length headers to avoid conflicts with HttpClient 5.x internal management.
-         * Uses setHeader instead of addHeader to match the reference implementation.
-         * Follows HttpClient5 Classic API patterns.
+         * Execute the request while keeping the response stream open for callers (e.g. RestTemplate)
+         * to consume. Avoids using response handlers which auto-close streams.
+         *
+         * <p>GoodDataHttpClient provides direct execute() methods that return ClassicHttpResponse
+         * without auto-closing streams. For standard CloseableHttpClient, we use executeOpen().</p>
          */
-        private void addHeaders(ClassicHttpRequest httpRequest) {
+        private ClassicHttpResponse executeClassic(final HttpClient httpClient,
+                                                   final ClassicHttpRequest httpRequest) throws IOException {
+            if (logger.isDebugEnabled()) {
+                try {
+                    logger.debug("Executing request: {} {}", httpRequest.getMethod(), httpRequest.getUri());
+                } catch (Exception e) {
+                    logger.debug("Executing request: {}", httpRequest.getMethod());
+                }
+            }
+
+            // GoodDataHttpClient has direct execute() that returns ClassicHttpResponse
+            // without auto-closing streams - preferred for authenticated GoodData API calls
+            if (httpClient instanceof GoodDataHttpClient) {
+                logger.debug("Using GoodDataHttpClient execute");
+                return ((GoodDataHttpClient) httpClient).execute(httpRequest);
+            }
+
+            // For CloseableHttpClient (and subclasses), use executeOpen to keep streams alive
+            if (httpClient instanceof CloseableHttpClient) {
+                logger.debug("Using CloseableHttpClient executeOpen");
+                return ((CloseableHttpClient) httpClient).executeOpen(null, httpRequest, null);
+            }
+
+            // Fallback for other HttpClient implementations
+            logger.debug("Using standard HttpClient executeOpen");
+            return httpClient.executeOpen(null, httpRequest, null);
+        }
+
+        /**
+         * Add the headers from the HttpHeaders to the HttpRequest.
+         * Excludes headers that HttpClient 5 manages internally or that were already set.
+         */
+        private void addHeaders(final ClassicHttpRequest httpRequest) {
             for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
-                String headerName = entry.getKey();
-                // Skip Content-Length as HttpClient 5.x manages it internally
-                if (!"Content-Length".equalsIgnoreCase(headerName)) {
-                    for (String headerValue : entry.getValue()) {
-                        httpRequest.setHeader(headerName, headerValue);
+                final String headerName = entry.getKey();
+
+                // Skip headers that HttpClient manages internally or that would cause conflicts
+                if ("Content-Length".equalsIgnoreCase(headerName) ||
+                    "Transfer-Encoding".equalsIgnoreCase(headerName) ||
+                    "Connection".equalsIgnoreCase(headerName) ||
+                    "Host".equalsIgnoreCase(headerName)) {
+                    continue;
+                }
+
+                // Remove any existing headers with the same name first to avoid duplicates
+                httpRequest.removeHeaders(headerName);
+
+                // Add all values for this header
+                for (String headerValue : entry.getValue()) {
+                    if (headerValue != null) {
+                        httpRequest.addHeader(headerName, headerValue);
                     }
                 }
             }
@@ -221,7 +218,7 @@ public class HttpClient5ComponentsClientHttpRequestFactory implements ClientHttp
     }
 
     /**
-     * {@link ClientHttpResponse} implementation based on Apache HttpComponents HttpClient 5.x Classic API.
+     * {@link ClientHttpResponse} implementation backed by Apache HttpClient 5 Classic API.
      */
     private static class HttpClient5ComponentsClientHttpResponse implements ClientHttpResponse {
 
@@ -249,31 +246,54 @@ public class HttpClient5ComponentsClientHttpRequestFactory implements ClientHttp
 
         @Override
         public HttpHeaders getHeaders() {
-            if (this.headers == null) {
-                this.headers = new HttpHeaders();
+            if (headers == null) {
+                headers = new HttpHeaders();
                 for (org.apache.hc.core5.http.Header header : httpResponse.getHeaders()) {
-                    this.headers.add(header.getName(), header.getValue());
+                    headers.add(header.getName(), header.getValue());
                 }
             }
-            return this.headers;
+            return headers;
         }
 
         @Override
         public InputStream getBody() throws IOException {
-            HttpEntity entity = httpResponse.getEntity();
-            return entity != null ? entity.getContent() : InputStream.nullInputStream();
+            final HttpEntity entity = httpResponse.getEntity();
+            if (entity == null) {
+                logger.debug("No entity in response, returning empty stream");
+                return InputStream.nullInputStream();
+            }
+
+            try {
+                final InputStream content = entity.getContent();
+                if (content == null) {
+                    logger.debug("Entity content is null, returning empty stream");
+                    return InputStream.nullInputStream();
+                }
+
+                // Log entity details for debugging
+                if (logger.isTraceEnabled()) {
+                    logger.trace("Returning entity content stream - repeatable: {}, streaming: {}, content length: {}",
+                               entity.isRepeatable(), entity.isStreaming(), entity.getContentLength());
+                }
+
+                return content;
+            } catch (IllegalStateException e) {
+                logger.warn("Entity content stream is in illegal state (likely already consumed): {}", e.getMessage());
+                throw new IOException("Response stream is no longer available: " + e.getMessage(), e);
+            }
         }
 
         @Override
         public void close() {
             try {
-                // Properly close the response to return connection to pool
+                logger.debug("Closing HTTP response");
                 if (httpResponse != null) {
+                    // For Apache HttpClient 5, we should just close the response directly
+                    // The connection manager handles proper connection cleanup automatically
                     httpResponse.close();
                 }
             } catch (IOException e) {
-                // Log the error but don't throw - closing should be best effort
-                // This ensures connections are returned to the pool
+                logger.debug("Unable to close HTTP response", e);
             }
         }
     }

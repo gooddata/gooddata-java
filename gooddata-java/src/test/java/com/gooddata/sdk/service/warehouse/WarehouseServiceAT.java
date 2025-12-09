@@ -46,7 +46,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
     private static final String SCHEMA_NAME = "default";
 
     private final String warehouseToken;
-    private final WarehouseService service;
+    private WarehouseService service;
 
     private Warehouse warehouse;
     private Warehouse warehouse2;
@@ -56,6 +56,10 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
 
     public WarehouseServiceAT() {
         warehouseToken = getProperty("warehouseToken");
+    }
+
+    @BeforeClass
+    public void initWarehouseService() {
         service = gd.getWarehouseService();
     }
 
@@ -64,7 +68,7 @@ public class WarehouseServiceAT extends AbstractGoodDataAT {
         account = gd.getAccountService().createAccount(new Account(LOGIN, "nnPvcGXU7f", "FirstName", "LastName"), getProperty("domain"));
     }
 
-    @Test(groups = "warehouse", dependsOnGroups = "account")
+    @Test(groups = "warehouse")
     public void createWarehouse() {
         final Warehouse wh = new Warehouse(title, warehouseToken);
         wh.setEnvironment(Environment.TESTING);
