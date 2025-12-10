@@ -25,10 +25,15 @@ public class OutputStageServiceAT extends AbstractGoodDataAT {
     private static final String CLIENT_ID = "clientId";
     private static final String PREFIX = "prefix";
 
-    private final Warehouse warehouse;
-    private final WarehouseSchema warehouseSchema;
+    private Warehouse warehouse;
+    private WarehouseSchema warehouseSchema;
 
     public OutputStageServiceAT() {
+        // Constructor should be lightweight - no I/O operations
+    }
+
+    @Test(groups = "warehouse", dependsOnGroups = {"project"})
+    public void setupWarehouse() {
         final String warehouseToken = getProperty("warehouseToken");
         final Warehouse wh = new Warehouse(title, warehouseToken);
         wh.setEnvironment(Environment.TESTING);
@@ -36,7 +41,7 @@ public class OutputStageServiceAT extends AbstractGoodDataAT {
         warehouseSchema = gd.getWarehouseService().getDefaultWarehouseSchema(warehouse);
     }
 
-    @Test(groups = "output_stage", dependsOnGroups = {"warehouse", "project"})
+    @Test(groups = "output_stage", dependsOnGroups = {"warehouse", "project"}, dependsOnMethods = "setupWarehouse")
     public void shouldReturnNullObjectWhenNoOutputStage() {
         final OutputStage outputStage = gd.getOutputStageService().getOutputStage(project);
 

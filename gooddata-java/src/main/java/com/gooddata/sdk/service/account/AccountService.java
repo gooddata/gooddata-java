@@ -13,6 +13,8 @@ import com.gooddata.sdk.model.account.SeparatorSettings;
 import com.gooddata.sdk.model.gdc.UriResponse;
 import com.gooddata.sdk.service.AbstractService;
 import com.gooddata.sdk.service.GoodDataSettings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.client.RestClientException;
@@ -27,6 +29,8 @@ import static com.gooddata.sdk.common.util.Validate.notNullState;
  * Service to access and manipulate account.
  */
 public class AccountService extends AbstractService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
 
     public static final UriTemplate ACCOUNT_TEMPLATE = new UriTemplate(Account.URI);
     public static final UriTemplate ACCOUNTS_TEMPLATE = new UriTemplate(Account.ACCOUNTS_URI);
@@ -63,9 +67,45 @@ public class AccountService extends AbstractService {
         try {
             final String id = getCurrent().getId();
             restTemplate.delete(Account.LOGIN_URI, id);
+        } catch (GoodDataRestException e) {
+            if (isAlreadyLoggedOutError(e)) {
+                logger.debug("User already logged out (status={}, errorCode={}, message={})",
+                        e.getStatusCode(), e.getErrorCode(), e.getMessage());
+                return;
+            }
+            throw new GoodDataException("Unable to logout", e);
         } catch (GoodDataException | RestClientException e) {
             throw new GoodDataException("Unable to logout", e);
         }
+    }
+
+    /**
+     * Checks if the exception indicates the user is already logged out.
+     * This is not an error condition - it means the logout goal is already achieved.
+     */
+    private static boolean isAlreadyLoggedOutError(final GoodDataRestException e) {
+        // HTTP 400 indicates a client error, which includes "not logged in"
+        if (e.getStatusCode() != HttpStatus.BAD_REQUEST.value()) {
+            return false;
+        }
+
+        // Prefer error code matching (API contract) over message content (locale-sensitive)
+        final String errorCode = e.getErrorCode();
+        if (errorCode != null && !errorCode.isEmpty()) {
+            // Match known error codes for "not logged in" state
+            // Common patterns: gdc.login.not_logged_in, NOT_LOGGED_IN, etc.
+            final String lowerErrorCode = errorCode.toLowerCase();
+            return lowerErrorCode.contains("not_logged") || lowerErrorCode.contains("notlogged");
+        }
+
+        // Fallback to message matching if error code is not available
+        final String message = e.getMessage();
+        if (message != null) {
+            final String lowerMessage = message.toLowerCase();
+            return lowerMessage.contains("not logged in") || lowerMessage.contains("not logged-in");
+        }
+
+        return false;
     }
 
     /**

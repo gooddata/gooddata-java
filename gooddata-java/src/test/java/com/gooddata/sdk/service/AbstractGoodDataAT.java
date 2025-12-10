@@ -63,9 +63,18 @@ public abstract class AbstractGoodDataAT {
 
     @AfterSuite
     public static void removeProjectAndLogout() {
-        if (project != null) {
-            gd.getProjectService().removeProject(project);
+        try {
+            if (project != null) {
+                gd.getProjectService().removeProject(project);
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to remove project during cleanup: " + e.getMessage());
         }
-        gd.logout();
+
+        try {
+            gd.logout();
+        } catch (Exception e) {
+            System.err.println("Failed to logout during cleanup: " + e.getMessage());
+        }
     }
 }
