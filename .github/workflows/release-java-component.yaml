@@ -1,0 +1,53 @@
+name: Release Java Component
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: |
+          ⚠️ **WARNING: Releasing this component requires additional steps!**
+          See: https://github.com/gooddata/gooddata-java/wiki/Releasing
+          
+          Git ref/branch/tag to release from
+        required: true
+        type: string
+        default: 'master'
+      release-version:
+        description: 'Release version to set (must be compatible with maven-release-plugin)'
+        required: true
+        type: string
+      module:
+        description: "Path to module to release (e.g. gdc-gcf). Empty means repo root."
+        required: false
+        type: string
+        default: ''
+      extra-prepare-params:
+        description: 'Extra args appended to release:prepare'
+        required: false
+        type: string
+        default: ''
+      extra-perform-params:
+        description: 'Extra args appended to release:perform'
+        required: false
+        type: string
+        default: ''
+      java-version:
+        description: 'Java version to use'
+        required: false
+        type: string
+        default: '17'
+
+jobs:
+  release:
+    uses: gooddata/github-actions/.github/workflows/release-java-component.yaml@master
+    permissions:
+      contents: write
+    with:
+      repository: ${{ github.repository }}
+      ref: ${{ inputs.ref }}
+      java-version: ${{ inputs.java-version }}
+      release-version: ${{ inputs.release-version }}
+      release-module: ${{ inputs.module }}
+      extra-prepare-params: ${{ inputs.extra-prepare-params }}
+      extra-perform-params: ${{ inputs.extra-perform-params }}
+    secrets: inherit
